@@ -1,0 +1,17 @@
+development:
+  adapter: postgresql
+  host: localhost
+  encoding: unicode
+  database: cans
+  pool: 5
+  username: postgres
+  password: <%= ENV.fetch('CANS_DB_PASSWORD', 'example') %>
+
+test:
+  adapter: postgresql
+  host: localhost
+  encoding: unicode
+  database: cans_test
+  pool: 5
+  username: postgres
+  password: <%= ENV.fetch('CANS_DB_PASSWORD', 'example') %>
