@@ -16,11 +16,13 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+/client/*.log
 
 # Ignore uploaded files in development
 /storage/*
 
 /node_modules
+/client/node_modules
 /yarn-error.log
 
 /public/assets
@@ -30,3 +32,9 @@
 /config/master.key
 
 .env
+
+# IDE
+*.idea
+
+# OS
+.DS_Store
