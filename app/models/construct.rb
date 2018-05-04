@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-class Template < ApplicationRecord
+class Construct < ApplicationRecord
   has_many :domains
 end
