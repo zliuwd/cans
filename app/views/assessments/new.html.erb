@@ -1,5 +1,10 @@
 <ul>
 <% @assessment.construct.domains.each do |domain| %>
   <li><%= domain.title %></li>
+    <ul>
+      <% domain.items.each do |item| %>
+        <li><%= item.question %></li>
+      <% end %>
+    </ul>
 <% end %>
 </ul>
