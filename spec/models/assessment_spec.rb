@@ -3,17 +3,11 @@
 require 'rails_helper'
 
 describe Assessment do
-  it 'has an assessed_by' do
-    assessment = Assessment.new(assessed_by: 'George Burdell')
-    assessment.save
-    expect(assessment.reload.assessed_by).to eq 'George Burdell'
-  end
-
-  it 'has a construct' do
-    assessment = Assessment.new(assessed_by: 'George Burdell')
-    assessment.save
-    construct = Construct.new(name: 'Construct 1', assessment_id: assessment.id)
+  it 'belongs to  a construct' do
+    construct = Construct.new(name: 'Construct 1')
     construct.save
-    expect(assessment.reload.construct).to eq construct
+    assessment = Assessment.new(assessed_by: 'George Burdell', construct: construct)
+    assessment.save
+    expect(assessment.reload.construct_id).to eq construct.id
   end
 end
