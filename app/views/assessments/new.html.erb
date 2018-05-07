@@ -1,1 +1,5 @@
-<div>Placeholder</div>
+<ul>
+<% @assessment.construct.domains.each do |domain| %>
+  <li><%= domain.title %></li>
+<% end %>
+</ul>
