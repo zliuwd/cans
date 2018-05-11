@@ -2,9 +2,10 @@ import React, {Component, Fragment} from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { GlobalHeader, PageHeader } from 'react-wood-duck';
 import Domains  from './Domains';
+import PageInfo  from './PageInfo';
 import SideNav from './views/SideNav';
 
-import './App.css';
+import './style.css';
 
 class App extends Component {
   render() {
@@ -15,7 +16,12 @@ class App extends Component {
         <Container>
           <Row>
             <Col xs="4"><SideNav /></Col>
-            <Col xs="8"><Domains /></Col>
+            <Col xs='8'>
+              <Row>
+              <Col xs="12"><PageInfo /></Col>
+              <Col xs="12"><Domains /></Col>
+              </Row>
+            </Col>
           </Row>
         </Container>
       </Fragment>

@@ -12,6 +12,7 @@ import {
   Fade,
   Row
 } from "reactstrap";
+import AssessmentFormHeader from './components/Assessment/AssessmentFormHeader'
 
 class Domains extends Component {
   constructor(props) {
@@ -49,7 +50,7 @@ class Domains extends Component {
                   >
                     <i className="fa fa-align-justify" />
                   </a>
-                  CANS: Domains
+                  <AssessmentFormHeader />
                   <div className="card-header-actions">
                     <a href="#" className="card-header-action btn btn-setting">
                       <i className="icon-settings" />
