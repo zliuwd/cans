@@ -1,10 +1,13 @@
+<%= form_tag '/assessments' do %>
 <ul>
-<% @assessment.construct.domains.each do |domain| %>
-  <li><%= domain.title %></li>
+  <% @assessment.construct.domains.each do |domain| %>
+    <li><%= domain.title %></li>
     <ul>
       <% domain.items.each do |item| %>
-        <li><%= item.question %></li>
+        <li><%= item.question %> <%= check_box_tag("items[]item[confidential]") %>Confidential<%= select_tag("items[]item[score]", options_for_select([['0', 0], ['1', 1], ['2', 2], ['3', 3]], 0)) %> <%= hidden_field_tag("items[]item[id]", item.id) %> <%= hidden_field_tag("items[]item[confidential]", 0) %></li>
       <% end %>
     </ul>
-<% end %>
+  <% end %>
 </ul>
+<%= submit_tag('Save') %>
+<% end %>

@@ -8,6 +8,7 @@
 construct = Construct.create(name: 'Default')
 domain1 = Domain.create(title: 'CHILD BEHAVIORAL/EMOTIONAL NEEDS', construct_id: construct.id)
 domain1.items.create(question: 'Psychosis (Thought Disorder)')
+domain1.items.create(question: 'Impulsivity/Hyperactivity')
 Domain.create(title: 'LIFE DOMAIN FUNCTIONING', construct_id: construct.id)
 Domain.create(title: 'RISK BEHAVIORS', construct_id: construct.id)
 Domain.create(title: 'CULTURAL FACTORS', construct_id: construct.id)
