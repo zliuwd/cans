@@ -1,0 +1,6 @@
+export { default as Assessment } from './Assessment'
+export { default as AssessmentFormHeader } from './Header/AssessmentFormHeader'
+export { default as DomainsGroup } from './DomainsGroup'
+export { default as Domain } from './Domain'
+export { default as Item } from './Item'
+export { default as Rating } from './Rating'

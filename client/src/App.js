@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { GlobalHeader, PageHeader } from 'react-wood-duck';
-import Domains  from './Domains';
+import { Assessment } from './components';
 import PageInfo  from './PageInfo';
 import SideNav from './views/SideNav';
 
@@ -19,7 +19,7 @@ class App extends Component {
             <Col xs='8'>
               <Row>
               <Col xs="12"><PageInfo /></Col>
-              <Col xs="12"><Domains /></Col>
+              <Col xs="12"><Assessment /></Col>
               </Row>
             </Col>
           </Row>
