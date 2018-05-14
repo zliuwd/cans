@@ -13,6 +13,7 @@ import {
   Row
 } from "reactstrap";
 import AssessmentFormHeader from './components/Assessment/AssessmentFormHeader'
+ import './style.css';
 
 class Domains extends Component {
   constructor(props) {
@@ -84,6 +85,11 @@ class Domains extends Component {
                     <Card><CardHeader>8. Early Childhood Domain (0-5 years old)</CardHeader></Card>
                     </div>
                   </CardBody>
+                  <Row className={'form-footer'}>
+                    <Col sm={3}><a href={'#'}>Cancel</a></Col>
+                    <Col sm={3}><Button>Save</Button></Col>
+                    <Col sm={3}><Button>Submit</Button></Col>
+                  </Row>
                 </Collapse>
               </Card>
             </Fade>
