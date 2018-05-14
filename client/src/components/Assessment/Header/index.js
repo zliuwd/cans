@@ -1,1 +1,1 @@
-export { default } from 'AssessmentFormHeader'
+export { default } from 'AssessmentFormHeader';

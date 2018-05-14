@@ -13,12 +13,13 @@ describe('I18nService', () => {
 
     it('returns i18n by instrument id', async () => {
       const instrumentId = 1;
+      const lang = 'en'
       const expectedI18n = { "_title_": "abc" };
       apiGetSpy.mockReturnValue(Promise.resolve({ data: expectedI18n }));
       const actualI18n = await I18nService.fetchByInstrumentId(instrumentId);
       expect(actualI18n).toBe(expectedI18n);
       expect(apiGetSpy).toHaveBeenCalledTimes(1);
-      expect(apiGetSpy).toHaveBeenCalledWith(`/instruments/${instrumentId}/i18n`);
+      expect(apiGetSpy).toHaveBeenCalledWith(`/instruments/${instrumentId}/i18n/${lang}`);
     });
   });
 });
