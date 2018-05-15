@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-
 class Rating extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +15,7 @@ class Rating extends Component {
     itemCode: PropTypes.string.isRequired,
     rating_type: PropTypes.string.isRequired,
     rating: PropTypes.number.isRequired,
-    hasNAValue: PropTypes.bool.isRequired,
+    hasNAOption: PropTypes.bool.isRequired,
     onRatingUpdate: PropTypes.func.isRequired,
   };
 
@@ -38,9 +37,7 @@ class Rating extends Component {
         value={this.props.rating}
         onChange={this.handleChange}
       >
-        <MenuItem value={-1}>
-          <em>None</em>
-        </MenuItem>
+        <MenuItem value={-1}/>
         { this.renderNAOptionIfNeeded() }
         <MenuItem value={0}>No</MenuItem>
         <MenuItem value={1}>Yes</MenuItem>
@@ -54,9 +51,7 @@ class Rating extends Component {
         value={this.props.rating}
         onChange={this.handleChange}
       >
-        <MenuItem value={-1}>
-          <em>None</em>
-        </MenuItem>
+        <MenuItem value={-1} />
         { this.renderNAOptionIfNeeded() }
         <MenuItem value={0}>0</MenuItem>
         <MenuItem value={1}>1</MenuItem>

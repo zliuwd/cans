@@ -10,3 +10,13 @@ export function getI18nByCode(i18n, code) {
     });
   return result;
 }
+
+export function getI18nValuesByPrefix(i18n, prefix) {
+  const results = [];
+  Object.keys(i18n)
+    .filter(key => key.startsWith(prefix))
+    .forEach(key => {
+      results.push(i18n[key]);
+    });
+  return results;
+}
