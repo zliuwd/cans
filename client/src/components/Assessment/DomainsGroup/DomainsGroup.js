@@ -9,12 +9,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Divider from '@material-ui/core/Divider';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {getI18nByCode} from "../../../utils/i18nHelper";
-import {isEmpty} from "lodash";
 
 class DomainsGroup extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      title: '',
+      description: '',
+    };
   }
 
   static propTypes = {
@@ -25,12 +27,18 @@ class DomainsGroup extends Component {
     onRatingUpdate: PropTypes.func.isRequired,
   };
 
-  renderDomains = domains => {
-    const { i18nAll } = this.props;
-    if (isEmpty(i18nAll)) {
-      return;
-    }
+  componentWillReceiveProps(nextProps) {
+    const { i18n } = nextProps;
+    const title = (i18n['_title_'] || '').toUpperCase();
+    const description = i18n['_description_'] || 'No Description';
+    this.setState({
+      title: title,
+      description: description,
+    })
+  }
 
+  renderDomains = domains => {
+    const { i18nAll } = this.props || {};
     return domains.map(domain => {
       const code = domain.code;
       const domainI18n = getI18nByCode(i18nAll, code);
@@ -44,9 +52,7 @@ class DomainsGroup extends Component {
   };
 
   render = () => {
-    const { i18n } = this.props;
-    const title = (i18n['_title_'] || 'Untitled').toUpperCase();
-    const description = i18n['_description_'] || 'No Description';
+    const { title, description } = this.state;
     const { domains } = this.props.domainsGroup;
     return (
       <ExpansionPanel style={{ 'background-color': '#114161' }}>

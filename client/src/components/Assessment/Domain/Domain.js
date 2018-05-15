@@ -9,12 +9,14 @@ import Divider from '@material-ui/core/Divider';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Item from './../Item'
 import {getI18nByCode} from "../../../utils/i18nHelper";
-import {isEmpty} from "lodash";
 
 class Domain extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      title: '',
+      description: '',
+    };
   }
 
   static propTypes = {
@@ -25,12 +27,18 @@ class Domain extends Component {
     onRatingUpdate: PropTypes.func.isRequired,
   };
 
-  renderItems = items => {
-    const { i18nAll } = this.props;
-    if (isEmpty(i18nAll)) {
-      return;
-    }
+  componentWillReceiveProps(nextProps) {
+    const { i18n } = nextProps;
+    const title = (i18n['_title_'] || '').toUpperCase();
+    const description = i18n['_description_'] || 'No Description';
+    this.setState({
+      title: title,
+      description: description,
+    })
+  }
 
+  renderItems = items => {
+    const { i18nAll } = this.props || {};
     return items.map(item => {
       const code = item.code;
       const itemI18n = getI18nByCode(i18nAll, code);
@@ -44,10 +52,8 @@ class Domain extends Component {
   };
 
   render = () => {
-    const { i18n } = this.props;
-    const title = (i18n['_title_'] || 'Untitled').toUpperCase();
-    const description = i18n['_description_'] || 'No Description';
     const { items } = this.props.domain;
+    const { title, description } = this.state;
     return (
       <ExpansionPanel style={{ 'background-color': '#114161' }}>
         <ExpansionPanelSummary

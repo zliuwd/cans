@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { AssessmentFormHeader, Domain, DomainsGroup } from './';
 import { AssessmentService, I18nService } from '../../services';
 import { getI18nByCode } from './../../utils/i18nHelper';
-import { isEmpty, clone } from 'lodash';
+import { clone } from 'lodash';
 
 const HARDCODED_ASSESSMENT_ID = 50000;
 
@@ -93,11 +93,7 @@ class Assessment extends Component {
   };
 
   renderDomains = domains => {
-    const i18n = this.state.i18n;
-    if (isEmpty(i18n)) {
-      return;
-    }
-
+    const i18n = this.state.i18n || {};
     return domains.map(child => {
       const code = child.code;
       const childI18n = getI18nByCode(i18n, code);
