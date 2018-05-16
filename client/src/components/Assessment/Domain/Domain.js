@@ -25,6 +25,7 @@ class Domain extends Component {
     i18n: PropTypes.object.isRequired,
     i18nAll: PropTypes.object.isRequired,
     onRatingUpdate: PropTypes.func.isRequired,
+    onConfidentialityUpdate: PropTypes.func.isRequired,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -38,13 +39,15 @@ class Domain extends Component {
   }
 
   renderItems = items => {
-    const { i18nAll } = this.props || {};
+    const i18nAll = this.props.i18nAll || {};
+    const { onRatingUpdate, onConfidentialityUpdate } = this.props;
     return items.map(item => {
       const code = item.code;
       const itemI18n = getI18nByCode(i18nAll, code);
       return (
         <div>
-          <Item key={code} item={item} i18n={itemI18n} onRatingUpdate={this.props.onRatingUpdate} />
+          <Item key={code} item={item} i18n={itemI18n} onRatingUpdate={onRatingUpdate}
+                onConfidentialityUpdate={onConfidentialityUpdate}/>
           <Divider/>
         </div>
       )
