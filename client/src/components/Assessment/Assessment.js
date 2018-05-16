@@ -4,6 +4,7 @@ import { AssessmentFormHeader, Domain, DomainsGroup } from './';
 import { AssessmentService, I18nService } from '../../services';
 import { getI18nByCode } from './../../utils/i18nHelper';
 import { clone } from 'lodash';
+import AssessmentFormFooter from './Footer/AssessmentFormFooter';
 
 const HARDCODED_ASSESSMENT_ID = 50000;
 
@@ -113,6 +114,7 @@ class Assessment extends Component {
       <Fragment>
         <AssessmentFormHeader style={{ 'margin-bottom': '25px' }}/>
         { this.renderDomains(domains) }
+        <AssessmentFormFooter/>
       </Fragment>
     );
   };
