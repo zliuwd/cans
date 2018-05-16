@@ -7,6 +7,7 @@ import Icon from '@material-ui/core/Icon';
 import Paper from '@material-ui/core/Paper';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
+import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Rating from './../Rating';
@@ -29,6 +30,7 @@ class Item extends Component {
     item: PropTypes.object.isRequired,
     i18n: PropTypes.object.isRequired,
     onRatingUpdate: PropTypes.func.isRequired,
+    onConfidentialityUpdate: PropTypes.func.isRequired,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -64,8 +66,30 @@ class Item extends Component {
     this.props.onRatingUpdate(code, newValue);
   };
 
+  handleConfidentialityChange = onChangeEvent => {
+    const code = this.props.item.code;
+    const oldValue = onChangeEvent.target.value === 'true';
+    this.props.onConfidentialityUpdate(code, !oldValue);
+  };
+
   switchExpandedState = () => {
     this.setState({ isExpanded: !this.state.isExpanded })
+  };
+
+  renderConfidentialCheckbox = (isConfidential) => {
+    return (
+      <div>
+        <form autoComplete="off">
+          <FormControl >
+            <FormControlLabel onChange={this.handleConfidentialityChange}
+              label={'Confidential'}
+              value={isConfidential}
+              control={<Checkbox checked={isConfidential} />}
+            />
+          </FormControl>
+        </form>
+      </div>
+    )
   };
 
   renderQtcIfNeeded = (qtcDescriptions) => {
@@ -111,7 +135,7 @@ class Item extends Component {
 
   render = () => {
     const { onRatingUpdate, item } = this.props;
-    const { code, rating_type, has_na_option, rating } = item;
+    const { code, rating_type, has_na_option, rating, confidential } = item;
     const { isExpanded, title, description, qtcDescriptions, ratingDescriptions } = this.state;
     const isBooleanRating = rating_type === 'BOOLEAN';
     return (
@@ -128,6 +152,7 @@ class Item extends Component {
             <Typography variant="title">
               {code}. {title}
             </Typography>
+            { this.renderConfidentialCheckbox(confidential) }
             <Rating
               itemCode={code}
               rating_type={rating_type}
