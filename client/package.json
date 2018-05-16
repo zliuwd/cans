@@ -26,6 +26,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "test:coverage": "npm test -- --coverage",
-    "eject": "react-scripts eject"
-  }
+    "eject": "react-scripts eject",
+    "devbuild": "cd client && npm install && npm run build && cd ..",
+    "deploy": "cp -a build/static/. ../public/static && cp -a build/index.html ../app/views",
+    "postinstall": "npm run devbuild && npm run deploy && echo 'Client built!'"
+  },
+  "proxy": "http://localhost:3001/"
 }

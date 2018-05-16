@@ -18,6 +18,9 @@
 !/tmp/.keep
 /client/*.log
 /client/coverage
+/client/build
+/public/static
+/app/views/index.html
 
 # Ignore uploaded files in development
 /storage/*
