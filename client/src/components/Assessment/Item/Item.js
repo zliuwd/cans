@@ -68,12 +68,52 @@ class Item extends Component {
     this.setState({ isExpanded: !this.state.isExpanded })
   };
 
+  renderQtcIfNeeded = (qtcDescriptions) => {
+    return qtcDescriptions.length > 0 ? (
+      <div>
+        <Typography variant="headline">Questions to Consider:</Typography>
+        <Typography variant="body1">
+          {qtcDescriptions.map((description, i) => {
+            return (<li key={i}>{description}</li>)
+          })}
+        </Typography>
+      </div>
+    ) : null;
+  };
+
+  renderRatingDescriptionsIfNeeded = (ratingDescriptions, isBooleanRating, rating, has_na_option) => {
+    return ratingDescriptions.length > 0 ? (
+      <div>
+        <Typography variant="headline">Ratings:</Typography>
+        <Typography variant="body1">
+          <form autoComplete="off">
+            <FormControl >
+              <RadioGroup name="rating_desc" value={rating} onChange={this.handleRatingChange}>
+                {has_na_option ? (<FormControlLabel
+                  value={-1}
+                  control={<Radio value={-1}/>}
+                  label={'N/A'}
+                />) : null}
+                {ratingDescriptions.map((label, i) => {
+                  return (<FormControlLabel
+                    value={i}
+                    control={<Radio value={i}/>}
+                    label={`${this.getRadioValueForLabel(isBooleanRating, i)} = ${label}`}
+                  />)
+                })}
+              </RadioGroup>
+            </FormControl>
+          </form>
+        </Typography>
+      </div>
+    ) : null;
+  };
+
   render = () => {
     const { onRatingUpdate, item } = this.props;
-    const { code, rating_type, rating } = item;
-    const hasNAOption = rating_type === 'REGULAR_WITH_NA' || rating_type === 'BOOLEAN_WITH_NA';
-    const isBooleanRating = rating_type === 'BOOLEAN' || rating_type === 'BOOLEAN_WITH_NA';
+    const { code, rating_type, has_na_option, rating } = item;
     const { isExpanded, title, description, qtcDescriptions, ratingDescriptions } = this.state;
+    const isBooleanRating = rating_type === 'BOOLEAN';
     return (
       <div>
         <AppBar position="static" color="114161">
@@ -91,7 +131,7 @@ class Item extends Component {
             <Rating
               itemCode={code}
               rating_type={rating_type}
-              hasNAOption={hasNAOption}
+              hasNaOption={has_na_option}
               rating={rating}
               onRatingUpdate={onRatingUpdate}
             />
@@ -99,55 +139,14 @@ class Item extends Component {
         </AppBar>
         {isExpanded
           ? (<Paper>
-            <Typography variant="headline">
-              Item Description:
-            </Typography>
-            <Typography variant="body1">
-              {description}
-            </Typography>
-            {qtcDescriptions.length > 0
-              ? (<div>
-                <Typography variant="headline">
-                  Questions to Consider:
-                </Typography>
-                <Typography variant="body1">
-                  {qtcDescriptions.map((description, i) => {
-                    return (<li key={i}>{description}</li>)
-                  })}
-                </Typography>
-              </div>)
-              : null}
-            {ratingDescriptions.length > 0
-              ? (<div>
-                <Typography variant="headline">
-                  Ratings:
-                </Typography>
-                <Typography variant="body1">
-                  <form autoComplete="off">
-                    <FormControl >
-                      <RadioGroup name="rating_desc" value={rating} onChange={this.handleRatingChange}>
-                        {hasNAOption ? (<FormControlLabel
-                          value={-1}
-                          control={<Radio value={-1}/>}
-                          label={'N/A'}
-                        />) : null}
-                        {ratingDescriptions.map((label, i) => {
-                          return (<FormControlLabel
-                            value={i}
-                            control={<Radio value={i}/>}
-                            label={`${this.getRadioValueForLabel(isBooleanRating, i)} = ${label}`}
-                          />)
-                        })}
-                      </RadioGroup>
-                    </FormControl>
-                  </form>
-                </Typography>
-              </div>)
-              : null}
+            <Typography variant="headline">Item Description:</Typography>
+            <Typography variant="body1">{description}</Typography>
+            {this.renderQtcIfNeeded(qtcDescriptions)}
+            {this.renderRatingDescriptionsIfNeeded(ratingDescriptions, isBooleanRating, rating, has_na_option)}
           </Paper>)
           : null}
       </div>
-  )};
+    )};
 }
 
 export default Item;

@@ -15,7 +15,7 @@ class Rating extends Component {
     itemCode: PropTypes.string.isRequired,
     rating_type: PropTypes.string.isRequired,
     rating: PropTypes.number.isRequired,
-    hasNAOption: PropTypes.bool.isRequired,
+    hasNaOption: PropTypes.bool.isRequired,
     onRatingUpdate: PropTypes.func.isRequired,
   };
 
@@ -25,10 +25,10 @@ class Rating extends Component {
     this.props.onRatingUpdate(code, newValue);
   };
 
-  renderNAOptionIfNeeded = () => {
-    return this.props.hasNAValue ? (
+  renderNaOptionIfNeeded = () => {
+    return this.props.hasNaOption ? (
       <MenuItem value={8}>N/A</MenuItem>
-    ) : (null)
+    ) : null
   };
 
   renderBooleanSelect = () => {
@@ -38,7 +38,7 @@ class Rating extends Component {
         onChange={this.handleChange}
       >
         <MenuItem value={-1}/>
-        { this.renderNAOptionIfNeeded() }
+        { this.renderNaOptionIfNeeded() }
         <MenuItem value={0}>No</MenuItem>
         <MenuItem value={1}>Yes</MenuItem>
       </Select>
@@ -52,7 +52,7 @@ class Rating extends Component {
         onChange={this.handleChange}
       >
         <MenuItem value={-1} />
-        { this.renderNAOptionIfNeeded() }
+        { this.renderNaOptionIfNeeded() }
         <MenuItem value={0}>0</MenuItem>
         <MenuItem value={1}>1</MenuItem>
         <MenuItem value={2}>2</MenuItem>

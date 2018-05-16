@@ -62,13 +62,15 @@ class DomainsGroup extends Component {
           <Typography variant="title" style={{ 'color': 'white' }}>
             {title}
           </Typography>
-          <Tooltip title={description} placement="top-end">
-            <i className="material-icons" style={{
-              'color': '#09798e',
-              'font-size': '14px',
-              'margin-left': '3px'
-            }}>help</i>
-          </Tooltip>
+          {description ? (
+            <Tooltip title={description} placement="top-end">
+              <i className="material-icons" style={{
+                'color': '#09798e',
+                'font-size': '14px',
+                'margin-left': '3px'
+              }}>help</i>
+            </Tooltip>
+          ) : null}
         </ExpansionPanelSummary>
         <ExpansionPanelDetails style={{display: 'block', padding: '0'}}>
           { this.renderDomains(domains) }
