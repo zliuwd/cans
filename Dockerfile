@@ -13,9 +13,6 @@ ADD package.json /app/client
 ADD . /app
 RUN mkdir /client
 RUN cd /app/client && yarn install && yarn build && yarn deploy
-# RUN NODE_ENV=production RAILS_ENV=production bundle exec rails assets:precompile
-# Required because we have mapping issues in nginx
-# RUN ln -s /app/public/casemng/packs /app/public/packs
 EXPOSE 3000 3035
 RUN cd /app
 CMD ["bundle", "exec", "rails", "server"]
