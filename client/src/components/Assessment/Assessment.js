@@ -2,6 +2,9 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { AssessmentFormHeader, Domain, DomainsGroup } from './';
 import { AssessmentService, I18nService } from '../../services';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Typography from '@material-ui/core/Typography';
 import { getI18nByCode } from './../../utils/i18nHelper';
 import { clone } from 'lodash';
 import AssessmentFormFooter from './Footer/AssessmentFormFooter';
@@ -70,57 +73,46 @@ class Assessment extends Component {
   };
 
   handleUpdateItemRating = (code, rating) => {
-    const updateAssessment = clone(this.state.assessment);
-    const item = this.findItemByCode(updateAssessment, code);
-    item.rating = rating;
-    this.updateAssessment(updateAssessment);
+    this.updateAndStoreItem(code, 'rating', rating);
   };
 
   handleUpdateItemConfidentiality = (code, isConfidential) => {
+    this.updateAndStoreItem(code, 'confidential', isConfidential);
+  };
+
+  updateAndStoreItem = (itemCode, key, value) => {
     const updateAssessment = clone(this.state.assessment);
-    const item = this.findItemByCode(updateAssessment, code);
-    item.confidential = isConfidential;
+    updateAssessment.state.domains.map(assessmentChild => {
+      if (assessmentChild.class === 'domain') {
+        assessmentChild.items.map(item => {
+          if (item.code === itemCode) {
+            item[key] = value;
+          }
+        })
+      } else {
+        assessmentChild.domains.map(domain => {
+          domain.items.map(item => {
+            if (item.code === itemCode) {
+              item[key] = value;
+            }
+          })
+        })
+      }
+    });
+
     this.updateAssessment(updateAssessment);
   };
 
-  findItemByCode = (assessment, code) => {
-    const domains = assessment.state.domains;
-    const length = domains.length;
-    let i;
-    for (i = 0; i < length; i++) {
-      const assessmentChild = domains[i];
-      if (assessmentChild.class === 'domain') {
-        const item = this.findItemInDomainByCode(assessmentChild, code);
-        if (item) {
-          return item;
-        }
-      } else {
-        const domains = assessmentChild.domains;
-        let j;
-        for (j = 0; j < domains.length; j++) {
-          const domain = domains[j];
-          const item = this.findItemInDomainByCode(domain, code);
-          if (item) {
-            return item;
-          }
-        }
-      }
-    }
-  };
-
-  findItemInDomainByCode = (domain, code) => {
-    const items = domain.items;
-    let i;
-    for (i = 0; i < items.length; i++) {
-      const item = items[i];
-      if (item.code === code) {
-        return item;
-      }
-    }
+  handleUnderSixStateNegate = onChangeEvent => {
+    const updateAssessment = clone(this.state.assessment);
+    const oldValue = onChangeEvent.target.value === 'true';
+    updateAssessment.state.under_six = !oldValue;
+    this.updateAssessment(updateAssessment);
   };
 
   renderDomains = domains => {
     const i18n = this.state.i18n || {};
+    const { under_six } = ((this.state.assessment || {}).state || {});
     return domains.map(child => {
       const code = child.code;
       const childI18n = getI18nByCode(i18n, code);
@@ -130,6 +122,7 @@ class Assessment extends Component {
           domain={child}
           i18n={childI18n}
           i18nAll={i18n}
+          assessmentUnderSix={under_six}
           onRatingUpdate={this.handleUpdateItemRating}
           onConfidentialityUpdate={this.handleUpdateItemConfidentiality}
         />
@@ -139,6 +132,7 @@ class Assessment extends Component {
           domainsGroup={child}
           i18n={childI18n}
           i18nAll={i18n}
+          assessmentUnderSix={under_six}
           onRatingUpdate={this.handleUpdateItemRating}
           onConfidentialityUpdate={this.handleUpdateItemConfidentiality}
         />
@@ -147,11 +141,27 @@ class Assessment extends Component {
   };
 
   render = () => {
-    const assessmentState = this.state.assessment.state;
-    const domains = assessmentState ? assessmentState.domains : [];
+    const assessmentState = this.state.assessment.state || {};
+    const isUnderSix = assessmentState.under_six || false;
+    const domains = assessmentState.domains || [];
     return (
       <Fragment>
-        <AssessmentFormHeader style={{ 'margin-bottom': '25px' }}/>
+        <AssessmentFormHeader/>
+        <Typography variant="body1" style={{ "text-align": "right" }}>
+          0-5
+          <FormControlLabel
+            control={
+              <Switch
+                checked={!isUnderSix}
+                value={isUnderSix}
+                onChange={this.handleUnderSixStateNegate}
+                color="default"
+              />
+            }
+            label="6-21"
+            style={{ "margin-left": "0px"}}
+          />
+        </Typography>
         { this.renderDomains(domains) }
         <AssessmentFormFooter/>
       </Fragment>

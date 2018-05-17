@@ -29,6 +29,7 @@ class Item extends Component {
     key: PropTypes.string.isRequired,
     item: PropTypes.object.isRequired,
     i18n: PropTypes.object.isRequired,
+    assessmentUnderSix: PropTypes.bool.isRequired,
     onRatingUpdate: PropTypes.func.isRequired,
     onConfidentialityUpdate: PropTypes.func.isRequired,
   };
@@ -134,8 +135,9 @@ class Item extends Component {
   };
 
   render = () => {
-    const { onRatingUpdate, item } = this.props;
+    const { item, assessmentUnderSix, onRatingUpdate } = this.props;
     const { code, rating_type, has_na_option, rating, confidential } = item;
+    const itemNumber = assessmentUnderSix ? item.under_six_id : item.above_six_id;
     const { isExpanded, title, description, qtcDescriptions, ratingDescriptions } = this.state;
     const isBooleanRating = rating_type === 'BOOLEAN';
     return (
@@ -150,7 +152,7 @@ class Item extends Component {
               {isExpanded ? 'remove_circle' : 'add_circle'}
             </Icon>
             <Typography variant="title">
-              {code}. {title}
+              {itemNumber}. {title}
             </Typography>
             { this.renderConfidentialCheckbox(confidential) }
             <Rating

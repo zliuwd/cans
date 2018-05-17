@@ -24,6 +24,7 @@ class Domain extends Component {
     domain: PropTypes.object.isRequired,
     i18n: PropTypes.object.isRequired,
     i18nAll: PropTypes.object.isRequired,
+    assessmentUnderSix: PropTypes.bool.isRequired,
     onRatingUpdate: PropTypes.func.isRequired,
     onConfidentialityUpdate: PropTypes.func.isRequired,
   };
@@ -40,14 +41,14 @@ class Domain extends Component {
 
   renderItems = items => {
     const i18nAll = this.props.i18nAll || {};
-    const { onRatingUpdate, onConfidentialityUpdate } = this.props;
+    const { assessmentUnderSix, onRatingUpdate, onConfidentialityUpdate } = this.props;
     return items.map(item => {
       const code = item.code;
       const itemI18n = getI18nByCode(i18nAll, code);
       return (
         <div>
           <Item key={code} item={item} i18n={itemI18n} onRatingUpdate={onRatingUpdate}
-                onConfidentialityUpdate={onConfidentialityUpdate}/>
+                onConfidentialityUpdate={onConfidentialityUpdate} assessmentUnderSix={assessmentUnderSix}/>
           <Divider/>
         </div>
       )
@@ -55,14 +56,15 @@ class Domain extends Component {
   };
 
   render = () => {
-    const { items } = this.props.domain;
+    const { assessmentUnderSix } = this.props;
+    const { items, under_six, above_six } = this.props.domain;
     const { title, description } = this.state;
-    return (
-      <ExpansionPanel style={{ 'background-color': '#114161' }}>
+    return (assessmentUnderSix && under_six) || (!assessmentUnderSix && above_six) ? (
+      <ExpansionPanel style={{'background-color': '#114161'}}>
         <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon style={{ 'height': '28px', 'color': 'white' }} />}
-          style={{ 'min-height': '28px' }}>
-          <Typography variant="title" style={{ 'color': 'white' }}>
+          expandIcon={<ExpandMoreIcon style={{'height': '28px', 'color': 'white'}}/>}
+          style={{'min-height': '28px'}}>
+          <Typography variant="title" style={{'color': 'white'}}>
             {title}
           </Typography>
           {description ? (
@@ -76,10 +78,10 @@ class Domain extends Component {
           ) : null}
         </ExpansionPanelSummary>
         <ExpansionPanelDetails style={{display: 'block', padding: '0'}}>
-          { this.renderItems(items) }
+          {this.renderItems(items)}
         </ExpansionPanelDetails>
       </ExpansionPanel>
-    );
+    ) : null
   };
 }
 

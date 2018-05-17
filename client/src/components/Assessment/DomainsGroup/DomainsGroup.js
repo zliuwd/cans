@@ -24,6 +24,7 @@ class DomainsGroup extends Component {
     domainsGroup: PropTypes.object.isRequired,
     i18n: PropTypes.object.isRequired,
     i18nAll: PropTypes.object.isRequired,
+    assessmentUnderSix: PropTypes.bool.isRequired,
     onRatingUpdate: PropTypes.func.isRequired,
     onConfidentialityUpdate: PropTypes.func.isRequired,
   };
@@ -40,14 +41,19 @@ class DomainsGroup extends Component {
 
   renderDomains = domains => {
     const i18nAll = this.props.i18nAll || {};
-    const { onRatingUpdate, onConfidentialityUpdate } = this.props;
+    const { onRatingUpdate, onConfidentialityUpdate, assessmentUnderSix } = this.props;
     return domains.map(domain => {
       const code = domain.code;
       const domainI18n = getI18nByCode(i18nAll, code);
       return (
         <div>
           <Divider/>
-          <Domain key={code} domain={domain} i18n={domainI18n} i18nAll={i18nAll} onRatingUpdate={onRatingUpdate}
+          <Domain key={code}
+                  domain={domain}
+                  i18n={domainI18n}
+                  i18nAll={i18nAll}
+                  assessmentUnderSix={assessmentUnderSix}
+                  onRatingUpdate={onRatingUpdate}
                   onConfidentialityUpdate={onConfidentialityUpdate}/>
         </div>
       )
