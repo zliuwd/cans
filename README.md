@@ -22,3 +22,27 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+# Running the react app
+
+The react app lives in the client dir
+
+```cd client``` 
+
+If this is your first time running the app, install the project node modules:
+
+```yarn```
+
+To start the react app only:
+
+```yarn start```
+
+to start rails + minified production ready react app:
+
+```yarn start:rails```
+
+alternatively, you can run the above command via shell script
+
+from the project root:
+
+```sh start.sh```
