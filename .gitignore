@@ -21,6 +21,7 @@
 /client/build
 /public/static
 /app/views/index.html
+/client/src/**/*.css
 
 # Ignore uploaded files in development
 /storage/*

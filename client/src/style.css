@@ -1,13 +1,8 @@
 .App {
-  text-align: center;
-}
+  text-align: center; }
 
-/**********************
-  PageInfo
-***********************/
 .title {
   font-size: 26px;
   padding: 26px 0 0px 8px;
   color: #086D87;
-  font-weight: 600;
-}
+  font-weight: 600; }
