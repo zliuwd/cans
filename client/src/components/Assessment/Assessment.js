@@ -148,7 +148,7 @@ class Assessment extends Component {
       <Fragment>
         <AssessmentFormHeader/>
         <Typography variant="body1" style={{ "text-align": "right" }}>
-          0-5
+          Age: 0-5
           <FormControlLabel
             control={
               <Switch

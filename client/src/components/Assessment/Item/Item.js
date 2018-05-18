@@ -136,11 +136,11 @@ class Item extends Component {
 
   render = () => {
     const { item, assessmentUnderSix, onRatingUpdate } = this.props;
-    const { code, rating_type, has_na_option, rating, confidential } = item;
-    const itemNumber = assessmentUnderSix ? item.under_six_id : item.above_six_id;
+    const { code, rating_type, has_na_option, rating, confidential, under_six_id, above_six_id } = item;
+    const itemNumber = assessmentUnderSix ? under_six_id : above_six_id;
     const { isExpanded, title, description, qtcDescriptions, ratingDescriptions } = this.state;
     const isBooleanRating = rating_type === 'BOOLEAN';
-    return (
+    return (assessmentUnderSix && under_six_id) || (!assessmentUnderSix && above_six_id) ?  (
       <div>
         <AppBar position="static" color="114161">
           <Toolbar style={{'justify-content': 'space-between'}}>
@@ -173,7 +173,8 @@ class Item extends Component {
           </Paper>)
           : null}
       </div>
-    )};
+    ) : null;
+  };
 }
 
 export default Item;
