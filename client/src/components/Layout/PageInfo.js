@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 
-import './style.css';
+import '../../style.css';
 
 class PageInfo extends Component {
   render() {

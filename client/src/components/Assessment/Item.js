@@ -10,8 +10,8 @@ import Radio from '@material-ui/core/Radio';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Rating from './../Rating';
-import { getI18nValuesByPrefix } from './../../../utils/i18nHelper';
+import { Rating } from './';
+import { getI18nValuesByPrefix } from './I18nHelper';
 
 class Item extends Component {
   constructor(props) {

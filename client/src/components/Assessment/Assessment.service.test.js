@@ -1,11 +1,11 @@
 import { AssessmentService } from './assessment.service';
+import { api } from '../../index';
 
 jest.mock('../api');
-const ApiService = require('../api').default;
 
 describe('I18nService', () => {
   describe('#fetch', () => {
-    const apiGetSpy = jest.spyOn(ApiService, 'get');
+    const apiGetSpy = jest.spyOn(api, 'get');
 
     beforeEach(() => {
       apiGetSpy.mockReset();

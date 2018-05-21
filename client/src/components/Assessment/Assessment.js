@@ -1,13 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { AssessmentFormHeader, Domain, DomainsGroup } from './';
-import { AssessmentService, I18nService } from '../../services';
+import { AssessmentFormHeader, Domain, DomainsGroup, AssessmentService, I18nService } from './';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Typography from '@material-ui/core/Typography';
-import { getI18nByCode } from './../../utils/i18nHelper';
+import { getI18nByCode } from './I18nHelper';
 import { clone } from 'lodash';
-import AssessmentFormFooter from './Footer/AssessmentFormFooter';
+import AssessmentFormFooter from './AssessmentFormFooter';
 
 const HARDCODED_ASSESSMENT_ID = 50000;
 

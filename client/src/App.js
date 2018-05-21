@@ -2,8 +2,7 @@ import React, {Component, Fragment} from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { GlobalHeader, PageHeader } from 'react-wood-duck';
 import { Assessment } from './components';
-import PageInfo  from './PageInfo';
-import SideNav from './views/SideNav';
+import { PageInfo, SideNav }  from './components/Layout';
 
 import './style.css';
 

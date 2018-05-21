@@ -7,8 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import Divider from '@material-ui/core/Divider';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Item from './../Item'
-import {getI18nByCode} from "../../../utils/i18nHelper";
+import { Item }from './'
+import {getI18nByCode} from "./I18nHelper";
 
 class Domain extends Component {
   constructor(props) {

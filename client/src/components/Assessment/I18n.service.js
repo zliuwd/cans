@@ -1,4 +1,4 @@
-import { api } from './..';
+import { api } from '../../index';
 
 export class I18nService {
   static fetchByInstrumentId(id, lang = 'en') {
