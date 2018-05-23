@@ -1,8 +1,8 @@
-import { api } from '../../index';
+import appApi from '../../App.api';
 
 export class I18nService {
   static fetchByInstrumentId(id, lang = 'en') {
-    return api.get(`/instruments/${id}/i18n/${lang}`).then(response => response.data);
+    return appApi.get(`/instruments/${id}/i18n/${lang}`).then(response => response.data);
   }
 }
 

@@ -1,11 +1,11 @@
 import { I18nService } from './I18n.service';
-import { api } from '../../index';
+import appApi from '../../App.api';
 
-jest.mock('../api');
+jest.mock('../../App.api');
 
 describe('I18nService', () => {
   describe('#fetch', () => {
-    const apiGetSpy = jest.spyOn(api, 'get');
+    const apiGetSpy = jest.spyOn(appApi, 'get');
 
     beforeEach(() => {
       apiGetSpy.mockReset();
@@ -19,7 +19,9 @@ describe('I18nService', () => {
       const actualI18n = await I18nService.fetchByInstrumentId(instrumentId);
       expect(actualI18n).toBe(expectedI18n);
       expect(apiGetSpy).toHaveBeenCalledTimes(1);
-      expect(apiGetSpy).toHaveBeenCalledWith(`/instruments/${instrumentId}/i18n/${lang}`);
+      expect(apiGetSpy).toHaveBeenCalledWith(
+        `/instruments/${instrumentId}/i18n/${lang}`
+      );
     });
   });
 });

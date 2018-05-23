@@ -1,4 +1,4 @@
-const ApiService = require('./api').default;
+const ApiService = require('./App.api').default;
 
 describe('ApiService', () => {
   it('has a timeout of 15000 seconds', () => {
@@ -6,6 +6,6 @@ describe('ApiService', () => {
   });
 
   it('has a baseUrl of /api/', () => {
-    expect(ApiService.defaults.baseURL).toBe('/');
+    expect(ApiService.defaults.baseURL).toBe('/api');
   });
 });
