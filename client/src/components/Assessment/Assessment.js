@@ -29,7 +29,7 @@ class Assessment extends Component {
     this.fetchAssessment(HARDCODED_ASSESSMENT_ID);
   }
 
-  fetchAssessment = (id) => {
+  fetchAssessment = id => {
     this.setState({ assessment_status: 'waiting' });
     return AssessmentService.fetch(id)
       .then(this.onFetchAssessmentSuccess)
@@ -44,7 +44,7 @@ class Assessment extends Component {
     this.fetchI18n(assessment.instrument_id);
   };
 
-  fetchI18n = (instrumentId) => {
+  fetchI18n = instrumentId => {
     this.setState({ i18n_status: 'waiting' });
     return I18nService.fetchByInstrumentId(instrumentId)
       .then(this.onFetchI18nSuccess)
@@ -58,17 +58,16 @@ class Assessment extends Component {
     });
   };
 
-  updateAssessment = (assessment) => {
+  updateAssessment = assessment => {
     this.setState({ assessment_status: 'updating' });
     AssessmentService.update(assessment.id, assessment)
       .then(updatedAssessment => {
         this.setState({
           assessment: updatedAssessment,
-          assessment_status: 'ready'
-        })
+          assessment_status: 'ready',
+        });
       })
       .catch(() => this.setState({ assessment_status: 'error' }));
-
   };
 
   handleUpdateItemRating = (code, rating) => {
@@ -87,15 +86,15 @@ class Assessment extends Component {
           if (item.code === itemCode) {
             item[key] = value;
           }
-        })
+        });
       } else {
         assessmentChild.domains.map(domain => {
           domain.items.map(item => {
             if (item.code === itemCode) {
               item[key] = value;
             }
-          })
-        })
+          });
+        });
       }
     });
 
@@ -111,7 +110,7 @@ class Assessment extends Component {
 
   renderDomains = domains => {
     const i18n = this.state.i18n || {};
-    const { under_six } = ((this.state.assessment || {}).state || {});
+    const { under_six } = (this.state.assessment || {}).state || {};
     return domains.map(child => {
       const code = child.code;
       const childI18n = getI18nByCode(i18n, code);
@@ -135,7 +134,7 @@ class Assessment extends Component {
           onRatingUpdate={this.handleUpdateItemRating}
           onConfidentialityUpdate={this.handleUpdateItemConfidentiality}
         />
-      )
+      );
     });
   };
 
@@ -145,8 +144,8 @@ class Assessment extends Component {
     const domains = assessmentState.domains || [];
     return (
       <Fragment>
-        <AssessmentFormHeader/>
-        <Typography variant="body1" style={{ "text-align": "right" }}>
+        <AssessmentFormHeader />
+        <Typography variant="body1" style={{ 'text-align': 'right' }}>
           Age: 0-5
           <FormControlLabel
             control={
@@ -158,11 +157,11 @@ class Assessment extends Component {
               />
             }
             label="6-21"
-            style={{ "margin-left": "0px"}}
+            style={{ 'margin-left': '0px' }}
           />
         </Typography>
-        { this.renderDomains(domains) }
-        <AssessmentFormFooter/>
+        {this.renderDomains(domains)}
+        <AssessmentFormFooter />
       </Fragment>
     );
   };

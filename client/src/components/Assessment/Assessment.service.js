@@ -1,11 +1,11 @@
-import { api } from '../../index';
+import appApi from '../../App.api';
 
 export class AssessmentService {
   static fetch(id) {
-    return api.get(`/assessments/${id}`).then(response => response.data);
+    return appApi.get(`/assessments/${id}`).then(response => response.data);
   }
   static update(id, assessment) {
-    return api.put(`/assessments/${id}`, assessment).then(response => response.data);
+    return appApi.put(`/assessments/${id}`, assessment).then(response => response.data);
   }
 }
 
