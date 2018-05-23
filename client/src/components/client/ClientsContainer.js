@@ -3,7 +3,7 @@ import { PersonService } from './person.service';
 import { groupClientsByLastName } from './person.helper';
 import './style.css'
 
-class Clients extends Component {
+class ClientsContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,4 +68,4 @@ class Clients extends Component {
   };
 }
 
-export default Clients;
+export default ClientsContainer;

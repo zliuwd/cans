@@ -1,1 +1,1 @@
-export { default as Clients } from './Clients';
+export { default as ClientsContainer } from './ClientsContainer';
