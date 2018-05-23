@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'reactstrap';
 import { GlobalHeader, PageHeader } from 'react-wood-duck';
 import { Assessment } from './components';
 import { PageInfo, SideNav }  from './components/Layout';
+import { Clients } from './components/client';
 
 import './style.css';
 
@@ -18,7 +19,8 @@ class App extends Component {
             <Col xs='8'>
               <Row>
               <Col xs="12"><PageInfo /></Col>
-              <Col xs="12"><Assessment /></Col>
+              {/*<Col xs="12"><Assessment /></Col>*/}
+              <Col xs="12" className={'content'}><Clients /></Col>
               </Row>
             </Col>
           </Row>

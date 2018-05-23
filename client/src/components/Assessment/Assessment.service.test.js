@@ -3,7 +3,7 @@ import { api } from '../../index';
 
 jest.mock('../api');
 
-describe('I18nService', () => {
+describe('AssessmentService', () => {
   describe('#fetch', () => {
     const apiGetSpy = jest.spyOn(api, 'get');
 
