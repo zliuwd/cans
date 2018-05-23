@@ -1,8 +1,6 @@
+.content {
+  border-left: 4px solid #2C749E;
+  background-color: #F5F5F5; }
+
 .App {
   text-align: center; }
-
-.title {
-  font-size: 26px;
-  padding: 26px 0 0px 8px;
-  color: #086D87;
-  font-weight: 600; }

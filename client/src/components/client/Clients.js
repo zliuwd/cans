@@ -31,33 +31,38 @@ class Clients extends Component {
     });
   };
 
+  renderClientsRecord = record => {
+    return (
+      <div className="client-name-container">
+        <div className="header">{record.letter}</div>
+        {record.clients.map(client => {
+          return this.renderClientName(client);
+        })}
+      </div>
+    )
+  };
+
+  renderClientName = client => {
+    return (
+      <div className="client-name">
+        <a href={`/clients/${client.id}`}>{`${client.last_name}, ${client.first_name}`}</a>
+      </div>
+    );
+  };
+
   render = () => {
     const clients = this.state.clients || [];
+    const { clients_status } = this.state;
     return (
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        flexDirection: 'row',
-        alignContent: 'flex-start',
-        height: '100%',
-        paddingTop: 8,
-        paddingBottom: 16
-      }}>
-        { clients.length !== 0 ?
-          clients.map(record => {
-          return (
-            <div style={{flex: '0 0 33%'}}>
-              <div className={'header'}>{record.letter}</div>
-              {record.clients.map(client => {
-                return (
-                  <div className={'client-name'}>
-                    <a href={`/clients/${client.id}`}>{`${client.last_name}, ${client.first_name}`}</a>
-                  </div>
-                )
-              })}
-            </div>
-          )
-        }) : <div>No clients found</div> }
+      <div className="clients-container">
+        {clients.map(record => {
+          return this.renderClientsRecord(record);
+        })}
+
+        {clients_status === 'ready' && clients.length === 0
+          ? <div>No clients found</div>
+          : null
+        }
       </div>
     );
   };

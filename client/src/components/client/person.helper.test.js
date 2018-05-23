@@ -7,6 +7,11 @@ describe('person.helper', () => {
       const actual = groupClientsByLastName(personJson);
       expect(actual).toEqual(expectedSortedMap);
     });
+
+    it('returns empty array when empty input', () => {
+      const actual = groupClientsByLastName([]);
+      expect(actual).toEqual([]);
+    });
   });
 });
 
