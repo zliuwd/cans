@@ -28,13 +28,17 @@ class SideNav extends Component {
         <SideNavLink
           href={CHILD_FAMILY_TEAMS}
           text={'Child & Family Teams'}
-          onClick={() => {this.toggleActiveLink(CHILD_FAMILY_TEAMS)}}
+          onClick={() => {
+            this.toggleActiveLink(CHILD_FAMILY_TEAMS);
+          }}
           active={this.isActive(CHILD_FAMILY_TEAMS)}
         />
         <SideNavLink
           href={RECORDS}
           text={'Reports'}
-          onClick={() => {this.toggleActiveLink(RECORDS)}}
+          onClick={() => {
+            this.toggleActiveLink(RECORDS);
+          }}
           active={this.isActive(RECORDS)}
         />
       </nav>

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -45,7 +45,7 @@ class Item extends Component {
       description: description,
       qtcDescriptions: qtcDescriptions,
       ratingDescriptions: ratingDescriptions,
-    })
+    });
   }
 
   getRadioValueForLabel = (isBooleanRating, index) => {
@@ -74,15 +74,16 @@ class Item extends Component {
   };
 
   switchExpandedState = () => {
-    this.setState({ isExpanded: !this.state.isExpanded })
+    this.setState({ isExpanded: !this.state.isExpanded });
   };
 
-  renderConfidentialCheckbox = (isConfidential) => {
+  renderConfidentialCheckbox = isConfidential => {
     return (
       <div>
         <form autoComplete="off">
-          <FormControl >
-            <FormControlLabel onChange={this.handleConfidentialityChange}
+          <FormControl>
+            <FormControlLabel
+              onChange={this.handleConfidentialityChange}
               label={'Confidential'}
               value={isConfidential}
               control={<Checkbox checked={isConfidential} />}
@@ -90,16 +91,16 @@ class Item extends Component {
           </FormControl>
         </form>
       </div>
-    )
+    );
   };
 
-  renderQtcIfNeeded = (qtcDescriptions) => {
+  renderQtcIfNeeded = qtcDescriptions => {
     return qtcDescriptions.length > 0 ? (
       <div>
         <Typography variant="headline">Questions to Consider:</Typography>
         <Typography variant="body1">
           {qtcDescriptions.map((description, i) => {
-            return (<li key={i}>{description}</li>)
+            return <li key={i}>{description}</li>;
           })}
         </Typography>
       </div>
@@ -112,19 +113,17 @@ class Item extends Component {
         <Typography variant="headline">Ratings:</Typography>
         <Typography variant="body1">
           <form autoComplete="off">
-            <FormControl >
+            <FormControl>
               <RadioGroup name="rating_desc" value={rating} onChange={this.handleRatingChange}>
-                {has_na_option ? (<FormControlLabel
-                  value={-1}
-                  control={<Radio value={-1}/>}
-                  label={'N/A'}
-                />) : null}
+                {has_na_option ? <FormControlLabel value={-1} control={<Radio value={-1} />} label={'N/A'} /> : null}
                 {ratingDescriptions.map((label, i) => {
-                  return (<FormControlLabel
-                    value={i}
-                    control={<Radio value={i}/>}
-                    label={`${this.getRadioValueForLabel(isBooleanRating, i)} = ${label}`}
-                  />)
+                  return (
+                    <FormControlLabel
+                      value={i}
+                      control={<Radio value={i} />}
+                      label={`${this.getRadioValueForLabel(isBooleanRating, i)} = ${label}`}
+                    />
+                  );
                 })}
               </RadioGroup>
             </FormControl>
@@ -140,21 +139,25 @@ class Item extends Component {
     const itemNumber = assessmentUnderSix ? under_six_id : above_six_id;
     const { isExpanded, title, description, qtcDescriptions, ratingDescriptions } = this.state;
     const isBooleanRating = rating_type === 'BOOLEAN';
-    return (assessmentUnderSix && under_six_id) || (!assessmentUnderSix && above_six_id) ?  (
+    return (assessmentUnderSix && under_six_id) || (!assessmentUnderSix && above_six_id) ? (
       <div>
         <AppBar position="static" color="114161">
-          <Toolbar style={{'justify-content': 'space-between'}}>
-            <Icon color="primary" onClick={this.switchExpandedState} style={{
-              'color': '#09798e',
-              'font-size': '14px',
-              'margin-left': '3px'
-            }}>
+          <Toolbar style={{ 'justify-content': 'space-between' }}>
+            <Icon
+              color="primary"
+              onClick={this.switchExpandedState}
+              style={{
+                color: '#09798e',
+                'font-size': '14px',
+                'margin-left': '3px',
+              }}
+            >
               {isExpanded ? 'remove_circle' : 'add_circle'}
             </Icon>
             <Typography variant="title">
               {itemNumber}. {title}
             </Typography>
-            { this.renderConfidentialCheckbox(confidential) }
+            {this.renderConfidentialCheckbox(confidential)}
             <Rating
               itemCode={code}
               rating_type={rating_type}
@@ -164,14 +167,14 @@ class Item extends Component {
             />
           </Toolbar>
         </AppBar>
-        {isExpanded
-          ? (<Paper>
+        {isExpanded ? (
+          <Paper>
             <Typography variant="headline">Item Description:</Typography>
             <Typography variant="body1">{description}</Typography>
             {this.renderQtcIfNeeded(qtcDescriptions)}
             {this.renderRatingDescriptionsIfNeeded(ratingDescriptions, isBooleanRating, rating, has_na_option)}
-          </Paper>)
-          : null}
+          </Paper>
+        ) : null}
       </div>
     ) : null;
   };

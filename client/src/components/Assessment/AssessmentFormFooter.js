@@ -7,9 +7,15 @@ class AssessmentFormFooter extends Component {
   render() {
     return (
       <Row className={'form-footer'}>
-        <Col sm={3}><a href={'#'}>Cancel</a></Col>
-        <Col sm={3}><Button>Save</Button></Col>
-        <Col sm={3}><Button>Submit</Button></Col>
+        <Col sm={3}>
+          <a href={'#'}>Cancel</a>
+        </Col>
+        <Col sm={3}>
+          <Button>Save</Button>
+        </Col>
+        <Col sm={3}>
+          <Button>Submit</Button>
+        </Col>
       </Row>
     );
   }
