@@ -7,11 +7,8 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     rm -rf /var/lib/apt/lists/*
 RUN mkdir /app
 WORKDIR /app
-ADD Gemfile Gemfile.lock /app/
-RUN bundle install --jobs 20 --retry 5
-ADD package.json /app/client
 ADD . /app
-RUN mkdir /client
+RUN bundle install --jobs 20 --retry 5
 RUN cd /app/client && yarn install && yarn build && yarn deploy
 EXPOSE 3000 3035
 RUN cd /app
