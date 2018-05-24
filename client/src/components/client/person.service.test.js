@@ -1,11 +1,11 @@
 import PersonService from "./person.service";
+import  appApi  from '../../App.api';
 
-jest.mock('./../api');
-const api = require('./../api').default;
+jest.mock('../../App.api');
 
 describe('PersonService', () => {
   describe('#fetchAllClients', () => {
-    const apiPostSpy = jest.spyOn(api, 'post');
+    const apiPostSpy = jest.spyOn(appApi, 'post');
 
     it('returns clients', async () => {
       const expectedClients = [{ "id": 1 }];

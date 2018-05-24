@@ -1,4 +1,4 @@
-import { api } from '../../index';
+import appApi  from '../../App.api';
 
 export class PersonService {
   static fetchAllClients() {
@@ -10,7 +10,7 @@ export class PersonService {
     const data = {
       person_role: 'CLIENT'
     };
-    return api.post('/people/_search', data)
+    return appApi.post('/people/_search', data)
       .then(response => {
         return response.data;
       })
