@@ -14,7 +14,6 @@ class Page extends Component {
             <Row>
               <Col xs="12"><PageInfo /></Col>
               <Col xs="12"><Routes /></Col>
-              <Col xs="12"><ChildForm /></Col>
             </Row>
           </Col>
         </Row>

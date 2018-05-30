@@ -2,6 +2,7 @@ import React from 'react';
 import { executeTest } from './Routes.test.util';
 import { Assessment } from '../components/Assessment';
 import { ClientsContainer } from "../components/Client";
+import { ChildForm } from "../components/ChildForm";
 
 /**
  * To test that a configured route is working, create a new
@@ -21,4 +22,8 @@ it('navigates to assessments', () => {
 
 it('navigates to clients list page', () => {
   executeTest(ClientsContainer, '/', '');
+});
+
+it('navigates to clients form page', () => {
+  executeTest(ChildForm, '/clients/new', 'Child/Youth');
 });
