@@ -12,7 +12,8 @@ module Infrastructure
     def call(environment)
       return @application.call(environment) unless Feature.active?(:authentication)
       request = Rack::Request.new(environment)
-      return redirect_to_login(request.url) unless Infrastructure::SecurityPolicy.new.validate_access(request)
+      security_policy = Infrastructure::SecurityPolicy.new
+      return redirect_to_login(request.url) unless security_policy.validate_access(request)
       @application.call(environment)
     end
 

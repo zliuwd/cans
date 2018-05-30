@@ -19,9 +19,7 @@ describe('I18nService', () => {
       const actualI18n = await I18nService.fetchByInstrumentId(instrumentId);
       expect(actualI18n).toBe(expectedI18n);
       expect(apiGetSpy).toHaveBeenCalledTimes(1);
-      expect(apiGetSpy).toHaveBeenCalledWith(
-        `/instruments/${instrumentId}/i18n/${lang}`
-      );
+      expect(apiGetSpy).toHaveBeenCalledWith(`/instruments/${instrumentId}/i18n/${lang}`);
     });
   });
 });

@@ -1,4 +1,4 @@
-import { AssessmentService } from './assessment.service';
+import { AssessmentService } from './Assessment.service';
 import appApi from '../../App.api';
 
 jest.mock('../../App.api');

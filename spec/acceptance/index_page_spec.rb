@@ -5,7 +5,7 @@ require 'feature'
 
 feature 'Index Page' do
   scenario 'has cans homepage' do
-    visit '/'
+    login
     expect(page).to have_content('CANS')
   end
 end

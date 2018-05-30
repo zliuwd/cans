@@ -32,6 +32,7 @@
     "build-js": "react-scripts build",
     "deploy": "cp -a build/static/. ../public/static && cp -a build/index.html ../app/views",
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
+    "prettier-check": "prettier --list-different 'src/**/*.js'",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "test": "react-scripts test --env=jsdom",
     "test:coverage": "npm test -- --coverage",
