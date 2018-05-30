@@ -115,7 +115,7 @@ class Item extends Component {
           <form autoComplete="off">
             <FormControl>
               <RadioGroup name="rating_desc" value={rating} onChange={this.handleRatingChange}>
-                {has_na_option ? <FormControlLabel value={-1} control={<Radio value={-1} />} label={'N/A'} /> : null}
+                {has_na_option ? <FormControlLabel value={8} control={<Radio value={8} />} label={'N/A'} /> : null}
                 {ratingDescriptions.map((label, i) => {
                   return (
                     <FormControlLabel

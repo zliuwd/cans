@@ -54,7 +54,7 @@ class Rating extends Component {
   };
 
   render = () => {
-    const isRegularType = this.props.rating_type === 'REGULAR' || this.props.rating_type === 'REGULAR_NA';
+    const isRegularType = this.props.rating_type === 'REGULAR';
     return (
       <div style={{ display: 'flex' }}>
         <Typography
