@@ -1,14 +1,17 @@
 import React, { Component, Fragment } from 'react';
-import { Route } from 'react-router-dom';
-import { Assessment, ClientsContainer } from '../components';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Assessment, ClientsContainer, Client } from '../components';
 
 class Routes extends Component {
   render() {
     return (
-      <Fragment>
-        <Route exact path="/" component={ClientsContainer}/>
-        <Route exact path="/assessments" component={Assessment}/>
-      </Fragment>
+      <Router>
+        <Fragment>
+          <Route path="/assessments" component={Assessment} />
+          <Route path="/clients/:id" component={Client} />
+          <Route exact path="/" component={ClientsContainer}/>
+        </Fragment>
+      </Router>
     );
   }
 }

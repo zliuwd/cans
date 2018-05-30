@@ -1,6 +1,10 @@
 import appApi from '../../App.api';
 
 class PersonService {
+  static fetch(id) {
+    return appApi.get(`/people/${id}`).then(response => response.data);
+  }
+
   static fetchAllClients() {
     const data = {
       person_role: 'CLIENT',

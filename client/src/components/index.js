@@ -1,3 +1,3 @@
 export { Assessment } from './Assessment';
-export { ClientsContainer } from './Client';
+export { Client, ClientsContainer } from './Client';
 export { PageInfo, SideNav } from './Layout';
