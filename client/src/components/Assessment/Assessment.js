@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { AssessmentFormHeader, Domain, DomainsGroup, AssessmentService, I18nService } from './';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -20,10 +19,6 @@ class Assessment extends Component {
       i18n_status: 'idle',
     };
   }
-
-  static propTypes = {
-    someFunction: PropTypes.func,
-  };
 
   componentDidMount() {
     this.fetchAssessment(HARDCODED_ASSESSMENT_ID);
@@ -145,7 +140,7 @@ class Assessment extends Component {
     return (
       <Fragment>
         <AssessmentFormHeader />
-        <Typography variant="body1" style={{ 'text-align': 'right' }}>
+        <Typography variant="body1" style={{ textAlign: 'right' }}>
           Age: 0-5
           <FormControlLabel
             control={
@@ -157,7 +152,7 @@ class Assessment extends Component {
               />
             }
             label="6-21"
-            style={{ 'margin-left': '0px' }}
+            style={{ marginLeft: '0px' }}
           />
         </Typography>
         {this.renderDomains(domains)}

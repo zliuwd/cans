@@ -1,15 +1,14 @@
 import React, { Component, Fragment } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Assessment } from '../components/Assessment';
+import { Route } from 'react-router-dom';
+import { Assessment, ClientsContainer } from '../components';
 
 class Routes extends Component {
   render() {
     return (
-      <Router>
-        <Fragment>
-          <Route path="/assessment" component={Assessment} />
-        </Fragment>
-      </Router>
+      <Fragment>
+        <Route exact path="/" component={ClientsContainer}/>
+        <Route exact path="/assessments" component={Assessment}/>
+      </Fragment>
     );
   }
 }

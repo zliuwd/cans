@@ -3,8 +3,8 @@ import SideNavLink from './SideNavLink';
 
 import './style.css';
 
-const CHILD_FAMILY_TEAMS = '/child-family-teams';
-const RECORDS = '/records';
+const CHILD_FAMILY_TEAMS = '/';
+const REPORTS = '/reports';
 
 class SideNav extends Component {
   constructor(props) {
@@ -34,12 +34,12 @@ class SideNav extends Component {
           active={this.isActive(CHILD_FAMILY_TEAMS)}
         />
         <SideNavLink
-          href={RECORDS}
+          href={REPORTS}
           text={'Reports'}
           onClick={() => {
-            this.toggleActiveLink(RECORDS);
+            this.toggleActiveLink(REPORTS);
           }}
-          active={this.isActive(RECORDS)}
+          active={this.isActive(REPORTS)}
         />
       </nav>
     );

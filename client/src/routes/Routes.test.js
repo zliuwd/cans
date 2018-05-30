@@ -1,6 +1,7 @@
 import React from 'react';
 import { executeTest } from './Routes.test.util';
 import { Assessment } from '../components/Assessment';
+import { ClientsContainer } from "../components/Client";
 
 /**
  * To test that a configured route is working, create a new
@@ -14,6 +15,10 @@ import { Assessment } from '../components/Assessment';
  *   executeTest(Home, /home', 'Welcome!')
  */
 
-it('navigates to assessment', () => {
-  executeTest(Assessment, '/assessment', 'COMMUNIMETRIC');
+it('navigates to assessments', () => {
+  executeTest(Assessment, '/assessments', 'COMMUNIMETRIC');
+});
+
+it('navigates to clients list page', () => {
+  executeTest(ClientsContainer, '/', '');
 });

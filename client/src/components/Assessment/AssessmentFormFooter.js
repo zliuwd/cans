@@ -8,7 +8,7 @@ class AssessmentFormFooter extends Component {
     return (
       <Row className={'form-footer'}>
         <Col sm={3}>
-          <a href={'#'}>Cancel</a>
+          <Button>Cancel</Button>
         </Col>
         <Col sm={3}>
           <Button>Save</Button>
