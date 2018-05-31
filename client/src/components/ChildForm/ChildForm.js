@@ -10,7 +10,7 @@ import {
   CardActions,
   Button,
 } from '@material-ui/core';
-
+import { Redirect } from 'react-router-dom';
 import { CountiesService } from './Counties.service';
 import { ChildFormService } from './ChildForm.service';
 import { PageInfo } from '../Layout';
@@ -109,6 +109,7 @@ class ChildForm extends Component {
       })
       .catch(() => this.setState({ child_status: 'error' }));
   };
+
   handleCancel = event => {
     this.setState({
       childInfo: {
@@ -145,6 +146,10 @@ class ChildForm extends Component {
   };
 
   render() {
+    if (this.state.child_status === 'ready') {
+      return <Redirect to={'/clients/' + this.state.childInfo.id} />;
+    }
+
     const { classes } = this.props;
     return (
       <Fragment>

@@ -1,9 +1,10 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import {shallow, mount } from 'enzyme';
 import Card from '@material-ui/core/Card';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import ChildForm from './ChildForm';
+import { Redirect, MemoryRouter } from 'react-router-dom';
 
 describe('<ChildForm />', () => {
   const getWrapper = () => mount(<ChildForm />);
