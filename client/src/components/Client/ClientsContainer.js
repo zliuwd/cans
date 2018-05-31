@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PersonService from './person.service';
 import { groupClientsByLastName } from './person.helper';
 import './style.css';
+import { PageInfo } from '../Layout';
 
 class ClientsContainer extends Component {
   constructor(props) {
@@ -56,17 +57,20 @@ class ClientsContainer extends Component {
     const clients = this.state.clients || [];
     const { clients_status } = this.state;
     return (
-      <div className={'content'}>
-        <div className="clients-container">
-          {clients.map(record => {
-            return this.renderClientsRecord(record);
-          })}
+      <Fragment>
+        <PageInfo title={''} />
+        <div className={'content'}>
+          <div className="clients-container">
+            {clients.map(record => {
+              return this.renderClientsRecord(record);
+            })}
 
-          {clients_status === 'ready' && clients.length === 0 ? (
-            <div>No clients found</div>
-          ) : null}
+            {clients_status === 'ready' && clients.length === 0 ? (
+              <div id='no-data'>No clients found</div>
+            ) : null}
+          </div>
         </div>
-      </div>
+      </Fragment>
     );
   };
 }

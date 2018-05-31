@@ -13,6 +13,7 @@ import {
 
 import { CountiesService } from './Counties.service';
 import { ChildFormService } from './ChildForm.service';
+import { PageInfo } from '../Layout';
 
 const styles = theme => ({
   container: {
@@ -147,7 +148,7 @@ class ChildForm extends Component {
     const { classes } = this.props;
     return (
       <Fragment>
-        <h3>Add Child/Youth</h3>
+        <PageInfo title={'Add Child/Youth'} />
         <Card className={classes.card}>
           <CardHeader
             className={classes.cardHeader}

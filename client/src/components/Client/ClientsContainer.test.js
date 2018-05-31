@@ -10,13 +10,13 @@ describe('<ClientsContainer />', () => {
     PersonService.fetchAllClients.mockReturnValue(Promise.resolve([]));
     const wrapper = await mount(<ClientsContainer />);
     wrapper.update();
-    expect(wrapper.text()).toBe('No clients found');
+    expect(wrapper.find('#no-data').text()).toBe('No clients found');
   });
 
   it('renders grouped clients names when fetches 3 clients', async () => {
     PersonService.fetchAllClients.mockReturnValue(Promise.resolve(personsJson));
     const wrapper = await mount(<ClientsContainer />);
-    const renderedText = wrapper.text();
+    const renderedText = wrapper.find('.clients-container').text();
     wrapper.update();
     expect(renderedText).toBe('PParker, CharleyParker, PeterWwayne, Bruce');
   });

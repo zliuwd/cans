@@ -13,10 +13,6 @@ describe('<Page />', () => {
     expect(getLength(SideNav)).toBe(1);
   });
 
-  it('renders with <PageInfo /> component', () => {
-    expect(getLength(PageInfo)).toBe(1);
-  });
-
   it('renders with <Routes /> component', () => {
     expect(getLength(Routes)).toBe(1);
   });

@@ -6,6 +6,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import { PageInfo } from '../Layout';
 
 describe('<Client />', () => {
   const match = { params: { id: 1 } };
@@ -22,6 +23,10 @@ describe('<Client />', () => {
 
   it('renders with <CardContent /> component', () => {
     expect(getLength(CardContent)).toBe(1);
+  });
+
+  it('renders with <PageInfo /> component', () => {
+    expect(getLength(PageInfo)).toBe(1);
   });
 });
 

@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { getI18nByCode } from './I18nHelper';
 import { clone } from 'lodash';
 import AssessmentFormFooter from './AssessmentFormFooter';
+import { PageInfo } from '../Layout';
 
 const HARDCODED_ASSESSMENT_ID = 50000;
 
@@ -139,6 +140,7 @@ class Assessment extends Component {
     const domains = assessmentState.domains || [];
     return (
       <Fragment>
+        <PageInfo title={'Add CANS'} />
         <AssessmentFormHeader />
         <Typography variant="body1" style={{ textAlign: 'right' }}>
           Age: 0-5

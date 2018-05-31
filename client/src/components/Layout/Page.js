@@ -12,7 +12,6 @@ class Page extends Component {
           <Col xs="4"><SideNav /></Col>
           <Col xs='8'>
             <Row>
-              <Col xs="12"><PageInfo /></Col>
               <Col xs="12"><Routes /></Col>
             </Row>
           </Col>
