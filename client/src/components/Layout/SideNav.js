@@ -3,8 +3,10 @@ import SideNavLink from './SideNavLink';
 
 import './style.css';
 
-const CHILD_FAMILY_TEAMS = '/';
-const REPORTS = '/reports';
+const URL_MAP = [
+  { url: '/', text: 'Child & Family Teams' },
+  { url: '/reports', text: 'Reports' },
+];
 
 class SideNav extends Component {
   constructor(props) {
@@ -25,22 +27,20 @@ class SideNav extends Component {
   render() {
     return (
       <nav className={'sidebar'}>
-        <SideNavLink
-          href={CHILD_FAMILY_TEAMS}
-          text={'Child & Family Teams'}
-          onClick={() => {
-            this.toggleActiveLink(CHILD_FAMILY_TEAMS);
-          }}
-          active={this.isActive(CHILD_FAMILY_TEAMS)}
-        />
-        <SideNavLink
-          href={REPORTS}
-          text={'Reports'}
-          onClick={() => {
-            this.toggleActiveLink(REPORTS);
-          }}
-          active={this.isActive(REPORTS)}
-        />
+        {URL_MAP.map((item, index) => {
+          return (
+            <SideNavLink
+              key={index}
+              id={item.url.substr(1)}
+              href={item.url}
+              text={item.text}
+              onClick={() => {
+                this.toggleActiveLink(item.url);
+              }}
+              active={this.isActive(item.url)}
+            />
+          );
+        })}
       </nav>
     );
   }

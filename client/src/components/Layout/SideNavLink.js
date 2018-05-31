@@ -17,7 +17,11 @@ class SideNavLink extends Component {
     const { active, text, href, onClick } = this.props;
     const classes = classNames('sidebar-item', { active });
     return (
-      <div className={classes} onClick={() => onClick()}>
+      <div
+        id="side-nav"
+        className={classes}
+        onClick={() => onClick()}
+      >
         <span className="fa-stack">
           <i className="fa fa-circle-thin fa-stack-2x" />
           <i className="fa fa-check fa-stack-1x" />
