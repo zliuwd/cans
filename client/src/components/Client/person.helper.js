@@ -1,3 +1,24 @@
+const compareStrings = (a, b) => {
+  if (a < b) {
+    return -1;
+  } else if (a > b) {
+    return 1;
+  }
+  return 0;
+};
+
+const sortClientsInGroups = clients => {
+  return clients.sort((a, b) => {
+    const aLastName = a.last_name.toUpperCase();
+    const bLastName = b.last_name.toUpperCase();
+    if (aLastName !== bLastName) {
+      return compareStrings(aLastName, bLastName)
+    } else {
+      return compareStrings(a.first_name, b.first_name)
+    }
+  });
+};
+
 export function groupClientsByLastName(clients) {
   if (!clients) {
     return [];
@@ -5,7 +26,7 @@ export function groupClientsByLastName(clients) {
   const initials = new Set();
 
   clients.forEach(client => {
-    initials.add(client.last_name[0]);
+    initials.add(client.last_name[0].toUpperCase());
   });
 
   const preResultObject = {};
@@ -14,7 +35,7 @@ export function groupClientsByLastName(clients) {
   });
 
   clients.forEach(client => {
-    const letter = client.last_name[0];
+    const letter = client.last_name[0].toUpperCase();
     preResultObject[letter].push(client);
   });
 
@@ -23,7 +44,7 @@ export function groupClientsByLastName(clients) {
     if (preResultObject.hasOwnProperty(property)) {
       results.push({
         letter: property,
-        clients: preResultObject[property].sort(),
+        clients: sortClientsInGroups(preResultObject[property]),
       });
     }
   }

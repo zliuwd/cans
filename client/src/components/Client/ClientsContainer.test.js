@@ -18,7 +18,7 @@ describe('<ClientsContainer />', () => {
     const wrapper = await mount(<ClientsContainer />);
     const renderedText = wrapper.text();
     wrapper.update();
-    expect(renderedText).toBe('PParker, PeterParker, CharleyWWayne, Bruce');
+    expect(renderedText).toBe('PParker, CharleyParker, PeterWwayne, Bruce');
   });
 
   it('renders empty container when failed to fetch', async () => {

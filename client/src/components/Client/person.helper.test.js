@@ -19,15 +19,15 @@ export const personsJson = [
   {
     id: 1,
     first_name: 'Bruce',
-    last_name: 'Wayne',
+    last_name: 'wayne',
   },
   {
-    id: 3,
+    id: 4,
     first_name: 'Peter',
     last_name: 'Parker',
   },
   {
-    id: 4,
+    id: 3,
     first_name: 'Charley',
     last_name: 'Parker',
   },
@@ -39,12 +39,12 @@ const expectedSortedMap = [
     clients: [
       {
         id: 3,
-        first_name: 'Peter',
+        first_name: 'Charley',
         last_name: 'Parker',
       },
       {
         id: 4,
-        first_name: 'Charley',
+        first_name: 'Peter',
         last_name: 'Parker',
       },
     ],
@@ -55,7 +55,7 @@ const expectedSortedMap = [
       {
         id: 1,
         first_name: 'Bruce',
-        last_name: 'Wayne',
+        last_name: 'wayne',
       },
     ],
   },
