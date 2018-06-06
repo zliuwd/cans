@@ -1,14 +1,15 @@
 import React from 'react';
 import App from './App';
 import { Page } from './components/Layout';
-import { GlobalHeader, PageHeader } from 'react-wood-duck';
+import Header from './components/Header/';
+import { PageHeader } from 'react-wood-duck';
 
 describe('<App />', () => {
   const getWrapper = () => shallow(<App />);
   const getLength = component => getWrapper().find(component).length;
 
-  it('renders with <GlobalHeader /> component', () => {
-    expect(getLength(GlobalHeader)).toBe(1);
+  it('renders with <Header /> component', () => {
+    expect(getLength(Header)).toBe(1);
   });
 
   it('renders with <PageHeader /> component', () => {
