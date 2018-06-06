@@ -3,14 +3,16 @@
 module LoginHelper
   def login(login_config = default_json)
     visit '/'
-    return unless ENV.fetch('CANS_AUTHORIZATION_ENABLED', false)
-    puts 'debugging'
-    puts page.body
+    return unless need_login?
     fill_in 'Authorization JSON', with: JSON.generate(login_config)
     click_button 'Sign In'
   end
 
   private
+
+  def need_login?
+    ENV.fetch('CANS_AUTHORIZATION_ENABLED', false) && !page.has_content?('CANS')
+  end
 
   def default_json
     {
