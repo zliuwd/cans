@@ -13,7 +13,9 @@ import {
 import { Redirect } from 'react-router-dom';
 import { CountiesService } from './Counties.service';
 import { ChildFormService } from './ChildForm.service';
+import { validate, isFormValid } from './ChildForm.helper';
 import { PageInfo } from '../Layout';
+import Notification from './Notification';
 
 const styles = theme => ({
   container: {
@@ -24,11 +26,11 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     width: 300,
-    fontSize: 14,
+    fontSize: 20,
   },
   menu: {
     width: 300,
-    fontSize: 14,
+    fontSize: 20,
   },
   card: {
     minWidth: 300,
@@ -39,22 +41,21 @@ const styles = theme => ({
   },
   title: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 24,
   },
   formControl: {
     margin: theme.spacing.unit,
     minWidth: 300,
     color: '#000',
-    fontSize: 14,
+    fontSize: 20,
   },
   button: {
     marginTop: theme.spacing.unit,
     backgroundColor: '#09798e',
     color: '#ffffff',
-    fontSize: 14,
+    fontSize: 20,
   },
 });
-
 class ChildForm extends Component {
   constructor(props) {
     super(props);
@@ -72,20 +73,28 @@ class ChildForm extends Component {
           name: '',
         },
       },
+      childInfoValidation: {
+        first_name: false,
+        last_name: false,
+        dob: false,
+        case_id: false,
+        county: false,
+      },
+      isSaveButtonDisabled: true,
       open: false,
+      navigate: false,
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleCancel = this.handleCancel.bind(this);
   }
 
   handleChange = name => event => {
+    const newValue = event.target.value;
     this.setState({
       childInfo: {
         ...this.state.childInfo,
-        [name]: event.target.value,
+        [name]: newValue,
       },
     });
+    this.validateInput(name, newValue);
   };
 
   handleClose = () => {
@@ -99,7 +108,6 @@ class ChildForm extends Component {
   handleSubmit = event => {
     event.preventDefault();
     this.setState({ child_status: 'updating' });
-    console.log('ChildInfo in handleSubmit: ', this.state.childInfo);
     ChildFormService.createChild(this.state.childInfo)
       .then(newChild => {
         this.setState({
@@ -107,6 +115,7 @@ class ChildForm extends Component {
           child_status: 'ready',
         });
       })
+      .then(() => setTimeout(() => this.setState({ navigate: true }), 5000))
       .catch(() => this.setState({ child_status: 'error' }));
   };
 
@@ -145,9 +154,22 @@ class ChildForm extends Component {
     });
   };
 
+  validateInput = (fieldName, inputValue) => {
+    const fieldValidation = validate(fieldName, inputValue);
+    const allValidations = this.state.childInfoValidation;
+    allValidations[fieldName] = fieldValidation;
+    const formValidation = isFormValid(allValidations);
+    this.setState({
+      childInfoValidation: {
+        ...allValidations,
+      },
+      isSaveButtonDisabled: !formValidation,
+    });
+  };
+
   render() {
-    if (this.state.child_status === 'ready') {
-      return <Redirect to={'/clients/' + this.state.childInfo.id} />;
+    if (this.state.navigate) {
+      return <Redirect to={`/clients/${this.state.childInfo.id}`} />;
     }
 
     const { classes } = this.props;
@@ -166,11 +188,14 @@ class ChildForm extends Component {
             <form className={classes.container} noValidate autoComplete="off">
               <div style={{ width: '800px' }}>
                 <TextField
+                  required
                   id="first_name"
                   label="First Name"
+                  error={!this.state.childInfoValidation['first_name']}
                   className={classes.textField}
                   value={this.state.first_name}
                   onChange={this.handleChange('first_name')}
+                  inputProps={{ maxLength: 50 }}
                   margin="normal"
                 />
 
@@ -178,9 +203,11 @@ class ChildForm extends Component {
                   required
                   id="last_name"
                   label="Last Name"
+                  error={!this.state.childInfoValidation['last_name']}
                   className={classes.textField}
                   value={this.state.last_name}
                   onChange={this.handleChange('last_name')}
+                  inputProps={{ maxLength: 50 }}
                   margin="normal"
                 />
               </div>
@@ -189,6 +216,7 @@ class ChildForm extends Component {
                   required
                   id="dob"
                   label="Birth Date"
+                  error={!this.state.childInfoValidation['dob']}
                   type="date"
                   defaultValue=""
                   className={classes.textField}
@@ -201,9 +229,11 @@ class ChildForm extends Component {
                   required
                   id="case_id"
                   label="Case Number"
+                  error={!this.state.childInfoValidation['case_id']}
                   className={classes.textField}
                   value={this.state.case_id}
                   onChange={this.handleChange('case_id')}
+                  inputProps={{ maxLength: 50 }}
                   margin="normal"
                 />
               </div>
@@ -213,6 +243,7 @@ class ChildForm extends Component {
                   select
                   id="county"
                   label="County"
+                  error={!this.state.childInfoValidation['county']}
                   className={classes.textField}
                   open={this.state.open}
                   onClose={this.handleClose}
@@ -238,14 +269,14 @@ class ChildForm extends Component {
             </form>
           </CardContent>
           <CardActions>
-            <Button onClick={this.handleCancel} href="/">
+            <Button onClick={this.handleCancel} href="/clients/new">
               Cancel
             </Button>
-
             <Button
               variant="raised"
               size="large"
               color="primary"
+              disabled={this.state.isSaveButtonDisabled}
               className={classes.button}
               onClick={this.handleSubmit}
             >
@@ -253,6 +284,7 @@ class ChildForm extends Component {
             </Button>
           </CardActions>
         </Card>
+        {this.state.child_status === 'ready' && <Notification />}
       </Fragment>
     );
   }
@@ -263,3 +295,4 @@ ChildForm.propTypes = {
 };
 
 export default withStyles(styles)(ChildForm);
+

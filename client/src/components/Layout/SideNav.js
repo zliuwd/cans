@@ -6,6 +6,7 @@ import './style.css';
 const URL_MAP = [
   { url: '/', text: 'Child & Family Teams' },
   { url: '/reports', text: 'Reports' },
+  { url: '/clients/new', text: 'Add Child' },
 ];
 
 class SideNav extends Component {

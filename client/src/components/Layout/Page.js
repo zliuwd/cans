@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { PageInfo, SideNav } from './';
 import { Routes } from '../../routes';
-import { ChildForm } from '../ChildForm';
+
 
 class Page extends Component {
   render() {
