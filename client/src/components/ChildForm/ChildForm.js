@@ -230,7 +230,7 @@ class ChildForm extends Component {
                       value={option}
                       className={classes.menu}
                     >
-                      {option.name}
+                      <span id={'county-name'}>{option.name}</span>
                     </MenuItem>
                   ))}
                 </TextField>

@@ -4,9 +4,9 @@ import Card from '@material-ui/core/Card/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { PersonService } from './index';
 import PropTypes from 'prop-types';
 import { PageInfo } from '../Layout';
+import { ClientAssessmentHistory, PersonService } from './index';
 
 import './style.css';
 
@@ -30,7 +30,7 @@ class Client extends Component {
   fetchChildData(id) {
     return PersonService.fetch(id)
       .then(data => this.setState({ childData: data }))
-      .catch(() => this.setState({ childData: undefined }));
+      .catch(() => this.setState({ childData: {} }));
   }
 
   renderClientData(data, label) {
@@ -73,6 +73,10 @@ class Client extends Component {
               </CardContent>
             </Card>
           </Grid>
+          <ClientAssessmentHistory
+            clientFirstName={childData.first_name}
+            clientLastName={childData.last_name}
+          />
         </Grid>
       </Fragment>
     );

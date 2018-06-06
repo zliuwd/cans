@@ -1,5 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { AssessmentFormHeader, Domain, DomainsGroup, AssessmentService, I18nService } from './';
+import {
+  AssessmentFormHeader,
+  Domain,
+  DomainsGroup,
+  AssessmentService,
+  I18nService,
+} from './';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Typography from '@material-ui/core/Typography';
@@ -7,8 +13,6 @@ import { getI18nByCode } from './I18nHelper';
 import { clone } from 'lodash';
 import AssessmentFormFooter from './AssessmentFormFooter';
 import { PageInfo } from '../Layout';
-
-const HARDCODED_ASSESSMENT_ID = 50000;
 
 class Assessment extends Component {
   constructor(props) {
@@ -22,10 +26,30 @@ class Assessment extends Component {
   }
 
   componentDidMount() {
-    this.fetchAssessment(HARDCODED_ASSESSMENT_ID);
+    const assessmentId = this.props.match.params.id;
+    if (assessmentId) {
+      this.fetchAssessment(assessmentId);
+    } else {
+      this.fetchNewAssessment();
+    }
   }
 
-  fetchAssessment = id => {
+  fetchNewAssessment() {
+    this.setState({ assessment_status: 'waiting' });
+    return AssessmentService.fetchNewAssessment()
+      .then(this.onFetchNewAssessmentSuccess)
+      .catch(() => this.setState({ assessment_status: 'error' }));
+  }
+
+  onFetchNewAssessmentSuccess = instrument => {
+    this.setState({
+      assessment: instrument,
+      assessment_status: 'ready',
+    });
+    this.fetchI18n(instrument.id);
+  };
+
+  fetchAssessment(id) {
     this.setState({ assessment_status: 'waiting' });
     return AssessmentService.fetch(id)
       .then(this.onFetchAssessmentSuccess)
@@ -135,13 +159,18 @@ class Assessment extends Component {
   };
 
   render = () => {
-    const assessmentState = this.state.assessment.state || {};
+    const { clientFirstName, clientLastName } = this.props.location;
+    const assessmentState =
+      this.state.assessment.state || this.state.assessment.prototype || {};
     const isUnderSix = assessmentState.under_six || false;
     const domains = assessmentState.domains || [];
     return (
       <Fragment>
         <PageInfo title={'Add CANS'} />
-        <AssessmentFormHeader />
+        <AssessmentFormHeader
+          clientFirstName={clientFirstName}
+          clientLastName={clientLastName}
+        />
         <Typography variant="body1" style={{ textAlign: 'right' }}>
           Age: 0-5
           <FormControlLabel
