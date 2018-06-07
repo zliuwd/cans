@@ -16,15 +16,14 @@ feature 'Client Pages' do
     visit '/clients/new'
     expect(page).to have_content 'Add Child/Youth'
 
-    fill_in('First Name', with: '')
-    click_button('Save')
-    expect(page).to have_content 'Add Child/Youth'
-
     fill_in('First Name', with: first_name)
     fill_in('Last Name', with: last_name)
     page.find('#dob').set(date_of_birth)
+    page.find('#dob').native.send_keys(:up)
+    page.find('#dob').native.send_keys(:down)
     fill_in('Case Number', with: case_number)
     find('div[aria-haspopup=true][role=button]').click
+    expect(find_button('Save', disabled: true).disabled?).to be true
     find('li', text: 'Fresno').send_keys(:enter)
     click_button 'Save'
     expect(page).to have_content 'Child/Youth Profile'

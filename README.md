@@ -27,7 +27,7 @@ Things you may want to cover:
 
 The react app lives in the client dir
 
-```cd client``` 
+```cd client```
 
 If this is your first time running the app, install the project node modules:
 
