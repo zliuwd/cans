@@ -1,14 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Card from "@cwds/components/lib/Cards";
+import Button from '@cwds/components/lib/Button';
 import {
   MenuItem,
   TextField,
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Button,
+  // Card,
+  // CardHeader,
+  // CardContent,
+  // CardActions,
+  // Button,
 } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { CountiesService } from './Counties.service';
@@ -134,6 +136,7 @@ class ChildForm extends Component {
         },
       },
     });
+    // go to /clients/new
   };
 
   componentDidMount() {
@@ -177,14 +180,10 @@ class ChildForm extends Component {
       <Fragment>
         <PageInfo title={'Add Child/Youth'} />
         <Card className={classes.card}>
-          <CardHeader
-            className={classes.cardHeader}
-            title="Child/Youth Information"
-            classes={{
-              title: classes.title,
-            }}
-          />
-          <CardContent>
+          <Card.Header>
+            <Card.Title>Child/Youth Information</Card.Title>
+          </Card.Header>
+          <Card.Body>
             <form className={classes.container} noValidate autoComplete="off">
               <div style={{ width: '800px' }}>
                 <TextField
@@ -267,22 +266,19 @@ class ChildForm extends Component {
                 </TextField>
               </div>
             </form>
-          </CardContent>
-          <CardActions>
-            <Button onClick={this.handleCancel} href="/clients/new">
+          </Card.Body>
+          <Card.Footer>
+            <Button onClick={this.handleCancel}>
               Cancel
             </Button>
             <Button
-              variant="raised"
-              size="large"
               color="primary"
               disabled={this.state.isSaveButtonDisabled}
-              className={classes.button}
               onClick={this.handleSubmit}
             >
               Save
             </Button>
-          </CardActions>
+          </Card.Footer>
         </Card>
         {this.state.child_status === 'ready' && <Notification />}
       </Fragment>
