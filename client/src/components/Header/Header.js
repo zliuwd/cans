@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { GlobalHeader } from 'react-wood-duck';
+// import { GlobalHeader } from 'react-wood-duck';
+import AppBar from '@cwds/components/lib/AppBar';
 import { trimSafely } from '../../util/formatters';
 import UserAccountService from './UserAccountService';
 
@@ -70,13 +71,17 @@ class Header extends React.Component {
     }
   };
 
+  renderHeaderCTA() {
+    const { userName, userInitials } = this.state;
+    return userName && <div>Something</div>;
+  }
+
   render = () => {
     const { userName, userInitials } = this.state;
     return (
-      <GlobalHeader
-        profileName={userName}
-        profileId={userInitials}
-        profileAvatar={userInitials}
+      <AppBar
+        brand={_ => <a>CWDS-CARES</a>}
+        rhs={_ => this.renderHeaderCTA()}
       />
     );
   };

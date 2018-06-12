@@ -1,10 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import { PageHeader } from 'react-wood-duck';
+import AppBar from '@cwds/components/lib/AppBar';
+import PageHeader from '@cwds/components/lib/PageHeader';
 import Header from './components/Header';
 import { Page } from './components/Layout';
 import { BrowserRouter } from 'react-router-dom'
-
-import './style.css';
 
 class App extends Component {
   render() {
@@ -12,7 +11,8 @@ class App extends Component {
       <BrowserRouter>
         <Fragment>
           <Header/>
-          <PageHeader pageTitle="CANS Assessment Application" button={null}/>
+          {/* <AppBar /> */}
+          <PageHeader title="CANS Assessment Application" />
           <Page/>
         </Fragment>
       </BrowserRouter>
