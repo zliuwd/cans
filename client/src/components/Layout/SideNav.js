@@ -1,13 +1,26 @@
 import React, { Component } from 'react';
+import { Route, Link, withRouter } from 'react-router-dom';
+import { ListGroup, ListGroupItem } from '@cwds/components/lib/ListGroups';
 import SideNavLink from './SideNavLink';
 
-import './style.css';
-
-const URL_MAP = [
-  { url: '/', text: 'Child & Family Teams' },
-  { url: '/reports', text: 'Reports' },
-  { url: '/clients/new', text: 'Add Child' },
+const ROUTES = [
+  { url: '/', name: 'Child & Family Teams' },
+  { url: '/reports', name: 'Reports' },
+  { url: '/clients/new', name: 'Add Child' }
 ];
+
+const ListGroupItemLink = withRouter(
+  ({ history, location, match, staticContext: _, to, ...props }) => {
+    return (
+      <ListGroupItem
+        {...props}
+        onClick={() => history.push(to)}
+        action
+        active={to === location.pathname}
+      />
+    );
+  }
+);
 
 class SideNav extends Component {
   constructor(props) {
@@ -27,22 +40,18 @@ class SideNav extends Component {
 
   render() {
     return (
-      <nav className={'sidebar'}>
-        {URL_MAP.map((item, index) => {
-          return (
-            <SideNavLink
-              key={index}
-              id={item.url.substr(1)}
-              href={item.url}
-              text={item.text}
-              onClick={() => {
-                this.toggleActiveLink(item.url);
-              }}
-              active={this.isActive(item.url)}
-            />
-          );
-        })}
-      </nav>
+      <ListGroup>
+        {ROUTES.map(({ name, url }) => (
+          <ListGroupItemLink
+            key={name}
+            to={url}
+            action
+            style={{ cursor: 'pointer' }}
+          >
+            {name}
+          </ListGroupItemLink>
+        ))}
+      </ListGroup>
     );
   }
 }
