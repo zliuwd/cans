@@ -30,9 +30,6 @@ plugins:
     enabled: true
 exclude_patterns:
   - "config/"
-  - "db/"
-  - "dist/"
-  - "features/"
   - "/client/**/node_modules/"
   - "script/"
   - "**/spec/"
