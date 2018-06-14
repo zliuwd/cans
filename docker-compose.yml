@@ -66,3 +66,4 @@ services:
         target: /app/spec
     environment:
       CANS_WEB_BASE_URL: ${CANS_WEB_BASE_URL}
+

@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import Row from '@cwds/components/lib/Row';
-import Col from '@cwds/components/lib/Col';
+import { Row, Col} from 'reactstrap';
 import PropTypes from 'prop-types'
 
-import './style.css';
+import '../../style.css';
 
 class PageInfo extends Component {
 
   static propTypes = {
+    // page header title
     title: PropTypes.string.isRequired,
   };
 

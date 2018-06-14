@@ -2,7 +2,7 @@ import React from 'react';
 import App from './App';
 import { Page } from './components/Layout';
 import Header from './components/Header/';
-import PageHeader from '@cwds/components/lib/PageHeader';
+import { PageHeader } from 'react-wood-duck';
 
 describe('<App />', () => {
   const getWrapper = () => shallow(<App />);
