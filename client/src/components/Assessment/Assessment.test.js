@@ -1,5 +1,5 @@
 import React from 'react';
-import { Assessment, AssessmentFormHeader, AssessmentService } from './index';
+import { Assessment, AssessmentFormHeader, AssessmentService, Domain, DomainsGroup } from './index';
 import { childInfoJson } from '../Client/person.helper.test';
 import PersonService from '../Client/person.service';
 import { DateTime } from 'luxon';
@@ -15,14 +15,14 @@ const initialAssessment = {
   status: 'IN_PROGRESS',
   completed_as: 'COMMUNIMETRIC',
   state: {
-    'id': 0,
-    'under_six': false,
-    'domains': [
+    id: 0,
+    under_six: false,
+    domains: [
       {
-        'id': 0,
-        'code': 'string',
-        'underSix': false,
-        'aboveSix': false,
+        id: 0,
+        code: 'string',
+        underSix: false,
+        aboveSix: false,
       },
     ],
   },
@@ -43,6 +43,18 @@ const assessment = {
       {
         id: 0,
         code: '123',
+        class: 'domain',
+        items: [
+          {
+            above_six_id: '2',
+            code: '1',
+            confidential: true,
+            rating: 1,
+            rating_type: 'REGULAR',
+            required: true,
+            under_six_id: 'EC01',
+          },
+        ],
         underSix: false,
         aboveSix: false,
       },
@@ -95,34 +107,53 @@ const instrument = {
   },
 };
 
+const i18n = {
+  "10._description_" : "Child youth relationship",
+  "10._rating_.1._description_" : "Identified need requires monitoring",
+  "10._rating_.2._description_" : "Action or intervention is required",
+  "10._rating_.3._description_" : "Problems are dangerous",
+};
+
 describe('<Assessment />', () => {
   describe('init Assessment', () => {
-    describe('every assessment', () => {
-      describe('page layout', () => {
+    describe('page layout', () => {
+      const props = {
+        location: { childId: 10 },
+        match: { params: { id: undefined } },
+      };
+      const getWrapper = () => shallow(<Assessment {...props}/>);
+      const getLength = component => getWrapper().find(component).length;
+
+      it('renders with 1 <PageInfo /> component', () => {
+        expect(getLength(PageInfo)).toBe(1);
+      });
+
+      it('renders with 1 <AssessmentFormHeader /> component', () => {
+        expect(getLength(AssessmentFormHeader)).toBe(1);
+      });
+
+      it('renders with 1 <Typography /> component', () => {
+        expect(getLength(Typography)).toBe(1);
+      });
+
+      it('renders with 1 <AssessmentFormFooter /> component', () => {
+        expect(getLength(AssessmentFormFooter)).toBe(1);
+      });
+    });
+
+    describe('assessment form with data', () => {
+      it('renders with 1 <Domain /> component' , () => {
         const props = {
           location: { childId: 10 },
           match: { params: { id: undefined } },
         };
-        const getWrapper = () => shallow(<Assessment {...props}/>);
-        const getLength = component => getWrapper().find(component).length;
-
-        it('renders with 1 <PageInfo /> component', () => {
-          expect(getLength(PageInfo)).toBe(1);
-        });
-
-        it('renders with 1 <AssessmentFormHeader /> component', () => {
-          expect(getLength(AssessmentFormHeader)).toBe(1);
-        });
-
-        it('renders with 1 <Typography /> component', () => {
-          expect(getLength(Typography)).toBe(1);
-        });
-
-        it('renders with 1 <AssessmentFormFooter /> component', () => {
-          expect(getLength(AssessmentFormFooter)).toBe(1);
-        });
-
+        const wrapper = shallow(<Assessment {...props}/>);
+        wrapper.setState({assessment: assessment});
+        expect(wrapper.find(Domain).length).toBe(1);
       });
+    });
+
+    describe('every assessment', () => {
       const personServiceFetchSpy = jest.spyOn(PersonService, 'fetch');
 
       beforeEach(() => {
@@ -145,7 +176,7 @@ describe('<Assessment />', () => {
       });
     });
 
-    describe('assessment with no existing assessment', () => {
+    describe('assessment form with no existing assessment', () => {
       const props = {
         location: { childId: 1 },
         match: { params: { id: undefined } },
@@ -171,7 +202,7 @@ describe('<Assessment />', () => {
       })
     });
 
-    describe('assessment with an existing assessment', () => {
+    describe('assessment form with an existing assessment', () => {
 
       it('calls fetchAssessment', () => {
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment');
@@ -251,6 +282,51 @@ describe('<Assessment />', () => {
     });
   });
 
+  describe('handleDateChange', () => {
+    it('will update assessmentDate on the component state', () => {
+      const props = {
+        location: { childId: 1 },
+        match: { params: { id: 1 } },
+      };
+      const wrapper = shallow(<Assessment {...props} />);
+
+      wrapper.setState({assessment: assessment});
+      expect(wrapper.state('assessment').event_date).toEqual('2018-06-11');
+      wrapper.instance().handleDateChange('2018-06-12');
+      expect(wrapper.state('assessment').event_date).toEqual('2018-06-12');
+    });
+  });
+
+  describe('handleSelectCompletedAs', () => {
+    it('will update completedAs on the component state', () => {
+      const props = {
+        location: { childId: 1 },
+        match: { params: { id: 1 } },
+      };
+      const wrapper = shallow(<Assessment {...props} />);
+
+      wrapper.setState({assessment: assessment});
+      expect(wrapper.state('assessment').completed_as).toEqual('COMMUNIMETRIC');
+      wrapper.instance().handleSelectCompletedAs('Social Worker');
+      expect(wrapper.state('assessment').completed_as).toEqual('Social Worker');
+    });
+  });
+
+  describe('updateItem', () => {
+    it('will update an assessment domain item on the component state', () => {
+      const props = {
+        location: { childId: 1 },
+        match: { params: { id: 1 } },
+      };
+      const wrapper = shallow(<Assessment {...props} />);
+
+      wrapper.setState({assessment: assessment});
+      expect(wrapper.state('assessment').state.domains[0].items[0].rating).toEqual(1);
+      wrapper.instance().updateItem('1', 'rating', 2);
+      expect(wrapper.state('assessment').state.domains[0].items[0].rating).toEqual(2);
+    });
+  });
+
   describe('update assessment', () => {
     describe('is passed updated data', () => {
       it('will update the assessment on the component state', () => {
@@ -314,6 +390,32 @@ describe('<Assessment />', () => {
       expect(wrapper.state('assessment').state.under_six).toEqual(true);
       wrapper.instance().toggleUnderSix();
       expect(wrapper.state('assessment').state.under_six).toEqual(false);
+    });
+  });
+
+  describe('renderDomains', () => {
+    it('will render Domain', () => {
+      const props = {
+        location: { childId: 1 },
+        match: { params: { id: 1 } },
+      };
+      const wrapper = shallow(<Assessment {...props} />);
+
+      wrapper.setState({ assessment: assessment, i18n: i18n});
+      wrapper.instance().renderDomains(assessment.state.domains);
+      expect(wrapper.find(Domain).length).toBe(1);
+    });
+
+    it('will render DomainGroup', () => {
+      const props = {
+        location: { childId: 1 },
+        match: { params: { id: 1 } },
+      };
+      const wrapper = shallow(<Assessment {...props} />);
+
+      wrapper.setState({ assessment: initialAssessment, i18n: i18n});
+      wrapper.instance().renderDomains(assessment.state.domains);
+      expect(wrapper.find(DomainsGroup).length).toBe(1);
     });
   });
 });

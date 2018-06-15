@@ -94,11 +94,11 @@ class Assessment extends Component {
   };
 
   handleUpdateItemRating = (code, rating) => {
-    this.updateAndStoreItem(code, 'rating', rating);
+    this.updateItem(code, 'rating', rating);
   };
 
   handleUpdateItemConfidentiality = (code, isConfidential) => {
-    this.updateAndStoreItem(code, 'confidential', isConfidential);
+    this.updateItem(code, 'confidential', isConfidential);
   };
 
   handleDateChange = (dateValue) => {
@@ -113,7 +113,7 @@ class Assessment extends Component {
     this.updateAssessment(assessment)
   };
 
-  updateAndStoreItem = (itemCode, key, value) => {
+  updateItem = (itemCode, key, value) => {
     const updateAssessment = clone(this.state.assessment);
     updateAssessment.state.domains.map(assessmentChild => {
       if (assessmentChild.class === 'domain') {
