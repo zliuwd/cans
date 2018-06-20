@@ -13,15 +13,20 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Rating } from './';
 import { getI18nValuesByPrefix } from './I18nHelper';
 
+const initI18nValue = i18n => ({
+  title: (i18n['_title_'] || '').toUpperCase(),
+  description: i18n['_description_'] || 'No Description',
+  qtcDescriptions: getI18nValuesByPrefix(i18n, '_to_consider_.'),
+  ratingDescriptions: getI18nValuesByPrefix(i18n, '_rating_.'),
+});
+
 class Item extends Component {
   constructor(props) {
     super(props);
+    const i18nValues = initI18nValue(props.i18n);
     this.state = {
       isExpanded: false,
-      title: '',
-      description: '',
-      qtcDescriptions: [],
-      ratingDescriptions: [],
+      ...i18nValues,
     };
   }
 
@@ -35,16 +40,9 @@ class Item extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    const { i18n } = nextProps;
-    const title = (i18n['_title_'] || '').toUpperCase();
-    const description = i18n['_description_'] || 'No Description';
-    const qtcDescriptions = getI18nValuesByPrefix(i18n, '_to_consider_.');
-    const ratingDescriptions = getI18nValuesByPrefix(i18n, '_rating_.');
+    const i18nValues = initI18nValue(nextProps.i18n);
     this.setState({
-      title: title,
-      description: description,
-      qtcDescriptions: qtcDescriptions,
-      ratingDescriptions: ratingDescriptions,
+      ...i18nValues,
     });
   }
 
@@ -97,8 +95,10 @@ class Item extends Component {
   renderQtcIfNeeded = qtcDescriptions => {
     return qtcDescriptions.length > 0 ? (
       <div>
-        <Typography variant="headline">Questions to Consider:</Typography>
-        <Typography variant="body1">
+        <Typography variant="display1" style={{marginTop: '1.5rem'}}>
+          Questions to Consider:
+        </Typography>
+        <Typography variant="headline">
           {qtcDescriptions.map((description, i) => {
             return <li key={i}>{description}</li>;
           })}
@@ -110,25 +110,31 @@ class Item extends Component {
   renderRatingDescriptionsIfNeeded = (ratingDescriptions, isBooleanRating, rating, has_na_option) => {
     return ratingDescriptions.length > 0 ? (
       <div>
-        <Typography variant="headline">Ratings:</Typography>
-        <Typography variant="body1">
+        <Typography variant="display1" style={{marginTop: '1.5rem'}}>
+          Ratings:
+        </Typography>
           <form autoComplete="off">
             <FormControl>
               <RadioGroup name="rating_desc" value={rating} onChange={this.handleRatingChange}>
-                {has_na_option ? <FormControlLabel value={8} control={<Radio value={8} />} label={'N/A'} /> : null}
+                {has_na_option
+                  ? <FormControlLabel
+                    value={8}
+                    control={<Radio value={8} />}
+                    label={<Typography variant="headline">N/A</Typography>}
+                    style={{fontSize: '1.3rem'}}
+                  />
+                  : null}
                 {ratingDescriptions.map((label, i) => {
-                  return (
-                    <FormControlLabel
-                      value={i}
-                      control={<Radio value={i} />}
-                      label={`${this.getRadioValueForLabel(isBooleanRating, i)} = ${label}`}
-                    />
-                  );
+                  return <FormControlLabel
+                    value={i}
+                    control={<Radio value={i} />}
+                    style={{fontSize: '1.3rem'}}
+                    label={<Typography variant="headline">{this.getRadioValueForLabel(isBooleanRating, i)} = {label}</Typography>}
+                  />;
                 })}
               </RadioGroup>
             </FormControl>
           </form>
-        </Typography>
       </div>
     ) : null;
   };
@@ -168,9 +174,9 @@ class Item extends Component {
           </Toolbar>
         </AppBar>
         {isExpanded ? (
-          <Paper>
-            <Typography variant="headline">Item Description:</Typography>
-            <Typography variant="body1">{description}</Typography>
+          <Paper style={{ padding: '1rem 3rem' }}>
+            <Typography variant="display1">Item Description:</Typography>
+            <Typography variant="headline">{description}</Typography>
             {this.renderQtcIfNeeded(qtcDescriptions)}
             {this.renderRatingDescriptionsIfNeeded(ratingDescriptions, isBooleanRating, rating, has_na_option)}
           </Paper>
