@@ -6,7 +6,6 @@ import { withStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import green from '@material-ui/core/colors/green';
 import {
-  Button,
   IconButton,
   Snackbar,
   SnackbarContent,
@@ -16,12 +15,20 @@ const variantIcon = {
   success: CheckCircleIcon,
   backgroundColor: green,
 };
-const styles1 = theme => ({
+
+const styles = theme => ({
   success: {
-    backgroundColor: green[600],
+    backgroundColor: 'white',
+    color: 'black',
+    padding: '0',
+    height: '50px',
+    border: "2px solid green"
   },
   icon: {
-    fontSize: 20,
+    background: 'green',
+    color: 'white',
+    height: '50px',
+    width: '50px',
   },
   iconVariant: {
     opacity: 0.9,
@@ -30,6 +37,7 @@ const styles1 = theme => ({
   message: {
     display: 'flex',
     alignItems: 'center',
+    fontSize: 18,
   },
 });
 
@@ -47,8 +55,14 @@ const MessageContent = props => {
         </span>
       }
       action={[
-        <IconButton key="close" aria-label="Close" color="inherit" className={classes.close} onClick={onClose}>
-          <CloseIcon className={classes.icon} />
+        <IconButton
+          key="close"
+          aria-label="Close"
+          color="inherit"
+          className={classes.close}
+          onClick={onClose}
+        >
+          <CloseIcon />
         </IconButton>,
       ]}
       {...other}
@@ -63,16 +77,15 @@ MessageContent.propTypes = {
   onClose: PropTypes.func,
   variant: PropTypes.oneOf(['success']).isRequired,
 };
-const MessageContentWrapper = withStyles(styles1)(MessageContent);
-const styles2 = theme => ({
-  margin: {
-    margin: theme.spacing.unit,
-  },
-});
+
+const MessageContentWrapper = withStyles(styles)(MessageContent);
 class Notification extends Component {
-  state = {
-    open: true,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: true,
+    };
+  }
 
   handleClick = () => {
     this.setState({ open: true });
@@ -86,14 +99,10 @@ class Notification extends Component {
   };
 
   render() {
-    const { classes } = this.props;
     return (
       <Fragment>
         <Snackbar
-          anchorOrigin={{
-            vertical: 'center',
-            horizontal: 'center',
-          }}
+          anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
           open={this.state.open}
           autoHideDuration={5000}
           onClose={this.handleClose}
@@ -103,7 +112,7 @@ class Notification extends Component {
           <MessageContentWrapper
             onClose={this.handleClose}
             variant="success"
-            message="Success! New Child/Youth record has been saved."
+            message={this.props.messageText}
           />
         </Snackbar>
       </Fragment>
@@ -115,4 +124,4 @@ Notification.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles2)(Notification);
+export default withStyles(styles)(Notification);

@@ -15,7 +15,7 @@ import { CountiesService } from './Counties.service';
 import { ChildFormService } from './ChildForm.service';
 import { validate, isFormValid } from './ChildForm.helper';
 import { PageInfo } from '../Layout';
-import Notification from './Notification';
+import { Notification } from '../Notification';
 
 const styles = theme => ({
   container: {
@@ -284,7 +284,9 @@ class ChildForm extends Component {
             </Button>
           </CardActions>
         </Card>
-        {this.state.child_status === 'ready' && <Notification />}
+        {this.state.child_status === 'ready' && (
+          <Notification messageText="Success! New Child/Youth record has been saved." />
+        )}
       </Fragment>
     );
   }
@@ -295,4 +297,3 @@ ChildForm.propTypes = {
 };
 
 export default withStyles(styles)(ChildForm);
-
