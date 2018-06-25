@@ -159,6 +159,25 @@ describe('<Item />', () => {
       wrapper.instance().handleConfidentialityChange({target: {}})
       expect(onConfidentialityUpdateMock.mock.calls.length).toBe(1);
     });
+
+    it('converts newValue to a number', () => {
+      const onRatingUpdateMock = jest.fn();
+      const wrapper = mount(<Item
+        key={"1"}
+        item={{...itemDefault}}
+        assessmentUnderSix={false}
+        i18n={{...i18nDefault}}
+        onRatingUpdate={onRatingUpdateMock}
+        onConfidentialityUpdate={() => {}}
+      />);
+      const stringValue = {target: {value: "1"}};
+
+      wrapper.setProps({...propsDefault});
+      wrapper.instance().handleRatingChange(stringValue);
+
+      // the string "1" was converted to a 1
+      expect(onRatingUpdateMock).toBeCalledWith('lf10family', 1);
+    });
   });
 
 });

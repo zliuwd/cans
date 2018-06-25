@@ -61,7 +61,7 @@ class Item extends Component {
 
   handleRatingChange = onChangeEvent => {
     const code = this.props.item.code;
-    const newValue = onChangeEvent.target.value;
+    const newValue = parseInt(onChangeEvent.target.value);
     this.props.onRatingUpdate(code, newValue);
   };
 
@@ -119,7 +119,7 @@ class Item extends Component {
                 {has_na_option
                   ? <FormControlLabel
                     value={8}
-                    control={<Radio value={8} />}
+                    control={<Radio value={8} color={'default'}/>}
                     label={<Typography variant="headline">N/A</Typography>}
                     style={{fontSize: '1.3rem'}}
                   />
@@ -127,7 +127,7 @@ class Item extends Component {
                 {ratingDescriptions.map((label, i) => {
                   return <FormControlLabel
                     value={i}
-                    control={<Radio value={i} />}
+                    control={<Radio value={i} color={'default'}/>}
                     style={{fontSize: '1.3rem'}}
                     label={<Typography variant="headline">{this.getRadioValueForLabel(isBooleanRating, i)} = {label}</Typography>}
                   />;
