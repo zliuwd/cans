@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PersonService from './person.service';
 import { groupClientsByLastName } from './person.helper';
-import './style.css';
 import { PageInfo } from '../Layout';
+
+import './style.sass';
 
 class ClientsContainer extends Component {
   constructor(props) {

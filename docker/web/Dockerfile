@@ -9,7 +9,8 @@ RUN mkdir /app
 WORKDIR /app
 ADD . /app
 RUN bundle install --jobs 20 --retry 5
-RUN cd /app/client && yarn install && yarn build && yarn deploy
+RUN yarn install
+# RUN cd /app/client && yarn install && yarn build && yarn deploy
 EXPOSE 3000 3035
-RUN cd /app
+# RUN cd /app
 CMD ["bundle", "exec", "rails", "server"]

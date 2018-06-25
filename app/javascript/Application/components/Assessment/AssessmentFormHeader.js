@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Label, Input } from 'reactstrap';
-
-import './style.css';
 import PropTypes from 'prop-types';
+
+import './style.sass';
 
 class AssessmentFormHeader extends Component {
   static propTypes = {

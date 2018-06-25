@@ -1,7 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import Item from './Item';
-import Icon from '@material-ui/core/Icon';
 import Radio from '@material-ui/core/Radio';
 import Select from '@material-ui/core/Select';
 
@@ -54,12 +53,12 @@ describe('<Item />', () => {
     const wrapper = mount({...itemComponentDefault});
     wrapper.setProps({...propsDefault});
     const foldedText = wrapper.text();
-    expect(foldedText).toMatch(/add_circle/);
+    expect(wrapper.find('#item-expand').hasClass('fa-plus')).toBe(true);
     expect(foldedText).not.toMatch(/Description/);
 
-    wrapper.find(Icon).simulate('click');
+    wrapper.find('#item-expand').simulate('click');
     const expandedText = wrapper.text();
-    expect(expandedText).toMatch(/remove_circle/);
+    expect(wrapper.find('#item-expand').hasClass('fa-minus')).toBe(true);
     expect(expandedText).toMatch(/Description/);
   });
 
@@ -72,7 +71,7 @@ describe('<Item />', () => {
     expect(foldedText).not.toMatch(/qtc/);
     expect(foldedText).not.toMatch(/rating/);
 
-    wrapper.find(Icon).simulate('click');
+    wrapper.find('#item-expand').simulate('click');
     const expandedText = wrapper.text();
     expect(expandedText).toMatch(/TITLE/);
     expect(expandedText).toMatch(/Description:Description/);
@@ -86,7 +85,7 @@ describe('<Item />', () => {
       item.has_na_option = true;
       const wrapper = mountItem(item);
       wrapper.setProps({...propsDefault});
-      wrapper.find(Icon).simulate('click');
+      wrapper.find('#item-expand').simulate('click');
       const expandedText = wrapper.text();
       expect(expandedText).toMatch(/N\/A/);
       const radios = wrapper.find(Radio);
@@ -96,7 +95,7 @@ describe('<Item />', () => {
     it('can have no N/A option', () => {
       const wrapper = mount({...itemComponentDefault});
       wrapper.setProps({...propsDefault});
-      wrapper.find(Icon).simulate('click');
+      wrapper.find('#item-expand').simulate('click');
       const expandedText = wrapper.text();
       expect(expandedText).not.toMatch(/N\/A/);
       const radios = wrapper.find(Radio);
@@ -111,7 +110,7 @@ describe('<Item />', () => {
       const findSelect = wrapper.find(Select);
       expect(findSelect.children().get(0).props.children.length).toBe(6);
 
-      wrapper.find(Icon).simulate('click');
+      wrapper.find('#item-expand').simulate('click');
       const expandedText = wrapper.text();
       expect(expandedText).toMatch(/0 = rating 0 description1 = rating 1 description/);
     });
@@ -124,7 +123,7 @@ describe('<Item />', () => {
       const findSelect = wrapper.find(Select);
       expect(findSelect.children().get(0).props.children.length).toBe(4);
 
-      wrapper.find(Icon).simulate('click');
+      wrapper.find('#item-expand').simulate('click');
       const expandedText = wrapper.text();
       expect(expandedText).toMatch(/No = rating 0 descriptionYes = rating 1 description/);
     });
@@ -133,7 +132,7 @@ describe('<Item />', () => {
   describe('Actions', () => {
     it('invokes onRatingUpdate callback on rating change', () => {
       const onRatingUpdateMock = jest.fn();
-      const wrapper = mount(<Item
+      const wrapper = shallow(<Item
         key={"1"}
         item={{...itemDefault}}
         assessmentUnderSix={false}
@@ -148,7 +147,7 @@ describe('<Item />', () => {
 
     it('invokes onConfidentialityUpdate callback on confidentiality change', () => {
       const onConfidentialityUpdateMock = jest.fn();
-      const wrapper = mount(<Item
+      const wrapper = shallow(<Item
         key={"1"}
         item={{...itemDefault}}
         assessmentUnderSix={false}

@@ -54,7 +54,6 @@ services:
       PERRY_BASE_URL: "http://${HOST}:${PERRY_PORT}/perry"
       CANS_API_BASE_URL: ${CANS_API_BASE_URL}
       CANS_AUTHORIZATION_ENABLED: ${CANS_AUTHORIZATION_ENABLED}
-    command: ['./start.sh']
 
   cans-test:
     build:

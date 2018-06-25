@@ -1,4 +1,8 @@
-# README
+# CANS
+
+# Project Dependencies
+React 16.4.1"
+Rails 5.2.0 
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
@@ -23,26 +27,30 @@ Things you may want to cover:
 
 * ...
 
+# Running the Rails App
+If this is your first time running the app, install the project gems
+
+```bundle install```
+
+To start the rails app:
+
+```rails s```
+
 # Running the react app
 
-The react app lives in the client dir
-
-```cd client```
-
-If this is your first time running the app, install the project node modules:
+If this is your first time running the app, install the project npm packages:
 
 ```yarn```
 
-To start the react app only:
+To start the react app:
 
 ```yarn start```
 
-to start rails + minified production ready react app:
+To run the react test suite with watcher: 
 
-```yarn start:rails```
+```yarn test```
 
-alternatively, you can run the above command via shell script
+and a one-time run with coverage
 
-from the project root:
+```yarn test:coverage```
 
-```sh start.sh```

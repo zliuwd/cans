@@ -1,0 +1,46 @@
+{
+  "name": "cans-react-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "webpack-dashboard -- ./bin/webpack-dev-server",
+    "build": "npm-run-all",
+    "prettier-check": "prettier --list-different 'src/**/*.js'",
+    "test": "jest --env=jsdom --watch",
+    "test:coverage": "jest --env=jsdom --coverage"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "app/javascript/**/*.js",
+      "!app/javascript/**/index.js"
+    ]
+  },
+  "dependencies": {
+    "@material-ui/core": "^1.1.0",
+    "@material-ui/icons": "^1.1.0",
+    "@rails/webpacker": "3.5",
+    "axios": "^0.18.0",
+    "babel-preset-react": "^6.24.1",
+    "bootstrap": "^4.1.1",
+    "classnames": "^2.2.5",
+    "lodash": "^4.17.10",
+    "luxon": "^1.2.1",
+    "npm-run-all": "^4.1.3",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-input-mask": "^2.0.2",
+    "react-router-dom": "^4.2.2",
+    "react-wood-duck": "^0.1.57",
+    "reactstrap": "^6.0.1"
+  },
+  "devDependencies": {
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^23.1.0",
+    "prettier": "1.12.1",
+    "webpack-dashboard": "^2.0.0",
+    "webpack-dev-server": "2.11.2"
+  }
+}

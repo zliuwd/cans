@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Icon from '@material-ui/core/Icon';
 import Paper from '@material-ui/core/Paper';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import classNames from 'classnames';
 import { Rating } from './';
 import { getI18nValuesByPrefix } from './I18nHelper';
 
@@ -145,21 +145,12 @@ class Item extends Component {
     const itemNumber = assessmentUnderSix ? under_six_id : above_six_id;
     const { isExpanded, title, description, qtcDescriptions, ratingDescriptions } = this.state;
     const isBooleanRating = rating_type === 'BOOLEAN';
+    const classes = classNames('item-expand-icon', {'fa fa-plus':!isExpanded, 'fa fa-minus':isExpanded });
     return (assessmentUnderSix && under_six_id) || (!assessmentUnderSix && above_six_id) ? (
       <div>
         <AppBar position="static" color="114161">
           <Toolbar style={{ 'justify-content': 'space-between' }}>
-            <Icon
-              color="primary"
-              onClick={this.switchExpandedState}
-              style={{
-                color: '#09798e',
-                'font-size': '14px',
-                'margin-left': '3px',
-              }}
-            >
-              {isExpanded ? 'remove_circle' : 'add_circle'}
-            </Icon>
+            <i id={'item-expand'} className={classes} onClick={this.switchExpandedState} />
             <Typography variant="title">
               {itemNumber}. {title}
             </Typography>

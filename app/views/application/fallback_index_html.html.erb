@@ -1,0 +1,6 @@
+<%= stylesheet_pack_tag 'application' %>
+<%= content_tag :div,
+  id: "root",
+  data: @data.to_json do %>
+  <%= javascript_pack_tag 'application' %>
+<% end %>

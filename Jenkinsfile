@@ -84,7 +84,7 @@ def lintStage(container) {
 
 def unitTestStage(container) {
   stage('Unit Test') {
-    sh "docker exec -t ${container.id} bash -c 'cd client && yarn test:coverage'"
+    sh "docker exec -t ${container.id} bash -c 'yarn test:coverage'"
     sh "docker exec -t ${container.id} rspec spec/routes"
   }
 }

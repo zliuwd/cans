@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Row, Col} from 'reactstrap';
 import PropTypes from 'prop-types'
 
-import '../../style.css';
+import './style.sass';
 
 class PageInfo extends Component {
 

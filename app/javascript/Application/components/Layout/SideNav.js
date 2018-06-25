@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SideNavLink from './SideNavLink';
 
-import './style.css';
+import './style.sass';
 
 const URL_MAP = [
   { url: '/', text: 'Child & Family Teams' },

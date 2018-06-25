@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom'
 
-import './style.css';
+import './style.sass';
 
 class SideNavLink extends Component {
   static propTypes = {

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { PageInfo } from '../Layout';
 import { ClientAssessmentHistory, PersonService } from './index';
 
-import './style.css';
+import './style.sass';
 
 class Client extends Component {
   constructor(props) {

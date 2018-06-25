@@ -11,7 +11,7 @@ import { Container, Row, Col } from 'reactstrap';
 import { AssessmentService } from '../Assessment/Assessment.service';
 import { toDateFormat } from '../../util/formatters';
 
-import './style.css';
+import './style.sass';
 
 const getActionVerbByStatus = status => {
   switch (status) {

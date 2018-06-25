@@ -10,6 +10,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Item } from './';
 import { getI18nByCode } from './I18nHelper';
 
+import './style.sass'
+
 class Domain extends Component {
   constructor(props) {
     super(props);
@@ -75,17 +77,9 @@ class Domain extends Component {
             {title}
           </Typography>
           {description ? (
-            <Tooltip title={description} placement="top-end">
-              <i
-                className="material-icons"
-                style={{
-                  color: '#09798e',
-                  'font-size': '14px',
-                  'margin-left': '3px',
-                }}
-              >
-                help
-              </i>
+            <Tooltip title={description} placement="top-end"
+                     classes={{popper: 'domain-tooltip'}}>
+              <i className="fa fa-question-circle domain-help-icon"></i>
             </Tooltip>
           ) : null}
         </ExpansionPanelSummary>
