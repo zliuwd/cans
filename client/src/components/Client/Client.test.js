@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { PageInfo } from '../Layout';
 import { MemoryRouter } from 'react-router-dom';
+import { formatClientId } from './Client';
 
 describe('<Client />', () => {
   describe('initial component layout', () => {
@@ -48,8 +49,8 @@ describe('<Client />', () => {
   describe('with childData', () => {
     const match = { params: { id: 1 } };
     let wrapper = {};
-    beforeEach(async () => {
-       wrapper = await shallow(
+    beforeEach( () => {
+      wrapper = shallow(
         <MemoryRouter>
           <Client match={match} />
         </MemoryRouter>
@@ -64,6 +65,7 @@ describe('<Client />', () => {
           last_name: 'user',
           dob: '10/10/1980',
           case_id: '483u92432',
+          external_id: '1234567891234567890',
           county: { name: 'Sacramento' },
         },
       });
@@ -71,16 +73,18 @@ describe('<Client />', () => {
 
     const getLength = component => wrapper.find(component).length;
 
-    it('renders with 8 <Grid /> components', () => {
-      expect(getLength(Grid)).toBe(8);
+    it('renders with 9 <Grid /> components', () => {
+      expect(getLength(Grid)).toBe(9);
     });
 
-    it('renders with 5 <Typography /> components', () => {
-      expect(getLength(Typography)).toBe(5);
+    it('renders with 6 <Typography /> components', () => {
+      expect(getLength(Typography)).toBe(6);
     });
+
     it('does not render No Child Data Found', () => {
       expect(getLength('#no-data')).not.toBe(1);
     });
+
   });
 
   describe('componentDidMount', () => {

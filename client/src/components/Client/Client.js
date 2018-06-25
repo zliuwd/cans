@@ -19,7 +19,6 @@ class Client extends Component {
   }
 
   static propTypes = {
-    // react router supplies match
     match: PropTypes.object.isRequired,
   };
 
@@ -46,6 +45,22 @@ class Client extends Component {
     }
   }
 
+  formatClientId = num => {
+    if (num) {
+      if (num.length === 19) {
+        const firstFour = num.substring(0, 4);
+        const secondFour = num.substring(4, 8);
+        const thirdFour = num.substring(8, 12);
+        const fourthFour = num.substring(12, 19);
+        return `${firstFour}-${secondFour}-${thirdFour}-${fourthFour}`;
+      } else if (num.length === 22) {
+        return num;
+      } else {
+        return '0';
+      }
+    }
+  };
+
   render() {
     const childData = this.state.childData;
     return (
@@ -62,10 +77,17 @@ class Client extends Component {
                 <CardContent>
                   {childData && childData.id ? (
                     <Grid container spacing={24}>
-                      {this.renderClientData(childData.first_name, 'First Name')}
+                      {this.renderClientData(
+                        childData.first_name,
+                        'First Name'
+                      )}
                       {this.renderClientData(childData.last_name, 'Last Name')}
                       {this.renderClientData(childData.dob, 'Birth Date')}
                       {this.renderClientData(childData.case_id, 'Case Number')}
+                      {this.renderClientData(
+                        this.formatClientId(childData.external_id),
+                        'Client Id'
+                      )}
                       {this.renderClientData(childData.county.name, 'County')}
                     </Grid>
                   ) : (

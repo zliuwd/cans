@@ -33,6 +33,17 @@ describe('ChildForm.helper', () => {
       expect(validate('case_id', '#34la7sd')).toBe(false);
       expect(validate('case_id', '   ')).toBe(false);
     });
+    it('external_id', () => {
+      expect(validate('external_id', '1234567891234567890')).toBe(true);
+      expect(validate('external_id', '1234-5678-9123-4567890')).toBe(true);
+      expect(validate('external_id', '12345678912345678900')).toBe(false);
+      expect(validate('external_id', '123456789')).toBe(false);
+      expect(validate('external_id', '1234--5678-9123-4567890')).toBe(false);
+      expect(validate('external_id', '76cv39d6')).toBe(false);
+      expect(validate('external_id', 'vgh7321 ')).toBe(false);
+      expect(validate('external_id', '#34la7sd')).toBe(false);
+      expect(validate('external_id', '   ')).toBe(false);
+    });
     it('dob', () => {
       expect(validate('dob', '2012/10/12')).toBe(true);
       expect(validate('dob', null)).toBe(false);
@@ -64,6 +75,7 @@ describe('ChildForm.helper', () => {
           last_name: '',
           dob: '',
           case_id: '',
+          external_id: '',
           county: '',
         })
       ).toBe(false);
@@ -75,6 +87,7 @@ describe('ChildForm.helper', () => {
           last_name: 'Jersey',
           dob: '10/12/2012',
           case_id: '123',
+          external_id: '1234567891234567890',
           county: { id: 1 },
         })
       ).toBe(true);

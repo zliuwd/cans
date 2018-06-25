@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import InputMask from 'react-input-mask';
 import { withStyles } from '@material-ui/core/styles';
 import {
   MenuItem,
@@ -23,8 +24,7 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    margin: 10,
     width: 300,
     fontSize: 20,
   },
@@ -43,12 +43,6 @@ const styles = theme => ({
     color: '#fff',
     fontSize: 24,
   },
-  formControl: {
-    margin: theme.spacing.unit,
-    minWidth: 300,
-    color: '#000',
-    fontSize: 20,
-  },
   button: {
     marginTop: theme.spacing.unit,
     backgroundColor: '#09798e',
@@ -56,6 +50,7 @@ const styles = theme => ({
     fontSize: 20,
   },
 });
+
 class ChildForm extends Component {
   constructor(props) {
     super(props);
@@ -68,6 +63,7 @@ class ChildForm extends Component {
         last_name: '',
         dob: '',
         case_id: '',
+        external_id: '',
         county: {
           id: 0,
           name: '',
@@ -78,6 +74,7 @@ class ChildForm extends Component {
         last_name: false,
         dob: false,
         case_id: false,
+        external_id: false,
         county: false,
       },
       isSaveButtonDisabled: true,
@@ -115,7 +112,7 @@ class ChildForm extends Component {
           child_status: 'ready',
         });
       })
-      .then(() => setTimeout(() => this.setState({ navigate: true }), 5000))
+      .then(() => setTimeout(() => this.setState({ navigate: true }), 3000))
       .catch(() => this.setState({ child_status: 'error' }));
   };
 
@@ -128,6 +125,7 @@ class ChildForm extends Component {
         last_name: '',
         dob: '',
         case_id: '',
+        external_id: '',
         county: {
           id: 0,
           name: '',
@@ -186,86 +184,100 @@ class ChildForm extends Component {
           />
           <CardContent>
             <form className={classes.container} noValidate autoComplete="off">
-              <div style={{ width: '800px' }}>
-                <TextField
-                  required
-                  id="first_name"
-                  label="First Name"
-                  error={!this.state.childInfoValidation['first_name']}
-                  className={classes.textField}
-                  value={this.state.first_name}
-                  onChange={this.handleChange('first_name')}
-                  inputProps={{ maxLength: 50 }}
-                  margin="normal"
-                />
+              <TextField
+                required
+                id="first_name"
+                label="First Name"
+                focused
+                error={!this.state.childInfoValidation['first_name']}
+                className={classes.textField}
+                value={this.state.first_name}
+                onChange={this.handleChange('first_name')}
+                inputProps={{ maxLength: 50 }}
+                margin="normal"
+              />
 
-                <TextField
-                  required
-                  id="last_name"
-                  label="Last Name"
-                  error={!this.state.childInfoValidation['last_name']}
-                  className={classes.textField}
-                  value={this.state.last_name}
-                  onChange={this.handleChange('last_name')}
-                  inputProps={{ maxLength: 50 }}
-                  margin="normal"
-                />
-              </div>
-              <div style={{ width: '800px' }}>
-                <TextField
-                  required
-                  id="dob"
-                  label="Birth Date"
-                  error={!this.state.childInfoValidation['dob']}
-                  type="date"
-                  defaultValue=""
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={this.handleChange('dob')}
-                />
-                <TextField
-                  required
-                  id="case_id"
-                  label="Case Number"
-                  error={!this.state.childInfoValidation['case_id']}
-                  className={classes.textField}
-                  value={this.state.case_id}
-                  onChange={this.handleChange('case_id')}
-                  inputProps={{ maxLength: 50 }}
-                  margin="normal"
-                />
-              </div>
-              <div style={{ width: '800px' }}>
-                <TextField
-                  required
-                  select
-                  id="county"
-                  label="County"
-                  error={!this.state.childInfoValidation['county']}
-                  className={classes.textField}
-                  open={this.state.open}
-                  onClose={this.handleClose}
-                  value={this.state.childInfo.county}
-                  onChange={this.handleChange('county')}
-                  helperText="Please select your County"
-                  margin="normal"
-                >
-                  <MenuItem value="">
-                    <em />
+              <TextField
+                required
+                id="last_name"
+                label="Last Name"
+                error={!this.state.childInfoValidation['last_name']}
+                className={classes.textField}
+                value={this.state.last_name}
+                onChange={this.handleChange('last_name')}
+                inputProps={{ maxLength: 50 }}
+                margin="normal"
+              />
+              <TextField
+                required
+                id="dob"
+                label="Birth Date"
+                error={!this.state.childInfoValidation['dob']}
+                type="date"
+                defaultValue=""
+                className={classes.textField}
+                onChange={this.handleChange('dob')}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <TextField
+                required
+                id="case_id"
+                label="Case Number"
+                error={!this.state.childInfoValidation['case_id']}
+                className={classes.textField}
+                value={this.state.case_id}
+                onChange={this.handleChange('case_id')}
+                inputProps={{ maxLength: 50 }}
+                margin="normal"
+              />
+
+              <InputMask
+                mask="9999-9999-9999-9999999"
+                value={this.state.external_id}
+                onChange={this.handleChange('external_id')}
+              >
+                {() => (
+                  <TextField
+                    required
+                    id="external_id"
+                    label="Client Id"
+                    helperText="Enter 19 digits number"
+                    error={!this.state.childInfoValidation['external_id']}
+                    className={classes.textField}
+                    margin="normal"
+                  />
+                )}
+              </InputMask>
+
+              <TextField
+                required
+                select
+                id="county"
+                label="County"
+                error={!this.state.childInfoValidation['county']}
+                className={classes.textField}
+                open={this.state.open}
+                onClose={this.handleClose}
+                value={this.state.childInfo.county}
+                onChange={this.handleChange('county')}
+                helperText="Please select your County"
+                margin="normal"
+              >
+                <MenuItem value="">
+                  <em />
+                </MenuItem>
+                {this.state.counties.map(option => (
+                  <MenuItem
+                    key={option.id}
+                    value={option}
+                    className={classes.menu}
+                  >
+                    <span id={'county-name'}>{option.name}</span>
                   </MenuItem>
-                  {this.state.counties.map(option => (
-                    <MenuItem
-                      key={option.id}
-                      value={option}
-                      className={classes.menu}
-                    >
-                      <span id={'county-name'}>{option.name}</span>
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </div>
+                ))}
+              </TextField>
             </form>
           </CardContent>
           <CardActions>
