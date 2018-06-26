@@ -1,1 +1,2 @@
-import "../Application";
+import 'babel-polyfill';
+import '../Application';
