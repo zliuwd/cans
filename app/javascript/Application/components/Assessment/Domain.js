@@ -22,11 +22,11 @@ class Domain extends Component {
   }
 
   static propTypes = {
-    key: PropTypes.string.isRequired,
     domain: PropTypes.object.isRequired,
     i18n: PropTypes.object.isRequired,
     i18nAll: PropTypes.object.isRequired,
     assessmentUnderSix: PropTypes.bool.isRequired,
+    canReleaseConfidentialInfo: PropTypes.bool.isRequired,
     onRatingUpdate: PropTypes.func.isRequired,
     onConfidentialityUpdate: PropTypes.func.isRequired,
   };
@@ -42,8 +42,10 @@ class Domain extends Component {
   }
 
   renderItems = items => {
-    const i18nAll = this.props.i18nAll || {};
-    const { assessmentUnderSix, onRatingUpdate, onConfidentialityUpdate } = this.props;
+    const {
+      i18nAll, assessmentUnderSix, onRatingUpdate,
+      onConfidentialityUpdate, canReleaseConfidentialInfo,
+    } = this.props;
     return items.map(item => {
       const code = item.code;
       const itemI18n = getI18nByCode(i18nAll, code);
@@ -56,6 +58,7 @@ class Domain extends Component {
             onRatingUpdate={onRatingUpdate}
             onConfidentialityUpdate={onConfidentialityUpdate}
             assessmentUnderSix={assessmentUnderSix}
+            canReleaseConfidentialInfo={canReleaseConfidentialInfo}
           />
           <Divider />
         </div>
@@ -68,10 +71,10 @@ class Domain extends Component {
     const { items, under_six, above_six } = this.props.domain;
     const { title, description } = this.state;
     return (assessmentUnderSix && under_six) || (!assessmentUnderSix && above_six) ? (
-      <ExpansionPanel style={{ 'background-color': '#114161' }}>
+      <ExpansionPanel style={{ 'backgroundColor': '#114161' }}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon style={{ height: '28px', color: 'white' }} />}
-          style={{ 'min-height': '28px' }}
+          style={{ 'minHeight': '28px' }}
         >
           <Typography variant="title" style={{ color: 'white' }}>
             {title}
@@ -79,7 +82,7 @@ class Domain extends Component {
           {description ? (
             <Tooltip title={description} placement="top-end"
                      classes={{popper: 'domain-tooltip'}}>
-              <i className="fa fa-question-circle domain-help-icon"></i>
+              <i className="fa fa-question-circle domain-help-icon" />
             </Tooltip>
           ) : null}
         </ExpansionPanelSummary>
@@ -90,5 +93,13 @@ class Domain extends Component {
     ) : null;
   };
 }
+
+Domain.defaultProps = {
+  domain: {},
+  i18n: {},
+  i18nAll: {},
+  assessmentUnderSix: false,
+  canReleaseConfidentialInfo: false
+};
 
 export default Domain;

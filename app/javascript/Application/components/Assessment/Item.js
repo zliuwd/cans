@@ -31,10 +31,10 @@ class Item extends Component {
   }
 
   static propTypes = {
-    key: PropTypes.string.isRequired,
     item: PropTypes.object.isRequired,
     i18n: PropTypes.object.isRequired,
     assessmentUnderSix: PropTypes.bool.isRequired,
+    canReleaseConfidentialInfo: PropTypes.bool.isRequired,
     onRatingUpdate: PropTypes.func.isRequired,
     onConfidentialityUpdate: PropTypes.func.isRequired,
   };
@@ -75,7 +75,7 @@ class Item extends Component {
     this.setState({ isExpanded: !this.state.isExpanded });
   };
 
-  renderConfidentialCheckbox = isConfidential => {
+  renderConfidentialCheckbox = (isConfidential, confidential_by_default) => {
     return (
       <div>
         <form autoComplete="off">
@@ -84,7 +84,10 @@ class Item extends Component {
               onChange={this.handleConfidentialityChange}
               label={'Confidential'}
               value={isConfidential}
-              control={<Checkbox checked={isConfidential} />}
+              control={<Checkbox checked={isConfidential}
+                                 disabled={confidential_by_default && !this.props.canReleaseConfidentialInfo}
+                                 color={'default'}
+              />}
             />
           </FormControl>
         </form>
@@ -141,20 +144,21 @@ class Item extends Component {
 
   render = () => {
     const { item, assessmentUnderSix, onRatingUpdate } = this.props;
-    const { code, rating_type, has_na_option, rating, confidential, under_six_id, above_six_id } = item;
+    const { code, rating_type, has_na_option, rating, confidential: isConfidential, confidential_by_default,
+      under_six_id, above_six_id } = item;
     const itemNumber = assessmentUnderSix ? under_six_id : above_six_id;
     const { isExpanded, title, description, qtcDescriptions, ratingDescriptions } = this.state;
     const isBooleanRating = rating_type === 'BOOLEAN';
     const classes = classNames('item-expand-icon', {'fa fa-plus':!isExpanded, 'fa fa-minus':isExpanded });
     return (assessmentUnderSix && under_six_id) || (!assessmentUnderSix && above_six_id) ? (
       <div>
-        <AppBar position="static" color="114161">
-          <Toolbar style={{ 'justify-content': 'space-between' }}>
+        <AppBar position="static" color="inherit">
+          <Toolbar style={{ 'justifyContent': 'space-between' }}>
             <i id={'item-expand'} className={classes} onClick={this.switchExpandedState} />
             <Typography variant="title">
               {itemNumber}. {title}
             </Typography>
-            {this.renderConfidentialCheckbox(confidential)}
+            {this.renderConfidentialCheckbox(isConfidential, confidential_by_default)}
             <Rating
               itemCode={code}
               rating_type={rating_type}
@@ -176,5 +180,12 @@ class Item extends Component {
     ) : null;
   };
 }
+
+Item.defaultProps = {
+  item: {},
+  i18n: {},
+  assessmentUnderSix: false,
+  canReleaseConfidentialInfo: false,
+};
 
 export default Item;

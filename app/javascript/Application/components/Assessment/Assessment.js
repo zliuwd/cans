@@ -18,6 +18,8 @@ import { LoadingState } from '../../util/loadingHelper';
 import { AssessmentStatus, AssessmentType } from './AssessmentHelper';
 import { DateTime } from 'luxon';
 
+const CONFIDENTIAL_BY_DEFAULT_CODES = ['SUBSTANCE_USE', 'SUBSTANCE_USE_CAREGIVER', 'EXPOSURE'];
+
 class Assessment extends Component {
   constructor(props) {
     super(props);
@@ -56,6 +58,7 @@ class Assessment extends Component {
       state: instrument.prototype,
       event_date: DateTime.local().toISODate(),
       completed_as: 'COMMUNIMETRIC',
+      can_release_confidential_info: false,
     };
     this.setState({
       assessment,
@@ -101,17 +104,26 @@ class Assessment extends Component {
     this.updateItem(code, 'confidential', isConfidential);
   };
 
-  handleDateChange = (dateValue) => {
+  handleHeaderFormValueChange = (prop, value) => {
+    if (prop === 'can_release_confidential_info'){
+      this.setSubstanceAbuseItemsConfidential();
+    }
     const assessment = this.state.assessment;
-    assessment.event_date = dateValue;
+    assessment[prop] = value;
     this.updateAssessment(assessment)
   };
 
-  handleSelectCompletedAs = (completedAs) => {
-    const assessment = this.state.assessment;
-    assessment.completed_as = completedAs;
+  setSubstanceAbuseItemsConfidential() {
+    const assessment = clone(this.state.assessment);
+    assessment.state.domains.map(domain => {
+      domain.items.map(item => {
+        if (!this.state.canReleaseConfidentialInfo && CONFIDENTIAL_BY_DEFAULT_CODES.includes(item.code)) {
+          item.confidential = true
+        }
+      })
+    });
     this.updateAssessment(assessment)
-  };
+  }
 
   updateItem = (itemCode, key, value) => {
     const updateAssessment = clone(this.state.assessment);
@@ -171,7 +183,7 @@ class Assessment extends Component {
   };
 
   renderDomains(domains) {
-    const i18n = this.state.i18n || {};
+    const i18n = this.state.i18n;
     const { under_six } = (this.state.assessment || {}).state || {};
     return domains.map(domain => {
       const domainCode = domain.code;
@@ -185,6 +197,7 @@ class Assessment extends Component {
           assessmentUnderSix={under_six}
           onRatingUpdate={this.handleUpdateItemRating}
           onConfidentialityUpdate={this.handleUpdateItemConfidentiality}
+          canReleaseConfidentialInfo={this.state.assessment.can_release_confidential_info}
         />
       ) : (
         <DomainsGroup
@@ -211,10 +224,10 @@ class Assessment extends Component {
         <AssessmentFormHeader
           clientFirstName={child.first_name}
           clientLastName={child.last_name}
-          onAssessmentDateChange={this.handleDateChange}
-          onAssessmentCompletedAsChange={this.handleSelectCompletedAs}
+          onValueChange={this.handleHeaderFormValueChange}
           assessmentDate={this.state.assessment.event_date}
           assessmentCompletedAs={this.state.assessment.completed_as}
+          canReleaseInformation={this.state.assessment.can_release_confidential_info}
         />
         <Typography variant="body1" style={{ textAlign: 'right' }}>
           Age: 0-5

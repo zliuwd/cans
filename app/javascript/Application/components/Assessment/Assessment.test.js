@@ -14,6 +14,7 @@ const initialAssessment = {
   assessment_type: "INITIAL",
   status: 'IN_PROGRESS',
   completed_as: 'COMMUNIMETRIC',
+  can_release_confidential_info: false,
   state: {
     id: 0,
     under_six: false,
@@ -36,6 +37,7 @@ const assessment = {
   assessment_type: 'INITIAL',
   status: 'IN_PROGRESS',
   completed_as: 'COMMUNIMETRIC',
+  can_release_confidential_info: false,
   state: {
     id: 0,
     under_six: false,
@@ -46,9 +48,40 @@ const assessment = {
         class: 'domain',
         items: [
           {
-            above_six_id: '2',
+            above_six_id: '1',
             code: '1',
-            confidential: true,
+            confidential: false,
+            confidential_by_default: false,
+            rating: 1,
+            rating_type: 'REGULAR',
+            required: true,
+            under_six_id: 'EC01',
+          },
+          {
+            above_six_id: '2',
+            code: 'SUBSTANCE_USE',
+            confidential: false,
+            confidential_by_default: false,
+            rating: 1,
+            rating_type: 'REGULAR',
+            required: true,
+            under_six_id: 'EC01',
+          },
+          {
+            above_six_id: '2',
+            code: 'SUBSTANCE_USE_CAREGIVER',
+            confidential: false,
+            confidential_by_default: false,
+            rating: 1,
+            rating_type: 'REGULAR',
+            required: true,
+            under_six_id: 'EC01',
+          },
+          {
+            above_six_id: '2',
+            code: 'EXPOSURE',
+            confidential: false,
+            confidential_by_default: false,
             rating: 1,
             rating_type: 'REGULAR',
             required: true,
@@ -63,6 +96,39 @@ const assessment = {
   event_date: '2018-06-11',
 };
 
+const domainItems = [
+  {
+    above_six_id: '2',
+    code: 'EXPOSURE',
+    confidential: true,
+    confidential_by_default: true,
+    rating: 1,
+    rating_type: 'REGULAR',
+    required: true,
+    under_six_id: 'EC01',
+  },
+  {
+    above_six_id: '2',
+    code: 'SUBSTANCE_USE',
+    confidential: true,
+    confidential_by_default: true,
+    rating: 1,
+    rating_type: 'REGULAR',
+    required: true,
+    under_six_id: 'EC01',
+  },
+  {
+    above_six_id: '2',
+    code: 'SUBSTANCE_USE_CAREGIVER',
+    confidential: true,
+    confidential_by_default: true,
+    rating: 1,
+    rating_type: 'REGULAR',
+    required: true,
+    under_six_id: 'EC01',
+  },
+];
+
 const updatedAssessment = {
   id: 1,
   instrument_id: 1,
@@ -70,6 +136,7 @@ const updatedAssessment = {
   assessment_type: 'INITIAL',
   status: 'IN_PROGRESS',
   completed_as: 'COMMUNIMETRIC',
+  can_release_confidential_info: false,
   state: {
     id: 0,
     under_six: true,
@@ -282,8 +349,8 @@ describe('<Assessment />', () => {
     });
   });
 
-  describe('handleDateChange', () => {
-    it('will update assessmentDate on the component state', () => {
+  describe('handleHeaderFormValueChange', () => {
+    it('will update event_date on the component state', () => {
       const props = {
         location: { childId: 1 },
         match: { params: { id: 1 } },
@@ -292,13 +359,11 @@ describe('<Assessment />', () => {
 
       wrapper.setState({assessment: assessment});
       expect(wrapper.state('assessment').event_date).toEqual('2018-06-11');
-      wrapper.instance().handleDateChange('2018-06-12');
+      wrapper.instance().handleHeaderFormValueChange('event_date', '2018-06-12');
       expect(wrapper.state('assessment').event_date).toEqual('2018-06-12');
     });
-  });
 
-  describe('handleSelectCompletedAs', () => {
-    it('will update completedAs on the component state', () => {
+    it('will update completed_as on the component state', () => {
       const props = {
         location: { childId: 1 },
         match: { params: { id: 1 } },
@@ -307,8 +372,21 @@ describe('<Assessment />', () => {
 
       wrapper.setState({assessment: assessment});
       expect(wrapper.state('assessment').completed_as).toEqual('COMMUNIMETRIC');
-      wrapper.instance().handleSelectCompletedAs('Social Worker');
+      wrapper.instance().handleHeaderFormValueChange('completed_as', 'Social Worker');
       expect(wrapper.state('assessment').completed_as).toEqual('Social Worker');
+    });
+
+    it('will update can_release_confidential_info on the component state', () => {
+      const props = {
+        location: { childId: 1 },
+        match: { params: { id: 1 } },
+      };
+      const wrapper = shallow(<Assessment {...props} />);
+
+      wrapper.setState({assessment: assessment});
+      expect(wrapper.state('assessment').can_release_confidential_info).toEqual(false);
+      wrapper.instance().handleHeaderFormValueChange('can_release_confidential_info', true);
+      expect(wrapper.state('assessment').can_release_confidential_info).toEqual(true);
     });
   });
 
@@ -417,5 +495,18 @@ describe('<Assessment />', () => {
       wrapper.instance().renderDomains(assessment.state.domains);
       expect(wrapper.find(DomainsGroup).length).toBe(1);
     });
+  });
+
+  describe('setSubstanceAbuseItemsConfidential', () => {
+    it ('sets confidential to true for all substance abuse items when canReleaseInfo is false', () => {
+        const wrapper = shallow(<Assessment match={ {params: { id: 1 }}}/>);
+
+        wrapper.setState({ assessment: assessment});
+        wrapper.instance().handleHeaderFormValueChange('can_release_confidential_info', false);
+        expect(wrapper.state('assessment').state.domains[0].items[0].confidential).toBe(false);
+        expect(wrapper.state('assessment').state.domains[0].items[1].confidential).toBe(true);
+        expect(wrapper.state('assessment').state.domains[0].items[2].confidential).toBe(true);
+        expect(wrapper.state('assessment').state.domains[0].items[3].confidential).toBe(true);
+      });
   });
 });

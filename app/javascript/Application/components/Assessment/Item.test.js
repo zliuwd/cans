@@ -3,13 +3,17 @@ import { mount } from 'enzyme';
 import Item from './Item';
 import Radio from '@material-ui/core/Radio';
 import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const itemDefault = {
   code: "lf10family",
   under_six_id: 1,
   above_six_id: 101,
   required: true,
-  confidential: false,
+  confidential: true,
+  confidential_by_default: true,
   rating_type: "REGULAR",
   has_na_option: false,
   rating: "-1",
@@ -180,4 +184,16 @@ describe('<Item />', () => {
     });
   });
 
+  describe('canReleaseConfidentialInfo', () => {
+    it('should disable the confidential checkbox when false paired with an item thats confidential_by_default', () => {
+      const wrapper = shallow(<Item
+        assessmentUnderSix={false}
+        item={{...itemDefault}}
+        i18n={{...i18nDefault}}
+        canReleaseConfidentialInfo={false}
+        onRatingUpdate={() => {}}
+        onConfidentialityUpdate={() => {}}/>);
+      expect(wrapper.find(FormControlLabel).dive().dive().find(Checkbox).prop('disabled')).toEqual(true)
+    })
+  })
 });
