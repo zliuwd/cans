@@ -38,4 +38,12 @@ feature 'Client Pages' do
     expect(page).to have_content client_id
     expect(page).to have_content 'Fresno'
   end
+
+  scenario 'page is accessible' do
+    pending('page has accessability issues')
+    login
+    visit '/clients/new'
+    expect(page).to have_content 'Add Child/Youth'
+    expect(page).to be_accessible
+  end
 end

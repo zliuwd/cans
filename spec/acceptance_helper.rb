@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'axe/rspec'
 require 'capybara'
 require 'capybara/rspec'
 require 'selenium/webdriver'
