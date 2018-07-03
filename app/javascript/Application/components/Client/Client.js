@@ -69,25 +69,16 @@ class Client extends Component {
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Card className={'card'}>
-              <CardHeader
-                className={'card-header-cans'}
-                title="Child/Youth Information"
-              />
+              <CardHeader className={'card-header-cans'} title="Child/Youth Information" />
               <div className={'content'}>
                 <CardContent>
                   {childData && childData.id ? (
                     <Grid container spacing={24}>
-                      {this.renderClientData(
-                        childData.first_name,
-                        'First Name'
-                      )}
+                      {this.renderClientData(childData.first_name, 'First Name')}
                       {this.renderClientData(childData.last_name, 'Last Name')}
                       {this.renderClientData(childData.dob, 'Birth Date')}
                       {this.renderClientData(childData.case_id, 'Case Number')}
-                      {this.renderClientData(
-                        this.formatClientId(childData.external_id),
-                        'Client Id'
-                      )}
+                      {this.renderClientData(this.formatClientId(childData.external_id), 'Client Id')}
                       {this.renderClientData(childData.county.name, 'County')}
                     </Grid>
                   ) : (

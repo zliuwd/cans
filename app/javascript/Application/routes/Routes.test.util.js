@@ -1,6 +1,7 @@
-import React from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
-import { Route, MemoryRouter } from 'react-router-dom'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { Route, MemoryRouter } from 'react-router-dom';
 
 // This code can be found at:
 // https://reacttraining.com/react-router/web/guides/testing
@@ -11,47 +12,52 @@ import { Route, MemoryRouter } from 'react-router-dom'
 // `match` and `location`, and `history` so you can control
 // the flow and make assertions.
 export const renderTestSequence = ({ initialIndex, subject: Subject, steps }) => {
-  const div = document.createElement('div')
+  const div = document.createElement('div');
 
   class Assert extends React.Component {
-
     componentDidMount() {
-      this.assert()
+      this.assert();
     }
 
     componentDidUpdate() {
-      this.assert()
+      this.assert();
     }
 
     assert() {
-      const nextStep = steps.shift()
+      const nextStep = steps.shift();
       if (nextStep) {
-        nextStep({ ...this.props, div })
+        nextStep({ ...this.props, div });
       } else {
-        unmountComponentAtNode(div)
+        unmountComponentAtNode(div);
       }
     }
 
     render() {
-      return this.props.children
+      return this.props.children;
     }
+
+    static propTypes = {
+      children: PropTypes.node,
+    };
   }
 
   class Test extends React.Component {
     render() {
       return (
-        <MemoryRouter initialIndex={initialIndex} initialEntries={[ '/' ]}>
-          <Route render={(props) => (
-            <Assert {...props}>
-              <Subject/>
-            </Assert>
-          )}/>
+        <MemoryRouter initialIndex={initialIndex} initialEntries={['/']}>
+          <Route
+            render={props => (
+              <Assert {...props}>
+                <Subject />
+              </Assert>
+            )}
+          />
         </MemoryRouter>
-      )
+      );
     }
   }
 
-  render(<Test/>, div);
+  render(<Test />, div);
   unmountComponentAtNode(div);
 };
 
@@ -66,13 +72,21 @@ export const renderTestSequence = ({ initialIndex, subject: Subject, steps }) =>
  * @param htmlOnPage A string that the component will render
  */
 export const executeTest = (component, url, htmlOnPage) => {
-// This code was slightly modified from the original to fit
-// the needs of the project
+  // This code was slightly modified from the original to fit
+  // the needs of the project
 
-// our Subject, the App
+  // our Subject, the App
   const App = () => (
     <div>
-      <Route exact path="/" render={() => (<div><h1>Welcome</h1></div>)}/>
+      <Route
+        exact
+        path="/"
+        render={() => (
+          <div>
+            <h1>Welcome</h1>
+          </div>
+        )}
+      />
       <Route path={url} component={component} />
     </div>
   );
@@ -95,7 +109,6 @@ export const executeTest = (component, url, htmlOnPage) => {
 
       // second render from new location
       ({ location, div }) => {
-
         expect(location.pathname).toBe(url);
         expect(div.innerHTML).toMatch(new RegExp(`${htmlOnPage}`));
       },

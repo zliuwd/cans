@@ -14,6 +14,7 @@ describe('ChildForm.helper', () => {
       expect(validate('first_name', 'Mike#')).toBe(false);
       expect(validate('first_name', '@')).toBe(false);
     });
+
     it('last_name', () => {
       expect(validate('last_name', 'Mike')).toBe(true);
       expect(validate('last_name', 'Mike John')).toBe(true);
@@ -26,6 +27,7 @@ describe('ChildForm.helper', () => {
       expect(validate('last_name', 'Mike#')).toBe(false);
       expect(validate('last_name', '@')).toBe(false);
     });
+
     it('case_id', () => {
       expect(validate('case_id', 'E76cv396')).toBe(true);
       expect(validate('case_id', '76cv39d6')).toBe(true);
@@ -33,6 +35,7 @@ describe('ChildForm.helper', () => {
       expect(validate('case_id', '#34la7sd')).toBe(false);
       expect(validate('case_id', '   ')).toBe(false);
     });
+
     it('external_id', () => {
       expect(validate('external_id', '1234567891234567890')).toBe(true);
       expect(validate('external_id', '1234-5678-9123-4567890')).toBe(true);
@@ -44,12 +47,14 @@ describe('ChildForm.helper', () => {
       expect(validate('external_id', '#34la7sd')).toBe(false);
       expect(validate('external_id', '   ')).toBe(false);
     });
+
     it('dob', () => {
       expect(validate('dob', '2012/10/12')).toBe(true);
       expect(validate('dob', null)).toBe(false);
       expect(validate('dob', undefined)).toBe(false);
       expect(validate('dob', '')).toBe(false);
     });
+
     it('county', () => {
       expect(validate('county', { id: '1' })).toBe(true);
       expect(validate('county', {})).toBe(false);
@@ -57,6 +62,7 @@ describe('ChildForm.helper', () => {
       expect(validate('county', undefined)).toBe(false);
       expect(validate('county', '')).toBe(false);
     });
+
     it('unknown field name', () => {
       expect(validate('unknownFieldName', { id: '1' })).toBe(false);
       expect(validate('unknownFieldName', {})).toBe(false);
@@ -80,6 +86,7 @@ describe('ChildForm.helper', () => {
         })
       ).toBe(false);
     });
+
     it('returns true when valid', () => {
       expect(
         isFormValid({

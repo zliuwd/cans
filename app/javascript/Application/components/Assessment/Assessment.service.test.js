@@ -8,7 +8,7 @@ jest.mock('../../App.api');
 const initialAssessment = {
   instrument_id: 1,
   person: childInfoJson,
-  assessment_type: "INITIAL",
+  assessment_type: 'INITIAL',
   status: 'IN_PROGRESS',
   state: {
     id: 0,
@@ -111,7 +111,6 @@ describe('AssessmentService', () => {
       apiPutSpy.mockReset();
     });
   });
-
 
   describe('#postAssessment', () => {
     const apiPostSpy = jest.spyOn(appApi, 'post');

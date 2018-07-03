@@ -29,7 +29,8 @@ class DomainsGroup extends Component {
     onConfidentialityUpdate: PropTypes.func.isRequired,
   };
 
-  componentWillReceiveProps(nextProps) {
+  /* eslint-disable camelcase */
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { i18n } = nextProps;
     const title = (i18n['_title_'] || '').toUpperCase();
     const description = i18n['_description_'] || 'No Description';
@@ -38,15 +39,16 @@ class DomainsGroup extends Component {
       description: description,
     });
   }
+  /* eslint-enable camelcase */
 
   renderDomains = domains => {
     const i18nAll = this.props.i18nAll || {};
     const { onRatingUpdate, onConfidentialityUpdate, assessmentUnderSix } = this.props;
-    return domains.map(domain => {
+    return domains.map((domain, index) => {
       const code = domain.code;
       const domainI18n = getI18nByCode(i18nAll, code);
       return (
-        <div>
+        <div key={index}>
           <Divider />
           <Domain
             key={code}

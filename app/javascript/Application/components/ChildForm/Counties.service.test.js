@@ -9,6 +9,7 @@ describe('CountiesService', () => {
     beforeEach(() => {
       apiGetSpy.mockReset();
     });
+
     it('returns array of Counties', async () => {
       const expectedCounties = [];
       apiGetSpy.mockReturnValue(Promise.resolve({ data: expectedCounties }));

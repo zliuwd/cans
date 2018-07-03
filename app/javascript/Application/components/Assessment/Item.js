@@ -20,6 +20,7 @@ const initI18nValue = i18n => ({
   ratingDescriptions: getI18nValuesByPrefix(i18n, '_rating_.'),
 });
 
+/* eslint-disable camelcase */
 class Item extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +40,7 @@ class Item extends Component {
     onConfidentialityUpdate: PropTypes.func.isRequired,
   };
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const i18nValues = initI18nValue(nextProps.i18n);
     this.setState({
       ...i18nValues,
@@ -84,10 +85,13 @@ class Item extends Component {
               onChange={this.handleConfidentialityChange}
               label={'Confidential'}
               value={isConfidential}
-              control={<Checkbox checked={isConfidential}
-                                 disabled={confidential_by_default && !this.props.canReleaseConfidentialInfo}
-                                 color={'default'}
-              />}
+              control={
+                <Checkbox
+                  checked={isConfidential}
+                  disabled={confidential_by_default && !this.props.canReleaseConfidentialInfo}
+                  color={'default'}
+                />
+              }
             />
           </FormControl>
         </form>
@@ -98,7 +102,7 @@ class Item extends Component {
   renderQtcIfNeeded = qtcDescriptions => {
     return qtcDescriptions.length > 0 ? (
       <div>
-        <Typography variant="display1" style={{marginTop: '1.5rem'}}>
+        <Typography variant="display1" style={{ marginTop: '1.5rem' }}>
           Questions to Consider:
         </Typography>
         <Typography variant="headline">
@@ -113,48 +117,70 @@ class Item extends Component {
   renderRatingDescriptionsIfNeeded = (ratingDescriptions, isBooleanRating, rating, has_na_option) => {
     return ratingDescriptions.length > 0 ? (
       <div>
-        <Typography variant="display1" style={{marginTop: '1.5rem'}}>
+        <Typography variant="display1" style={{ marginTop: '1.5rem' }}>
           Ratings:
         </Typography>
-          <form autoComplete="off">
-            <FormControl>
-              <RadioGroup name="rating_desc" value={rating} onChange={this.handleRatingChange}>
-                {has_na_option
-                  ? <FormControlLabel
-                    value={8}
-                    control={<Radio value={8} color={'default'}/>}
-                    label={<Typography variant="headline">N/A</Typography>}
-                    style={{fontSize: '1.3rem'}}
-                  />
-                  : null}
-                {ratingDescriptions.map((label, i) => {
-                  return <FormControlLabel
+        <form autoComplete="off">
+          <FormControl>
+            <RadioGroup name="rating_desc" value={rating} onChange={this.handleRatingChange}>
+              {has_na_option ? (
+                <FormControlLabel
+                  value={8}
+                  control={<Radio value={8} color={'default'} />}
+                  label={<Typography variant="headline">N/A</Typography>}
+                  style={{ fontSize: '1.3rem' }}
+                />
+              ) : null}
+              {ratingDescriptions.map((label, i) => {
+                return (
+                  <FormControlLabel
                     value={i}
-                    control={<Radio value={i} color={'default'}/>}
-                    style={{fontSize: '1.3rem'}}
-                    label={<Typography variant="headline">{this.getRadioValueForLabel(isBooleanRating, i)} = {label}</Typography>}
-                  />;
-                })}
-              </RadioGroup>
-            </FormControl>
-          </form>
+                    key={label}
+                    control={<Radio value={i} color={'default'} />}
+                    style={{ fontSize: '1.3rem' }}
+                    label={
+                      <Typography variant="headline">
+                        {this.getRadioValueForLabel(isBooleanRating, i)} = {label}
+                      </Typography>
+                    }
+                  />
+                );
+              })}
+            </RadioGroup>
+          </FormControl>
+        </form>
       </div>
     ) : null;
   };
 
   render = () => {
     const { item, assessmentUnderSix, onRatingUpdate } = this.props;
-    const { code, rating_type, has_na_option, rating, confidential: isConfidential, confidential_by_default,
-      under_six_id, above_six_id } = item;
+    const {
+      code,
+      rating_type,
+      has_na_option,
+      rating,
+      confidential: isConfidential,
+      confidential_by_default,
+      under_six_id,
+      above_six_id,
+    } = item;
     const itemNumber = assessmentUnderSix ? under_six_id : above_six_id;
     const { isExpanded, title, description, qtcDescriptions, ratingDescriptions } = this.state;
     const isBooleanRating = rating_type === 'BOOLEAN';
-    const classes = classNames('item-expand-icon', {'fa fa-plus':!isExpanded, 'fa fa-minus':isExpanded });
+    const classes = classNames('item-expand-icon', { 'fa fa-plus': !isExpanded, 'fa fa-minus': isExpanded });
     return (assessmentUnderSix && under_six_id) || (!assessmentUnderSix && above_six_id) ? (
       <div>
         <AppBar position="static" color="inherit">
-          <Toolbar style={{ 'justifyContent': 'space-between' }}>
-            <i id={'item-expand'} className={classes} onClick={this.switchExpandedState} />
+          <Toolbar style={{ justifyContent: 'space-between' }}>
+            <i
+              id={'item-expand'}
+              role="link"
+              tabIndex={0}
+              className={classes}
+              onClick={this.switchExpandedState}
+              onKeyDown={this.switchExpandedState}
+            />
             <Typography variant="title">
               {itemNumber}. {title}
             </Typography>
@@ -180,6 +206,7 @@ class Item extends Component {
     ) : null;
   };
 }
+/* eslint-enable camelcase */
 
 Item.defaultProps = {
   item: {},

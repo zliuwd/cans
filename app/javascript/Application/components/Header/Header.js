@@ -27,7 +27,7 @@ class Header extends React.Component {
   fetchUser = () => {
     return UserAccountService.fetchCurrent()
       .then(this.onFetchSuccess)
-      .catch(() => {})
+      .catch(() => {});
   };
 
   onFetchSuccess = staffPerson => {
@@ -45,7 +45,7 @@ class Header extends React.Component {
     const userInitials = this.parseUserInitials(staffPerson);
     this.setState({
       userName,
-      userInitials
+      userInitials,
     });
   };
 
@@ -72,13 +72,7 @@ class Header extends React.Component {
 
   render = () => {
     const { userName, userInitials } = this.state;
-    return (
-      <GlobalHeader
-        profileName={userName}
-        profileId={userInitials}
-        profileAvatar={userInitials}
-      />
-    );
+    return <GlobalHeader profileName={userName} profileId={userInitials} profileAvatar={userInitials} />;
   };
 }
 

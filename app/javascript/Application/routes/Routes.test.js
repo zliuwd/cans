@@ -1,8 +1,7 @@
-import React from 'react';
 import { executeTest } from './Routes.test.util';
 import { Assessment } from '../components/Assessment';
-import { ClientsContainer } from "../components/Client";
-import { ChildForm } from "../components/ChildForm";
+import { ClientsContainer } from '../components/Client';
+import { ChildForm } from '../components/ChildForm';
 
 /**
  * To test that a configured route is working, create a new

@@ -1,4 +1,5 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 import { Client } from './index';
 import Card from '@material-ui/core/Card/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -7,7 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { PageInfo } from '../Layout';
 import { MemoryRouter } from 'react-router-dom';
-import { formatClientId } from './Client';
 
 describe('<Client />', () => {
   describe('initial component layout', () => {
@@ -49,7 +49,7 @@ describe('<Client />', () => {
   describe('with childData', () => {
     const match = { params: { id: 1 } };
     let wrapper = {};
-    beforeEach( () => {
+    beforeEach(() => {
       wrapper = shallow(
         <MemoryRouter>
           <Client match={match} />
@@ -84,7 +84,6 @@ describe('<Client />', () => {
     it('does not render No Child Data Found', () => {
       expect(getLength('#no-data')).not.toBe(1);
     });
-
   });
 
   describe('componentDidMount', () => {
@@ -95,8 +94,8 @@ describe('<Client />', () => {
       const fetchClientDataSpy = jest.spyOn(Client.prototype, 'fetchChildData');
       const wrapper = shallow(<Client match={match} />);
       wrapper.instance().componentDidMount();
-      expect(spy).toHaveBeenCalled();
-      expect(fetchClientDataSpy).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledWith();
+      expect(fetchClientDataSpy).toHaveBeenCalledWith(1);
 
       spy.mockReset();
       fetchClientDataSpy.mockReset();

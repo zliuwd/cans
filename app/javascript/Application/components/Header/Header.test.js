@@ -27,7 +27,7 @@ describe('Header', () => {
         Promise.resolve({
           first_name: 'Joanna',
           last_name: 'Doe',
-          any_field: 'Any value'
+          any_field: 'Any value',
         })
       );
       const wrapper = await mount(<Header />);
@@ -53,9 +53,7 @@ describe('Header', () => {
 
   describe('when failed to fetch user', () => {
     it('shows empty user name', async () => {
-      UserAccountService.fetchCurrent.mockReturnValue(
-        Promise.reject(new Error('e'))
-      );
+      UserAccountService.fetchCurrent.mockReturnValue(Promise.reject(new Error('e')));
       const wrapper = await mount(<Header />);
       const displayedUserName = wrapper
         .find('.profile')
@@ -65,9 +63,7 @@ describe('Header', () => {
     });
 
     it('does not invoke callback', async () => {
-      UserAccountService.fetchCurrent.mockReturnValue(
-        Promise.reject(new Error('e'))
-      );
+      UserAccountService.fetchCurrent.mockReturnValue(Promise.reject(new Error('e')));
       const mockCallback = jest.fn();
       await mount(<Header onUserFetchedCallback={mockCallback} />);
       expect(mockCallback.mock.calls.length).toBe(0);

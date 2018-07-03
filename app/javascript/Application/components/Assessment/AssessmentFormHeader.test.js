@@ -1,7 +1,8 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 import { AssessmentFormHeader } from './index';
 import { DateTime } from 'luxon';
-import { Alert } from '@cwds/components'
+import { Alert } from '@cwds/components';
 
 describe('<AssessmentFormHeader />', () => {
   describe('with child name', () => {
@@ -30,27 +31,29 @@ describe('<AssessmentFormHeader />', () => {
     it('should default to todays date', () => {
       const today = DateTime.local().toISODate();
       const tomorrow = DateTime.local()
-        .plus({days: 1})
-        .toISODate()
+        .plus({ days: 1 })
+        .toISODate();
 
       const props = {
         onValueChange: jest.fn(),
         assessmentDate: today,
       };
 
-      const wrapper = shallow(<AssessmentFormHeader {...props}/>);
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
       expect(wrapper.instance().props.assessmentDate).toBe(today);
       expect(wrapper.find('#date-select').props().value).toBe(today);
       expect(wrapper.instance().props.assessmentDate).not.toBe(tomorrow);
     });
 
     it('should allow user to change date', () => {
-      const today = DateTime.local().toISODate()
+      const today = DateTime.local().toISODate();
       const tomorrow = {
         target: {
-          value: DateTime.local().plus({ days: 1 }).toISODate(),
+          value: DateTime.local()
+            .plus({ days: 1 })
+            .toISODate(),
           name: 'event_date',
-        }
+        },
       };
 
       const onValueChange = jest.fn();
@@ -68,13 +71,13 @@ describe('<AssessmentFormHeader />', () => {
     it('should default to false', () => {
       const value = false;
 
-      const wrapper = shallow(<AssessmentFormHeader canReleaseInformation={value}/>);
+      const wrapper = shallow(<AssessmentFormHeader canReleaseInformation={value} />);
       expect(wrapper.instance().props.canReleaseInformation).toBe(value);
     });
 
     it('should allow user to change can_release_confidential_info', () => {
       const defaultValue = false;
-      const newValue = { target: { value: 'true', name: 'can_release_confidential_info'}};
+      const newValue = { target: { value: 'true', name: 'can_release_confidential_info' } };
 
       const onValueChange = jest.fn();
       const props = {
@@ -94,7 +97,7 @@ describe('<AssessmentFormHeader />', () => {
     it('should default to Communimetric', () => {
       const value = 'Communimetric';
 
-      const wrapper = shallow(<AssessmentFormHeader assessmentCompletedAs={value}/>);
+      const wrapper = shallow(<AssessmentFormHeader assessmentCompletedAs={value} />);
       expect(wrapper.instance().props.assessmentCompletedAs).toBe(value);
     });
 
@@ -108,7 +111,7 @@ describe('<AssessmentFormHeader />', () => {
         assessmentCompletedAs: defaultValue,
       };
 
-      const wrapper = shallow(<AssessmentFormHeader {...props} onValueChange={onValueChange}/>);
+      const wrapper = shallow(<AssessmentFormHeader {...props} onValueChange={onValueChange} />);
 
       expect(wrapper.instance().props.assessmentCompletedAs).toBe('Communimetric');
       wrapper.instance().handleValueChange(newValue);
@@ -134,22 +137,22 @@ describe('<AssessmentFormHeader />', () => {
     const props = {
       onValueChange: () => {},
       clientFirstName: '',
-      clientLastName:'',
+      clientLastName: '',
       assessmentDate: '',
       assessmentCompletedAs: '',
-      canReleaseInformation: false
-    }
+      canReleaseInformation: false,
+    };
 
     it('should render Alert component when canReleaseInformation is false', () => {
-      const wrapper = shallow(<AssessmentFormHeader {...props}/>);
-      expect(wrapper.find(Alert).length).toBe(1)
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
+      expect(wrapper.find(Alert).length).toBe(1);
     });
 
     it('should render specific message', () => {
-      const wrapper = shallow(<AssessmentFormHeader  {...props}/>);
-      expect(wrapper.find(Alert).html()).toMatch(/Prior to sharing the CANS assessment redact item number 7, 48, EC.41 and EC.18/)
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
+      expect(wrapper.find(Alert).html()).toMatch(
+        /Prior to sharing the CANS assessment redact item number 7, 48, EC.41 and EC.18/
+      );
     });
-
   });
-
 });

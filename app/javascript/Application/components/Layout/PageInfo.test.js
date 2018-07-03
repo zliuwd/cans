@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Row, Col, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import PageInfo from './PageInfo';
 
 describe('<PageInfo />', () => {
-  const getWrapper = () => shallow(<PageInfo title={'title'}/>);
+  const getWrapper = () => shallow(<PageInfo title={'title'} />);
   const getLength = component => getWrapper().find(component).length;
 
   it('renders with 1 <Row /> component', () => {
@@ -14,5 +14,4 @@ describe('<PageInfo />', () => {
   it('renders with 1 <Col /> component', () => {
     expect(getLength(Col)).toBe(1);
   });
-
 });

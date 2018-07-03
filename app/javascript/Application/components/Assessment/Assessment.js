@@ -1,11 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import {
-  AssessmentFormHeader,
-  Domain,
-  DomainsGroup,
-  AssessmentService,
-  I18nService,
-} from './';
+import PropTypes from 'prop-types';
+import { AssessmentFormHeader, Domain, DomainsGroup, AssessmentService, I18nService } from './';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Typography from '@material-ui/core/Typography';
@@ -20,6 +15,7 @@ import { DateTime } from 'luxon';
 
 const CONFIDENTIAL_BY_DEFAULT_CODES = ['SUBSTANCE_USE', 'SUBSTANCE_USE_CAREGIVER', 'EXPOSURE'];
 
+/* eslint-disable camelcase */
 class Assessment extends Component {
   constructor(props) {
     super(props);
@@ -37,9 +33,7 @@ class Assessment extends Component {
     PersonService.fetch(this.props.match.params.childId)
       .then(response => this.setState({ child: response }))
       .catch(() => this.setState({ child: {} }));
-    assessmentId
-      ? this.fetchAssessment(assessmentId)
-      : this.fetchNewAssessment();
+    assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment();
   }
 
   fetchNewAssessment() {
@@ -105,12 +99,12 @@ class Assessment extends Component {
   };
 
   handleHeaderFormValueChange = (prop, value) => {
-    if (prop === 'can_release_confidential_info'){
+    if (prop === 'can_release_confidential_info') {
       this.setSubstanceAbuseItemsConfidential();
     }
     const assessment = this.state.assessment;
     assessment[prop] = value;
-    this.updateAssessment(assessment)
+    this.updateAssessment(assessment);
   };
 
   setSubstanceAbuseItemsConfidential() {
@@ -118,11 +112,11 @@ class Assessment extends Component {
     assessment.state.domains.map(domain => {
       domain.items.map(item => {
         if (!this.state.canReleaseConfidentialInfo && CONFIDENTIAL_BY_DEFAULT_CODES.includes(item.code)) {
-          item.confidential = true
+          item.confidential = true;
         }
-      })
+      });
     });
-    this.updateAssessment(assessment)
+    this.updateAssessment(assessment);
   }
 
   updateItem = (itemCode, key, value) => {
@@ -156,7 +150,7 @@ class Assessment extends Component {
 
   initialSave(assessment) {
     this.setState({ assessment });
-    this.updateUrlWithAssessment(assessment)
+    this.updateUrlWithAssessment(assessment);
   }
 
   updateUrlWithAssessment(assessment) {
@@ -167,11 +161,15 @@ class Assessment extends Component {
     const assessment = this.state.assessment;
     if (assessment.id) {
       AssessmentService.update(assessment.id, assessment)
-        .then((updatedAssessment) => {this.setState({ assessment: updatedAssessment })})
+        .then(updatedAssessment => {
+          this.setState({ assessment: updatedAssessment });
+        })
         .catch(() => this.setState({ assessment_status: LoadingState.error }));
     } else {
       AssessmentService.postAssessment(assessment)
-        .then((updatedAssessment) => {this.initialSave(updatedAssessment)})
+        .then(updatedAssessment => {
+          this.initialSave(updatedAssessment);
+        })
         .catch(() => this.setState({ assessment_status: LoadingState.error }));
     }
   };
@@ -232,24 +230,25 @@ class Assessment extends Component {
         <Typography variant="body1" style={{ textAlign: 'right' }}>
           Age: 0-5
           <FormControlLabel
-            control={
-              <Switch
-                checked={!isUnderSix}
-                value={isUnderSix}
-                onChange={this.toggleUnderSix}
-                color="default"
-              />
-            }
+            control={<Switch checked={!isUnderSix} value={isUnderSix} onChange={this.toggleUnderSix} color="default" />}
             label="6-21"
             style={{ marginLeft: '0px' }}
           />
         </Typography>
         {this.renderDomains(domains)}
-        <AssessmentFormFooter handleSaveAssessment={this.handleSaveAssessment}
-                              assessmentDate={this.state.assessment.event_date}/>
+        <AssessmentFormFooter
+          handleSaveAssessment={this.handleSaveAssessment}
+          assessmentDate={this.state.assessment.event_date}
+        />
       </Fragment>
     );
-  };
+  }
 }
+/* eslint-enable camelcase */
+
+Assessment.propTypes = {
+  match: PropTypes.array,
+  history: PropTypes.object,
+};
 
 export default Assessment;

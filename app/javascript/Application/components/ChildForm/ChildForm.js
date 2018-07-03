@@ -2,15 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import InputMask from 'react-input-mask';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  MenuItem,
-  TextField,
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Button,
-} from '@material-ui/core';
+import { MenuItem, TextField, Card, CardHeader, CardContent, CardActions, Button } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { CountiesService } from './Counties.service';
 import { ChildFormService } from './ChildForm.service';
@@ -269,11 +261,7 @@ class ChildForm extends Component {
                   <em />
                 </MenuItem>
                 {this.state.counties.map(option => (
-                  <MenuItem
-                    key={option.id}
-                    value={option}
-                    className={classes.menu}
-                  >
+                  <MenuItem key={option.id} value={option} className={classes.menu}>
                     <span id={'county-name'}>{option.name}</span>
                   </MenuItem>
                 ))}

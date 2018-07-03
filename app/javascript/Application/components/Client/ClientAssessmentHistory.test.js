@@ -1,18 +1,18 @@
 import React from 'react';
+import { shallow, mount } from 'enzyme';
 import Card from '@material-ui/core/Card/Card';
 import CardHeader from '@material-ui/core/CardHeader/index';
 import CardContent from '@material-ui/core/CardContent/index';
 import Grid from '@material-ui/core/Grid/Grid';
-import { Link } from 'react-router-dom';
+import { Link, MemoryRouter } from 'react-router-dom';
 import { ClientAssessmentHistory } from './index';
-import { MemoryRouter } from 'react-router-dom';
+import AssessmentService from '../Assessment/Assessment.service';
 
 jest.mock('../Assessment/Assessment.service');
-import AssessmentService from '../Assessment/Assessment.service';
 
 const assessmentInProgress = {
   id: 97501,
-  person: {id:1},
+  person: { id: 1 },
   status: 'IN_PROGRESS',
   event_date: '2015-10-10',
   updated_timestamp: '2015-06-06T15:37:32.000Z',
@@ -24,7 +24,7 @@ const assessmentInProgress = {
 
 const assessmentSubmitted = {
   id: 97502,
-  person: {id:1},
+  person: { id: 1 },
   status: 'SUBMITTED',
   event_date: '2018-01-05',
   updated_timestamp: '2018-06-06T15:37:32.000Z',
@@ -36,7 +36,7 @@ const assessmentSubmitted = {
 
 const assessmentWithNoUpdateInfo = {
   id: 97503,
-  person: {id:1},
+  person: { id: 1 },
   status: 'IN_PROGRESS',
   event_date: '2018-01-05',
   created_timestamp: '2018-06-06T15:37:32.000Z',
@@ -46,16 +46,15 @@ const assessmentWithNoUpdateInfo = {
   },
 };
 
-const getShallowWrapper = () =>
-  shallow(<ClientAssessmentHistory clientId={1004} />);
+const getShallowWrapper = () => shallow(<ClientAssessmentHistory clientId={1004} />);
 
-const prepareWrapper = async (mockedAssessments) => {
+const prepareWrapper = async mockedAssessments => {
   // given
   AssessmentService.search.mockReturnValue(Promise.resolve(mockedAssessments));
   const wrapper = getShallowWrapper();
 
   // when
-  await wrapper.instance().componentWillReceiveProps({ clientId: 1004 });
+  await wrapper.instance().UNSAFE_componentWillReceiveProps({ clientId: 1004 });
   wrapper.update();
   return wrapper;
 };

@@ -1,4 +1,3 @@
-import { clone } from 'lodash';
 import { getI18nByCode, getI18nValuesByPrefix } from './I18nHelper';
 
 describe('<I18nHelper />', () => {
@@ -12,12 +11,13 @@ describe('<I18nHelper />', () => {
       };
       const actualResult = getI18nByCode(inputI18n, 'item10');
       const expectedResult = {
-        '_title_': 'Title 10',
-        '_description_': 'Description 10',
+        _title_: 'Title 10',
+        _description_: 'Description 10',
       };
-      expect(actualResult).toEqual(expectedResult)
+      expect(actualResult).toEqual(expectedResult);
     });
   });
+
   describe('#getI18nValuesByPrefix()', () => {
     it('filters records by prefix and returns values only', () => {
       const inputI18n = {
@@ -28,8 +28,7 @@ describe('<I18nHelper />', () => {
       };
       const actualResult = getI18nValuesByPrefix(inputI18n, 'item10.');
       const expectedResult = ['Title 10', 'Description 10'];
-      expect(actualResult).toEqual(expectedResult)
+      expect(actualResult).toEqual(expectedResult);
     });
   });
-
 });

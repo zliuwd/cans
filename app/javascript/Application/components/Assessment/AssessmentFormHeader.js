@@ -6,7 +6,7 @@ import FormControl from '@material-ui/core/FormControl';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
-import { Alert } from '@cwds/components'
+import { Alert } from '@cwds/components';
 
 import './style.sass';
 
@@ -26,14 +26,16 @@ class AssessmentFormHeader extends Component {
     return isCanReleaseInfo ? booleanValue : event.target.value;
   }
 
-  handleValueChange = (event) => {
+  handleValueChange = event => {
     const value = AssessmentFormHeader.parseCanReleaseInfo(event);
     this.props.onValueChange(event.target.name, value);
   };
 
   renderWarningAlert() {
     if (!this.props.canReleaseInformation) {
-      return <Alert color={'warning'}>Prior to sharing the CANS assessment redact item number 7, 48, EC.41 and EC.18</Alert>
+      return (
+        <Alert color={'warning'}>Prior to sharing the CANS assessment redact item number 7, 48, EC.41 and EC.18</Alert>
+      );
     }
   }
 
@@ -47,10 +49,24 @@ class AssessmentFormHeader extends Component {
         </Col>
         <Col sm={12}>
           <FormControl>
-            <RadioGroup name="can_release_confidential_info" value={this.props.canReleaseInformation}
-                        onChange={this.handleValueChange} className={'can-release-radio-group'}>
-              <FormControlLabel value={true} control={<Radio color="default"/>} label={'Yes'} classes={{label: 'can-release-radio-label'}}/>
-              <FormControlLabel value={false} control={<Radio color="default"/>} label={'No'} classes={{label: 'can-release-radio-label'}}/>
+            <RadioGroup
+              name="can_release_confidential_info"
+              value={this.props.canReleaseInformation}
+              onChange={this.handleValueChange}
+              className={'can-release-radio-group'}
+            >
+              <FormControlLabel
+                value={true}
+                control={<Radio color="default" />}
+                label={'Yes'}
+                classes={{ label: 'can-release-radio-label' }}
+              />
+              <FormControlLabel
+                value={false}
+                control={<Radio color="default" />}
+                label={'No'}
+                classes={{ label: 'can-release-radio-label' }}
+              />
             </RadioGroup>
           </FormControl>
           {this.renderWarningAlert()}
@@ -65,9 +81,7 @@ class AssessmentFormHeader extends Component {
       <Fragment>
         {clientFirstName && clientLastName ? (
           <Col sm={12}>
-            <span id={'child-name'}>
-              {clientLastName + ', ' + clientFirstName}
-            </span>
+            <span id={'child-name'}>{clientLastName + ', ' + clientFirstName}</span>
           </Col>
         ) : (
           <Col sm={12}>
@@ -104,12 +118,11 @@ class AssessmentFormHeader extends Component {
             >
               <option value={'COMMUNIMETRIC'}>Communimetric</option>
             </Input>
-
           </Col>
         </Row>
         <Row>{this.renderCanReleaseInfoQuestion()}</Row>
       </Fragment>
-    )
+    );
   }
 }
 

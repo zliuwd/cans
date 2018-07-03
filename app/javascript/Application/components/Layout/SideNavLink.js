@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 import './style.sass';
 
@@ -21,6 +21,9 @@ class SideNavLink extends Component {
         id="side-nav"
         className={classes}
         onClick={() => onClick()}
+        onKeyDown={() => onClick()}
+        role="link"
+        tabIndex={0}
       >
         <span className="fa-stack">
           <i className="fa fa-circle-thin fa-stack-2x" />

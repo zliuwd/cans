@@ -1,4 +1,3 @@
-import React from 'react';
 import { groupClientsByLastName } from './person.helper';
 
 describe('person.helper', () => {

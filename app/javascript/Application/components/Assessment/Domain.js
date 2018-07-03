@@ -10,8 +10,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Item } from './';
 import { getI18nByCode } from './I18nHelper';
 
-import './style.sass'
+import './style.sass';
 
+/* eslint-disable camelcase */
 class Domain extends Component {
   constructor(props) {
     super(props);
@@ -31,7 +32,7 @@ class Domain extends Component {
     onConfidentialityUpdate: PropTypes.func.isRequired,
   };
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { i18n } = nextProps;
     const title = (i18n['_title_'] || '').toUpperCase();
     const description = i18n['_description_'] || '';
@@ -43,14 +44,17 @@ class Domain extends Component {
 
   renderItems = items => {
     const {
-      i18nAll, assessmentUnderSix, onRatingUpdate,
-      onConfidentialityUpdate, canReleaseConfidentialInfo,
+      i18nAll,
+      assessmentUnderSix,
+      onRatingUpdate,
+      onConfidentialityUpdate,
+      canReleaseConfidentialInfo,
     } = this.props;
-    return items.map(item => {
+    return items.map((item, index) => {
       const code = item.code;
       const itemI18n = getI18nByCode(i18nAll, code);
       return (
-        <div>
+        <div key={index}>
           <Item
             key={code}
             item={item}
@@ -71,17 +75,16 @@ class Domain extends Component {
     const { items, under_six, above_six } = this.props.domain;
     const { title, description } = this.state;
     return (assessmentUnderSix && under_six) || (!assessmentUnderSix && above_six) ? (
-      <ExpansionPanel style={{ 'backgroundColor': '#114161' }}>
+      <ExpansionPanel style={{ backgroundColor: '#114161' }}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon style={{ height: '28px', color: 'white' }} />}
-          style={{ 'minHeight': '28px' }}
+          style={{ minHeight: '28px' }}
         >
           <Typography variant="title" style={{ color: 'white' }}>
             {title}
           </Typography>
           {description ? (
-            <Tooltip title={description} placement="top-end"
-                     classes={{popper: 'domain-tooltip'}}>
+            <Tooltip title={description} placement="top-end" classes={{ popper: 'domain-tooltip' }}>
               <i className="fa fa-question-circle domain-help-icon" />
             </Tooltip>
           ) : null}
@@ -93,13 +96,14 @@ class Domain extends Component {
     ) : null;
   };
 }
+/* eslint-enable camelcase */
 
 Domain.defaultProps = {
   domain: {},
   i18n: {},
   i18nAll: {},
   assessmentUnderSix: false,
-  canReleaseConfidentialInfo: false
+  canReleaseConfidentialInfo: false,
 };
 
 export default Domain;

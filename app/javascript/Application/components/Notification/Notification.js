@@ -51,13 +51,7 @@ const MessageContent = props => {
         </span>
       }
       action={[
-        <IconButton
-          key="close"
-          aria-label="Close"
-          color="inherit"
-          className={classes.close}
-          onClick={onClose}
-        >
+        <IconButton key="close" aria-label="Close" color="inherit" className={classes.close} onClick={onClose}>
           <CloseIcon />
         </IconButton>,
       ]}
@@ -105,11 +99,7 @@ class Notification extends Component {
           labelStyle={{ color: 'white' }}
           iconStyle={{ fill: 'green' }}
         >
-          <MessageContentWrapper
-            onClose={this.handleClose}
-            variant="success"
-            message={this.props.messageText}
-          />
+          <MessageContentWrapper onClose={this.handleClose} variant="success" message={this.props.messageText} />
         </Snackbar>
       </Fragment>
     );
@@ -118,6 +108,7 @@ class Notification extends Component {
 
 Notification.propTypes = {
   classes: PropTypes.object.isRequired,
+  messageText: PropTypes.string,
 };
 
 export default withStyles(styles)(Notification);

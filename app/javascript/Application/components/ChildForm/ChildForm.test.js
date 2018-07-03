@@ -3,7 +3,7 @@ import { mount, shallow } from 'enzyme';
 import ChildForm from './ChildForm';
 
 describe('<ChildForm />', () => {
-  const getWrapper =  () =>  shallow(<ChildForm />);
+  const getWrapper = () => shallow(<ChildForm />);
   const getMountWrapper = () => mount(<ChildForm />);
   const getLength = component => {
     const wrapper = getMountWrapper();
@@ -26,9 +26,7 @@ describe('<ChildForm />', () => {
       childFormWrapper.instance().handleChange('first_name')({
         target: { value: 'John' },
       });
-      expect(childFormWrapper.state('childInfoValidation').first_name).toEqual(
-        true
-      );
+      expect(childFormWrapper.state('childInfoValidation').first_name).toEqual(true);
       expect(childFormWrapper.state('isSaveButtonDisabled')).toEqual(true);
     });
 
@@ -38,9 +36,7 @@ describe('<ChildForm />', () => {
       childFormWrapper.instance().handleChange('last_name')({
         target: { value: 'John' },
       });
-      expect(childFormWrapper.state('childInfoValidation').last_name).toEqual(
-        true
-      );
+      expect(childFormWrapper.state('childInfoValidation').last_name).toEqual(true);
       expect(childFormWrapper.state('isSaveButtonDisabled')).toEqual(true);
     });
 
@@ -50,9 +46,7 @@ describe('<ChildForm />', () => {
       childFormWrapper.instance().handleChange('case_id')({
         target: { value: 'John' },
       });
-      expect(childFormWrapper.state('childInfoValidation').case_id).toEqual(
-        true
-      );
+      expect(childFormWrapper.state('childInfoValidation').case_id).toEqual(true);
       expect(childFormWrapper.state('isSaveButtonDisabled')).toEqual(true);
     });
 
@@ -72,9 +66,7 @@ describe('<ChildForm />', () => {
       childFormWrapper.instance().handleChange('county')({
         target: { value: { id: '1' } },
       });
-      expect(childFormWrapper.state('childInfoValidation').county).toEqual(
-        true
-      );
+      expect(childFormWrapper.state('childInfoValidation').county).toEqual(true);
       expect(childFormWrapper.state('isSaveButtonDisabled')).toEqual(true);
     });
 
@@ -89,7 +81,7 @@ describe('<ChildForm />', () => {
         target: { value: 'Max' },
       });
       childFormInstance.handleChange('case_id')({
-      target: { value: '879R34U7' },
+        target: { value: '879R34U7' },
       });
       childFormInstance.handleChange('external_id')({
         target: { value: '1234567891234567890' },
@@ -121,13 +113,13 @@ describe('<ChildForm />', () => {
     const wrapper = getWrapper();
     const childFormWrapper = wrapper.find('ChildForm').dive();
     childFormWrapper.instance().handleCancel();
-    expect(childFormWrapper.state('childInfo').person_role).toEqual('CLIENT')
-    expect(childFormWrapper.state('childInfo').first_name).toEqual('')
-    expect(childFormWrapper.state('childInfo').dob).toEqual('')
-    expect(childFormWrapper.state('childInfo').case_id).toEqual('')
-    expect(childFormWrapper.state('childInfo').external_id).toEqual('')
-    expect(childFormWrapper.state('childInfo').county.id).toEqual(0)
-    expect(childFormWrapper.state('childInfo').county.name).toEqual('')
+    expect(childFormWrapper.state('childInfo').person_role).toEqual('CLIENT');
+    expect(childFormWrapper.state('childInfo').first_name).toEqual('');
+    expect(childFormWrapper.state('childInfo').dob).toEqual('');
+    expect(childFormWrapper.state('childInfo').case_id).toEqual('');
+    expect(childFormWrapper.state('childInfo').external_id).toEqual('');
+    expect(childFormWrapper.state('childInfo').county.id).toEqual(0);
+    expect(childFormWrapper.state('childInfo').county.name).toEqual('');
   });
 
   it('renders counties drop down', () => {

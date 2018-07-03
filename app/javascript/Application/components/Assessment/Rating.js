@@ -60,8 +60,8 @@ class Rating extends Component {
         <Typography
           variant="body2"
           style={{
-            'marginTop': '6px',
-            'marginRight': '6px',
+            marginTop: '6px',
+            marginRight: '6px',
           }}
         >
           Rating:

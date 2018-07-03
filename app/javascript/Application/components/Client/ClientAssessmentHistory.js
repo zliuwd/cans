@@ -24,6 +24,7 @@ const getActionVerbByStatus = status => {
   }
 };
 
+/* eslint-disable camelcase */
 class ClientAssessmentHistory extends Component {
   constructor(context) {
     super(context);
@@ -39,7 +40,7 @@ class ClientAssessmentHistory extends Component {
     clientId: PropTypes.number,
   };
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { clientId } = nextProps;
     if (!clientId) {
       return;
@@ -111,11 +112,7 @@ class ClientAssessmentHistory extends Component {
               </Row>
               <Row>
                 <Col xs="12">
-                  <Typography
-                    variant={'headline'}
-                    color={'textSecondary'}
-                    className={'item-timestamp'}
-                  >
+                  <Typography variant={'headline'} color={'textSecondary'} className={'item-timestamp'}>
                     {`${actionVerb} on ${formattedTimestamp} by ${updatedByName}`}
                   </Typography>
                 </Col>
@@ -132,11 +129,7 @@ class ClientAssessmentHistory extends Component {
     return (
       <Grid item xs={12}>
         <Card className={'card'}>
-          <CardHeader
-            className={'card-header-cans'}
-            title="Assessment History"
-            action={this.renderAddCansButton()}
-          />
+          <CardHeader className={'card-header-cans'} title="Assessment History" action={this.renderAddCansButton()} />
 
           <div className={'content'}>
             <CardContent>{this.renderAssessments(assessments, fetchStatus)}</CardContent>
@@ -146,5 +139,6 @@ class ClientAssessmentHistory extends Component {
     );
   }
 }
+/* eslint-enable camelcase */
 
 export default ClientAssessmentHistory;

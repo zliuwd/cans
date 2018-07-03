@@ -6,9 +6,10 @@ class UserAccountService {
   });
 
   static fetchCurrent() {
-    return this.httpClient.get('/user/account')
+    return this.httpClient
+      .get('/user/account')
       .then(response => response.data)
-      .catch(() => {})
+      .catch(() => {});
   }
 }
 

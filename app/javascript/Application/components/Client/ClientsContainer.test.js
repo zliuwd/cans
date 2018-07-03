@@ -1,9 +1,10 @@
 import React from 'react';
+import { mount } from 'enzyme';
 import ClientsContainer from './ClientsContainer';
 import { personsJson } from './person.helper.test';
+import PersonService from './person.service';
 
 jest.mock('./person.service');
-import PersonService from './person.service';
 
 describe('<ClientsContainer />', () => {
   it('renders message when fetches empty clients list', async () => {
@@ -22,9 +23,7 @@ describe('<ClientsContainer />', () => {
   });
 
   it('renders empty container when failed to fetch', async () => {
-    PersonService.fetchAllClients.mockReturnValue(
-      Promise.reject(Error('error'))
-    );
+    PersonService.fetchAllClients.mockReturnValue(Promise.reject(Error('error')));
     const wrapper = await mount(<ClientsContainer />);
     const renderedText = wrapper.text();
     wrapper.update();

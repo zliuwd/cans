@@ -5,6 +5,7 @@ import { PageInfo } from '../Layout';
 
 import './style.sass';
 
+/* eslint-disable camelcase */
 class ClientsContainer extends Component {
   constructor(props) {
     super(props);
@@ -47,9 +48,7 @@ class ClientsContainer extends Component {
   renderClientName = client => {
     return (
       <div className="client-name" key={client.id}>
-        <a href={`/clients/${client.id}`}>{`${client.last_name}, ${
-          client.first_name
-        }`}</a>
+        <a href={`/clients/${client.id}`}>{`${client.last_name}, ${client.first_name}`}</a>
       </div>
     );
   };
@@ -66,14 +65,13 @@ class ClientsContainer extends Component {
               return this.renderClientsRecord(record);
             })}
 
-            {clients_status === 'ready' && clients.length === 0 ? (
-              <div id='no-data'>No clients found</div>
-            ) : null}
+            {clients_status === 'ready' && clients.length === 0 ? <div id="no-data">No clients found</div> : null}
           </div>
         </div>
       </Fragment>
     );
   };
 }
+/* eslint-enable camelcase */
 
 export default ClientsContainer;

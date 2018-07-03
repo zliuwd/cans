@@ -12,9 +12,9 @@ const sortClientsInGroups = clients => {
     const aLastName = a.last_name.toUpperCase();
     const bLastName = b.last_name.toUpperCase();
     if (aLastName !== bLastName) {
-      return compareStrings(aLastName, bLastName)
+      return compareStrings(aLastName, bLastName);
     } else {
-      return compareStrings(a.first_name, b.first_name)
+      return compareStrings(a.first_name, b.first_name);
     }
   });
 };
