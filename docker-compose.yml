@@ -19,6 +19,10 @@ services:
       PERRY_PORT: ${PERRY_PORT}
       DEV_MODE: ${DEV_MODE}
       LOG_LEVEL: ${LOG_LEVEL}
+  redis:
+    image: 'redis:3.0'
+    ports:
+      - "6379:6379"
 
   cans-api:
     image: cwds/cans-api
@@ -54,6 +58,8 @@ services:
       PERRY_BASE_URL: "http://${HOST}:${PERRY_PORT}/perry"
       CANS_API_BASE_URL: ${CANS_API_BASE_URL}
       CANS_AUTHORIZATION_ENABLED: ${CANS_AUTHORIZATION_ENABLED}
+      REDIS_HOST: 'redis'
+      REDIS_PORT: 6379
 
   cans-test:
     build:
