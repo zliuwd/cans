@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
-Rails.application.config.session_store :redis_store, servers: {
-  host: ENV.fetch('REDIS_HOST', 'localhost'),
-  port: ENV.fetch('REDIS_PORT', '6379'),
-  db: 0,
-  namespace: 'session'
-}, expires_in: 4.hours
+Rails.application.config.session_store :redis_store, {
+  servers: [
+    {
+      host: ENV.fetch('REDIS_HOST', 'localhost'),
+      port: ENV.fetch('REDIS_PORT', '6379'),
+      db: 0,
+      namespace: "#{Rails.application.class.parent_name.downcase}_session"
+    },
+  ],
+ expires_after: 4.hours
+}
