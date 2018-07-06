@@ -1,95 +1,11 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { AssessmentFormHeader, Domain, DomainsGroup, AssessmentService, I18nService } from './';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Typography from '@material-ui/core/Typography';
-import { getI18nByCode } from './I18nHelper';
 import { clone } from 'lodash';
-import AssessmentFormFooter from './AssessmentFormFooter';
-import { PageInfo } from '../Layout';
-import { PersonService } from '../Client/';
-import { LoadingState } from '../../util/loadingHelper';
-import { AssessmentStatus, AssessmentType } from './AssessmentHelper';
-import { DateTime } from 'luxon';
+import { defaultEmptyAssessment } from './AssessmentHelper';
+import { getI18nByCode } from './I18nHelper';
+import Domain from './Domain';
 
-const CONFIDENTIAL_BY_DEFAULT_CODES = ['SUBSTANCE_USE', 'SUBSTANCE_USE_CAREGIVER', 'EXPOSURE'];
-
-/* eslint-disable camelcase */
 class Assessment extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      assessment: {},
-      assessment_status: LoadingState.idle,
-      i18n: {},
-      i18n_status: LoadingState.idle,
-      child: {},
-    };
-  }
-
-  componentDidMount() {
-    const assessmentId = this.props.match.params.id;
-    PersonService.fetch(this.props.match.params.childId)
-      .then(response => this.setState({ child: response }))
-      .catch(() => this.setState({ child: {} }));
-    assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment();
-  }
-
-  fetchNewAssessment() {
-    this.setState({ assessment_status: LoadingState.waiting });
-    return AssessmentService.fetchNewAssessment()
-      .then(this.onFetchNewAssessmentSuccess)
-      .catch(() => this.setState({ assessment_status: LoadingState.error }));
-  }
-
-  onFetchNewAssessmentSuccess = instrument => {
-    const assessment = {
-      instrument_id: 1,
-      person: this.state.child,
-      assessment_type: AssessmentType.initial,
-      status: AssessmentStatus.inProgress,
-      state: instrument.prototype,
-      event_date: DateTime.local().toISODate(),
-      completed_as: 'COMMUNIMETRIC',
-      can_release_confidential_info: false,
-    };
-    this.setState({
-      assessment,
-      assessment_status: LoadingState.ready,
-    });
-    this.fetchI18n(assessment.instrument_id);
-  };
-
-  fetchAssessment(id) {
-    this.setState({ assessment_status: LoadingState.waiting });
-    return AssessmentService.fetch(id)
-      .then(this.onFetchAssessmentSuccess)
-      .catch(() => this.setState({ assessment_status: LoadingState.error }));
-  }
-
-  onFetchAssessmentSuccess = assessment => {
-    this.setState({
-      assessment,
-      assessment_status: LoadingState.ready,
-    });
-    this.fetchI18n(assessment.instrument_id);
-  };
-
-  fetchI18n(instrumentId) {
-    this.setState({ i18n_status: LoadingState.waiting });
-    return I18nService.fetchByInstrumentId(instrumentId)
-      .then(this.onFetchI18nSuccess)
-      .catch(() => this.setState({ i18n_status: LoadingState.error }));
-  }
-
-  onFetchI18nSuccess = i18n => {
-    this.setState({
-      i18n: i18n,
-      i18n_status: LoadingState.ready,
-    });
-  };
-
   handleUpdateItemRating = (code, rating) => {
     this.updateItem(code, 'rating', rating);
   };
@@ -98,157 +14,54 @@ class Assessment extends Component {
     this.updateItem(code, 'confidential', isConfidential);
   };
 
-  handleHeaderFormValueChange = (prop, value) => {
-    if (prop === 'can_release_confidential_info') {
-      this.setSubstanceAbuseItemsConfidential();
-    }
-    const assessment = this.state.assessment;
-    assessment[prop] = value;
-    this.updateAssessment(assessment);
-  };
-
-  setSubstanceAbuseItemsConfidential() {
-    const assessment = clone(this.state.assessment);
-    assessment.state.domains.map(domain => {
-      domain.items.map(item => {
-        if (!this.state.canReleaseConfidentialInfo && CONFIDENTIAL_BY_DEFAULT_CODES.includes(item.code)) {
-          item.confidential = true;
+  updateItem = (itemCode, key, value) => {
+    const { assessment, onAssessmentUpdate } = this.props;
+    const newAssessment = clone(assessment);
+    newAssessment.state.domains.map(assessmentChild => {
+      assessmentChild.items.map(item => {
+        if (item.code === itemCode) {
+          item[key] = value;
         }
       });
     });
-    this.updateAssessment(assessment);
-  }
-
-  updateItem = (itemCode, key, value) => {
-    const updateAssessment = clone(this.state.assessment);
-    updateAssessment.state.domains.map(assessmentChild => {
-      if (assessmentChild.class === 'domain') {
-        assessmentChild.items.map(item => {
-          if (item.code === itemCode) {
-            item[key] = value;
-          }
-        });
-      } else {
-        assessmentChild.domains.map(domain => {
-          domain.items.map(item => {
-            if (item.code === itemCode) {
-              item[key] = value;
-            }
-          });
-        });
-      }
-    });
-    this.updateAssessment(updateAssessment);
+    onAssessmentUpdate(newAssessment);
   };
 
-  updateAssessment(assessment) {
-    this.setState({
-      assessment,
-      assessment_status: LoadingState.ready,
-    });
-  }
-
-  initialSave(assessment) {
-    this.setState({ assessment });
-    this.updateUrlWithAssessment(assessment);
-  }
-
-  updateUrlWithAssessment(assessment) {
-    this.props.history.push(`/clients/${this.state.child.id}/assessments/${assessment.id}`);
-  }
-
-  handleSaveAssessment = () => {
-    const assessment = this.state.assessment;
-    if (assessment.id) {
-      AssessmentService.update(assessment.id, assessment)
-        .then(updatedAssessment => {
-          this.setState({ assessment: updatedAssessment });
-        })
-        .catch(() => this.setState({ assessment_status: LoadingState.error }));
-    } else {
-      AssessmentService.postAssessment(assessment)
-        .then(updatedAssessment => {
-          this.initialSave(updatedAssessment);
-        })
-        .catch(() => this.setState({ assessment_status: LoadingState.error }));
-    }
-  };
-
-  toggleUnderSix = () => {
-    const assessment = this.state.assessment;
-    assessment.state.under_six = !assessment.state.under_six;
-    this.setState({ assessment });
-  };
-
-  renderDomains(domains) {
-    const i18n = this.state.i18n;
-    const { under_six } = (this.state.assessment || {}).state || {};
+  render() {
+    const i18n = this.props.i18n;
+    const assessmentDto = this.props.assessment;
+    const canReleaseConfidentialInfo = assessmentDto.can_release_confidential_info;
+    const assessmentJson = assessmentDto.state;
+    const isUnderSix = assessmentJson.under_six;
+    const domains = assessmentJson.domains;
     return domains.map(domain => {
       const domainCode = domain.code;
       const domainI18n = getI18nByCode(i18n, domainCode);
-      return domain.class === 'domain' ? (
+      return (
         <Domain
           key={domainCode}
           domain={domain}
           i18n={domainI18n}
           i18nAll={i18n}
-          assessmentUnderSix={under_six}
+          assessmentUnderSix={isUnderSix}
           onRatingUpdate={this.handleUpdateItemRating}
           onConfidentialityUpdate={this.handleUpdateItemConfidentiality}
-          canReleaseConfidentialInfo={this.state.assessment.can_release_confidential_info}
-        />
-      ) : (
-        <DomainsGroup
-          key={domainCode}
-          domainsGroup={domain}
-          i18n={domainI18n}
-          i18nAll={i18n}
-          assessmentUnderSix={under_six}
-          onRatingUpdate={this.handleUpdateItemRating}
-          onConfidentialityUpdate={this.handleUpdateItemConfidentiality}
+          canReleaseConfidentialInfo={canReleaseConfidentialInfo}
         />
       );
     });
   }
-
-  render() {
-    const child = this.state.child;
-    const assessmentState = this.state.assessment.state || {};
-    const isUnderSix = assessmentState.under_six || false;
-    const domains = assessmentState.domains || [];
-    return (
-      <Fragment>
-        <PageInfo title={'Add CANS'} />
-        <AssessmentFormHeader
-          clientFirstName={child.first_name}
-          clientLastName={child.last_name}
-          onValueChange={this.handleHeaderFormValueChange}
-          assessmentDate={this.state.assessment.event_date}
-          assessmentCompletedAs={this.state.assessment.completed_as}
-          canReleaseInformation={this.state.assessment.can_release_confidential_info}
-        />
-        <Typography variant="body1" style={{ textAlign: 'right' }}>
-          Age: 0-5
-          <FormControlLabel
-            control={<Switch checked={!isUnderSix} value={isUnderSix} onChange={this.toggleUnderSix} color="default" />}
-            label="6-21"
-            style={{ marginLeft: '0px' }}
-          />
-        </Typography>
-        {this.renderDomains(domains)}
-        <AssessmentFormFooter
-          handleSaveAssessment={this.handleSaveAssessment}
-          assessmentDate={this.state.assessment.event_date}
-        />
-      </Fragment>
-    );
-  }
 }
-/* eslint-enable camelcase */
 
 Assessment.propTypes = {
-  match: PropTypes.array,
-  history: PropTypes.object,
+  assessment: PropTypes.object.isRequired,
+  i18n: PropTypes.object.isRequired,
+  onAssessmentUpdate: PropTypes.func.isRequired,
+};
+
+Assessment.defaultProps = {
+  assessment: defaultEmptyAssessment,
+  i18n: {},
 };
 
 export default Assessment;

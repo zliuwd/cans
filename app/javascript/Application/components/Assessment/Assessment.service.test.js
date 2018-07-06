@@ -1,56 +1,8 @@
 import { AssessmentService } from './Assessment.service';
 import appApi from '../../App.api';
-import { childInfoJson } from '../Client/person.helper.test';
-import { DateTime } from 'luxon';
+import { initialAssessment, updatedAssessment } from './assessment.mocks.test';
 
 jest.mock('../../App.api');
-
-const initialAssessment = {
-  instrument_id: 1,
-  person: childInfoJson,
-  assessment_type: 'INITIAL',
-  status: 'IN_PROGRESS',
-  state: {
-    id: 0,
-    under_six: false,
-    domains: [
-      {
-        id: 0,
-        code: 'string',
-        underSix: false,
-        aboveSix: false,
-      },
-    ],
-  },
-  event_date: DateTime.local().toISODate(),
-};
-
-const updatedAssessment = {
-  id: 1,
-  instrument_id: 1,
-  person: childInfoJson,
-  assessment_type: 'INITIAL',
-  status: 'IN_PROGRESS',
-  state: {
-    id: 0,
-    under_six: true,
-    domains: [
-      {
-        id: 0,
-        code: '456',
-        underSix: false,
-        aboveSix: true,
-      },
-      {
-        id: 1,
-        code: '780',
-        underSix: false,
-        aboveSix: true,
-      },
-    ],
-  },
-  event_date: '2018-06-11',
-};
 
 describe('AssessmentService', () => {
   describe('#fetch', () => {

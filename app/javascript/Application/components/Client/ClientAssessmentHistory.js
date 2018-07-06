@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col } from 'reactstrap';
 import { AssessmentService } from '../Assessment/Assessment.service';
+import { CloseableAlert, alertType } from '../common/CloseableAlert';
 import { toDateFormat } from '../../util/formatters';
 
 import './style.sass';
@@ -28,16 +29,20 @@ const getActionVerbByStatus = status => {
 class ClientAssessmentHistory extends Component {
   constructor(context) {
     super(context);
+    const { successAssessmentId } = (this.props.location || {}).state || {};
     this.state = {
       clientId: null,
       assessments: [],
       fetchStatus: 'idle',
+      shouldRenderSuccessMessage: !!successAssessmentId,
     };
   }
 
   static propTypes = {
-    /* Id of the client */
+    /** Id of the client */
     clientId: PropTypes.number,
+    /** React-router location object */
+    location: PropTypes.object,
   };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -125,14 +130,24 @@ class ClientAssessmentHistory extends Component {
   };
 
   render() {
-    const { assessments, fetchStatus } = this.state;
+    const { assessments, fetchStatus, shouldRenderSuccessMessage } = this.state;
     return (
       <Grid item xs={12}>
         <Card className={'card'}>
           <CardHeader className={'card-header-cans'} title="Assessment History" action={this.renderAddCansButton()} />
 
           <div className={'content'}>
-            <CardContent>{this.renderAssessments(assessments, fetchStatus)}</CardContent>
+            <CardContent>
+              {shouldRenderSuccessMessage && (
+                <CloseableAlert
+                  type={alertType.SUCCESS}
+                  message={'Success! CANS assessment has been submitted.'}
+                  isCloseable
+                  isAutoCloseable
+                />
+              )}
+              {this.renderAssessments(assessments, fetchStatus)}
+            </CardContent>
           </div>
         </Card>
       </Grid>

@@ -1,5 +1,5 @@
 import { executeTest } from './Routes.test.util';
-import { Assessment } from '../components/Assessment';
+import { AssessmentContainer } from '../components/Assessment';
 import { ClientsContainer } from '../components/Client';
 import { ChildForm } from '../components/ChildForm';
 
@@ -16,7 +16,7 @@ import { ChildForm } from '../components/ChildForm';
  */
 
 it('navigates to assessments', () => {
-  executeTest(Assessment, '/assessments', 'Communimetric');
+  executeTest(AssessmentContainer, '/assessments', 'Communimetric');
 });
 
 it('navigates to clients list page', () => {

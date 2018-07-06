@@ -155,5 +155,27 @@ describe('<ClientAssessmentHistory', () => {
         expect(message).toBe('No assessments currently exist for this child/youth.');
       });
     });
+
+    describe('submit success message', () => {
+      it('is rendered when needed', () => {
+        // given + when
+        const history = shallow(
+          <ClientAssessmentHistory clientId={1004} location={{ state: { successAssessmentId: 123 } }} />
+        );
+
+        // then
+        const alert = history.find('CloseableAlert');
+        expect(alert.length).toBe(1);
+        expect(alert.render().text()).toBe('Success! CANS assessment has been submitted.');
+      });
+
+      it('is not rendered when no successAssessmentId', () => {
+        // given + when
+        const history = shallow(<ClientAssessmentHistory clientId={1004} />);
+
+        // then
+        expect(history.find('CloseableAlert').length).toBe(0);
+      });
+    });
   });
 });

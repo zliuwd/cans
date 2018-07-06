@@ -84,7 +84,7 @@ class Item extends Component {
             <FormControlLabel
               onChange={this.handleConfidentialityChange}
               label={'Confidential'}
-              value={isConfidential}
+              value={'' + isConfidential}
               control={
                 <Checkbox
                   checked={isConfidential}

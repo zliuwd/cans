@@ -1,158 +1,105 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { AssessmentFormHeader } from './index';
-import { DateTime } from 'luxon';
 import { Alert } from '@cwds/components';
+import { assessment, client } from './assessment.mocks.test';
+import { cloneDeep } from 'lodash';
 
 describe('<AssessmentFormHeader />', () => {
-  describe('with child name', () => {
-    it('displays correct child name', () => {
-      const props = {
-        clientFirstName: 'test',
-        clientLastName: 'child',
-      };
-      const wrapper = shallow(<AssessmentFormHeader {...props} />);
-      const selector = '#child-name';
+  describe('#handleValueChange()', () => {
+    it('will update event_date in assessment', () => {
+      // given
+      const mockFn = jest.fn();
+      const wrapper = shallow(<AssessmentFormHeader assessment={assessment} onAssessmentUpdate={mockFn} />);
+      expect(assessment.event_date).toBe('2018-06-11');
+      // when
+      const event = { target: { name: 'event_date', value: '2000-01-11' } };
+      wrapper.instance().handleValueChange(event);
+      // then
+      const updatedAssessment = cloneDeep(assessment);
+      updatedAssessment.event_date = '2000-01-11';
+      expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
+    });
 
-      expect(wrapper.find(selector).text()).toBe('child, test');
+    it('will update completed_as in assessment', () => {
+      // given
+      const mockFn = jest.fn();
+      const wrapper = shallow(<AssessmentFormHeader assessment={assessment} onAssessmentUpdate={mockFn} />);
+      expect(assessment.completed_as).toBe('COMMUNIMETRIC');
+      // when
+      const event = { target: { name: 'completed_as', value: 'Social Worker' } };
+      wrapper.instance().handleValueChange(event);
+      // then
+      const updatedAssessment = cloneDeep(assessment);
+      updatedAssessment.completed_as = 'Social Worker';
+      expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
     });
   });
 
-  describe('with no child name', () => {
+  describe('#handleCanReleaseInfoChange()', () => {
+    it('will update can_release_confidential_info in assessment and set confidential_by_default items to confidential', () => {
+      // given
+      const mockFn = jest.fn();
+      const sentAssessment = cloneDeep(assessment);
+      sentAssessment.can_release_confidential_info = true;
+      const wrapper = shallow(<AssessmentFormHeader assessment={sentAssessment} onAssessmentUpdate={mockFn} />);
+      expect(sentAssessment.state.domains[0].items[3].confidential).toBe(false);
+      // when
+      const event = { target: { name: 'can_release_confidential_info', value: 'false' } };
+      wrapper.instance().handleCanReleaseInfoChange(event);
+      // then
+      const updatedAssessment = cloneDeep(assessment);
+      updatedAssessment.can_release_confidential_info = false;
+      updatedAssessment.state.domains[0].items[3].confidential = true;
+      expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
+    });
+  });
+
+  describe('#toggleUnderSix()', () => {
+    it('will set under_six to its opposite', () => {
+      // given
+      const mockFn = jest.fn();
+      const wrapper = shallow(<AssessmentFormHeader assessment={assessment} onAssessmentUpdate={mockFn} />);
+      expect(assessment.state.under_six).toBe(false);
+      // when
+      wrapper.instance().toggleUnderSix();
+      // then
+      const updatedAssessment = cloneDeep(assessment);
+      updatedAssessment.state.under_six = true;
+      expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
+    });
+  });
+
+  describe('with client', () => {
+    it('displays correct client name', () => {
+      const wrapper = shallow(<AssessmentFormHeader client={client} />);
+      expect(wrapper.find('#child-name').text()).toBe('Doe, John');
+    });
+  });
+
+  describe('with no client', () => {
     it('displays default message', () => {
       const wrapper = shallow(<AssessmentFormHeader />);
-      const selector = '#no-data';
-
-      expect(wrapper.find(selector).text()).toBe('Client Info');
+      expect(wrapper.find('#no-data').text()).toBe('Client Info');
     });
   });
 
-  describe('select date', () => {
-    it('should default to todays date', () => {
-      const today = DateTime.local().toISODate();
-      const tomorrow = DateTime.local()
-        .plus({ days: 1 })
-        .toISODate();
-
-      const props = {
-        onValueChange: jest.fn(),
-        assessmentDate: today,
-      };
-
-      const wrapper = shallow(<AssessmentFormHeader {...props} />);
-      expect(wrapper.instance().props.assessmentDate).toBe(today);
-      expect(wrapper.find('#date-select').props().value).toBe(today);
-      expect(wrapper.instance().props.assessmentDate).not.toBe(tomorrow);
-    });
-
-    it('should allow user to change date', () => {
-      const today = DateTime.local().toISODate();
-      const tomorrow = {
-        target: {
-          value: DateTime.local()
-            .plus({ days: 1 })
-            .toISODate(),
-          name: 'event_date',
-        },
-      };
-
-      const onValueChange = jest.fn();
-
-      const wrapper = shallow(<AssessmentFormHeader assessmentDate={today} onValueChange={onValueChange} />);
-
-      expect(wrapper.instance().props.assessmentDate).toBe(today);
-      wrapper.instance().handleValueChange(tomorrow);
-      expect(onValueChange).toBeCalled();
-      expect(onValueChange).toBeCalledWith(tomorrow.target.name, tomorrow.target.value);
-    });
-  });
-
-  describe('select can_release_confidential_info', () => {
-    it('should default to false', () => {
-      const value = false;
-
-      const wrapper = shallow(<AssessmentFormHeader canReleaseInformation={value} />);
-      expect(wrapper.instance().props.canReleaseInformation).toBe(value);
-    });
-
-    it('should allow user to change can_release_confidential_info', () => {
-      const defaultValue = false;
-      const newValue = { target: { value: 'true', name: 'can_release_confidential_info' } };
-
-      const onValueChange = jest.fn();
-      const props = {
-        onValueChange: jest.fn(),
-        canReleaseInformation: defaultValue,
-      };
-
-      const wrapper = shallow(<AssessmentFormHeader {...props} onValueChange={onValueChange} />);
-
-      expect(wrapper.instance().props.canReleaseInformation).toBe(false);
-      wrapper.instance().handleValueChange(newValue);
-      expect(onValueChange).toBeCalledWith('can_release_confidential_info', true);
-    });
-  });
-
-  describe('select completedAs', () => {
-    it('should default to Communimetric', () => {
-      const value = 'Communimetric';
-
-      const wrapper = shallow(<AssessmentFormHeader assessmentCompletedAs={value} />);
-      expect(wrapper.instance().props.assessmentCompletedAs).toBe(value);
-    });
-
-    it('should allow user to change completedAs', () => {
-      const defaultValue = 'Communimetric';
-      const newValue = { target: { value: 'Social Worker', name: 'completed_as' } };
-
-      const onValueChange = jest.fn();
-      const props = {
-        onValueChange: jest.fn(),
-        assessmentCompletedAs: defaultValue,
-      };
-
-      const wrapper = shallow(<AssessmentFormHeader {...props} onValueChange={onValueChange} />);
-
-      expect(wrapper.instance().props.assessmentCompletedAs).toBe('Communimetric');
-      wrapper.instance().handleValueChange(newValue);
-      expect(onValueChange).toBeCalledWith('completed_as', 'Social Worker');
-    });
-  });
-
-  describe('parseCanReleaseInfo', () => {
-    it('should return a boolean value when passed a string', () => {
-      const value = { target: { value: 'true', name: 'can_release_confidential_info' } };
-
-      expect(AssessmentFormHeader.parseCanReleaseInfo(value)).toBe(true);
-    });
-
-    it('should return the original value if the target name isnt can_release_confidential_info', () => {
-      const value = { target: { value: 1, name: 'completed_as' } };
-
-      expect(AssessmentFormHeader.parseCanReleaseInfo(value)).toBe(1);
-    });
-  });
-
-  describe('renderWarningAlert', () => {
-    const props = {
-      onValueChange: () => {},
-      clientFirstName: '',
-      clientLastName: '',
-      assessmentDate: '',
-      assessmentCompletedAs: '',
-      canReleaseInformation: false,
-    };
-
+  describe('warning alert', () => {
     it('should render Alert component when canReleaseInformation is false', () => {
-      const wrapper = shallow(<AssessmentFormHeader {...props} />);
-      expect(wrapper.find(Alert).length).toBe(1);
-    });
-
-    it('should render specific message', () => {
-      const wrapper = shallow(<AssessmentFormHeader {...props} />);
+      const wrapper = shallow(<AssessmentFormHeader assessment={assessment} />);
+      const alert = wrapper.find(Alert);
+      expect(alert.length).toBe(1);
       expect(wrapper.find(Alert).html()).toMatch(
         /Prior to sharing the CANS assessment redact item number 7, 48, EC.41 and EC.18/
       );
+    });
+
+    it('should not render Alert component when canReleaseInformation is true', () => {
+      const sentAssessment = cloneDeep(assessment);
+      sentAssessment.can_release_confidential_info = true;
+      const wrapper = shallow(<AssessmentFormHeader assessment={sentAssessment} />);
+      const alert = wrapper.find(Alert);
+      expect(alert.length).toBe(0);
     });
   });
 });

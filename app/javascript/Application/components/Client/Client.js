@@ -19,7 +19,10 @@ class Client extends Component {
   }
 
   static propTypes = {
+    /** React-router match object */
     match: PropTypes.object.isRequired,
+    /** React-router location object */
+    location: PropTypes.object,
   };
 
   componentDidMount() {
@@ -88,7 +91,7 @@ class Client extends Component {
               </div>
             </Card>
           </Grid>
-          <ClientAssessmentHistory clientId={childData.id} />
+          <ClientAssessmentHistory clientId={childData.id} location={this.props.location} />
         </Grid>
       </Fragment>
     );
