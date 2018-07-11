@@ -76,26 +76,30 @@ class Domain extends Component {
     return (
       <div className={'caregiver-domain-controls'}>
         <h5>
-          <div
-            onClick={this.handleRemoveCaregiverDomain}
-            onKeyPress={this.handleRemoveCaregiverDomain}
-            className={'caregiver-control'}
-            role={'button'}
-            tabIndex={0}
-          >
-            - REMOVE CAREGIVER
-          </div>
-        </h5>
-        <h5>
-          <div
-            onClick={this.handleAddCaregiverDomain}
-            onKeyPress={this.handleAddCaregiverDomain}
-            className={'caregiver-control'}
-            role={'button'}
-            tabIndex={0}
-          >
-            + ADD CAREGIVER
-          </div>
+          <ul className={'caregiver-domain-controls-list'}>
+            <li>
+              <div
+                onClick={this.handleRemoveCaregiverDomain}
+                onKeyPress={this.handleRemoveCaregiverDomain}
+                className={'caregiver-control'}
+                role={'button'}
+                tabIndex={0}
+              >
+                - REMOVE CAREGIVER
+              </div>
+            </li>
+            <li>
+              <div
+                onClick={this.handleAddCaregiverDomain}
+                onKeyPress={this.handleAddCaregiverDomain}
+                className={'caregiver-control'}
+                role={'button'}
+                tabIndex={0}
+              >
+                + ADD CAREGIVER
+              </div>
+            </li>
+          </ul>
         </h5>
       </div>
     );
