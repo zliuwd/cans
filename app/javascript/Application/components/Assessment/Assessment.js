@@ -77,9 +77,7 @@ class Assessment extends Component {
 
   updateCaregiverName = (caregiverIndex, caregiverName) => {
     const assessment = cloneDeep(this.props.assessment);
-    const domains = assessment.state.domains;
-    for (let i = 0; i < domains.length; i++) {
-      const domain = domains[i];
+    for (const domain of assessment.state.domains) {
       if (domain.caregiver_index === caregiverIndex) {
         domain.caregiver_name = caregiverName;
         break;
