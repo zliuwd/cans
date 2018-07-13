@@ -17,7 +17,7 @@ import './style.sass';
 const mapPropsToState = props => ({
   title: (props.i18n['_title_'] || '').toUpperCase(),
   description: props.i18n['_description_'] || 'No Description',
-  caregiverName: props.domain.caregiver_name,
+  caregiverName: props.domain.caregiver_name || '',
 });
 
 /* eslint-disable camelcase */
