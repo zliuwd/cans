@@ -75,6 +75,19 @@ class Assessment extends Component {
     this.props.onAssessmentUpdate(assessment);
   };
 
+  updateCaregiverName = (caregiverIndex, caregiverName) => {
+    const assessment = cloneDeep(this.props.assessment);
+    const domains = assessment.state.domains;
+    for (let i = 0; i < domains.length; i++) {
+      const domain = domains[i];
+      if (domain.caregiver_index === caregiverIndex) {
+        domain.caregiver_name = caregiverName;
+        break;
+      }
+    }
+    this.props.onAssessmentUpdate(assessment);
+  };
+
   render() {
     const i18n = this.props.i18n;
     const assessmentDto = this.props.assessment;
@@ -97,6 +110,7 @@ class Assessment extends Component {
           onConfidentialityUpdate={this.handleUpdateItemConfidentiality}
           onAddCaregiverDomain={this.addCaregiverDomainAfter}
           onRemoveCaregiverDomain={this.removeCaregiverDomain}
+          onCaregiverNameUpdate={this.updateCaregiverName}
         />
       );
     });
