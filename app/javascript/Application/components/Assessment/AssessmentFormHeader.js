@@ -81,11 +81,13 @@ class AssessmentFormHeader extends Component {
                 value={'' + true}
                 control={<Radio color="default" />}
                 label={'Yes'}
+                classes={{ label: 'assessment-form-radio-label' }}
               />
               <FormControlLabel
                 value={'' + false}
                 control={<Radio color="default" />}
                 label={'No'}
+                classes={{ label: 'assessment-form-radio-label' }}
               />
             </RadioGroup>
           </FormControl>
@@ -116,11 +118,13 @@ class AssessmentFormHeader extends Component {
                 value={'' + true}
                 control={<Radio color="default" />}
                 label={'Yes'}
+                classes={{ label: 'assessment-form-radio-label' }}
               />
               <FormControlLabel
                 value={'' + false}
                 control={<Radio color="default" />}
                 label={'No'}
+                classes={{ label: 'assessment-form-radio-label' }}
               />
             </RadioGroup>
           </FormControl>
