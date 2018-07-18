@@ -8,7 +8,7 @@ export const initialAssessment = {
   status: 'IN_PROGRESS',
   completed_as: 'COMMUNIMETRIC',
   can_release_confidential_info: false,
-  has_caregiver: false,
+  has_caregiver: true,
   state: {
     id: 0,
     under_six: false,
