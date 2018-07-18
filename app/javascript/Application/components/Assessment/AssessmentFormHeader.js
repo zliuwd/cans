@@ -15,6 +15,7 @@ import './style.sass';
 
 const fields = Object.freeze({
   CAN_RELEASE_CONFIDENTIAL_INFO: 'can_release_confidential_info',
+  HAS_CAREGIVER: 'has_caregiver',
   EVENT_DATE: 'event_date',
   COMPLETED_AS: 'completed_as',
 });
@@ -24,6 +25,14 @@ class AssessmentFormHeader extends Component {
     const { name, value } = event.target;
     const assessment = clone(this.props.assessment);
     assessment[name] = value;
+    this.props.onAssessmentUpdate(assessment);
+  };
+
+  handleHasCaregiverChange = event => {
+    const { name, value } = event.target;
+    const hasCaregiver = value === 'true';
+    const assessment = clone(this.props.assessment);
+    assessment[name] = hasCaregiver;
     this.props.onAssessmentUpdate(assessment);
   };
 
@@ -50,6 +59,41 @@ class AssessmentFormHeader extends Component {
     this.props.onAssessmentUpdate(assessment);
   };
 
+  renderHasCaregiverQuestion() {
+    const assessment = this.props.assessment || {};
+    const hasCaregiver = assessment.has_caregiver;
+    return (
+      <Fragment>
+        <Col sm={12}>
+          <Typography variant="headline" classes={{ root: 'can-release-label' }}>
+            Child/Youth has Caregiver?
+          </Typography>
+        </Col>
+        <Col sm={12}>
+          <FormControl>
+            <RadioGroup
+              name={fields.HAS_CAREGIVER}
+              value={'' + hasCaregiver}
+              onChange={this.handleHasCaregiverChange}
+              className={'assessment-form-radio-group'}
+            >
+              <FormControlLabel
+                value={'' + true}
+                control={<Radio color="default" />}
+                label={'Yes'}
+              />
+              <FormControlLabel
+                value={'' + false}
+                control={<Radio color="default" />}
+                label={'No'}
+              />
+            </RadioGroup>
+          </FormControl>
+        </Col>
+      </Fragment>
+    );
+  }
+
   renderCanReleaseInfoQuestion() {
     const assessment = this.props.assessment || {};
     const canReleaseConfidentialInfo = assessment.can_release_confidential_info;
@@ -66,19 +110,17 @@ class AssessmentFormHeader extends Component {
               name={fields.CAN_RELEASE_CONFIDENTIAL_INFO}
               value={'' + canReleaseConfidentialInfo}
               onChange={this.handleCanReleaseInfoChange}
-              className={'can-release-radio-group'}
+              className={'assessment-form-radio-group'}
             >
               <FormControlLabel
                 value={'' + true}
                 control={<Radio color="default" />}
                 label={'Yes'}
-                classes={{ label: 'can-release-radio-label' }}
               />
               <FormControlLabel
                 value={'' + false}
                 control={<Radio color="default" />}
                 label={'No'}
-                classes={{ label: 'can-release-radio-label' }}
               />
             </RadioGroup>
           </FormControl>
@@ -144,7 +186,10 @@ class AssessmentFormHeader extends Component {
             </Input>
           </Col>
         </Row>
-        <Row>{this.renderCanReleaseInfoQuestion()}</Row>
+        <Row>
+          <Col xs={6}>{this.renderHasCaregiverQuestion()}</Col>
+          <Col xs={6}>{this.renderCanReleaseInfoQuestion()}</Col>
+        </Row>
         <Typography variant="body1" style={{ textAlign: 'right' }}>
           Age: 0-5
           <FormControlLabel

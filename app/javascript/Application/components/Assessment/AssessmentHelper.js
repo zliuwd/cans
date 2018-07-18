@@ -29,7 +29,8 @@ function validateAssessmentDtoFields(assessmentDto) {
   return (
     isDefined(assessmentDto.event_date) &&
     isDefined(assessmentDto.assessment_type) &&
-    isDefined(assessmentDto.completed_as)
+    isDefined(assessmentDto.completed_as) &&
+    isDefined(assessmentDto.has_caregiver)
   );
 }
 
