@@ -16,6 +16,7 @@ export const AssessmentStatus = Object.freeze({
 
 export const defaultEmptyAssessment = {
   event_date: DateTime.local().toISODate(),
+  has_caregiver: true,
   state: {
     domains: [],
   },

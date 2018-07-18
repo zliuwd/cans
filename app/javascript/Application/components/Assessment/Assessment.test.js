@@ -103,7 +103,7 @@ describe('<Assessment />', () => {
   });
 
   describe('caregiver domain', () => {
-    it('adds caregiver domain', () => {
+    it('add additional caregiver domain', () => {
       // given
       const initialAssessment = cloneDeep(assessment);
       initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0]);
@@ -117,6 +117,20 @@ describe('<Assessment />', () => {
       // then
       const updatedAssessment = mockFn.mock.calls[0][0];
       expect(updatedAssessment.state.domains.map(domain => domain.caregiver_index)).toEqual(['a', 'b']);
+    });
+
+    it('add initial caregiver domain', () => {
+      // given
+      const initialAssessment = cloneDeep(assessment);
+      const mockFn = jest.fn();
+      const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />);
+
+      // when
+      wrapper.instance().addInitialCaregiverDomain();
+
+      // then
+      const updatedAssessment = mockFn.mock.calls[0][0];
+      expect(updatedAssessment.state.domains[1].caregiver_index).toEqual('a');
     });
 
     it('removes the caregiver domain and resets the caregiver indexes', () => {
@@ -135,6 +149,25 @@ describe('<Assessment />', () => {
       // then
       const updatedAssessment = mockFn.mock.calls[0][0];
       expect(updatedAssessment.state.domains.map(domain => domain.caregiver_index)).toEqual(['a', 'b']);
+    });
+
+    it('remove all caregiver domains', () => {
+      // given
+      const initialAssessment = cloneDeep(assessment);
+      initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0]);
+      initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'b' });
+      initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'c' });
+      const mockFn = jest.fn();
+      const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />);
+
+      expect(initialAssessment.state.domains.length).toBe(3);
+
+      // when
+      wrapper.instance().removeAllCaregiverDomains();
+
+      // then
+      const updatedAssessment = mockFn.mock.calls[0][0];
+      expect(updatedAssessment.state.domains.length).toBe(0);
     });
   });
 });

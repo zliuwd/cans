@@ -25,7 +25,7 @@ class Assessment extends Component {
     if (hasCaregiverChange && !hasCaregiver) {
       this.removeAllCaregiverDomains();
     } else if (hasCaregiverChange && hasCaregiver) {
-      // this.addCaregiverDomainAfter();
+      this.addInitialCaregiverDomain();
     }
   }
 
@@ -67,6 +67,18 @@ class Assessment extends Component {
         domains.splice(i + 1, 0, cloneDeep(assessment.state.caregiver_domain_template));
         break;
       }
+    }
+    this.updateCaregiverDomainsIndices(assessment.state);
+    this.props.onAssessmentUpdate(assessment);
+  };
+
+  addInitialCaregiverDomain() {
+    const assessment = cloneDeep(this.props.assessment);
+    const domains = assessment.state.domains;
+    if (assessment.state.under_six) {
+      domains.splice(11, 0, cloneDeep(assessment.state.caregiver_domain_template));
+    } else {
+      domains.splice(5, 0, cloneDeep(assessment.state.caregiver_domain_template));
     }
     this.updateCaregiverDomainsIndices(assessment.state);
     this.props.onAssessmentUpdate(assessment);
