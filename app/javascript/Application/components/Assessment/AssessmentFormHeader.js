@@ -65,7 +65,7 @@ class AssessmentFormHeader extends Component {
     return (
       <Fragment>
         <Col sm={12}>
-          <Typography variant="headline" classes={{ root: 'can-release-label' }}>
+          <Typography variant="headline" classes={{ root: 'assessment-form-header-label' }}>
             Child/Youth has Caregiver?
           </Typography>
         </Col>
@@ -75,19 +75,19 @@ class AssessmentFormHeader extends Component {
               name={fields.HAS_CAREGIVER}
               value={'' + hasCaregiver}
               onChange={this.handleHasCaregiverChange}
-              className={'assessment-form-radio-group'}
+              className={'assessment-form-header-radio-group'}
             >
               <FormControlLabel
                 value={'' + true}
                 control={<Radio color="default" />}
                 label={'Yes'}
-                classes={{ label: 'assessment-form-radio-label' }}
+                classes={{ label: 'assessment-form-header-label' }}
               />
               <FormControlLabel
                 value={'' + false}
                 control={<Radio color="default" />}
                 label={'No'}
-                classes={{ label: 'assessment-form-radio-label' }}
+                classes={{ label: 'assessment-form-header-label' }}
               />
             </RadioGroup>
           </FormControl>
@@ -102,7 +102,7 @@ class AssessmentFormHeader extends Component {
     return (
       <Fragment>
         <Col sm={12}>
-          <Typography variant="headline" classes={{ root: 'can-release-label' }}>
+          <Typography variant="headline" classes={{ root: 'assessment-form-header-label' }}>
             Authorization for release of information on file?
           </Typography>
         </Col>
@@ -112,19 +112,19 @@ class AssessmentFormHeader extends Component {
               name={fields.CAN_RELEASE_CONFIDENTIAL_INFO}
               value={'' + canReleaseConfidentialInfo}
               onChange={this.handleCanReleaseInfoChange}
-              className={'assessment-form-radio-group'}
+              className={'assessment-form-header-radio-group'}
             >
               <FormControlLabel
                 value={'' + true}
                 control={<Radio color="default" />}
                 label={'Yes'}
-                classes={{ label: 'assessment-form-radio-label' }}
+                classes={{ label: 'assessment-form-header-label' }}
               />
               <FormControlLabel
                 value={'' + false}
                 control={<Radio color="default" />}
                 label={'No'}
-                classes={{ label: 'assessment-form-radio-label' }}
+                classes={{ label: 'assessment-form-header-label' }}
               />
             </RadioGroup>
           </FormControl>
@@ -168,7 +168,9 @@ class AssessmentFormHeader extends Component {
         <Row>{this.renderClientName()}</Row>
         <Row className={'assessment-form-header-inputs'}>
           <Col sm={4}>
-            <Label for={'date-select'}>Date</Label>
+            <Label for={'date-select'} className={'assessment-form-header-label'}>
+              Date
+            </Label>
             <Input
               type={'date'}
               id={'date-select'}
@@ -178,7 +180,9 @@ class AssessmentFormHeader extends Component {
             />
           </Col>
           <Col sm={4}>
-            <Label for={'select-user'}>Complete as</Label>
+            <Label for={'select-user'} className={'assessment-form-header-label'}>
+              Complete as
+            </Label>
             <Input
               type={'select'}
               name={fields.COMPLETED_AS}
