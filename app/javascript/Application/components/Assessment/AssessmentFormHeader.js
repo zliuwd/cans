@@ -160,12 +160,26 @@ class AssessmentFormHeader extends Component {
     );
   }
 
+  renderToggleUnderSixQuestion() {
+    const isUnderSix = this.props.assessment.state.under_six;
+    return (
+      <Typography variant="body1" style={{ textAlign: 'right' }}>
+        Age: 0-5
+        <FormControlLabel
+          control={
+            <Switch checked={!isUnderSix} value={'' + isUnderSix} onChange={this.toggleUnderSix} color="default" />
+          }
+          label="6-21"
+          style={{ marginLeft: '0px' }}
+        />
+      </Typography>
+    );
+  }
+
   render() {
     const assessment = this.props.assessment;
     const eventDate = assessment.event_date;
     const completedAs = assessment.completed_as;
-    const assessmentState = assessment.state;
-    const isUnderSix = assessmentState.under_six;
     return (
       <Fragment>
         <Row>{this.renderClientName()}</Row>
@@ -204,16 +218,9 @@ class AssessmentFormHeader extends Component {
         <Row>
           <Col xs={12}>{this.renderIsConfidentialWarningAlert()}</Col>
         </Row>
-        <Typography variant="body1" style={{ textAlign: 'right' }}>
-          Age: 0-5
-          <FormControlLabel
-            control={
-              <Switch checked={!isUnderSix} value={'' + isUnderSix} onChange={this.toggleUnderSix} color="default" />
-            }
-            label="6-21"
-            style={{ marginLeft: '0px' }}
-          />
-        </Typography>
+        <Row>
+          <Col xs={12}>{this.renderToggleUnderSixQuestion()}</Col>
+        </Row>
       </Fragment>
     );
   }
