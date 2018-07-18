@@ -82,7 +82,7 @@ class Assessment extends Component {
     }
     this.updateCaregiverDomainsIndices(assessment.state);
     this.props.onAssessmentUpdate(assessment);
-  };
+  }
 
   removeCaregiverDomain = caregiverIndex => {
     const assessment = cloneDeep(this.props.assessment);
