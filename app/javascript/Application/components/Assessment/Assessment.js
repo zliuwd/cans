@@ -1,3 +1,4 @@
+/* eslint-disable no-sequences */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { cloneDeep } from 'lodash';
@@ -17,6 +18,16 @@ class Assessment extends Component {
     }
   }
   /* eslint-enable camelcase */
+
+  componentDidUpdate(prevProps) {
+    const hasCaregiver = this.props.assessment.has_caregiver;
+    const hasCaregiverChange = hasCaregiver !== prevProps.assessment.has_caregiver;
+    if (hasCaregiverChange && !hasCaregiver) {
+      this.removeAllCaregiverDomains();
+    } else if (hasCaregiverChange && hasCaregiver) {
+      // this.addCaregiverDomainAfter();
+    }
+  }
 
   handleUpdateItemRating = (code, rating, caregiverIndex) => {
     this.updateItem(code, 'rating', rating, caregiverIndex);
@@ -74,6 +85,17 @@ class Assessment extends Component {
     this.updateCaregiverDomainsIndices(assessment.state);
     this.props.onAssessmentUpdate(assessment);
   };
+
+  removeAllCaregiverDomains() {
+    const assessment = cloneDeep(this.props.assessment);
+    const domains = assessment.state.domains;
+    let caregiverDomains = domains.filter(domain => domain.is_caregiver_domain);
+    for (const caregiverDomain of caregiverDomains) {
+      domains.splice(domains.findIndex(domain => domain.id === caregiverDomain.id), 1);
+    }
+    this.updateCaregiverDomainsIndices(assessment.state);
+    this.props.onAssessmentUpdate(assessment);
+  }
 
   updateCaregiverName = (caregiverIndex, caregiverName) => {
     const assessment = cloneDeep(this.props.assessment);
