@@ -59,6 +59,14 @@ class AssessmentFormHeader extends Component {
     this.props.onAssessmentUpdate(assessment);
   };
 
+  renderIsConfidentialWarningAlert() {
+    if (!this.props.assessment.can_release_confidential_info) {
+      return (
+        <Alert color={'warning'}>Prior to sharing the CANS assessment redact item number 7, 48, EC.41 and EC.18</Alert>
+      );
+    }
+  }
+
   renderHasCaregiverQuestion() {
     const assessment = this.props.assessment || {};
     const hasCaregiver = assessment.has_caregiver;
@@ -128,11 +136,6 @@ class AssessmentFormHeader extends Component {
               />
             </RadioGroup>
           </FormControl>
-          {!canReleaseConfidentialInfo && (
-            <Alert color={'warning'}>
-              Prior to sharing the CANS assessment redact item number 7, 48, EC.41 and EC.18
-            </Alert>
-          )}
         </Col>
       </Fragment>
     );
@@ -197,6 +200,9 @@ class AssessmentFormHeader extends Component {
         <Row>
           <Col xs={6}>{this.renderHasCaregiverQuestion()}</Col>
           <Col xs={6}>{this.renderCanReleaseInfoQuestion()}</Col>
+        </Row>
+        <Row>
+          <Col xs={12}>{this.renderIsConfidentialWarningAlert()}</Col>
         </Row>
         <Typography variant="body1" style={{ textAlign: 'right' }}>
           Age: 0-5
