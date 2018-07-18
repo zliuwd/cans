@@ -74,11 +74,7 @@ class Assessment extends Component {
   addInitialCaregiverDomain() {
     const assessment = cloneDeep(this.props.assessment);
     const domains = assessment.state.domains;
-    if (assessment.state.under_six) {
-      domains.splice(11, 0, cloneDeep(assessment.state.caregiver_domain_template));
-    } else {
-      domains.splice(5, 0, cloneDeep(assessment.state.caregiver_domain_template));
-    }
+    domains.splice(domains.length - 1, 0, cloneDeep(assessment.state.caregiver_domain_template));
     this.updateCaregiverDomainsIndices(assessment.state);
     this.props.onAssessmentUpdate(assessment);
   }

@@ -30,7 +30,7 @@ describe('<Assessment />', () => {
 
         // then
         const finalAssessment = mockFn.mock.calls[0][0];
-        expect(finalAssessment.state.domains[1].caregiver_index).toEqual('a');
+        expect(finalAssessment.state.domains[0].caregiver_index).toEqual('a');
       });
     });
 
@@ -173,7 +173,7 @@ describe('<Assessment />', () => {
 
       // then
       const updatedAssessment = mockFn.mock.calls[0][0];
-      expect(updatedAssessment.state.domains[1].caregiver_index).toEqual('a');
+      expect(updatedAssessment.state.domains[0].caregiver_index).toEqual('a');
     });
 
     it('removes the caregiver domain and resets the caregiver indexes', () => {
