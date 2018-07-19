@@ -56,6 +56,7 @@ class AssessmentContainer extends Component {
       status: AssessmentStatus.inProgress,
       state: instrument.prototype,
       event_date: DateTime.local().toISODate(),
+      has_caregiver: true,
       completed_as: 'COMMUNIMETRIC',
       can_release_confidential_info: false,
     };

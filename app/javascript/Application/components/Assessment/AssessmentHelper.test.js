@@ -11,6 +11,7 @@ const validAssessment = {
   can_release_confidential_info: false,
   assessment_type: 'INITIAL',
   status: 'SUBMITTED',
+  has_caregiver: true,
   state: {
     under_six: false,
     domains: [

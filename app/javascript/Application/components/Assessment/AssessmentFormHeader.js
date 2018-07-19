@@ -15,6 +15,7 @@ import './style.sass';
 
 const fields = Object.freeze({
   CAN_RELEASE_CONFIDENTIAL_INFO: 'can_release_confidential_info',
+  HAS_CAREGIVER: 'has_caregiver',
   EVENT_DATE: 'event_date',
   COMPLETED_AS: 'completed_as',
 });
@@ -24,6 +25,14 @@ class AssessmentFormHeader extends Component {
     const { name, value } = event.target;
     const assessment = clone(this.props.assessment);
     assessment[name] = value;
+    this.props.onAssessmentUpdate(assessment);
+  };
+
+  handleHasCaregiverChange = event => {
+    const { name, value } = event.target;
+    const hasCaregiver = value === 'true';
+    const assessment = clone(this.props.assessment);
+    assessment[name] = hasCaregiver;
     this.props.onAssessmentUpdate(assessment);
   };
 
@@ -50,13 +59,58 @@ class AssessmentFormHeader extends Component {
     this.props.onAssessmentUpdate(assessment);
   };
 
+  renderIsConfidentialWarningAlert() {
+    if (!this.props.assessment.can_release_confidential_info) {
+      return (
+        <Alert color={'warning'}>Prior to sharing the CANS assessment redact item number 7, 48, EC.41 and EC.18</Alert>
+      );
+    }
+  }
+
+  renderHasCaregiverQuestion() {
+    const assessment = this.props.assessment || {};
+    const hasCaregiver = assessment.has_caregiver;
+    return (
+      <Fragment>
+        <Col sm={12}>
+          <Typography variant="headline" classes={{ root: 'assessment-form-header-label' }}>
+            Child/Youth has Caregiver?
+          </Typography>
+        </Col>
+        <Col sm={12}>
+          <FormControl>
+            <RadioGroup
+              name={fields.HAS_CAREGIVER}
+              value={'' + hasCaregiver}
+              onChange={this.handleHasCaregiverChange}
+              className={'assessment-form-header-radio-group'}
+            >
+              <FormControlLabel
+                value={'' + true}
+                control={<Radio color="default" />}
+                label={'Yes'}
+                classes={{ label: 'assessment-form-header-label' }}
+              />
+              <FormControlLabel
+                value={'' + false}
+                control={<Radio color="default" />}
+                label={'No'}
+                classes={{ label: 'assessment-form-header-label' }}
+              />
+            </RadioGroup>
+          </FormControl>
+        </Col>
+      </Fragment>
+    );
+  }
+
   renderCanReleaseInfoQuestion() {
     const assessment = this.props.assessment || {};
     const canReleaseConfidentialInfo = assessment.can_release_confidential_info;
     return (
       <Fragment>
         <Col sm={12}>
-          <Typography variant="headline" classes={{ root: 'can-release-label' }}>
+          <Typography variant="headline" classes={{ root: 'assessment-form-header-label' }}>
             Authorization for release of information on file?
           </Typography>
         </Col>
@@ -66,27 +120,22 @@ class AssessmentFormHeader extends Component {
               name={fields.CAN_RELEASE_CONFIDENTIAL_INFO}
               value={'' + canReleaseConfidentialInfo}
               onChange={this.handleCanReleaseInfoChange}
-              className={'can-release-radio-group'}
+              className={'assessment-form-header-radio-group'}
             >
               <FormControlLabel
                 value={'' + true}
                 control={<Radio color="default" />}
                 label={'Yes'}
-                classes={{ label: 'can-release-radio-label' }}
+                classes={{ label: 'assessment-form-header-label' }}
               />
               <FormControlLabel
                 value={'' + false}
                 control={<Radio color="default" />}
                 label={'No'}
-                classes={{ label: 'can-release-radio-label' }}
+                classes={{ label: 'assessment-form-header-label' }}
               />
             </RadioGroup>
           </FormControl>
-          {!canReleaseConfidentialInfo && (
-            <Alert color={'warning'}>
-              Prior to sharing the CANS assessment redact item number 7, 48, EC.41 and EC.18
-            </Alert>
-          )}
         </Col>
       </Fragment>
     );
@@ -111,18 +160,34 @@ class AssessmentFormHeader extends Component {
     );
   }
 
+  renderToggleUnderSixQuestion() {
+    const isUnderSix = this.props.assessment.state.under_six;
+    return (
+      <Typography variant="body1" style={{ textAlign: 'right' }}>
+        Age: 0-5
+        <FormControlLabel
+          control={
+            <Switch checked={!isUnderSix} value={'' + isUnderSix} onChange={this.toggleUnderSix} color="default" />
+          }
+          label="6-21"
+          style={{ marginLeft: '0px' }}
+        />
+      </Typography>
+    );
+  }
+
   render() {
     const assessment = this.props.assessment;
     const eventDate = assessment.event_date;
     const completedAs = assessment.completed_as;
-    const assessmentState = assessment.state;
-    const isUnderSix = assessmentState.under_six;
     return (
       <Fragment>
         <Row>{this.renderClientName()}</Row>
         <Row className={'assessment-form-header-inputs'}>
           <Col sm={4}>
-            <Label for={'date-select'}>Date</Label>
+            <Label for={'date-select'} className={'assessment-form-header-label'}>
+              Date
+            </Label>
             <Input
               type={'date'}
               id={'date-select'}
@@ -132,7 +197,9 @@ class AssessmentFormHeader extends Component {
             />
           </Col>
           <Col sm={4}>
-            <Label for={'select-user'}>Complete as</Label>
+            <Label for={'select-user'} className={'assessment-form-header-label'}>
+              Complete as
+            </Label>
             <Input
               type={'select'}
               name={fields.COMPLETED_AS}
@@ -144,17 +211,16 @@ class AssessmentFormHeader extends Component {
             </Input>
           </Col>
         </Row>
-        <Row>{this.renderCanReleaseInfoQuestion()}</Row>
-        <Typography variant="body1" style={{ textAlign: 'right' }}>
-          Age: 0-5
-          <FormControlLabel
-            control={
-              <Switch checked={!isUnderSix} value={'' + isUnderSix} onChange={this.toggleUnderSix} color="default" />
-            }
-            label="6-21"
-            style={{ marginLeft: '0px' }}
-          />
-        </Typography>
+        <Row>
+          <Col xs={6}>{this.renderHasCaregiverQuestion()}</Col>
+          <Col xs={6}>{this.renderCanReleaseInfoQuestion()}</Col>
+        </Row>
+        <Row>
+          <Col xs={12}>{this.renderIsConfidentialWarningAlert()}</Col>
+        </Row>
+        <Row>
+          <Col xs={12}>{this.renderToggleUnderSixQuestion()}</Col>
+        </Row>
       </Fragment>
     );
   }
