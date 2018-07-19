@@ -30,9 +30,8 @@ module Cans
     require 'infrastructure/cwds_authenticator'
     config.middleware.use Infrastructure::CwdsAuthenticator
 
-    require 'infrastructure/api_proxy'
-    config.middleware.use Infrastructure::ApiProxy, {ssl_verify_none: true}
-
     config.micro_services = config_for(:micro_services)
+    config.relative_url_root = ENV['CANS_BASE_PATH'] || '/'
+    config.assets.prefix = "#{ENV['CANS_BASE_PATH']}/packs"
   end
 end

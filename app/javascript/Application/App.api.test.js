@@ -5,7 +5,7 @@ describe('ApiService', () => {
     expect(appApi.defaults.timeout).toBe(15000);
   });
 
-  it('has a baseUrl of /api/', () => {
-    expect(appApi.defaults.baseURL).toBe('/api');
+  it('has a baseUrl of /api/ or /cans', () => {
+    expect(appApi.defaults.baseURL).toMatch(/(\/api|\/cans\/api)/);
   });
 });

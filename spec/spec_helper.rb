@@ -2,6 +2,7 @@
 
 require 'active_support'
 require 'active_support/dependencies'
+require 'faraday'
 
 # rubocop:disable Layout/CommentIndentation
 

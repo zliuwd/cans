@@ -2,6 +2,7 @@ import axios from 'axios';
 
 class UserAccountService {
   static httpClient = axios.create({
+    baseURL: process.env.CANS_BASE_PATH || '/',
     timeout: 15000,
   });
 

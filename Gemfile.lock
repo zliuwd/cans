@@ -99,6 +99,8 @@ GEM
       i18n (>= 0.7)
     faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
+    faraday_middleware (0.12.2)
+      faraday (>= 0.7.4, < 1.0)
     feature (1.4.0)
     ffi (1.9.25)
     globalid (0.4.1)
@@ -303,13 +305,13 @@ DEPENDENCIES
   dotenv-rails
   faker
   faraday (~> 0.13.1)
+  faraday_middleware (~> 0.12.2)
   feature
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
   pry
   pry-byebug
   puma (~> 3.11)
-  rack-proxy (~> 0.6.4)
   rails (~> 5.2.0)
   rails-controller-testing
   redis-rails (~> 5.0.2)

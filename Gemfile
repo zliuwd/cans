@@ -7,6 +7,7 @@ ruby '2.5.1'
 
 gem 'addressable', '~> 2.5.2'
 gem 'faraday', '~> 0.13.1'
+gem 'faraday_middleware', '~> 0.12.2'
 gem 'feature'
 # gem 'pg'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -22,8 +23,6 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
-# Use a proxy for javascript clients
-gem 'rack-proxy', '~> 0.6.4'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'

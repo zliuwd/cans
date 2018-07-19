@@ -4,4 +4,10 @@
 
 require_relative 'config/environment'
 
-run Rails.application
+app = Rack::Builder.new do
+  map ENV['CANS_BASE_PATH'] || '/' do
+    run Cans::Application
+  end
+end
+
+run app

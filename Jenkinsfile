@@ -94,7 +94,7 @@ def acceptanceTestStage() {
   stage('Acceptance Test') {
     sh "docker-compose up -d --build"
     sh "sleep 120"
-    sh "docker-compose exec -T --env CANS_AUTHORIZATION_ENABLED=true --env CANS_WEB_BASE_URL=cans-web:3000 cans-test bundle exec rspec spec/acceptance"
+    sh "docker-compose exec -T --env CANS_AUTHORIZATION_ENABLED=true --env CANS_WEB_BASE_URL=cans-web:3000/cans cans-test bundle exec rspec spec/acceptance"
   }
 }
 
