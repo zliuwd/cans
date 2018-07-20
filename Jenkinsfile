@@ -101,7 +101,7 @@ def acceptanceTestStage() {
 def acceptanceTestPreintStage() {
   stage('Acceptance Test Preint') {
     sh "docker-compose up -d --build cans-test"
-    sh "docker-compose exec -T --env CANS_AUTHORIZATION_ENABLED=true --env CANS_WEB_BASE_URL=https://cans.preint.cwds.io cans-test bundle exec rspec spec/acceptance"
+    sh "docker-compose exec -T --env CANS_AUTHORIZATION_ENABLED=true --env CANS_WEB_BASE_URL=https://cans.preint.cwds.io/cans cans-test bundle exec rspec spec/acceptance"
   }
 }
 
