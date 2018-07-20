@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import PersonService from './person.service';
 import { groupClientsByLastName } from './person.helper';
 import { PageInfo } from '../Layout';
@@ -48,7 +49,7 @@ class ClientsContainer extends Component {
   renderClientName = client => {
     return (
       <div className="client-name" key={client.id}>
-        <a href={`/clients/${client.id}`}>{`${client.last_name}, ${client.first_name}`}</a>
+        <Link to={`/clients/${client.id}`}>{`${client.last_name}, ${client.first_name}`}</Link>
       </div>
     );
   };

@@ -8,6 +8,14 @@ describe('UserAccountService', () => {
       getSpy = jest.spyOn(UserAccountService.httpClient, 'get');
     });
 
+    it('has a timeout of 15 seconds', () => {
+      expect(UserAccountService.httpClient.defaults.timeout).toBe(15000);
+    });
+
+    it('has a baseUrl of / or /cans', () => {
+      expect(UserAccountService.httpClient.defaults.baseURL).toMatch(/(\/|\/cans)/);
+    });
+
     it('calls backend service', () => {
       getSpy.mockReturnValue(Promise.resolve(42));
       expect(getSpy).not.toHaveBeenCalled();

@@ -36,6 +36,25 @@ describe('<AssessmentFormHeader />', () => {
     });
   });
 
+  describe('#handleHasCaregiverChange()', () => {
+    it('will update has_caregiver in assessment', () => {
+      // given
+      const mockFn = jest.fn();
+      const sentAssessment = cloneDeep(assessment);
+      sentAssessment.has_caregiver = true;
+      const wrapper = shallow(<AssessmentFormHeader assessment={sentAssessment} onAssessmentUpdate={mockFn} />);
+
+      // when
+      const event = { target: { name: 'has_caregiver', value: 'false' } };
+      wrapper.instance().handleHasCaregiverChange(event);
+
+      // then
+      const updatedAssessment = cloneDeep(assessment);
+      updatedAssessment.has_caregiver = false;
+      expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
+    });
+  });
+
   describe('#handleCanReleaseInfoChange()', () => {
     it('will update can_release_confidential_info in assessment and set confidential_by_default items to confidential', () => {
       // given

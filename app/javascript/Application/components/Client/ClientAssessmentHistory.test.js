@@ -85,7 +85,7 @@ describe('<ClientAssessmentHistory', () => {
           <ClientAssessmentHistory clientId={1004} />
         </MemoryRouter>
       ).find(CardHeader);
-      expect(wrapper.props().action.props.to.pathname).toBe('/clients/1004/assessments');
+      expect(wrapper.props().action.props.to).toBe('/clients/1004/assessments');
     });
   });
 

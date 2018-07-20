@@ -8,8 +8,9 @@ import './style.sass';
 
 class App extends Component {
   render() {
+    const basePath = process.env.CANS_BASE_PATH;
     return (
-      <BrowserRouter>
+      <BrowserRouter basename={basePath}>
         <Fragment>
           <Header />
           <PageHeader pageTitle="CANS Assessment Application" button={null} />

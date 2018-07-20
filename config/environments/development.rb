@@ -54,6 +54,9 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
+  config.assets.prefix = "#{ENV['CANS_BASE_PATH']}/packs/"
+  config.relative_url_root = ENV['CANS_BASE_PATH'] || '/'
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 

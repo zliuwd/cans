@@ -95,7 +95,12 @@ describe('<AssessmentContainer />', () => {
       it('should call AssessmentService.postAssessment', () => {
         const assessmentServicePostSpy = jest.spyOn(AssessmentService, 'postAssessment');
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />);
-        const assessment = { event_date: DateTime.local().toISODate(), person: {}, state: { domains: [] } };
+        const assessment = {
+          event_date: DateTime.local().toISODate(),
+          has_caregiver: true,
+          person: {},
+          state: { domains: [] },
+        };
         wrapper.instance().handleSaveAssessment();
         assessmentServicePostSpy.mockReturnValue(Promise.resolve(assessment));
         expect(assessmentServicePostSpy).toHaveBeenCalledWith(assessment);
@@ -139,6 +144,7 @@ describe('<AssessmentContainer />', () => {
         assessmentServicePostSpy.mockReturnValue(Promise.resolve(assessment));
         const expectedArgument = {
           event_date: DateTime.local().toISODate(),
+          has_caregiver: true,
           person: {},
           state: { domains: [] },
           status: 'SUBMITTED',

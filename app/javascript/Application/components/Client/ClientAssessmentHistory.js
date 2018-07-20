@@ -61,11 +61,7 @@ class ClientAssessmentHistory extends Component {
   renderAddCansButton() {
     const childId = this.props.clientId;
     return (
-      <Link
-        to={{
-          pathname: `/clients/${childId}/assessments`,
-        }}
-      >
+      <Link to={`/clients/${childId}/assessments`}>
         <Button size="small" color="inherit" className={'card-header-cans-button'}>
           Add Cans
         </Button>
@@ -105,7 +101,7 @@ class ClientAssessmentHistory extends Component {
             <Col xs="11">
               <Row>
                 <Col xs="12">
-                  <Link to={{ pathname: `${person.id}/assessments/${id}` }} className={'underlined'}>
+                  <Link to={`/clients/${person.id}/assessments/${id}`} className={'underlined'}>
                     {`${formattedEventDate} CANS`}
                   </Link>
                 </Col>
