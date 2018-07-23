@@ -10,12 +10,6 @@
     "test": "jest --env=jsdom --watch",
     "test:coverage": "jest --env=jsdom --coverage"
   },
-  "jest": {
-    "collectCoverageFrom": [
-      "app/javascript/**/*.js",
-      "!app/javascript/**/index.js"
-    ]
-  },
   "dependencies": {
     "@cwds/components": "^0.2.0-alpha.10",
     "@material-ui/core": "^1.1.0",
