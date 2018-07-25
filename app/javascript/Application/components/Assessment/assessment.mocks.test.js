@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { childInfoJson } from '../Client/person.helper.test';
+import { childInfoJson } from '../Client/Client.helper.test';
 
 export const initialAssessment = {
   instrument_id: 1,

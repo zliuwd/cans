@@ -3,14 +3,17 @@ import PropTypes from 'prop-types';
 import InputMask from 'react-input-mask';
 import { withStyles } from '@material-ui/core/styles';
 import { MenuItem, TextField, Card, CardHeader, CardContent, CardActions, Button } from '@material-ui/core';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { CountiesService } from './Counties.service';
-import { ChildFormService } from './ChildForm.service';
-import { validate, isFormValid } from './ChildForm.helper';
+import { ClientService } from './Client.service';
+import { validate, isFormValid } from './ClientFormValidator';
 import { PageInfo } from '../Layout';
-import { Notification } from '../Notification';
 
 const styles = theme => ({
+  inputText: {
+    color: '#111',
+    fontSize: '16px',
+  },
   container: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -18,7 +21,6 @@ const styles = theme => ({
   textField: {
     margin: 10,
     width: 300,
-    fontSize: 20,
   },
   menu: {
     width: 300,
@@ -43,7 +45,7 @@ const styles = theme => ({
   },
 });
 
-class ChildForm extends Component {
+class ClientAddForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -72,6 +74,10 @@ class ChildForm extends Component {
       isSaveButtonDisabled: true,
       open: false,
       navigate: false,
+      redirection: {
+        shouldRedirect: false,
+        successClientAddId: null,
+      },
     };
   }
 
@@ -97,14 +103,17 @@ class ChildForm extends Component {
   handleSubmit = event => {
     event.preventDefault();
     this.setState({ child_status: 'updating' });
-    ChildFormService.createChild(this.state.childInfo)
+    ClientService.addClient(this.state.childInfo)
       .then(newChild => {
         this.setState({
           childInfo: newChild,
           child_status: 'ready',
+          redirection: {
+            shouldRedirect: true,
+            successClientAddId: newChild.id,
+          },
         });
       })
-      .then(() => setTimeout(() => this.setState({ navigate: true }), 3000))
       .catch(() => this.setState({ child_status: 'error' }));
   };
 
@@ -122,6 +131,9 @@ class ChildForm extends Component {
           id: 0,
           name: '',
         },
+      },
+      redirection: {
+        shouldRedirect: true,
       },
     });
   };
@@ -158,11 +170,13 @@ class ChildForm extends Component {
   };
 
   render() {
-    if (this.state.navigate) {
-      return <Redirect to={`/clients/${this.state.childInfo.id}`} />;
-    }
-
     const { classes } = this.props;
+    const { childInfo, childInfoValidation, counties, isSaveButtonDisabled, redirection } = this.state;
+    const { shouldRedirect, successClientAddId } = redirection;
+
+    if (shouldRedirect) {
+      return <Redirect push to={{ pathname: `/clients/${childInfo.id}`, state: { successClientAddId } }} />;
+    }
     return (
       <Fragment>
         <PageInfo title={'Add Child/Youth'} />
@@ -178,89 +192,143 @@ class ChildForm extends Component {
             <form className={classes.container} noValidate autoComplete="off">
               <TextField
                 required
+                focused
                 id="first_name"
                 label="First Name"
-                focused
-                error={!this.state.childInfoValidation['first_name']}
+                error={!childInfoValidation['first_name']}
                 className={classes.textField}
-                value={this.state.first_name}
+                value={childInfo.first_name}
                 onChange={this.handleChange('first_name')}
-                inputProps={{ maxLength: 50 }}
+                inputProps={{
+                  maxLength: 50,
+                  className: classes.inputText,
+                }}
                 margin="normal"
+                InputLabelProps={{
+                  style: {
+                    color: '#bbb',
+                    fontSize: '14px',
+                  },
+                }}
               />
 
               <TextField
                 required
+                focused
                 id="last_name"
                 label="Last Name"
-                error={!this.state.childInfoValidation['last_name']}
+                error={!childInfoValidation['last_name']}
                 className={classes.textField}
-                value={this.state.last_name}
+                value={childInfo.last_name}
                 onChange={this.handleChange('last_name')}
-                inputProps={{ maxLength: 50 }}
+                inputProps={{
+                  maxLength: 50,
+                  className: classes.inputText,
+                }}
                 margin="normal"
-              />
-              <TextField
-                required
-                id="dob"
-                label="Birth Date"
-                error={!this.state.childInfoValidation['dob']}
-                type="date"
-                defaultValue=""
-                className={classes.textField}
-                onChange={this.handleChange('dob')}
                 InputLabelProps={{
-                  shrink: true,
+                  style: {
+                    color: '#bbb',
+                    fontSize: '14px',
+                  },
                 }}
               />
               <TextField
                 required
+                focused
+                id="dob"
+                label="Birth Date"
+                error={!childInfoValidation['dob']}
+                type="date"
+                defaultValue=""
+                className={classes.textField}
+                onChange={this.handleChange('dob')}
+                inputProps={{
+                  className: classes.inputText,
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                  style: {
+                    color: '#bbb',
+                    fontSize: '18px',
+                  },
+                }}
+              />
+              <TextField
+                required
+                focused
                 id="case_id"
                 label="Case Number"
-                error={!this.state.childInfoValidation['case_id']}
+                error={!childInfoValidation['case_id']}
                 className={classes.textField}
-                value={this.state.case_id}
+                value={childInfo.case_id}
                 onChange={this.handleChange('case_id')}
-                inputProps={{ maxLength: 50 }}
+                inputProps={{
+                  maxLength: 50,
+                  className: classes.inputText,
+                }}
                 margin="normal"
+                InputLabelProps={{
+                  style: {
+                    color: '#bbb',
+                    fontSize: '14px',
+                  },
+                }}
               />
 
               <InputMask
                 mask="9999-9999-9999-9999999"
-                value={this.state.external_id}
+                value={childInfo.external_id}
                 onChange={this.handleChange('external_id')}
               >
                 {() => (
                   <TextField
                     required
+                    focused
                     id="external_id"
                     label="Client Id"
                     helperText="Enter 19 digits number"
-                    error={!this.state.childInfoValidation['external_id']}
+                    error={!childInfoValidation['external_id']}
                     className={classes.textField}
                     margin="normal"
+                    inputProps={{
+                      className: classes.inputText,
+                    }}
+                    InputLabelProps={{
+                      style: {
+                        color: '#bbb',
+                        fontSize: '14px',
+                      },
+                    }}
                   />
                 )}
               </InputMask>
 
               <TextField
                 required
+                focused
                 select
                 id="county"
                 label="County"
-                error={!this.state.childInfoValidation['county']}
+                error={!childInfoValidation['county']}
                 className={classes.textField}
                 open={this.state.open}
                 onClose={this.handleClose}
-                value={this.state.childInfo.county}
+                value={childInfo.county}
                 onChange={this.handleChange('county')}
                 helperText="Please select your County"
                 margin="normal"
+                inputProps={{
+                  className: classes.inputText,
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: '#bbb',
+                    fontSize: '18px',
+                  },
+                }}
               >
-                <MenuItem value="">
-                  <em />
-                </MenuItem>
-                {this.state.counties.map(option => (
+                {counties.map(option => (
                   <MenuItem key={option.id} value={option} className={classes.menu}>
                     <span id={'county-name'}>{option.name}</span>
                   </MenuItem>
@@ -269,14 +337,15 @@ class ChildForm extends Component {
             </form>
           </CardContent>
           <CardActions>
-            <Button onClick={this.handleCancel} href="/clients/new">
+            <Link onClick={this.handleCancel} to={`/`}>
               Cancel
-            </Button>
+            </Link>
+
             <Button
               variant="raised"
               size="large"
               color="primary"
-              disabled={this.state.isSaveButtonDisabled}
+              disabled={isSaveButtonDisabled}
               className={classes.button}
               onClick={this.handleSubmit}
             >
@@ -284,16 +353,16 @@ class ChildForm extends Component {
             </Button>
           </CardActions>
         </Card>
-        {this.state.child_status === 'ready' && (
-          <Notification messageText="Success! New Child/Youth record has been saved." />
-        )}
       </Fragment>
     );
   }
 }
 
-ChildForm.propTypes = {
+ClientAddForm.propTypes = {
   classes: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
+  childData: PropTypes.object.isRequired,
+  history: PropTypes.object,
 };
 
-export default withStyles(styles)(ChildForm);
+export default withStyles(styles)(ClientAddForm);

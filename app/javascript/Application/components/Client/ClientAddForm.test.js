@@ -1,10 +1,21 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import ChildForm from './ChildForm';
+import ClientAddForm from './ClientAddForm';
+import { MemoryRouter } from 'react-router-dom';
 
-describe('<ChildForm />', () => {
-  const getWrapper = () => shallow(<ChildForm />);
-  const getMountWrapper = () => mount(<ChildForm />);
+const defaultProps = {
+  location: { childId: 1 },
+  match: { params: { id: 1 } },
+};
+
+describe('<ClientAddForm />', () => {
+  const getWrapper = () => shallow(<ClientAddForm {...defaultProps} />);
+  const getMountWrapper = () =>
+    mount(
+      <MemoryRouter>
+        <ClientAddForm />
+      </MemoryRouter>
+    );
   const getLength = component => {
     const wrapper = getMountWrapper();
     const length = wrapper.find(component).length;
@@ -22,7 +33,7 @@ describe('<ChildForm />', () => {
   describe('input validation', () => {
     it('validates first_name', () => {
       const wrapper = getWrapper();
-      const childFormWrapper = wrapper.find('ChildForm').dive();
+      const childFormWrapper = wrapper.find('ClientAddForm').dive();
       childFormWrapper.instance().handleChange('first_name')({
         target: { value: 'John' },
       });
@@ -32,7 +43,7 @@ describe('<ChildForm />', () => {
 
     it('validates last_name', () => {
       const wrapper = getWrapper();
-      const childFormWrapper = wrapper.find('ChildForm').dive();
+      const childFormWrapper = wrapper.find('ClientAddForm').dive();
       childFormWrapper.instance().handleChange('last_name')({
         target: { value: 'John' },
       });
@@ -42,7 +53,7 @@ describe('<ChildForm />', () => {
 
     it('validates case_id', () => {
       const wrapper = getWrapper();
-      const childFormWrapper = wrapper.find('ChildForm').dive();
+      const childFormWrapper = wrapper.find('ClientAddForm').dive();
       childFormWrapper.instance().handleChange('case_id')({
         target: { value: 'John' },
       });
@@ -52,7 +63,7 @@ describe('<ChildForm />', () => {
 
     it('validates dob', () => {
       const wrapper = getWrapper();
-      const childFormWrapper = wrapper.find('ChildForm').dive();
+      const childFormWrapper = wrapper.find('ClientAddForm').dive();
       childFormWrapper.instance().handleChange('dob')({
         target: { value: '2012/10/12' },
       });
@@ -62,7 +73,7 @@ describe('<ChildForm />', () => {
 
     it('validates county', () => {
       const wrapper = getWrapper();
-      const childFormWrapper = wrapper.find('ChildForm').dive();
+      const childFormWrapper = wrapper.find('ClientAddForm').dive();
       childFormWrapper.instance().handleChange('county')({
         target: { value: { id: '1' } },
       });
@@ -72,7 +83,7 @@ describe('<ChildForm />', () => {
 
     it('enables Save button when all validations are good', () => {
       const wrapper = getWrapper();
-      const childFormWrapper = wrapper.find('ChildForm').dive();
+      const childFormWrapper = wrapper.find('ClientAddForm').dive();
       const childFormInstance = childFormWrapper.instance();
       childFormInstance.handleChange('first_name')({
         target: { value: 'John' },
@@ -102,16 +113,16 @@ describe('<ChildForm />', () => {
   it('#handleSubmit()', () => {
     const simulateEvent = { preventDefault: () => {} };
     const wrapper = getWrapper();
-    const childFormWrapper = wrapper.find('ChildForm').dive();
+    const childFormWrapper = wrapper.find('ClientAddForm').dive();
     expect(childFormWrapper.find('form').length).toBe(1);
     expect(getLength('TextField')).toEqual(6);
-    expect(getLength('Button')).toEqual(2);
+    expect(getLength('Button')).toEqual(1);
     childFormWrapper.find('form').simulate('submit', simulateEvent);
   });
 
   it('#handleCancel()', () => {
     const wrapper = getWrapper();
-    const childFormWrapper = wrapper.find('ChildForm').dive();
+    const childFormWrapper = wrapper.find('ClientAddForm').dive();
     childFormWrapper.instance().handleCancel();
     expect(childFormWrapper.state('childInfo').person_role).toEqual('CLIENT');
     expect(childFormWrapper.state('childInfo').first_name).toEqual('');
@@ -124,7 +135,7 @@ describe('<ChildForm />', () => {
 
   it('renders counties drop down', () => {
     const wrapper = getWrapper();
-    const childFormWrapper = wrapper.find('ChildForm').dive();
+    const childFormWrapper = wrapper.find('ClientAddForm').dive();
     const childFormInstance = childFormWrapper.instance();
     childFormInstance.onFetchCountiesSuccess([{ id: '1', name: 'Alameda' }]);
     childFormWrapper.update();

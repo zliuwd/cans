@@ -1,6 +1,6 @@
-import { groupClientsByLastName } from './person.helper';
+import { groupClientsByLastName } from './Client.helper';
 
-describe('person.helper', () => {
+describe('Client.helper', () => {
   describe('#groupClientsByLastName()', () => {
     it('returns clients grouped by the first letter of the last name', () => {
       const actual = groupClientsByLastName(personsJson);

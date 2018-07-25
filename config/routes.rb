@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   get 'user/account', to: 'account#index'
 
   namespace :api, defaults: { format: 'json' } do
-    resources :people, only: [:show, :create] do
+    resources :people, only: [:show, :create, :update] do
       collection do
         post '_search', to: 'people#search'
       end

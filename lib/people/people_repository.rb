@@ -15,6 +15,10 @@ module People
       @http_service.call('/people', :post, @token, payload)
     end
 
+    def update(id, payload)
+      @http_service.call("/people/#{id}", :put, @token, payload)
+    end
+
     def search(payload)
       @http_service.call('/people/_search', :post, @token, payload)
     end

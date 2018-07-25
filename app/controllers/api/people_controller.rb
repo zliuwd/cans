@@ -17,5 +17,11 @@ module Api
       response = people_repository.create(params[:person])
       render json: response.body, status: response.status
     end
+
+    def update
+      people_repository = People::PeopleRepository.new(session[:token])
+      response = people_repository.update(params[:id], params[:person])
+      render json: response.body, status: response.status
+    end
   end
 end

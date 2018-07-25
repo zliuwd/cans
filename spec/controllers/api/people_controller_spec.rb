@@ -43,6 +43,24 @@ module Api
       end
     end
 
+    describe '#update' do
+      let(:person) { { id: '2' } }
+      let(:new_person_params) { { 'person': { 'person_role': 'CLIENT' } } }
+      let(:update_person_params) { ActionController::Parameters.new('person_role': 'CLIENT') }
+      let(:person_response) do
+        instance_double('Faraday::Response', body: person, status: 200)
+      end
+
+      it 'saves a person' do
+        allow(people_repository).to receive(:update)
+          .with('2', update_person_params)
+          .and_return(person_response)
+        put :update, params: { id: 2 }.merge(new_person_params)
+        expect(response.status).to eq 200
+        expect(response.body).to eq person.to_json
+      end
+    end
+
     describe '#search' do
       let(:people) { [{ 'id': 1, 'person_role': 'CLIENT', 'first_name': 'Bruce' }] }
       let(:people_params) { { 'person': { 'person_role': 'CLIENT' } } }

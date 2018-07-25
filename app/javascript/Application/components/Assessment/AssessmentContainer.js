@@ -5,7 +5,7 @@ import { Assessment, AssessmentFormHeader, AssessmentFormFooter, AssessmentServi
 import Typography from '@material-ui/core/Typography';
 import { clone } from 'lodash';
 import { PageInfo } from '../Layout';
-import { PersonService } from '../Client/';
+import { ClientService } from '../Client/';
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper';
 import {
   AssessmentStatus,
@@ -35,7 +35,7 @@ class AssessmentContainer extends Component {
 
   componentDidMount() {
     const assessmentId = this.props.match.params.id;
-    PersonService.fetch(this.props.match.params.childId)
+    ClientService.fetch(this.props.match.params.childId)
       .then(response => this.setState({ child: response }))
       .catch(() => this.setState({ child: {} }));
     assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment();

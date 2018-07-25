@@ -1,6 +1,6 @@
-import { validate, isFormValid } from './ChildForm.helper';
+import { validate, isFormValid } from './ClientFormValidator';
 
-describe('ChildForm.helper', () => {
+describe('ClientFormValidator', () => {
   describe('#validate()', () => {
     it('first_name', () => {
       expect(validate('first_name', 'Mike')).toBe(true);

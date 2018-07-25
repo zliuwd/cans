@@ -1,7 +1,7 @@
 import React from 'react';
 import { AssessmentContainer, AssessmentFormHeader, AssessmentService } from './index';
-import { childInfoJson } from '../Client/person.helper.test';
-import PersonService from '../Client/person.service';
+import { childInfoJson } from '../Client/Client.helper.test';
+import ClientService from '../Client/Client.service';
 import { shallow, mount } from 'enzyme';
 import { PageInfo } from '../Layout';
 import Typography from '@material-ui/core/Typography/Typography';
@@ -50,8 +50,8 @@ describe('<AssessmentContainer />', () => {
         const props = {
           location: { childId: 10 },
         };
-        const personServiceFetchSpy = jest.spyOn(PersonService, 'fetch');
-        personServiceFetchSpy.mockReturnValue(Promise.resolve(childInfoJson));
+        const ClientServiceFetchSpy = jest.spyOn(ClientService, 'fetch');
+        ClientServiceFetchSpy.mockReturnValue(Promise.resolve(childInfoJson));
         const wrapper = shallow(<AssessmentContainer {...props} />);
         await wrapper.instance().componentDidMount();
         expect(wrapper.instance().state.child.first_name).toBe('Test');

@@ -6,15 +6,31 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { PageInfo } from '../Layout';
-import { ClientAssessmentHistory, PersonService } from './index';
+import { ClientAssessmentHistory, ClientService } from './index';
+import Button from '@material-ui/core/Button/Button';
+import { CloseableAlert, alertType } from '../common/CloseableAlert';
+import { Link } from 'react-router-dom';
 
 import './style.sass';
 
 class Client extends Component {
   constructor(props) {
     super(props);
+
+    const { successClientAddId } = (this.props.location || {}).state || {};
+    if (successClientAddId && this.props.history) {
+      this.props.history.replace({ ...this.props.location, state: {} });
+    }
+
+    const { successClientEditId } = (this.props.location || {}).state || {};
+    if (successClientEditId && this.props.history) {
+      this.props.history.replace({ ...this.props.location, state: {} });
+    }
+
     this.state = {
       childData: {},
+      shouldRenderClientAddMessage: !!successClientAddId,
+      shouldRenderClientEditMessage: !!successClientEditId,
     };
   }
 
@@ -32,7 +48,7 @@ class Client extends Component {
   }
 
   fetchChildData(id) {
-    return PersonService.fetch(id)
+    return ClientService.fetch(id)
       .then(data => this.setState({ childData: data }))
       .catch(() => this.setState({ childData: {} }));
   }
@@ -67,16 +83,44 @@ class Client extends Component {
   };
 
   render() {
-    const childData = this.state.childData;
+    const { childData, shouldRenderClientAddMessage, shouldRenderClientEditMessage } = this.state;
     return (
       <Fragment>
         <PageInfo title={'Child/Youth Profile'} />
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Card className={'card'}>
-              <CardHeader className={'card-header-cans'} title="Child/Youth Information" />
+              <CardHeader
+                className={'card-header-cans'}
+                title="Child/Youth Information"
+                action={
+                  <Link to={`/clients/edit/${childData.id}`}>
+                    <Button size="small" color="inherit" className={'card-header-cans-button'}>
+                      EDIT
+                    </Button>
+                  </Link>
+                }
+              />
               <div className={'content'}>
                 <CardContent>
+                  {shouldRenderClientAddMessage && (
+                    <CloseableAlert
+                      type={alertType.SUCCESS}
+                      message={'Success! New Child/Youth record has been added.'}
+                      isCloseable
+                      isAutoCloseable
+                    />
+                  )}
+
+                  {shouldRenderClientEditMessage && (
+                    <CloseableAlert
+                      type={alertType.SUCCESS}
+                      message={'Success! Child/Youth record has been updated.'}
+                      isCloseable
+                      isAutoCloseable
+                    />
+                  )}
+
                   {childData && childData.id ? (
                     <Grid container spacing={24}>
                       {this.renderClientData(childData.first_name, 'First Name')}

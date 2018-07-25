@@ -8,7 +8,6 @@ const URL_MAP = [
   { url: '/reports', text: 'Reports' },
   { url: '/clients/new', text: 'Add Child' },
 ];
-
 class SideNav extends Component {
   constructor(props) {
     super(props);

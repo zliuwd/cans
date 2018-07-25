@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import PersonService from './person.service';
-import { groupClientsByLastName } from './person.helper';
+import ClientService from './Client.service';
+import { groupClientsByLastName } from './Client.helper';
 import { PageInfo } from '../Layout';
 
 import './style.sass';
@@ -22,7 +22,7 @@ class ClientsContainer extends Component {
 
   fetchAllClients = () => {
     this.setState({ clients_status: 'waiting' });
-    return PersonService.fetchAllClients()
+    return ClientService.fetchAllClients()
       .then(this.onFetchAllClientsSuccess)
       .catch(() => this.setState({ clients_status: 'error' }));
   };

@@ -27,6 +27,16 @@ module People
       end
     end
 
+    describe '#update' do
+      it 'updates a person' do
+        allow(http_service).to receive(:call)
+          .with('/people/2', :put, token, person_role: 'CLIENT', first_name: 'George')
+          .and_return(response)
+        expect(person_repository
+          .update(2, person_role: 'CLIENT', first_name: 'George')).to eq response
+      end
+    end
+
     describe '#search' do
       it 'returns people' do
         allow(http_service).to receive(:call)
