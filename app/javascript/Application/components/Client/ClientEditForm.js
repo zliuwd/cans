@@ -50,8 +50,7 @@ class ClientEditForm extends Component {
   constructor(context) {
     super(context);
     this.state = {
-      childStatus: 'idle',
-      childInfo: { XHRStatus: 'idle' },
+      childInfo: {},
       counties: [],
       childInfoValidation: {
         first_name: true,
@@ -63,7 +62,6 @@ class ClientEditForm extends Component {
       },
       isSaveButtonDisabled: false,
       open: false,
-      navigate: false,
       redirection: {
         shouldRedirect: false,
         successClientEditId: null,
@@ -96,31 +94,23 @@ class ClientEditForm extends Component {
   }
 
   fetchChildData = id => {
-    this.setState({ childInfo: { XHRStatus: 'waiting' } });
     return ClientService.getClient(id)
       .then(this.onFetchChildDataSuccess)
-      .catch(() => this.setState({ childInfo: { XHRStatus: 'error' } }));
+      .catch(() => {});
   };
 
   onFetchChildDataSuccess = data => {
-    this.setState({
-      childInfo: data,
-      XHRStatus: 'ready',
-    });
+    this.setState({ childInfo: data });
   };
 
   fetchCounties = () => {
-    this.setState({ counties_status: 'waiting' });
     return CountiesService.fetchCounties()
       .then(this.onFetchCountiesSuccess)
-      .catch(() => this.setState({ counties_status: 'error' }));
+      .catch(() => {});
   };
 
   onFetchCountiesSuccess = counties => {
-    this.setState({
-      counties: counties,
-      counties_status: 'ready',
-    });
+    this.setState({ counties });
   };
 
   validateInput = (fieldName, inputValue) => {
@@ -136,23 +126,21 @@ class ClientEditForm extends Component {
     });
   };
 
-  handleSubmit = event => {
-    this.setState({ childStatus: 'updating' });
+  handleSubmit = () => {
     ClientService.updateClient(this.state.childInfo.id, this.state.childInfo)
       .then(newChild => {
         this.setState({
           childInfo: newChild,
-          childStatus: 'ready',
           redirection: {
             shouldRedirect: true,
             successClientEditId: newChild.id,
           },
         });
       })
-      .catch(() => this.setState({ childStatus: 'error' }));
+      .catch(() => {});
   };
 
-  handleCancel = event => {
+  handleCancel = () => {
     this.setState({
       redirection: {
         shouldRedirect: true,
@@ -351,7 +339,6 @@ class ClientEditForm extends Component {
 ClientEditForm.propTypes = {
   classes: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  history: PropTypes.object,
 };
 
 export default withStyles(styles)(ClientEditForm);

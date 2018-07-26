@@ -30,7 +30,7 @@ const domainComponentDefault = (
   <Domain
     key={'1'}
     domain={{ ...domainDefault }}
-    assessmentUnderSix={true}
+    isAssessmentUnderSix={true}
     i18n={{ ...i18nDefault }}
     i18nAll={{ a: 'b' }}
     onRatingUpdate={() => {}}
@@ -57,7 +57,7 @@ describe('<Domain />', () => {
         <Domain
           key={'1'}
           domain={{ ...domain }}
-          assessmentUnderSix={true}
+          isAssessmentUnderSix={true}
           i18n={{ ...i18nDefault }}
           i18nAll={{}}
           onRatingUpdate={() => {}}
@@ -85,7 +85,7 @@ describe('<Domain />', () => {
         <Domain
           key={'1'}
           domain={{ ...domain }}
-          assessmentUnderSix={true}
+          isAssessmentUnderSix={true}
           i18n={{ ...i18nDefault }}
           i18nAll={{}}
           onRatingUpdate={() => {}}
@@ -114,7 +114,7 @@ describe('<Domain />', () => {
         <Domain
           key={'1'}
           domain={{ ...domain }}
-          assessmentUnderSix={true}
+          isAssessmentUnderSix={true}
           i18n={{ ...i18nDefault }}
           i18nAll={{}}
           onRatingUpdate={() => {}}
@@ -147,7 +147,7 @@ describe('<Domain />', () => {
               <Domain
                 key={'1'}
                 domain={{ ...domain }}
-                assessmentUnderSix={true}
+                isAssessmentUnderSix={true}
                 i18n={{ ...i18nDefault }}
                 i18nAll={{}}
                 onRatingUpdate={() => {}}
@@ -183,7 +183,7 @@ describe('<Domain />', () => {
               <Domain
                 key={'1'}
                 domain={{ ...domain }}
-                assessmentUnderSix={true}
+                isAssessmentUnderSix={true}
                 i18n={{ ...i18nDefault }}
                 i18nAll={{}}
                 onRatingUpdate={() => {}}

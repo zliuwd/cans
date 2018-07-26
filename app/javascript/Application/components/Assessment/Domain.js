@@ -34,7 +34,7 @@ class Domain extends Component {
   renderItems = items => {
     const i18nAll = this.props.i18nAll || {};
     const {
-      assessmentUnderSix,
+      isAssessmentUnderSix,
       onRatingUpdate,
       onConfidentialityUpdate,
       domain,
@@ -53,7 +53,7 @@ class Domain extends Component {
             i18n={itemI18n}
             onRatingUpdate={onRatingUpdate}
             onConfidentialityUpdate={onConfidentialityUpdate}
-            assessmentUnderSix={assessmentUnderSix}
+            isAssessmentUnderSix={isAssessmentUnderSix}
             canReleaseConfidentialInfo={canReleaseConfidentialInfo}
           />
           <Divider />
@@ -132,10 +132,10 @@ class Domain extends Component {
   }
 
   render = () => {
-    const { assessmentUnderSix } = this.props;
+    const { isAssessmentUnderSix } = this.props;
     const { items, under_six, above_six, is_caregiver_domain } = this.props.domain;
     const { title, description, caregiverName } = this.state;
-    return (assessmentUnderSix && under_six) || (!assessmentUnderSix && above_six) ? (
+    return (isAssessmentUnderSix && under_six) || (!isAssessmentUnderSix && above_six) ? (
       <ExpansionPanel style={{ backgroundColor: '#114161' }}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon style={{ height: '28px', color: 'white' }} />}
@@ -161,25 +161,18 @@ class Domain extends Component {
 }
 /* eslint-enable camelcase */
 
+/* eslint-disable react/no-unused-prop-types */
 Domain.propTypes = {
+  canReleaseConfidentialInfo: PropTypes.bool.isRequired,
   domain: PropTypes.object.isRequired,
   i18n: PropTypes.object.isRequired,
   i18nAll: PropTypes.object.isRequired,
-  assessmentUnderSix: PropTypes.bool.isRequired,
-  canReleaseConfidentialInfo: PropTypes.bool.isRequired,
-  onRatingUpdate: PropTypes.func.isRequired,
-  onConfidentialityUpdate: PropTypes.func.isRequired,
+  isAssessmentUnderSix: PropTypes.bool.isRequired,
   onAddCaregiverDomain: PropTypes.func.isRequired,
-  onRemoveCaregiverDomain: PropTypes.func.isRequired,
   onCaregiverNameUpdate: PropTypes.func.isRequired,
-};
-
-Domain.defaultProps = {
-  domain: {},
-  i18n: {},
-  i18nAll: {},
-  assessmentUnderSix: false,
-  canReleaseConfidentialInfo: false,
+  onConfidentialityUpdate: PropTypes.func.isRequired,
+  onRatingUpdate: PropTypes.func.isRequired,
+  onRemoveCaregiverDomain: PropTypes.func.isRequired,
 };
 
 export default Domain;

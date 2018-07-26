@@ -35,7 +35,7 @@ const itemComponentDefault = (
   <Item
     key={'1'}
     item={{ ...itemDefault }}
-    assessmentUnderSix={true}
+    isAssessmentUnderSix={true}
     i18n={{ ...i18nDefault }}
     onRatingUpdate={() => {}}
     onConfidentialityUpdate={() => {}}
@@ -47,7 +47,7 @@ const mountItem = item => {
     <Item
       key={'1'}
       item={item}
-      assessmentUnderSix={false}
+      isAssessmentUnderSix={false}
       i18n={{ ...i18nDefault }}
       onRatingUpdate={() => {}}
       onConfidentialityUpdate={() => {}}
@@ -155,7 +155,7 @@ describe('<Item />', () => {
         <Item
           key={'1'}
           item={{ ...itemDefault }}
-          assessmentUnderSix={false}
+          isAssessmentUnderSix={false}
           i18n={{ ...i18nDefault }}
           onRatingUpdate={onRatingUpdateMock}
           onConfidentialityUpdate={() => {}}
@@ -172,7 +172,7 @@ describe('<Item />', () => {
         <Item
           key={'1'}
           item={{ ...itemDefault }}
-          assessmentUnderSix={false}
+          isAssessmentUnderSix={false}
           i18n={{ ...i18nDefault }}
           onRatingUpdate={() => {}}
           onConfidentialityUpdate={onConfidentialityUpdateMock}
@@ -189,7 +189,7 @@ describe('<Item />', () => {
         <Item
           key={'1'}
           item={{ ...itemDefault }}
-          assessmentUnderSix={false}
+          isAssessmentUnderSix={false}
           i18n={{ ...i18nDefault }}
           onRatingUpdate={onRatingUpdateMock}
           onConfidentialityUpdate={() => {}}
@@ -209,7 +209,7 @@ describe('<Item />', () => {
     it('should disable the confidential checkbox when false paired with an item thats confidential_by_default', () => {
       const wrapper = shallow(
         <Item
-          assessmentUnderSix={false}
+          isAssessmentUnderSix={false}
           item={{ ...itemDefault }}
           i18n={{ ...i18nDefault }}
           canReleaseConfidentialInfo={false}

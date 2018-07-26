@@ -11,6 +11,7 @@ import { Route, MemoryRouter } from 'react-router-dom';
 // changes, it will call back to you with stuff like
 // `match` and `location`, and `history` so you can control
 // the flow and make assertions.
+/* eslint-disable */
 export const renderTestSequence = ({ initialIndex, subject: Subject, steps }) => {
   const div = document.createElement('div');
 

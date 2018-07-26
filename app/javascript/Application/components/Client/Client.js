@@ -34,15 +34,6 @@ class Client extends Component {
     };
   }
 
-  static propTypes = {
-    /** React-router match object */
-    match: PropTypes.object.isRequired,
-    /** React-router location object */
-    location: PropTypes.object,
-    /** React-router history object */
-    history: PropTypes.object,
-  };
-
   componentDidMount() {
     this.fetchChildData(this.props.match.params.id);
   }
@@ -147,5 +138,15 @@ class Client extends Component {
     );
   }
 }
+
+Client.propTypes = {
+  history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 
 export default Client;

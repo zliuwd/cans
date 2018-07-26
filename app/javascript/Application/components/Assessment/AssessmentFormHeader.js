@@ -7,7 +7,6 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Radio from '@material-ui/core/Radio';
-import { defaultEmptyAssessment } from './AssessmentHelper';
 import { Alert } from '@cwds/components';
 
 import './style.sass';
@@ -226,14 +225,9 @@ class AssessmentFormHeader extends Component {
 }
 
 AssessmentFormHeader.propTypes = {
-  client: PropTypes.object.isRequired,
   assessment: PropTypes.object.isRequired,
+  client: PropTypes.object.isRequired,
   onAssessmentUpdate: PropTypes.func.isRequired,
-};
-
-AssessmentFormHeader.defaultProps = {
-  client: {},
-  assessment: defaultEmptyAssessment,
 };
 
 export default AssessmentFormHeader;

@@ -9,7 +9,8 @@ describe('<AssessmentFormHeader />', () => {
     it('will update event_date in assessment', () => {
       // given
       const mockFn = jest.fn();
-      const wrapper = shallow(<AssessmentFormHeader assessment={assessment} onAssessmentUpdate={mockFn} />);
+      const props = { assessment, client, onAssessmentUpdate: mockFn };
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
       expect(assessment.event_date).toBe('2018-06-11');
       // when
       const event = { target: { name: 'event_date', value: '2000-01-11' } };
@@ -23,7 +24,8 @@ describe('<AssessmentFormHeader />', () => {
     it('will update completed_as in assessment', () => {
       // given
       const mockFn = jest.fn();
-      const wrapper = shallow(<AssessmentFormHeader assessment={assessment} onAssessmentUpdate={mockFn} />);
+      const props = { assessment, client, onAssessmentUpdate: mockFn };
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
       expect(assessment.completed_as).toBe('COMMUNIMETRIC');
       // when
       const event = { target: { name: 'completed_as', value: 'Social Worker' } };
@@ -41,7 +43,8 @@ describe('<AssessmentFormHeader />', () => {
       const mockFn = jest.fn();
       const sentAssessment = JSON.parse(JSON.stringify(assessment));
       sentAssessment.has_caregiver = true;
-      const wrapper = shallow(<AssessmentFormHeader assessment={sentAssessment} onAssessmentUpdate={mockFn} />);
+      const props = { assessment: sentAssessment, client, onAssessmentUpdate: mockFn };
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
 
       // when
       const event = { target: { name: 'has_caregiver', value: 'false' } };
@@ -60,7 +63,8 @@ describe('<AssessmentFormHeader />', () => {
       const mockFn = jest.fn();
       const sentAssessment = JSON.parse(JSON.stringify(assessment));
       sentAssessment.can_release_confidential_info = true;
-      const wrapper = shallow(<AssessmentFormHeader assessment={sentAssessment} onAssessmentUpdate={mockFn} />);
+      const props = { assessment: sentAssessment, client, onAssessmentUpdate: mockFn };
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
       expect(sentAssessment.state.domains[0].items[3].confidential).toBe(false);
       // when
       const event = { target: { name: 'can_release_confidential_info', value: 'false' } };
@@ -77,7 +81,8 @@ describe('<AssessmentFormHeader />', () => {
     it('will set under_six to its opposite', () => {
       // given
       const mockFn = jest.fn();
-      const wrapper = shallow(<AssessmentFormHeader assessment={assessment} onAssessmentUpdate={mockFn} />);
+      const props = { assessment, client, onAssessmentUpdate: mockFn };
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
       expect(assessment.state.under_six).toBe(false);
       // when
       wrapper.instance().toggleUnderSix();
@@ -90,21 +95,24 @@ describe('<AssessmentFormHeader />', () => {
 
   describe('with client', () => {
     it('displays correct client name', () => {
-      const wrapper = shallow(<AssessmentFormHeader client={client} />);
+      const props = { assessment, client, onAssessmentUpdate: jest.fn() };
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
       expect(wrapper.find('#child-name').text()).toBe('Doe, John');
     });
   });
 
   describe('with no client', () => {
     it('displays default message', () => {
-      const wrapper = shallow(<AssessmentFormHeader />);
+      const props = { assessment, client: {}, onAssessmentUpdate: jest.fn() };
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
       expect(wrapper.find('#no-data').text()).toBe('Client Info');
     });
   });
 
   describe('warning alert', () => {
     it('should render Alert component when canReleaseInformation is false', () => {
-      const wrapper = shallow(<AssessmentFormHeader assessment={assessment} />);
+      const props = { assessment, client, onAssessmentUpdate: jest.fn() };
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
       const alert = wrapper.find(Alert);
       expect(alert.length).toBe(1);
       expect(wrapper.find(Alert).html()).toMatch(
@@ -115,7 +123,9 @@ describe('<AssessmentFormHeader />', () => {
     it('should not render Alert component when canReleaseInformation is true', () => {
       const sentAssessment = JSON.parse(JSON.stringify(assessment));
       sentAssessment.can_release_confidential_info = true;
-      const wrapper = shallow(<AssessmentFormHeader assessment={sentAssessment} />);
+      const props = { assessment: sentAssessment, client, onAssessmentUpdate: jest.fn() };
+
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
       const alert = wrapper.find(Alert);
       expect(alert.length).toBe(0);
     });

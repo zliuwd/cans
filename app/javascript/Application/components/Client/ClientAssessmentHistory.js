@@ -36,7 +36,6 @@ class ClientAssessmentHistory extends Component {
     }
 
     this.state = {
-      clientId: null,
       assessments: [],
       fetchStatus: 'idle',
       shouldRenderSuccessMessage: !!successAssessmentId,
@@ -46,7 +45,6 @@ class ClientAssessmentHistory extends Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { clientId } = nextProps;
     if (clientId) {
-      this.setState({ clientId });
       this.searchAssessments(clientId);
     }
   }
@@ -150,9 +148,9 @@ class ClientAssessmentHistory extends Component {
 /* eslint-enable camelcase */
 
 ClientAssessmentHistory.propTypes = {
-  clientId: PropTypes.number,
-  location: PropTypes.object,
-  history: PropTypes.object,
+  clientId: PropTypes.number.isRequired,
+  history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
 export default ClientAssessmentHistory;

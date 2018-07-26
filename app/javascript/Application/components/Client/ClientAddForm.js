@@ -49,7 +49,6 @@ class ClientAddForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      child_status: 'idle',
       counties: [],
       childInfo: {
         person_role: 'CLIENT',
@@ -73,7 +72,6 @@ class ClientAddForm extends Component {
       },
       isSaveButtonDisabled: true,
       open: false,
-      navigate: false,
       redirection: {
         shouldRedirect: false,
         successClientAddId: null,
@@ -102,19 +100,17 @@ class ClientAddForm extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.setState({ child_status: 'updating' });
     ClientService.addClient(this.state.childInfo)
       .then(newChild => {
         this.setState({
           childInfo: newChild,
-          child_status: 'ready',
           redirection: {
             shouldRedirect: true,
             successClientAddId: newChild.id,
           },
         });
       })
-      .catch(() => this.setState({ child_status: 'error' }));
+      .catch(() => {});
   };
 
   handleCancel = event => {
@@ -143,17 +139,13 @@ class ClientAddForm extends Component {
   }
 
   fetchCounties = () => {
-    this.setState({ counties_status: 'waiting' });
     return CountiesService.fetchCounties()
       .then(this.onFetchCountiesSuccess)
-      .catch(() => this.setState({ counties_status: 'error' }));
+      .catch(() => this.setState({ counties: [] }));
   };
 
   onFetchCountiesSuccess = counties => {
-    this.setState({
-      counties: counties,
-      counties_status: 'ready',
-    });
+    this.setState({ counties: counties });
   };
 
   validateInput = (fieldName, inputValue) => {
@@ -360,9 +352,6 @@ class ClientAddForm extends Component {
 
 ClientAddForm.propTypes = {
   classes: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
-  childData: PropTypes.object.isRequired,
-  history: PropTypes.object,
 };
 
 export default withStyles(styles)(ClientAddForm);

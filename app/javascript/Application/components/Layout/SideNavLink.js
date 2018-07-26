@@ -1,21 +1,14 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import './style.sass';
 
-class SideNavLink extends Component {
-  static propTypes = {
-    href: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
-    active: PropTypes.bool.isRequired,
-    onClick: PropTypes.func.isRequired,
-  };
-
+class SideNavLink extends PureComponent {
   render() {
-    const { active, text, href, onClick } = this.props;
-    const classes = classNames('sidebar-item', { active });
+    const { isActive, text, href, onClick } = this.props;
+    const classes = classNames('sidebar-item', { active: isActive });
     return (
       <div
         id="side-nav"
@@ -35,8 +28,11 @@ class SideNavLink extends Component {
   }
 }
 
-SideNavLink.defaultProps = {
-  active: false,
+SideNavLink.propTypes = {
+  href: PropTypes.string.isRequired,
+  isActive: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired,
 };
 
 export default SideNavLink;

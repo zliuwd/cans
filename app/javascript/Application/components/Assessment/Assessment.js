@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { defaultEmptyAssessment } from './AssessmentHelper';
 import { getI18nByCode } from './I18nHelper';
 import Domain from './Domain';
 
@@ -128,7 +127,7 @@ class Assessment extends Component {
           domain={domain}
           i18n={domainI18n}
           i18nAll={i18n}
-          assessmentUnderSix={isUnderSix}
+          isAssessmentUnderSix={isUnderSix}
           canReleaseConfidentialInfo={canReleaseConfidentialInfo}
           onRatingUpdate={this.handleUpdateItemRating}
           onConfidentialityUpdate={this.handleUpdateItemConfidentiality}
@@ -145,11 +144,6 @@ Assessment.propTypes = {
   assessment: PropTypes.object.isRequired,
   i18n: PropTypes.object.isRequired,
   onAssessmentUpdate: PropTypes.func.isRequired,
-};
-
-Assessment.defaultProps = {
-  assessment: defaultEmptyAssessment,
-  i18n: {},
 };
 
 export default Assessment;

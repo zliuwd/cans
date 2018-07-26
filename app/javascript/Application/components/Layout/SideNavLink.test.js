@@ -7,7 +7,7 @@ describe('active <SideNavLink />', () => {
   const getWrapper = active =>
     mount(
       <MemoryRouter>
-        <SideNavLink active={active} href={'/records'} text={'Records'} onClick={jest.fn()} />
+        <SideNavLink isActive={active} href={'/records'} text={'Records'} onClick={jest.fn()} />
       </MemoryRouter>
     );
 
@@ -32,7 +32,7 @@ describe('<SideNavLink /> text', () => {
   it('should display text thats passed in', () => {
     const wrapper = mount(
       <MemoryRouter>
-        <SideNavLink active={true} text={'Reports'} href={'/reports'} onClick={jest.fn()} />
+        <SideNavLink isActive={true} text={'Reports'} href={'/reports'} onClick={jest.fn()} />
       </MemoryRouter>
     );
     expect(wrapper.find('#side-nav').text()).toBe('Reports');
@@ -46,7 +46,7 @@ describe('<SideNavLink /> onClick', () => {
       const onClickFunc = jest.fn();
       const wrapper = mount(
         <MemoryRouter>
-          <SideNavLink active={false} text={'Reports'} href={'/records'} onClick={onClickFunc} />
+          <SideNavLink isActive={false} text={'Reports'} href={'/records'} onClick={onClickFunc} />
         </MemoryRouter>
       );
       wrapper.simulate('click');
@@ -59,7 +59,7 @@ describe('<SideNavLink /> onClick', () => {
       const onClickFunction = jest.fn();
       const wrapper = mount(
         <MemoryRouter>
-          <SideNavLink active={false} text={'Reports'} href={'/records'} onClick={onClickFunction} />
+          <SideNavLink isActive={false} text={'Reports'} href={'/records'} onClick={onClickFunction} />
         </MemoryRouter>
       );
       wrapper.simulate('keyDown', { keyCode: 40 });

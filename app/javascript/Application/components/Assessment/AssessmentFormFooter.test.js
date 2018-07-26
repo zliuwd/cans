@@ -15,7 +15,7 @@ describe('AssessmentFormFooter', () => {
   describe('save button', () => {
     it('can invoke a callback when enabled', () => {
       const mockFn = jest.fn();
-      const footer = shallow(<AssessmentFormFooter saveButtonEnabled={true} onSaveAssessment={mockFn} />);
+      const footer = shallow(<AssessmentFormFooter isSaveButtonEnabled={true} onSaveAssessment={mockFn} />);
       const saveButton = footer.find('Button#save-assessment');
       expect(saveButton.props().disabled).toBe(false);
       saveButton.simulate('click');
@@ -23,7 +23,7 @@ describe('AssessmentFormFooter', () => {
     });
 
     it('can be disabled', () => {
-      const footer = shallow(<AssessmentFormFooter saveButtonEnabled={false} />);
+      const footer = shallow(<AssessmentFormFooter isSaveButtonEnabled={false} />);
       expect(footer.find('Button#save-assessment').props().disabled).toBe(true);
     });
   });
@@ -31,7 +31,7 @@ describe('AssessmentFormFooter', () => {
   describe('submit button', () => {
     it('can invoke a callback when enabled', () => {
       const mockFn = jest.fn();
-      const footer = shallow(<AssessmentFormFooter submitButtonEnabled={true} onSubmitAssessment={mockFn} />);
+      const footer = shallow(<AssessmentFormFooter isSubmitButtonEnabled={true} onSubmitAssessment={mockFn} />);
       const submitButton = footer.find('Button#submit-assessment');
       expect(submitButton.props().disabled).toBe(false);
       submitButton.simulate('click');
@@ -39,7 +39,7 @@ describe('AssessmentFormFooter', () => {
     });
 
     it('can be disabled', () => {
-      const footer = shallow(<AssessmentFormFooter submitButtonEnabled={false} />);
+      const footer = shallow(<AssessmentFormFooter isSubmitButtonEnabled={false} />);
       expect(footer.find('Button#submit-assessment').props().disabled).toBe(true);
     });
   });

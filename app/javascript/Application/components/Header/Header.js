@@ -10,15 +10,8 @@ class Header extends React.Component {
     this.state = {
       userName: '',
       userInitials: '..',
-      user: {},
     };
   }
-
-  static propTypes = {
-    /** callback to be invoked when user info is successfully fetched,
-     * should accept staffId as a parameter */
-    onUserFetchedCallback: PropTypes.func,
-  };
 
   componentDidMount() {
     this.fetchUser();
@@ -31,11 +24,6 @@ class Header extends React.Component {
   };
 
   onFetchSuccess = staffPerson => {
-    this.setState({
-      user: {
-        user: staffPerson,
-      },
-    });
     this.updateNameAndInitials(staffPerson);
     this.invokeCallback(staffPerson.staff_id);
   };
@@ -75,5 +63,11 @@ class Header extends React.Component {
     return <GlobalHeader profileName={userName} profileId={userInitials} profileAvatar={userInitials} />;
   };
 }
+
+Header.propTypes = {
+  /** callback to be invoked when user info is successfully fetched,
+   * should accept staffId as a parameter */
+  onUserFetchedCallback: PropTypes.func.isRequired,
+};
 
 export default Header;

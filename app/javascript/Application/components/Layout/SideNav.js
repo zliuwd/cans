@@ -37,7 +37,7 @@ class SideNav extends Component {
               onClick={() => {
                 this.toggleActiveLink(item.url);
               }}
-              active={this.isActive(item.url)}
+              isActive={this.isActive(item.url)}
             />
           );
         })}

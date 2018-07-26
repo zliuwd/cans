@@ -31,16 +31,6 @@ class Item extends Component {
     };
   }
 
-  static propTypes = {
-    item: PropTypes.object.isRequired,
-    caregiverIndex: PropTypes.string,
-    i18n: PropTypes.object.isRequired,
-    assessmentUnderSix: PropTypes.bool.isRequired,
-    canReleaseConfidentialInfo: PropTypes.bool.isRequired,
-    onRatingUpdate: PropTypes.func.isRequired,
-    onConfidentialityUpdate: PropTypes.func.isRequired,
-  };
-
   UNSAFE_componentWillReceiveProps(nextProps) {
     const i18nValues = initI18nValue(nextProps.i18n);
     this.setState({
@@ -157,7 +147,7 @@ class Item extends Component {
   };
 
   render = () => {
-    const { item, assessmentUnderSix, caregiverIndex } = this.props;
+    const { item, isAssessmentUnderSix, caregiverIndex } = this.props;
     const {
       code,
       rating_type,
@@ -168,11 +158,11 @@ class Item extends Component {
       under_six_id,
       above_six_id,
     } = item;
-    const itemNumber = assessmentUnderSix ? under_six_id : above_six_id;
+    const itemNumber = isAssessmentUnderSix ? under_six_id : above_six_id;
     const { isExpanded, title, description, qtcDescriptions, ratingDescriptions } = this.state;
     const isBooleanRating = rating_type === 'BOOLEAN';
     const classes = classNames('item-expand-icon', { 'fa fa-plus': !isExpanded, 'fa fa-minus': isExpanded });
-    return (assessmentUnderSix && under_six_id) || (!assessmentUnderSix && above_six_id) ? (
+    return (isAssessmentUnderSix && under_six_id) || (!isAssessmentUnderSix && above_six_id) ? (
       <div>
         <AppBar position="static" color="inherit">
           <Toolbar style={{ justifyContent: 'space-between' }}>
@@ -212,11 +202,14 @@ class Item extends Component {
 }
 /* eslint-enable camelcase */
 
-Item.defaultProps = {
-  item: {},
-  i18n: {},
-  assessmentUnderSix: false,
-  canReleaseConfidentialInfo: false,
+Item.propTypes = {
+  canReleaseConfidentialInfo: PropTypes.bool.isRequired,
+  caregiverIndex: PropTypes.string.isRequired,
+  i18n: PropTypes.object.isRequired,
+  isAssessmentUnderSix: PropTypes.bool.isRequired,
+  item: PropTypes.object.isRequired,
+  onConfidentialityUpdate: PropTypes.func.isRequired,
+  onRatingUpdate: PropTypes.func.isRequired,
 };
 
 export default Item;

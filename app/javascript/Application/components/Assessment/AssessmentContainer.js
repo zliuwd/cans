@@ -22,7 +22,6 @@ class AssessmentContainer extends Component {
       assessment: defaultEmptyAssessment,
       assessmentServiceStatus: LoadingState.idle,
       i18n: {},
-      i18n_status: LoadingState.idle,
       child: {},
       isValidForSubmit: false,
       redirection: {
@@ -85,19 +84,17 @@ class AssessmentContainer extends Component {
   }
 
   async fetchI18n(instrumentId) {
-    this.setState({ i18n_status: LoadingState.waiting });
     try {
       const i18n = await I18nService.fetchByInstrumentId(instrumentId);
       this.onFetchI18nSuccess(i18n);
     } catch (e) {
-      this.setState({ i18n_status: LoadingState.error });
+      this.setState({ i18n: {} });
     }
   }
 
   onFetchI18nSuccess(i18n) {
     this.setState({
       i18n: i18n,
-      i18n_status: LoadingState.ready,
     });
   }
 
@@ -207,9 +204,9 @@ class AssessmentContainer extends Component {
         </Typography>
         <AssessmentFormFooter
           onCancelClick={this.handleCancelClick}
-          saveButtonEnabled={canPerformUpdates && !!this.state.assessment.event_date}
+          isSaveButtonEnabled={canPerformUpdates && !!this.state.assessment.event_date}
           onSaveAssessment={this.handleSaveAssessment}
-          submitButtonEnabled={canPerformUpdates && isValidForSubmit}
+          isSubmitButtonEnabled={canPerformUpdates && isValidForSubmit}
           onSubmitAssessment={this.handleSubmitAssessment}
         />
       </Fragment>
@@ -219,8 +216,8 @@ class AssessmentContainer extends Component {
 /* eslint-enable camelcase */
 
 AssessmentContainer.propTypes = {
-  match: PropTypes.object,
   history: PropTypes.object,
+  match: PropTypes.object,
 };
 
 AssessmentContainer.defaultProps = {

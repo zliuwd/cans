@@ -1,15 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Row, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 import './style.sass';
 
-class PageInfo extends Component {
-  static propTypes = {
-    // page header title
-    title: PropTypes.string.isRequired,
-  };
-
+class PageInfo extends PureComponent {
   render() {
     return (
       <Fragment>
@@ -22,5 +17,10 @@ class PageInfo extends Component {
     );
   }
 }
+
+PageInfo.propTypes = {
+  // page header title
+  title: PropTypes.string.isRequired,
+};
 
 export default PageInfo;

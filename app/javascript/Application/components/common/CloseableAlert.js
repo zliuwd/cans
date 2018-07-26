@@ -20,13 +20,6 @@ export class CloseableAlert extends Component {
     };
   }
 
-  static propTypes = {
-    type: PropTypes.oneOf([alertType.SUCCESS, alertType.INFO, alertType.WARNING, alertType.DANGER]).isRequired,
-    message: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
-    isCloseable: PropTypes.bool,
-    isAutoCloseable: PropTypes.bool,
-  };
-
   componentDidMount() {
     if (this.props.isAutoCloseable) {
       setTimeout(this.handleCloseAlert, DEFAULT_AUTO_HIDE_TIMEOUT);
@@ -61,3 +54,15 @@ export class CloseableAlert extends Component {
     );
   }
 }
+
+CloseableAlert.propTypes = {
+  isAutoCloseable: PropTypes.bool,
+  isCloseable: PropTypes.bool,
+  message: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
+  type: PropTypes.oneOf([alertType.SUCCESS, alertType.INFO, alertType.WARNING, alertType.DANGER]).isRequired,
+};
+
+CloseableAlert.defaultProps = {
+  isAutoCloseable: false,
+  isCloseable: false,
+};

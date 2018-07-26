@@ -11,14 +11,6 @@ class Rating extends Component {
     this.state = {};
   }
 
-  static propTypes = {
-    itemCode: PropTypes.string.isRequired,
-    rating_type: PropTypes.string.isRequired,
-    rating: PropTypes.number.isRequired,
-    hasNaOption: PropTypes.bool.isRequired,
-    onRatingUpdate: PropTypes.func.isRequired,
-  };
-
   handleChange = onChangeEvent => {
     this.props.onRatingUpdate(onChangeEvent);
   };
@@ -71,5 +63,12 @@ class Rating extends Component {
     );
   };
 }
+
+Rating.propTypes = {
+  hasNaOption: PropTypes.bool.isRequired,
+  onRatingUpdate: PropTypes.func.isRequired,
+  rating: PropTypes.number.isRequired,
+  rating_type: PropTypes.string.isRequired,
+};
 
 export default Rating;
