@@ -1,7 +1,6 @@
 import React from 'react';
 import { Assessment, Domain } from './';
 import { mount, shallow } from 'enzyme';
-import { cloneDeep } from 'lodash';
 
 import { assessment, i18n } from './assessment.mocks.test';
 
@@ -19,8 +18,8 @@ describe('<Assessment />', () => {
     describe('hasCaregiver is true', () => {
       it('should add initial caregiver', () => {
         // given
-        const initialAssessment = cloneDeep(assessment);
-        let updatedAssessment = cloneDeep(assessment);
+        const initialAssessment = JSON.parse(JSON.stringify(assessment));
+        let updatedAssessment = JSON.parse(JSON.stringify(assessment));
         const mockFn = jest.fn();
         const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />);
 
@@ -37,8 +36,8 @@ describe('<Assessment />', () => {
     describe('hasCaregiver is false', () => {
       it('should remove caregiver domains', () => {
         // given
-        let initialAssessment = cloneDeep(assessment);
-        let updatedAssessment = cloneDeep(assessment);
+        let initialAssessment = JSON.parse(JSON.stringify(assessment));
+        let updatedAssessment = JSON.parse(JSON.stringify(assessment));
         initialAssessment.has_caregiver = true;
         initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0]);
         initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'b' });
@@ -66,7 +65,7 @@ describe('<Assessment />', () => {
           const wrapper = mount(<Assessment onAssessmentUpdate={mockFn} assessment={assessment} i18n={i18n} />);
           expect(assessment.state.domains[0].items[0].rating).toBe(1);
           wrapper.instance().handleUpdateItemRating('1', 2);
-          const newAssessment = cloneDeep(assessment);
+          const newAssessment = JSON.parse(JSON.stringify(assessment));
           newAssessment.state.domains[0].items[0].rating = 2;
           expect(mockFn).toHaveBeenCalledWith(newAssessment);
         });
@@ -74,7 +73,7 @@ describe('<Assessment />', () => {
         it('is invoked when item rating is updated for caregiver domain', () => {
           // given
           const mockFn = jest.fn();
-          const initialAssessment = cloneDeep(assessment);
+          const initialAssessment = JSON.parse(JSON.stringify(assessment));
           initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0]);
           const wrapper = mount(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />);
 
@@ -83,7 +82,7 @@ describe('<Assessment />', () => {
           wrapper.instance().handleUpdateItemRating('1', 2, 'a');
 
           // then
-          const updatedAssessment = cloneDeep(assessment);
+          const updatedAssessment = JSON.parse(JSON.stringify(assessment));
           updatedAssessment.state.domains[0] = enhanceDomainToCaregiver(updatedAssessment.state.domains[0]);
           updatedAssessment.state.domains[0].items[0].rating = 2;
           expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
@@ -93,11 +92,11 @@ describe('<Assessment />', () => {
       describe('confidentiality', () => {
         it('is invoked when item confidentiality is updated', () => {
           const mockFn = jest.fn();
-          const initialAssessment = cloneDeep(assessment);
+          const initialAssessment = JSON.parse(JSON.stringify(assessment));
           const wrapper = mount(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />);
           expect(initialAssessment.state.domains[0].items[3].confidential).toBe(false);
           wrapper.instance().handleUpdateItemConfidentiality('EXPOSURE', true);
-          const newAssessment = cloneDeep(assessment);
+          const newAssessment = JSON.parse(JSON.stringify(assessment));
           newAssessment.state.domains[0].items[3].confidential = true;
           expect(mockFn).toHaveBeenCalledWith(newAssessment);
         });
@@ -105,7 +104,7 @@ describe('<Assessment />', () => {
         it('is invoked when item confidentiality is updated for caregiver domain', () => {
           // given
           const mockFn = jest.fn();
-          const initialAssessment = cloneDeep(assessment);
+          const initialAssessment = JSON.parse(JSON.stringify(assessment));
           initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0]);
           const wrapper = mount(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />);
 
@@ -114,7 +113,7 @@ describe('<Assessment />', () => {
           wrapper.instance().handleUpdateItemConfidentiality('EXPOSURE', true, 'a');
 
           // then
-          const updatedAssessment = cloneDeep(assessment);
+          const updatedAssessment = JSON.parse(JSON.stringify(assessment));
           updatedAssessment.state.domains[0] = enhanceDomainToCaregiver(updatedAssessment.state.domains[0]);
           updatedAssessment.state.domains[0].items[3].confidential = true;
           expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
@@ -128,7 +127,7 @@ describe('<Assessment />', () => {
       it('is invoked when caregiver name is updated', () => {
         // given
         const mockFn = jest.fn();
-        const initialAssessment = cloneDeep(assessment);
+        const initialAssessment = JSON.parse(JSON.stringify(assessment));
         initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0]);
         const wrapper = mount(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />);
         expect(initialAssessment.state.domains[0].caregiver_name).toBeUndefined();
@@ -137,7 +136,7 @@ describe('<Assessment />', () => {
         wrapper.instance().updateCaregiverName('a', 'New Name');
 
         // then
-        const updatedAssessment = cloneDeep(assessment);
+        const updatedAssessment = JSON.parse(JSON.stringify(assessment));
         updatedAssessment.state.domains[0] = enhanceDomainToCaregiver(updatedAssessment.state.domains[0]);
         updatedAssessment.state.domains[0].caregiver_name = 'New Name';
         expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
@@ -149,7 +148,7 @@ describe('<Assessment />', () => {
     describe('#addInitialCaregiverDomain', () => {
       it('adds initial caregiver domain to the assessment', () => {
         // given
-        const initialAssessment = cloneDeep(assessment);
+        const initialAssessment = JSON.parse(JSON.stringify(assessment));
         const mockFn = jest.fn();
         const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />);
 
@@ -165,7 +164,7 @@ describe('<Assessment />', () => {
     describe('#addCaregiverDomainAfter', () => {
       it('adds additional caregiver domain', () => {
         // given
-        const initialAssessment = cloneDeep(assessment);
+        const initialAssessment = JSON.parse(JSON.stringify(assessment));
         initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0]);
         const mockFn = jest.fn();
         const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />);
@@ -183,7 +182,7 @@ describe('<Assessment />', () => {
     describe('#removeCaregiverDomain', () => {
       it('removes the caregiver domain and resets the caregiver indexes', () => {
         // given
-        const initialAssessment = cloneDeep(assessment);
+        const initialAssessment = JSON.parse(JSON.stringify(assessment));
         initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0]);
         initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'b' });
         initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'c' });
@@ -203,7 +202,7 @@ describe('<Assessment />', () => {
     describe('#removeAllCaregiverDomains', () => {
       it('removes all caregiver domains from the domains list', () => {
         // given
-        const initialAssessment = cloneDeep(assessment);
+        const initialAssessment = JSON.parse(JSON.stringify(assessment));
         initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0]);
         initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'b' });
         initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'c' });

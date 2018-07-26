@@ -1,5 +1,4 @@
 import { validateAssessmentForSubmit } from './AssessmentHelper';
-import { cloneDeep } from 'lodash';
 
 const validAssessment = {
   instrument_id: 1,
@@ -85,7 +84,7 @@ describe('AssessmentHelper', () => {
   describe('#validateAssessmentForSubmit()', () => {
     describe('invalid state', () => {
       it('returns false when no event_date', () => {
-        const assessment = cloneDeep(validAssessment);
+        const assessment = JSON.parse(JSON.stringify(validAssessment));
         assessment.event_date = null;
         expect(validateAssessmentForSubmit(assessment)).toBe(false);
         assessment.event_date = '';
@@ -93,7 +92,7 @@ describe('AssessmentHelper', () => {
       });
 
       it('returns false when no assessment_type', () => {
-        const assessment = cloneDeep(validAssessment);
+        const assessment = JSON.parse(JSON.stringify(validAssessment));
         assessment.assessment_type = null;
         expect(validateAssessmentForSubmit(assessment)).toBe(false);
         assessment.assessment_type = '';
@@ -101,7 +100,7 @@ describe('AssessmentHelper', () => {
       });
 
       it('returns false when no completed_as', () => {
-        const assessment = cloneDeep(validAssessment);
+        const assessment = JSON.parse(JSON.stringify(validAssessment));
         assessment.completed_as = null;
         expect(validateAssessmentForSubmit(assessment)).toBe(false);
         assessment.completed_as = '';
@@ -109,20 +108,20 @@ describe('AssessmentHelper', () => {
       });
 
       it('returns false when rating is not set for 1 above six item', () => {
-        const assessment = cloneDeep(validAssessment);
+        const assessment = JSON.parse(JSON.stringify(validAssessment));
         assessment.state.under_six = true;
         assessment.state.domains[0].items[0].rating = -1;
         expect(validateAssessmentForSubmit(assessment)).toBe(false);
       });
 
       it('returns false when rating is not set for 1 under six item', () => {
-        const assessment = cloneDeep(validAssessment);
+        const assessment = JSON.parse(JSON.stringify(validAssessment));
         assessment.state.domains[1].items[0].rating = -1;
         expect(validateAssessmentForSubmit(assessment)).toBe(false);
       });
 
       it('returns false when domain is above_six rating is not set for 1 under six item', () => {
-        const assessment = cloneDeep(validAssessment);
+        const assessment = JSON.parse(JSON.stringify(validAssessment));
         assessment.state.domains[1].items[0].rating = -1;
         expect(validateAssessmentForSubmit(assessment)).toBe(false);
       });
@@ -135,7 +134,7 @@ describe('AssessmentHelper', () => {
       });
 
       it('returns true when domain is above_six but item is under_six and has no rating', () => {
-        const assessment = cloneDeep(validAssessment);
+        const assessment = JSON.parse(JSON.stringify(validAssessment));
         assessment.state.domains[0].items[0].rating = -1;
         expect(validateAssessmentForSubmit(assessment)).toBe(true);
       });

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { cloneDeep } from 'lodash';
 import { defaultEmptyAssessment } from './AssessmentHelper';
 import { getI18nByCode } from './I18nHelper';
 import Domain from './Domain';
@@ -11,7 +10,7 @@ class Assessment extends Component {
   /* eslint-disable camelcase */
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.assessment.state.domains.length === 0 && nextProps.assessment.state.domains.length !== 0) {
-      const assessment = cloneDeep(nextProps.assessment);
+      const assessment = Object.assign({}, nextProps.assessment);
       this.updateCaregiverDomainsIndices(assessment.state);
       this.props.onAssessmentUpdate(assessment);
     }
@@ -37,7 +36,7 @@ class Assessment extends Component {
   };
 
   updateItem = (itemCode, key, value, itemCaregiverIndex) => {
-    const assessment = cloneDeep(this.props.assessment);
+    const assessment = JSON.parse(JSON.stringify(this.props.assessment));
     assessment.state.domains.map(domain => {
       if (itemCaregiverIndex !== domain.caregiver_index) return;
       domain.items.map(item => {
@@ -58,12 +57,11 @@ class Assessment extends Component {
   }
 
   addCaregiverDomainAfter = caregiverIndex => {
-    const assessment = cloneDeep(this.props.assessment);
+    const assessment = JSON.parse(JSON.stringify(this.props.assessment));
     const domains = assessment.state.domains;
-    for (let i = 0; i < domains.length; i++) {
-      const domain = domains[i];
+    for (const [index, domain] of domains.entries()) {
       if (domain.caregiver_index === caregiverIndex) {
-        domains.splice(i + 1, 0, cloneDeep(assessment.state.caregiver_domain_template));
+        domains.splice(index + 1, 0, JSON.parse(JSON.stringify(assessment.state.caregiver_domain_template)));
         break;
       }
     }
@@ -72,20 +70,19 @@ class Assessment extends Component {
   };
 
   addInitialCaregiverDomain() {
-    const assessment = cloneDeep(this.props.assessment);
+    const assessment = JSON.parse(JSON.stringify(this.props.assessment));
     const domains = assessment.state.domains;
-    domains.splice(domains.length - 1, 0, cloneDeep(assessment.state.caregiver_domain_template));
+    domains.splice(domains.length - 1, 0, JSON.parse(JSON.stringify(assessment.state.caregiver_domain_template)));
     this.updateCaregiverDomainsIndices(assessment.state);
     this.props.onAssessmentUpdate(assessment);
   }
 
   removeCaregiverDomain = caregiverIndex => {
-    const assessment = cloneDeep(this.props.assessment);
+    const assessment = JSON.parse(JSON.stringify(this.props.assessment));
     const domains = assessment.state.domains;
-    for (let i = 0; i < domains.length; i++) {
-      const domain = domains[i];
+    for (const [index, domain] of domains.entries()) {
       if (domain.caregiver_index === caregiverIndex) {
-        domains.splice(i, 1);
+        domains.splice(index, 1);
         break;
       }
     }
@@ -94,7 +91,7 @@ class Assessment extends Component {
   };
 
   removeAllCaregiverDomains() {
-    const assessment = cloneDeep(this.props.assessment);
+    const assessment = JSON.parse(JSON.stringify(this.props.assessment));
     const domains = assessment.state.domains;
     let caregiverDomains = domains.filter(domain => domain.is_caregiver_domain);
     for (const caregiverDomain of caregiverDomains) {
@@ -105,7 +102,7 @@ class Assessment extends Component {
   }
 
   updateCaregiverName = (caregiverIndex, caregiverName) => {
-    const assessment = cloneDeep(this.props.assessment);
+    const assessment = JSON.parse(JSON.stringify(this.props.assessment));
     for (const domain of assessment.state.domains) {
       if (domain.caregiver_index === caregiverIndex) {
         domain.caregiver_name = caregiverName;

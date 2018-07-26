@@ -9,7 +9,6 @@ import Switch from '@material-ui/core/Switch';
 import Radio from '@material-ui/core/Radio';
 import { defaultEmptyAssessment } from './AssessmentHelper';
 import { Alert } from '@cwds/components';
-import { clone } from 'lodash';
 
 import './style.sass';
 
@@ -23,7 +22,7 @@ const fields = Object.freeze({
 class AssessmentFormHeader extends Component {
   handleValueChange = event => {
     const { name, value } = event.target;
-    const assessment = clone(this.props.assessment);
+    const assessment = Object.assign({}, this.props.assessment);
     assessment[name] = value;
     this.props.onAssessmentUpdate(assessment);
   };
@@ -31,7 +30,7 @@ class AssessmentFormHeader extends Component {
   handleHasCaregiverChange = event => {
     const { name, value } = event.target;
     const hasCaregiver = value === 'true';
-    const assessment = clone(this.props.assessment);
+    const assessment = Object.assign({}, this.props.assessment);
     assessment[name] = hasCaregiver;
     this.props.onAssessmentUpdate(assessment);
   };
@@ -39,7 +38,7 @@ class AssessmentFormHeader extends Component {
   handleCanReleaseInfoChange = event => {
     const { name, value } = event.target;
     const canReleaseInfo = value === 'true';
-    const assessment = clone(this.props.assessment);
+    const assessment = Object.assign({}, this.props.assessment);
     assessment[name] = canReleaseInfo;
     if (!canReleaseInfo) {
       assessment.state.domains.map(domain => {
@@ -54,7 +53,7 @@ class AssessmentFormHeader extends Component {
   };
 
   toggleUnderSix = () => {
-    const assessment = clone(this.props.assessment);
+    const assessment = Object.assign({}, this.props.assessment);
     assessment.state.under_six = !assessment.state.under_six;
     this.props.onAssessmentUpdate(assessment);
   };

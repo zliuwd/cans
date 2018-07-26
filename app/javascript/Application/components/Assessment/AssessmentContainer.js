@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Assessment, AssessmentFormHeader, AssessmentFormFooter, AssessmentService, I18nService } from './';
 import Typography from '@material-ui/core/Typography';
-import { clone } from 'lodash';
 import { PageInfo } from '../Layout';
 import { ClientService } from '../Client/';
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper';
@@ -33,22 +32,25 @@ class AssessmentContainer extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const assessmentId = this.props.match.params.id;
-    ClientService.fetch(this.props.match.params.childId)
-      .then(response => this.setState({ child: response }))
-      .catch(() => this.setState({ child: {} }));
+    const { childId } = this.props.match.params;
+    const child = await ClientService.fetch(childId).catch(() => {});
+    this.setState({ child });
     assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment();
   }
 
-  fetchNewAssessment() {
+  async fetchNewAssessment() {
     this.setState({ assessmentServiceStatus: LoadingState.waiting });
-    return AssessmentService.fetchNewAssessment()
-      .then(this.onFetchNewAssessmentSuccess)
-      .catch(() => this.setState({ assessmentServiceStatus: LoadingState.error }));
+    try {
+      const instrument = await AssessmentService.fetchNewAssessment();
+      return this.onFetchNewAssessmentSuccess(instrument);
+    } catch (e) {
+      this.setState({ assessmentServiceStatus: LoadingState.error });
+    }
   }
 
-  onFetchNewAssessmentSuccess = instrument => {
+  onFetchNewAssessmentSuccess(instrument) {
     const assessment = {
       instrument_id: 1,
       person: this.state.child,
@@ -65,33 +67,39 @@ class AssessmentContainer extends Component {
       assessmentServiceStatus: LoadingState.ready,
     });
     this.fetchI18n(assessment.instrument_id);
-  };
-
-  fetchAssessment(id) {
-    this.setState({ assessmentServiceStatus: LoadingState.waiting });
-    return AssessmentService.fetch(id)
-      .then(this.onFetchAssessmentSuccess)
-      .catch(() => this.setState({ assessmentServiceStatus: LoadingState.error }));
   }
 
-  onFetchAssessmentSuccess = assessment => {
+  async fetchAssessment(id) {
+    this.setState({ assessmentServiceStatus: LoadingState.waiting });
+    try {
+      const assessment = await AssessmentService.fetch(id);
+      return this.onFetchAssessmentSuccess(assessment);
+    } catch (e) {
+      this.setState({ assessmentServiceStatus: LoadingState.error });
+    }
+  }
+
+  onFetchAssessmentSuccess(assessment) {
     this.updateAssessment(assessment);
     this.fetchI18n(assessment.instrument_id);
-  };
-
-  fetchI18n(instrumentId) {
-    this.setState({ i18n_status: LoadingState.waiting });
-    return I18nService.fetchByInstrumentId(instrumentId)
-      .then(this.onFetchI18nSuccess)
-      .catch(() => this.setState({ i18n_status: LoadingState.error }));
   }
 
-  onFetchI18nSuccess = i18n => {
+  async fetchI18n(instrumentId) {
+    this.setState({ i18n_status: LoadingState.waiting });
+    try {
+      const i18n = await I18nService.fetchByInstrumentId(instrumentId);
+      this.onFetchI18nSuccess(i18n);
+    } catch (e) {
+      this.setState({ i18n_status: LoadingState.error });
+    }
+  }
+
+  onFetchI18nSuccess(i18n) {
     this.setState({
       i18n: i18n,
       i18n_status: LoadingState.ready,
     });
-  };
+  }
 
   updateAssessment = assessment => {
     const isValidForSubmit = validateAssessmentForSubmit(assessment);
@@ -114,58 +122,62 @@ class AssessmentContainer extends Component {
     this.props.history.push(`/clients/${this.state.child.id}/assessments/${assessment.id}`);
   }
 
-  handleSaveAssessment = () => {
+  handleSaveAssessment = async () => {
     this.setState({ assessmentServiceStatus: LoadingState.updating });
     const assessment = this.state.assessment;
     assessment.person = this.state.child;
     if (assessment.id) {
-      AssessmentService.update(assessment.id, assessment)
-        .then(updatedAssessment => {
-          this.setState({
-            assessment: updatedAssessment,
-            assessmentServiceStatus: LoadingState.ready,
-          });
-        })
-        .catch(() => this.setState({ assessmentServiceStatus: LoadingState.error }));
+      try {
+        const updatedAssessment = await AssessmentService.update(assessment.id, assessment);
+        this.setState({
+          assessment: updatedAssessment,
+          assessmentServiceStatus: LoadingState.ready,
+        });
+      } catch (e) {
+        this.setState({ assessmentServiceStatus: LoadingState.error });
+      }
     } else {
-      AssessmentService.postAssessment(assessment)
-        .then(updatedAssessment => {
-          this.initialSave(updatedAssessment);
-        })
-        .catch(() => this.setState({ assessmentServiceStatus: LoadingState.error }));
+      try {
+        const updatedAssessment = await AssessmentService.postAssessment(assessment);
+        this.initialSave(updatedAssessment);
+      } catch (e) {
+        this.setState({ assessmentServiceStatus: LoadingState.error });
+      }
     }
   };
 
-  handleSubmitAssessment = () => {
+  handleSubmitAssessment = async () => {
     this.setState({ assessmentServiceStatus: LoadingState.updating });
-    const assessment = clone(this.state.assessment);
+    const assessment = Object.assign({}, this.state.assessment);
     assessment.status = AssessmentStatus.submitted;
     assessment.person = this.state.child;
     if (assessment.id) {
-      AssessmentService.update(assessment.id, assessment)
-        .then(submittedAssessment => {
-          this.setState({
-            assessmentServiceStatus: LoadingState.ready,
-            redirection: {
-              shouldRedirect: true,
-              successAssessmentId: submittedAssessment.id,
-            },
-          });
-        })
-        .catch(() => this.setState({ assessmentServiceStatus: LoadingState.error }));
+      try {
+        const submittedAssessment = await AssessmentService.update(assessment.id, assessment);
+        this.setState({
+          assessmentServiceStatus: LoadingState.ready,
+          redirection: {
+            shouldRedirect: true,
+            successAssessmentId: submittedAssessment.id,
+          },
+        });
+      } catch (e) {
+        this.setState({ assessmentServiceStatus: LoadingState.error });
+      }
     } else {
-      AssessmentService.postAssessment(assessment)
-        .then(submittedAssessment => {
-          this.updateUrlWithAssessment(submittedAssessment);
-          this.setState({
-            assessmentServiceStatus: LoadingState.ready,
-            redirection: {
-              shouldRedirect: true,
-              successAssessmentId: submittedAssessment.id,
-            },
-          });
-        })
-        .catch(() => this.setState({ assessmentServiceStatus: LoadingState.error }));
+      try {
+        const submittedAssessment = await AssessmentService.postAssessment(assessment);
+        this.updateUrlWithAssessment(submittedAssessment);
+        this.setState({
+          assessmentServiceStatus: LoadingState.ready,
+          redirection: {
+            shouldRedirect: true,
+            successAssessmentId: submittedAssessment.id,
+          },
+        });
+      } catch (e) {
+        this.setState({ assessmentServiceStatus: LoadingState.error });
+      }
     }
   };
 

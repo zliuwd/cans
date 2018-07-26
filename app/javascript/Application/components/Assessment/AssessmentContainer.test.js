@@ -63,11 +63,11 @@ describe('<AssessmentContainer />', () => {
         location: { childId: 1 },
       };
 
-      it('calls fetchNewAssessment', () => {
+      it('calls fetchNewAssessment', async () => {
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment');
         const wrapper = shallow(<AssessmentContainer {...props} />);
 
-        wrapper.instance().componentDidMount();
+        await wrapper.instance().componentDidMount();
         expect(assessmentServiceGetSpy).toHaveBeenCalledWith();
       });
 
