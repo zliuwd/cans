@@ -18,10 +18,6 @@ class SideNavLink extends PureComponent {
         role="link"
         tabIndex={0}
       >
-        <span className="fa-stack">
-          <i className="fa fa-circle-thin fa-stack-2x" />
-          <i className="fa fa-check fa-stack-1x" />
-        </span>
         <Link to={href}>{text}</Link>
       </div>
     );

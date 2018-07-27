@@ -58,7 +58,7 @@ describe('<Assessment />', () => {
   });
 
   describe('#updateItem()', () => {
-    describe('onUpdateAssessment call back', () => {
+    describe('handleUpdateItem call backs', () => {
       describe('rating', () => {
         it('is invoked when item rating is updated', () => {
           const mockFn = jest.fn();
@@ -123,7 +123,7 @@ describe('<Assessment />', () => {
   });
 
   describe('#updateCaregiverName()', () => {
-    describe('onUpdateAssessment call back', () => {
+    describe('onCareGiverNameUpdate call back', () => {
       it('is invoked when caregiver name is updated', () => {
         // given
         const mockFn = jest.fn();

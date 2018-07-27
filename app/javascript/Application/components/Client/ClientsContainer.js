@@ -2,7 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import ClientService from './Client.service';
 import { groupClientsByLastName } from './Client.helper';
-import { PageInfo } from '../Layout';
+import Button from '@material-ui/core/Button/Button';
+import Card from '@material-ui/core/Card/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
 
 import './style.sass';
 
@@ -35,6 +39,16 @@ class ClientsContainer extends Component {
     });
   };
 
+  renderAddChildButton() {
+    return (
+      <Link to={'/clients/new'}>
+        <Button size="small" color="inherit" className={'card-header-cans-button'}>
+          Add Child
+        </Button>
+      </Link>
+    );
+  }
+
   renderClientsRecord = record => {
     return (
       <div className="client-name-container" key={record.letter}>
@@ -54,21 +68,31 @@ class ClientsContainer extends Component {
     );
   };
 
+  renderNoData = () => {
+    if (this.state.clients_status === 'ready' && (this.state.clients || []).length === 0) {
+      return <div id="no-data">No clients found</div>;
+    } else {
+      return null;
+    }
+  };
+
   render = () => {
     const clients = this.state.clients || [];
-    const { clients_status } = this.state;
     return (
       <Fragment>
-        <PageInfo title={''} />
-        <div className={'content'}>
-          <div className="clients-container">
-            {clients.map(record => {
-              return this.renderClientsRecord(record);
-            })}
-
-            {clients_status === 'ready' && clients.length === 0 ? <div id="no-data">No clients found</div> : null}
-          </div>
-        </div>
+        <Grid item className={'client-grid'} xs={12}>
+          <Card className={'card'}>
+            <CardHeader className={'card-header-cans'} title="Child/Youth List" action={this.renderAddChildButton()} />
+            <CardContent>
+              <div className="clients-container">
+                {clients.map(record => {
+                  return this.renderClientsRecord(record);
+                })}
+                {this.renderNoData()}
+              </div>
+            </CardContent>
+          </Card>
+        </Grid>
       </Fragment>
     );
   };

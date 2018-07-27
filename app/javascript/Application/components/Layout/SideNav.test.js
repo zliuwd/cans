@@ -11,8 +11,8 @@ describe('the <SideNav /> view', () => {
     expect(getLength('nav')).toBe(1);
   });
 
-  it('renders with 3 <SideNavLink /> component', () => {
-    expect(getLength(SideNavLink)).toBe(3);
+  it('renders with 1 <SideNavLink /> component', () => {
+    expect(getLength(SideNavLink)).toBe(1);
   });
 });
 
@@ -28,9 +28,8 @@ describe('toggleActiveLink', () => {
   it('should change activeLink state onClick', () => {
     const wrapper = getWrapper();
     expect(wrapper.state().activeLink).toEqual('');
-    wrapper.find('#reports').simulate('click');
-    expect(wrapper.state().activeLink).toEqual('/reports');
-    expect(wrapper.state().activeLink).not.toEqual('/records');
+    wrapper.find('[text="Child/Youth List"]').simulate('click');
+    expect(wrapper.state().activeLink).toEqual('/');
   });
 });
 

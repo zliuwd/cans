@@ -4,6 +4,10 @@ import ClientsContainer from './ClientsContainer';
 import ClientService from './Client.service';
 import { personsJson } from './Client.helper.test';
 import { Link } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
 
 describe('<ClientsContainer />', () => {
   const ClientServiceFetchSpy = jest.spyOn(ClientService, 'fetchAllClients');
@@ -11,25 +15,40 @@ describe('<ClientsContainer />', () => {
     ClientServiceFetchSpy.mockClear();
   });
 
-  it('renders message when fetches empty clients list', async () => {
-    ClientServiceFetchSpy.mockReturnValue(Promise.resolve([]));
-    const wrapper = await shallow(<ClientsContainer />);
-    wrapper.update();
-    expect(wrapper.find('#no-data').text()).toBe('No clients found');
-  });
-
-  it('renders grouped clients names when fetches 3 clients', async () => {
+  it('renders a card with a header', async () => {
     ClientServiceFetchSpy.mockReturnValue(Promise.resolve(personsJson));
-    const wrapper = await shallow(<ClientsContainer />);
-    wrapper.update();
-    expect(wrapper.find(Link).length).toBe(3);
+    const koolmodee = await shallow(<ClientsContainer />);
+    expect(koolmodee.find(Card).length).toBe(1);
+    expect(koolmodee.find(CardHeader).props().title).toBe('Child/Youth List');
   });
 
-  it('renders empty container when failed to fetch', async () => {
-    ClientServiceFetchSpy.mockReturnValue(Promise.reject(Error('error')));
-    const wrapper = await mount(<ClientsContainer />);
-    const renderedText = wrapper.text();
-    wrapper.update();
-    expect(renderedText).toBe('');
+  describe('when client list is empty', () => {
+    it('renders message no clients found', async () => {
+      ClientServiceFetchSpy.mockReturnValue(Promise.resolve([]));
+      const wrapper = await shallow(<ClientsContainer />);
+      wrapper.update();
+      expect(wrapper.find('#no-data').text()).toBe('No clients found');
+    });
+  });
+
+  describe('when client list has 3 clients ', () => {
+    it('renders grouped clients names', async () => {
+      ClientServiceFetchSpy.mockReturnValue(Promise.resolve(personsJson));
+      const wrapper = await shallow(<ClientsContainer />);
+      wrapper.update();
+      expect(wrapper.find(Link).length).toBe(3);
+    });
+  });
+
+  describe('when client fetch fails', () => {
+    it('renders an empty container', async () => {
+      ClientServiceFetchSpy.mockReturnValue(Promise.reject(Error('error')));
+      const wrapper = await mount(
+        <MemoryRouter>
+          <ClientsContainer />
+        </MemoryRouter>
+      ).find(CardContent);
+      expect(wrapper.text()).toBe('');
+    });
   });
 });

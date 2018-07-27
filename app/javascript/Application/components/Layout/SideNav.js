@@ -3,11 +3,7 @@ import SideNavLink from './SideNavLink';
 
 import './style.sass';
 
-const URL_MAP = [
-  { url: '/', text: 'Child & Family Teams' },
-  { url: '/reports', text: 'Reports' },
-  { url: '/clients/new', text: 'Add Child' },
-];
+const URL_MAP = [{ url: '/', text: 'Child/Youth List' }];
 class SideNav extends Component {
   constructor(props) {
     super(props);
