@@ -1,6 +1,7 @@
 const path = require('path');
 module.exports = {
   verbose: true,
+  testURL: 'http://localhost/',
   rootDir: './app/javascript',
   setupTestFrameworkScriptFile: '<rootDir>/setupTests.js',
   coverageDirectory: path.resolve(__dirname, 'coverage', 'javascript'),
