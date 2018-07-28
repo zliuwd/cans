@@ -8,7 +8,7 @@ switch(env.BUILD_JOB_TYPE) {
 }
 
 def buildPullRequest() {
-  node('cans-slave') {
+  node('linux') {
     try {
       checkoutStage()
       buildDockerImageStage()
@@ -24,7 +24,7 @@ def buildPullRequest() {
 }
 
 def buildMaster() {
-  node('cans-slave') {
+  node('linux') {
     try {
       checkoutStage()
       buildDockerImageStage()
@@ -92,16 +92,23 @@ def unitTestStage(container) {
 
 def acceptanceTestStage() {
   stage('Acceptance Test') {
-    sh "docker-compose up -d --build"
-    sh "sleep 120"
-    sh "docker-compose exec -T --env CANS_AUTHORIZATION_ENABLED=true --env CANS_WEB_BASE_URL=cans-web:3000/cans cans-test bundle exec rspec spec/acceptance"
+    hostname = sh(returnStdout: true, script: '/sbin/ifconfig eth0 | grep "inet addr:" | cut -d: -f2 | cut -d " " -f1').trim()
+    withEnv(["HOST=${hostname}"]) {
+      withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
+        sh "docker-compose up -d --build"
+        sh "sleep 120"
+        sh "docker-compose exec -T --env CANS_AUTHORIZATION_ENABLED=true --env CANS_WEB_BASE_URL=cans-web:3000/cans cans-test bundle exec rspec spec/acceptance"
+      }
+    }
   }
 }
 
 def acceptanceTestPreintStage() {
   stage('Acceptance Test Preint') {
-    sh "docker-compose up -d --build cans-test"
-    sh "docker-compose exec -T --env CANS_AUTHORIZATION_ENABLED=true --env CANS_WEB_BASE_URL=https://cans.preint.cwds.io/cans cans-test bundle exec rspec spec/acceptance"
+    withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
+      sh "docker-compose up -d --build cans-test"
+      sh "docker-compose exec -T --env CANS_AUTHORIZATION_ENABLED=true --env CANS_WEB_BASE_URL=https://cans.preint.cwds.io/cans cans-test bundle exec rspec spec/acceptance"
+    }
   }
 }
 
@@ -135,7 +142,9 @@ def deployToIntegrationStage() {
 
 def cleanupStage() {
   stage('Cleanup') {
-    sh "docker-compose down"
+    withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
+      sh "docker-compose down"
+    }
     cleanWs()
   }
 }

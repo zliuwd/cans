@@ -1,9 +1,9 @@
-FROM selenium/node-chrome:3.11.0
+FROM selenium/node-chrome:3.13.0
 
 USER root
 
 RUN apt-get update && apt-get install -y curl
-RUN curl https://chromedriver.storage.googleapis.com/2.31/chromedriver_linux64.zip -o /usr/local/bin/chromedriver
+RUN curl https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip -o /usr/local/bin/chromedriver
 RUN chmod +x /usr/local/bin/chromedriver
 
 RUN apt-get update && apt-get install -y git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev xvfb
@@ -14,6 +14,7 @@ RUN mkdir /app
 WORKDIR app
 ADD Gemfile Gemfile.lock /app/
 RUN gem install bundler && bundle install
+RUN chromedriver-update
 ADD . /app
 
 
