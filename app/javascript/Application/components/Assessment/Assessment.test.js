@@ -180,22 +180,47 @@ describe('<Assessment />', () => {
     });
 
     describe('#removeCaregiverDomain', () => {
-      it('removes the caregiver domain and resets the caregiver indexes', () => {
-        // given
-        const initialAssessment = JSON.parse(JSON.stringify(assessment));
-        initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0]);
-        initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'b' });
-        initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'c' });
-        const mockFn = jest.fn();
-        const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />);
-        const instance = wrapper.instance();
+      describe('assessment has multiple caregiver domain', () => {
+        it('removes the caregiver domain and reset the caregiver indexes', () => {
+          // given
+          const initialAssessment = JSON.parse(JSON.stringify(assessment));
+          initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0]);
+          initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'b' });
+          initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'c' });
+          const mockFn = jest.fn();
+          const wrapper = shallow(
+            <Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />
+          );
+          const instance = wrapper.instance();
 
-        // when
-        instance.removeCaregiverDomain('b');
+          // when
+          instance.removeCaregiverDomain('b');
 
-        // then
-        const updatedAssessment = mockFn.mock.calls[0][0];
-        expect(updatedAssessment.state.domains.map(domain => domain.caregiver_index)).toEqual(['a', 'b']);
+          // then
+          const updatedAssessment = mockFn.mock.calls[0][0];
+          expect(updatedAssessment.state.domains.map(domain => domain.caregiver_index)).toEqual(['a', 'b']);
+        });
+      });
+
+      describe('assessment has only one caregiver domain', () => {
+        it('removes the caregiver domain and sets hasCaregiver to false', () => {
+          const initialAssessment = JSON.parse(JSON.stringify(assessment));
+          initialAssessment.has_caregiver = true;
+          initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0]);
+          const mockFn = jest.fn();
+          const wrapper = shallow(
+            <Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />
+          );
+          const instance = wrapper.instance();
+
+          // when
+          instance.removeCaregiverDomain('a');
+
+          // then
+          const updatedAssessment = mockFn.mock.calls[0][0];
+          expect(updatedAssessment.state.domains.map(domain => domain.caregiver_index).length).toBe(0);
+          expect(updatedAssessment.has_caregiver).toBe(false);
+        });
       });
     });
 

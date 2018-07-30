@@ -85,6 +85,9 @@ class Assessment extends Component {
         break;
       }
     }
+    if (!domains.filter(domain => domain.is_caregiver_domain).length) {
+      assessment.has_caregiver = false;
+    }
     this.updateCaregiverDomainsIndices(assessment.state);
     this.props.onAssessmentUpdate(assessment);
   };
