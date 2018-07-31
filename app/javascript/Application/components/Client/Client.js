@@ -17,20 +17,15 @@ class Client extends Component {
   constructor(props) {
     super(props);
 
-    const { successClientAddId } = (this.props.location || {}).state || {};
-    if (successClientAddId && this.props.history) {
-      this.props.history.replace({ ...this.props.location, state: {} });
-    }
-
-    const { successClientEditId } = (this.props.location || {}).state || {};
-    if (successClientEditId && this.props.history) {
+    const { isNewForm, successClientId } = (this.props.location || {}).state || {};
+    if (successClientId && this.props.history) {
       this.props.history.replace({ ...this.props.location, state: {} });
     }
 
     this.state = {
+      isNewForm,
       childData: {},
-      shouldRenderClientAddMessage: !!successClientAddId,
-      shouldRenderClientEditMessage: !!successClientEditId,
+      shouldRenderClientMessage: !!successClientId,
     };
   }
 
@@ -74,7 +69,7 @@ class Client extends Component {
   };
 
   render() {
-    const { childData, shouldRenderClientAddMessage, shouldRenderClientEditMessage } = this.state;
+    const { isNewForm, childData, shouldRenderClientMessage } = this.state;
     return (
       <Fragment>
         <PageInfo title={'Child/Youth Profile'} />
@@ -94,19 +89,14 @@ class Client extends Component {
               />
               <div className={'content'}>
                 <CardContent>
-                  {shouldRenderClientAddMessage && (
+                  {shouldRenderClientMessage && (
                     <CloseableAlert
                       type={alertType.SUCCESS}
-                      message={'Success! New Child/Youth record has been added.'}
-                      isCloseable
-                      isAutoCloseable
-                    />
-                  )}
-
-                  {shouldRenderClientEditMessage && (
-                    <CloseableAlert
-                      type={alertType.SUCCESS}
-                      message={'Success! Child/Youth record has been updated.'}
+                      message={
+                        isNewForm
+                          ? 'Success! New Child/Youth record has been added.'
+                          : 'Success! Child/Youth record has been updated.'
+                      }
                       isCloseable
                       isAutoCloseable
                     />

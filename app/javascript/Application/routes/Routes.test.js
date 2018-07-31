@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { executeTest } from './Routes.test.util';
 import { AssessmentContainer } from '../components/Assessment';
-import { ClientsContainer, ClientAddForm, ClientEditForm } from '../components/Client';
+import { ClientsContainer, ClientAddEditForm } from '../components/Client';
 import { Routes } from './';
 import { Route, Switch } from 'react-router-dom';
 
@@ -12,7 +12,6 @@ describe('<Router />', () => {
     const getLength = component => getWrapper().find(component).length;
 
     it('renders with 1 <Switch /> component', () => {
-      console.log(getWrapper().debug());
       expect(getLength(Switch)).toBe(1);
     });
 
@@ -47,13 +46,13 @@ describe('<Router />', () => {
 
     describe('/clients/new', () => {
       it('navigates to client add form page', () => {
-        executeTest(ClientAddForm, '/clients/new', 'Child/Youth');
+        executeTest(ClientAddEditForm, '/clients/new', 'Child/Youth');
       });
     });
 
     describe('/clients/edit/:id', () => {
       it('navigates to client edit form page', () => {
-        executeTest(ClientEditForm, '/clients/edit/:id', 'Child/Youth');
+        executeTest(ClientAddEditForm, '/clients/edit/:id', 'Child/Youth');
       });
     });
   });

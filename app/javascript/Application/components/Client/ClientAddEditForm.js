@@ -12,7 +12,7 @@ import { PageInfo } from '../Layout';
 const styles = theme => ({
   inputText: {
     color: '#111',
-    fontSize: '16px',
+    fontSize: 16,
   },
   container: {
     display: 'flex',
@@ -21,17 +21,25 @@ const styles = theme => ({
   textField: {
     margin: 10,
     width: 300,
+    fontSize: 20,
   },
   menu: {
     width: 300,
     fontSize: 20,
   },
-  card: {
+  cardWidth: {
     minWidth: 300,
   },
   cardHeader: {
     backgroundColor: '#114161',
     color: '#fff',
+  },
+
+  cardActions: {
+    marginLeft: 400,
+  },
+  note: {
+    color: '#ff0000',
   },
   title: {
     color: '#fff',
@@ -45,11 +53,12 @@ const styles = theme => ({
   },
 });
 
-class ClientAddForm extends Component {
+class ClientAddEditForm extends Component {
   constructor(props) {
     super(props);
+    const isNewForm = !this.props.match.params.id;
     this.state = {
-      counties: [],
+      isNewForm: isNewForm,
       childInfo: {
         person_role: 'CLIENT',
         first_name: '',
@@ -62,19 +71,20 @@ class ClientAddForm extends Component {
           name: '',
         },
       },
+      counties: [],
       childInfoValidation: {
-        first_name: false,
-        last_name: false,
-        dob: false,
-        case_id: false,
-        external_id: false,
-        county: false,
+        first_name: !isNewForm,
+        last_name: !isNewForm,
+        dob: !isNewForm,
+        case_id: !isNewForm,
+        external_id: !isNewForm,
+        county: !isNewForm,
       },
-      isSaveButtonDisabled: true,
+      isSaveButtonDisabled: isNewForm,
       open: false,
       redirection: {
         shouldRedirect: false,
-        successClientAddId: null,
+        successClientId: null,
       },
     };
   }
@@ -98,54 +108,31 @@ class ClientAddForm extends Component {
     this.setState({ open: true });
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
-    ClientService.addClient(this.state.childInfo)
-      .then(newChild => {
-        this.setState({
-          childInfo: newChild,
-          redirection: {
-            shouldRedirect: true,
-            successClientAddId: newChild.id,
-          },
-        });
-      })
+  componentDidMount() {
+    if (!this.state.isNewForm) {
+      this.fetchChildData(this.props.match.params.id);
+    }
+    this.fetchCounties();
+  }
+
+  fetchChildData = id => {
+    return ClientService.getClient(id)
+      .then(this.onFetchChildDataSuccess)
       .catch(() => {});
   };
 
-  handleCancel = event => {
-    this.setState({
-      childInfo: {
-        ...this.state.childInfo,
-        person_role: 'CLIENT',
-        first_name: '',
-        last_name: '',
-        dob: '',
-        case_id: '',
-        external_id: '',
-        county: {
-          id: 0,
-          name: '',
-        },
-      },
-      redirection: {
-        shouldRedirect: true,
-      },
-    });
+  onFetchChildDataSuccess = data => {
+    this.setState({ childInfo: data });
   };
-
-  componentDidMount() {
-    this.fetchCounties();
-  }
 
   fetchCounties = () => {
     return CountiesService.fetchCounties()
       .then(this.onFetchCountiesSuccess)
-      .catch(() => this.setState({ counties: [] }));
+      .catch(() => {});
   };
 
   onFetchCountiesSuccess = counties => {
-    this.setState({ counties: counties });
+    this.setState({ counties });
   };
 
   validateInput = (fieldName, inputValue) => {
@@ -161,18 +148,55 @@ class ClientAddForm extends Component {
     });
   };
 
+  handleSubmit = event => {
+    if (this.state.isNewForm) {
+      event.preventDefault();
+      ClientService.addClient(this.state.childInfo)
+        .then(newChild => {
+          this.setState({
+            childInfo: newChild,
+            redirection: {
+              shouldRedirect: true,
+              successClientId: newChild.id,
+            },
+          });
+        })
+        .catch(() => {});
+    } else {
+      ClientService.updateClient(this.state.childInfo.id, this.state.childInfo)
+        .then(newChild => {
+          this.setState({
+            childInfo: newChild,
+            redirection: {
+              shouldRedirect: true,
+              successClientId: newChild.id,
+            },
+          });
+        })
+        .catch(() => {});
+    }
+  };
+
+  handleCancel = () => {
+    this.setState({
+      redirection: {
+        shouldRedirect: true,
+      },
+    });
+  };
+
   render() {
     const { classes } = this.props;
-    const { childInfo, childInfoValidation, counties, isSaveButtonDisabled, redirection } = this.state;
-    const { shouldRedirect, successClientAddId } = redirection;
+    const { isNewForm, childInfo, childInfoValidation, counties, isSaveButtonDisabled, redirection } = this.state;
+    const { shouldRedirect, successClientId } = redirection;
 
     if (shouldRedirect) {
-      return <Redirect push to={{ pathname: `/clients/${childInfo.id}`, state: { successClientAddId } }} />;
+      return <Redirect push to={{ pathname: `/clients/${childInfo.id}`, state: { isNewForm, successClientId } }} />;
     }
     return (
       <Fragment>
-        <PageInfo title={'Add Child/Youth'} />
-        <Card className={classes.card}>
+        <PageInfo title={isNewForm ? 'Add Child/Youth' : 'Edit Child/Youth'} />
+        <Card className={classes.cardWidth}>
           <CardHeader
             className={classes.cardHeader}
             title="Child/Youth Information"
@@ -180,6 +204,7 @@ class ClientAddForm extends Component {
               title: classes.title,
             }}
           />
+
           <CardContent>
             <form className={classes.container} noValidate autoComplete="off">
               <TextField
@@ -187,6 +212,7 @@ class ClientAddForm extends Component {
                 focused
                 id="first_name"
                 label="First Name"
+                defaultValue={childInfo.first_name}
                 error={!childInfoValidation['first_name']}
                 className={classes.textField}
                 value={childInfo.first_name}
@@ -198,8 +224,8 @@ class ClientAddForm extends Component {
                 margin="normal"
                 InputLabelProps={{
                   style: {
-                    color: '#bbb',
-                    fontSize: '14px',
+                    color: '#777777',
+                    fontSize: '1.8rem',
                   },
                 }}
               />
@@ -209,19 +235,17 @@ class ClientAddForm extends Component {
                 focused
                 id="last_name"
                 label="Last Name"
+                defaultValue={childInfo.last_name}
                 error={!childInfoValidation['last_name']}
                 className={classes.textField}
                 value={childInfo.last_name}
                 onChange={this.handleChange('last_name')}
-                inputProps={{
-                  maxLength: 50,
-                  className: classes.inputText,
-                }}
+                inputProps={{ maxLength: 50, className: classes.inputText }}
                 margin="normal"
                 InputLabelProps={{
                   style: {
-                    color: '#bbb',
-                    fontSize: '14px',
+                    color: '#777777',
+                    fontSize: '1.8rem',
                   },
                 }}
               />
@@ -229,47 +253,26 @@ class ClientAddForm extends Component {
                 required
                 focused
                 id="dob"
-                label="Birth Date"
+                label="Date of Birth"
+                defaultValue={childInfo.dob}
+                value={childInfo.dob}
                 error={!childInfoValidation['dob']}
                 type="date"
-                defaultValue=""
                 className={classes.textField}
                 onChange={this.handleChange('dob')}
-                inputProps={{
-                  className: classes.inputText,
-                }}
+                inputProps={{ className: classes.inputText }}
                 InputLabelProps={{
                   shrink: true,
                   style: {
-                    color: '#bbb',
-                    fontSize: '18px',
-                  },
-                }}
-              />
-              <TextField
-                required
-                focused
-                id="case_id"
-                label="Case Number"
-                error={!childInfoValidation['case_id']}
-                className={classes.textField}
-                value={childInfo.case_id}
-                onChange={this.handleChange('case_id')}
-                inputProps={{
-                  maxLength: 50,
-                  className: classes.inputText,
-                }}
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: '#bbb',
-                    fontSize: '14px',
+                    color: '#777777',
+                    fontSize: '1.8rem',
                   },
                 }}
               />
 
               <InputMask
                 mask="9999-9999-9999-9999999"
+                defaultValue={childInfo.external_id}
                 value={childInfo.external_id}
                 onChange={this.handleChange('external_id')}
               >
@@ -279,17 +282,21 @@ class ClientAddForm extends Component {
                     focused
                     id="external_id"
                     label="Client Id"
+                    defaultValue={childInfo.external_id}
                     helperText="Enter 19 digits number"
                     error={!childInfoValidation['external_id']}
                     className={classes.textField}
                     margin="normal"
-                    inputProps={{
-                      className: classes.inputText,
-                    }}
+                    inputProps={{ className: classes.inputText }}
                     InputLabelProps={{
                       style: {
-                        color: '#bbb',
-                        fontSize: '14px',
+                        color: '#777777',
+                        fontSize: '1.8rem',
+                      },
+                    }}
+                    FormHelperTextProps={{
+                      style: {
+                        fontSize: '1rem',
                       },
                     }}
                   />
@@ -310,29 +317,61 @@ class ClientAddForm extends Component {
                 onChange={this.handleChange('county')}
                 helperText="Please select your County"
                 margin="normal"
-                inputProps={{
-                  className: classes.inputText,
-                }}
+                inputProps={{ className: classes.inputText }}
                 InputLabelProps={{
                   style: {
-                    color: '#bbb',
-                    fontSize: '18px',
+                    color: '#777777',
+                    fontSize: '1.8rem',
+                  },
+                }}
+                FormHelperTextProps={{
+                  style: {
+                    fontSize: '1rem',
                   },
                 }}
               >
+                {!isNewForm && (
+                  <MenuItem className={classes.menu} selected={true} value={childInfo.county}>
+                    {childInfo.county.name}
+                  </MenuItem>
+                )}
+
                 {counties.map(option => (
                   <MenuItem key={option.id} value={option} className={classes.menu}>
                     <span id={'county-name'}>{option.name}</span>
                   </MenuItem>
                 ))}
               </TextField>
+              <TextField
+                required
+                focused
+                id="case_id"
+                label="Case Number"
+                defaultValue={childInfo.case_id}
+                error={!childInfoValidation['case_id']}
+                className={classes.textField}
+                value={childInfo.case_id}
+                onChange={this.handleChange('case_id')}
+                inputProps={{ maxLength: 50, className: classes.inputText }}
+                margin="normal"
+                InputLabelProps={{
+                  style: {
+                    color: '#777777',
+                    fontSize: '1.8rem',
+                  },
+                }}
+              />
             </form>
           </CardContent>
           <CardActions>
-            <Link onClick={this.handleCancel} to={`/`}>
+            {this.state.isSaveButtonDisabled && <p className={classes.note}>*required fields</p>},
+            <Link
+              onClick={this.handleCancel}
+              to={isNewForm ? `/` : `/clients/${childInfo.id}`}
+              className={classes.cardActions}
+            >
               Cancel
             </Link>
-
             <Button
               variant="raised"
               size="large"
@@ -350,8 +389,9 @@ class ClientAddForm extends Component {
   }
 }
 
-ClientAddForm.propTypes = {
+ClientAddEditForm.propTypes = {
   classes: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ClientAddForm);
+export default withStyles(styles)(ClientAddEditForm);

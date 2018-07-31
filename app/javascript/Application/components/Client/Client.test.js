@@ -64,7 +64,7 @@ describe('<Client />', () => {
           first_name: 'test',
           last_name: 'user',
           dob: '10/10/1980',
-          case_id: '483u92432',
+          case_id: '456789',
           external_id: '1234567891234567890',
           county: { name: 'Sacramento' },
         },
