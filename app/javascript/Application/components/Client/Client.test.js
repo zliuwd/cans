@@ -62,7 +62,9 @@ describe('<Client />', () => {
         childData: {
           id: 1,
           first_name: 'test',
+          middle_name: 'name',
           last_name: 'user',
+          suffix: 'Mr.',
           dob: '10/10/1980',
           case_id: '456789',
           external_id: '1234567891234567890',
@@ -74,11 +76,11 @@ describe('<Client />', () => {
     const getLength = component => wrapper.find(component).length;
 
     it('renders with 9 <Grid /> components', () => {
-      expect(getLength(Grid)).toBe(9);
+      expect(getLength(Grid)).toBe(12);
     });
 
     it('renders with 6 <Typography /> components', () => {
-      expect(getLength(Typography)).toBe(6);
+      expect(getLength(Typography)).toBe(9);
     });
 
     it('does not render No Child Data Found', () => {
