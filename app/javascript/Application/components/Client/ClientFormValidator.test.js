@@ -51,11 +51,16 @@ describe('ClientFormValidator', () => {
     });
 
     it('case_id', () => {
-      expect(validate('case_id', 'E76cv396')).toBe(true);
-      expect(validate('case_id', '76cv39d6')).toBe(true);
+      expect(validate('case_id', '1234567891234567890')).toBe(true);
+      expect(validate('case_id', '1234-567-8912-34567890')).toBe(true);
+      expect(validate('case_id', '1234-5678-9123-4567890')).toBe(false);
+      expect(validate('case_id', '12345678912345678900')).toBe(false);
+      expect(validate('case_id', '123456789')).toBe(false);
+      expect(validate('case_id', '1234--5678-9123-4567890')).toBe(false);
+      expect(validate('case_id', '76cv39d6')).toBe(false);
       expect(validate('case_id', 'vgh7321 ')).toBe(false);
       expect(validate('case_id', '#34la7sd')).toBe(false);
-      expect(validate('case_id', '   ')).toBe(false);
+      expect(validate('case_id', '')).toBe(true);
     });
 
     it('external_id', () => {
@@ -117,7 +122,7 @@ describe('ClientFormValidator', () => {
           last_name: 'Jersey',
           suffix: 'Mrs.',
           dob: '10/12/2012',
-          case_id: '123',
+          case_id: '1234567891234567890',
           external_id: '1234567891234567890',
           county: { id: 1 },
         })

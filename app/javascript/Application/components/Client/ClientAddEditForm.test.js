@@ -39,7 +39,7 @@ describe('<ClientAddEditForm />', () => {
       expect(addWrapper.state('childInfoValidation').first_name).toEqual(false);
       expect(addWrapper.state('childInfoValidation').last_name).toEqual(false);
       expect(addWrapper.state('childInfoValidation').dob).toEqual(false);
-      expect(addWrapper.state('childInfoValidation').case_id).toEqual(false);
+      expect(addWrapper.state('childInfoValidation').case_id).toEqual(true);
       expect(addWrapper.state('childInfoValidation').external_id).toEqual(false);
       expect(addWrapper.state('childInfoValidation').county).toEqual(false);
       expect(addWrapper.state('isSaveButtonDisabled')).toEqual(true);
@@ -138,6 +138,9 @@ describe('<ClientAddEditForm />', () => {
       });
       childFormInstance.handleChange('case_id')({
         target: { value: '1234567891234567890' },
+      });
+      childFormInstance.handleChange('case_id')({
+        target: { value: '1234-567-8912-34567890' },
       });
       childFormInstance.handleChange('external_id')({
         target: { value: '1234567891234567890' },

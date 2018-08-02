@@ -10,13 +10,13 @@ import { validate, isFormValid } from './ClientFormValidator';
 import { PageInfo } from '../Layout';
 
 const styles = theme => ({
-  inputText: {
-    color: '#111',
-    fontSize: 16,
-  },
   container: {
     display: 'flex',
     flexWrap: 'wrap',
+  },
+  inputText: {
+    color: '#111',
+    fontSize: 16,
   },
   textField: {
     margin: 10,
@@ -80,7 +80,7 @@ class ClientAddEditForm extends Component {
         middle_name: true,
         suffix: true,
         dob: !isNewForm,
-        case_id: !isNewForm,
+        case_id: true,
         external_id: !isNewForm,
         county: !isNewForm,
       },
@@ -384,25 +384,38 @@ class ClientAddEditForm extends Component {
                   </MenuItem>
                 ))}
               </TextField>
-              <TextField
-                required
-                focused
-                id="case_id"
-                label="Case Number"
-                defaultValue={childInfo.case_id}
-                error={!childInfoValidation['case_id']}
-                className={classes.textField}
+              <InputMask
+                mask="9999-999-9999-99999999"
                 value={childInfo.case_id}
+                defaultValue={childInfo.case_id}
                 onChange={this.handleChange('case_id')}
-                inputProps={{ maxLength: 50, className: classes.inputText }}
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: '#777777',
-                    fontSize: '1.8rem',
-                  },
-                }}
-              />
+              >
+                {() => (
+                  <TextField
+                    required
+                    focused
+                    id="case_id"
+                    label="Case Number"
+                    defaultValue={childInfo.case_id}
+                    helperText="Enter 19 digits number"
+                    error={!childInfoValidation['case_id']}
+                    className={classes.textField}
+                    margin="normal"
+                    inputProps={{ className: classes.inputText }}
+                    InputLabelProps={{
+                      style: {
+                        color: '#777777',
+                        fontSize: '1.8rem',
+                      },
+                    }}
+                    FormHelperTextProps={{
+                      style: {
+                        fontSize: '1rem',
+                      },
+                    }}
+                  />
+                )}
+              </InputMask>
             </form>
           </CardContent>
           <CardActions>
