@@ -1,13 +1,11 @@
 export function validate(fieldName, value) {
-  const isName = value => /^[A-z]+(([ ]|[-])[A-z]+)?$/i.test(value);
   switch (fieldName) {
     case 'first_name':
     case 'last_name':
-      return value.length && isName(value);
+      return value.length;
     case 'middle_name':
-      return value.length === 0 || isName(value);
     case 'suffix':
-      return value.length === 0 || /^([a-zA-Z])+[.]?$/i.test(value);
+      return value.length >= 0;
     case 'case_id':
       return (
         value.length === 0 ||
