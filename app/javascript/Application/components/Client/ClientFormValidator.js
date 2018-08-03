@@ -2,7 +2,7 @@ export function validate(fieldName, value) {
   switch (fieldName) {
     case 'first_name':
     case 'last_name':
-      return value.length;
+      return value.length > 0;
     case 'middle_name':
     case 'suffix':
       return value.length >= 0;
