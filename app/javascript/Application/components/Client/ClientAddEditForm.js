@@ -9,6 +9,10 @@ import { ClientService } from './Client.service';
 import { validate, isFormValid } from './ClientFormValidator';
 import { PageInfo } from '../Layout';
 
+const FIRST_MIDDLE_NAME_MAX_LENGTH = 20;
+const LAST_NAME_MAX_LENGTH = 25;
+const SUFFIX_MAX_LENGTH = 4;
+
 const styles = theme => ({
   container: {
     display: 'flex',
@@ -189,6 +193,35 @@ class ClientAddEditForm extends Component {
     });
   };
 
+  renderNameInputs(field, label, maxLength) {
+    const { classes } = this.props;
+    const { childInfo, childInfoValidation } = this.state;
+    return (
+      <TextField
+        required
+        focused
+        id={field}
+        label={label}
+        defaultValue={childInfo[field]}
+        error={!childInfoValidation[field]}
+        className={classes.textField}
+        value={childInfo[field]}
+        onChange={this.handleChange(field)}
+        inputProps={{
+          maxLength: maxLength,
+          className: classes.inputText,
+        }}
+        margin="normal"
+        InputLabelProps={{
+          style: {
+            color: '#777777',
+            fontSize: '1.8rem',
+          },
+        }}
+      />
+    );
+  }
+
   render() {
     const { classes } = this.props;
     const { isNewForm, childInfo, childInfoValidation, counties, isSaveButtonDisabled, redirection } = this.state;
@@ -211,85 +244,10 @@ class ClientAddEditForm extends Component {
 
           <CardContent>
             <form className={classes.container} noValidate autoComplete="off">
-              <TextField
-                required
-                focused
-                id="first_name"
-                label="First Name"
-                defaultValue={childInfo.first_name}
-                error={!childInfoValidation['first_name']}
-                className={classes.textField}
-                value={childInfo.first_name}
-                onChange={this.handleChange('first_name')}
-                inputProps={{
-                  maxLength: 50,
-                  className: classes.inputText,
-                }}
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: '#777777',
-                    fontSize: '1.8rem',
-                  },
-                }}
-              />
-
-              <TextField
-                focused
-                id="middle_name"
-                label="Middle Name"
-                defaultValue={childInfo.middle_name}
-                error={!childInfoValidation['middle_name']}
-                className={classes.textField}
-                value={childInfo.middle_name}
-                onChange={this.handleChange('middle_name')}
-                inputProps={{ maxLength: 50, className: classes.inputText }}
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: '#777777',
-                    fontSize: '2rem',
-                  },
-                }}
-              />
-
-              <TextField
-                required
-                focused
-                id="last_name"
-                label="Last Name"
-                defaultValue={childInfo.last_name}
-                error={!childInfoValidation['last_name']}
-                className={classes.textField}
-                value={childInfo.last_name}
-                onChange={this.handleChange('last_name')}
-                inputProps={{ maxLength: 50, className: classes.inputText }}
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: '#777777',
-                    fontSize: '1.8rem',
-                  },
-                }}
-              />
-
-              <TextField
-                id="suffix"
-                label="Suffix"
-                defaultValue={childInfo.suffix}
-                error={!childInfoValidation['suffix']}
-                className={classes.textField}
-                value={childInfo.suffix}
-                onChange={this.handleChange('suffix')}
-                inputProps={{ maxLength: 10, className: classes.inputText }}
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: '#777777',
-                    fontSize: '1.8rem',
-                  },
-                }}
-              />
+              {this.renderNameInputs('first_name', 'First Name', FIRST_MIDDLE_NAME_MAX_LENGTH)}
+              {this.renderNameInputs('middle_name', 'Middle Name', FIRST_MIDDLE_NAME_MAX_LENGTH)}
+              {this.renderNameInputs('last_name', 'Last Name', LAST_NAME_MAX_LENGTH)}
+              {this.renderNameInputs('suffix', 'Suffix', SUFFIX_MAX_LENGTH)}
 
               <TextField
                 required
