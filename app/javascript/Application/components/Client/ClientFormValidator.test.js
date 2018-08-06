@@ -3,51 +3,23 @@ import { validate, isFormValid } from './ClientFormValidator';
 describe('ClientFormValidator', () => {
   describe('#validate()', () => {
     it('first_name', () => {
+      expect(validate('first_name', '')).toBe(false);
       expect(validate('first_name', 'Mike')).toBe(true);
-      expect(validate('first_name', 'Mike John')).toBe(true);
-      expect(validate('first_name', 'Mike  John')).toBe(false);
-      expect(validate('first_name', 'Mike-John')).toBe(true);
-      expect(validate('first_name', 'mike')).toBe(true);
-      expect(validate('first_name', 'Mike1')).toBe(false);
-      expect(validate('first_name', 'Mike-')).toBe(false);
-      expect(validate('first_name', '   ')).toBe(false);
-      expect(validate('first_name', 'Mike#')).toBe(false);
-      expect(validate('first_name', '@')).toBe(false);
     });
 
     it('last_name', () => {
-      expect(validate('last_name', 'Mike')).toBe(true);
-      expect(validate('last_name', 'Mike John')).toBe(true);
-      expect(validate('last_name', 'Mike  John')).toBe(false);
-      expect(validate('last_name', 'Mike-John')).toBe(true);
-      expect(validate('last_name', 'mike')).toBe(true);
-      expect(validate('last_name', 'Mike1')).toBe(false);
-      expect(validate('last_name', 'Mike-')).toBe(false);
-      expect(validate('last_name', '   ')).toBe(false);
-      expect(validate('last_name', 'Mike#')).toBe(false);
-      expect(validate('last_name', '@')).toBe(false);
+      expect(validate('first_name', '')).toBe(false);
+      expect(validate('first_name', 'Mike')).toBe(true);
     });
 
     it('middle_name', () => {
-      expect(validate('middle_name', 'Mike')).toBe(true);
-      expect(validate('middle_name', 'Mike John')).toBe(true);
-      expect(validate('middle_name', 'Mike  John')).toBe(false);
-      expect(validate('middle_name', 'Mike-John')).toBe(true);
-      expect(validate('middle_name', 'mike')).toBe(true);
-      expect(validate('middle_name', 'Mike1')).toBe(false);
-      expect(validate('middle_name', 'Mike-')).toBe(false);
-      expect(validate('middle_name', '   ')).toBe(false);
-      expect(validate('middle_name', 'Mike#')).toBe(false);
-      expect(validate('middle_name', '@')).toBe(false);
       expect(validate('middle_name', '')).toBe(true);
+      expect(validate('middle_name', 'Mike')).toBe(true);
     });
 
     it('suffix', () => {
-      expect(validate('suffix', 'Mr.')).toBe(true);
       expect(validate('suffix', '')).toBe(true);
-      expect(validate('suffix', 'Jr. ')).toBe(false);
-      expect(validate('suffix', 'Jr.() ')).toBe(false);
-      expect(validate('suffix', 'Jr.Jr')).toBe(false);
+      expect(validate('suffix', 'Mr')).toBe(true);
     });
 
     it('case_id', () => {
