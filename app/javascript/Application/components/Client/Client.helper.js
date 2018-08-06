@@ -50,3 +50,17 @@ export function groupClientsByLastName(clients) {
   }
   return results;
 }
+
+/* eslint-disable camelcase */
+export function formatClientName(client) {
+  const { first_name, middle_name, last_name, suffix } = client;
+  let result = `${last_name}, ${first_name}`;
+  if (middle_name) {
+    result += ` ${middle_name}`;
+  }
+  if (suffix) {
+    result += `, ${suffix}`;
+  }
+  return result;
+}
+/* eslint-enable camelcase */

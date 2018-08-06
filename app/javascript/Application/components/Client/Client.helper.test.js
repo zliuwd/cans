@@ -1,4 +1,4 @@
-import { groupClientsByLastName } from './Client.helper';
+import { formatClientName, groupClientsByLastName } from './Client.helper';
 
 describe('Client.helper', () => {
   describe('#groupClientsByLastName()', () => {
@@ -10,6 +10,38 @@ describe('Client.helper', () => {
     it('returns an empty array when empty input', () => {
       const actual = groupClientsByLastName([]);
       expect(actual).toEqual([]);
+    });
+  });
+
+  describe('formatClientName', () => {
+    describe('client with firstName, midleName ', () => {
+      it('returns lastName, firstName', () => {
+        const client = { first_name: 'first', last_name: 'last' };
+        const expectedName = formatClientName(client);
+
+        expect(expectedName).toEqual('last, first');
+      });
+
+      it('returns lastName, firstName middle', () => {
+        const client = { first_name: 'first', last_name: 'last', middle_name: 'middle' };
+        const expectedName = formatClientName(client);
+
+        expect(expectedName).toEqual('last, first middle');
+      });
+
+      it('returns lastName, firstName, suffix', () => {
+        const client = { first_name: 'first', last_name: 'last', suffix: 'suffix' };
+        const expectedName = formatClientName(client);
+
+        expect(expectedName).toEqual('last, first, suffix');
+      });
+
+      it('returns lastName, firstName middle, suffix', () => {
+        const client = { first_name: 'first', last_name: 'last', middle_name: 'middle', suffix: 'suffix' };
+        const expectedName = formatClientName(client);
+
+        expect(expectedName).toEqual('last, first middle, suffix');
+      });
     });
   });
 });
@@ -28,17 +60,23 @@ export const personsJson = [
   {
     id: 1,
     first_name: 'Bruce',
+    middle_name: 'Middle',
     last_name: 'wayne',
+    suffix: 'Mr.',
   },
   {
     id: 4,
     first_name: 'Peter',
+    middle_name: 'Middle',
     last_name: 'Parker',
+    suffix: 'Mr.',
   },
   {
     id: 3,
     first_name: 'Charley',
+    middle_name: 'Middle',
     last_name: 'Parker',
+    suffix: 'Mr.',
   },
 ];
 
@@ -49,12 +87,16 @@ const expectedSortedMap = [
       {
         id: 3,
         first_name: 'Charley',
+        middle_name: 'Middle',
         last_name: 'Parker',
+        suffix: 'Mr.',
       },
       {
         id: 4,
         first_name: 'Peter',
+        middle_name: 'Middle',
         last_name: 'Parker',
+        suffix: 'Mr.',
       },
     ],
   },
@@ -64,7 +106,9 @@ const expectedSortedMap = [
       {
         id: 1,
         first_name: 'Bruce',
+        middle_name: 'Middle',
         last_name: 'wayne',
+        suffix: 'Mr.',
       },
     ],
   },

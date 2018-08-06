@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import ClientService from './Client.service';
-import { groupClientsByLastName } from './Client.helper';
+import { groupClientsByLastName, formatClientName } from './Client.helper';
 import Button from '@material-ui/core/Button/Button';
 import Card from '@material-ui/core/Card/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -63,7 +63,7 @@ class ClientsContainer extends Component {
   renderClientName = client => {
     return (
       <div className="client-name" key={client.id}>
-        <Link to={`/clients/${client.id}`}>{`${client.last_name}, ${client.first_name}`}</Link>
+        <Link to={`/clients/${client.id}`}>{formatClientName(client)}</Link>
       </div>
     );
   };

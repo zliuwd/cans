@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Row, Col, Label, Input } from 'reactstrap';
+import { formatClientName } from '../Client/Client.helper';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
@@ -147,7 +148,7 @@ class AssessmentFormHeader extends Component {
       <Fragment>
         {firstName && lastName ? (
           <Col sm={12}>
-            <span id={'child-name'}>{lastName + ', ' + firstName}</span>
+            <span id={'child-name'}>{formatClientName(client)}</span>
           </Col>
         ) : (
           <Col sm={12}>
