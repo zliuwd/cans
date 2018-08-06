@@ -1,4 +1,4 @@
-import { validate, isFormValid } from './ClientFormValidator';
+import { validate, validateCaseNumber, validateCaseNumbersAreUnique, isFormValid } from './ClientFormValidator';
 
 describe('ClientFormValidator', () => {
   describe('#validate()', () => {
@@ -20,19 +20,6 @@ describe('ClientFormValidator', () => {
     it('suffix', () => {
       expect(validate('suffix', '')).toBe(true);
       expect(validate('suffix', 'Mr')).toBe(true);
-    });
-
-    it('case_id', () => {
-      expect(validate('case_id', '1234567891234567890')).toBe(true);
-      expect(validate('case_id', '1234-567-8912-34567890')).toBe(true);
-      expect(validate('case_id', '1234-5678-9123-4567890')).toBe(false);
-      expect(validate('case_id', '12345678912345678900')).toBe(false);
-      expect(validate('case_id', '123456789')).toBe(false);
-      expect(validate('case_id', '1234--5678-9123-4567890')).toBe(false);
-      expect(validate('case_id', '76cv39d6')).toBe(false);
-      expect(validate('case_id', 'vgh7321 ')).toBe(false);
-      expect(validate('case_id', '#34la7sd')).toBe(false);
-      expect(validate('case_id', '')).toBe(true);
     });
 
     it('external_id', () => {
@@ -72,6 +59,50 @@ describe('ClientFormValidator', () => {
     });
   });
 
+  describe('#validateCaseNumber()', () => {
+    it('should return true for empty case numbers', () => {
+      expect(validateCaseNumber(undefined)).toBeTruthy();
+      expect(validateCaseNumber(null)).toBeTruthy();
+      expect(validateCaseNumber('')).toBeTruthy();
+    });
+
+    it('should return true for valid case numbers', () => {
+      expect(validateCaseNumber('4321-321-4321-87654321')).toBeTruthy();
+      expect(validateCaseNumber('1234-123-1234-12345678')).toBeTruthy();
+    });
+
+    it('should return false for invalid case numbers', () => {
+      expect(validateCaseNumber('/')).toBeFalsy();
+      expect(validateCaseNumber('a%')).toBeFalsy();
+      expect(validateCaseNumber('123456789012345678901234567890123456789012345678901')).toBeFalsy();
+    });
+  });
+
+  describe('#validateCaseNumbersAreUnique()', () => {
+    it('should return empty array for a single case input', () => {
+      expect(validateCaseNumbersAreUnique([])).toEqual([]);
+      expect(validateCaseNumbersAreUnique([{}])).toEqual([]);
+    });
+
+    it('should return empty array for cases array with only unique ids', () => {
+      expect(validateCaseNumbersAreUnique([{ external_id: '1' }, { external_id: '2' }])).toEqual([]);
+    });
+
+    it('should return indices of non unique cases', () => {
+      const cases = [
+        { external_id: 'unique0' },
+        { external_id: '1' },
+        { external_id: '2' },
+        { external_id: '2' },
+        { external_id: 'unique1' },
+        { external_id: '1' },
+        { external_id: '2' },
+        { external_id: 'unique2' },
+      ];
+      expect(validateCaseNumbersAreUnique(cases).sort()).toEqual([1, 2, 3, 5, 6]);
+    });
+  });
+
   describe('#isFormValid()', () => {
     it('returns false when invalid', () => {
       expect(
@@ -79,9 +110,9 @@ describe('ClientFormValidator', () => {
           first_name: '',
           last_name: '',
           dob: '',
-          case_id: '',
           external_id: '',
           county: '',
+          cases: [],
         })
       ).toBe(false);
     });
@@ -94,9 +125,13 @@ describe('ClientFormValidator', () => {
           last_name: 'Jersey',
           suffix: 'Mrs.',
           dob: '10/12/2012',
-          case_id: '1234567891234567890',
           external_id: '1234567891234567890',
           county: { id: 1 },
+          cases: [
+            {
+              external_id: '123',
+            },
+          ],
         })
       ).toBe(true);
     });

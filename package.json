@@ -8,7 +8,8 @@
     "lint": "yarn run eslint --ext .js --ext .jsx app/javascript",
     "prettier-check": "prettier --list-different 'src/**/*.js'",
     "test": "jest --env=jsdom --watch",
-    "test:coverage": "jest --env=jsdom --coverage"
+    "test:coverage": "jest --env=jsdom --coverage",
+    "test:acceptance": "rspec spec/acceptance"
   },
   "dependencies": {
     "@cwds/components": "^0.2.0-alpha.10",

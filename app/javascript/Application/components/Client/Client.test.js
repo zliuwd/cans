@@ -66,9 +66,9 @@ describe('<Client />', () => {
           last_name: 'user',
           suffix: 'Mr.',
           dob: '10/10/1980',
-          case_id: '456789',
           external_id: '1234567891234567890',
           county: { name: 'Sacramento' },
+          cases: [],
         },
       });
     });
