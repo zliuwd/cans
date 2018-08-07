@@ -308,4 +308,20 @@ describe('<ClientAddEditForm />', () => {
     const menuItems = ClientEditWrapper.find('MenuItem');
     expect(menuItems.children.length).toEqual(1);
   });
+
+  describe('#renderNameInputs', () => {
+    const wrapper = getWrapperAdd();
+    const ClientEditWrapper = wrapper.find('ClientAddEditForm').dive();
+    describe.each`
+            field        | isRequired
+       ${'#first_name'}  | ${true}
+       ${'#middle_name'} | ${false}
+       ${'#last_name'}   | ${true}
+       ${'#suffix'}      | ${false}
+    `('$field', ({ field, isRequired }) => {
+      test(`renders input with required: ${isRequired}`, () => {
+        expect(ClientEditWrapper.find(field).prop('required')).toBe(isRequired);
+      });
+    });
+  });
 });

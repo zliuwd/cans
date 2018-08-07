@@ -274,12 +274,12 @@ class ClientAddEditForm extends Component {
     };
   };
 
-  renderNameInputs(field, label, maxLength) {
+  renderNameInputs(field, label, maxLength, isRequired) {
     const { classes } = this.props;
     const { childInfo, childInfoValidation } = this.state;
     return (
       <TextField
-        required
+        required={isRequired}
         focused
         id={field}
         label={label}
@@ -436,10 +436,10 @@ class ClientAddEditForm extends Component {
           <div className={'content'}>
             <CardContent>
               <form className={classes.container} noValidate autoComplete="off">
-                {this.renderNameInputs('first_name', 'First Name', FIRST_MIDDLE_NAME_MAX_LENGTH)}
-                {this.renderNameInputs('middle_name', 'Middle Name', FIRST_MIDDLE_NAME_MAX_LENGTH)}
-                {this.renderNameInputs('last_name', 'Last Name', LAST_NAME_MAX_LENGTH)}
-                {this.renderNameInputs('suffix', 'Suffix', SUFFIX_MAX_LENGTH)}
+                {this.renderNameInputs('first_name', 'First Name', FIRST_MIDDLE_NAME_MAX_LENGTH, true)}
+                {this.renderNameInputs('middle_name', 'Middle Name', FIRST_MIDDLE_NAME_MAX_LENGTH, false)}
+                {this.renderNameInputs('last_name', 'Last Name', LAST_NAME_MAX_LENGTH, true)}
+                {this.renderNameInputs('suffix', 'Suffix', SUFFIX_MAX_LENGTH, false)}
 
                 <TextField
                   required
