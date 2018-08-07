@@ -120,7 +120,7 @@ def publishImageStage() {
   stage('Trigger Security scan') {
     build job: 'tenable-scan', parameters: [
         [$class: 'StringParameterValue', name: 'CONTAINER_NAME', value: 'cans'],
-        [$class: 'StringParameterValue', name: 'CONTAINER_VERSION', value: ${env.BUILD_ID}]
+        [$class: 'StringParameterValue', name: 'CONTAINER_VERSION', value: "${env.BUILD_ID}"]
     ]
   }
 }
