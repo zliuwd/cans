@@ -313,14 +313,14 @@ describe('<ClientAddEditForm />', () => {
     const wrapper = getWrapperAdd();
     const ClientEditWrapper = wrapper.find('ClientAddEditForm').dive();
     describe.each`
-            field        | isRequired
-       ${'#first_name'}  | ${true}
-       ${'#middle_name'} | ${false}
-       ${'#last_name'}   | ${true}
-       ${'#suffix'}      | ${false}
-    `('$field', ({ field, isRequired }) => {
+      input             | isRequired
+      ${'#first_name'}  | ${true}
+      ${'#middle_name'} | ${false}
+      ${'#last_name'}   | ${true}
+      ${'#suffix'}      | ${false}
+    `('$input', ({ input, isRequired }) => {
       test(`renders input with required: ${isRequired}`, () => {
-        expect(ClientEditWrapper.find(field).prop('required')).toBe(isRequired);
+        expect(ClientEditWrapper.find(input).prop('required')).toBe(isRequired);
       });
     });
   });

@@ -1,4 +1,4 @@
-import { clone } from './common';
+import { clone, stringify } from './common';
 
 describe('common', () => {
   describe('#clone()', () => {
@@ -25,6 +25,18 @@ describe('common', () => {
           a: 'b',
         },
         arr: [{ c: 'd' }],
+      });
+    });
+  });
+
+  describe('#stringify()', () => {
+    describe.each`
+      value   | string
+      ${1}    | ${'1'}
+      ${true} | ${'true'}
+    `('$value', ({ value, string }) => {
+      test(`converts ${value} to a string`, () => {
+        expect(stringify(value)).toBe(string);
       });
     });
   });

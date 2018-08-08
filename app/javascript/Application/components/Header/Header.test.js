@@ -14,7 +14,7 @@ describe('Header', () => {
           last_name: 'Doe',
         })
       );
-      const wrapper = await mount(<Header />);
+      const wrapper = await mount(<Header onUserFetchedCallback={jest.fn()} />);
       const displayedUserName = wrapper
         .find('.profile')
         .text()
@@ -30,7 +30,7 @@ describe('Header', () => {
           any_field: 'Any value',
         })
       );
-      const wrapper = await mount(<Header />);
+      const wrapper = await mount(<Header onUserFetchedCallback={jest.fn()} />);
       const displayedUserInitials = wrapper
         .find('.profile-avatar')
         .text()
@@ -54,7 +54,7 @@ describe('Header', () => {
   describe('when failed to fetch user', () => {
     it('shows empty user name', async () => {
       UserAccountService.fetchCurrent.mockReturnValue(Promise.reject(new Error('e')));
-      const wrapper = await mount(<Header />);
+      const wrapper = await mount(<Header onUserFetchedCallback={jest.fn()} />);
       const displayedUserName = wrapper
         .find('.profile')
         .text()

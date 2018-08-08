@@ -15,7 +15,7 @@ const itemDefault = {
   confidential_by_default: true,
   rating_type: 'REGULAR',
   has_na_option: false,
-  rating: '-1',
+  rating: -1,
 };
 
 const i18nDefault = {
@@ -34,6 +34,7 @@ const propsDefault = { i18n: i18nDefault };
 const itemComponentDefault = (
   <Item
     key={'1'}
+    canReleaseConfidentialInfo={true}
     item={{ ...itemDefault }}
     isAssessmentUnderSix={true}
     i18n={{ ...i18nDefault }}
@@ -46,6 +47,7 @@ const mountItem = item => {
   return mount(
     <Item
       key={'1'}
+      canReleaseConfidentialInfo={true}
       item={item}
       isAssessmentUnderSix={false}
       i18n={{ ...i18nDefault }}
@@ -154,6 +156,7 @@ describe('<Item />', () => {
       const wrapper = shallow(
         <Item
           key={'1'}
+          canReleaseConfidentialInfo={true}
           item={{ ...itemDefault }}
           isAssessmentUnderSix={false}
           i18n={{ ...i18nDefault }}
@@ -171,6 +174,7 @@ describe('<Item />', () => {
       const wrapper = shallow(
         <Item
           key={'1'}
+          canReleaseConfidentialInfo={true}
           item={{ ...itemDefault }}
           isAssessmentUnderSix={false}
           i18n={{ ...i18nDefault }}
@@ -188,6 +192,7 @@ describe('<Item />', () => {
       const wrapper = mount(
         <Item
           key={'1'}
+          canReleaseConfidentialInfo={true}
           item={{ ...itemDefault }}
           isAssessmentUnderSix={false}
           i18n={{ ...i18nDefault }}

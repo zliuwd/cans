@@ -29,6 +29,7 @@ const i18nDefault = {
 const domainComponentDefault = (
   <Domain
     key={'1'}
+    canReleaseConfidentialInfo={true}
     domain={{ ...domainDefault }}
     isAssessmentUnderSix={true}
     i18n={{ ...i18nDefault }}
@@ -56,6 +57,7 @@ describe('<Domain />', () => {
       const domainComponent = (
         <Domain
           key={'1'}
+          canReleaseConfidentialInfo={true}
           domain={{ ...domain }}
           isAssessmentUnderSix={true}
           i18n={{ ...i18nDefault }}
@@ -84,6 +86,7 @@ describe('<Domain />', () => {
       const domainComponent = (
         <Domain
           key={'1'}
+          canReleaseConfidentialInfo={true}
           domain={{ ...domain }}
           isAssessmentUnderSix={true}
           i18n={{ ...i18nDefault }}
@@ -113,6 +116,7 @@ describe('<Domain />', () => {
       const domainComponent = (
         <Domain
           key={'1'}
+          canReleaseConfidentialInfo={true}
           domain={{ ...domain }}
           isAssessmentUnderSix={true}
           i18n={{ ...i18nDefault }}
@@ -146,6 +150,7 @@ describe('<Domain />', () => {
             const domainComponent = (
               <Domain
                 key={'1'}
+                canReleaseConfidentialInfo={true}
                 domain={{ ...domain }}
                 isAssessmentUnderSix={true}
                 i18n={{ ...i18nDefault }}
@@ -182,6 +187,7 @@ describe('<Domain />', () => {
             const domainComponent = (
               <Domain
                 key={'1'}
+                canReleaseConfidentialInfo={true}
                 domain={{ ...domain }}
                 isAssessmentUnderSix={true}
                 i18n={{ ...i18nDefault }}

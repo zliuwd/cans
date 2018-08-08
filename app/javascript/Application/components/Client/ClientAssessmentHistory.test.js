@@ -45,8 +45,13 @@ const assessmentWithNoUpdateInfo = {
     last_name: 'LastName 3',
   },
 };
+const params = {
+  clientId: 1004,
+  location: { pathname: '/client' },
+  history: { location: '/client' },
+};
 
-const getShallowWrapper = () => shallow(<ClientAssessmentHistory clientId={1004} />);
+const getShallowWrapper = () => shallow(<ClientAssessmentHistory {...params} />);
 
 const prepareWrapper = async mockedAssessments => {
   // given
@@ -82,7 +87,7 @@ describe('<ClientAssessmentHistory', () => {
     it('renders with <Link /> that navigates to /assessments', () => {
       const wrapper = mount(
         <MemoryRouter>
-          <ClientAssessmentHistory clientId={1004} />
+          <ClientAssessmentHistory {...params} />
         </MemoryRouter>
       ).find(CardHeader);
       expect(wrapper.props().action.props.to).toBe('/clients/1004/assessments');
@@ -158,9 +163,15 @@ describe('<ClientAssessmentHistory', () => {
 
     describe('submit success message', () => {
       it('is rendered when needed', () => {
+        const browserHistory = [{ state: { successAssessmentId: 123 } }];
+        browserHistory.replace = jest.fn();
         // given + when
         const history = shallow(
-          <ClientAssessmentHistory clientId={1004} location={{ state: { successAssessmentId: 123 } }} />
+          <ClientAssessmentHistory
+            clientId={1004}
+            location={{ state: { successAssessmentId: 123 } }}
+            history={browserHistory}
+          />
         );
 
         // then
@@ -171,7 +182,7 @@ describe('<ClientAssessmentHistory', () => {
 
       it('is not rendered when no successAssessmentId', () => {
         // given + when
-        const history = shallow(<ClientAssessmentHistory clientId={1004} />);
+        const history = shallow(<ClientAssessmentHistory {...params} />);
 
         // then
         expect(history.find('CloseableAlert').length).toBe(0);

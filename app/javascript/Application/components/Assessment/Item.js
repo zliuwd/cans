@@ -12,6 +12,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import classNames from 'classnames';
 import { Rating } from './';
 import { getI18nValuesByPrefix } from './I18nHelper';
+import { stringify } from '../../util/common';
 
 const initI18nValue = i18n => ({
   title: (i18n['_title_'] || '').toUpperCase(),
@@ -77,7 +78,7 @@ class Item extends Component {
             <FormControlLabel
               onChange={this.handleConfidentialityChange}
               label={'Confidential'}
-              value={'' + isConfidential}
+              value={stringify(isConfidential)}
               control={
                 <Checkbox
                   checked={isConfidential}
@@ -115,11 +116,11 @@ class Item extends Component {
         </Typography>
         <form autoComplete="off">
           <FormControl>
-            <RadioGroup name="rating_desc" value={rating} onChange={this.handleRatingChange}>
+            <RadioGroup name="rating_desc" value={stringify(rating)} onChange={this.handleRatingChange}>
               {has_na_option ? (
                 <FormControlLabel
-                  value={8}
-                  control={<Radio value={8} color={'default'} />}
+                  value={stringify(8)}
+                  control={<Radio value={stringify(8)} color={'default'} />}
                   label={<Typography variant="headline">N/A</Typography>}
                   style={{ fontSize: '1.3rem' }}
                 />
@@ -127,9 +128,9 @@ class Item extends Component {
               {ratingDescriptions.map((label, i) => {
                 return (
                   <FormControlLabel
-                    value={i}
+                    value={stringify(i)}
                     key={label}
-                    control={<Radio value={i} color={'default'} />}
+                    control={<Radio value={stringify(i)} color={'default'} />}
                     style={{ fontSize: '1.3rem' }}
                     label={
                       <Typography variant="headline">
@@ -204,12 +205,16 @@ class Item extends Component {
 
 Item.propTypes = {
   canReleaseConfidentialInfo: PropTypes.bool.isRequired,
-  caregiverIndex: PropTypes.string.isRequired,
+  caregiverIndex: PropTypes.string,
   i18n: PropTypes.object.isRequired,
   isAssessmentUnderSix: PropTypes.bool.isRequired,
   item: PropTypes.object.isRequired,
   onConfidentialityUpdate: PropTypes.func.isRequired,
   onRatingUpdate: PropTypes.func.isRequired,
+};
+
+Item.defaultProps = {
+  caregiverIndex: undefined,
 };
 
 export default Item;

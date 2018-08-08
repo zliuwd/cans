@@ -11,8 +11,13 @@ import { MemoryRouter } from 'react-router-dom';
 
 describe('<Client />', () => {
   describe('initial component layout', () => {
-    const match = { params: { id: 1 } };
-    const getWrapper = () => shallow(<Client match={match} />);
+    const params = {
+      match: { params: { id: '1' } },
+      location: { pathname: 'client' },
+      history: { location: '/client' },
+    };
+
+    const getWrapper = () => shallow(<Client {...params} />);
     const getLength = component => getWrapper().find(component).length;
 
     it('renders with 1 <Card /> component', () => {
@@ -33,8 +38,13 @@ describe('<Client />', () => {
   });
 
   describe('with no childData', () => {
-    const match = { params: { id: 1 } };
-    const getWrapper = () => shallow(<Client match={match} />);
+    const params = {
+      match: { params: { id: '1' } },
+      location: { pathname: 'client' },
+      history: { location: '/client' },
+    };
+
+    const getWrapper = () => shallow(<Client {...params} />);
     const getLength = component => getWrapper().find(component).length;
 
     it('renders with 2 <Grid /> components', () => {
@@ -47,12 +57,17 @@ describe('<Client />', () => {
   });
 
   describe('with childData', () => {
-    const match = { params: { id: 1 } };
+    const params = {
+      match: { params: { id: '1' } },
+      location: { pathname: 'client' },
+      history: { location: '/client' },
+    };
+
     let wrapper = {};
     beforeEach(() => {
       wrapper = shallow(
         <MemoryRouter>
-          <Client match={match} />
+          <Client {...params} />
         </MemoryRouter>
       )
         .find(Client)
@@ -89,15 +104,19 @@ describe('<Client />', () => {
   });
 
   describe('componentDidMount', () => {
-    const match = { params: { id: 1 } };
+    const params = {
+      match: { params: { id: '1' } },
+      location: { pathname: '/client' },
+      history: { location: '/client' },
+    };
 
     it('calls fetchChildData', () => {
       const spy = jest.spyOn(Client.prototype, 'componentDidMount');
       const fetchClientDataSpy = jest.spyOn(Client.prototype, 'fetchChildData');
-      const wrapper = shallow(<Client match={match} />);
+      const wrapper = shallow(<Client {...params} />);
       wrapper.instance().componentDidMount();
       expect(spy).toHaveBeenCalledWith();
-      expect(fetchClientDataSpy).toHaveBeenCalledWith(1);
+      expect(fetchClientDataSpy).toHaveBeenCalledWith('1');
 
       spy.mockReset();
       fetchClientDataSpy.mockReset();

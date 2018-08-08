@@ -10,7 +10,7 @@ import { ClientService } from './Client.service';
 import { validate, validateCaseNumber, validateCaseNumbersAreUnique, isFormValid } from './ClientFormValidator';
 import { PageInfo } from '../Layout';
 import { isA11yAllowedInput } from '../../util/events';
-import { clone } from '../../util/common';
+import { clone, stringify } from '../../util/common';
 
 import './style.sass';
 
@@ -280,13 +280,11 @@ class ClientAddEditForm extends Component {
     return (
       <TextField
         required={isRequired}
-        focused
         id={field}
         label={label}
-        defaultValue={childInfo[field]}
         error={!childInfoValidation[field]}
         className={classes.textField}
-        value={childInfo[field]}
+        value={stringify(childInfo[field])}
         onChange={this.handleChange(field)}
         inputProps={{
           maxLength: maxLength,
