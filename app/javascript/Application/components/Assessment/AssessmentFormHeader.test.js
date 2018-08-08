@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { AssessmentFormHeader } from './index';
 import { Alert } from '@cwds/components';
 import { assessment, client } from './assessment.mocks.test';
+import { clone } from '../../util/common';
 
 describe('<AssessmentFormHeader />', () => {
   describe('#handleValueChange()', () => {
@@ -16,7 +17,7 @@ describe('<AssessmentFormHeader />', () => {
       const event = { target: { name: 'event_date', value: '2000-01-11' } };
       wrapper.instance().handleValueChange(event);
       // then
-      const updatedAssessment = JSON.parse(JSON.stringify(assessment));
+      const updatedAssessment = clone(assessment);
       updatedAssessment.event_date = '2000-01-11';
       expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
     });
@@ -31,7 +32,7 @@ describe('<AssessmentFormHeader />', () => {
       const event = { target: { name: 'completed_as', value: 'Social Worker' } };
       wrapper.instance().handleValueChange(event);
       // then
-      const updatedAssessment = JSON.parse(JSON.stringify(assessment));
+      const updatedAssessment = clone(assessment);
       updatedAssessment.completed_as = 'Social Worker';
       expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
     });
@@ -41,7 +42,7 @@ describe('<AssessmentFormHeader />', () => {
     it('will update has_caregiver in assessment', () => {
       // given
       const mockFn = jest.fn();
-      const sentAssessment = JSON.parse(JSON.stringify(assessment));
+      const sentAssessment = clone(assessment);
       sentAssessment.has_caregiver = true;
       const props = { assessment: sentAssessment, client, onAssessmentUpdate: mockFn };
       const wrapper = shallow(<AssessmentFormHeader {...props} />);
@@ -51,7 +52,7 @@ describe('<AssessmentFormHeader />', () => {
       wrapper.instance().handleHasCaregiverChange(event);
 
       // then
-      const updatedAssessment = JSON.parse(JSON.stringify(assessment));
+      const updatedAssessment = clone(assessment);
       updatedAssessment.has_caregiver = false;
       expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
     });
@@ -61,7 +62,7 @@ describe('<AssessmentFormHeader />', () => {
     it('will update can_release_confidential_info in assessment and set confidential_by_default items to confidential', () => {
       // given
       const mockFn = jest.fn();
-      const sentAssessment = JSON.parse(JSON.stringify(assessment));
+      const sentAssessment = clone(assessment);
       sentAssessment.can_release_confidential_info = true;
       const props = { assessment: sentAssessment, client, onAssessmentUpdate: mockFn };
       const wrapper = shallow(<AssessmentFormHeader {...props} />);
@@ -70,7 +71,7 @@ describe('<AssessmentFormHeader />', () => {
       const event = { target: { name: 'can_release_confidential_info', value: 'false' } };
       wrapper.instance().handleCanReleaseInfoChange(event);
       // then
-      const updatedAssessment = JSON.parse(JSON.stringify(assessment));
+      const updatedAssessment = clone(assessment);
       updatedAssessment.can_release_confidential_info = false;
       updatedAssessment.state.domains[0].items[3].confidential = true;
       expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
@@ -87,7 +88,7 @@ describe('<AssessmentFormHeader />', () => {
       // when
       wrapper.instance().toggleUnderSix();
       // then
-      const updatedAssessment = JSON.parse(JSON.stringify(assessment));
+      const updatedAssessment = clone(assessment);
       updatedAssessment.state.under_six = true;
       expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
     });
@@ -121,7 +122,7 @@ describe('<AssessmentFormHeader />', () => {
     });
 
     it('should not render Alert component when canReleaseInformation is true', () => {
-      const sentAssessment = JSON.parse(JSON.stringify(assessment));
+      const sentAssessment = clone(assessment);
       sentAssessment.can_release_confidential_info = true;
       const props = { assessment: sentAssessment, client, onAssessmentUpdate: jest.fn() };
 
