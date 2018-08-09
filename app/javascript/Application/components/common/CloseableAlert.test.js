@@ -8,7 +8,7 @@ describe('<CloseableAlert>', () => {
   describe('render', () => {
     it('has a message and no close button', () => {
       // given + when
-      const alert = shallow(<CloseableAlert message={'welcome'} />);
+      const alert = shallow(<CloseableAlert message={'welcome'} type={'info'} />);
 
       // then
       expect(alert.render().text()).toBe('welcome');
@@ -17,7 +17,7 @@ describe('<CloseableAlert>', () => {
 
     it('has a close icon when needed', () => {
       // given + when
-      const alert = shallow(<CloseableAlert isCloseable={true} />);
+      const alert = shallow(<CloseableAlert isCloseable={true} type={'info'} />);
 
       // then
       expect(alert.find('.close-icon').length).toBe(1);
@@ -27,7 +27,7 @@ describe('<CloseableAlert>', () => {
   describe('closability', () => {
     it('is hidden in closed state', () => {
       // given
-      const alert = shallow(<CloseableAlert message={'welcome'} />);
+      const alert = shallow(<CloseableAlert message={'welcome'} type={'info'} />);
 
       // when
       alert.instance().setState({ isClosed: true });
@@ -39,7 +39,7 @@ describe('<CloseableAlert>', () => {
 
     it('hides on close icon click', () => {
       // given
-      const alert = shallow(<CloseableAlert message={'welcome'} isCloseable={true} />);
+      const alert = shallow(<CloseableAlert message={'welcome'} isCloseable={true} type={'info'} />);
       expect(alert.render().text()).toBe('welcome');
 
       // when
@@ -52,7 +52,7 @@ describe('<CloseableAlert>', () => {
 
     it('hides automatically on timeout when auto closeable', () => {
       // given
-      const alert = shallow(<CloseableAlert message={'welcome'} isAutoCloseable={true} />);
+      const alert = shallow(<CloseableAlert message={'welcome'} isAutoCloseable={true} type={'info'} />);
       expect(alert.render().text()).toBe('welcome');
 
       // when

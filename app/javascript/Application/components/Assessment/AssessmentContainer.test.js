@@ -263,9 +263,14 @@ describe('<AssessmentContainer />', () => {
         // given
         const assessmentServicePostSpy = jest.spyOn(AssessmentService, 'postAssessment');
         assessmentServicePostSpy.mockReturnValue(Promise.resolve({ id: 123 }));
-        const historyArray = [];
+        const historyMock = {
+          push: () => {
+            historyMock.length += 1;
+          },
+          length: 0,
+        };
         const wrapper = await mountWithRouter(
-          <AssessmentContainer match={{ params: { id: 1 } }} history={historyArray} />
+          <AssessmentContainer match={{ params: { id: 1 } }} history={historyMock} />
         );
         expect(wrapper.find('Redirect').length).toBe(0);
 
@@ -278,7 +283,7 @@ describe('<AssessmentContainer />', () => {
         const redirect = wrapper.find('Redirect');
         expect(redirect.length).toBe(1);
         expect(redirect.first().props().to.state.successAssessmentId).toBe(123);
-        expect(historyArray.length).toBe(1);
+        expect(historyMock.length).toBe(1);
       });
     });
 
