@@ -52,3 +52,14 @@ function areItemsValid(assessment) {
   const itemsWithNoRating = requiredItems.filter(item => item.rating === -1);
   return itemsWithNoRating.length === 0;
 }
+
+export function resetConfidentialByDefaultItems(assessment) {
+  assessment.state.domains.map(domain => {
+    domain.items.map(item => {
+      if (item.confidential_by_default) {
+        item.confidential = true;
+      }
+    });
+  });
+  return assessment;
+}

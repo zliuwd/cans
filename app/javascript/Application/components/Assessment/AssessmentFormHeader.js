@@ -1,5 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Row, Col, Label, Input } from 'reactstrap';
+import { resetConfidentialByDefaultItems } from './AssessmentHelper';
 import { formatClientName } from '../Client/Client.helper';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
@@ -9,66 +10,138 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Radio from '@material-ui/core/Radio';
 import { Alert } from '@cwds/components';
+import { clone, stringify } from '../../util/common';
 
 import './style.sass';
 
-const fields = Object.freeze({
-  CAN_RELEASE_CONFIDENTIAL_INFO: 'can_release_confidential_info',
-  HAS_CAREGIVER: 'has_caregiver',
-  EVENT_DATE: 'event_date',
-  COMPLETED_AS: 'completed_as',
-});
+class AssessmentFormHeader extends PureComponent {
+  handleValueChange = event => this.changeFieldAndUpdateAssessment(event.target.name, event.target.value);
 
-class AssessmentFormHeader extends Component {
-  handleValueChange = event => {
-    const { name, value } = event.target;
-    const assessment = Object.assign({}, this.props.assessment);
+  handleHasCaregiverChange = event =>
+    this.changeFieldAndUpdateAssessment(event.target.name, event.target.value === 'true');
+
+  changeFieldAndUpdateAssessment(name, value) {
+    const assessment = clone(this.props.assessment);
     assessment[name] = value;
     this.props.onAssessmentUpdate(assessment);
-  };
-
-  handleHasCaregiverChange = event => {
-    const { name, value } = event.target;
-    const hasCaregiver = value === 'true';
-    const assessment = Object.assign({}, this.props.assessment);
-    assessment[name] = hasCaregiver;
-    this.props.onAssessmentUpdate(assessment);
-  };
+  }
 
   handleCanReleaseInfoChange = event => {
-    const { name, value } = event.target;
-    const canReleaseInfo = value === 'true';
-    const assessment = Object.assign({}, this.props.assessment);
-    assessment[name] = canReleaseInfo;
+    const canReleaseInfo = event.target.value === 'true';
+    const assessment = clone(this.props.assessment);
+    assessment.can_release_confidential_info = canReleaseInfo;
     if (!canReleaseInfo) {
-      assessment.state.domains.map(domain => {
-        domain.items.map(item => {
-          if (item.confidential_by_default) {
-            item.confidential = true;
-          }
-        });
-      });
+      resetConfidentialByDefaultItems(assessment);
     }
     this.props.onAssessmentUpdate(assessment);
   };
 
+  handleSelectCaseNumber = event => {
+    const assessment = clone(this.props.assessment);
+    assessment.the_case = this.findCaseByExternalId(event.target.value);
+    this.props.onAssessmentUpdate(assessment);
+  };
+
+  findCaseByExternalId = externalId => (this.props.client.cases || []).find(aCase => aCase.external_id === externalId);
+
   toggleUnderSix = () => {
-    const assessment = Object.assign({}, this.props.assessment);
+    const assessment = clone(this.props.assessment);
     assessment.state.under_six = !assessment.state.under_six;
     this.props.onAssessmentUpdate(assessment);
   };
 
-  renderIsConfidentialWarningAlert() {
-    if (!this.props.assessment.can_release_confidential_info) {
-      return (
-        <Alert color={'warning'}>Prior to sharing the CANS assessment redact item number 7, 48, EC.41 and EC.18</Alert>
-      );
-    }
+  renderClientNameAndCounty() {
+    const { first_name: firstName, last_name: lastName } = this.props.client;
+    const county = this.props.assessment.county || {};
+    const countyName = county.name ? `${county.name} County` : '';
+    return (
+      <Col sm={12}>
+        <h4>
+          {firstName && lastName ? (
+            <span id={'child-name'}>{formatClientName(this.props.client)}</span>
+          ) : (
+            <span id={'no-data'}>Client Info</span>
+          )}
+        </h4>
+        {countyName ? (
+          <h5 className={'county-name-block'}>
+            <span id={'county-name'}>{countyName}</span>
+          </h5>
+        ) : null}
+      </Col>
+    );
   }
 
+  renderDateSelect() {
+    return (
+      <Fragment>
+        <Label for={'date-select'} className={'assessment-form-header-label'}>
+          Date
+        </Label>
+        <Input
+          type={'date'}
+          id={'date-select'}
+          name={'event_date'}
+          value={this.props.assessment.event_date}
+          onChange={this.handleValueChange}
+        />
+      </Fragment>
+    );
+  }
+
+  renderCaseSelect() {
+    return (
+      <Fragment>
+        <Label for={'select-case'} className={'assessment-form-header-label'}>
+          Case Number
+        </Label>
+        <Input
+          type={'select'}
+          id={'select-case'}
+          value={(this.props.assessment.the_case || {}).external_id}
+          onChange={this.handleSelectCaseNumber}
+        >
+          {this.renderCaseNumbersDropdownOptions()}
+        </Input>
+      </Fragment>
+    );
+  }
+
+  renderCaseNumbersDropdownOptions = () => {
+    const cases = this.props.client.cases || [];
+    return [...cases, {}].reverse().map(theCase => (
+      <option key={theCase.id || 0} value={theCase.external_id}>
+        {theCase.external_id}
+      </option>
+    ));
+  };
+
+  renderCompletedAsSelect() {
+    return (
+      <Fragment>
+        <Label for={'select-user'} className={'assessment-form-header-label'}>
+          Complete as
+        </Label>
+        <Input
+          type={'select'}
+          name={'completed_as'}
+          id={'select-user'}
+          value={this.props.assessment.completed_as}
+          onChange={this.handleValueChange}
+        >
+          <option value={'COMMUNIMETRIC'}>Communimetric</option>
+        </Input>
+      </Fragment>
+    );
+  }
+
+  renderConfidentialWarningAlertIfNeeded = () =>
+    this.props.assessment.can_release_confidential_info ? null : (
+      <Alert color={'warning'}>Prior to sharing the CANS assessment redact item number 7, 48, EC.41 and EC.18</Alert>
+    );
+
   renderHasCaregiverQuestion() {
-    const assessment = this.props.assessment || {};
-    const hasCaregiver = assessment.has_caregiver;
+    const hasCaregiver = (this.props.assessment || {}).has_caregiver;
     return (
       <Fragment>
         <Col sm={12}>
@@ -79,19 +152,19 @@ class AssessmentFormHeader extends Component {
         <Col sm={12}>
           <FormControl>
             <RadioGroup
-              name={fields.HAS_CAREGIVER}
-              value={'' + hasCaregiver}
+              name={'has_caregiver'}
+              value={stringify(hasCaregiver)}
               onChange={this.handleHasCaregiverChange}
               className={'assessment-form-header-radio-group'}
             >
               <FormControlLabel
-                value={'' + true}
+                value={stringify(true)}
                 control={<Radio color="default" />}
                 label={'Yes'}
                 classes={{ label: 'assessment-form-header-label' }}
               />
               <FormControlLabel
-                value={'' + false}
+                value={stringify(false)}
                 control={<Radio color="default" />}
                 label={'No'}
                 classes={{ label: 'assessment-form-header-label' }}
@@ -104,8 +177,7 @@ class AssessmentFormHeader extends Component {
   }
 
   renderCanReleaseInfoQuestion() {
-    const assessment = this.props.assessment || {};
-    const canReleaseConfidentialInfo = assessment.can_release_confidential_info;
+    const canReleaseConfidentialInfo = (this.props.assessment || {}).can_release_confidential_info;
     return (
       <Fragment>
         <Col sm={12}>
@@ -116,19 +188,19 @@ class AssessmentFormHeader extends Component {
         <Col sm={12}>
           <FormControl>
             <RadioGroup
-              name={fields.CAN_RELEASE_CONFIDENTIAL_INFO}
-              value={'' + canReleaseConfidentialInfo}
+              name={'can_release_confidential_info'}
+              value={stringify(canReleaseConfidentialInfo)}
               onChange={this.handleCanReleaseInfoChange}
               className={'assessment-form-header-radio-group'}
             >
               <FormControlLabel
-                value={'' + true}
+                value={stringify(true)}
                 control={<Radio color="default" />}
                 label={'Yes'}
                 classes={{ label: 'assessment-form-header-label' }}
               />
               <FormControlLabel
-                value={'' + false}
+                value={stringify(false)}
                 control={<Radio color="default" />}
                 label={'No'}
                 classes={{ label: 'assessment-form-header-label' }}
@@ -140,25 +212,6 @@ class AssessmentFormHeader extends Component {
     );
   }
 
-  renderClientName() {
-    const client = this.props.client;
-    const firstName = client.first_name;
-    const lastName = client.last_name;
-    return (
-      <Fragment>
-        {firstName && lastName ? (
-          <Col sm={12}>
-            <span id={'child-name'}>{formatClientName(client)}</span>
-          </Col>
-        ) : (
-          <Col sm={12}>
-            <span id={'no-data'}>Client Info</span>
-          </Col>
-        )}
-      </Fragment>
-    );
-  }
-
   renderToggleUnderSixQuestion() {
     const isUnderSix = this.props.assessment.state.under_six;
     return (
@@ -166,7 +219,12 @@ class AssessmentFormHeader extends Component {
         Age: 0-5
         <FormControlLabel
           control={
-            <Switch checked={!isUnderSix} value={'' + isUnderSix} onChange={this.toggleUnderSix} color="default" />
+            <Switch
+              checked={!isUnderSix}
+              value={stringify(isUnderSix)}
+              onChange={this.toggleUnderSix}
+              color="default"
+            />
           }
           label="6-21"
           style={{ marginLeft: '0px' }}
@@ -176,46 +234,20 @@ class AssessmentFormHeader extends Component {
   }
 
   render() {
-    const assessment = this.props.assessment;
-    const eventDate = assessment.event_date;
-    const completedAs = assessment.completed_as;
     return (
       <Fragment>
-        <Row>{this.renderClientName()}</Row>
+        <Row>{this.renderClientNameAndCounty()}</Row>
         <Row className={'assessment-form-header-inputs'}>
-          <Col sm={4}>
-            <Label for={'date-select'} className={'assessment-form-header-label'}>
-              Date
-            </Label>
-            <Input
-              type={'date'}
-              id={'date-select'}
-              name={fields.EVENT_DATE}
-              value={eventDate}
-              onChange={this.handleValueChange}
-            />
-          </Col>
-          <Col sm={4}>
-            <Label for={'select-user'} className={'assessment-form-header-label'}>
-              Complete as
-            </Label>
-            <Input
-              type={'select'}
-              name={fields.COMPLETED_AS}
-              id={'select-user'}
-              value={completedAs}
-              onChange={this.handleValueChange}
-            >
-              <option value={'COMMUNIMETRIC'}>Communimetric</option>
-            </Input>
-          </Col>
+          <Col sm={3}>{this.renderDateSelect()}</Col>
+          <Col sm={5}>{this.renderCaseSelect()}</Col>
+          <Col sm={4}>{this.renderCompletedAsSelect()}</Col>
         </Row>
         <Row>
           <Col xs={6}>{this.renderHasCaregiverQuestion()}</Col>
           <Col xs={6}>{this.renderCanReleaseInfoQuestion()}</Col>
         </Row>
         <Row>
-          <Col xs={12}>{this.renderIsConfidentialWarningAlert()}</Col>
+          <Col xs={12}>{this.renderConfidentialWarningAlertIfNeeded()}</Col>
         </Row>
         <Row>
           <Col xs={12}>{this.renderToggleUnderSixQuestion()}</Col>

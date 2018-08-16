@@ -66,7 +66,6 @@ describe('<AssessmentContainer />', () => {
       it('calls fetchNewAssessment', async () => {
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment');
         const wrapper = shallow(<AssessmentContainer {...props} />);
-
         await wrapper.instance().componentDidMount();
         expect(assessmentServiceGetSpy).toHaveBeenCalledWith();
       });
@@ -76,7 +75,10 @@ describe('<AssessmentContainer />', () => {
         wrapper.setState({ child: childInfoJson });
         expect(wrapper.state('assessment').instrument_id).toBeFalsy();
         wrapper.instance().onFetchNewAssessmentSuccess(instrument);
-        expect(wrapper.state('assessment')).toEqual(initialAssessment);
+        const assessment = wrapper.state('assessment');
+        expect(assessment).toEqual(initialAssessment);
+        expect(assessment.person).toEqual(childInfoJson);
+        expect(assessment.county).toEqual(childInfoJson.county);
       });
     });
 

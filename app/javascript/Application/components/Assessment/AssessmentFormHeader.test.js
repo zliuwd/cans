@@ -4,8 +4,36 @@ import { AssessmentFormHeader } from './index';
 import { Alert } from '@cwds/components';
 import { assessment, client } from './assessment.mocks.test';
 import { clone } from '../../util/common';
+import { Input } from 'reactstrap';
 
 describe('<AssessmentFormHeader />', () => {
+  describe('components', () => {
+    const getShallowWrapper = () =>
+      shallow(<AssessmentFormHeader {...{ assessment, client, onAssessmentUpdate: jest.fn() }} />);
+    const getLength = component => getShallowWrapper().find(component).length;
+
+    it('renders with 3 assessment-form-header-label labels', () => {
+      expect(getLength('.assessment-form-header-label')).toBe(3);
+    });
+
+    it('renders with 3 <Input /> component', () => {
+      expect(getLength(Input)).toBe(3);
+    });
+
+    it('renders with case numbers dropdown', () => {
+      const clientWithCases = clone(client);
+      clientWithCases.cases = [{ id: 101, external_id: '1001' }, { id: 102, external_id: '1002' }];
+      const props = { assessment, client: clientWithCases, onAssessmentUpdate: jest.fn() };
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
+      const caseNumberOptions = wrapper
+        .find('#select-case')
+        .dive()
+        .find('option');
+      expect(caseNumberOptions.length).toBe(3);
+      expect(caseNumberOptions.map(option => option.get(0).props.value)).toEqual([undefined, '1002', '1001']);
+    });
+  });
+
   describe('#handleValueChange()', () => {
     it('will update event_date in assessment', () => {
       // given
@@ -58,6 +86,46 @@ describe('<AssessmentFormHeader />', () => {
     });
   });
 
+  describe('#handleSelectCaseNumber()', () => {
+    it('will update case in assessment with a case object', () => {
+      // given
+      const mockFn = jest.fn();
+      const sentAssessment = clone(assessment);
+      const clientWithCases = clone(client);
+      clientWithCases.cases = [
+        { id: 101, external_id: '1001' },
+        { id: 102, external_id: '1002' },
+        { id: 103, external_id: '1003' },
+      ];
+      const props = { assessment: sentAssessment, client: clientWithCases, onAssessmentUpdate: mockFn };
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
+
+      // when
+      wrapper.instance().handleSelectCaseNumber({ target: { value: '1002' } });
+
+      // then
+      const updatedAssessment = clone(assessment);
+      updatedAssessment.the_case = { id: 102, external_id: '1002' };
+      expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
+    });
+
+    it('will update case in assessment with an undefined value', () => {
+      // given
+      const mockFn = jest.fn();
+      const sentAssessment = clone(assessment);
+      sentAssessment.the_case = { id: 101, external_id: '1001' };
+      const props = { assessment: sentAssessment, client: clone(client), onAssessmentUpdate: mockFn };
+      const wrapper = shallow(<AssessmentFormHeader {...props} />);
+
+      // when
+      wrapper.instance().handleSelectCaseNumber({ target: { value: undefined } });
+
+      // then
+      const updatedAssessment = clone(assessment);
+      expect(mockFn).toHaveBeenCalledWith(updatedAssessment);
+    });
+  });
+
   describe('#handleCanReleaseInfoChange()', () => {
     it('will update can_release_confidential_info in assessment and set confidential_by_default items to confidential', () => {
       // given
@@ -99,6 +167,7 @@ describe('<AssessmentFormHeader />', () => {
       const props = { assessment, client, onAssessmentUpdate: jest.fn() };
       const wrapper = shallow(<AssessmentFormHeader {...props} />);
       expect(wrapper.find('#child-name').text()).toBe('Doe, John');
+      expect(wrapper.find('#county-name').text()).toBe('Calaveras County');
     });
   });
 

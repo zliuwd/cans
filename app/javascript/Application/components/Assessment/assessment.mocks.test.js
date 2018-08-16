@@ -4,6 +4,7 @@ import { childInfoJson } from '../Client/Client.helper.test';
 export const initialAssessment = {
   instrument_id: 1,
   person: childInfoJson,
+  county: childInfoJson.county,
   assessment_type: 'INITIAL',
   status: 'IN_PROGRESS',
   completed_as: 'COMMUNIMETRIC',
@@ -28,6 +29,7 @@ export const assessment = {
   id: 1,
   instrument_id: 1,
   person: childInfoJson,
+  county: childInfoJson.county,
   assessment_type: 'INITIAL',
   status: 'IN_PROGRESS',
   completed_as: 'COMMUNIMETRIC',
@@ -103,6 +105,7 @@ export const updatedAssessment = {
   id: 1,
   instrument_id: 1,
   person: childInfoJson,
+  county: childInfoJson.county,
   assessment_type: 'INITIAL',
   status: 'IN_PROGRESS',
   completed_as: 'COMMUNIMETRIC',

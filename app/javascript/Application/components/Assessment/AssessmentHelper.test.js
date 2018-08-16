@@ -1,4 +1,4 @@
-import { validateAssessmentForSubmit } from './AssessmentHelper';
+import { validateAssessmentForSubmit, resetConfidentialByDefaultItems } from './AssessmentHelper';
 import { clone } from '../../util/common';
 
 const validAssessment = {
@@ -16,7 +16,6 @@ const validAssessment = {
     under_six: false,
     domains: [
       {
-        class: 'domain',
         items: [
           {
             under_six_id: 'EC.1',
@@ -24,7 +23,7 @@ const validAssessment = {
             code: 'PSYCHOSIS',
             required: true,
             confidential: false,
-            confidential_by_default: false,
+            confidential_by_default: true,
             rating_type: 'REGULAR',
             has_na_option: false,
             rating: 2,
@@ -47,7 +46,6 @@ const validAssessment = {
         above_six: true,
       },
       {
-        class: 'domain',
         items: [
           {
             under_six_id: '',
@@ -139,6 +137,20 @@ describe('AssessmentHelper', () => {
         assessment.state.domains[0].items[0].rating = -1;
         expect(validateAssessmentForSubmit(assessment)).toBe(true);
       });
+    });
+  });
+
+  describe('#resetConfidentialByDefaultItems()', () => {
+    it('should initialize all confidential by default items with confidential=true', () => {
+      // given
+      const assessment = clone(validAssessment);
+      expect(assessment.state.domains[0].items[0].confidential).toBe(false);
+
+      // when
+      resetConfidentialByDefaultItems(assessment);
+
+      // then
+      expect(assessment.state.domains[0].items[0].confidential).toBe(true);
     });
   });
 });

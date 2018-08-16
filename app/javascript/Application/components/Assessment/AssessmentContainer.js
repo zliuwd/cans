@@ -51,8 +51,9 @@ class AssessmentContainer extends Component {
 
   onFetchNewAssessmentSuccess(instrument) {
     const assessment = {
-      instrument_id: 1,
+      instrument_id: instrument.id,
       person: this.state.child,
+      county: this.state.child.county,
       assessment_type: AssessmentType.initial,
       status: AssessmentStatus.inProgress,
       state: instrument.prototype,
