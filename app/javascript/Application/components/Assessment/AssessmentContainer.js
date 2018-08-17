@@ -116,6 +116,7 @@ class AssessmentContainer extends Component {
     this.setState({
       assessment,
       assessmentServiceStatus: LoadingState.ready,
+      shouldRenderSaveSuccessMessage: true,
     });
     this.updateUrlWithAssessment(assessment);
   }
