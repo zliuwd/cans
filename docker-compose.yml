@@ -2,7 +2,7 @@ version: '3.2'
 services:
 
   postgres:
-    image: cwds/postgresql_data:0.8.4_644-RC
+    image: cwds/postgresql_data:0.8.4_648-RC
     hostname: postgresql_data
     ports:
       - ${POSTGRES_PORT}:5432
@@ -26,7 +26,7 @@ services:
       - "6379:6379"
 
   cans-api:
-    image: cwds/cans-api:0.8.4_160-RC
+    image: cwds/cans-api:0.8.4_161-RC
     hostname: cans-api
     depends_on:
       - postgres
