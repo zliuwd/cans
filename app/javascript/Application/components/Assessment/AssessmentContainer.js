@@ -17,11 +17,11 @@ import { DateTime } from 'luxon';
 
 import './style.sass';
 
-/* eslint-disable camelcase */
 class AssessmentContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isNewForm: !!this.props.match.params.id,
       assessment: defaultEmptyAssessment,
       assessmentServiceStatus: LoadingState.idle,
       i18n: {},
@@ -198,6 +198,7 @@ class AssessmentContainer extends Component {
 
   render() {
     const {
+      isNewForm,
       child,
       redirection,
       isValidForSubmit,
@@ -210,10 +211,11 @@ class AssessmentContainer extends Component {
     if (shouldRedirect) {
       return <Redirect push to={{ pathname: `/clients/${child.id}`, state: { successAssessmentId } }} />;
     }
+    const pageTitle = isNewForm ? 'CANS Assessment Form' : 'New CANS';
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus);
     return (
       <Fragment>
-        <PageInfo title={'Add CANS'} />
+        <PageInfo title={pageTitle} />
         <AssessmentFormHeader client={child} assessment={assessment} onAssessmentUpdate={this.updateAssessment} />
         <Assessment assessment={assessment} i18n={i18n} onAssessmentUpdate={this.updateAssessment} />
         <Typography variant="headline" className={'submit-validation-message'}>
@@ -246,7 +248,6 @@ class AssessmentContainer extends Component {
     );
   }
 }
-/* eslint-enable camelcase */
 
 AssessmentContainer.propTypes = {
   history: PropTypes.object,

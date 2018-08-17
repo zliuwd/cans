@@ -50,7 +50,7 @@ class ClientAssessmentHistory extends Component {
     return (
       <Link to={`/clients/${childId}/assessments`}>
         <Button size="small" color="inherit" className={'card-header-cans-button'}>
-          Add Cans
+          New CANS
         </Button>
       </Link>
     );

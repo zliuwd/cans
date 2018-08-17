@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import Card from '@material-ui/core/Card/Card';
+import Button from '@material-ui/core/Button/Button';
 import CardHeader from '@material-ui/core/CardHeader/index';
 import CardContent from '@material-ui/core/CardContent/index';
 import Grid from '@material-ui/core/Grid/Grid';
@@ -57,6 +58,15 @@ describe('<ClientAssessmentHistory', () => {
         </MemoryRouter>
       ).find(CardHeader);
       expect(wrapper.props().action.props.to).toBe('/clients/1004/assessments');
+    });
+
+    it('renders with <Button /> in the Card header', () => {
+      const wrapper = mount(
+        <MemoryRouter>
+          <ClientAssessmentHistory {...params} />
+        </MemoryRouter>
+      ).find(Button);
+      expect(wrapper.text()).toBe('New CANS');
     });
   });
 

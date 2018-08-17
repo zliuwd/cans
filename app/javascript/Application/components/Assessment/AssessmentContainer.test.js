@@ -48,6 +48,28 @@ describe('<AssessmentContainer />', () => {
       });
     });
 
+    describe('page title', () => {
+      it('should be "New CANS" for new assessment', () => {
+        const wrapper = shallow(<AssessmentContainer />);
+        expect(
+          wrapper
+            .find('PageInfo')
+            .render()
+            .text()
+        ).toBe('New CANS');
+      });
+
+      it('should be "CANS Assessment Form" for the existent assessment', () => {
+        const wrapper = shallow(<AssessmentContainer {...defaultProps} />);
+        expect(
+          wrapper
+            .find('PageInfo')
+            .render()
+            .text()
+        ).toBe('CANS Assessment Form');
+      });
+    });
+
     describe('every assessment', () => {
       it('will load client data', async () => {
         const props = {
