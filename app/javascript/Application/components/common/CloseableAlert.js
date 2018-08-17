@@ -15,6 +15,7 @@ export const alertType = Object.freeze({
 export class CloseableAlert extends Component {
   constructor(context) {
     super(context);
+    this.timer = null;
     this.state = {
       isClosed: false,
     };
@@ -22,12 +23,20 @@ export class CloseableAlert extends Component {
 
   componentDidMount() {
     if (this.props.isAutoCloseable) {
-      setTimeout(this.handleCloseAlert, DEFAULT_AUTO_HIDE_TIMEOUT);
+      this.timer = setTimeout(this.handleCloseAlert, DEFAULT_AUTO_HIDE_TIMEOUT);
     }
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
+
   handleCloseAlert = () => {
+    clearTimeout(this.timer);
     this.setState({ isClosed: true });
+    if (this.props.onClose) {
+      this.props.onClose();
+    }
   };
 
   render() {
@@ -35,9 +44,9 @@ export class CloseableAlert extends Component {
       return null;
     }
 
-    const { message, type, isCloseable } = this.props;
+    const { message, type, isCloseable, className } = this.props;
     return (
-      <Alert color={type}>
+      <Alert color={type} className={className}>
         {message}
         {isCloseable && (
           <div className="float-right">
@@ -56,13 +65,17 @@ export class CloseableAlert extends Component {
 }
 
 CloseableAlert.propTypes = {
+  className: PropTypes.string,
   isAutoCloseable: PropTypes.bool,
   isCloseable: PropTypes.bool,
   message: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
+  onClose: PropTypes.func,
   type: PropTypes.oneOf([alertType.SUCCESS, alertType.INFO, alertType.WARNING, alertType.DANGER]).isRequired,
 };
 
 CloseableAlert.defaultProps = {
+  className: null,
   isAutoCloseable: false,
   isCloseable: false,
+  onClose: null,
 };

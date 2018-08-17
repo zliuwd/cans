@@ -6,10 +6,13 @@ import { shallow, mount } from 'enzyme';
 import { PageInfo } from '../Layout';
 import Typography from '@material-ui/core/Typography/Typography';
 import AssessmentFormFooter from './AssessmentFormFooter';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Link } from 'react-router-dom';
 import { assessment, updatedAssessment, initialAssessment, instrument } from './assessment.mocks.test';
 import { DateTime } from 'luxon';
 import { LoadingState } from '../../util/loadingHelper';
+import { CloseableAlert } from '../common/CloseableAlert';
+
+jest.useFakeTimers();
 
 const defaultProps = {
   location: { childId: 1 },
@@ -129,6 +132,35 @@ describe('<AssessmentContainer />', () => {
         expect(wrapper.state('assessment').id).toBe(1);
         expect(wrapper.state('assessment').state.domains).toBeTruthy();
       });
+    });
+
+    it('should render save success message that has a link to child info page', async () => {
+      // given
+      jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
+      jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment));
+      const wrapper = await shallow(<AssessmentContainer {...defaultProps} />);
+      wrapper.setState({ assessment: { id: 1 } });
+
+      // when
+      await wrapper.instance().handleSaveAssessment();
+      wrapper.update();
+
+      // then
+      const alertWrapper = wrapper.find(CloseableAlert);
+      expect(alertWrapper.length).toBe(1);
+      const linkWrapper = alertWrapper
+        .first()
+        .dive()
+        .find(Link)
+        .first();
+      expect(linkWrapper.props().to).toBe('/clients/10');
+
+      // when 2 (the message is auto closed)
+      jest.runAllTimers();
+      wrapper.update();
+
+      // then 2
+      expect(wrapper.find(CloseableAlert).length).toBe(0);
     });
   });
 

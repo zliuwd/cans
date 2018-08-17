@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { CloseableAlert, alertType } from '../common/CloseableAlert';
 import { Assessment, AssessmentFormHeader, AssessmentFormFooter, AssessmentService, I18nService } from './';
 import Typography from '@material-ui/core/Typography';
 import { PageInfo } from '../Layout';
@@ -14,6 +15,8 @@ import {
 } from './AssessmentHelper';
 import { DateTime } from 'luxon';
 
+import './style.sass';
+
 /* eslint-disable camelcase */
 class AssessmentContainer extends Component {
   constructor(props) {
@@ -24,6 +27,7 @@ class AssessmentContainer extends Component {
       i18n: {},
       child: {},
       isValidForSubmit: false,
+      shouldRenderSaveSuccessMessage: false,
       redirection: {
         shouldRedirect: false,
         successAssessmentId: null,
@@ -120,6 +124,10 @@ class AssessmentContainer extends Component {
     this.props.history.push(`/clients/${this.state.child.id}/assessments/${assessment.id}`);
   }
 
+  hideSaveSuccessMessage = () => {
+    this.setState({ shouldRenderSaveSuccessMessage: false });
+  };
+
   handleSaveAssessment = async () => {
     this.setState({ assessmentServiceStatus: LoadingState.updating });
     const assessment = this.state.assessment;
@@ -130,6 +138,7 @@ class AssessmentContainer extends Component {
         this.setState({
           assessment: updatedAssessment,
           assessmentServiceStatus: LoadingState.ready,
+          shouldRenderSaveSuccessMessage: true,
         });
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error });
@@ -188,7 +197,15 @@ class AssessmentContainer extends Component {
   };
 
   render() {
-    const { child, redirection, isValidForSubmit, assessment, i18n, assessmentServiceStatus } = this.state;
+    const {
+      child,
+      redirection,
+      isValidForSubmit,
+      assessment,
+      i18n,
+      assessmentServiceStatus,
+      shouldRenderSaveSuccessMessage,
+    } = this.state;
     const { shouldRedirect, successAssessmentId } = redirection;
     if (shouldRedirect) {
       return <Redirect push to={{ pathname: `/clients/${child.id}`, state: { successAssessmentId } }} />;
@@ -203,6 +220,21 @@ class AssessmentContainer extends Component {
           Assessment Date, Complete as, and all available ratings fields for the child/adolescent and applicable
           caregiver(s) must be completed prior to clicking the Submit button.
         </Typography>
+        {shouldRenderSaveSuccessMessage ? (
+          <CloseableAlert
+            type={alertType.SUCCESS}
+            message={
+              <Fragment>
+                Success! CANS assessment has been saved. <Link to={`/clients/${child.id}`}>Click here</Link> to return
+                to Child/Youth profile.
+              </Fragment>
+            }
+            onClose={this.hideSaveSuccessMessage}
+            className={'assessment-save-success'}
+            isCloseable
+            isAutoCloseable
+          />
+        ) : null}
         <AssessmentFormFooter
           onCancelClick={this.handleCancelClick}
           isSaveButtonEnabled={canPerformUpdates && !!this.state.assessment.event_date}

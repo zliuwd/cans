@@ -17,7 +17,7 @@ describe('<CloseableAlert>', () => {
 
     it('has a close icon when needed', () => {
       // given + when
-      const alert = shallow(<CloseableAlert isCloseable={true} type={'info'} />);
+      const alert = shallow(<CloseableAlert isCloseable={true} type={'info'} message={''} />);
 
       // then
       expect(alert.find('.close-icon').length).toBe(1);
@@ -61,6 +61,21 @@ describe('<CloseableAlert>', () => {
 
       // then
       expect(alert.render().text()).toBe('');
+    });
+
+    it('invokes onClose callback if it exists', () => {
+      // given
+      const onCloseCallback = jest.fn();
+      const alert = shallow(
+        <CloseableAlert onClose={onCloseCallback} isAutoCloseable={true} message={''} type={'info'} />
+      );
+
+      // when
+      jest.runAllTimers();
+      alert.update();
+
+      // then
+      expect(onCloseCallback).toHaveBeenCalledWith();
     });
   });
 });
