@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import InputMask from 'react-input-mask';
 import { Row, Col, Button } from 'reactstrap';
 import { withStyles } from '@material-ui/core/styles';
-import { MenuItem, TextField, Card, CardHeader, CardContent } from '@material-ui/core';
+import { TextField, Card, CardHeader, CardContent } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { CountiesService } from './Counties.service';
 import { ClientService } from './Client.service';
@@ -11,6 +11,10 @@ import { validate, validateCaseNumber, validateCaseNumbersAreUnique, isFormValid
 import { PageInfo } from '../Layout';
 import { isA11yAllowedInput } from '../../util/events';
 import { clone, stringify } from '../../util/common';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
 
 import './style.sass';
 
@@ -19,6 +23,19 @@ const LAST_NAME_MAX_LENGTH = 25;
 const SUFFIX_MAX_LENGTH = 4;
 
 const styles = theme => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  formControl: {
+    width: 300,
+    margin: 10,
+  },
+  inputSelect: {
+    backgroundImage: 'none !important',
+    color: '#111',
+    fontSize: 16,
+  },
   inputText: {
     color: '#111',
     fontSize: 16,
@@ -32,9 +49,14 @@ const styles = theme => ({
     width: 300,
     fontSize: 16,
   },
-  menu: {
+  textFieldSelect: {
+    margin: '10 10 10 0',
     width: 300,
     fontSize: 16,
+  },
+  inputLabel: {
+    color: '#777777 !important',
+    fontSize: 18,
   },
   cardWidth: {
     minWidth: 300,
@@ -67,6 +89,11 @@ const helperTextProps = {
   },
 };
 
+const emptyCounty = {
+  id: 0,
+  name: '',
+};
+
 class ClientAddEditForm extends Component {
   constructor(props) {
     super(props);
@@ -81,10 +108,7 @@ class ClientAddEditForm extends Component {
         suffix: '',
         dob: '',
         external_id: '',
-        county: {
-          id: 0,
-          name: '',
-        },
+        county: emptyCounty,
         cases: [{ external_id: '' }],
       },
       childInfoValidation: {
@@ -145,6 +169,17 @@ class ClientAddEditForm extends Component {
 
   onFetchCountiesSuccess = counties => {
     this.setState({ counties });
+  };
+
+  handleCountyChange = event => {
+    const county = this.state.counties.find(county => county.name === event.target.value) || emptyCounty;
+    this.setState({
+      childInfo: {
+        ...this.state.childInfo,
+        county: county,
+      },
+    });
+    this.validateInput('county', county);
   };
 
   handleChange = name => event => {
@@ -298,36 +333,35 @@ class ClientAddEditForm extends Component {
 
   renderCountiesDropDown = () => {
     const { classes } = this.props;
-    const { isNewForm, childInfo, childInfoValidation, counties } = this.state;
+    const { childInfo, childInfoValidation, counties } = this.state;
     const isValid = childInfoValidation['county'];
     return (
-      <TextField
-        required
-        select
-        id="county"
-        label="County"
-        error={!isValid}
-        className={classes.textField}
-        value={childInfo.county}
-        onChange={this.handleChange('county')}
-        helperText={!isValid ? 'Please select your County' : null}
-        margin="normal"
-        inputProps={{ className: classes.inputText }}
-        InputLabelProps={inputLabelProps}
-        FormHelperTextProps={helperTextProps}
-      >
-        {!isNewForm && (
-          <MenuItem className={classes.menu} selected={true} value={childInfo.county}>
-            {childInfo.county.name}
-          </MenuItem>
-        )}
-
-        {counties.map(option => (
-          <MenuItem key={option.id} value={option} className={classes.menu}>
-            <span id={'county-name'}>{option.name}</span>
-          </MenuItem>
-        ))}
-      </TextField>
+      <div className={classes.root}>
+        <FormControl required error={!isValid} className={classes.formControl}>
+          <InputLabel htmlFor="county-select" className={classes.inputLabel}>
+            County
+          </InputLabel>
+          <Select
+            native
+            value={childInfo.county.name}
+            onChange={this.handleCountyChange}
+            name="county"
+            className={classes.textFieldSelect}
+            inputProps={{
+              id: 'county-select',
+              className: classes.inputSelect,
+            }}
+          >
+            <option key={0} value="" />
+            {counties.map(county => (
+              <option key={county.id} value={county.name}>
+                {county.name}
+              </option>
+            ))}
+          </Select>
+          <FormHelperText>{!isValid ? 'Please select your County' : null}</FormHelperText>
+        </FormControl>
+      </div>
     );
   };
 
@@ -475,7 +509,6 @@ class ClientAddEditForm extends Component {
                     />
                   )}
                 </InputMask>
-
                 {this.renderCountiesDropDown()}
                 {this.renderCaseNumbersBlock()}
               </form>

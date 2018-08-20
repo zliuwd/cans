@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { getI18nByCode } from './I18nHelper';
 import Domain from './Domain';
@@ -122,25 +122,29 @@ class Assessment extends Component {
     const assessmentJson = assessmentDto.state;
     const isUnderSix = assessmentJson.under_six;
     const domains = assessmentJson.domains;
-    return domains.map(domain => {
-      const { code, caregiver_index: caregiverIndex } = domain;
-      const domainI18n = getI18nByCode(i18n, code);
-      return (
-        <Domain
-          key={code + caregiverIndex}
-          domain={domain}
-          i18n={domainI18n}
-          i18nAll={i18n}
-          isAssessmentUnderSix={isUnderSix}
-          canReleaseConfidentialInfo={canReleaseConfidentialInfo}
-          onRatingUpdate={this.handleUpdateItemRating}
-          onConfidentialityUpdate={this.handleUpdateItemConfidentiality}
-          onAddCaregiverDomain={this.addCaregiverDomainAfter}
-          onRemoveCaregiverDomain={this.removeCaregiverDomain}
-          onCaregiverNameUpdate={this.updateCaregiverName}
-        />
-      );
-    });
+    return (
+      <Fragment>
+        {domains.map(domain => {
+          const { code, caregiver_index: caregiverIndex } = domain;
+          const domainI18n = getI18nByCode(i18n, code);
+          return (
+            <Domain
+              key={code + caregiverIndex}
+              domain={domain}
+              i18n={domainI18n}
+              i18nAll={i18n}
+              isAssessmentUnderSix={isUnderSix}
+              canReleaseConfidentialInfo={canReleaseConfidentialInfo}
+              onRatingUpdate={this.handleUpdateItemRating}
+              onConfidentialityUpdate={this.handleUpdateItemConfidentiality}
+              onAddCaregiverDomain={this.addCaregiverDomainAfter}
+              onRemoveCaregiverDomain={this.removeCaregiverDomain}
+              onCaregiverNameUpdate={this.updateCaregiverName}
+            />
+          );
+        })}
+      </Fragment>
+    );
   }
 }
 

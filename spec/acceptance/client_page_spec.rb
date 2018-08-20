@@ -42,9 +42,7 @@ feature 'Client Pages' do
     focus_and_fill_in('#caseNumber0', case_number_0)
     focus_and_fill_in('#caseNumber1', case_number_1)
     focus_and_fill_in('#external_id', client_id)
-    find('div[aria-haspopup=true][role=button]').click
-    expect(find_button('Save', disabled: true).disabled?).to be true
-    find('li', text: 'Fresno').send_keys(:enter)
+    find('#county-select').find(:xpath, 'option[11]').select_option
     click_button 'Save'
     expect(page).to have_content 'Child/Youth Profile'
     expect(page).to have_content first_name

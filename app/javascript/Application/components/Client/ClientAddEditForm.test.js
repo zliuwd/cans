@@ -12,6 +12,7 @@ const defaultPropsEdit = {
 const defaultPropsAdd = {
   match: { params: { id: undefined } },
 };
+
 describe('<ClientAddEditForm />', () => {
   const getWrapperMountAdd = () =>
     mount(
@@ -203,6 +204,7 @@ describe('<ClientAddEditForm />', () => {
 
         // when
         clientForm.instance().onFetchChildDataSuccess({
+          county: { id: 0, name: '' },
           cases: [{}, {}, {}],
         });
         clientForm.update();
@@ -224,7 +226,7 @@ describe('<ClientAddEditForm />', () => {
           .dive();
 
         // when
-        clientForm.instance().onFetchChildDataSuccess({ cases: [] });
+        clientForm.instance().onFetchChildDataSuccess({ county: { id: 0, name: '0' }, cases: [] });
         clientForm.update();
 
         // then

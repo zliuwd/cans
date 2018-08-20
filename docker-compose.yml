@@ -1,6 +1,5 @@
 version: '3.2'
 services:
-
   postgres:
     image: cwds/postgresql_data:0.8.4_648-RC
     hostname: postgresql_data
@@ -23,7 +22,7 @@ services:
   redis:
     image: 'redis:3.0'
     ports:
-      - "6379:6379"
+      - '6379:6379'
 
   cans-api:
     image: cwds/cans-api:0.8.4_161-RC
@@ -56,7 +55,7 @@ services:
       - 3000:3000
     environment:
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      PERRY_BASE_URL: "http://${HOST}:${PERRY_PORT}/perry"
+      PERRY_BASE_URL: 'http://${HOST}:${PERRY_PORT}/perry'
       CANS_API_BASE_URL: ${CANS_API_BASE_URL}
       CANS_AUTHORIZATION_ENABLED: ${CANS_AUTHORIZATION_ENABLED}
       REDIS_HOST: 'redis'
