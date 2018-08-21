@@ -1,4 +1,4 @@
-import { trimSafely, toDateFormat } from './formatters';
+import { trimSafely, toDateFormat, addTrailingSlash } from './formatters';
 
 describe('formatters', () => {
   describe('#trimSafely()', () => {
@@ -26,6 +26,24 @@ describe('formatters', () => {
 
     it('returns a formatted date only when date and time in input', () => {
       expect(toDateFormat('1941-12-07T12:00:00.123Z')).toEqual('12/7/1941');
+    });
+  });
+
+  describe('#addTrailingSlash()', () => {
+    it('should add trailing slash to string', () => {
+      expect(addTrailingSlash('www.home.com')).toEqual('www.home.com/');
+    });
+
+    it('should return input string when it already has a trailing slash', () => {
+      expect(addTrailingSlash('/')).toEqual('/');
+      expect(addTrailingSlash('www.home.com/')).toEqual('www.home.com/');
+      expect(addTrailingSlash('www.home.com///')).toEqual('www.home.com///');
+    });
+
+    it('should return slash for empty input string', () => {
+      expect(addTrailingSlash(undefined)).toEqual('/');
+      expect(addTrailingSlash(null)).toEqual('/');
+      expect(addTrailingSlash('')).toEqual('/');
     });
   });
 });

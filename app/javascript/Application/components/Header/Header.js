@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { GlobalHeader } from 'react-wood-duck';
-import { trimSafely } from '../../util/formatters';
+import { trimSafely, addTrailingSlash } from '../../util/formatters';
 import UserAccountService from './UserAccountService';
+
+const logoutUrl = `${addTrailingSlash(process.env.CANS_BASE_PATH)}user/logout`;
 
 class Header extends React.Component {
   constructor(props) {
@@ -58,16 +60,31 @@ class Header extends React.Component {
     }
   };
 
+  logout() {
+    window.location.href = logoutUrl;
+  }
+
   render = () => {
     const { userName, userInitials } = this.state;
-    return <GlobalHeader profileName={userName} profileId={userInitials} profileAvatar={userInitials} />;
+    return (
+      <GlobalHeader
+        profileName={userName}
+        profileId={userInitials}
+        profileAvatar={userInitials}
+        logoutCallback={this.logout}
+      />
+    );
   };
 }
 
 Header.propTypes = {
   /** callback to be invoked when user info is successfully fetched,
    * should accept staffId as a parameter */
-  onUserFetchedCallback: PropTypes.func.isRequired,
+  onUserFetchedCallback: PropTypes.func,
+};
+
+Header.defaultProps = {
+  onUserFetchedCallback: null,
 };
 
 export default Header;

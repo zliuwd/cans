@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   root 'application#fallback_index_html'
   get 'user/account', to: 'account#index'
+  get 'user/logout', to: 'logout#index'
 
   namespace :api, defaults: { format: 'json' } do
     resources :people, only: [:show, :create, :update] do

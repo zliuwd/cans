@@ -8,6 +8,11 @@ module LoginHelper
     click_button 'Sign In'
   end
 
+  def logout
+    find('.profile-avatar button').click
+    find('.profile-avatar a').click
+  end
+
   private
 
   def need_login?

@@ -17,3 +17,16 @@ export function trimSafely(str) {
 export function toDateFormat(datetime) {
   return DateTime.fromISO(datetime).toFormat('M/d/yyyy');
 }
+
+/**
+ * Adds a trailing slash to a string if there is no trailing slash.
+ * Returns slash for an empty or undefined strings
+ *
+ * @param url
+ */
+export function addTrailingSlash(url) {
+  if (!url) {
+    return '/';
+  }
+  return url[url.length - 1] === '/' ? url : url + '/';
+}

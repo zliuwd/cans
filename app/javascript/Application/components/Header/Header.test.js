@@ -49,6 +49,24 @@ describe('Header', () => {
       expect(mockCallback.mock.calls.length).toBe(1);
       expect(mockCallback.mock.calls[0][0]).toBe('id');
     });
+
+    it('should invoke #logout() on logout button click', async () => {
+      // given
+      const spy = jest.spyOn(Header.prototype, 'logout');
+      UserAccountService.fetchCurrent.mockReturnValue(
+        Promise.resolve({
+          staff_id: 'id',
+        })
+      );
+      const wrapper = await mount(<Header />);
+
+      // when
+      wrapper.find('.profile-avatar button').simulate('click');
+      wrapper.find('.profile-avatar a').simulate('click');
+
+      // then
+      expect(spy.mock.calls.length).toBe(1);
+    });
   });
 
   describe('when failed to fetch user', () => {
