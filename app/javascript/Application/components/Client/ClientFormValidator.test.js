@@ -1,4 +1,4 @@
-import { validate, validateCaseNumber, validateCaseNumbersAreUnique, isFormValid } from './ClientFormValidator';
+import { validate, validateCase, validateCaseNumbersAreUnique, isFormValid } from './ClientFormValidator';
 
 describe('ClientFormValidator', () => {
   describe('#validate()', () => {
@@ -59,22 +59,39 @@ describe('ClientFormValidator', () => {
     });
   });
 
-  describe('#validateCaseNumber()', () => {
-    it('should return true for empty case numbers', () => {
-      expect(validateCaseNumber(undefined)).toBeTruthy();
-      expect(validateCaseNumber(null)).toBeTruthy();
-      expect(validateCaseNumber('')).toBeTruthy();
+  describe('#validateCase()', () => {
+    describe('when new case', () => {
+      it('should return true for empty cases', () => {
+        expect(validateCase({ external_id: undefined })).toBeTruthy();
+        expect(validateCase({ external_id: null })).toBeTruthy();
+        expect(validateCase({ external_id: '' })).toBeTruthy();
+      });
+
+      it('should return true for valid case numbers', () => {
+        expect(validateCase({ external_id: '4321-321-4321-87654321' })).toBeTruthy();
+        expect(validateCase({ external_id: '1234-123-1234-12345678' })).toBeTruthy();
+      });
     });
 
-    it('should return true for valid case numbers', () => {
-      expect(validateCaseNumber('4321-321-4321-87654321')).toBeTruthy();
-      expect(validateCaseNumber('1234-123-1234-12345678')).toBeTruthy();
-    });
+    describe('when existent case', () => {
+      it('should return false for empty cases', () => {
+        expect(validateCase({ id: 123, external_id: undefined })).toBeFalsy();
+        expect(validateCase({ id: 123, external_id: null })).toBeFalsy();
+        expect(validateCase({ id: 123, external_id: '' })).toBeFalsy();
+      });
 
-    it('should return false for invalid case numbers', () => {
-      expect(validateCaseNumber('/')).toBeFalsy();
-      expect(validateCaseNumber('a%')).toBeFalsy();
-      expect(validateCaseNumber('123456789012345678901234567890123456789012345678901')).toBeFalsy();
+      it('should return false for invalid case numbers', () => {
+        expect(validateCase({ id: 123, external_id: '/' })).toBeFalsy();
+        expect(validateCase({ id: 123, external_id: 'a%' })).toBeFalsy();
+        expect(
+          validateCase({ id: 123, external_id: '123456789012345678901234567890123456789012345678901' })
+        ).toBeFalsy();
+      });
+
+      it('should return true for valid case numbers', () => {
+        expect(validateCase({ id: 123, external_id: '4321-321-4321-87654321' })).toBeTruthy();
+        expect(validateCase({ id: 123, external_id: '1234-123-1234-12345678' })).toBeTruthy();
+      });
     });
   });
 

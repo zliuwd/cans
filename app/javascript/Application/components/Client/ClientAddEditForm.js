@@ -7,7 +7,7 @@ import { TextField, Card, CardHeader, CardContent } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { CountiesService } from './Counties.service';
 import { ClientService } from './Client.service';
-import { validate, validateCaseNumber, validateCaseNumbersAreUnique, isFormValid } from './ClientFormValidator';
+import { validate, validateCase, validateCaseNumbersAreUnique, isFormValid } from './ClientFormValidator';
 import { PageInfo } from '../Layout';
 import { isA11yAllowedInput } from '../../util/events';
 import { clone, stringify } from '../../util/common';
@@ -224,7 +224,7 @@ class ClientAddEditForm extends Component {
   validateCaseNumbers = cases => {
     const casesValidations = clone(this.state.childInfoValidation.cases);
     for (const [index, aCase] of cases.entries()) {
-      casesValidations[index].external_id = validateCaseNumber(aCase.external_id);
+      casesValidations[index].external_id = validateCase(aCase);
     }
     const nonUniqueCasesIndices = validateCaseNumbersAreUnique(cases);
     nonUniqueCasesIndices.forEach(index => (casesValidations[index].external_id = false));

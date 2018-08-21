@@ -1,3 +1,5 @@
+const caseNumberRegexp = /^\d{4}-\d{3}-\d{4}-\d{8}$/i;
+
 export function validate(fieldName, value) {
   switch (fieldName) {
     case 'first_name':
@@ -17,8 +19,8 @@ export function validate(fieldName, value) {
   }
 }
 
-export function validateCaseNumber(caseNumber) {
-  return !caseNumber || /^\d{4}-\d{3}-\d{4}-\d{8}$/i.test(caseNumber);
+export function validateCase({ id, external_id: externalId }) {
+  return id ? caseNumberRegexp.test(externalId) : !externalId || caseNumberRegexp.test(externalId);
 }
 
 export function validateCaseNumbersAreUnique(cases) {
