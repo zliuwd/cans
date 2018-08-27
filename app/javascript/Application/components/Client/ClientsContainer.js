@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import ClientService from './Client.service';
 import { groupClientsByLastName, formatClientName } from './Client.helper';
@@ -6,6 +7,8 @@ import Button from '@material-ui/core/Button/Button';
 import Card from '@material-ui/core/Card/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
+import BreadCrumb from '../common/breadCrumb';
+import SideNav from '../Layout/SideNav';
 import Grid from '@material-ui/core/Grid';
 
 import './style.sass';
@@ -80,19 +83,31 @@ class ClientsContainer extends Component {
     const clients = this.state.clients || [];
     return (
       <Fragment>
-        <Grid item className={'client-grid'} xs={12}>
-          <Card className={'card'}>
-            <CardHeader className={'card-header-cans'} title="Child/Youth List" action={this.renderAddChildButton()} />
-            <CardContent>
-              <div className="clients-container">
-                {clients.map(record => {
-                  return this.renderClientsRecord(record);
-                })}
-                {this.renderNoData()}
-              </div>
-            </CardContent>
-          </Card>
-        </Grid>
+        <BreadCrumb navigationElements={[<u>CHILD YOUTH/LIST</u>]} />
+        <Row>
+          <Col xs="4">
+            <SideNav />
+          </Col>
+          <Col xs="8">
+            <Grid item className={'client-grid'} xs={12}>
+              <Card className={'card'}>
+                <CardHeader
+                  className={'card-header-cans'}
+                  title="Child/Youth List"
+                  action={this.renderAddChildButton()}
+                />
+                <CardContent>
+                  <div className="clients-container">
+                    {clients.map(record => {
+                      return this.renderClientsRecord(record);
+                    })}
+                    {this.renderNoData()}
+                  </div>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Col>
+        </Row>
       </Fragment>
     );
   };

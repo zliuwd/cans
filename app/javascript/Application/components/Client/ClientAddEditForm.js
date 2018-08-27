@@ -14,6 +14,8 @@ import { clone, stringify } from '../../util/common';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import BreadCrumb from '../common/breadCrumb';
+import SideNav from '../Layout/SideNav';
 import FormControl from '@material-ui/core/FormControl';
 
 import './style.sass';
@@ -450,6 +452,19 @@ class ClientAddEditForm extends Component {
     const { isNewForm, childInfo, childInfoValidation, redirection } = this.state;
     const { shouldRedirect, successClientId } = redirection;
 
+    const firstName = childInfo.first_name === undefined ? null : childInfo.first_name.toUpperCase();
+    const lastName = childInfo.last_name === undefined ? null : childInfo.last_name.toUpperCase();
+
+    const childListUrl = <a href={'/CANS'}>CHILD YOUTH/LIST</a>;
+    const addChildUrl = <u>ADD CHILD/YOUTH</u>;
+    const editChildUrl = [
+      <a href={`/CANS/clients/${childInfo.id}`}>
+        {lastName}, {firstName}
+      </a>,
+      <span> > </span>,
+      <u>EDIT PROFILE</u>,
+    ];
+
     if (shouldRedirect) {
       const pathName = isNewForm && !successClientId ? `/` : `/clients/${childInfo.id}`;
       return <Redirect push to={{ pathname: pathName, state: { isNewForm, successClientId } }} />;
@@ -457,65 +472,73 @@ class ClientAddEditForm extends Component {
 
     return (
       <Fragment>
-        <PageInfo title={isNewForm ? 'Add Child/Youth' : 'Edit Child/Youth'} />
-        <Card className={classes.cardWidth}>
-          <CardHeader
-            className={'card-header-cans'}
-            title="Child/Youth Information"
-            classes={{ title: classes.title }}
-          />
+        <BreadCrumb navigationElements={[childListUrl, isNewForm ? addChildUrl : editChildUrl]} />
+        <Row>
+          <Col xs="4">
+            <SideNav />
+          </Col>
+          <Col xs="8">
+            <PageInfo title={isNewForm ? 'Add Child/Youth' : 'Edit Child/Youth'} />
+            <Card className={classes.cardWidth}>
+              <CardHeader
+                className={'card-header-cans'}
+                title="Child/Youth Information"
+                classes={{ title: classes.title }}
+              />
 
-          <div className={'content'}>
-            <CardContent>
-              <form className={classes.container} noValidate autoComplete="off">
-                {this.renderNameInputs('first_name', 'First Name', FIRST_MIDDLE_NAME_MAX_LENGTH, true)}
-                {this.renderNameInputs('middle_name', 'Middle Name', FIRST_MIDDLE_NAME_MAX_LENGTH, false)}
-                {this.renderNameInputs('last_name', 'Last Name', LAST_NAME_MAX_LENGTH, true)}
-                {this.renderNameInputs('suffix', 'Suffix', SUFFIX_MAX_LENGTH, false)}
+              <div className={'content'}>
+                <CardContent>
+                  <form className={classes.container} noValidate autoComplete="off">
+                    {this.renderNameInputs('first_name', 'First Name', FIRST_MIDDLE_NAME_MAX_LENGTH, true)}
+                    {this.renderNameInputs('middle_name', 'Middle Name', FIRST_MIDDLE_NAME_MAX_LENGTH, false)}
+                    {this.renderNameInputs('last_name', 'Last Name', LAST_NAME_MAX_LENGTH, true)}
+                    {this.renderNameInputs('suffix', 'Suffix', SUFFIX_MAX_LENGTH, false)}
 
-                <TextField
-                  required
-                  id="dob"
-                  label="Date of Birth"
-                  value={childInfo.dob}
-                  error={!childInfoValidation['dob']}
-                  type="date"
-                  className={classes.textField}
-                  onChange={this.handleChange('dob')}
-                  inputProps={{ className: classes.inputText }}
-                  InputLabelProps={{
-                    ...inputLabelProps,
-                    shrink: true,
-                  }}
-                />
-
-                <InputMask
-                  mask="9999-9999-9999-9999999"
-                  value={childInfo.external_id}
-                  onChange={this.handleChange('external_id')}
-                >
-                  {() => (
                     <TextField
                       required
-                      id="external_id"
-                      label="Client Id"
-                      helperText={!childInfoValidation['external_id'] ? 'Enter 19 digits number' : null}
-                      error={!childInfoValidation['external_id']}
+                      id="dob"
+                      label="Date of Birth"
+                      value={childInfo.dob}
+                      error={!childInfoValidation['dob']}
+                      type="date"
                       className={classes.textField}
-                      margin="normal"
+                      onChange={this.handleChange('dob')}
                       inputProps={{ className: classes.inputText }}
-                      InputLabelProps={inputLabelProps}
-                      FormHelperTextProps={helperTextProps}
+                      InputLabelProps={{
+                        ...inputLabelProps,
+                        shrink: true,
+                      }}
                     />
-                  )}
-                </InputMask>
-                {this.renderCountiesDropDown()}
-                {this.renderCaseNumbersBlock()}
-              </form>
-              {this.renderFormFooter()}
-            </CardContent>
-          </div>
-        </Card>
+
+                    <InputMask
+                      mask="9999-9999-9999-9999999"
+                      value={childInfo.external_id}
+                      onChange={this.handleChange('external_id')}
+                    >
+                      {() => (
+                        <TextField
+                          required
+                          id="external_id"
+                          label="Client Id"
+                          helperText={!childInfoValidation['external_id'] ? 'Enter 19 digits number' : null}
+                          error={!childInfoValidation['external_id']}
+                          className={classes.textField}
+                          margin="normal"
+                          inputProps={{ className: classes.inputText }}
+                          InputLabelProps={inputLabelProps}
+                          FormHelperTextProps={helperTextProps}
+                        />
+                      )}
+                    </InputMask>
+                    {this.renderCountiesDropDown()}
+                    {this.renderCaseNumbersBlock()}
+                  </form>
+                  {this.renderFormFooter()}
+                </CardContent>
+              </div>
+            </Card>
+          </Col>
+        </Row>
       </Fragment>
     );
   }

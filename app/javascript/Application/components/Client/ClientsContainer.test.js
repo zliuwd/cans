@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { MemoryRouter } from 'react-router';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import { SideNav } from '../Layout';
 import CardHeader from '@material-ui/core/CardHeader';
 
 describe('<ClientsContainer />', () => {
@@ -20,6 +21,13 @@ describe('<ClientsContainer />', () => {
     const koolmodee = await shallow(<ClientsContainer />);
     expect(koolmodee.find(Card).length).toBe(1);
     expect(koolmodee.find(CardHeader).props().title).toBe('Child/Youth List');
+  });
+
+  it('renders a card with a SideNav', async () => {
+    ClientServiceFetchSpy.mockReturnValue(Promise.resolve(personsJson));
+    const coolmodee = await shallow(<ClientsContainer />);
+    expect(coolmodee.find(Card).length).toBe(1);
+    expect(coolmodee.find(SideNav).length).toBe(1);
   });
 
   describe('when client list is empty', () => {

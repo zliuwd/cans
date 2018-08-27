@@ -1,11 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect, Link } from 'react-router-dom';
+import { Row, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { CloseableAlert, alertType } from '../common/CloseableAlert';
 import { Assessment, AssessmentFormHeader, AssessmentFormFooter, AssessmentService, I18nService } from './';
 import Typography from '@material-ui/core/Typography';
 import { PageInfo } from '../Layout';
 import { ClientService } from '../Client/';
+import BreadCrumb from '../common/breadCrumb';
+import SideNav from '../Layout/SideNav';
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper';
 import {
   AssessmentStatus,
@@ -214,37 +217,53 @@ class AssessmentContainer extends Component {
     }
     const pageTitle = isNewForm ? 'CANS Assessment Form' : 'New CANS';
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus);
+    const fullName = `${child.last_name}, ${child.first_name}`;
+    const childName = fullName === undefined ? null : fullName.toUpperCase();
     return (
       <Fragment>
-        <PageInfo title={pageTitle} />
-        <AssessmentFormHeader client={child} assessment={assessment} onAssessmentUpdate={this.updateAssessment} />
-        <Assessment assessment={assessment} i18n={i18n} onAssessmentUpdate={this.updateAssessment} />
-        <Typography variant="headline" className={'submit-validation-message'}>
-          Assessment Date, Complete as, and all available ratings fields for the child/adolescent and applicable
-          caregiver(s) must be completed prior to clicking the Submit button.
-        </Typography>
-        {shouldRenderSaveSuccessMessage ? (
-          <CloseableAlert
-            type={alertType.SUCCESS}
-            message={
-              <Fragment>
-                Success! CANS assessment has been saved. <Link to={`/clients/${child.id}`}>Click here</Link> to return
-                to Child/Youth profile.
-              </Fragment>
-            }
-            onClose={this.hideSaveSuccessMessage}
-            className={'assessment-save-success'}
-            isCloseable
-            isAutoCloseable
-          />
-        ) : null}
-        <AssessmentFormFooter
-          onCancelClick={this.handleCancelClick}
-          isSaveButtonEnabled={canPerformUpdates && !!this.state.assessment.event_date}
-          onSaveAssessment={this.handleSaveAssessment}
-          isSubmitButtonEnabled={canPerformUpdates && isValidForSubmit}
-          onSubmitAssessment={this.handleSubmitAssessment}
+        <BreadCrumb
+          navigationElements={[
+            <a href={'/CANS'}>CHILD YOUTH/LIST</a>,
+            <a href={`/CANS/clients/${child.id}`}>{childName}</a>,
+            isNewForm ? <u>EDIT CANS</u> : <u>ADD CANS</u>,
+          ]}
         />
+        <Row>
+          <Col xs="4">
+            <SideNav />
+          </Col>
+          <Col xs="8">
+            <PageInfo title={pageTitle} />
+            <AssessmentFormHeader client={child} assessment={assessment} onAssessmentUpdate={this.updateAssessment} />
+            <Assessment assessment={assessment} i18n={i18n} onAssessmentUpdate={this.updateAssessment} />
+            <Typography variant="headline" className={'submit-validation-message'}>
+              Assessment Date, Complete as, and all available ratings fields for the child/adolescent and applicable
+              caregiver(s) must be completed prior to clicking the Submit button.
+            </Typography>
+            {shouldRenderSaveSuccessMessage ? (
+              <CloseableAlert
+                type={alertType.SUCCESS}
+                message={
+                  <Fragment>
+                    Success! CANS assessment has been saved. <Link to={`/clients/${child.id}`}>Click here</Link> to
+                    return to Child/Youth profile.
+                  </Fragment>
+                }
+                onClose={this.hideSaveSuccessMessage}
+                className={'assessment-save-success'}
+                isCloseable
+                isAutoCloseable
+              />
+            ) : null}
+            <AssessmentFormFooter
+              onCancelClick={this.handleCancelClick}
+              isSaveButtonEnabled={canPerformUpdates && !!this.state.assessment.event_date}
+              onSaveAssessment={this.handleSaveAssessment}
+              isSubmitButtonEnabled={canPerformUpdates && isValidForSubmit}
+              onSubmitAssessment={this.handleSubmitAssessment}
+            />
+          </Col>
+        </Row>
       </Fragment>
     );
   }

@@ -11,6 +11,7 @@ import { assessment, updatedAssessment, initialAssessment, instrument } from './
 import { DateTime } from 'luxon';
 import { LoadingState } from '../../util/loadingHelper';
 import { CloseableAlert } from '../common/CloseableAlert';
+import { SideNav } from '../Layout';
 
 jest.useFakeTimers();
 
@@ -30,6 +31,10 @@ describe('<AssessmentContainer />', () => {
       };
       const getWrapper = () => shallow(<AssessmentContainer {...props} />);
       const getLength = component => getWrapper().find(component).length;
+
+      it('renders with 1 <SideNav /> component', () => {
+        expect(getLength(SideNav)).toBe(1);
+      });
 
       it('renders with 1 <PageInfo /> component', () => {
         expect(getLength(PageInfo)).toBe(1);

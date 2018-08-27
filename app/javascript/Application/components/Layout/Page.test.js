@@ -1,19 +1,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Page, SideNav } from './';
+import { Page } from './';
 import { Routes } from '../../routes';
 
 describe('<Page />', () => {
   describe('layout', () => {
     const getWrapper = () => shallow(<Page />);
-
-    it('renders with <SideNav /> links', () => {
-      const wrapper = getWrapper();
-      const sideNav = wrapper.find(SideNav);
-
-      expect(sideNav.length).toBe(1);
-      expect(sideNav.dive().find({ text: 'Child/Youth List' }).length).toBe(1);
-    });
 
     it('renders with <Routes /> component', () => {
       const wrapper = getWrapper();
