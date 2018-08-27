@@ -12,8 +12,8 @@ describe('<AssessmentFormHeader />', () => {
       shallow(<AssessmentFormHeader {...{ assessment, client, onAssessmentUpdate: jest.fn() }} />);
     const getLength = component => getShallowWrapper().find(component).length;
 
-    it('renders with 3 assessment-form-header-label labels', () => {
-      expect(getLength('.assessment-form-header-label')).toBe(3);
+    it('renders with 5 assessment-form-header-label labels', () => {
+      expect(getLength('.assessment-form-header-label')).toBe(5);
     });
 
     it('renders with 3 <Input /> component', () => {

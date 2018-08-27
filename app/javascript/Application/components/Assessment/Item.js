@@ -166,7 +166,7 @@ class Item extends Component {
     return (isAssessmentUnderSix && under_six_id) || (!isAssessmentUnderSix && above_six_id) ? (
       <div>
         <AppBar position="static" color="inherit">
-          <Toolbar style={{ justifyContent: 'space-between' }}>
+          <Toolbar style={{ justifyContent: 'left' }}>
             <i
               id={'item-expand'}
               role="link"
@@ -175,18 +175,31 @@ class Item extends Component {
               onClick={this.switchExpandedState}
               onKeyDown={this.switchExpandedState}
             />
-            <Typography variant="title">
+
+            <Typography
+              variant="title"
+              style={{
+                flex: 1,
+                textAlign: 'left',
+                marginLeft: 10,
+              }}
+            >
               {itemNumber}
               {caregiverIndex}. {title}
             </Typography>
-            {this.renderConfidentialCheckbox(isConfidential, confidential_by_default)}
-            <Rating
-              itemCode={code}
-              rating_type={rating_type}
-              hasNaOption={has_na_option}
-              rating={rating}
-              onRatingUpdate={this.handleRatingChange}
-            />
+
+            <Typography variant="title" style={{ marginRight: 10 }}>
+              {this.renderConfidentialCheckbox(isConfidential, confidential_by_default)}
+            </Typography>
+            <Typography variant="title">
+              <Rating
+                itemCode={code}
+                rating_type={rating_type}
+                hasNaOption={has_na_option}
+                rating={rating}
+                onRatingUpdate={this.handleRatingChange}
+              />
+            </Typography>
           </Toolbar>
         </AppBar>
         {isExpanded ? (
@@ -216,5 +229,4 @@ Item.propTypes = {
 Item.defaultProps = {
   caregiverIndex: undefined,
 };
-
 export default Item;

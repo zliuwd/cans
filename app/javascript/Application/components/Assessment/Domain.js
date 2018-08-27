@@ -145,7 +145,7 @@ class Domain extends Component {
             {title} {caregiverName && `- ${caregiverName}`}
           </Typography>
           {description ? (
-            <Tooltip title={description} placement="top-end" classes={{ popper: 'domain-tooltip' }}>
+            <Tooltip title={description} placement="top" classes={{ tooltip: 'domain-tooltip' }}>
               <i className="fa fa-question-circle domain-help-icon" />
             </Tooltip>
           ) : null}

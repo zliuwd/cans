@@ -84,6 +84,7 @@ class AssessmentFormHeader extends PureComponent {
           name={'event_date'}
           value={this.props.assessment.event_date}
           onChange={this.handleValueChange}
+          style={{ fontSize: '1.5rem', height: '3rem' }}
         />
       </Fragment>
     );
@@ -100,6 +101,7 @@ class AssessmentFormHeader extends PureComponent {
           id={'select-case'}
           value={(this.props.assessment.the_case || {}).external_id}
           onChange={this.handleSelectCaseNumber}
+          style={{ fontSize: '1.5rem', height: '3rem' }}
         >
           {this.renderCaseNumbersDropdownOptions()}
         </Input>
@@ -128,6 +130,7 @@ class AssessmentFormHeader extends PureComponent {
           id={'select-user'}
           value={this.props.assessment.completed_as}
           onChange={this.handleValueChange}
+          style={{ fontSize: '1.5rem', height: '3rem' }}
         >
           <option value={'COMMUNIMETRIC'}>Communimetric</option>
         </Input>
@@ -215,9 +218,10 @@ class AssessmentFormHeader extends PureComponent {
   renderToggleUnderSixQuestion() {
     const isUnderSix = this.props.assessment.state.under_six;
     return (
-      <Typography variant="body1" style={{ textAlign: 'right' }}>
+      <Typography variant="body1" style={{ textAlign: 'right' }} className={'assessment-form-header-label'}>
         Age: 0-5
         <FormControlLabel
+          className={'assessment-form-header-label'}
           control={
             <Switch
               checked={!isUnderSix}
@@ -226,9 +230,9 @@ class AssessmentFormHeader extends PureComponent {
               color="default"
             />
           }
-          label="6-21"
-          style={{ marginLeft: '0px' }}
+          style={{ marginLeft: '0px', marginRight: '0px' }}
         />
+        6-21
       </Typography>
     );
   }
