@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import Domain from './Domain';
+import { DomainProgressBar } from './index';
 
 const domainDefault = {
   id: '1',
@@ -47,6 +48,22 @@ describe('<Domain />', () => {
     expect(() => shallow(domainComponentDefault)).not.toThrow();
   });
 
+  describe('progress bar', () => {
+    it('should render progress bar when folded', () => {
+      const wrapper = shallow(domainComponentDefault);
+      expect(wrapper.instance().state.expanded).toBeFalsy();
+      expect(wrapper.find(DomainProgressBar).length).toBe(1);
+    });
+
+    it('should render progress bar when extended', () => {
+      const wrapper = shallow(domainComponentDefault);
+      wrapper.instance().handleExpandedChange();
+      wrapper.update();
+      expect(wrapper.instance().state.expanded).toBeTruthy();
+      expect(wrapper.find(DomainProgressBar).length).toBe(1);
+    });
+  });
+
   describe('caregiver domain', () => {
     it('renders caregiver index and caregiver control buttons', () => {
       const domain = {
@@ -70,6 +87,8 @@ describe('<Domain />', () => {
         />
       );
       const wrapper = mount(domainComponent);
+      wrapper.instance().handleExpandedChange();
+      wrapper.update();
       const foldedText = wrapper.text();
       expect(foldedText).toMatch(/TITLE/);
       expect(foldedText).toMatch(/- REMOVE CAREGIVER/);
@@ -99,6 +118,8 @@ describe('<Domain />', () => {
         />
       );
       const wrapper = mount(domainComponent);
+      wrapper.instance().handleExpandedChange();
+      wrapper.update();
       const addCaregiverButton = wrapper.find('.caregiver-control').at(1);
       addCaregiverButton.simulate('click');
       addCaregiverButton.simulate('keypress', { key: 'Enter' });
@@ -129,6 +150,8 @@ describe('<Domain />', () => {
         />
       );
       const wrapper = mount(domainComponent);
+      wrapper.instance().handleExpandedChange();
+      wrapper.update();
       const removeCaregiverButton = wrapper.find('.caregiver-control').at(0);
       removeCaregiverButton.simulate('click');
       removeCaregiverButton.simulate('keypress', { key: 'Enter' });
@@ -163,6 +186,8 @@ describe('<Domain />', () => {
               />
             );
             const wrapper = mount(domainComponent);
+            wrapper.instance().handleExpandedChange();
+            wrapper.update();
             const nameInput = wrapper.find('.caregiver-name').at(0);
 
             // when
@@ -200,6 +225,8 @@ describe('<Domain />', () => {
               />
             );
             const wrapper = mount(domainComponent);
+            wrapper.instance().handleExpandedChange();
+            wrapper.update();
             const nameInput = wrapper.find('.caregiver-name').at(0);
             nameInput.simulate('change', { target: { value: 'Full Name' } });
 
