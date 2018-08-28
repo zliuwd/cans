@@ -10,6 +10,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import classNames from 'classnames';
+import { shouldItemBeRendered } from './AssessmentHelper';
 import { Rating } from './';
 import { getI18nValuesByPrefix } from './I18nHelper';
 import { stringify } from '../../util/common';
@@ -163,7 +164,7 @@ class Item extends Component {
     const { isExpanded, title, description, qtcDescriptions, ratingDescriptions } = this.state;
     const isBooleanRating = rating_type === 'BOOLEAN';
     const classes = classNames('item-expand-icon', { 'fa fa-plus': !isExpanded, 'fa fa-minus': isExpanded });
-    return (isAssessmentUnderSix && under_six_id) || (!isAssessmentUnderSix && above_six_id) ? (
+    return shouldItemBeRendered(isAssessmentUnderSix, item) ? (
       <div>
         <AppBar position="static" color="inherit">
           <Toolbar style={{ justifyContent: 'left' }}>

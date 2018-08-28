@@ -1,4 +1,10 @@
-import { validateAssessmentForSubmit, resetConfidentialByDefaultItems } from './AssessmentHelper';
+import {
+  validateAssessmentForSubmit,
+  resetConfidentialByDefaultItems,
+  shouldDomainBeRendered,
+  shouldItemBeRendered,
+  calculateDomainProgress,
+} from './AssessmentHelper';
 import { clone } from '../../util/common';
 
 const validAssessment = {
@@ -151,6 +157,150 @@ describe('AssessmentHelper', () => {
 
       // then
       expect(assessment.state.domains[0].items[0].confidential).toBe(true);
+    });
+  });
+
+  describe('#shouldDomainBeRendered()', () => {
+    describe('when domain is under six', () => {
+      const domain = { under_six: true };
+      it('should return true when the assessment is under six', () => {
+        expect(shouldDomainBeRendered(true, domain)).toBeTruthy();
+      });
+
+      it('should return false when the assessment is not under six', () => {
+        expect(shouldDomainBeRendered(false, domain)).toBeFalsy();
+      });
+    });
+
+    describe('when domain is above six', () => {
+      const domain = { above_six: true };
+      it('should return false when the assessment is under six', () => {
+        expect(shouldDomainBeRendered(true, domain)).toBeFalsy();
+      });
+
+      it('should return true when the assessment is not under six', () => {
+        expect(shouldDomainBeRendered(false, domain)).toBeTruthy();
+      });
+    });
+  });
+
+  describe('#shouldItemBeRendered()', () => {
+    describe('when the item has an under six id', () => {
+      const item = { under_six_id: '1' };
+      it('should return true when the assessment is under six', () => {
+        expect(shouldItemBeRendered(true, item)).toBeTruthy();
+      });
+
+      it('should return false when the assessment is not under six', () => {
+        expect(shouldItemBeRendered(false, item)).toBeFalsy();
+      });
+    });
+
+    describe('when the item has an above six id', () => {
+      const item = { above_six_id: '1' };
+      it('should return false when the assessment is under six', () => {
+        expect(shouldItemBeRendered(true, item)).toBeFalsy();
+      });
+
+      it('should return true when the assessment is not under six', () => {
+        expect(shouldItemBeRendered(false, item)).toBeTruthy();
+      });
+    });
+  });
+
+  describe('#calculateDomainProgress()', () => {
+    it('should return 100 when all required items have rating', () => {
+      expect(calculateDomainProgress(true, validAssessment.state.domains[0])).toEqual(100);
+      expect(calculateDomainProgress(true, validAssessment.state.domains[1])).toEqual(100);
+    });
+
+    it('should ignore not required fields', () => {
+      const domain = {
+        items: [
+          {
+            under_six_id: '1',
+            required: false,
+            rating: -1,
+          },
+          {
+            under_six_id: '2',
+            required: true,
+            rating: 1,
+          },
+          {
+            under_six_id: '3',
+            required: true,
+            rating: -1,
+          },
+        ],
+      };
+      expect(calculateDomainProgress(true, domain)).toEqual(50);
+    });
+
+    describe('when assessment is under six', () => {
+      it('should ignore fields with no under_six_id', () => {
+        const domain = {
+          items: [
+            {
+              required: true,
+              rating: -1,
+            },
+            {
+              under_six_id: '2',
+              required: true,
+              rating: 1,
+            },
+            {
+              under_six_id: '3',
+              required: true,
+              rating: -1,
+            },
+          ],
+        };
+        expect(calculateDomainProgress(true, domain)).toEqual(50);
+      });
+
+      it('should return 50 when one of two items has a rating', () => {
+        const domain = {
+          items: [
+            {
+              under_six_id: '1',
+              required: true,
+              rating: -1,
+            },
+            {
+              under_six_id: '2',
+              required: true,
+              rating: 1,
+            },
+          ],
+        };
+        expect(calculateDomainProgress(true, domain)).toEqual(50);
+      });
+    });
+
+    describe('when assessment is not under six', () => {
+      it('should ignore fields with no above_six_id', () => {
+        const domain = {
+          items: [
+            {
+              required: true,
+              rating: -1,
+            },
+            {
+              above_six_id: '2',
+              required: true,
+              rating: 1,
+            },
+            {
+              above_six_id: '3',
+              required: true,
+              rating: -1,
+            },
+          ],
+        };
+        expect(calculateDomainProgress(false, domain)).toEqual(50);
+      });
     });
   });
 });

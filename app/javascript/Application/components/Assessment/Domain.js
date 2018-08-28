@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -8,7 +8,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Divider from '@material-ui/core/Divider';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Input } from 'reactstrap';
-import { Item } from './';
+import { DomainProgressBar, Item } from './';
+import { shouldDomainBeRendered } from './AssessmentHelper';
 import { getI18nByCode } from './I18nHelper';
 import { isA11yAllowedInput } from '../../util/events';
 
@@ -24,12 +25,21 @@ const mapPropsToState = props => ({
 class Domain extends Component {
   constructor(props) {
     super(props);
-    this.state = mapPropsToState(props);
+    this.state = {
+      ...mapPropsToState(props),
+      expanded: false,
+    };
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState(mapPropsToState(nextProps));
   }
+
+  handleExpandedChange = () => {
+    this.setState({
+      expanded: !this.state.expanded,
+    });
+  };
 
   renderItems = items => {
     const i18nAll = this.props.i18nAll || {};
@@ -132,30 +142,38 @@ class Domain extends Component {
   }
 
   render = () => {
-    const { isAssessmentUnderSix } = this.props;
-    const { items, under_six, above_six, is_caregiver_domain } = this.props.domain;
-    const { title, description, caregiverName } = this.state;
-    return (isAssessmentUnderSix && under_six) || (!isAssessmentUnderSix && above_six) ? (
-      <ExpansionPanel style={{ backgroundColor: '#114161' }}>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon style={{ height: '28px', color: 'white' }} />}
-          style={{ minHeight: '28px' }}
-        >
-          <Typography variant="title" style={{ color: 'white' }}>
-            {title} {caregiverName && `- ${caregiverName}`}
-          </Typography>
-          {description ? (
-            <Tooltip title={description} placement="top" classes={{ tooltip: 'domain-tooltip' }}>
-              <i className="fa fa-question-circle domain-help-icon" />
-            </Tooltip>
-          ) : null}
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails style={{ display: 'block', padding: '0', backgroundColor: 'white' }}>
-          {is_caregiver_domain && this.renderCaregiverName()}
-          {this.renderItems(items)}
-          {is_caregiver_domain && this.renderCaregiverDomainControls()}
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+    const { isAssessmentUnderSix, domain } = this.props;
+    const { items, is_caregiver_domain } = domain;
+    const { title, description, caregiverName, expanded } = this.state;
+    return shouldDomainBeRendered(isAssessmentUnderSix, domain) ? (
+      <Fragment>
+        <ExpansionPanel expanded={expanded} onChange={this.handleExpandedChange} style={{ backgroundColor: '#114161' }}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon style={{ height: '28px', color: 'white' }} />}
+            style={{ minHeight: '28px' }}
+          >
+            <Typography variant="title" style={{ color: 'white' }}>
+              {title} {caregiverName && `- ${caregiverName}`}
+            </Typography>
+            {description ? (
+              <Tooltip title={description} placement="top" classes={{ tooltip: 'domain-tooltip' }}>
+                <i className="fa fa-question-circle domain-help-icon" />
+              </Tooltip>
+            ) : null}
+          </ExpansionPanelSummary>
+          {expanded && (
+            <Fragment>
+              <DomainProgressBar isAssessmentUnderSix={isAssessmentUnderSix} domain={domain} />
+              <ExpansionPanelDetails style={{ display: 'block', padding: '0', backgroundColor: 'white' }}>
+                {is_caregiver_domain && this.renderCaregiverName()}
+                {this.renderItems(items)}
+                {is_caregiver_domain && this.renderCaregiverDomainControls()}
+              </ExpansionPanelDetails>
+            </Fragment>
+          )}
+        </ExpansionPanel>
+        {!expanded && <DomainProgressBar isAssessmentUnderSix={isAssessmentUnderSix} domain={domain} />}
+      </Fragment>
     ) : null;
   };
 }

@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon';
 
+const FULL_PROGRESS = 100;
+
 export const AssessmentType = Object.freeze({
   initial: 'INITIAL',
   subsequent: 'SUBSEQUENT',
@@ -46,9 +48,9 @@ function isDefined(value) {
 function areItemsValid(assessment) {
   const isUnderSix = !!assessment.under_six;
   const requiredItems = assessment.domains
-    .filter(domain => (isUnderSix && domain.under_six) || (!isUnderSix && domain.above_six))
+    .filter(domain => shouldDomainBeRendered(isUnderSix, domain))
     .reduce((items, domain) => items.concat(domain.items), [])
-    .filter(item => (isUnderSix && item.under_six_id) || (!isUnderSix && item.above_six_id));
+    .filter(item => shouldItemBeRendered(isUnderSix, item));
   const itemsWithNoRating = requiredItems.filter(item => item.rating === -1);
   return itemsWithNoRating.length === 0;
 }
@@ -62,4 +64,19 @@ export function resetConfidentialByDefaultItems(assessment) {
     });
   });
   return assessment;
+}
+
+export function shouldDomainBeRendered(isAssessmentUnderSix, domain) {
+  return (isAssessmentUnderSix && domain.under_six) || (!isAssessmentUnderSix && domain.above_six);
+}
+
+export function shouldItemBeRendered(isAssessmentUnderSix, item) {
+  return (isAssessmentUnderSix && item.under_six_id) || (!isAssessmentUnderSix && item.above_six_id);
+}
+
+export function calculateDomainProgress(isAssessmentUnderSix, domain) {
+  const total = domain.items.filter(item => shouldItemBeRendered(isAssessmentUnderSix, item) && item.required);
+  if (total.length === 0) return FULL_PROGRESS;
+  const filled = total.filter(item => item.rating !== -1);
+  return (filled.length / total.length) * FULL_PROGRESS;
 }
