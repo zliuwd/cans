@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const BreadCrumb = ({ navigationElements }) => (
   <div className="container">
@@ -8,7 +9,7 @@ const BreadCrumb = ({ navigationElements }) => (
         <h5>
           {' '}
           <span>
-            <a href="/dashboard">DASHBOARD</a>{' '}
+            <Link to={'/dashboard'}>DASHBOARD</Link>{' '}
             {navigationElements.map((nav, index) => <span key={index}> > {nav}</span>)}
           </span>
         </h5>

@@ -7,12 +7,12 @@ describe('bread crumb rendering', () => {
   it('verify breadCrumb rendering with a single node', () => {
     let props = [<a href="/dashboard"> DASHBOARD</a>];
     breadCrumbComp = shallow(<BreadCrumb navigationElements={props} />);
-    expect(breadCrumbComp.find('a').length).toEqual(2);
+    expect(breadCrumbComp.find('a').length).toEqual(1);
   });
 
   it('verify breadCrumb rendering with two nodes', () => {
     let props = [<a href="/dashboard"> DASHBOARD</a>, <a href={'/CANS'}>CHILD YOUTH/LIST</a>];
     breadCrumbComp = shallow(<BreadCrumb navigationElements={props} />);
-    expect(breadCrumbComp.find('a').length).toEqual(3);
+    expect(breadCrumbComp.find('a').length).toEqual(2);
   });
 });

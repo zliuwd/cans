@@ -3,7 +3,7 @@ import { AssessmentContainer, AssessmentFormHeader, AssessmentService } from './
 import { childInfoJson } from '../Client/Client.helper.test';
 import ClientService from '../Client/Client.service';
 import { shallow, mount } from 'enzyme';
-import { PageInfo } from '../Layout';
+import { PageInfo, SideNav } from '../Layout';
 import Typography from '@material-ui/core/Typography/Typography';
 import AssessmentFormFooter from './AssessmentFormFooter';
 import { MemoryRouter, Link } from 'react-router-dom';
@@ -11,7 +11,6 @@ import { assessment, updatedAssessment, initialAssessment, instrument } from './
 import { DateTime } from 'luxon';
 import { LoadingState } from '../../util/loadingHelper';
 import { CloseableAlert } from '../common/CloseableAlert';
-import { SideNav } from '../Layout';
 
 jest.useFakeTimers();
 

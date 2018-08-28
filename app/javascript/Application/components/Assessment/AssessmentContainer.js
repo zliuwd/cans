@@ -5,10 +5,9 @@ import PropTypes from 'prop-types';
 import { CloseableAlert, alertType } from '../common/CloseableAlert';
 import { Assessment, AssessmentFormHeader, AssessmentFormFooter, AssessmentService, I18nService } from './';
 import Typography from '@material-ui/core/Typography';
-import { PageInfo } from '../Layout';
+import { PageInfo, SideNav } from '../Layout';
 import { ClientService } from '../Client/';
 import BreadCrumb from '../common/breadCrumb';
-import SideNav from '../Layout/SideNav';
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper';
 import {
   AssessmentStatus,
@@ -223,8 +222,8 @@ class AssessmentContainer extends Component {
       <Fragment>
         <BreadCrumb
           navigationElements={[
-            <a href={'/CANS'}>CHILD YOUTH/LIST</a>,
-            <a href={`/CANS/clients/${child.id}`}>{childName}</a>,
+            <Link to={''}>CHILD YOUTH/LIST</Link>,
+            <Link to={`/clients/${child.id}`}>{childName}</Link>,
             isNewForm ? <u>EDIT CANS</u> : <u>ADD CANS</u>,
           ]}
         />

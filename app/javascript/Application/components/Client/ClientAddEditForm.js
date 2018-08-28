@@ -4,7 +4,7 @@ import InputMask from 'react-input-mask';
 import { Row, Col, Button } from 'reactstrap';
 import { withStyles } from '@material-ui/core/styles';
 import { TextField, Card, CardHeader, CardContent } from '@material-ui/core';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { CountiesService } from './Counties.service';
 import { ClientService } from './Client.service';
 import { validate, validateCase, validateCaseNumbersAreUnique, isFormValid } from './ClientFormValidator';
@@ -455,12 +455,12 @@ class ClientAddEditForm extends Component {
     const firstName = childInfo.first_name === undefined ? null : childInfo.first_name.toUpperCase();
     const lastName = childInfo.last_name === undefined ? null : childInfo.last_name.toUpperCase();
 
-    const childListUrl = <a href={'/CANS'}>CHILD YOUTH/LIST</a>;
+    const childListUrl = <Link to={''}>CHILD YOUTH/LIST</Link>;
     const addChildUrl = <u>ADD CHILD/YOUTH</u>;
     const editChildUrl = [
-      <a href={`/CANS/clients/${childInfo.id}`}>
+      <Link to={`/clients/${childInfo.id}`}>
         {lastName}, {firstName}
-      </a>,
+      </Link>,
       <span> > </span>,
       <u>EDIT PROFILE</u>,
     ];

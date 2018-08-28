@@ -83,7 +83,7 @@ class Client extends Component {
     const childName = fullName === undefined ? null : fullName.toUpperCase();
     return (
       <Fragment>
-        <BreadCrumb navigationElements={[<a href={'/CANS'}>CHILD YOUTH/LIST</a>, <u>{childName}</u>]} />
+        <BreadCrumb navigationElements={[<Link to={''}>CHILD YOUTH/LIST</Link>, <u>{childName}</u>]} />
         <Row>
           <Col xs="4">
             <SideNav />
