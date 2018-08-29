@@ -3,7 +3,7 @@ import BreadCrumb from './breadCrumb';
 import { shallow } from 'enzyme';
 
 describe('bread crumb rendering', () => {
-  let breadCrumbComp;
+  let breadCrumbComponent;
   it('verify breadCrumb rendering with a single node', () => {
     let props = [
       <a key="" href="/dashboard">
@@ -11,8 +11,8 @@ describe('bread crumb rendering', () => {
         DASHBOARD
       </a>,
     ];
-    breadCrumbComp = shallow(<BreadCrumb navigationElements={props} />);
-    expect(breadCrumbComp.find('a').length).toEqual(2);
+    breadCrumbComponent = shallow(<BreadCrumb navigationElements={props} />);
+    expect(breadCrumbComponent.find('a').length).toEqual(2);
   });
 
   it('verify breadCrumb rendering with two nodes', () => {
@@ -25,7 +25,7 @@ describe('bread crumb rendering', () => {
         CHILD YOUTH/LIST
       </a>,
     ];
-    breadCrumbComp = shallow(<BreadCrumb navigationElements={props} />);
-    expect(breadCrumbComp.find('a').length).toEqual(3);
+    breadCrumbComponent = shallow(<BreadCrumb navigationElements={props} />);
+    expect(breadCrumbComponent.find('a').length).toEqual(3);
   });
 });

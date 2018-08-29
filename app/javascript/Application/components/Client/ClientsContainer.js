@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button/Button';
 import Card from '@material-ui/core/Card/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import BreadCrumb from '../common/breadCrumb';
+import BreadCrumb from '../common/BreadCrumb';
 import SideNav from '../Layout/SideNav';
 import Grid from '@material-ui/core/Grid';
 

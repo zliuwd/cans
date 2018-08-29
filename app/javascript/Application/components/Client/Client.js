@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { PageInfo } from '../Layout';
 import { ClientAssessmentHistory, ClientService } from './index';
 import Button from '@material-ui/core/Button/Button';
-import BreadCrumb from '../common/breadCrumb';
+import BreadCrumb from '../common/BreadCrumb';
 import SideNav from '../Layout/SideNav';
 import { CloseableAlert, alertType } from '../common/CloseableAlert';
 import { Link } from 'react-router-dom';

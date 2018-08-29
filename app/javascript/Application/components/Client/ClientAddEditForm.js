@@ -14,7 +14,7 @@ import { clone, stringify } from '../../util/common';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import BreadCrumb from '../common/breadCrumb';
+import BreadCrumb from '../common/BreadCrumb';
 import SideNav from '../Layout/SideNav';
 import FormControl from '@material-ui/core/FormControl';
 

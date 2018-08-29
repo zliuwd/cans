@@ -7,7 +7,7 @@ import { Assessment, AssessmentFormHeader, AssessmentFormFooter, AssessmentServi
 import Typography from '@material-ui/core/Typography';
 import { PageInfo, SideNav } from '../Layout';
 import { ClientService } from '../Client/';
-import BreadCrumb from '../common/breadCrumb';
+import BreadCrumb from '../common/BreadCrumb';
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper';
 import {
   AssessmentStatus,
