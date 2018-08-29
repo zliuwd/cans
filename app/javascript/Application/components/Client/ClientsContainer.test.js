@@ -10,13 +10,14 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 
 describe('<ClientsContainer />', () => {
-  const ClientServiceFetchSpy = jest.spyOn(ClientService, 'fetchAllClients');
+  let clientServiceFetchSpy;
+
   beforeEach(() => {
-    ClientServiceFetchSpy.mockClear();
+    clientServiceFetchSpy = jest.spyOn(ClientService, 'fetchAllClients');
   });
 
   it('renders a card with a header', async () => {
-    ClientServiceFetchSpy.mockReturnValue(Promise.resolve(personsJson));
+    clientServiceFetchSpy.mockReturnValue(Promise.resolve(personsJson));
     const koolmodee = await shallow(<ClientsContainer />);
     expect(koolmodee.find(Card).length).toBe(1);
     expect(koolmodee.find(CardHeader).props().title).toBe('Child/Youth List');
@@ -24,7 +25,7 @@ describe('<ClientsContainer />', () => {
 
   describe('when client list is empty', () => {
     it('renders message no clients found', async () => {
-      ClientServiceFetchSpy.mockReturnValue(Promise.resolve([]));
+      clientServiceFetchSpy.mockReturnValue(Promise.resolve([]));
       const wrapper = await shallow(<ClientsContainer />);
       wrapper.update();
       expect(wrapper.find('#no-data').text()).toBe('No clients found');
@@ -33,7 +34,7 @@ describe('<ClientsContainer />', () => {
 
   describe('when client list has 3 clients ', () => {
     it('renders grouped clients names', async () => {
-      ClientServiceFetchSpy.mockReturnValue(Promise.resolve(personsJson));
+      clientServiceFetchSpy.mockReturnValue(Promise.resolve(personsJson));
       const wrapper = await shallow(<ClientsContainer />);
       wrapper.update();
       expect(wrapper.find(Link).length).toBe(3);
@@ -42,7 +43,7 @@ describe('<ClientsContainer />', () => {
 
   describe('when client fetch fails', () => {
     it('renders an empty container', async () => {
-      ClientServiceFetchSpy.mockReturnValue(Promise.reject(Error('error')));
+      clientServiceFetchSpy.mockReturnValue(Promise.reject(Error('error')));
       const wrapper = await mount(
         <MemoryRouter>
           <ClientsContainer />

@@ -108,10 +108,10 @@ describe('<AssessmentContainer />', () => {
     });
 
     describe('assessment form with an existing assessment', () => {
-      it('calls fetchAssessment', () => {
+      it('calls fetchAssessment', async () => {
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment');
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />);
-        wrapper.instance().componentDidMount();
+        await wrapper.instance().componentDidMount();
         expect(assessmentServiceGetSpy).toHaveBeenCalledWith();
       });
     });

@@ -3,6 +3,7 @@ module.exports = {
   verbose: true,
   testURL: 'http://localhost/',
   rootDir: './app/javascript',
+  restoreMocks: true,
   setupTestFrameworkScriptFile: '<rootDir>/setupTests.js',
   coverageDirectory: path.resolve(__dirname, 'coverage', 'javascript'),
   moduleNameMapper: {
