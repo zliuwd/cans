@@ -83,7 +83,7 @@ class ClientsContainer extends Component {
     const clients = this.state.clients || [];
     return (
       <Fragment>
-        <BreadCrumb navigationElements={[<u>CHILD YOUTH/LIST</u>]} />
+        <BreadCrumb navigationElements={[<u key="">CHILD YOUTH/LIST</u>]} />
         <Row>
           <Col xs="4">
             <SideNav />

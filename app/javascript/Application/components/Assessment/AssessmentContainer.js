@@ -222,8 +222,12 @@ class AssessmentContainer extends Component {
       <Fragment>
         <BreadCrumb
           navigationElements={[
-            <Link to={''}>CHILD YOUTH/LIST</Link>,
-            <Link to={`/clients/${child.id}`}>{childName}</Link>,
+            <Link key="" to={''}>
+              CHILD YOUTH/LIST
+            </Link>,
+            <Link key={child.id} to={`/clients/${child.id}`}>
+              {childName}
+            </Link>,
             isNewForm ? <u>EDIT CANS</u> : <u>ADD CANS</u>,
           ]}
         />

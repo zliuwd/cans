@@ -455,14 +455,18 @@ class ClientAddEditForm extends Component {
     const firstName = childInfo.first_name === undefined ? null : childInfo.first_name.toUpperCase();
     const lastName = childInfo.last_name === undefined ? null : childInfo.last_name.toUpperCase();
 
-    const childListUrl = <Link to={''}>CHILD YOUTH/LIST</Link>;
+    const childListUrl = (
+      <Link key="childList" to={''}>
+        CHILD YOUTH/LIST
+      </Link>
+    );
     const addChildUrl = <u>ADD CHILD/YOUTH</u>;
     const editChildUrl = [
-      <Link to={`/clients/${childInfo.id}`}>
+      <Link key="childInfo" to={`/clients/${childInfo.id}`}>
         {lastName}, {firstName}
       </Link>,
-      <span> > </span>,
-      <u>EDIT PROFILE</u>,
+      <span key=""> {'>'} </span>,
+      <u key="editProfile">EDIT PROFILE</u>,
     ];
 
     if (shouldRedirect) {
