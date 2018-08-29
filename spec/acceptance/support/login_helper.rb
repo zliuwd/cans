@@ -23,7 +23,7 @@ module LoginHelper
     {
       'user': 'RACFID',
       'staffId': '0X5',
-      'roles': ['CWS-admin', 'Supervisor'],
+      'roles': ['CWS-admin', 'Supervisor', 'CANS-worker'],
       'county_code': '56',
       'county_cws_code': '1123',
       'county_name': 'Ventura',
@@ -37,6 +37,7 @@ module LoginHelper
         'Hotline-rollout',
         'Facility-search-rollout',
         'RFA-rollout',
+        'CANS-rollout',
         'development-not-in-use'
       ]
     }
