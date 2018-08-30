@@ -9,6 +9,7 @@
     "prettier-check": "prettier --list-different 'src/**/*.js'",
     "test": "jest --env=jsdom --watch",
     "test:coverage": "jest --env=jsdom --coverage",
+    "test:rspec": "rspec --exclude-pattern 'spec/acceptance/**/*_spec.rb'",
     "test:acceptance": "rspec spec/acceptance"
   },
   "dependencies": {
