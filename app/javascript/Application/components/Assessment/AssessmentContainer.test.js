@@ -1,5 +1,5 @@
 import React from 'react';
-import { AssessmentContainer, AssessmentFormHeader, AssessmentService } from './index';
+import { AssessmentContainer, AssessmentFormHeader, AssessmentService, SecurityService } from './index';
 import { childInfoJson } from '../Client/Client.helper.test';
 import ClientService from '../Client/Client.service';
 import { shallow, mount } from 'enzyme';
@@ -70,6 +70,54 @@ describe('<AssessmentContainer />', () => {
       });
     });
 
+    describe('warning message on absence of edit permission', () => {
+      afterEach(() => {
+        jest.restoreAllMocks();
+      });
+
+      it('should render warning message', async () => {
+        const props = {
+          location: { childId: 1 },
+          match: { params: { id: 1 } },
+        };
+        jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
+        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false));
+        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment));
+        jest.spyOn(AssessmentService, 'fetch').mockReturnValue(Promise.resolve(assessment));
+        const wrapper = await shallow(<AssessmentContainer {...props} />);
+        await wrapper.instance().componentDidMount();
+        expect(wrapper.find(CloseableAlert).length).toBe(1);
+        const warning = wrapper.find(CloseableAlert).first();
+        expect(warning.props().message).toBe(
+          'This assessment was initiated in a county that is different than the User’s ' +
+            'County. Saving and Submitting are disabled'
+        );
+      });
+
+      it('should not render warning message', async () => {
+        const props = {
+          location: { childId: 10 },
+        };
+        jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
+        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true));
+        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment));
+        const wrapper = await shallow(<AssessmentContainer {...props} />);
+        await wrapper.instance().componentDidMount();
+        expect(wrapper.find(CloseableAlert).length).toBe(0);
+      });
+
+      it('should not render warning message when assessment is new', async () => {
+        const props = {
+          location: { childId: 10 },
+        };
+        jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
+        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment));
+        const wrapper = await shallow(<AssessmentContainer {...props} />);
+        await wrapper.instance().componentDidMount();
+        expect(wrapper.find(CloseableAlert).length).toBe(0);
+      });
+    });
+
     describe('every assessment', () => {
       it('will load client data', async () => {
         const props = {
@@ -77,6 +125,7 @@ describe('<AssessmentContainer />', () => {
         };
         const ClientServiceFetchSpy = jest.spyOn(ClientService, 'fetch');
         ClientServiceFetchSpy.mockReturnValue(Promise.resolve(childInfoJson));
+        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true));
         const wrapper = shallow(<AssessmentContainer {...props} />);
         await wrapper.instance().componentDidMount();
         expect(wrapper.instance().state.child.first_name).toBe('Test');
@@ -90,6 +139,8 @@ describe('<AssessmentContainer />', () => {
 
       it('calls fetchNewAssessment', async () => {
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment');
+        jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
+        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true));
         const wrapper = shallow(<AssessmentContainer {...props} />);
         await wrapper.instance().componentDidMount();
         expect(assessmentServiceGetSpy).toHaveBeenCalledWith();
@@ -109,8 +160,13 @@ describe('<AssessmentContainer />', () => {
 
     describe('assessment form with an existing assessment', () => {
       it('calls fetchAssessment', async () => {
+        const props = {
+          location: { childId: 1 },
+        };
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment');
-        const wrapper = shallow(<AssessmentContainer {...defaultProps} />);
+        jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
+        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true));
+        const wrapper = shallow(<AssessmentContainer {...props} />);
         await wrapper.instance().componentDidMount();
         expect(assessmentServiceGetSpy).toHaveBeenCalledWith();
       });
@@ -173,6 +229,8 @@ describe('<AssessmentContainer />', () => {
         // given
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
         jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment));
+        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true));
+        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment));
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />);
         wrapper.setState({ assessment: { id: 1 } });
 
@@ -305,8 +363,9 @@ describe('<AssessmentContainer />', () => {
           .setState({
             isValidForSubmit: false,
             assessmentServiceStatus: LoadingState.ready,
+            isEditable: true,
           });
-        wrapper.update();
+        await wrapper.update();
         expect(
           wrapper
             .find('button#submit-assessment')
@@ -319,8 +378,9 @@ describe('<AssessmentContainer />', () => {
           .setState({
             isValidForSubmit: true,
             assessmentServiceStatus: LoadingState.ready,
+            isEditable: true,
           });
-        wrapper.update();
+        await wrapper.update();
         expect(
           wrapper
             .find('button#submit-assessment')
@@ -385,11 +445,30 @@ describe('<AssessmentContainer />', () => {
           .setState({
             isValidForSubmit: true,
             assessmentServiceStatus: LoadingState.ready,
+            isEditable: true,
           });
 
         // then
         expect(wrapper.find('Button#save-assessment').instance().props.disabled).toBeFalsy();
         expect(wrapper.find('Button#submit-assessment').instance().props.disabled).toBeFalsy();
+      });
+
+      it('should disable buttons when assessment is not editable', async () => {
+        const wrapper = await mountWithRouter(<AssessmentContainer />);
+
+        // when
+        wrapper
+          .find('AssessmentContainer')
+          .instance()
+          .setState({
+            isValidForSubmit: true,
+            assessmentServiceStatus: LoadingState.ready,
+            isEditable: false,
+          });
+
+        // then
+        expect(wrapper.find('Button#save-assessment').instance().props.disabled).toBeTruthy();
+        expect(wrapper.find('Button#submit-assessment').instance().props.disabled).toBeTruthy();
       });
     });
   });

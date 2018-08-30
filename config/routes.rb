@@ -24,6 +24,8 @@ Rails.application.routes.draw do
 
     resources :counties, only: [:index] do
     end
+
+    get 'security/check_permission/:permission', to: 'security#check_permission'
   end
 
   get '*path', to: "application#fallback_index_html", constraints: -> (request) do

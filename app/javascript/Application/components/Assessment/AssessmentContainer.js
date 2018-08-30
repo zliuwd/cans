@@ -2,7 +2,14 @@ import React, { Component, Fragment } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { CloseableAlert, alertType } from '../common/CloseableAlert';
-import { Assessment, AssessmentFormHeader, AssessmentFormFooter, AssessmentService, I18nService } from './';
+import {
+  Assessment,
+  AssessmentFormHeader,
+  AssessmentFormFooter,
+  AssessmentService,
+  I18nService,
+  SecurityService,
+} from './';
 import Typography from '@material-ui/core/Typography';
 import { PageInfo } from '../Layout';
 import { ClientService } from '../Client/';
@@ -32,14 +39,19 @@ class AssessmentContainer extends Component {
         shouldRedirect: false,
         successAssessmentId: null,
       },
+      isEditable: false,
     };
   }
 
   async componentDidMount() {
     const assessmentId = this.props.match.params.id;
+    let isEditable = assessmentId === undefined;
+    if (!isEditable) {
+      isEditable = await SecurityService.checkPermission(`assessment:write:${assessmentId}`);
+    }
     const { childId } = this.props.match.params;
     const child = await ClientService.fetch(childId).catch(() => {});
-    this.setState({ child });
+    this.setState({ child, isEditable: isEditable });
     assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment();
   }
 
@@ -207,6 +219,7 @@ class AssessmentContainer extends Component {
       i18n,
       assessmentServiceStatus,
       shouldRenderSaveSuccessMessage,
+      isEditable,
     } = this.state;
     const { shouldRedirect, successAssessmentId } = redirection;
     if (shouldRedirect) {
@@ -238,11 +251,21 @@ class AssessmentContainer extends Component {
             isAutoCloseable
           />
         ) : null}
+        {LoadingState.ready === assessmentServiceStatus &&
+          !isEditable && (
+            <CloseableAlert
+              type={alertType.WARNING}
+              message="This assessment was initiated in a county that is different than the User’s County. Saving and
+              Submitting are disabled"
+              isCloseable={false}
+              isAutoCloseable={false}
+            />
+          )}
         <AssessmentFormFooter
           onCancelClick={this.handleCancelClick}
-          isSaveButtonEnabled={canPerformUpdates && !!this.state.assessment.event_date}
+          isSaveButtonEnabled={isEditable && canPerformUpdates && !!this.state.assessment.event_date}
           onSaveAssessment={this.handleSaveAssessment}
-          isSubmitButtonEnabled={canPerformUpdates && isValidForSubmit}
+          isSubmitButtonEnabled={isEditable && canPerformUpdates && isValidForSubmit}
           onSubmitAssessment={this.handleSubmitAssessment}
         />
       </Fragment>

@@ -3,3 +3,13 @@
 
 .App
   text-align: center
+
+//tmp fix of issue: https://osi-cwds.atlassian.net/browse/CANS-256
+//Name: "CANS > Global and Application headers"
+//reason: incompatibility of CANS bootstrap version (#4) and react-wood-duck bootstrap version (#3)
+
+.col-xs-7
+    position: relative
+    min-height: 1px
+    padding-right: 15px
+    padding-left: 15px
