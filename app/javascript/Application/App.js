@@ -3,6 +3,7 @@ import { PageHeader } from 'react-wood-duck';
 import Header from './components/Header';
 import { Page } from './components/Layout';
 import { BrowserRouter } from 'react-router-dom';
+import { GlobalAlert } from './components/common';
 
 import './style.sass';
 
@@ -12,7 +13,9 @@ const App = () => {
     <BrowserRouter basename={basePath}>
       <Fragment>
         <Header />
-        <PageHeader pageTitle="CANS Assessment Application" button={null} />
+        <PageHeader pageTitle="CANS Assessment Application" button={null}>
+          <GlobalAlert />
+        </PageHeader>
         <Page />
       </Fragment>
     </BrowserRouter>

@@ -1,11 +1,11 @@
 import ClientService from './Client.service';
-import appApi from '../../App.api';
+import apiEndpoints from '../../App.api';
 
 jest.mock('../../App.api');
 
 describe('ClientService', () => {
   describe('#fetch', () => {
-    const apiGetSpy = jest.spyOn(appApi, 'get');
+    const apiGetSpy = jest.spyOn(apiEndpoints, 'apiGet');
 
     beforeEach(() => {
       apiGetSpy.mockReset();
@@ -14,7 +14,7 @@ describe('ClientService', () => {
     it('returns client data', async () => {
       const clientId = 1;
       const mockClientData = { id: clientId, name: 'test user' };
-      apiGetSpy.mockReturnValue(Promise.resolve({ data: mockClientData }));
+      apiGetSpy.mockReturnValue(mockClientData);
       const clientData = await ClientService.fetch(clientId);
       expect(clientData).toBe(mockClientData);
       expect(apiGetSpy).toHaveBeenCalledTimes(1);
@@ -23,11 +23,11 @@ describe('ClientService', () => {
   });
 
   describe('#fetchAllClients', () => {
-    const apiPostSpy = jest.spyOn(appApi, 'post');
+    const apiPostSpy = jest.spyOn(apiEndpoints, 'apiPost');
 
     it('returns clients', async () => {
       const expectedClients = [{ id: 1 }];
-      apiPostSpy.mockReturnValue(Promise.resolve({ data: expectedClients }));
+      apiPostSpy.mockReturnValue(expectedClients);
       const actualClients = await ClientService.fetchAllClients();
       expect(actualClients).toBe(expectedClients);
       expect(apiPostSpy).toHaveBeenCalledTimes(1);
@@ -38,7 +38,7 @@ describe('ClientService', () => {
   });
 
   describe('#addClient', () => {
-    const apiGetSpy = jest.spyOn(appApi, 'post');
+    const apiGetSpy = jest.spyOn(apiEndpoints, 'apiPost');
 
     beforeEach(() => {
       apiGetSpy.mockReset();
@@ -47,7 +47,7 @@ describe('ClientService', () => {
     it('posts ChildInfo Object', async () => {
       const childInfo = {};
       const expectedChildForm = `/people`;
-      apiGetSpy.mockReturnValue(Promise.resolve({ data: `/people` }));
+      apiGetSpy.mockReturnValue(`/people`);
       const actualChildForm = await ClientService.addClient(childInfo);
       expect(actualChildForm).toBe(expectedChildForm);
       expect(apiGetSpy).toHaveBeenCalledTimes(1);
@@ -56,7 +56,7 @@ describe('ClientService', () => {
   });
 
   describe('#updateClient', () => {
-    const apiGetSpy = jest.spyOn(appApi, 'put');
+    const apiGetSpy = jest.spyOn(apiEndpoints, 'apiPut');
 
     beforeEach(() => {
       apiGetSpy.mockReset();
@@ -66,7 +66,7 @@ describe('ClientService', () => {
       const childInfo = {};
       const childId = 1;
       const expectedChildForm = `/people`;
-      apiGetSpy.mockReturnValue(Promise.resolve({ data: `/people` }));
+      apiGetSpy.mockReturnValue(`/people`);
       const actualChildForm = await ClientService.updateClient(childId, childInfo);
       expect(actualChildForm).toBe(expectedChildForm);
       expect(apiGetSpy).toHaveBeenCalledTimes(1);

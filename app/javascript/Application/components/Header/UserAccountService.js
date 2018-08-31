@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { handleError } from '../../util/ApiErrorHandler';
 
 class UserAccountService {
   static httpClient = axios.create({
@@ -10,7 +11,7 @@ class UserAccountService {
     return this.httpClient
       .get('/user/account')
       .then(response => response.data)
-      .catch(() => {});
+      .catch(handleError);
   }
 }
 

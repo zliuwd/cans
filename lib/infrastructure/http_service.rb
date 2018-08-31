@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative './api_exception_processor'
+
 module Infrastructure
   class HttpService
     def initialize(base_url = Rails.configuration.micro_services['cans_api_base_url'])
@@ -18,7 +20,7 @@ module Infrastructure
 
     def http_connection
       Faraday.new(url: @base_url) do |connection|
-        connection.response :json, parser_options: { symbolize_names: true }
+        connection.use Infrastructure::ApiExceptionProcessor
         connection.adapter Faraday.default_adapter
       end
     end

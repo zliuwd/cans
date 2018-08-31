@@ -1,20 +1,20 @@
-import appApi from '../../App.api';
+import { apiGet, apiPost, apiPut } from '../../App.api';
 
 export class AssessmentService {
   static fetch(id) {
-    return appApi.get(`/assessments/${id}`).then(response => response.data);
+    return apiGet(`/assessments/${id}`);
   }
   static update(id, assessment) {
-    return appApi.put(`/assessments/${id}`, assessment).then(response => response.data);
+    return apiPut(`/assessments/${id}`, assessment);
   }
   static fetchNewAssessment() {
-    return appApi.get('/instruments/1').then(response => response.data);
+    return apiGet('/instruments/1');
   }
   static search(searchRequest) {
-    return appApi.post('/assessments/_search', searchRequest).then(response => response.data);
+    return apiPost('/assessments/_search', searchRequest);
   }
   static postAssessment(assessment) {
-    return appApi.post('/assessments', assessment).then(response => response.data);
+    return apiPost('/assessments', assessment);
   }
 }
 

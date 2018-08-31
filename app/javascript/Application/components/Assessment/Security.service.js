@@ -1,8 +1,8 @@
-import appApi from '../../App.api';
+import { apiGet } from '../../App.api';
 
 export class SecurityService {
   static checkPermission(permission) {
-    return appApi.get(`/security/check_permission/${permission}`).then(response => response.data);
+    return apiGet(`/security/check_permission/${permission}`);
   }
 }
 

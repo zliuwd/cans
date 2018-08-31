@@ -1,8 +1,8 @@
-import appApi from '../../App.api';
+import { apiGet } from '../../App.api';
 
 export class CountiesService {
   static fetchCounties() {
-    return appApi.get(`/counties`).then(response => response.data);
+    return apiGet(`/counties`);
   }
 }
 

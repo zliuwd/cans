@@ -1,11 +1,11 @@
 import { I18nService } from './I18n.service';
-import appApi from '../../App.api';
+import apiEndpoints from '../../App.api';
 
 jest.mock('../../App.api');
 
 describe('I18nService', () => {
   describe('#fetch', () => {
-    const apiGetSpy = jest.spyOn(appApi, 'get');
+    const apiGetSpy = jest.spyOn(apiEndpoints, 'apiGet');
 
     beforeEach(() => {
       apiGetSpy.mockReset();
@@ -15,7 +15,7 @@ describe('I18nService', () => {
       const instrumentId = 1;
       const lang = 'en';
       const expectedI18n = { _title_: 'abc' };
-      apiGetSpy.mockReturnValue(Promise.resolve({ data: expectedI18n }));
+      apiGetSpy.mockReturnValue(expectedI18n);
       const actualI18n = await I18nService.fetchByInstrumentId(instrumentId);
       expect(actualI18n).toBe(expectedI18n);
       expect(apiGetSpy).toHaveBeenCalledTimes(1);
