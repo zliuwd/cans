@@ -116,7 +116,7 @@ class Item extends Component {
           Ratings:
         </Typography>
         <form autoComplete="off">
-          <FormControl>
+          <FormControl className={'item-form-control'}>
             <RadioGroup name="rating_desc" value={stringify(rating)} onChange={this.handleRatingChange}>
               {has_na_option ? (
                 <FormControlLabel
