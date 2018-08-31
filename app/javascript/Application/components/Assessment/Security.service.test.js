@@ -15,8 +15,6 @@ describe('SecurityService', () => {
       expect(actualResult).toBe(expectedResult);
       expect(apiGetSpy).toHaveBeenCalledTimes(1);
       expect(apiGetSpy).toHaveBeenCalledWith(`/security/check_permission/${permission}`);
-
-      apiGetSpy.mockReset();
     });
   });
 });

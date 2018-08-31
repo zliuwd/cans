@@ -71,10 +71,6 @@ describe('<AssessmentContainer />', () => {
     });
 
     describe('warning message on absence of edit permission', () => {
-      afterEach(() => {
-        jest.restoreAllMocks();
-      });
-
       it('should render warning message', async () => {
         const props = {
           location: { childId: 1 },
@@ -82,7 +78,6 @@ describe('<AssessmentContainer />', () => {
         };
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
         jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false));
-        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment));
         jest.spyOn(AssessmentService, 'fetch').mockReturnValue(Promise.resolve(assessment));
         const wrapper = await shallow(<AssessmentContainer {...props} />);
         await wrapper.instance().componentDidMount();
