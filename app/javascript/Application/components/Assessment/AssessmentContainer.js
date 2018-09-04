@@ -20,9 +20,9 @@ import {
   validateAssessmentForSubmit,
   defaultEmptyAssessment,
 } from './AssessmentHelper';
-import { DateTime } from 'luxon';
 
 import './style.sass';
+import { getCurrentIsoDate } from '../../util/dateHelper';
 
 class AssessmentContainer extends Component {
   constructor(props) {
@@ -73,7 +73,7 @@ class AssessmentContainer extends Component {
       assessment_type: AssessmentType.initial,
       status: AssessmentStatus.inProgress,
       state: instrument.prototype,
-      event_date: DateTime.local().toISODate(),
+      event_date: getCurrentIsoDate(),
       has_caregiver: true,
       completed_as: 'COMMUNIMETRIC',
       can_release_confidential_info: false,

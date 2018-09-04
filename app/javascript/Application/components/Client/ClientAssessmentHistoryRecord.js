@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col } from 'reactstrap';
 import Typography from '@material-ui/core/Typography';
-import { toDateFormat } from '../../util/formatters';
+import { isoToLocalDate } from '../../util/dateHelper';
 
 import './style.sass';
 
@@ -41,7 +41,7 @@ class ClientAssessmentHistoryRecord extends Component {
       county,
     } = this.props.assessment;
     const actionVerb = getActionVerbByStatus(status);
-    const formattedTimestamp = toDateFormat(updatedTimestamp || createdTimestamp);
+    const formattedTimestamp = isoToLocalDate(updatedTimestamp || createdTimestamp);
     const user = updatedBy || createdBy || {};
     const updatedByName = `${user.first_name} ${user.last_name}`;
     const caseNumber = (theCase || {}).external_id || '';
@@ -58,7 +58,7 @@ class ClientAssessmentHistoryRecord extends Component {
 
   render() {
     const { id, event_date: eventDate, status, person } = this.props.assessment;
-    const formattedEventDate = toDateFormat(eventDate);
+    const formattedEventDate = isoToLocalDate(eventDate);
     return (
       <Container className={'history-item'}>
         <Row>

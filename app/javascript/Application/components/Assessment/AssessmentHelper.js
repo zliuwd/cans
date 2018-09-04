@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import { getCurrentIsoDate } from '../../util/dateHelper';
 
 const FULL_PROGRESS = 100;
 
@@ -17,7 +17,7 @@ export const AssessmentStatus = Object.freeze({
 });
 
 export const defaultEmptyAssessment = {
-  event_date: DateTime.local().toISODate(),
+  event_date: getCurrentIsoDate(),
   has_caregiver: true,
   state: {
     domains: [],

@@ -74,7 +74,7 @@ describe('<ClientAssessmentHistory', () => {
       .get(0)
       .props.children.filter(el => el.type !== 'br');
     expect(assessmentInfo).toEqual([
-      'Saved on 6/6/2015 by Name 1 LastName 1',
+      'Saved on 06/06/2015 by Name 1 LastName 1',
       'Case: 4444-333-4444-88888888',
       'County: Alameda',
     ]);
@@ -92,12 +92,12 @@ describe('<ClientAssessmentHistory', () => {
         .find(Link)
         .children()
         .text()
-    ).toEqual('1/5/2018 CANS');
+    ).toEqual('01/05/2018 CANS');
     const timestamp = wrapper
       .find('.item-info')
       .get(0)
       .props.children.filter(el => el.type !== 'br');
-    expect(timestamp).toEqual(['Submitted on 6/6/2018 by Name 2 LastName 2', 'Case: ', 'County: Alameda']);
+    expect(timestamp).toEqual(['Submitted on 06/06/2018 by Name 2 LastName 2', 'Case: ', 'County: Alameda']);
   });
 
   it('renders assessment with no update info (create info only)', async () => {
@@ -109,6 +109,6 @@ describe('<ClientAssessmentHistory', () => {
       .find('.item-info')
       .get(0)
       .props.children.filter(el => el.type !== 'br');
-    expect(timestamp).toEqual(['Saved on 6/6/2018 by Name 3 LastName 3', 'Case: ', 'County: Alameda']);
+    expect(timestamp).toEqual(['Saved on 06/06/2018 by Name 3 LastName 3', 'Case: ', 'County: Alameda']);
   });
 });

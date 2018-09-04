@@ -16,8 +16,8 @@ describe('<AssessmentFormHeader />', () => {
       expect(getLength('.assessment-form-header-label')).toBe(5);
     });
 
-    it('renders with 3 <Input /> component', () => {
-      expect(getLength(Input)).toBe(3);
+    it('renders with 2 <Input /> component', () => {
+      expect(getLength(Input)).toBe(2);
     });
 
     it('renders with case numbers dropdown', () => {

@@ -8,9 +8,9 @@ import Typography from '@material-ui/core/Typography/Typography';
 import AssessmentFormFooter from './AssessmentFormFooter';
 import { MemoryRouter, Link } from 'react-router-dom';
 import { assessment, updatedAssessment, initialAssessment, instrument } from './assessment.mocks.test';
-import { DateTime } from 'luxon';
 import { LoadingState } from '../../util/loadingHelper';
 import { CloseableAlert } from '../common/CloseableAlert';
+import { getCurrentIsoDate } from '../../util/dateHelper';
 
 jest.useFakeTimers();
 
@@ -174,7 +174,7 @@ describe('<AssessmentContainer />', () => {
         const assessmentServicePostSpy = jest.spyOn(AssessmentService, 'postAssessment');
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />);
         const assessment = {
-          event_date: DateTime.local().toISODate(),
+          event_date: getCurrentIsoDate(),
           has_caregiver: true,
           person: {},
           state: { domains: [] },
@@ -266,7 +266,7 @@ describe('<AssessmentContainer />', () => {
 
         assessmentServicePostSpy.mockReturnValue(Promise.resolve(assessment));
         const expectedArgument = {
-          event_date: DateTime.local().toISODate(),
+          event_date: getCurrentIsoDate(),
           has_caregiver: true,
           person: {},
           state: { domains: [] },

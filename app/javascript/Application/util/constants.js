@@ -1,1 +1,3 @@
 export const DEFAULT_AUTO_HIDE_TIMEOUT = 3000;
+export const LOCAL_DATE_FORMAT = 'MM/DD/YYYY';
+export const ISO_DATE_FORMAT = 'YYYY-MM-DD';

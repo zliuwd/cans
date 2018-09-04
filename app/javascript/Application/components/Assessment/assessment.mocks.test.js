@@ -1,5 +1,5 @@
-import { DateTime } from 'luxon';
 import { childInfoJson } from '../Client/Client.helper.test';
+import { getCurrentIsoDate } from '../../util/dateHelper';
 
 export const initialAssessment = {
   instrument_id: 1,
@@ -22,7 +22,7 @@ export const initialAssessment = {
       },
     ],
   },
-  event_date: DateTime.local().toISODate(),
+  event_date: getCurrentIsoDate(),
 };
 
 export const assessment = {

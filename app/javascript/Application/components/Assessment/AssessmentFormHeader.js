@@ -11,8 +11,8 @@ import Switch from '@material-ui/core/Switch';
 import Radio from '@material-ui/core/Radio';
 import { Alert } from '@cwds/components';
 import { clone, stringify } from '../../util/common';
-
 import './style.sass';
+import DateField from '../common/DateField';
 
 class AssessmentFormHeader extends PureComponent {
   handleValueChange = event => this.changeFieldAndUpdateAssessment(event.target.name, event.target.value);
@@ -75,16 +75,15 @@ class AssessmentFormHeader extends PureComponent {
   renderDateSelect() {
     return (
       <Fragment>
-        <Label for={'date-select'} className={'assessment-form-header-label'}>
-          Date
+        <Label required for={'date-select'} className={'assessment-form-header-label'}>
+          Date *
         </Label>
-        <Input
-          type={'date'}
-          id={'date-select'}
-          name={'event_date'}
+        <DateField
+          required={true}
+          id={'assessment-date'}
           value={this.props.assessment.event_date}
-          onChange={this.handleValueChange}
-          style={{ fontSize: '1.5rem', height: '3rem' }}
+          onChange={value => this.changeFieldAndUpdateAssessment('event_date', value)}
+          max={new Date()}
         />
       </Fragment>
     );
@@ -101,7 +100,7 @@ class AssessmentFormHeader extends PureComponent {
           id={'select-case'}
           value={(this.props.assessment.the_case || {}).external_id}
           onChange={this.handleSelectCaseNumber}
-          style={{ fontSize: '1.5rem', height: '3rem' }}
+          style={{ fontSize: '1.5rem', height: '3.6rem' }}
         >
           {this.renderCaseNumbersDropdownOptions()}
         </Input>
@@ -130,7 +129,7 @@ class AssessmentFormHeader extends PureComponent {
           id={'select-user'}
           value={this.props.assessment.completed_as}
           onChange={this.handleValueChange}
-          style={{ fontSize: '1.5rem', height: '3rem' }}
+          style={{ fontSize: '1.5rem', height: '3.6rem' }}
         >
           <option value={'COMMUNIMETRIC'}>Communimetric</option>
         </Input>
