@@ -88,7 +88,7 @@ export const executeTest = (component, url, htmlOnPage) => {
           </div>
         )}
       />
-      <Route path={url} component={component} />
+      <Route path={url} children={() => component} />
     </div>
   );
 

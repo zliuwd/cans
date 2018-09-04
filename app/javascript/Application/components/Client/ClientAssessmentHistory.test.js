@@ -18,15 +18,18 @@ const params = {
   history: { location: '/client' },
 };
 
-const getShallowWrapper = () => shallow(<ClientAssessmentHistory {...params} />);
+const getShallowWrapper = () => {
+  AssessmentService.search.mockReturnValue(Promise.resolve([{ id: 1 }, { id: 2 }]));
+  return shallow(<ClientAssessmentHistory {...params} />);
+};
 
 const prepareWrapper = async mockedAssessments => {
   // given
   AssessmentService.search.mockReturnValue(Promise.resolve(mockedAssessments));
-  const wrapper = getShallowWrapper();
+  const wrapper = shallow(<ClientAssessmentHistory {...params} />);
 
   // when
-  await wrapper.instance().UNSAFE_componentWillReceiveProps({ clientId: 1004 });
+  await wrapper.instance().componentDidMount();
   wrapper.update();
   return wrapper;
 };

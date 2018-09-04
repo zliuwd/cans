@@ -6,8 +6,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { PageInfo } from '../Layout';
-import { ClientAssessmentHistory, ClientService } from './index';
 import Button from '@material-ui/core/Button/Button';
+import ClientAssessmentHistory from './ClientAssessmentHistory';
 import { CloseableAlert, alertType } from '../common/CloseableAlert';
 import { Link } from 'react-router-dom';
 
@@ -24,19 +24,8 @@ class Client extends Component {
 
     this.state = {
       isNewForm,
-      childData: {},
       shouldRenderClientMessage: !!successClientId,
     };
-  }
-
-  componentDidMount() {
-    this.fetchChildData(this.props.match.params.id);
-  }
-
-  fetchChildData(id) {
-    return ClientService.fetch(id)
-      .then(data => this.setState({ childData: data }))
-      .catch(() => this.setState({ childData: {} }));
   }
 
   renderClientData(data, label, gridSize = 3) {
@@ -75,7 +64,8 @@ class Client extends Component {
   }
 
   render() {
-    const { isNewForm, childData, shouldRenderClientMessage } = this.state;
+    const { client } = this.props;
+    const { isNewForm, shouldRenderClientMessage } = this.state;
     return (
       <Fragment>
         <PageInfo title={'Child/Youth Profile'} />
@@ -86,7 +76,7 @@ class Client extends Component {
                 className={'card-header-cans'}
                 title="Child/Youth Information"
                 action={
-                  <Link to={`/clients/edit/${childData.id}`}>
+                  <Link to={`/clients/${client.id}/edit`}>
                     <Button size="small" color="inherit" className={'card-header-cans-button'}>
                       EDIT
                     </Button>
@@ -108,19 +98,19 @@ class Client extends Component {
                     />
                   )}
 
-                  {childData && childData.id ? (
+                  {client && client.id ? (
                     <Grid container spacing={24}>
-                      {this.renderClientData(childData.first_name, 'First Name')}
-                      {this.renderClientData(childData.middle_name, 'Middle Name')}
-                      {this.renderClientData(childData.last_name, 'Last Name')}
-                      {this.renderClientData(childData.suffix, 'Suffix')}
-                      {this.renderClientData(childData.dob, 'Date Of Birth')}
-                      {this.renderClientData(childData.county.name, 'County')}
-                      {this.renderClientData(this.formatClientId(childData.external_id), 'Client Id', 6)}
+                      {this.renderClientData(client.first_name, 'First Name')}
+                      {this.renderClientData(client.middle_name, 'Middle Name')}
+                      {this.renderClientData(client.last_name, 'Last Name')}
+                      {this.renderClientData(client.suffix, 'Suffix')}
+                      {this.renderClientData(client.dob, 'Birth Date')}
+                      {this.renderClientData(client.county.name, 'County')}
+                      {this.renderClientData(this.formatClientId(client.external_id), 'Client Id', 6)}
                       {this.renderClientData(undefined, undefined, 6)}
                       {this.renderClientData(
-                        this.formatCases(childData.cases),
-                        childData.cases.length > 1 ? 'Case Numbers' : 'Case Number',
+                        this.formatCases(client.cases),
+                        client.cases.length > 1 ? 'Case Numbers' : 'Case Number',
                         6
                       )}
                     </Grid>
@@ -131,11 +121,7 @@ class Client extends Component {
               </div>
             </Card>
           </Grid>
-          <ClientAssessmentHistory
-            clientId={childData.id}
-            location={this.props.location}
-            history={this.props.history}
-          />
+          <ClientAssessmentHistory clientId={client.id} location={this.props.location} history={this.props.history} />
         </Grid>
       </Fragment>
     );
@@ -143,13 +129,13 @@ class Client extends Component {
 }
 
 Client.propTypes = {
+  client: PropTypes.object,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
+};
+
+Client.defaultProps = {
+  client: {},
 };
 
 export default Client;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import App from './App';
-import { Page } from './components/Layout';
 import Header from './components/Header/';
 import { PageHeader } from 'react-wood-duck';
+import { Routes } from './routes';
 
 describe('<App />', () => {
   const getWrapper = () => shallow(<App />);
@@ -17,7 +17,8 @@ describe('<App />', () => {
     expect(getLength(PageHeader)).toBe(1);
   });
 
-  it('renders with <Page /> component', () => {
-    expect(getLength(Page)).toBe(1);
+  it('renders with <Routes /> component', () => {
+    const wrapper = getWrapper();
+    expect(wrapper.find(Routes).length).toBe(1);
   });
 });

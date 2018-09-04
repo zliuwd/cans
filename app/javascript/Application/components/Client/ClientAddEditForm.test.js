@@ -1,9 +1,8 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import ClientAddEditForm from './ClientAddEditForm';
 import { ClientService } from './Client.service';
 import { childInfoJson } from './Client.helper.test';
-import { MemoryRouter } from 'react-router-dom';
 
 const defaultPropsEdit = {
   match: { params: { id: 1 } },
@@ -14,57 +13,49 @@ const defaultPropsAdd = {
 };
 
 describe('<ClientAddEditForm />', () => {
-  const getWrapperMountAdd = () =>
-    mount(
-      <MemoryRouter>
-        <ClientAddEditForm {...defaultPropsAdd} />
-      </MemoryRouter>
-    );
-  const getWrapperMountEdit = () =>
-    mount(
-      <MemoryRouter>
-        <ClientAddEditForm {...defaultPropsEdit} />
-      </MemoryRouter>
-    );
   const getWrapperAdd = () => shallow(<ClientAddEditForm {...defaultPropsAdd} />);
   const getWrapperEdit = () => shallow(<ClientAddEditForm {...defaultPropsEdit} />);
+  const client = {
+    cases: [{ external_id: '' }],
+    county: { id: 0, name: '' },
+    dob: '',
+    external_id: '',
+    first_name: '',
+    last_name: '',
+    middle_name: '',
+    person_role: 'CLIENT',
+    suffix: '',
+  };
 
   describe('When isNewForm is true', () => {
     it('validates the form inputs are false', () => {
-      const wrapper = getWrapperAdd();
-      const wrapperMount = getWrapperMountAdd();
-      const addWrapper = wrapper.find('ClientAddEditForm').dive();
-      const addWrapperMount = wrapperMount.find('PageInfo').first();
-      expect(addWrapperMount.exists()).toBe(true);
-      expect(addWrapper.state('isNewForm')).toEqual(true);
-      expect(addWrapper.state('childInfoValidation').first_name).toEqual(false);
-      expect(addWrapper.state('childInfoValidation').last_name).toEqual(false);
-      expect(addWrapper.state('childInfoValidation').dob).toEqual(false);
-      expect(addWrapper.state('childInfoValidation').external_id).toEqual(false);
-      expect(addWrapper.state('childInfoValidation').county).toEqual(false);
-      expect(addWrapper.state('childInfoValidation').cases[0].external_id).toEqual(true);
-      expect(addWrapper.state('isSaveButtonDisabled')).toEqual(true);
-      expect(addWrapperMount.prop('title')).toBe('Add Child/Youth');
+      const wrapper = shallow(<ClientAddEditForm isNewForm={true} />)
+        .find('ClientAddEditForm')
+        .dive();
+      expect(wrapper.state('childInfo')).toEqual(client);
+      expect(wrapper.state('childInfoValidation').first_name).toEqual(false);
+      expect(wrapper.state('childInfoValidation').last_name).toEqual(false);
+      expect(wrapper.state('childInfoValidation').dob).toEqual(false);
+      expect(wrapper.state('childInfoValidation').external_id).toEqual(false);
+      expect(wrapper.state('childInfoValidation').county).toEqual(false);
+      expect(wrapper.state('childInfoValidation').cases[0].external_id).toEqual(true);
+      expect(wrapper.state('isSaveButtonDisabled')).toEqual(true);
     });
   });
 
   describe('When isNewForm is false', () => {
     it('validates the form is populated', () => {
-      const wrapper = getWrapperEdit();
-      const wrapperMount = getWrapperMountEdit();
-      const editWrapper = wrapper.find('ClientAddEditForm').dive();
-      const editWrapperMount = wrapperMount.find('PageInfo').first();
-      expect(editWrapperMount.exists()).toBe(true);
-
-      expect(editWrapper.state('isNewForm')).toEqual(false);
-      expect(editWrapper.state('childInfoValidation').first_name).toEqual(true);
-      expect(editWrapper.state('childInfoValidation').last_name).toEqual(true);
-      expect(editWrapper.state('childInfoValidation').dob).toEqual(true);
-      expect(editWrapper.state('childInfoValidation').external_id).toEqual(true);
-      expect(editWrapper.state('childInfoValidation').county).toEqual(true);
-      expect(editWrapper.state('childInfoValidation').cases[0].external_id).toEqual(true);
-      expect(editWrapper.state('isSaveButtonDisabled')).toEqual(false);
-      expect(editWrapperMount.prop('title')).toBe('Edit Child/Youth');
+      const wrapper = shallow(<ClientAddEditForm isNewForm={false} client={childInfoJson} />)
+        .find('ClientAddEditForm')
+        .dive();
+      expect(wrapper.state('childInfo')).toEqual(childInfoJson);
+      expect(wrapper.state('childInfoValidation').first_name).toEqual(true);
+      expect(wrapper.state('childInfoValidation').last_name).toEqual(true);
+      expect(wrapper.state('childInfoValidation').dob).toEqual(true);
+      expect(wrapper.state('childInfoValidation').external_id).toEqual(true);
+      expect(wrapper.state('childInfoValidation').county).toEqual(true);
+      expect(wrapper.state('childInfoValidation').cases[0].external_id).toEqual(true);
+      expect(wrapper.state('isSaveButtonDisabled')).toEqual(false);
     });
 
     it('#handleSubmit() updates and set shouldRedirect to true', async () => {
@@ -194,20 +185,16 @@ describe('<ClientAddEditForm />', () => {
       });
     });
 
-    describe('#onFetchChildDataSuccess()', () => {
+    describe('initialization', () => {
       it('should initialize validation object with cases', () => {
         // given
-        const clientForm = getWrapperAdd()
+        const inputClient = { ...client, cases: [{}, {}, {}] };
+
+        // when
+        const clientForm = shallow(<ClientAddEditForm client={inputClient} isNewForm={false} />)
           .find('ClientAddEditForm')
           .first()
           .dive();
-
-        // when
-        clientForm.instance().onFetchChildDataSuccess({
-          county: { id: 0, name: '' },
-          cases: [{}, {}, {}],
-        });
-        clientForm.update();
 
         // then
         expect(clientForm.find('.case-numbers>InputElement').length).toEqual(3);
@@ -226,7 +213,7 @@ describe('<ClientAddEditForm />', () => {
           .dive();
 
         // when
-        clientForm.instance().onFetchChildDataSuccess({ county: { id: 0, name: '0' }, cases: [] });
+        clientForm.instance().fetchCounties({ county: { id: 0, name: '0' }, cases: [] });
         clientForm.update();
 
         // then
@@ -305,7 +292,7 @@ describe('<ClientAddEditForm />', () => {
     const wrapper = getWrapperEdit();
     const ClientEditWrapper = wrapper.find('ClientAddEditForm').dive();
     const childFormInstance = ClientEditWrapper.instance();
-    childFormInstance.onFetchCountiesSuccess([{ id: '9', name: 'Fresno' }]);
+    childFormInstance.fetchCounties([{ id: '9', name: 'Fresno' }]);
     ClientEditWrapper.update();
     const menuItems = ClientEditWrapper.find('MenuItem');
     expect(menuItems.children.length).toEqual(1);

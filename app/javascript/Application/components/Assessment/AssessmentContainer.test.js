@@ -17,6 +17,8 @@ jest.useFakeTimers();
 const defaultProps = {
   location: { childId: 1 },
   match: { params: { id: 1 } },
+  isNewForm: false,
+  client: childInfoJson,
 };
 
 const mountWithRouter = async component => mount(<MemoryRouter initialEntries={['/random']}>{component}</MemoryRouter>);
@@ -50,7 +52,7 @@ describe('<AssessmentContainer />', () => {
 
     describe('page title', () => {
       it('should be "New CANS" for new assessment', () => {
-        const wrapper = shallow(<AssessmentContainer />);
+        const wrapper = shallow(<AssessmentContainer isNewForm={true} />);
         expect(
           wrapper
             .find('PageInfo')
@@ -113,23 +115,9 @@ describe('<AssessmentContainer />', () => {
       });
     });
 
-    describe('every assessment', () => {
-      it('will load client data', async () => {
-        const props = {
-          location: { childId: 10 },
-        };
-        const ClientServiceFetchSpy = jest.spyOn(ClientService, 'fetch');
-        ClientServiceFetchSpy.mockReturnValue(Promise.resolve(childInfoJson));
-        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true));
-        const wrapper = shallow(<AssessmentContainer {...props} />);
-        await wrapper.instance().componentDidMount();
-        expect(wrapper.instance().state.child.first_name).toBe('Test');
-      });
-    });
-
     describe('assessment form with no existing assessment', () => {
       const props = {
-        location: { childId: 1 },
+        client: childInfoJson,
       };
 
       it('calls fetchNewAssessment', async () => {
@@ -143,7 +131,6 @@ describe('<AssessmentContainer />', () => {
 
       it('sets a new assessment on component state', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />);
-        wrapper.setState({ child: childInfoJson });
         expect(wrapper.state('assessment').instrument_id).toBeFalsy();
         wrapper.instance().onFetchNewAssessmentSuccess(instrument);
         const assessment = wrapper.state('assessment');
@@ -176,7 +163,7 @@ describe('<AssessmentContainer />', () => {
         const assessment = {
           event_date: getCurrentIsoDate(),
           has_caregiver: true,
-          person: {},
+          person: childInfoJson,
           state: { domains: [] },
         };
         wrapper.instance().handleSaveAssessment();
@@ -186,9 +173,8 @@ describe('<AssessmentContainer />', () => {
 
       it('should render save success message on initial save', async () => {
         // given
-        jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
         jest.spyOn(AssessmentService, 'postAssessment').mockReturnValue(Promise.resolve(assessment));
-        const wrapper = await shallow(<AssessmentContainer {...{ location: { childId: 1 } }} />);
+        const wrapper = await shallow(<AssessmentContainer {...{ client: childInfoJson }} />);
 
         // when
         await wrapper.instance().handleSaveAssessment();
@@ -206,7 +192,7 @@ describe('<AssessmentContainer />', () => {
         assessmentServicePutSpy.mockReturnValue(Promise.resolve(assessment));
         wrapper.setState({ assessment: { id: 1 } });
         wrapper.instance().handleSaveAssessment();
-        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { id: 1, person: {} });
+        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { id: 1, person: childInfoJson });
       });
 
       it('should update state with assessment', async () => {
@@ -215,7 +201,7 @@ describe('<AssessmentContainer />', () => {
         assessmentServicePutSpy.mockReturnValue(Promise.resolve(assessment));
         wrapper.setState({ assessment: { id: 1 } });
         await wrapper.instance().handleSaveAssessment();
-        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { id: 1, person: {} });
+        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { id: 1, person: childInfoJson });
         expect(wrapper.state('assessment').id).toBe(1);
         expect(wrapper.state('assessment').state.domains).toBeTruthy();
       });
@@ -226,7 +212,7 @@ describe('<AssessmentContainer />', () => {
         jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment));
         jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true));
         jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment));
-        const wrapper = await shallow(<AssessmentContainer {...defaultProps} />);
+        const wrapper = await shallow(<AssessmentContainer {...{ client: childInfoJson }} />);
         wrapper.setState({ assessment: { id: 1 } });
 
         // when
@@ -259,6 +245,7 @@ describe('<AssessmentContainer />', () => {
         const assessmentServicePostSpy = jest.spyOn(AssessmentService, 'postAssessment');
         const props = {
           match: { params: { id: 1 } },
+          client: childInfoJson,
         };
 
         const wrapper = shallow(<AssessmentContainer {...props} />);
@@ -268,7 +255,7 @@ describe('<AssessmentContainer />', () => {
         const expectedArgument = {
           event_date: getCurrentIsoDate(),
           has_caregiver: true,
-          person: {},
+          person: childInfoJson,
           state: { domains: [] },
           status: 'SUBMITTED',
         };
@@ -283,7 +270,7 @@ describe('<AssessmentContainer />', () => {
         assessmentServicePutSpy.mockReturnValue(Promise.resolve(assessment));
         wrapper.setState({ assessment: { id: 1 } });
         wrapper.instance().handleSubmitAssessment();
-        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { id: 1, person: {}, status: 'SUBMITTED' });
+        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { id: 1, person: childInfoJson, status: 'SUBMITTED' });
       });
     });
   });
@@ -314,6 +301,7 @@ describe('<AssessmentContainer />', () => {
         location: { childId: 1 },
         match: { params: { id: 1 } },
         history: { push: jest.fn() },
+        client: childInfoJson,
       };
       const wrapper = shallow(<AssessmentContainer {...props} />);
 
@@ -337,7 +325,9 @@ describe('<AssessmentContainer />', () => {
   describe('buttons', () => {
     describe('Cancel button', () => {
       it('redirects to client page', async () => {
-        const wrapper = await mountWithRouter(<AssessmentContainer match={{ params: { id: 1 } }} />);
+        const wrapper = await mountWithRouter(
+          <AssessmentContainer match={{ params: { id: 1 } }} client={childInfoJson} />
+        );
         expect(wrapper.find('Redirect').length).toBe(0);
         await wrapper
           .find('AssessmentContainer')
@@ -351,7 +341,9 @@ describe('<AssessmentContainer />', () => {
 
     describe('Submit button', () => {
       it('is disabled/enabled based on the assessment validity', async () => {
-        const wrapper = await mountWithRouter(<AssessmentContainer match={{ params: { childId: 123 } }} />);
+        const wrapper = await mountWithRouter(
+          <AssessmentContainer match={{ params: { childId: 123 } }} client={childInfoJson} />
+        );
         await wrapper
           .find('AssessmentContainer')
           .instance()
@@ -395,7 +387,7 @@ describe('<AssessmentContainer />', () => {
           length: 0,
         };
         const wrapper = await mountWithRouter(
-          <AssessmentContainer match={{ params: { id: 1 } }} history={historyMock} />
+          <AssessmentContainer match={{ params: { id: 1 } }} client={childInfoJson} history={historyMock} />
         );
         expect(wrapper.find('Redirect').length).toBe(0);
 
@@ -414,7 +406,7 @@ describe('<AssessmentContainer />', () => {
 
     describe('submit and save buttons', () => {
       it('should disable buttons when assessment service is working', async () => {
-        const wrapper = await mountWithRouter(<AssessmentContainer />);
+        const wrapper = await mountWithRouter(<AssessmentContainer client={childInfoJson} />);
 
         // when
         wrapper
@@ -431,7 +423,7 @@ describe('<AssessmentContainer />', () => {
       });
 
       it('should enable buttons when assessment service is not working', async () => {
-        const wrapper = await mountWithRouter(<AssessmentContainer />);
+        const wrapper = await mountWithRouter(<AssessmentContainer client={childInfoJson} />);
 
         // when
         wrapper
@@ -449,7 +441,7 @@ describe('<AssessmentContainer />', () => {
       });
 
       it('should disable buttons when assessment is not editable', async () => {
-        const wrapper = await mountWithRouter(<AssessmentContainer />);
+        const wrapper = await mountWithRouter(<AssessmentContainer client={childInfoJson} />);
 
         // when
         wrapper

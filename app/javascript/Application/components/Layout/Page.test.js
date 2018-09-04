@@ -1,23 +1,72 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Page, SideNav } from './';
-import { Routes } from '../../routes';
+import BreadCrumbsBuilder from './BreadCrumbsBuilder';
+import { childInfoJson } from '../Client/Client.helper.test';
+import { ClientService } from '../Client/Client.service';
+import { navigation } from '../../util/constants';
+import AssessmentContainer from '../Assessment/AssessmentContainer';
+import ClientAddEditForm from '../Client/ClientAddEditForm';
+import Client from '../Client/Client';
 
 describe('<Page />', () => {
   describe('layout', () => {
-    const getWrapper = () => shallow(<Page />);
+    const getWrapper = () => shallow(<Page match={{ params: {} }} />);
 
-    it('renders with <SideNav /> links', () => {
+    it('renders with <SideNav /> links', async () => {
       const wrapper = getWrapper();
+      await wrapper.instance().componentDidMount();
       const sideNav = wrapper.find(SideNav);
 
       expect(sideNav.length).toBe(1);
       expect(sideNav.dive().find({ text: 'Child/Youth List' }).length).toBe(1);
     });
 
-    it('renders with <Routes /> component', () => {
+    it('renders with <BreadCrumbsBuilder /> links', async () => {
       const wrapper = getWrapper();
-      expect(wrapper.find(Routes).length).toBe(1);
+      await wrapper.instance().componentDidMount();
+      const breadCrumbsBuilder = wrapper.find(BreadCrumbsBuilder);
+
+      expect(breadCrumbsBuilder.length).toBe(1);
     });
+  });
+});
+
+describe('when adding Assessment', () => {
+  const getWrapper = navigateTo => shallow(<Page match={{ params: { clientId: 1001 } }} navigateTo={navigateTo} />);
+
+  it('renders < AssessmentContainer on Add/>', async () => {
+    jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
+    const wrapper = getWrapper(navigation.ASSESSMENT_ADD);
+    await wrapper.instance().componentDidMount();
+    expect(wrapper.find(AssessmentContainer).length).toBe(1);
+  });
+
+  it('renders < AssessmentContainer on Edit />', async () => {
+    jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
+    const wrapper = getWrapper(navigation.ASSESSMENT_EDIT);
+    await wrapper.instance().componentDidMount();
+    expect(wrapper.find(AssessmentContainer).length).toBe(1);
+  });
+
+  it('renders < ClientAddEditForm for Edit Profile/>', async () => {
+    jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
+    const wrapper = getWrapper(navigation.CHILD_PROFILE_EDIT);
+    await wrapper.instance().componentDidMount();
+    expect(wrapper.find(ClientAddEditForm).length).toBe(1);
+  });
+
+  it('renders < ClientAddEditForm for Add CANS/>', async () => {
+    jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
+    const wrapper = getWrapper(navigation.CHILD_PROFILE_ADD);
+    await wrapper.instance().componentDidMount();
+    expect(wrapper.find(ClientAddEditForm).length).toBe(1);
+  });
+
+  it('renders < Client />', async () => {
+    jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
+    const wrapper = getWrapper(navigation.CHILD_PROFILE);
+    await wrapper.instance().componentDidMount();
+    expect(wrapper.find(Client).length).toBe(1);
   });
 });

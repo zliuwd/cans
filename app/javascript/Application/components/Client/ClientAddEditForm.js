@@ -94,33 +94,37 @@ const emptyCounty = {
   name: '',
 };
 
+const prepareChildInfo = childInfo => {
+  if (childInfo.cases.length === 0) {
+    childInfo.cases.push({ external_id: '' });
+  }
+  return childInfo;
+};
+
+const prepareChildInfoValidation = (childInfo, isNewForm) => {
+  const validation = {
+    first_name: !isNewForm,
+    last_name: !isNewForm,
+    middle_name: true,
+    suffix: true,
+    dob: !isNewForm,
+    external_id: !isNewForm,
+    county: !isNewForm,
+    cases: [],
+  };
+
+  childInfo.cases.map(() => validation.cases.push({ external_id: true }));
+
+  return validation;
+};
+
 class ClientAddEditForm extends Component {
   constructor(props) {
     super(props);
-    const isNewForm = !this.props.match.params.id;
+    const { client, isNewForm } = props;
     this.state = {
-      isNewForm,
-      childInfo: {
-        person_role: 'CLIENT',
-        first_name: '',
-        middle_name: '',
-        last_name: '',
-        suffix: '',
-        dob: '',
-        external_id: '',
-        county: emptyCounty,
-        cases: [{ external_id: '' }],
-      },
-      childInfoValidation: {
-        first_name: !isNewForm,
-        last_name: !isNewForm,
-        middle_name: true,
-        suffix: true,
-        dob: !isNewForm,
-        external_id: !isNewForm,
-        county: !isNewForm,
-        cases: [{ external_id: true }],
-      },
+      childInfo: prepareChildInfo(client),
+      childInfoValidation: prepareChildInfoValidation(client, isNewForm),
       counties: [],
       isSaveButtonDisabled: isNewForm,
       redirection: {
@@ -130,46 +134,15 @@ class ClientAddEditForm extends Component {
     };
   }
 
-  componentDidMount() {
-    this.fetchCounties();
-    if (!this.state.isNewForm) {
-      this.fetchChildData(this.props.match.params.id);
-    }
+  async componentDidMount() {
+    await this.fetchCounties();
   }
 
-  fetchChildData = id => {
-    return ClientService.getClient(id)
-      .then(this.onFetchChildDataSuccess)
-      .catch(() => {});
-  };
-
-  onFetchChildDataSuccess = childInfo => {
-    if (childInfo.cases.length === 0) {
-      childInfo.cases.push({ external_id: '' });
-    }
-
-    const childInfoValidation = {
-      ...this.state.childInfoValidation,
-      cases: [],
-    };
-    for (let i = 0; i < childInfo.cases.length; i++) {
-      childInfoValidation.cases.push({ external_id: true });
-    }
-    this.setState({
-      childInfo,
-      childInfoValidation,
-    });
-  };
-
-  fetchCounties = () => {
+  fetchCounties() {
     return CountiesService.fetchCounties()
-      .then(this.onFetchCountiesSuccess)
+      .then(counties => this.setState({ counties }))
       .catch(() => {});
-  };
-
-  onFetchCountiesSuccess = counties => {
-    this.setState({ counties });
-  };
+  }
 
   handleCountyChange = event => {
     const county = this.state.counties.find(county => county.name === event.target.value) || emptyCounty;
@@ -233,7 +206,7 @@ class ClientAddEditForm extends Component {
 
   handleSubmit = event => {
     const childInfo = this.prepareChildForSubmit(clone(this.state.childInfo));
-    if (this.state.isNewForm) {
+    if (this.props.isNewForm) {
       event.preventDefault();
       ClientService.addClient(childInfo)
         .then(newChild => {
@@ -446,8 +419,8 @@ class ClientAddEditForm extends Component {
   };
 
   render() {
-    const { classes } = this.props;
-    const { isNewForm, childInfo, childInfoValidation, redirection } = this.state;
+    const { classes, isNewForm } = this.props;
+    const { childInfo, childInfoValidation, redirection } = this.state;
     const { shouldRedirect, successClientId } = redirection;
 
     if (shouldRedirect) {
@@ -523,7 +496,22 @@ class ClientAddEditForm extends Component {
 
 ClientAddEditForm.propTypes = {
   classes: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
+  client: PropTypes.object,
+  isNewForm: PropTypes.bool.isRequired,
+};
+
+ClientAddEditForm.defaultProps = {
+  client: {
+    person_role: 'CLIENT',
+    first_name: '',
+    middle_name: '',
+    last_name: '',
+    suffix: '',
+    dob: '',
+    external_id: '',
+    county: emptyCounty,
+    cases: [{ external_id: '' }],
+  },
 };
 
 export default withStyles(styles)(ClientAddEditForm);

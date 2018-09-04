@@ -9,10 +9,10 @@ import { ClientAssessmentHistoryRecord } from './';
 import { Link } from 'react-router-dom';
 import { AssessmentService } from '../Assessment/Assessment.service';
 import { CloseableAlert, alertType } from '../common/CloseableAlert';
+import { LoadingState } from '../../util/loadingHelper';
 
 import './style.sass';
 
-/* eslint-disable camelcase */
 class ClientAssessmentHistory extends Component {
   constructor(context) {
     super(context);
@@ -24,25 +24,21 @@ class ClientAssessmentHistory extends Component {
 
     this.state = {
       assessments: [],
-      fetchStatus: 'idle',
+      fetchStatus: LoadingState.idle,
       shouldRenderSuccessMessage: !!successAssessmentId,
     };
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { clientId } = nextProps;
+  componentDidMount() {
+    const { clientId } = this.props;
     if (clientId) {
-      this.searchAssessments(clientId);
-    }
-  }
-
-  searchAssessments(clientId) {
-    return AssessmentService.search({ person_id: clientId }).then(data => {
-      this.setState({
-        assessments: data,
-        fetchStatus: 'ready',
+      return AssessmentService.search({ person_id: clientId }).then(data => {
+        this.setState({
+          assessments: data,
+          fetchStatus: LoadingState.ready,
+        });
       });
-    });
+    }
   }
 
   renderAddCansButton() {
@@ -57,7 +53,7 @@ class ClientAssessmentHistory extends Component {
   }
 
   renderAssessments = (assessments, fetchStatus) => {
-    return fetchStatus === 'ready' && assessments.length === 0 ? (
+    return fetchStatus === LoadingState.ready && assessments.length === 0 ? (
       <div id="no-data">No assessments currently exist for this child/youth.</div>
     ) : (
       assessments.map(assessment => <ClientAssessmentHistoryRecord assessment={assessment} key={assessment.id} />)
@@ -89,7 +85,6 @@ class ClientAssessmentHistory extends Component {
     );
   }
 }
-/* eslint-enable camelcase */
 
 ClientAssessmentHistory.propTypes = {
   clientId: PropTypes.number,

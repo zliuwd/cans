@@ -9,14 +9,25 @@ import Grid from '@material-ui/core/Grid';
 import { PageInfo } from '../Layout';
 import { MemoryRouter } from 'react-router-dom';
 
+const client = {
+  id: 1,
+  first_name: 'test',
+  middle_name: 'name',
+  last_name: 'user',
+  suffix: 'Mr.',
+  dob: '10/10/1980',
+  external_id: '1234567891234567890',
+  county: { name: 'Sacramento' },
+  cases: [],
+};
+const params = {
+  match: { params: { id: '1' } },
+  location: { pathname: 'client' },
+  history: { location: '/client' },
+  client,
+};
 describe('<Client />', () => {
   describe('initial component layout', () => {
-    const params = {
-      match: { params: { id: '1' } },
-      location: { pathname: 'client' },
-      history: { location: '/client' },
-    };
-
     const getWrapper = () => shallow(<Client {...params} />);
     const getLength = component => getWrapper().find(component).length;
 
@@ -57,12 +68,6 @@ describe('<Client />', () => {
   });
 
   describe('with childData', () => {
-    const params = {
-      match: { params: { id: '1' } },
-      location: { pathname: 'client' },
-      history: { location: '/client' },
-    };
-
     let wrapper = {};
     beforeEach(() => {
       wrapper = shallow(
@@ -72,25 +77,11 @@ describe('<Client />', () => {
       )
         .find(Client)
         .dive();
-
-      wrapper.setState({
-        childData: {
-          id: 1,
-          first_name: 'test',
-          middle_name: 'name',
-          last_name: 'user',
-          suffix: 'Mr.',
-          dob: '10/10/1980',
-          external_id: '1234567891234567890',
-          county: { name: 'Sacramento' },
-          cases: [],
-        },
-      });
     });
 
     const getLength = component => wrapper.find(component).length;
 
-    it('renders with 9 <Grid /> components', () => {
+    it('renders with 12 <Grid /> components', () => {
       expect(getLength(Grid)).toBe(12);
     });
 
@@ -100,26 +91,6 @@ describe('<Client />', () => {
 
     it('does not render No Child Data Found', () => {
       expect(getLength('#no-data')).not.toBe(1);
-    });
-  });
-
-  describe('componentDidMount', () => {
-    const params = {
-      match: { params: { id: '1' } },
-      location: { pathname: '/client' },
-      history: { location: '/client' },
-    };
-
-    it('calls fetchChildData', () => {
-      const spy = jest.spyOn(Client.prototype, 'componentDidMount');
-      const fetchClientDataSpy = jest.spyOn(Client.prototype, 'fetchChildData');
-      const wrapper = shallow(<Client {...params} />);
-      wrapper.instance().componentDidMount();
-      expect(spy).toHaveBeenCalledWith();
-      expect(fetchClientDataSpy).toHaveBeenCalledWith('1');
-
-      spy.mockReset();
-      fetchClientDataSpy.mockReset();
     });
   });
 });

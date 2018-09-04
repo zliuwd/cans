@@ -12,7 +12,6 @@ import {
 } from './';
 import Typography from '@material-ui/core/Typography';
 import { PageInfo } from '../Layout';
-import { ClientService } from '../Client/';
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper';
 import {
   AssessmentStatus,
@@ -28,11 +27,9 @@ class AssessmentContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isNewForm: !!this.props.match.params.id,
       assessment: defaultEmptyAssessment,
       assessmentServiceStatus: LoadingState.idle,
       i18n: {},
-      child: {},
       isValidForSubmit: false,
       shouldRenderSaveSuccessMessage: false,
       redirection: {
@@ -49,9 +46,7 @@ class AssessmentContainer extends Component {
     if (!isEditable) {
       isEditable = await SecurityService.checkPermission(`assessment:write:${assessmentId}`);
     }
-    const { childId } = this.props.match.params;
-    const child = await ClientService.fetch(childId).catch(() => {});
-    this.setState({ child, isEditable: isEditable });
+    this.setState({ isEditable: isEditable });
     assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment();
   }
 
@@ -68,8 +63,8 @@ class AssessmentContainer extends Component {
   onFetchNewAssessmentSuccess(instrument) {
     const assessment = {
       instrument_id: instrument.id,
-      person: this.state.child,
-      county: this.state.child.county,
+      person: this.props.client,
+      county: this.props.client.county,
       assessment_type: AssessmentType.initial,
       status: AssessmentStatus.inProgress,
       state: instrument.prototype,
@@ -134,7 +129,7 @@ class AssessmentContainer extends Component {
   }
 
   updateUrlWithAssessment(assessment) {
-    this.props.history.push(`/clients/${this.state.child.id}/assessments/${assessment.id}`);
+    this.props.history.push(`/clients/${this.props.client.id}/assessments/${assessment.id}`);
   }
 
   hideSaveSuccessMessage = () => {
@@ -144,7 +139,7 @@ class AssessmentContainer extends Component {
   handleSaveAssessment = async () => {
     this.setState({ assessmentServiceStatus: LoadingState.updating });
     const assessment = this.state.assessment;
-    assessment.person = this.state.child;
+    assessment.person = this.props.client;
     if (assessment.id) {
       try {
         const updatedAssessment = await AssessmentService.update(assessment.id, assessment);
@@ -170,7 +165,7 @@ class AssessmentContainer extends Component {
     this.setState({ assessmentServiceStatus: LoadingState.updating });
     const assessment = Object.assign({}, this.state.assessment);
     assessment.status = AssessmentStatus.submitted;
-    assessment.person = this.state.child;
+    assessment.person = this.props.client;
     if (assessment.id) {
       try {
         const submittedAssessment = await AssessmentService.update(assessment.id, assessment);
@@ -210,9 +205,8 @@ class AssessmentContainer extends Component {
   };
 
   render() {
+    const { client, isNewForm } = this.props;
     const {
-      isNewForm,
-      child,
       redirection,
       isValidForSubmit,
       assessment,
@@ -223,14 +217,14 @@ class AssessmentContainer extends Component {
     } = this.state;
     const { shouldRedirect, successAssessmentId } = redirection;
     if (shouldRedirect) {
-      return <Redirect push to={{ pathname: `/clients/${child.id}`, state: { successAssessmentId } }} />;
+      return <Redirect push to={{ pathname: `/clients/${client.id}`, state: { successAssessmentId } }} />;
     }
-    const pageTitle = isNewForm ? 'CANS Assessment Form' : 'New CANS';
+    const pageTitle = isNewForm ? 'New CANS' : 'CANS Assessment Form';
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus);
     return (
       <Fragment>
         <PageInfo title={pageTitle} />
-        <AssessmentFormHeader client={child} assessment={assessment} onAssessmentUpdate={this.updateAssessment} />
+        <AssessmentFormHeader client={client} assessment={assessment} onAssessmentUpdate={this.updateAssessment} />
         <Assessment assessment={assessment} i18n={i18n} onAssessmentUpdate={this.updateAssessment} />
         <Typography variant="headline" className={'submit-validation-message'}>
           Assessment Date, Complete as, and all available ratings fields for the child/adolescent and applicable
@@ -241,7 +235,7 @@ class AssessmentContainer extends Component {
             type={alertType.SUCCESS}
             message={
               <Fragment>
-                Success! CANS assessment has been saved. <Link to={`/clients/${child.id}`}>Click here</Link> to return
+                Success! CANS assessment has been saved. <Link to={`/clients/${client.id}`}>Click here</Link> to return
                 to Child/Youth profile.
               </Fragment>
             }
@@ -274,7 +268,9 @@ class AssessmentContainer extends Component {
 }
 
 AssessmentContainer.propTypes = {
+  client: PropTypes.object.isRequired,
   history: PropTypes.object,
+  isNewForm: PropTypes.bool.isRequired,
   match: PropTypes.object,
 };
 
