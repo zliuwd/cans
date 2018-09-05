@@ -226,10 +226,13 @@ class AssessmentContainer extends Component {
         <PageInfo title={pageTitle} />
         <AssessmentFormHeader client={client} assessment={assessment} onAssessmentUpdate={this.updateAssessment} />
         <Assessment assessment={assessment} i18n={i18n} onAssessmentUpdate={this.updateAssessment} />
-        <Typography variant="headline" className={'submit-validation-message'}>
-          Assessment Date, Complete as, and all available ratings fields for the child/adolescent and applicable
-          caregiver(s) must be completed prior to clicking the Submit button.
-        </Typography>
+        {LoadingState.ready === assessmentServiceStatus &&
+          isEditable && (
+            <Typography variant="headline" className={'submit-validation-message'}>
+              Assessment Date, Complete as, and all available ratings fields for the child/adolescent and applicable
+              caregiver(s) must be completed prior to clicking the Submit button.
+            </Typography>
+          )}
         {shouldRenderSaveSuccessMessage ? (
           <CloseableAlert
             type={alertType.SUCCESS}
@@ -247,13 +250,15 @@ class AssessmentContainer extends Component {
         ) : null}
         {LoadingState.ready === assessmentServiceStatus &&
           !isEditable && (
-            <CloseableAlert
-              type={alertType.WARNING}
-              message="This assessment was initiated in a county that is different than the User’s County. Saving and
+            <div className={'permission-warning-alert'}>
+              <CloseableAlert
+                type={alertType.WARNING}
+                message="This assessment was initiated in a county that is different than the User’s County. Saving and
               Submitting are disabled"
-              isCloseable={false}
-              isAutoCloseable={false}
-            />
+                isCloseable={false}
+                isAutoCloseable={false}
+              />
+            </div>
           )}
         <AssessmentFormFooter
           onCancelClick={this.handleCancelClick}

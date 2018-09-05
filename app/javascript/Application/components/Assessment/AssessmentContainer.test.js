@@ -25,13 +25,16 @@ const mountWithRouter = async component => mount(<MemoryRouter initialEntries={[
 
 describe('<AssessmentContainer />', () => {
   describe('init AssessmentContainer', () => {
-    describe('page layout', () => {
+    describe('page layout', async () => {
       const props = {
         location: { childId: 10 },
-        match: { params: { id: undefined } },
+        match: { params: { id: 1 } },
       };
-      const getWrapper = () => shallow(<AssessmentContainer {...props} />);
-      const getLength = component => getWrapper().find(component).length;
+      jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
+      jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(AssessmentService, 'fetch').mockReturnValue(Promise.resolve(assessment));
+      const wrapper = await shallow(<AssessmentContainer {...props} />);
+      const getLength = component => wrapper.find(component).length;
 
       it('renders with 1 <PageInfo /> component', () => {
         expect(getLength(PageInfo)).toBe(1);
@@ -89,6 +92,7 @@ describe('<AssessmentContainer />', () => {
           'This assessment was initiated in a county that is different than the User’s ' +
             'County. Saving and Submitting are disabled'
         );
+        expect(wrapper.find(Typography).length).toBe(0);
       });
 
       it('should not render warning message', async () => {
