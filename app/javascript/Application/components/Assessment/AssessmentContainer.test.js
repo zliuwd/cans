@@ -11,6 +11,7 @@ import { assessment, updatedAssessment, initialAssessment, instrument } from './
 import { LoadingState } from '../../util/loadingHelper';
 import { CloseableAlert } from '../common/CloseableAlert';
 import { getCurrentIsoDate } from '../../util/dateHelper';
+import { Print } from '../Print';
 
 jest.useFakeTimers();
 
@@ -56,22 +57,41 @@ describe('<AssessmentContainer />', () => {
     describe('page title', () => {
       it('should be "New CANS" for new assessment', () => {
         const wrapper = shallow(<AssessmentContainer isNewForm={true} />);
-        expect(
-          wrapper
-            .find('PageInfo')
-            .render()
-            .text()
-        ).toBe('New CANS');
+        const pageInfoText = wrapper
+          .find('PageInfo')
+          .render()
+          .text();
+        expect(pageInfoText).toMatch(/New CANS/);
+        expect(pageInfoText).toMatch(/Print/);
       });
 
       it('should be "CANS Assessment Form" for the existent assessment', () => {
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />);
-        expect(
-          wrapper
-            .find('PageInfo')
-            .render()
-            .text()
-        ).toBe('CANS Assessment Form');
+        const pageInfoText = wrapper
+          .find('PageInfo')
+          .render()
+          .text();
+        expect(pageInfoText).toMatch(/CANS Assessment Form/);
+        expect(pageInfoText).toMatch(/Print/);
+      });
+    });
+
+    describe('print assessment', () => {
+      it('should render <Print /> on print button click', () => {
+        // given
+        const wrapper = shallow(<AssessmentContainer {...defaultProps} />);
+        expect(wrapper.find(Print).length).toBe(0);
+
+        // when
+        wrapper
+          .find('PageInfo')
+          .dive()
+          .find('.print-link')
+          .simulate('click');
+        wrapper.update();
+
+        // then
+        expect(wrapper.find(Print).length).toBe(1);
       });
     });
 

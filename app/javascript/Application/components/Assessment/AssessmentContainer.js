@@ -13,6 +13,7 @@ import {
 import Typography from '@material-ui/core/Typography';
 import { PageInfo } from '../Layout';
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper';
+import { Print, PrintAssessment } from '../Print';
 import {
   AssessmentStatus,
   AssessmentType,
@@ -37,6 +38,7 @@ class AssessmentContainer extends Component {
         successAssessmentId: null,
       },
       isEditable: false,
+      shouldPrintNow: false,
     };
   }
 
@@ -196,13 +198,21 @@ class AssessmentContainer extends Component {
     }
   };
 
-  handleCancelClick = () => {
-    this.setState({
-      redirection: {
-        shouldRedirect: true,
-      },
-    });
-  };
+  handleCancelClick = () => this.setState({ redirection: { shouldRedirect: true } });
+
+  togglePrintNow = () => this.setState({ shouldPrintNow: !this.state.shouldPrintNow });
+
+  renderPrintButton = () => (
+    <div
+      onClick={this.togglePrintNow}
+      onKeyPress={this.togglePrintNow}
+      className={'print-link'}
+      role={'button'}
+      tabIndex={0}
+    >
+      <i className={'fa fa-print'} /> Print
+    </div>
+  );
 
   render() {
     const { client, isNewForm } = this.props;
@@ -214,6 +224,7 @@ class AssessmentContainer extends Component {
       assessmentServiceStatus,
       shouldRenderSaveSuccessMessage,
       isEditable,
+      shouldPrintNow,
     } = this.state;
     const { shouldRedirect, successAssessmentId } = redirection;
     if (shouldRedirect) {
@@ -221,9 +232,13 @@ class AssessmentContainer extends Component {
     }
     const pageTitle = isNewForm ? 'New CANS' : 'CANS Assessment Form';
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus);
+    const printButton = this.renderPrintButton();
     return (
       <Fragment>
-        <PageInfo title={pageTitle} />
+        <PageInfo title={pageTitle} actionNode={printButton} />
+        {shouldPrintNow && (
+          <Print node={<PrintAssessment assessment={assessment} i18n={i18n} />} onClose={this.togglePrintNow} />
+        )}
         <AssessmentFormHeader client={client} assessment={assessment} onAssessmentUpdate={this.updateAssessment} />
         <Assessment assessment={assessment} i18n={i18n} onAssessmentUpdate={this.updateAssessment} />
         {LoadingState.ready === assessmentServiceStatus &&
