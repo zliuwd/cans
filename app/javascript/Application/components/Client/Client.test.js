@@ -15,7 +15,7 @@ const client = {
   middle_name: 'name',
   last_name: 'user',
   suffix: 'Mr.',
-  dob: '10/10/1980',
+  dob: '1980-01-02',
   external_id: '1234567891234567890',
   county: { name: 'Sacramento' },
   cases: [],
@@ -91,6 +91,15 @@ describe('<Client />', () => {
 
     it('does not render No Child Data Found', () => {
       expect(getLength('#no-data')).not.toBe(1);
+    });
+
+    it('date of birth rendered properly', () => {
+      expect(
+        wrapper
+          .find(Grid)
+          .at(7)
+          .html()
+      ).toEqual(expect.stringContaining('01/02/1980'));
     });
   });
 });

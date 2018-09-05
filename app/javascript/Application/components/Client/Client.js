@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button/Button';
 import ClientAssessmentHistory from './ClientAssessmentHistory';
 import { CloseableAlert, alertType } from '../common/CloseableAlert';
 import { Link } from 'react-router-dom';
+import { isoToLocalDate } from '../../util/dateHelper';
 
 import './style.sass';
 
@@ -104,7 +105,7 @@ class Client extends Component {
                       {this.renderClientData(client.middle_name, 'Middle Name')}
                       {this.renderClientData(client.last_name, 'Last Name')}
                       {this.renderClientData(client.suffix, 'Suffix')}
-                      {this.renderClientData(client.dob, 'Birth Date')}
+                      {this.renderClientData(isoToLocalDate(client.dob), 'Birth Date')}
                       {this.renderClientData(client.county.name, 'County')}
                       {this.renderClientData(this.formatClientId(client.external_id), 'Client Id', 6)}
                       {this.renderClientData(undefined, undefined, 6)}
