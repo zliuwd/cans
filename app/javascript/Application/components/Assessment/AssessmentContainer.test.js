@@ -26,31 +26,39 @@ const mountWithRouter = async component => mount(<MemoryRouter initialEntries={[
 
 describe('<AssessmentContainer />', () => {
   describe('init AssessmentContainer', () => {
-    describe('page layout', async () => {
+    describe('page layout', () => {
       const props = {
         location: { childId: 10 },
         match: { params: { id: 1 } },
       };
-      jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
-      jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true));
-      jest.spyOn(AssessmentService, 'fetch').mockReturnValue(Promise.resolve(assessment));
-      const wrapper = await shallow(<AssessmentContainer {...props} />);
-      const getLength = component => wrapper.find(component).length;
+
+      beforeEach(() => {
+        jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
+        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true));
+        jest.spyOn(AssessmentService, 'fetch').mockReturnValue(Promise.resolve(assessment));
+      });
+
+      const getLength = (wrapper, component) => wrapper.find(component).length;
 
       it('renders with 1 <PageInfo /> component', () => {
-        expect(getLength(PageInfo)).toBe(1);
+        const wrapper = shallow(<AssessmentContainer {...props} />);
+        expect(getLength(wrapper, PageInfo)).toBe(1);
       });
 
       it('renders with 1 <AssessmentFormHeader /> component', () => {
-        expect(getLength(AssessmentFormHeader)).toBe(1);
+        const wrapper = shallow(<AssessmentContainer {...props} />);
+        expect(getLength(wrapper, AssessmentFormHeader)).toBe(1);
       });
 
-      it('renders with 1 <Typography /> component', () => {
-        expect(getLength(Typography)).toBe(1);
+      it('renders with 1 <Typography /> component', async () => {
+        const wrapper = shallow(<AssessmentContainer {...props} />);
+        await wrapper.instance().componentDidMount();
+        expect(getLength(wrapper, Typography)).toBe(1);
       });
 
       it('renders with 1 <AssessmentFormFooter /> component', () => {
-        expect(getLength(AssessmentFormFooter)).toBe(1);
+        const wrapper = shallow(<AssessmentContainer {...props} />);
+        expect(getLength(wrapper, AssessmentFormFooter)).toBe(1);
       });
     });
 
