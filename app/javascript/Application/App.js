@@ -15,9 +15,9 @@ const App = () => {
       <Fragment>
         <Header />
         <PageHeader pageTitle="CANS Assessment Application" button={null}>
-          <Routes />
           <GlobalAlert />
         </PageHeader>
+        <Routes />
       </Fragment>
     </BrowserRouter>
   );
