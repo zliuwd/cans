@@ -105,7 +105,7 @@ class Client extends Component {
                       {this.renderClientData(client.middle_name, 'Middle Name')}
                       {this.renderClientData(client.last_name, 'Last Name')}
                       {this.renderClientData(client.suffix, 'Suffix')}
-                      {this.renderClientData(isoToLocalDate(client.dob), 'Birth Date')}
+                      {this.renderClientData(isoToLocalDate(client.dob), 'Date Of Birth')}
                       {this.renderClientData(client.county.name, 'County')}
                       {this.renderClientData(this.formatClientId(client.external_id), 'Client Id', 6)}
                       {this.renderClientData(undefined, undefined, 6)}
