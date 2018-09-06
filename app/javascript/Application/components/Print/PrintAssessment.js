@@ -135,6 +135,7 @@ class PrintAssessment extends PureComponent {
   renderHeader() {
     const assessment = this.props.assessment;
     const clientName = formatClientName(assessment.person);
+    const countyName = assessment.county.name ? `${assessment.county.name} County` : '';
     const eventDate = isoToLocalDate(assessment.event_date);
     const caseNumber = (assessment.the_case || {}).external_id;
     const hasCaregiver = assessment.has_caregiver;
@@ -145,7 +146,7 @@ class PrintAssessment extends PureComponent {
         <h1 style={textAlignCenter}>CANS Assessment Form</h1>
         <div style={headerNameRow}>
           <h2>{clientName}</h2>
-          <h2>{assessment.county.name}</h2>
+          <h2>{countyName}</h2>
         </div>
         <div style={headerRow}>
           {this.renderHeaderRecord('Date', eventDate)}
