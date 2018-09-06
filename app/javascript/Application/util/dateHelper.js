@@ -14,7 +14,19 @@ export function isoToLocalDate(datetime) {
 }
 
 /**
- * Transforms JS Date object to ISO formatted date staring
+ * Returns a formatted ISO8601 date
+ * @param {string}
+ * @returns {string}
+ */
+export function localToIsoDate(date) {
+  if (date === null) {
+    return date;
+  }
+  return moment(date, LOCAL_DATE_FORMAT).format(ISO_DATE_FORMAT);
+}
+
+/**
+ * Transforms JS Date object to ISO formatted date string
  * @param {Date} Javascript Date object
  * @returns {string} ISO formatted 'YYYY-MM-DD' date string
  */
@@ -42,11 +54,22 @@ export function isoToJsDate(value) {
 
 /**
  * Validates whether input string is a valid ISO formatted date
- * @param {string} Any string
+ * @param value {string} Any string
+ * @param strict {boolean} is strict check
  * @returns {boolean} True if input string is a valid ISO formatted date
  */
-export function isValidIsoDate(value) {
-  return moment(value, ISO_DATE_FORMAT).isValid();
+export function isValidIsoDate(value, strict = false) {
+  return moment(value, ISO_DATE_FORMAT, strict).isValid();
+}
+
+/**
+ * Validates whether input string is a valid Local formatted date
+ * @param value {string} Any string
+ * @param strict {boolean} is strict check
+ * @returns {boolean}
+ */
+export function isValidLocalDate(value, strict = false) {
+  return moment(value, LOCAL_DATE_FORMAT, strict).isValid();
 }
 
 /**
@@ -55,4 +78,37 @@ export function isValidIsoDate(value) {
  */
 export function getCurrentIsoDate() {
   return moment().format(ISO_DATE_FORMAT);
+}
+
+/**
+ * Checks if date is in future
+ * @param date
+ * @returns {boolean}
+ */
+export function isFutureDate(date) {
+  date = isValidIsoDate(date, true) ? date : localToIsoDate(date);
+  return moment().isSameOrBefore(date);
+}
+
+/**
+ * Validates date according to configuration
+ * @param date
+ * @param config
+ * @returns {boolean}
+ */
+export function isValidDate(date, config = { allowFutureDate: true }) {
+  let valid = isValidLocalDate(date, true) || isValidIsoDate(date, true);
+  return valid && (config.allowFutureDate || !isFutureDate(date));
+}
+
+/**
+ * Convert string to ISO date or returns null
+ * @param str
+ * @returns {string} or null
+ */
+export function localToIsoDateOrNull(str) {
+  if (isValidLocalDate(str, true)) {
+    return localToIsoDate(str);
+  }
+  return null;
 }

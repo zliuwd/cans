@@ -15,6 +15,7 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
+import MaskedDateField from '../common/MaskedDateField';
 
 import './style.sass';
 
@@ -446,20 +447,18 @@ class ClientAddEditForm extends Component {
                 {this.renderNameInputs('last_name', 'Last Name', LAST_NAME_MAX_LENGTH, true)}
                 {this.renderNameInputs('suffix', 'Suffix', SUFFIX_MAX_LENGTH, false)}
 
-                <TextField
-                  required
-                  id="dob"
-                  label="Date of Birth"
+                <MaskedDateField
+                  id={'dob'}
+                  isRequired
                   value={childInfo.dob}
+                  label="Date of Birth"
+                  isFutureDatesAllowed={false}
                   error={!childInfoValidation['dob']}
-                  type="date"
                   className={classes.textField}
-                  onChange={this.handleChange('dob')}
                   inputProps={{ className: classes.inputText }}
-                  InputLabelProps={{
-                    ...inputLabelProps,
-                    shrink: true,
-                  }}
+                  InputLabelProps={inputLabelProps}
+                  FormHelperTextProps={helperTextProps}
+                  onChange={this.handleChange('dob')}
                 />
 
                 <InputMask

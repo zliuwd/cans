@@ -8,7 +8,7 @@ require 'active_support/time'
 feature 'Client Pages' do
   given(:first_name) { Faker::Name.first_name }
   given(:last_name) { Faker::Name.last_name }
-  given(:date_of_birth) { Faker::Date.between(20.years.ago, 10.years.ago) }
+  given(:date_of_birth) { Faker::Date.between(20.years.ago, 10.years.ago).strftime('%m/%d/%Y') }
   given(:case_number_0) do
     "#{Faker::Number.number(4)}-#{Faker::Number.number(3)}-"\
     "#{Faker::Number.number(4)}-#{Faker::Number.number(8)}"
@@ -35,9 +35,7 @@ feature 'Client Pages' do
 
     fill_in('First Name', with: first_name)
     fill_in('Last Name', with: last_name)
-    page.find('#dob').set(date_of_birth)
-    page.find('#dob').native.send_keys(:up)
-    page.find('#dob').native.send_keys(:down)
+    focus_and_fill_in('#dob', date_of_birth)
     find('.case-numbers-single-control').click
     focus_and_fill_in('#caseNumber0', case_number_0)
     focus_and_fill_in('#caseNumber1', case_number_1)
