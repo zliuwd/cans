@@ -244,8 +244,8 @@ class AssessmentContainer extends Component {
         {LoadingState.ready === assessmentServiceStatus &&
           isEditable && (
             <Typography variant="headline" className={'submit-validation-message'}>
-              Assessment Date, Complete as, and all available ratings fields for the child/adolescent and applicable
-              caregiver(s) must be completed prior to clicking the Submit button.
+              Prior to clicking the Submit button the Assessment Date and all assessment ratings for the child/youth and
+              applicable caregiver(s) must be completed.
             </Typography>
           )}
         {shouldRenderSaveSuccessMessage ? (
