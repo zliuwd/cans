@@ -28,7 +28,7 @@ describe('toggleActiveLink', () => {
   it('should change activeLink state onClick', () => {
     const wrapper = getWrapper();
     expect(wrapper.state().activeLink).toEqual('');
-    wrapper.find('[text="Child/Youth List"]').simulate('click');
+    wrapper.find('[text="County Client List"]').simulate('click');
     expect(wrapper.state().activeLink).toEqual('/');
   });
 });

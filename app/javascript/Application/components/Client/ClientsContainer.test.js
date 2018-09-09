@@ -20,7 +20,7 @@ describe('<ClientsContainer />', () => {
     clientServiceFetchSpy.mockReturnValue(Promise.resolve(personsJson));
     const koolmodee = await shallow(<ClientsContainer />);
     expect(koolmodee.find(Card).length).toBe(1);
-    expect(koolmodee.find(CardHeader).props().title).toBe('Child/Youth List');
+    expect(koolmodee.find(CardHeader).props().title).toBe('County Client List');
   });
 
   describe('when client list is empty', () => {

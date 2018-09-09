@@ -82,7 +82,11 @@ class ClientsContainer extends Component {
       <Fragment>
         <Grid item className={'client-grid'} xs={12}>
           <Card className={'card'}>
-            <CardHeader className={'card-header-cans'} title="Child/Youth List" action={this.renderAddChildButton()} />
+            <CardHeader
+              className={'card-header-cans'}
+              title="County Client List"
+              action={this.renderAddChildButton()}
+            />
             <CardContent>
               <div className="clients-container">
                 {clients.map(record => {

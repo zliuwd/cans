@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { AssessmentFormHeader } from './index';
 import { Alert } from '@cwds/components';
 import { assessment, client } from './assessment.mocks.test';
@@ -31,6 +31,55 @@ describe('<AssessmentFormHeader />', () => {
         .find('option');
       expect(caseNumberOptions.length).toBe(3);
       expect(caseNumberOptions.map(option => option.get(0).props.value)).toEqual([undefined, '1002', '1001']);
+    });
+  });
+
+  describe('renders 5 assessment-form-header-label labels with correct text', () => {
+    let wrapped;
+    beforeEach(() => {
+      wrapped = shallow(<AssessmentFormHeader {...{ assessment, client, onAssessmentUpdate: jest.fn() }} />);
+    });
+
+    it('renderDateSelect() returns correct label text', () => {
+      expect(
+        mount(wrapped.instance().renderDateSelect())
+          .find('Label')
+          .text()
+      ).toBe('Assessment Date *');
+    });
+
+    it('renderCaseSelect() returns correct label text', () => {
+      expect(
+        mount(wrapped.instance().renderCaseSelect())
+          .find('Label')
+          .text()
+      ).toBe('Case Number');
+    });
+
+    it('renderCompletedAsSelect() returns correct label text', () => {
+      expect(
+        mount(wrapped.instance().renderCompletedAsSelect())
+          .find('Label')
+          .text()
+      ).toBe('Complete as');
+    });
+
+    it('renderHasCaregiverQuestion() returns correct label text', () => {
+      expect(
+        mount(wrapped.instance().renderHasCaregiverQuestion())
+          .find('Typography')
+          .first()
+          .text()
+      ).toBe('Child/Youth has Caregiver?');
+    });
+
+    it('renderCanReleaseInfoQuestion() returns correct label text', () => {
+      expect(
+        mount(wrapped.instance().renderCanReleaseInfoQuestion())
+          .find('Typography')
+          .first()
+          .text()
+      ).toBe('Authorization for release of information on file?');
     });
   });
 

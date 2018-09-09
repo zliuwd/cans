@@ -25,7 +25,7 @@ const assertLinkNumberMatches = (component, linkNumber, matcher) =>
       .prop('children')
   ).toMatch(matcher);
 
-const assertChildYouthListCrumbIsPresent = component => assertLinkNumberMatches(component, 0, /CHILD\/YOUTH LIST/);
+const assertChildYouthListCrumbIsPresent = component => assertLinkNumberMatches(component, 0, /COUNTY CLIENT LIST/);
 const assertChildInfoCrumbIsPresent = component => assertLinkNumberMatches(component, 1, /CHILD, TEST/);
 
 describe('bread crumb builder', () => {

@@ -76,7 +76,7 @@ class AssessmentFormHeader extends PureComponent {
     return (
       <Fragment>
         <Label required for={'date-select'} className={'assessment-form-header-label'}>
-          Date *
+          Assessment Date *
         </Label>
         <DateField
           required={true}

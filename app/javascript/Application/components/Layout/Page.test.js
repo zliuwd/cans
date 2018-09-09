@@ -19,7 +19,7 @@ describe('<Page />', () => {
       const sideNav = wrapper.find(SideNav);
 
       expect(sideNav.length).toBe(1);
-      expect(sideNav.dive().find({ text: 'Child/Youth List' }).length).toBe(1);
+      expect(sideNav.dive().find({ text: 'County Client List' }).length).toBe(1);
     });
 
     it('renders with <BreadCrumbsBuilder /> links', async () => {
