@@ -13,7 +13,11 @@ const navsWithChildYouthListCrumb = [
   navigation.CHILD_PROFILE_EDIT,
 ];
 
-const navsWithChildProfileCrumb = [navigation.ASSESSMENT_ADD, navigation.ASSESSMENT_EDIT];
+const navsWithChildProfileCrumb = [
+  navigation.CHILD_PROFILE_EDIT,
+  navigation.ASSESSMENT_ADD,
+  navigation.ASSESSMENT_EDIT,
+];
 
 const addChildYouthListCrumbIfNeeded = (elements, navigateTo) => {
   if (navsWithChildYouthListCrumb.includes(navigateTo)) {

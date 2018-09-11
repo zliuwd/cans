@@ -52,8 +52,9 @@ describe('bread crumb builder', () => {
   it('builds bread crumbs for CHILD_PROFILE_EDIT navigation', () => {
     const component = shallowBreadCrumbsBuilder(navigation.CHILD_PROFILE_EDIT);
     assertDashboardCrumbIsPresent(component);
-    assertHasLinks(component, 1);
+    assertHasLinks(component, 2);
     assertChildYouthListCrumbIsPresent(component);
+    assertChildInfoCrumbIsPresent(component);
   });
 
   it('builds bread crumbs for ASSESSMENT_ADD navigation', () => {
