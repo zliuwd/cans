@@ -25,6 +25,9 @@ Rails.application.routes.draw do
     resources :counties, only: [:index] do
     end
 
+    resources :sensitivity_types, only: [:index] do
+    end
+
     get 'security/check_permission/:permission', to: 'security#check_permission'
   end
 

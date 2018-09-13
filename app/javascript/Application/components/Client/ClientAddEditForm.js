@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { TextField, Card, CardHeader, CardContent } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { CountiesService } from './Counties.service';
+import { SensitivityTypesService } from './SensitivityTypes.service';
 import { ClientService } from './Client.service';
 import { validate, validateCase, validateCaseNumbersAreUnique, isFormValid } from './ClientFormValidator';
 import { PageInfo } from '../Layout';
@@ -127,6 +128,7 @@ class ClientAddEditForm extends Component {
       childInfo: prepareChildInfo(client),
       childInfoValidation: prepareChildInfoValidation(client, isNewForm),
       counties: [],
+      sensitivityTypes: [],
       isSaveButtonDisabled: isNewForm,
       redirection: {
         shouldRedirect: false,
@@ -137,12 +139,27 @@ class ClientAddEditForm extends Component {
 
   async componentDidMount() {
     await this.fetchCounties();
+    await this.fetchSensitivityTypes(this.state.childInfo.county);
   }
 
   fetchCounties() {
-    return CountiesService.fetchCounties()
-      .then(counties => this.setState({ counties }))
-      .catch(() => {});
+    return CountiesService.fetchCounties().then(counties => this.setState({ counties }));
+  }
+
+  fetchSensitivityTypes(county) {
+    if (county && county.id > 0) {
+      return SensitivityTypesService.fetch(county.id).then(sensitivityTypes => {
+        this.setState({ sensitivityTypes });
+        if (!sensitivityTypes || sensitivityTypes.length === 0) {
+          this.setState({
+            childInfo: {
+              ...this.state.childInfo,
+              sensitivity_type: null,
+            },
+          });
+        }
+      });
+    }
   }
 
   handleCountyChange = event => {
@@ -153,7 +170,18 @@ class ClientAddEditForm extends Component {
         county: county,
       },
     });
+    this.fetchSensitivityTypes(county);
     this.validateInput('county', county);
+  };
+
+  handleSensitivityTypeChange = event => {
+    const sensitivityType = this.state.sensitivityTypes.find(type => type === event.target.value) || null;
+    this.setState({
+      childInfo: {
+        ...this.state.childInfo,
+        sensitivity_type: sensitivityType,
+      },
+    });
   };
 
   handleChange = name => event => {
@@ -311,11 +339,12 @@ class ClientAddEditForm extends Component {
     const isValid = childInfoValidation['county'];
     return (
       <div className={classes.root}>
-        <FormControl required error={!isValid} className={classes.formControl}>
+        <FormControl required error={!isValid} className={classes.formControl} id={'county-dropdown'}>
           <InputLabel htmlFor="county-select" className={classes.inputLabel}>
             County
           </InputLabel>
           <Select
+            id={'select-wrapper'}
             native
             value={childInfo.county.name}
             onChange={this.handleCountyChange}
@@ -395,6 +424,43 @@ class ClientAddEditForm extends Component {
             </div>
           </h5>
         </div>
+      </div>
+    );
+  };
+
+  renderSensitivityTypeDropDown = () => {
+    if (!this.state.sensitivityTypes.length) {
+      return null;
+    }
+    const { classes } = this.props;
+    const { childInfo, sensitivityTypes } = this.state;
+    return (
+      <div className={classes.root} id={'sensitivity_type_dropdown'}>
+        <FormControl required={false} className={'mt-0 ' + classes.formControl}>
+          <InputLabel htmlFor="sensitivity-type-select" className={classes.inputLabel}>
+            Access Restrictions
+          </InputLabel>
+          <Select
+            native
+            value={childInfo.sensitivity_type !== null ? childInfo.sensitivity_type : 'N/A'}
+            onChange={this.handleSensitivityTypeChange}
+            name="sensitivity-type"
+            className={classes.textFieldSelect}
+            inputProps={{
+              id: 'sensitivity-type-select',
+              className: classes.inputSelect,
+            }}
+          >
+            <option key={''} value="N/A">
+              Do Not Restrict Access
+            </option>
+            {sensitivityTypes.map(type => (
+              <option key={type} value={type} className={'sensitivity_type_option'}>
+                {type === 'SENSITIVE' ? 'Mark as Sensitive' : type === 'SEALED' ? 'Mark as Sealed' : type}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
       </div>
     );
   };
@@ -481,7 +547,10 @@ class ClientAddEditForm extends Component {
                     />
                   )}
                 </InputMask>
-                {this.renderCountiesDropDown()}
+                <div>
+                  {this.renderCountiesDropDown()}
+                  {this.renderSensitivityTypeDropDown()}
+                </div>
                 {this.renderCaseNumbersBlock()}
               </form>
               {this.renderFormFooter()}
