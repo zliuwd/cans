@@ -83,7 +83,6 @@ class AssessmentFormHeader extends PureComponent {
           id={'assessment-date'}
           value={this.props.assessment.event_date}
           onChange={value => this.changeFieldAndUpdateAssessment('event_date', value)}
-          max={new Date()}
         />
       </Fragment>
     );

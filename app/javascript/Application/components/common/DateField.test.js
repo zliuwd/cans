@@ -4,20 +4,9 @@ import DateField from './DateField';
 import { jsDateToIso } from '../../util/dateHelper';
 
 describe('DateField', () => {
-  function mountDateField({
-    id = '',
-    max,
-    min,
-    onBlur = () => null,
-    onChange = () => null,
-    required = undefined,
-    value,
-  } = {}) {
+  function mountDateField({ id = '', onChange = () => null, required = undefined, value } = {}) {
     const props = {
       id,
-      max,
-      min,
-      onBlur,
       onChange,
       required,
       value,
@@ -64,45 +53,9 @@ describe('DateField', () => {
     }).not.toThrow(new TypeError('onBlur is not a function'));
   });
 
-  describe('when passed an onBlur function', () => {
-    let onBlur;
-    let dateTimePicker;
-
-    beforeEach(() => {
-      onBlur = jasmine.createSpy('onBlur');
-      dateTimePicker = mountDateField({ onBlur }).find('DateTimePicker');
-    });
-
-    it('calls the passed function with a value', () => {
-      const event = { target: { value: '1999-12-31' } };
-      dateTimePicker.props().onBlur(event);
-      expect(onBlur).toHaveBeenCalledWith('1999-12-31');
-    });
-
-    it('calls the passed function with null if the value is empty', () => {
-      const event = { target: { value: '' } };
-      dateTimePicker.props().onBlur(event);
-      expect(onBlur).toHaveBeenCalledWith(null);
-    });
-
-    it('calls the passed function with null if the value is invalid date', () => {
-      const event = { target: { value: 'Invalid Date' } };
-      dateTimePicker.props().onBlur(event);
-      expect(onBlur).toHaveBeenCalledWith(null);
-    });
-  });
-
   it('displays with the expected format', () => {
     const input = mountDateField({ value: '2017-05-15' }).find('input');
     expect(input.props().value).toEqual('05/15/2017');
-  });
-
-  it('passes the min and max props down to the DateTimePicker', () => {
-    const min = new Date('2007-06-15');
-    const max = new Date('2008-08-23');
-    const dateTimePicker = mountDateField({ min, max }).find('DateTimePicker');
-    expect(dateTimePicker.props().max).toBe(max);
-    expect(dateTimePicker.props().min).toBe(min);
   });
 
   it('displays calendar by default', () => {
@@ -137,6 +90,6 @@ describe('DateField', () => {
     const event = { target: { value: null } };
     input.simulate('change', event);
     input.simulate('blur', event);
-    expect(onChange.calls.mostRecent().args[0]).toEqual(null);
+    expect(onChange.calls.mostRecent().args[0]).toEqual('');
   });
 });
