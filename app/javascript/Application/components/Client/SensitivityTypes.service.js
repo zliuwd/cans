@@ -1,8 +1,9 @@
 import { apiGet } from '../../App.api';
 
 export class SensitivityTypesService {
-  static fetch(countyId) {
-    return apiGet(`/sensitivity_types?county=${countyId}`);
+  static fetch(county) {
+    const path = `/sensitivity_types${county && county.id ? `?county=${county.id}` : ''}`;
+    return apiGet(path);
   }
 }
 

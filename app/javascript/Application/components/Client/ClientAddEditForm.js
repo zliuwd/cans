@@ -126,6 +126,7 @@ class ClientAddEditForm extends Component {
     const { client, isNewForm } = props;
     this.state = {
       childInfo: prepareChildInfo(client),
+      initialSensitivityType: client.sensitivity_type,
       childInfoValidation: prepareChildInfoValidation(client, isNewForm),
       counties: [],
       sensitivityTypes: [],
@@ -147,17 +148,19 @@ class ClientAddEditForm extends Component {
   }
 
   fetchSensitivityTypes(county) {
-    if (county && county.id > 0) {
-      return SensitivityTypesService.fetch(county.id).then(sensitivityTypes => {
-        this.setState({ sensitivityTypes });
-        if (!sensitivityTypes || sensitivityTypes.length === 0) {
-          this.setState({
-            childInfo: {
-              ...this.state.childInfo,
-              sensitivity_type: null,
-            },
-          });
-        }
+    return SensitivityTypesService.fetch(county).then(sensitivityTypes => {
+      this.setSensitivityTypes(sensitivityTypes);
+    });
+  }
+
+  setSensitivityTypes(sensitivityTypes) {
+    this.setState({ sensitivityTypes });
+    if (!sensitivityTypes || sensitivityTypes.length === 0) {
+      this.setState({
+        childInfo: {
+          ...this.state.childInfo,
+          sensitivity_type: this.state.initialSensitivityType,
+        },
       });
     }
   }

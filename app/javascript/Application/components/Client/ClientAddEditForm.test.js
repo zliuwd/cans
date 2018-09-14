@@ -329,12 +329,49 @@ describe('<ClientAddEditForm />', () => {
           expect(fetchSpy).toHaveBeenCalledTimes(1);
           expect(clientEditWrapper.find('#sensitivity_type_dropdown').length).toEqual(0);
         });
+
+        it('should reset sensitivity type to initial value', async () => {
+          const sensitivityTypeInitial = 'initial_value';
+          const clientForm = shallow(
+            <ClientAddEditForm
+              {...defaultPropsAdd}
+              client={{
+                sensitivity_type: sensitivityTypeInitial,
+                cases: [],
+                county: { id: 1, name: 'county' },
+              }}
+            />
+          )
+            .find('ClientAddEditForm')
+            .first()
+            .dive();
+
+          const clientFormInstance = clientForm.instance();
+          clientFormInstance.setState({ counties: [{ id: 1, name: 'county' }] });
+          clientFormInstance.setState({ sensitivityTypes: ['TYPE', 'TYPE1'] });
+          await clientForm.update();
+          expect(clientForm.state().initialSensitivityType).toEqual(sensitivityTypeInitial);
+          expect(clientForm.state().childInfo.sensitivity_type).toEqual(sensitivityTypeInitial);
+
+          SensitivityTypesService.fetch.mockClear();
+          SensitivityTypesService.fetch.mockReturnValue(Promise.resolve(['TYPE', 'TYPE1']));
+          clientFormInstance.handleCountyChange({ target: { value: 'county' } });
+          clientFormInstance.handleSensitivityTypeChange({ target: { value: 'TYPE' } });
+          await clientForm.update();
+          expect(clientForm.state().childInfo.sensitivity_type).toEqual('TYPE');
+
+          SensitivityTypesService.fetch.mockClear();
+          SensitivityTypesService.fetch.mockReturnValue(Promise.resolve([]));
+          clientFormInstance.handleCountyChange({ target: { value: '' } });
+          await clientForm.update();
+          expect(clientForm.state().childInfo.sensitivity_type).toEqual(sensitivityTypeInitial);
+        });
       });
 
       describe('when list of sensitivity types', () => {
         it('renders sensitivity_type dropdown and options', async () => {
           SensitivityTypesService.fetch.mockClear();
-          SensitivityTypesService.fetch.mockReturnValue(Promise.resolve(['TIPE', 'TYPE1']));
+          SensitivityTypesService.fetch.mockReturnValue(Promise.resolve(['TYPE', 'TYPE1']));
           const childFormInstance = clientEditWrapper.instance();
           childFormInstance.setState({ counties: [{ id: 1, name: 'county' }] });
           childFormInstance.handleCountyChange({ target: { value: 'county' } });
