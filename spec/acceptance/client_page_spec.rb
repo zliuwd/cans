@@ -40,7 +40,7 @@ feature 'Client Pages' do
     focus_and_fill_in('#caseNumber0', case_number_0)
     focus_and_fill_in('#caseNumber1', case_number_1)
     focus_and_fill_in('#external_id', client_id)
-    find('#county-select').find(:xpath, 'option[11]').select_option
+    find('#county-select').find(:xpath, 'option[57]').select_option
     click_button 'Save'
     expect(page).to have_content 'Child/Youth Profile'
     expect(page).to have_content first_name
@@ -48,7 +48,7 @@ feature 'Client Pages' do
     expect(page).to have_content case_number_0
     expect(page).to have_content case_number_1
     expect(page).to have_content client_id
-    expect(page).to have_content 'Fresno'
+    expect(page).to have_content 'Ventura'
   end
 
   scenario 'page is accessible' do
