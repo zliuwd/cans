@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import ClientService from './Client.service';
 import { formatClientName } from './Client.helper';
+import { LoadingState } from '../../util/loadingHelper';
 import Button from '@material-ui/core/Button/Button';
 import Card from '@material-ui/core/Card/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -21,76 +22,70 @@ class ClientsContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      filter: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        dob: null,
+      },
       pagination: {
         page: 0,
         pages: 0,
         pageSize: 10,
-        records: [],
       },
-      clientsAll: [],
-      clientsStatus: 'ready',
+      clients: [],
+      clientsStatus: LoadingState.ready,
     };
+    this.handleOnPageSizeChange = this.handleOnPageSizeChange.bind(this);
+    this.handleOnPageChange = this.handleOnPageChange.bind(this);
   }
 
   async componentDidMount() {
-    await this.fetchAllClients();
+    await this.fetchClients();
   }
 
-  fetchAllClients = () => {
-    this.setState({ clientsStatus: 'waiting' });
-    return ClientService.fetchAllClients()
-      .then(this.onFetchAllClientsSuccess)
-      .catch(() => this.setState({ clientsStatus: 'error' }));
+  fetchClients = () => {
+    this.setState({ clientsStatus: LoadingState.waiting });
+    return ClientService.search({ ...this.state.filter, pagination: this.state.pagination })
+      .then(this.onFetchClientsSuccess)
+      .catch(() => this.setState({ clientsStatus: LoadingState.error }));
   };
 
-  onFetchAllClientsSuccess = clientsAll => {
+  onFetchClientsSuccess = searchResult => {
     const pagination = this.state.pagination;
-    const pages = calculatePages(clientsAll.length, pagination.pageSize);
+    const pages = calculatePages(searchResult.total_records, pagination.pageSize);
     this.setState({
       pagination: {
         ...pagination,
         pages,
       },
-      clientsAll: clientsAll,
-      clientsStatus: 'ready',
-    });
-    this.simulateFetchData(pagination);
-  };
-
-  handleOnPageChange = page => {
-    const { pagination } = this.state;
-    this.simulateFetchData({
-      ...pagination,
-      page,
+      clients: searchResult.people,
+      clientsStatus: LoadingState.ready,
     });
   };
 
-  handleOnPageSizeChange = pageSize => {
-    const { pagination, clientsAll } = this.state;
-    const pages = calculatePages(clientsAll.length, pageSize);
-    this.simulateFetchData({
-      ...pagination,
-      page: 0,
-      pages,
-      pageSize,
+  async handleOnPageChange(page) {
+    const pagination = this.state.pagination;
+    await this.setState({
+      pagination: {
+        ...pagination,
+        page,
+      },
     });
-  };
+    await this.fetchClients();
+  }
 
-  simulateFetchData = pagination => {
-    const { clientsAll } = this.state;
-    const { page, pageSize } = pagination;
-    this.setState({ clientsStatus: 'waiting' });
-    const records = clientsAll.slice(page * pageSize, (page + 1) * pageSize);
-    const newPagination = {
-      ...pagination,
-      records,
-    };
-    console.log(JSON.stringify(newPagination));
-    this.setState({
-      pagination: newPagination,
-      clientsStatus: 'ready',
+  async handleOnPageSizeChange(pageSize) {
+    const pagination = this.state.pagination;
+    await this.setState({
+      pagination: {
+        ...pagination,
+        page: 0,
+        pageSize,
+      },
     });
-  };
+    await this.fetchClients();
+  }
 
   renderAddChildButton() {
     return (
@@ -102,17 +97,15 @@ class ClientsContainer extends Component {
     );
   }
 
-  renderClientName = client => {
-    return (
-      <div className="client-name" key={client.id}>
-        <Link to={`/clients/${client.id}`}>{formatClientName(client)}</Link>
-      </div>
-    );
-  };
+  renderClientName = client => (
+    <Link key={client.id} className="client-name" to={`/clients/${client.id}`}>
+      {formatClientName(client)}
+    </Link>
+  );
 
   render = () => {
-    const { pagination, clientsStatus } = this.state;
-    const { records, page, pages, pageSize } = pagination;
+    const { clients, pagination, clientsStatus } = this.state;
+    const { page, pages, pageSize } = pagination;
     const columns = [
       {
         id: 'fullName',
@@ -124,7 +117,7 @@ class ClientsContainer extends Component {
         accessor: 'dob',
       },
     ];
-    const loading = clientsStatus === 'waiting';
+    const loading = clientsStatus === LoadingState.waiting;
     return (
       <Fragment>
         <Grid item className={'client-grid'} xs={12}>
@@ -138,16 +131,15 @@ class ClientsContainer extends Component {
               <CardContent>
                 <DataGrid
                   manual
-                  data={records}
+                  data={clients}
                   page={page}
-                  pages={pages || 4}
+                  pages={pages}
                   pageSize={pageSize}
                   columns={columns}
                   minRows={0}
                   style={{ paddingBottom: '15rem' }}
                   loading={loading}
                   noDataText={'No clients found'}
-                  // onFetchData={this.fetchData}
                   onPageChange={this.handleOnPageChange}
                   onPageSizeChange={this.handleOnPageSizeChange}
                 />
