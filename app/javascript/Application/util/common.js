@@ -3,7 +3,7 @@ export function clone(object) {
 }
 
 export function stringify(value) {
-  return '' + value;
+  return value ? '' + value : '';
 }
 
 /**
