@@ -7,6 +7,8 @@ import { TextField, Card, CardHeader, CardContent } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { CountiesService } from './Counties.service';
 import { SensitivityTypesService } from './SensitivityTypes.service';
+import { CloseableAlert, alertType } from '../common/CloseableAlert';
+import UserAccountService from '../Header/UserAccountService';
 import { ClientService } from './Client.service';
 import { validate, validateCase, validateCaseNumbersAreUnique, isFormValid } from './ClientFormValidator';
 import { PageInfo } from '../Layout';
@@ -130,6 +132,8 @@ class ClientAddEditForm extends Component {
       childInfoValidation: prepareChildInfoValidation(client, isNewForm),
       counties: [],
       sensitivityTypes: [],
+      userCounty: emptyCounty,
+      isUsersCounty: true,
       isSaveButtonDisabled: isNewForm,
       redirection: {
         shouldRedirect: false,
@@ -140,6 +144,7 @@ class ClientAddEditForm extends Component {
 
   async componentDidMount() {
     await this.fetchCounties();
+    await this.fetchUserAccount();
     await this.fetchSensitivityTypes(this.state.childInfo.county);
   }
 
@@ -165,6 +170,12 @@ class ClientAddEditForm extends Component {
     }
   }
 
+  fetchUserAccount() {
+    return UserAccountService.fetchCurrent()
+      .then(user => this.setState({ userCounty: { id: parseInt(user.county_code, 10), name: user.county_name } }))
+      .catch(() => {});
+  }
+
   handleCountyChange = event => {
     const county = this.state.counties.find(county => county.name === event.target.value) || emptyCounty;
     this.setState({
@@ -175,6 +186,9 @@ class ClientAddEditForm extends Component {
     });
     this.fetchSensitivityTypes(county);
     this.validateInput('county', county);
+    county.name === this.state.userCounty.name
+      ? this.setState({ isUsersCounty: true })
+      : this.setState({ isUsersCounty: false });
   };
 
   handleSensitivityTypeChange = event => {
@@ -253,12 +267,12 @@ class ClientAddEditForm extends Component {
         .catch(() => {});
     } else {
       ClientService.updateClient(childInfo.id, childInfo)
-        .then(newChild => {
+        .then(updatedChild => {
           this.setState({
-            childInfo: newChild,
+            childInfo: updatedChild,
             redirection: {
               shouldRedirect: true,
-              successClientId: newChild.id,
+              successClientId: updatedChild.id,
             },
           });
         })
@@ -312,6 +326,12 @@ class ClientAddEditForm extends Component {
       ...this.state.childInfoValidation,
       cases: casesValidation,
     };
+  };
+
+  redirectPath = (isNewForm, childId) => {
+    const { redirection, isUsersCounty } = this.state;
+    const { successClientId } = redirection;
+    return !isUsersCounty || (isNewForm && !successClientId) ? `/` : `/clients/${childId}`;
   };
 
   renderNameInputs(field, label, maxLength, isRequired) {
@@ -470,9 +490,19 @@ class ClientAddEditForm extends Component {
 
   renderFormFooter = () => {
     const { classes } = this.props;
-    const { isSaveButtonDisabled } = this.state;
+    const { isSaveButtonDisabled, isUsersCounty } = this.state;
     return (
       <div className={'add-edit-form-footer'}>
+        {!isUsersCounty && (
+          <Row>
+            <Col sm={12}>
+              <CloseableAlert
+                message="The Child's County does not match the User's County. This will result in being unable to view the Child record."
+                type={alertType.WARNING}
+              />
+            </Col>
+          </Row>
+        )}
         <Row>
           <Col sm={4}>{isSaveButtonDisabled && <p className={classes.note}>*required fields</p>}</Col>
           <Col sm={8} className={'add-edit-form-controls'}>
@@ -494,8 +524,12 @@ class ClientAddEditForm extends Component {
     const { shouldRedirect, successClientId } = redirection;
 
     if (shouldRedirect) {
-      const pathName = isNewForm && !successClientId ? `/` : `/clients/${childInfo.id}`;
-      return <Redirect push to={{ pathname: pathName, state: { isNewForm, successClientId } }} />;
+      return (
+        <Redirect
+          push
+          to={{ pathname: this.redirectPath(isNewForm, childInfo.id), state: { isNewForm, successClientId } }}
+        />
+      );
     }
 
     return (

@@ -1,18 +1,21 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import ClientAddEditForm from './ClientAddEditForm';
 import { ClientService } from './Client.service';
 import { childInfoJson } from './Client.helper.test';
 import { SensitivityTypesService } from './SensitivityTypes.service';
+import { CountiesService } from './Counties.service';
+import UserAccountService from '../Header/UserAccountService';
+import { CloseableAlert } from '../common/CloseableAlert';
 
 jest.mock('./SensitivityTypes.service');
 
 const defaultPropsEdit = {
-  match: { params: { id: 1 } },
+  match: { params: { id: 1 }, isNewForm: false },
 };
 
 const defaultPropsAdd = {
-  match: { params: { id: undefined } },
+  match: { params: { id: undefined }, isNewForm: true },
 };
 
 describe('<ClientAddEditForm />', () => {
@@ -150,6 +153,33 @@ describe('<ClientAddEditForm />', () => {
     });
   });
 
+  describe('#handleCountyChange', () => {
+    describe('when new county is different from user county', () => {
+      it('sets isUserCounty to false', () => {
+        jest.spyOn(SensitivityTypesService, 'fetch').mockResolvedValue([]);
+        const component = getWrapperEdit()
+          .find('ClientAddEditForm')
+          .dive();
+        component.setState({ counties: [{ id: 34, name: 'Sacramento' }, { id: 49, name: 'Sonoma' }] });
+        component.setState({ userCounty: { name: 'Sacramento', id: 49 } });
+        component.instance().handleCountyChange({ target: { value: 'Sonoma' } });
+        expect(component.state('isUsersCounty')).toEqual(false);
+      });
+    });
+
+    describe('when new county is the same as user county', () => {
+      it('sets isUserCounty to true', () => {
+        const component = getWrapperEdit()
+          .find('ClientAddEditForm')
+          .dive();
+        component.setState({ counties: [{ id: 34, name: 'Sacramento' }, { id: 49, name: 'Sonoma' }] });
+        component.setState({ userCounty: { name: 'Sacramento', id: 49 } });
+        component.instance().handleCountyChange({ target: { value: 'Sacramento' } });
+        expect(component.state('isUsersCounty')).toEqual(true);
+      });
+    });
+  });
+
   describe('case numbers', () => {
     describe('#handleChangeCaseNumber()', () => {
       it('should update case external_id and validate it', () => {
@@ -216,7 +246,7 @@ describe('<ClientAddEditForm />', () => {
           .dive();
 
         // when
-        clientForm.instance().fetchCounties({ county: { id: 0, name: '0' }, cases: [] });
+        clientForm.instance().fetchCounties();
         clientForm.update();
 
         // then
@@ -274,6 +304,28 @@ describe('<ClientAddEditForm />', () => {
     });
   });
 
+  describe('#componentDidMount', () => {
+    const flushPromises = () => {
+      return new Promise(resolve => setImmediate(resolve));
+    };
+
+    it('fetches counties', async () => {
+      const countiesService = jest.spyOn(CountiesService, 'fetchCounties').mockResolvedValue([]);
+      jest.spyOn(UserAccountService, 'fetchCurrent').mockResolvedValue({});
+      mount(<ClientAddEditForm {...defaultPropsAdd} />);
+      await flushPromises();
+      expect(countiesService).toHaveBeenCalledWith();
+    });
+
+    it('fetches userAccount', async () => {
+      jest.spyOn(CountiesService, 'fetchCounties').mockResolvedValue([]);
+      const userAccountService = jest.spyOn(UserAccountService, 'fetchCurrent').mockResolvedValue({});
+      mount(<ClientAddEditForm {...defaultPropsAdd} />);
+      await flushPromises();
+      expect(userAccountService).toHaveBeenCalledWith();
+    });
+  });
+
   it('#handleSubmit()', async () => {
     const clientServicePutSpy = jest.spyOn(ClientService, 'updateClient');
     const wrapper = getWrapperEdit();
@@ -295,7 +347,7 @@ describe('<ClientAddEditForm />', () => {
     const wrapper = getWrapperEdit();
     const clientEditWrapper = wrapper.find('ClientAddEditForm').dive();
     const childFormInstance = clientEditWrapper.instance();
-    childFormInstance.fetchCounties([{ id: '9', name: 'Fresno' }]);
+    childFormInstance.fetchCounties();
     clientEditWrapper.update();
     const menuItems = clientEditWrapper.find('MenuItem');
     expect(menuItems.children.length).toEqual(1);
@@ -394,6 +446,156 @@ describe('<ClientAddEditForm />', () => {
         childFormInstance.handleSensitivityTypeChange({ target: { value: 'TYPE' } });
         clientEditWrapper.update();
         expect(childFormInstance.state.childInfo.sensitivity_type).toEqual('TYPE');
+      });
+    });
+  });
+
+  describe('#fetchUserAccount', () => {
+    describe('when successful', () => {
+      it('sets userCounty', async () => {
+        jest.spyOn(UserAccountService, 'fetchCurrent').mockResolvedValue({ county_code: '49', county_name: 'Sonoma' });
+        const component = getWrapperAdd()
+          .find('ClientAddEditForm')
+          .dive();
+        await component.instance().fetchUserAccount();
+        expect(component.state('userCounty')).toEqual({ id: 49, name: 'Sonoma' });
+      });
+    });
+
+    describe('when unsuccessful', () => {
+      it('does not change userCounty', async () => {
+        jest.spyOn(UserAccountService, 'fetchCurrent').mockRejectedValue(new Error('Async Error'));
+        const component = getWrapperAdd()
+          .find('ClientAddEditForm')
+          .dive();
+        await component.instance().fetchUserAccount();
+        expect(component.state('userCounty')).toEqual({ id: 0, name: '' });
+      });
+    });
+  });
+
+  describe('#redirectPath', () => {
+    let component;
+
+    beforeEach(() => {
+      component = getWrapperAdd()
+        .find('ClientAddEditForm')
+        .dive();
+    });
+
+    describe('when has a successClientId', () => {
+      beforeEach(() => {
+        component.setState({ redirection: { successClientId: 1 } });
+      });
+
+      describe('when isUsersCounty is false', () => {
+        beforeEach(() => {
+          component.setState({ isUsersCounty: false });
+        });
+
+        describe('when isNewForm is true', () => {
+          it('returns /', () => {
+            expect(component.instance().redirectPath(true, 1)).toBe('/');
+          });
+        });
+
+        describe('when isNewForm is false', () => {
+          it('returns client url', () => {
+            expect(component.instance().redirectPath(false, 1)).toBe('/');
+          });
+        });
+      });
+
+      describe('when isUsersCounty is true', () => {
+        beforeEach(() => {
+          component.setState({ isUsersCounty: true });
+        });
+
+        describe('when isNewForm is true', () => {
+          it('returns /', () => {
+            expect(component.instance().redirectPath(true, 1)).toBe('/clients/1');
+          });
+        });
+
+        describe('when isNewForm is false', () => {
+          it('returns client url', () => {
+            expect(component.instance().redirectPath(false, 1)).toBe('/clients/1');
+          });
+        });
+      });
+    });
+
+    describe('when no successClientId', () => {
+      beforeEach(() => {
+        component.setState({ redirection: {} });
+      });
+
+      describe('when isUsersCounty is false', () => {
+        beforeEach(() => {
+          component.setState({ isUsersCounty: false });
+        });
+
+        describe('when isNewForm is true', () => {
+          it('returns /', () => {
+            expect(component.instance().redirectPath(true, 1)).toBe('/');
+          });
+        });
+
+        describe('when isNewForm is false', () => {
+          it('returns client url', () => {
+            expect(component.instance().redirectPath(false, 1)).toBe('/');
+          });
+        });
+      });
+
+      describe('when isUsersCounty is true', () => {
+        beforeEach(() => {
+          component.setState({ isUsersCounty: true });
+        });
+
+        describe('when isNewForm is true', () => {
+          it('returns /', () => {
+            expect(component.instance().redirectPath(true, 1)).toBe('/');
+          });
+        });
+
+        describe('when isNewForm is false', () => {
+          it('returns client url', () => {
+            expect(component.instance().redirectPath(false, 1)).toBe('/clients/1');
+          });
+        });
+      });
+    });
+  });
+
+  describe('#renderFormFooter', () => {
+    describe('with isUsersCounty true', () => {
+      it('renders a warning message', () => {
+        const component = getWrapperAdd()
+          .find('ClientAddEditForm')
+          .dive();
+        component.setState({ isUsersCounty: true });
+        expect(
+          component
+            .find(CloseableAlert)
+            .findWhere(alert => alert.props().message.match(/The Child's County does not match the User's County/))
+            .length
+        ).toBe(0);
+      });
+    });
+
+    describe('with isUsersCounty false', () => {
+      it('renders a warning message', () => {
+        const component = getWrapperAdd()
+          .find('ClientAddEditForm')
+          .dive();
+        component.setState({ isUsersCounty: false });
+        expect(
+          component
+            .find(CloseableAlert)
+            .findWhere(alert => alert.props().message.match(/The Child's County does not match the User's County/))
+            .length
+        ).toBe(1);
       });
     });
   });

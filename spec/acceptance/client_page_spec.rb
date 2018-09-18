@@ -40,7 +40,9 @@ feature 'Client Pages' do
     focus_and_fill_in('#caseNumber0', case_number_0)
     focus_and_fill_in('#caseNumber1', case_number_1)
     focus_and_fill_in('#external_id', client_id)
-    find('#county-select').find(:xpath, 'option[57]').select_option
+    select_fresno_county
+    expect(page).to have_content "The Child's County does not match the User's County"
+    select_ventura_county
     click_button 'Save'
     expect(page).to have_content 'Child/Youth Profile'
     expect(page).to have_content first_name
@@ -57,5 +59,15 @@ feature 'Client Pages' do
     visit '/clients/new'
     expect(page).to have_content 'Add Child/Youth'
     expect(page).to be_accessible
+  end
+
+  private
+
+  def select_fresno_county
+    find('#county-select').find(:xpath, 'option[11]').select_option
+  end
+
+  def select_ventura_county
+    find('#county-select').find(:xpath, 'option[57]').select_option
   end
 end
