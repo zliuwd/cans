@@ -41,7 +41,9 @@ class BreadCrumbsBuilder extends React.Component {
     const elements = [];
     const { navigateTo, client } = this.props;
     addChildYouthListCrumbIfNeeded(elements, navigateTo);
-    addChildProfileCrumbIfNeeded(elements, navigateTo, client);
+    if (client) {
+      addChildProfileCrumbIfNeeded(elements, navigateTo, client);
+    }
     return elements;
   }
 

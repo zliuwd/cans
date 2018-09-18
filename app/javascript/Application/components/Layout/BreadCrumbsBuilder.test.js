@@ -72,4 +72,12 @@ describe('bread crumb builder', () => {
     assertChildYouthListCrumbIsPresent(component);
     assertChildInfoCrumbIsPresent(component);
   });
+
+  describe('when navigate to Assessment and no client info', () => {
+    const breadCrumbsBuilder = shallow(<BreadCrumbsBuilder navigateTo={navigation.ASSESSMENT_ADD} client={null} />);
+    it('should build bread crumbs without client', () => {
+      assertHasLinks(breadCrumbsBuilder, 1);
+      assertChildYouthListCrumbIsPresent(breadCrumbsBuilder);
+    });
+  });
 });
