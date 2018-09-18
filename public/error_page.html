@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The change you wanted was rejected (422)</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+    
+  .error-panel {
+    align-items: center;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+    -ms-flex-align: center;
+    flex-direction: column;
+    -ms-flex-pack: center;
+    height: 100vh;
+    justify-content: center;
+  }
+  .centered {
+    text-align: center;
+  }
+  .c-red {
+    color: #e00925;
+  }
+  .gap-right {
+      margin-right: 1.5rem;
+  }
+  .fa {
+      display: inline-block;
+      font: normal normal normal 14px/1 FontAwesome;
+      font-size: inherit;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: auto;
+  }
+  .gap-top {
+    margin-top: 1.5rem;
+  }
+    </style>
+  </head>
+
+  <body class="rails-default-error-page">
+    <div class='error-panel centered'>
+      <h4>
+        <i class='fa fa-warning c-red gap-right'>
+        This page is restricted.
+      </i>
+      </h4>
+      <div class='gap-top'>
+        <span>You don&apos;t have the appropriate permissions to view this page.</span>
+        <br/>
+        <a href='/dashboard'> Return to your dashboard</a>
+        <span>.</span>
+      </div>
+    </div>
+  </body>
+</html>

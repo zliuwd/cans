@@ -17,6 +17,9 @@ Bundler.require(*Rails.groups)
 
 module Cans
   class Application < Rails::Application
+    require 'infrastructure/cwds_authenticator'
+    require 'infrastructure/cwds_permission_checker'
+    
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
     config.autoload_paths << Rails.root.join('lib')
@@ -27,9 +30,8 @@ module Cans
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
-    require 'infrastructure/cwds_authenticator'
     config.middleware.use Infrastructure::CwdsAuthenticator
-
+    config.middleware.insert_after(Infrastructure::CwdsAuthenticator, Infrastructure::CwdsPermissionChecker) 
     config.micro_services = config_for(:micro_services)
     config.relative_url_root = ENV['CANS_BASE_PATH'] || '/'
     config.assets.prefix = "#{ENV['CANS_BASE_PATH']}/packs"
