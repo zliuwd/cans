@@ -54,7 +54,12 @@ class ClientsContainer extends Component {
       <div className="client-name-container" key={record.letter}>
         <div className="header">{record.letter}</div>
         {record.clients.map(client => {
-          return this.renderClientName(client);
+          const isEditable = client.metadata && (client.metadata.editable == null || client.metadata.editable);
+          if (isEditable) {
+            return this.renderClientName(client);
+          } else {
+            return this.renderSensitiveClientName(client);
+          }
         })}
       </div>
     );
@@ -64,6 +69,14 @@ class ClientsContainer extends Component {
     return (
       <div className="client-name" key={client.id}>
         <Link to={`/clients/${client.id}`}>{formatClientName(client)}</Link>
+      </div>
+    );
+  };
+
+  renderSensitiveClientName = client => {
+    return (
+      <div className="sensitive-client-name" key={client.id} title="Marked as Sensitive">
+        {formatClientName(client)}
       </div>
     );
   };

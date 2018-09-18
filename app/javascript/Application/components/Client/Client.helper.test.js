@@ -54,6 +54,9 @@ export const childInfoJson = {
   last_name: 'Child',
   person_role: 'CLIENT',
   cases: [],
+  metadata: {
+    editable: true,
+  },
 };
 
 export const personsJson = [
@@ -63,6 +66,9 @@ export const personsJson = [
     middle_name: 'Middle',
     last_name: 'wayne',
     suffix: 'Mr.',
+    metadata: {
+      editable: false,
+    },
   },
   {
     id: 4,
@@ -70,6 +76,7 @@ export const personsJson = [
     middle_name: 'Middle',
     last_name: 'Parker',
     suffix: 'Mr.',
+    metadata: {},
   },
   {
     id: 3,
@@ -77,6 +84,9 @@ export const personsJson = [
     middle_name: 'Middle',
     last_name: 'Parker',
     suffix: 'Mr.',
+    metadata: {
+      editable: true,
+    },
   },
 ];
 
@@ -90,6 +100,9 @@ const expectedSortedMap = [
         middle_name: 'Middle',
         last_name: 'Parker',
         suffix: 'Mr.',
+        metadata: {
+          editable: true,
+        },
       },
       {
         id: 4,
@@ -97,6 +110,7 @@ const expectedSortedMap = [
         middle_name: 'Middle',
         last_name: 'Parker',
         suffix: 'Mr.',
+        metadata: {},
       },
     ],
   },
@@ -109,6 +123,9 @@ const expectedSortedMap = [
         middle_name: 'Middle',
         last_name: 'wayne',
         suffix: 'Mr.',
+        metadata: {
+          editable: false,
+        },
       },
     ],
   },

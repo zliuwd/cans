@@ -3,7 +3,6 @@ import { mount, shallow } from 'enzyme';
 import ClientsContainer from './ClientsContainer';
 import ClientService from './Client.service';
 import { personsJson } from './Client.helper.test';
-import { Link } from 'react-router-dom';
 import { MemoryRouter } from 'react-router';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -33,11 +32,12 @@ describe('<ClientsContainer />', () => {
   });
 
   describe('when client list has 3 clients ', () => {
-    it('renders grouped clients names', async () => {
+    it('renders sensitive and non-sensitive clients names', async () => {
       clientServiceFetchSpy.mockReturnValue(Promise.resolve(personsJson));
       const wrapper = await shallow(<ClientsContainer />);
       wrapper.update();
-      expect(wrapper.find(Link).length).toBe(3);
+      expect(wrapper.find('.client-name').length).toBe(2);
+      expect(wrapper.find('.sensitive-client-name').length).toBe(1);
     });
   });
 
