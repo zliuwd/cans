@@ -14,9 +14,11 @@ const App = () => {
     <BrowserRouter basename={basePath}>
       <Fragment>
         <Header />
-        <PageHeader pageTitle="CANS Assessment Application" button={null}>
-          <GlobalAlert />
-        </PageHeader>
+        <div role="contentinfo">
+          <PageHeader pageTitle="CANS Assessment Application" button={null}>
+            <GlobalAlert />
+          </PageHeader>
+        </div>
         <Routes />
       </Fragment>
     </BrowserRouter>

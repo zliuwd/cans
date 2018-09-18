@@ -62,12 +62,12 @@ describe('<Item />', () => {
     const wrapper = mount({ ...itemComponentDefault });
     wrapper.setProps({ ...propsDefault });
     const foldedText = wrapper.text();
-    expect(wrapper.find('#item-expand').hasClass('fa-plus')).toBe(true);
+    expect(wrapper.find('#lf10family-item-expand').hasClass('fa-plus')).toBe(true);
     expect(foldedText).not.toMatch(/Description/);
 
-    wrapper.find('#item-expand').simulate('click');
+    wrapper.find('#lf10family-item-expand').simulate('click');
     const expandedText = wrapper.text();
-    expect(wrapper.find('#item-expand').hasClass('fa-minus')).toBe(true);
+    expect(wrapper.find('#lf10family-item-expand').hasClass('fa-minus')).toBe(true);
     expect(expandedText).toMatch(/Description/);
   });
 
@@ -80,7 +80,7 @@ describe('<Item />', () => {
     expect(foldedText).not.toMatch(/qtc/);
     expect(foldedText).not.toMatch(/rating/);
 
-    wrapper.find('#item-expand').simulate('click');
+    wrapper.find('#lf10family-item-expand').simulate('click');
     const expandedText = wrapper.text();
     expect(expandedText).toMatch(/TITLE/);
     expect(expandedText).toMatch(/Description:Description/);
@@ -106,7 +106,7 @@ describe('<Item />', () => {
       item.has_na_option = true;
       const wrapper = mountItem(item);
       wrapper.setProps({ ...propsDefault });
-      wrapper.find('#item-expand').simulate('click');
+      wrapper.find('#lf10family-item-expand').simulate('click');
       const expandedText = wrapper.text();
       expect(expandedText).toMatch(/N\/A/);
       const radios = wrapper.find(Radio);
@@ -116,7 +116,7 @@ describe('<Item />', () => {
     it('can have no N/A option', () => {
       const wrapper = mount({ ...itemComponentDefault });
       wrapper.setProps({ ...propsDefault });
-      wrapper.find('#item-expand').simulate('click');
+      wrapper.find('#lf10family-item-expand').simulate('click');
       const expandedText = wrapper.text();
       expect(expandedText).not.toMatch(/N\/A/);
       const radios = wrapper.find(Radio);
@@ -131,7 +131,7 @@ describe('<Item />', () => {
       const findSelect = wrapper.find(Select);
       expect(findSelect.children().get(0).props.children.length).toBe(6);
 
-      wrapper.find('#item-expand').simulate('click');
+      wrapper.find('#lf10family-item-expand').simulate('click');
       const expandedText = wrapper.text();
       expect(expandedText).toMatch(/0 = rating 0 description1 = rating 1 description/);
     });
@@ -144,7 +144,7 @@ describe('<Item />', () => {
       const findSelect = wrapper.find(Select);
       expect(findSelect.children().get(0).props.children.length).toBe(4);
 
-      wrapper.find('#item-expand').simulate('click');
+      wrapper.find('#lf10family-item-expand').simulate('click');
       const expandedText = wrapper.text();
       expect(expandedText).toMatch(/No = rating 0 descriptionYes = rating 1 description/);
     });

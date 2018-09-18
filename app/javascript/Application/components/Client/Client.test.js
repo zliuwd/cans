@@ -4,7 +4,6 @@ import { Client } from './index';
 import Card from '@material-ui/core/Card/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { PageInfo } from '../Layout';
 import { MemoryRouter } from 'react-router-dom';
@@ -20,12 +19,14 @@ const client = {
   county: { name: 'Sacramento' },
   cases: [],
 };
+
 const params = {
   match: { params: { id: '1' } },
   location: { pathname: 'client' },
   history: { location: '/client' },
   client,
 };
+
 describe('<Client />', () => {
   describe('initial component layout', () => {
     const getWrapper = () => shallow(<Client {...params} />);
@@ -85,8 +86,8 @@ describe('<Client />', () => {
       expect(getLength(Grid)).toBe(12);
     });
 
-    it('renders with 6 <Typography /> components', () => {
-      expect(getLength(Typography)).toBe(9);
+    it('renders with 9 ".label-text" styled elements', () => {
+      expect(getLength('.label-text')).toBe(9);
     });
 
     it('does not render No Child Data Found', () => {

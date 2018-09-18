@@ -124,11 +124,12 @@ class Assessment extends Component {
     const domains = assessmentJson.domains;
     return (
       <Fragment>
-        {domains.map(domain => {
+        {domains.map((domain, index) => {
           const { code, caregiver_index: caregiverIndex } = domain;
           const domainI18n = getI18nByCode(i18n, code);
           return (
             <Domain
+              index={index}
               key={code + caregiverIndex}
               domain={domain}
               i18n={domainI18n}

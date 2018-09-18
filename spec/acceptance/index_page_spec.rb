@@ -10,11 +10,4 @@ feature 'Index Page' do
     logout
     expect(page).not_to have_content('CANS')
   end
-
-  scenario 'page is accessible' do
-    pending('page has accessability issues')
-    login
-    expect(page).to have_content 'CANS'
-    expect(page).to be_accessible
-  end
 end

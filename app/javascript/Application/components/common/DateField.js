@@ -7,6 +7,8 @@ import { isEmpty } from '../../util/common';
 import { isoToJsDate, isValidLocalDate, jsDateToIso, localToIsoDate } from '../../util/dateHelper';
 import { LOCAL_DATE_FORMAT } from '../../util/constants';
 
+import './style.sass';
+
 Moment.locale('en');
 momentLocalizer();
 
@@ -48,7 +50,7 @@ class DateField extends Component {
   };
 
   render() {
-    const { id, isRequired } = this.props;
+    const { id, isRequired, ariaLabelledBy, ariaDescribedBy } = this.props;
     const { value, key } = this.state;
     return (
       <DateTimePicker
@@ -63,6 +65,8 @@ class DateField extends Component {
         placeholder={'mm/dd/yyyy'}
         required={isRequired}
         aria-required={isRequired}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
       />
     );
   }
@@ -70,9 +74,13 @@ class DateField extends Component {
 
 DateField.defaultProps = {
   isRequired: false,
+  ariaLabelledBy: null,
+  ariaDescribedBy: null,
 };
 
 DateField.propTypes = {
+  ariaDescribedBy: PropTypes.string,
+  ariaLabelledBy: PropTypes.string,
   id: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
   onChange: PropTypes.func.isRequired,

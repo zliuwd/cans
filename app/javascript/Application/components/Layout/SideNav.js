@@ -4,6 +4,7 @@ import SideNavLink from './SideNavLink';
 import './style.sass';
 
 const URL_MAP = [{ url: '/', text: 'County Client List' }];
+
 class SideNav extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +23,7 @@ class SideNav extends Component {
 
   render() {
     return (
-      <nav className={'sidebar'}>
+      <nav className={'sidebar'} role="navigation">
         {URL_MAP.map((item, index) => {
           return (
             <SideNavLink

@@ -14,6 +14,7 @@ def buildPullRequest() {
       buildDockerImageStage()
       lintAndUnitTestStages()
       acceptanceTestStage()
+      a11yLintStage()
     } catch(Exception exception) {
       currentBuild.result = "FAILURE"
       throw exception
@@ -30,6 +31,7 @@ def buildMaster() {
       buildDockerImageStage()
       lintAndUnitTestStages()
       acceptanceTestStage()
+      a11yLintStage()
       publishImageStage()
       deployToPreintStage()
     } catch(Exception exception) {
@@ -86,7 +88,7 @@ def lintStage(container) {
 def unitTestStage(container) {
   stage('Unit Test') {
     sh "docker exec -t ${container.id} bash -c 'yarn test:coverage'"
-    sh "docker exec -t ${container.id} rspec --exclude-pattern 'spec/acceptance/**/*_spec.rb'"
+    sh "docker exec -t ${container.id} yarn test:rspec"
   }
 }
 
@@ -97,7 +99,18 @@ def acceptanceTestStage() {
       withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
         sh "docker-compose up -d --build"
         sh "sleep 120"
-        sh "docker-compose exec -T --env CANS_AUTHORIZATION_ENABLED=true --env CANS_WEB_BASE_URL=cans-web:3000/cans cans-test bundle exec rspec spec/acceptance"
+        sh "docker-compose exec -T cans-test bundle exec rspec spec/acceptance"
+      }
+    }
+  }
+}
+
+def a11yLintStage() {
+  stage('Accessibility Lint') {
+    hostname = sh(returnStdout: true, script: '/sbin/ifconfig eth0 | grep "inet addr:" | cut -d: -f2 | cut -d " " -f1').trim()
+    withEnv(["HOST=${hostname}"]) {
+      withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
+        sh "docker-compose exec -T cans-test bundle exec rspec spec/a11y"
       }
     }
   }
@@ -106,7 +119,7 @@ def acceptanceTestStage() {
 def acceptanceTestPreintStage() {
   stage('Acceptance Test Preint') {
     sh "docker-compose up -d --build cans-test"
-    sh "docker-compose exec -T --env CANS_AUTHORIZATION_ENABLED=true --env CANS_WEB_BASE_URL=https://cans.preint.cwds.io/cans cans-test bundle exec rspec spec/acceptance"
+    sh "docker-compose exec -T --env CANS_WEB_BASE_URL=https://cans.preint.cwds.io/cans cans-test bundle exec rspec spec/acceptance"
   }
 }
 

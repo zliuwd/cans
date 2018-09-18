@@ -142,7 +142,7 @@ class Domain extends Component {
   }
 
   render = () => {
-    const { isAssessmentUnderSix, domain } = this.props;
+    const { isAssessmentUnderSix, domain, index } = this.props;
     const { items, is_caregiver_domain } = domain;
     const { title, description, caregiverName, expanded } = this.state;
     const progressBar = <DomainProgressBar isAssessmentUnderSix={isAssessmentUnderSix} domain={domain} />;
@@ -155,7 +155,7 @@ class Domain extends Component {
           elevation={0}
         >
           <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon style={{ height: '28px', color: 'white' }} />}
+            expandIcon={<ExpandMoreIcon id={`domain${index}-expand`} style={{ height: '28px', color: 'white' }} />}
             style={{ minHeight: '28px' }}
           >
             <Typography variant="title" style={{ color: 'white' }}>
@@ -168,14 +168,14 @@ class Domain extends Component {
             ) : null}
           </ExpansionPanelSummary>
           {expanded && (
-            <Fragment>
+            <div>
               {progressBar}
               <ExpansionPanelDetails style={{ display: 'block', padding: '0', backgroundColor: 'white' }}>
                 {is_caregiver_domain && this.renderCaregiverName()}
                 {this.renderItems(items)}
                 {is_caregiver_domain && this.renderCaregiverDomainControls()}
               </ExpansionPanelDetails>
-            </Fragment>
+            </div>
           )}
         </ExpansionPanel>
         {!expanded && progressBar}
@@ -191,6 +191,7 @@ Domain.propTypes = {
   domain: PropTypes.object.isRequired,
   i18n: PropTypes.object.isRequired,
   i18nAll: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
   isAssessmentUnderSix: PropTypes.bool.isRequired,
   onAddCaregiverDomain: PropTypes.func.isRequired,
   onCaregiverNameUpdate: PropTypes.func.isRequired,

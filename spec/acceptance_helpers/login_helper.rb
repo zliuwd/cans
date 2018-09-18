@@ -9,6 +9,7 @@ module LoginHelper
   end
 
   def logout
+    visit '/'
     find('.profile-avatar button').click
     find('.profile-avatar a').click
   end

@@ -63,16 +63,12 @@ class Page extends Component {
     if (!this.state.isLoaded) return null;
     return (
       <Container>
-        <Row className="row-padding">
-          <Col>
-            <BreadCrumbsBuilder navigateTo={this.props.navigateTo} client={this.state.client} />
-          </Col>
-        </Row>
+        <BreadCrumbsBuilder navigateTo={this.props.navigateTo} client={this.state.client} />
         <Row>
           <Col xs="4">
             <SideNav />
           </Col>
-          <Col xs="8">
+          <Col xs="8" role={'main'} id={'main-content'}>
             <Row>
               <Col xs="12">{this.renderContent()}</Col>
             </Row>

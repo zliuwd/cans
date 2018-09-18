@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
@@ -100,7 +99,7 @@ class Item extends Component {
         <Typography variant="display1" style={{ marginTop: '1.5rem' }}>
           Questions to Consider:
         </Typography>
-        <Typography variant="headline">
+        <Typography variant="headline" role={'list'}>
           {qtcDescriptions.map((description, i) => {
             return <li key={i}>{description}</li>;
           })}
@@ -109,10 +108,11 @@ class Item extends Component {
     ) : null;
   };
 
-  renderRatingDescriptionsIfNeeded = (ratingDescriptions, isBooleanRating, rating, has_na_option) => {
+  renderRatingDescriptionsIfNeeded = (code, ratingDescriptions, isBooleanRating, rating, has_na_option) => {
+    const labelId = `${code}-inter-controls-label`;
     return ratingDescriptions.length > 0 ? (
       <div>
-        <Typography variant="display1" style={{ marginTop: '1.5rem' }}>
+        <Typography id={labelId} variant="display1" style={{ marginTop: '1.5rem' }}>
           Ratings:
         </Typography>
         <form autoComplete="off">
@@ -131,7 +131,16 @@ class Item extends Component {
                   <FormControlLabel
                     value={stringify(i)}
                     key={label}
-                    control={<Radio value={stringify(i)} color={'default'} />}
+                    control={
+                      <Radio
+                        value={stringify(i)}
+                        color={'default'}
+                        inputProps={{
+                          id: `input-${code}-${i}`,
+                          'aria-labelledby': labelId,
+                        }}
+                      />
+                    }
                     style={{ fontSize: '1.3rem' }}
                     label={
                       <Typography variant="headline">
@@ -166,10 +175,10 @@ class Item extends Component {
     const classes = classNames('item-expand-icon', { 'fa fa-plus': !isExpanded, 'fa fa-minus': isExpanded });
     return shouldItemBeRendered(isAssessmentUnderSix, item) ? (
       <div>
-        <AppBar position="static" color="inherit">
+        <Paper>
           <Toolbar style={{ justifyContent: 'left' }}>
             <i
-              id={'item-expand'}
+              id={`${code}-item-expand`}
               role="link"
               tabIndex={0}
               className={classes}
@@ -202,13 +211,13 @@ class Item extends Component {
               />
             </Typography>
           </Toolbar>
-        </AppBar>
+        </Paper>
         {isExpanded ? (
           <Paper style={{ padding: '1rem 3rem' }}>
             <Typography variant="display1">Item Description:</Typography>
             <Typography variant="headline">{description}</Typography>
             {this.renderQtcIfNeeded(qtcDescriptions)}
-            {this.renderRatingDescriptionsIfNeeded(ratingDescriptions, isBooleanRating, rating, has_na_option)}
+            {this.renderRatingDescriptionsIfNeeded(code, ratingDescriptions, isBooleanRating, rating, has_na_option)}
           </Paper>
         ) : null}
       </div>

@@ -13,7 +13,7 @@ describe('<AssessmentFormHeader />', () => {
     const getLength = component => getShallowWrapper().find(component).length;
 
     it('renders with 5 assessment-form-header-label labels', () => {
-      expect(getLength('.assessment-form-header-label')).toBe(5);
+      expect(getLength('.assessment-form-header-label')).toBe(4);
     });
 
     it('renders with 2 <Input /> component', () => {

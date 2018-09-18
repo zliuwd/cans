@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import './style.sass';
+
 const BreadCrumb = ({ navigationElements }) => (
-  <div className="container">
+  <div className="container" role="navigation">
     <div className="row">
       <div className="col-xs-7 row-padding">
-        <h5>
-          {' '}
-          <span>
-            Back to: <a href="/dashboard">DASHBOARD</a>{' '}
-            {navigationElements.map((nav, index) => <span key={index}> &gt; {nav}</span>)}
-          </span>
-        </h5>
+        <span className={'breadcrumbs'}>
+          Back to: <a href="/dashboard">DASHBOARD</a>{' '}
+          {navigationElements.map((nav, index) => <span key={index}> &gt; {nav}</span>)}
+        </span>
       </div>
     </div>
   </div>

@@ -9,8 +9,9 @@
     "prettier-check": "prettier --list-different 'src/**/*.js'",
     "test": "jest --env=jsdom --watch",
     "test:coverage": "jest --env=jsdom --coverage",
-    "test:rspec": "rspec --exclude-pattern 'spec/acceptance/**/*_spec.rb'",
-    "test:acceptance": "rspec spec/acceptance"
+    "test:rspec": "rspec --exclude-pattern 'spec/{acceptance,a11y}/**/*_spec.rb'",
+    "test:acceptance": "bundle exec rspec spec/acceptance",
+    "test:a11y": "bundle exec rspec spec/a11y"
   },
   "dependencies": {
     "@cwds/components": "^0.2.0-alpha.10",

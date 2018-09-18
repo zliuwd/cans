@@ -56,17 +56,17 @@ class AssessmentFormHeader extends PureComponent {
     const countyName = county.name ? `${county.name} County` : '';
     return (
       <Col sm={12}>
-        <h4>
+        <div className={'child-name-block'}>
           {firstName && lastName ? (
             <span id={'child-name'}>{formatClientName(this.props.client)}</span>
           ) : (
             <span id={'no-data'}>Client Info</span>
           )}
-        </h4>
+        </div>
         {countyName ? (
-          <h5 className={'county-name-block'}>
+          <div className={'county-name-block'}>
             <span id={'county-name'}>{countyName}</span>
-          </h5>
+          </div>
         ) : null}
       </Col>
     );
@@ -75,7 +75,7 @@ class AssessmentFormHeader extends PureComponent {
   renderDateSelect() {
     return (
       <Fragment>
-        <Label required for={'date-select'} className={'assessment-form-header-label'}>
+        <Label required id={'assessment-date-label'} className={'assessment-form-header-label'}>
           Assessment Date *
         </Label>
         <DateField
@@ -83,6 +83,7 @@ class AssessmentFormHeader extends PureComponent {
           id={'assessment-date'}
           value={this.props.assessment.event_date}
           onChange={value => this.changeFieldAndUpdateAssessment('event_date', value)}
+          ariaLabelledBy={'assessment-date-label'}
         />
       </Fragment>
     );
@@ -146,27 +147,46 @@ class AssessmentFormHeader extends PureComponent {
     return (
       <Fragment>
         <Col sm={12}>
-          <Typography variant="headline" classes={{ root: 'assessment-form-header-label' }}>
+          <Typography id={'has-caregiver-label'} variant="headline" classes={{ root: 'assessment-form-header-label' }}>
             Child/Youth has Caregiver?
           </Typography>
         </Col>
         <Col sm={12}>
           <FormControl>
             <RadioGroup
+              id={'has-caregiver'}
               name={'has_caregiver'}
               value={stringify(hasCaregiver)}
               onChange={this.handleHasCaregiverChange}
               className={'assessment-form-header-radio-group'}
             >
               <FormControlLabel
+                id={'has-caregiver-yes'}
                 value={stringify(true)}
-                control={<Radio color="default" />}
+                control={
+                  <Radio
+                    color="default"
+                    inputProps={{
+                      id: 'input-has-caregiver-yes',
+                      'aria-labelledby': 'has-caregiver-label',
+                    }}
+                  />
+                }
                 label={'Yes'}
                 classes={{ label: 'assessment-form-header-label' }}
               />
               <FormControlLabel
+                id={'has-caregiver-no'}
                 value={stringify(false)}
-                control={<Radio color="default" />}
+                control={
+                  <Radio
+                    color="default"
+                    inputProps={{
+                      id: 'input-has-caregiver-no',
+                      'aria-labelledby': 'has-caregiver-label',
+                    }}
+                  />
+                }
                 label={'No'}
                 classes={{ label: 'assessment-form-header-label' }}
               />
@@ -182,7 +202,7 @@ class AssessmentFormHeader extends PureComponent {
     return (
       <Fragment>
         <Col sm={12}>
-          <Typography variant="headline" classes={{ root: 'assessment-form-header-label' }}>
+          <Typography id={'can-release-label'} variant="headline" classes={{ root: 'assessment-form-header-label' }}>
             Authorization for release of information on file?
           </Typography>
         </Col>
@@ -196,13 +216,29 @@ class AssessmentFormHeader extends PureComponent {
             >
               <FormControlLabel
                 value={stringify(true)}
-                control={<Radio color="default" />}
+                control={
+                  <Radio
+                    color="default"
+                    inputProps={{
+                      id: 'input-can-release-yes',
+                      'aria-labelledby': 'can-release-label',
+                    }}
+                  />
+                }
                 label={'Yes'}
                 classes={{ label: 'assessment-form-header-label' }}
               />
               <FormControlLabel
                 value={stringify(false)}
-                control={<Radio color="default" />}
+                control={
+                  <Radio
+                    color="default"
+                    inputProps={{
+                      id: 'input-can-release-no',
+                      'aria-labelledby': 'can-release-label',
+                    }}
+                  />
+                }
                 label={'No'}
                 classes={{ label: 'assessment-form-header-label' }}
               />
@@ -219,18 +255,19 @@ class AssessmentFormHeader extends PureComponent {
       <Typography variant="body1" style={{ textAlign: 'left' }} className={'assessment-form-header-label'}>
         Age: 0-5
         <FormControlLabel
-          className={'assessment-form-header-label'}
+          id={'age-switch'}
           control={
             <Switch
               checked={!isUnderSix}
               value={stringify(isUnderSix)}
               onChange={this.toggleUnderSix}
               color="default"
+              inputProps={{ id: 'age-switch-input', 'aria-labelledby': 'age-switch' }}
             />
           }
+          label={<span className={'assessment-form-header-label'}>6-21</span>}
           style={{ marginLeft: '0px', marginRight: '0px' }}
         />
-        6-21
       </Typography>
     );
   }

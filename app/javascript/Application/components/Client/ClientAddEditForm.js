@@ -1,8 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import InputMask from 'react-input-mask';
 import { Row, Col, Button } from 'reactstrap';
-import { withStyles } from '@material-ui/core/styles';
 import { TextField, Card, CardHeader, CardContent } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { CountiesService } from './Counties.service';
@@ -19,12 +18,21 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import MaskedDateField from '../common/MaskedDateField';
+import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
 
 import './style.sass';
 
 const FIRST_MIDDLE_NAME_MAX_LENGTH = 20;
 const LAST_NAME_MAX_LENGTH = 25;
 const SUFFIX_MAX_LENGTH = 4;
+
+const theme = createMuiTheme({
+  palette: {
+    error: {
+      main: '#DA190B',
+    },
+  },
+});
 
 const styles = theme => ({
   root: {
@@ -59,7 +67,7 @@ const styles = theme => ({
     fontSize: 16,
   },
   inputLabel: {
-    color: '#777777 !important',
+    color: '#707070 !important',
     fontSize: 18,
   },
   cardWidth: {
@@ -71,7 +79,7 @@ const styles = theme => ({
     color: '#fff',
   },
   note: {
-    color: '#ff0000',
+    color: '#DA190B',
     marginTop: theme.spacing.unit,
   },
   title: {
@@ -82,7 +90,7 @@ const styles = theme => ({
 
 const inputLabelProps = {
   style: {
-    color: '#777777',
+    color: '#707070',
     fontSize: 18,
   },
 };
@@ -391,7 +399,7 @@ class ClientAddEditForm extends Component {
     );
   };
 
-  renderSingleCaseNumber = (index, aCase, isFirst) => {
+  renderSingleCaseNumber = (index, aCase) => {
     const { classes } = this.props;
     const { childInfoValidation } = this.state;
     return (
@@ -405,7 +413,7 @@ class ClientAddEditForm extends Component {
           <TextField
             key={index}
             id={`caseNumber${index}`}
-            label={isFirst ? 'Case Number' : null}
+            label={'Case Number'}
             error={!childInfoValidation.cases[index].external_id}
             className={classes.textField}
             helperText={!childInfoValidation.cases[index].external_id ? 'Enter 19 digits number' : null}
@@ -422,10 +430,8 @@ class ClientAddEditForm extends Component {
   renderCaseNumbers = () => {
     const { cases } = this.state.childInfo;
     let renderedCases = [];
-    let isFirstCase = true;
     for (let i = cases.length - 1; i >= 0; i--) {
-      renderedCases.push(this.renderSingleCaseNumber(i, cases[i], isFirstCase));
-      isFirstCase = false;
+      renderedCases.push(this.renderSingleCaseNumber(i, cases[i]));
     }
     return renderedCases;
   };
@@ -435,17 +441,15 @@ class ClientAddEditForm extends Component {
       <div className={'case-numbers'}>
         {this.renderCaseNumbers()}
         <div className={'case-numbers-controls'}>
-          <h5>
-            <div
-              onClick={this.handleAddCaseNumber}
-              onKeyPress={this.handleAddCaseNumber}
-              className={'case-numbers-single-control'}
-              role={'button'}
-              tabIndex={0}
-            >
-              + ADD CASE NUMBER
-            </div>
-          </h5>
+          <div
+            onClick={this.handleAddCaseNumber}
+            onKeyPress={this.handleAddCaseNumber}
+            className={'case-numbers-single-control'}
+            role={'button'}
+            tabIndex={0}
+          >
+            + ADD CASE NUMBER
+          </div>
         </div>
       </div>
     );
@@ -533,7 +537,7 @@ class ClientAddEditForm extends Component {
     }
 
     return (
-      <Fragment>
+      <MuiThemeProvider theme={theme}>
         <PageInfo title={isNewForm ? 'Add Child/Youth' : 'Edit Child/Youth'} />
         <Card className={classes.cardWidth}>
           <CardHeader
@@ -594,7 +598,7 @@ class ClientAddEditForm extends Component {
             </CardContent>
           </div>
         </Card>
-      </Fragment>
+      </MuiThemeProvider>
     );
   }
 }
