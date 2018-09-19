@@ -3,7 +3,7 @@
   <head>
     <title>The change you wanted was rejected (422)</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link src="exclamation-triangle-solid.svg">
 
     <style>
 
@@ -37,7 +37,17 @@
       -webkit-font-smoothing: antialiased;
       text-rendering: auto;
   }
+
+  .fa-exclamation-triangle {
+    display: inline-block;
+    width: 18px;
+    height: 14px;
+  }
   
+  .fas {
+    content: /f071
+  }
+
   .gap-top {
     margin-top: 1.5rem;
   }
@@ -46,8 +56,8 @@
 
   <body class="rails-default-error-page">
     <div class='error-panel centered'>
-      <h4>
-        <i class='fa fas fa-exclamation-triangle c-red gap-right'>
+      <h4 class='c-red'><img class="fa-exclamation-triangle" src="exclamation-triangle-solid.svg" />
+        <i class='fa gap-right c-red'>
         This page is restricted.
       </i>
       </h4>

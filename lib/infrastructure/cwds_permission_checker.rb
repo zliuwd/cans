@@ -26,7 +26,8 @@ module Infrastructure
     end
 
     def error_page_url
-      'cans/error_page'
+      cans_base_path = Rails.configuration.micro_services['cans_base_path']
+      "#{cans_base_path}/error_page"
     end
   end
 end

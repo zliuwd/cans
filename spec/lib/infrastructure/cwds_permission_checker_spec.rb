@@ -16,7 +16,7 @@ module Infrastructure
         it 'redirects when user has no roles and privileges' do
           status, headers = cwds_permission_checker.call(environment)
           expect(status).to eq 301
-          expect(headers['Location']).to eq 'cans/error_page'
+          expect(headers['Location']).to eq '/error_page'
         end
       end
 
@@ -37,7 +37,7 @@ module Infrastructure
           request.session['roles'] = ['CANS-worker']
           status, headers, = cwds_permission_checker.call(environment)
           expect(status).to eq 301
-          expect(headers['Location']).to eq 'cans/error_page'
+          expect(headers['Location']).to eq '/error_page'
         end
       end
 
@@ -47,7 +47,7 @@ module Infrastructure
           request.session['privileges'] = ['CANS-rollout']
           status, headers, = cwds_permission_checker.call(environment)
           expect(status).to eq 301
-          expect(headers['Location']).to eq 'cans/error_page'
+          expect(headers['Location']).to eq '/error_page'
         end
       end
     end
