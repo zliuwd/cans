@@ -483,85 +483,85 @@ describe('<ClientAddEditForm />', () => {
         .dive();
     });
 
-    describe('when has a successClientId', () => {
+    describe('when user county is the same', () => {
       beforeEach(() => {
-        component.setState({ redirection: { successClientId: 1 } });
+        component.setState({ isUsersCounty: true });
       });
 
-      describe('when isUsersCounty is false', () => {
-        beforeEach(() => {
-          component.setState({ isUsersCounty: false });
-        });
+      describe('with new form', () => {
+        describe('when submitting', () => {
+          beforeEach(() => {
+            component.setState({ redirection: { successClientId: 1 } });
+          });
 
-        describe('when isNewForm is true', () => {
-          it('returns /', () => {
-            expect(component.instance().redirectPath(true, 1)).toBe('/');
+          it('redirects to client detail', () => {
+            expect(component.instance().redirectPath(1)).toBe('/clients/1');
           });
         });
 
-        describe('when isNewForm is false', () => {
-          it('returns client url', () => {
-            expect(component.instance().redirectPath(false, 1)).toBe('/');
+        describe('when canceling', () => {
+          it('redirects to client listing', () => {
+            expect(component.instance().redirectPath(undefined)).toBe('/');
           });
         });
       });
 
-      describe('when isUsersCounty is true', () => {
-        beforeEach(() => {
-          component.setState({ isUsersCounty: true });
-        });
+      describe('with existing form', () => {
+        describe('when submitting', () => {
+          beforeEach(() => {
+            component.setState({ redirection: { successClientId: 1 } });
+          });
 
-        describe('when isNewForm is true', () => {
-          it('returns /', () => {
-            expect(component.instance().redirectPath(true, 1)).toBe('/clients/1');
+          it('redirects to client detail', () => {
+            expect(component.instance().redirectPath(1)).toBe('/clients/1');
           });
         });
 
-        describe('when isNewForm is false', () => {
-          it('returns client url', () => {
-            expect(component.instance().redirectPath(false, 1)).toBe('/clients/1');
+        describe('when canceling', () => {
+          it('redirects to client listing', () => {
+            expect(component.instance().redirectPath(1)).toBe('/clients/1');
           });
         });
       });
     });
 
-    describe('when no successClientId', () => {
+    describe('when user county differs', () => {
       beforeEach(() => {
-        component.setState({ redirection: {} });
+        component.setState({ isUsersCounty: false });
       });
 
-      describe('when isUsersCounty is false', () => {
-        beforeEach(() => {
-          component.setState({ isUsersCounty: false });
-        });
+      describe('with new form', () => {
+        describe('when submitting', () => {
+          beforeEach(() => {
+            component.setState({ redirection: { successClientId: 1 } });
+          });
 
-        describe('when isNewForm is true', () => {
-          it('returns /', () => {
-            expect(component.instance().redirectPath(true, 1)).toBe('/');
+          it('redirects to client listing', () => {
+            expect(component.instance().redirectPath(1)).toBe('/');
           });
         });
 
-        describe('when isNewForm is false', () => {
-          it('returns client url', () => {
-            expect(component.instance().redirectPath(false, 1)).toBe('/');
+        describe('when canceling', () => {
+          it('redirects to client listing', () => {
+            expect(component.instance().redirectPath(undefined)).toBe('/');
           });
         });
       });
 
-      describe('when isUsersCounty is true', () => {
-        beforeEach(() => {
-          component.setState({ isUsersCounty: true });
-        });
+      describe('with existing form', () => {
+        describe('when submitting', () => {
+          beforeEach(() => {
+            component.setState({ redirection: { successClientId: 1 } });
+          });
 
-        describe('when isNewForm is true', () => {
-          it('returns /', () => {
-            expect(component.instance().redirectPath(true, 1)).toBe('/');
+          it('redirects to client listing', () => {
+            expect(component.instance().redirectPath(1)).toBe('/');
           });
         });
 
-        describe('when isNewForm is false', () => {
-          it('returns client url', () => {
-            expect(component.instance().redirectPath(false, 1)).toBe('/clients/1');
+        describe('when canceling', () => {
+          it('redirects to client detail', () => {
+            expect(component.instance().redirectPath(1)).toBe('/clients/1');
           });
         });
       });

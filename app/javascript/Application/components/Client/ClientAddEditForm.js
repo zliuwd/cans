@@ -336,10 +336,19 @@ class ClientAddEditForm extends Component {
     };
   };
 
-  redirectPath = (isNewForm, childId) => {
+  redirectPath = childId => {
     const { redirection, isUsersCounty } = this.state;
     const { successClientId } = redirection;
-    return !isUsersCounty || (isNewForm && !successClientId) ? `/` : `/clients/${childId}`;
+    const isEdit = !!childId;
+    const isCancel = !successClientId;
+    const notUsersCounty = !isUsersCounty;
+    if (isUsersCounty && isEdit) {
+      return `/clients/${childId}`;
+    } else if (notUsersCounty && isEdit && isCancel) {
+      return `/clients/${childId}`;
+    } else {
+      return '/';
+    }
   };
 
   renderNameInputs(field, label, maxLength, isRequired) {
@@ -529,10 +538,7 @@ class ClientAddEditForm extends Component {
 
     if (shouldRedirect) {
       return (
-        <Redirect
-          push
-          to={{ pathname: this.redirectPath(isNewForm, childInfo.id), state: { isNewForm, successClientId } }}
-        />
+        <Redirect push to={{ pathname: this.redirectPath(childInfo.id), state: { isNewForm, successClientId } }} />
       );
     }
 
