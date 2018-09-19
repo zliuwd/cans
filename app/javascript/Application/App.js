@@ -14,7 +14,7 @@ const App = () => {
     <BrowserRouter basename={basePath}>
       <Fragment>
         <Header />
-        <div role="contentinfo">
+        <div role="contentinfo" className="sticky page-header-container">
           <PageHeader pageTitle="CANS Assessment Application" button={null}>
             <GlobalAlert />
           </PageHeader>
