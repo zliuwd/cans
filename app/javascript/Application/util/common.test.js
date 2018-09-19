@@ -31,9 +31,11 @@ describe('common', () => {
 
   describe('#stringify()', () => {
     describe.each`
-      value   | string
-      ${1}    | ${'1'}
-      ${true} | ${'true'}
+      value        | string
+      ${1}         | ${'1'}
+      ${true}      | ${'true'}
+      ${undefined} | ${''}
+      ${null}      | ${''}
     `('$value', ({ value, string }) => {
       test(`converts ${value} to a string`, () => {
         expect(stringify(value)).toBe(string);
