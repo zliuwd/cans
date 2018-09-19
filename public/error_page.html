@@ -4,7 +4,7 @@
     <title>The change you wanted was rejected (422)</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <style>
-    
+
   .error-panel {
     align-items: center;
     -webkit-box-align: center;
@@ -29,12 +29,19 @@
   }
   .fa {
       display: inline-block;
-      font: normal normal normal 14px/1 FontAwesome;
+      font: normal;
       font-size: inherit;
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
       text-rendering: auto;
   }
+
+  .fa-exclamation-triangle {
+    display: inline-block;
+    width: 18px;
+    height: 14px;
+  }
+  
   .gap-top {
     margin-top: 1.5rem;
   }
@@ -43,8 +50,8 @@
 
   <body class="rails-default-error-page">
     <div class='error-panel centered'>
-      <h4>
-        <i class='fa fa-warning c-red gap-right'>
+      <h4 class='c-red'><img class="fa-exclamation-triangle" src="exclamation-triangle-solid.svg" />
+        <i class='fa gap-right c-red'>
         This page is restricted.
       </i>
       </h4>

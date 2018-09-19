@@ -14,9 +14,10 @@ module Infrastructure
 
       context 'when there is no session' do
         it 'redirects when user has no roles and privileges' do
+          allow(ENV).to receive(:fetch).with('CANS_BASE_PATH', '').and_return('/cans')
           status, headers = cwds_permission_checker.call(environment)
           expect(status).to eq 301
-          expect(headers['Location']).to eq '/error_page'
+          expect(headers['Location']).to eq '/cans/error_page'
         end
       end
 
@@ -33,21 +34,23 @@ module Infrastructure
 
       context 'when there is invalid session' do
         it 'redirects when user has no privileges' do
+          allow(ENV).to receive(:fetch).with('CANS_BASE_PATH', '').and_return('/cans')
           request = Rack::Request.new(environment)
           request.session['roles'] = ['CANS-worker']
           status, headers, = cwds_permission_checker.call(environment)
           expect(status).to eq 301
-          expect(headers['Location']).to eq '/error_page'
+          expect(headers['Location']).to eq '/cans/error_page'
         end
       end
 
       context 'when there is invalid session' do
         it 'redirects when user has no roles' do
+          allow(ENV).to receive(:fetch).with('CANS_BASE_PATH', '').and_return('/cans')
           request = Rack::Request.new(environment)
           request.session['privileges'] = ['CANS-rollout']
           status, headers, = cwds_permission_checker.call(environment)
           expect(status).to eq 301
-          expect(headers['Location']).to eq '/error_page'
+          expect(headers['Location']).to eq '/cans/error_page'
         end
       end
     end
