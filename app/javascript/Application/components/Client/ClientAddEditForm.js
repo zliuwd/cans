@@ -342,13 +342,9 @@ class ClientAddEditForm extends Component {
     const isEdit = !!childId;
     const isCancel = !successClientId;
     const notUsersCounty = !isUsersCounty;
-    if (isUsersCounty && isEdit) {
-      return `/clients/${childId}`;
-    } else if (notUsersCounty && isEdit && isCancel) {
-      return `/clients/${childId}`;
-    } else {
-      return '/';
-    }
+    const cancelWhenNotUsersCountyWhileEditing = isEdit && notUsersCounty && isCancel;
+    const isUsersCountyWhileEditing = isUsersCounty && isEdit;
+    return isUsersCountyWhileEditing || cancelWhenNotUsersCountyWhileEditing ? `/clients/${childId}` : '/';
   };
 
   renderNameInputs(field, label, maxLength, isRequired) {
