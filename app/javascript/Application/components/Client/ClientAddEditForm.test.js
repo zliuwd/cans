@@ -180,6 +180,18 @@ describe('<ClientAddEditForm />', () => {
     });
   });
 
+  describe('#handleDefaultCounty', () => {
+    it('once be invoked will change the childInfo.county then default county show up', () => {
+      const component = getWrapperEdit()
+        .find('ClientAddEditForm')
+        .dive();
+      component.setState({ counties: [{ id: 34, name: 'Sacramento' }, { id: 49, name: 'Sonoma' }] });
+      component.setState({ userCounty: { name: 'Sacramento', id: 34 } });
+      component.instance().handleDefaultCounty('Sacramento');
+      expect(component.state('childInfo')).toHaveProperty('county', { id: 34, name: 'Sacramento' });
+    });
+  });
+
   describe('case numbers', () => {
     describe('#handleChangeCaseNumber()', () => {
       it('should update case external_id and validate it', () => {

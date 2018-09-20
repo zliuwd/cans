@@ -154,6 +154,7 @@ class ClientAddEditForm extends Component {
     await this.fetchCounties();
     await this.fetchUserAccount();
     await this.fetchSensitivityTypes(this.state.childInfo.county);
+    this.handleDefaultCounty(this.state.userCounty.name);
   }
 
   fetchCounties() {
@@ -184,8 +185,17 @@ class ClientAddEditForm extends Component {
       .catch(() => {});
   }
 
+  handleDefaultCounty(defaultCountyName) {
+    const county = this.state.counties.find(county => county.name === defaultCountyName) || emptyCounty;
+    this.countyValidate(county);
+  }
+
   handleCountyChange = event => {
     const county = this.state.counties.find(county => county.name === event.target.value) || emptyCounty;
+    this.countyValidate(county);
+  };
+
+  countyValidate = county => {
     this.setState({
       childInfo: {
         ...this.state.childInfo,
