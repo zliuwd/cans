@@ -70,6 +70,7 @@ group :test do
   gem 'capybara', '>= 2.15', '< 4.0'
   gem 'chromedriver-helper'
   gem 'faker'
+  gem 'nyan-cat-formatter'
   gem 'rails-controller-testing'
   gem 'rspec'
   gem 'rspec-rails'

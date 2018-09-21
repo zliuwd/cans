@@ -9,7 +9,7 @@
     "prettier-check": "prettier --list-different 'src/**/*.js'",
     "test": "jest --env=jsdom --watch",
     "test:coverage": "jest --env=jsdom --coverage",
-    "test:rspec": "rspec --exclude-pattern 'spec/{acceptance,a11y}/**/*_spec.rb'",
+    "test:rspec": "rspec --exclude-pattern 'spec/{acceptance,a11y}/**/*_spec.rb' --format NyanCatFormatter",
     "test:acceptance": "bundle exec rspec spec/acceptance",
     "test:a11y": "bundle exec rspec spec/a11y"
   },
