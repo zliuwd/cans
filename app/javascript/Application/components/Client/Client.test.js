@@ -123,9 +123,8 @@ describe('<Client />', () => {
       it('renders with Sealed', () => {
         const sealedParams = { ...params };
         sealedParams.client.sensitivity_type = 'SEALED';
-        const cWrapper = clientWrapper(sealedParams);
         expect(
-          cWrapper
+          clientWrapper(sealedParams)
             .find('#client-info-content')
             .dive()
             .find(Grid)
@@ -137,9 +136,8 @@ describe('<Client />', () => {
       it('renders with Sensitive', () => {
         const sensitiveParams = { ...params };
         sensitiveParams.client.sensitivity_type = 'SENSITIVE';
-        const cWrapper = clientWrapper(sensitiveParams);
         expect(
-          cWrapper
+          clientWrapper(sensitiveParams)
             .find('#client-info-content')
             .dive()
             .find(Grid)

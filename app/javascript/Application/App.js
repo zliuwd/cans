@@ -4,6 +4,7 @@ import Header from './components/Header';
 import { BrowserRouter } from 'react-router-dom';
 import 'react-widgets/dist/css/react-widgets.css';
 import { GlobalAlert } from './components/common';
+import Sticker from 'react-stickyfill';
 
 import './style.sass';
 import { Routes } from './routes';
@@ -14,11 +15,13 @@ const App = () => {
     <BrowserRouter basename={basePath}>
       <Fragment>
         <Header />
-        <div role="contentinfo" className="sticky page-header-container">
-          <PageHeader pageTitle="CANS Assessment Application" button={null}>
-            <GlobalAlert />
-          </PageHeader>
-        </div>
+        <Sticker>
+          <div role="contentinfo" className="sticky page-header-container">
+            <PageHeader pageTitle="CANS Assessment Application" button={null}>
+              <GlobalAlert />
+            </PageHeader>
+          </div>
+        </Sticker>
         <Routes />
       </Fragment>
     </BrowserRouter>
