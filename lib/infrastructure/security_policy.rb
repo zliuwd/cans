@@ -14,15 +14,14 @@ module Infrastructure
       new_token = fetch_new_token(request.params['accessCode'])
       return unless new_token
       request.session['token'] = new_token
-      set_roles_and_privileges(request, new_token)
+      set_privileges(request, new_token)
     end
 
     private
 
-    def set_roles_and_privileges(request, token)
+    def set_privileges(request, token)
       perry_account_response = @security_gateway.validate_token(token)
       perry_account_json = JSON.parse(perry_account_response, symbolize_names: true)
-      request.session['roles'] = perry_account_json[:roles]
       request.session['privileges'] = perry_account_json[:privileges]
     end
 

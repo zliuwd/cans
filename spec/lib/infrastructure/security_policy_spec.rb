@@ -14,9 +14,8 @@ module Infrastructure
         end
         let(:request) { Rack::Request.new(environment) }
         let(:privileges) { ['CANS-rollout'] }
-        let(:roles) { ['CANS-worker'] }
         let(:account_json) do
-          { 'roles': roles, 'privileges': privileges }.to_json
+          { 'privileges': privileges }.to_json
         end
 
         it 'stores a valid token in session' do
@@ -65,9 +64,8 @@ module Infrastructure
 
         let(:request) { Rack::Request.new(environment) }
         let(:privileges) { ['CANS-rollout'] }
-        let(:roles) { ['CANS-worker'] }
         let(:account_json) do
-          { 'roles': roles, 'privileges': privileges }.to_json
+          { 'privileges': privileges }.to_json
         end
 
         before do
@@ -83,11 +81,6 @@ module Infrastructure
         it 'saves new token to session' do
           security_policy.validate_access(request)
           expect(request.session['token']).to eq 'new_token'
-        end
-
-        it 'saves roles' do
-          security_policy.validate_access(request)
-          expect(request.session['roles']).to eq(['CANS-worker'])
         end
 
         it 'saves privileges' do

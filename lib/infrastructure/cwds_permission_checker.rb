@@ -10,15 +10,14 @@ module Infrastructure
 
     def call(environment)
       request = Rack::Request.new(environment)
-      return redirect_to_error_page(request.url) unless valid_roles_privileges(request)
+      return redirect_to_error_page(request.url) unless valid_privileges(request)
       @application.call(environment)
     end
 
     private
 
-    def valid_roles_privileges(request)
-      request.session['roles']&.include?('CANS-worker') &&
-        request.session['privileges'] && request.session['privileges'].include?('CANS-rollout')
+    def valid_privileges(request)
+      request.session['privileges']&.include?('CANS-rollout')
     end
 
     def redirect_to_error_page(_url)
