@@ -18,6 +18,7 @@ const client = {
   external_id: '1234567891234567890',
   county: { name: 'Sacramento' },
   cases: [],
+  sensitivity_type: null,
 };
 
 const params = {
@@ -71,14 +72,18 @@ describe('<Client />', () => {
   describe('with childData', () => {
     let wrapper = {};
     beforeEach(() => {
-      wrapper = shallow(
+      wrapper = clientWrapper(params);
+    });
+
+    const clientWrapper = params => {
+      return shallow(
         <MemoryRouter>
           <Client {...params} />
         </MemoryRouter>
       )
         .find(Client)
         .dive();
-    });
+    };
 
     const getLength = component => wrapper.find(component).length;
 
@@ -101,6 +106,47 @@ describe('<Client />', () => {
           .at(7)
           .html()
       ).toEqual(expect.stringContaining('01/02/1980'));
+    });
+
+    describe('Access Restrictions label', () => {
+      it('renders with Unrestricted', () => {
+        expect(
+          wrapper
+            .find('#client-info-content')
+            .dive()
+            .find(Grid)
+            .at(7)
+            .html()
+        ).toEqual(expect.stringContaining('Unrestricted'));
+      });
+
+      it('renders with Sealed', () => {
+        const sealedParams = { ...params };
+        sealedParams.client.sensitivity_type = 'SEALED';
+        const cWrapper = clientWrapper(sealedParams);
+        expect(
+          cWrapper
+            .find('#client-info-content')
+            .dive()
+            .find(Grid)
+            .at(7)
+            .html()
+        ).toEqual(expect.stringContaining('Sealed'));
+      });
+
+      it('renders with Sensitive', () => {
+        const sensitiveParams = { ...params };
+        sensitiveParams.client.sensitivity_type = 'SENSITIVE';
+        const cWrapper = clientWrapper(sensitiveParams);
+        expect(
+          cWrapper
+            .find('#client-info-content')
+            .dive()
+            .find(Grid)
+            .at(7)
+            .html()
+        ).toEqual(expect.stringContaining('Sensitive'));
+      });
     });
   });
 });

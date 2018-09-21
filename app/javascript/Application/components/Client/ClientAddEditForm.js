@@ -494,11 +494,11 @@ class ClientAddEditForm extends Component {
             }}
           >
             <option key={''} value="N/A">
-              Do Not Restrict Access
+              Unrestricted
             </option>
             {sensitivityTypes.map(type => (
               <option key={type} value={type} className={'sensitivity_type_option'}>
-                {type === 'SENSITIVE' ? 'Mark as Sensitive' : type === 'SEALED' ? 'Mark as Sealed' : type}
+                {type === 'SENSITIVE' ? 'Sensitive' : type === 'SEALED' ? 'Sealed' : type}
               </option>
             ))}
           </Select>

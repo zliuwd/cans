@@ -61,6 +61,20 @@ class Client extends Component {
     return <ul className={'no-indent-list'}>{items}</ul>;
   }
 
+  sensitivityTypeLabel(type) {
+    if (!type) {
+      return 'Unrestricted';
+    }
+    switch (type) {
+      case 'SEALED':
+        return 'Sealed';
+      case 'SENSITIVE':
+        return 'Sensitive';
+      default:
+        return type;
+    }
+  }
+
   render() {
     const { client } = this.props;
     const { isNewForm, shouldRenderClientMessage } = this.state;
@@ -97,7 +111,7 @@ class Client extends Component {
                   )}
 
                   {client && client.id ? (
-                    <Grid container spacing={24}>
+                    <Grid container spacing={24} id={'client-info-content'}>
                       {this.renderClientData(client.first_name, 'First Name')}
                       {this.renderClientData(client.middle_name, 'Middle Name')}
                       {this.renderClientData(client.last_name, 'Last Name')}
@@ -105,7 +119,11 @@ class Client extends Component {
                       {this.renderClientData(isoToLocalDate(client.dob), 'Date of Birth')}
                       {this.renderClientData(client.county.name, 'County')}
                       {this.renderClientData(this.formatClientId(client.external_id), 'Client Id', 6)}
-                      {this.renderClientData(undefined, undefined, 6)}
+                      {this.renderClientData(
+                        this.sensitivityTypeLabel(client.sensitivity_type),
+                        'Access Restrictions',
+                        6
+                      )}
                       {this.renderClientData(
                         this.formatCases(client.cases),
                         client.cases.length > 1 ? 'Case Numbers' : 'Case Number',
