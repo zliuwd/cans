@@ -39,6 +39,12 @@ class Item extends Component {
     });
   }
 
+  handleKeyCheck = event => {
+    if (event.key !== 'Tab') {
+      this.switchExpandedState();
+    }
+  };
+
   getRadioValueForLabel = (isBooleanRating, index) => {
     if (!isBooleanRating) {
       return index;
@@ -183,7 +189,7 @@ class Item extends Component {
               tabIndex={0}
               className={classes}
               onClick={this.switchExpandedState}
-              onKeyDown={this.switchExpandedState}
+              onKeyDown={this.handleKeyCheck}
             />
 
             <Typography

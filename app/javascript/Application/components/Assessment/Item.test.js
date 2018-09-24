@@ -71,6 +71,12 @@ describe('<Item />', () => {
     expect(expandedText).toMatch(/Description/);
   });
 
+  it('when cross button get focus and press tab item will not expand', async () => {
+    const wrapper = mount({ ...itemComponentDefault });
+    wrapper.find('i').simulate('keydown', { key: 'Tab' });
+    expect(wrapper.instance().state.isExpanded).toEqual(false);
+  });
+
   it('has a title, description, questions to consider and rating descriptions ', async () => {
     const wrapper = mount({ ...itemComponentDefault });
     wrapper.setProps({ ...propsDefault });
