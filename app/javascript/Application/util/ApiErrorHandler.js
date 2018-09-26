@@ -17,11 +17,17 @@ function postErrors(issueDetails) {
 }
 
 export function handleError(error) {
-  if (error.response && error.response.data && error.response.data.issue_details) {
-    postErrors(error.response.data.issue_details);
+  const errorResponse = error.response;
+  if (errorResponse && errorResponse.status === 409) {
+    throw error;
+  }
+
+  if (errorResponse && errorResponse.data && errorResponse.data.issue_details) {
+    postErrors(errorResponse.data.issue_details);
   } else {
     postError(error.message);
   }
+
   throw error;
 }
 

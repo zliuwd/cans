@@ -96,4 +96,34 @@ describe('ApiErrorHandler', () => {
     expect(messages.length).toEqual(1);
     expect(isErrorThrowed).toEqual(true);
   });
+
+  describe('when error status 409', () => {
+    const error = {
+      message: 'message',
+      response: {
+        status: 409,
+      },
+    };
+
+    it('should not post global alert', () => {
+      let messages = [];
+      globalAlertService.subscribe(e => messages.push(e.message));
+      try {
+        handleError(error);
+      } catch (e) {
+        // ignore
+      }
+      expect(messages.length).toEqual(0);
+    });
+
+    it('should throw error farther', () => {
+      let isErrorThrowed = false;
+      try {
+        handleError(error);
+      } catch (e) {
+        isErrorThrowed = true;
+      }
+      expect(isErrorThrowed).toEqual(true);
+    });
+  });
 });

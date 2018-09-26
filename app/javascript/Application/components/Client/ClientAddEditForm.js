@@ -282,7 +282,7 @@ class ClientAddEditForm extends Component {
             },
           });
         })
-        .catch(() => {});
+        .catch(error => this.handleError(error));
     } else {
       ClientService.updateClient(childInfo.id, childInfo)
         .then(updatedChild => {
@@ -294,7 +294,19 @@ class ClientAddEditForm extends Component {
             },
           });
         })
-        .catch(() => {});
+        .catch(error => this.handleError(error));
+    }
+  };
+
+  handleError = error => {
+    const errorResponse = error.response;
+    if (errorResponse && errorResponse.status === 409) {
+      const errorMessage =
+        errorResponse.data &&
+        errorResponse.data.issue_details &&
+        errorResponse.data.issue_details[0] &&
+        errorResponse.data.issue_details[0].technical_message;
+      errorMessage ? this.setState({ error: { message: errorMessage } }) : this.setState({ error });
     }
   };
 
@@ -509,7 +521,7 @@ class ClientAddEditForm extends Component {
 
   renderFormFooter = () => {
     const { classes } = this.props;
-    const { isSaveButtonDisabled, isUsersCounty } = this.state;
+    const { isSaveButtonDisabled, isUsersCounty, error } = this.state;
     return (
       <div className={'add-edit-form-footer'}>
         {!isUsersCounty && (
@@ -519,6 +531,13 @@ class ClientAddEditForm extends Component {
                 message="The Child's County does not match the User's County. This will result in being unable to view the Child record."
                 type={alertType.WARNING}
               />
+            </Col>
+          </Row>
+        )}
+        {error && (
+          <Row>
+            <Col sm={12}>
+              <CloseableAlert message={error.message} type={alertType.DANGER} />
             </Col>
           </Row>
         )}

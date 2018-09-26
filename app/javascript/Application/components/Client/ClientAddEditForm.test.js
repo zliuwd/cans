@@ -627,4 +627,47 @@ describe('<ClientAddEditForm />', () => {
       });
     });
   });
+
+  describe('when error', () => {
+    it('renders a error message', () => {
+      const component = getWrapperAdd()
+        .find('ClientAddEditForm')
+        .dive();
+      component.setState({ error: { message: 'Error Message' } });
+      expect(
+        component.find(CloseableAlert).findWhere(alert => alert.props().message.match(/Error Message/)).length
+      ).toBe(1);
+    });
+  });
+
+  describe('#handleError', () => {
+    describe('when 409 error', () => {
+      const error = {
+        response: {
+          status: 409,
+          data: {
+            issue_details: [
+              {
+                technical_message: 'duplicate entity',
+              },
+              {
+                technical_message: 'other error',
+              },
+            ],
+          },
+        },
+      };
+
+      it('sets error to state', async () => {
+        const clientServicePutSpy = jest.spyOn(ClientService, 'updateClient');
+        const component = getWrapperAdd()
+          .find('ClientAddEditForm')
+          .dive();
+        clientServicePutSpy.mockRejectedValue(error);
+        await component.instance().handleSubmit();
+        await component.update();
+        expect(component.state().error).toEqual({ message: 'duplicate entity' });
+      });
+    });
+  });
 });
