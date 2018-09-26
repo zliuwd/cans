@@ -5,19 +5,23 @@ export class ClientService {
     return apiGet(`/people/${id}`);
   }
 
-  static fetchAllClients() {
-    const data = {
+  static search({ firstName, middleName, lastName, dob, pagination: { page, pageSize } }) {
+    const payload = {
+      first_name: firstName,
+      middle_name: middleName,
+      last_name: lastName,
+      dob,
       person_role: 'CLIENT',
+      pagination: {
+        page,
+        page_size: pageSize,
+      },
     };
-    return apiPost('/people/_search', data);
+    return apiPost('/people/_search', payload);
   }
 
   static addClient(childInfoObj) {
     return apiPost(`/people`, childInfoObj);
-  }
-
-  static getClient(id) {
-    return this.fetch(id);
   }
 
   static updateClient(id, childInfoObj) {

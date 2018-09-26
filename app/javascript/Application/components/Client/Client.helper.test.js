@@ -1,18 +1,6 @@
-import { formatClientName, groupClientsByLastName } from './Client.helper';
+import { formatClientName } from './Client.helper';
 
 describe('Client.helper', () => {
-  describe('#groupClientsByLastName()', () => {
-    it('returns clients grouped by the first letter of the last name', () => {
-      const actual = groupClientsByLastName(personsJson);
-      expect(actual).toEqual(expectedSortedMap);
-    });
-
-    it('returns an empty array when empty input', () => {
-      const actual = groupClientsByLastName([]);
-      expect(actual).toEqual([]);
-    });
-  });
-
   describe('formatClientName', () => {
     describe('client with firstName, midleName ', () => {
       it('returns lastName, firstName', () => {
@@ -66,6 +54,8 @@ export const personsJson = [
     middle_name: 'Middle',
     last_name: 'wayne',
     suffix: 'Mr.',
+    dob: '2014-01-28',
+    sensitivity_type: 'SENSITIVE',
     metadata: {
       editable: false,
     },
@@ -76,6 +66,8 @@ export const personsJson = [
     middle_name: 'Middle',
     last_name: 'Parker',
     suffix: 'Mr.',
+    dob: '2015-01-28',
+    sensitivity_type: 'SENSITIVE',
     metadata: {},
   },
   {
@@ -84,49 +76,9 @@ export const personsJson = [
     middle_name: 'Middle',
     last_name: 'Parker',
     suffix: 'Mr.',
+    dob: '2016-01-28',
     metadata: {
       editable: true,
     },
-  },
-];
-
-const expectedSortedMap = [
-  {
-    letter: 'P',
-    clients: [
-      {
-        id: 3,
-        first_name: 'Charley',
-        middle_name: 'Middle',
-        last_name: 'Parker',
-        suffix: 'Mr.',
-        metadata: {
-          editable: true,
-        },
-      },
-      {
-        id: 4,
-        first_name: 'Peter',
-        middle_name: 'Middle',
-        last_name: 'Parker',
-        suffix: 'Mr.',
-        metadata: {},
-      },
-    ],
-  },
-  {
-    letter: 'W',
-    clients: [
-      {
-        id: 1,
-        first_name: 'Bruce',
-        middle_name: 'Middle',
-        last_name: 'wayne',
-        suffix: 'Mr.',
-        metadata: {
-          editable: false,
-        },
-      },
-    ],
   },
 ];

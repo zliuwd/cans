@@ -22,21 +22,6 @@ describe('ClientService', () => {
     });
   });
 
-  describe('#fetchAllClients', () => {
-    const apiPostSpy = jest.spyOn(apiEndpoints, 'apiPost');
-
-    it('returns clients', async () => {
-      const expectedClients = [{ id: 1 }];
-      apiPostSpy.mockReturnValue(expectedClients);
-      const actualClients = await ClientService.fetchAllClients();
-      expect(actualClients).toBe(expectedClients);
-      expect(apiPostSpy).toHaveBeenCalledTimes(1);
-      expect(apiPostSpy).toHaveBeenCalledWith('/people/_search', {
-        person_role: 'CLIENT',
-      });
-    });
-  });
-
   describe('#addClient', () => {
     const apiGetSpy = jest.spyOn(apiEndpoints, 'apiPost');
 
@@ -71,6 +56,40 @@ describe('ClientService', () => {
       expect(actualChildForm).toBe(expectedChildForm);
       expect(apiGetSpy).toHaveBeenCalledTimes(1);
       expect(apiGetSpy).toHaveBeenCalledWith(`/people/1`, {});
+    });
+  });
+
+  describe('#search()', () => {
+    const apiPostSpy = jest.spyOn(apiEndpoints, 'apiPost');
+
+    beforeEach(() => {
+      apiPostSpy.mockReset();
+    });
+
+    it('should invoke App.api with correct params', async () => {
+      // given
+      const inputParam = {
+        firstName: 'First',
+        middleName: 'Middle',
+        lastName: 'Last',
+        dob: '10/10/2011',
+        pagination: { page: 0, pageSize: 10, pages: 1 },
+      };
+
+      // when
+      ClientService.search(inputParam);
+
+      // then
+      expect(apiPostSpy).toHaveBeenCalledTimes(1);
+      const expectedParam = {
+        first_name: 'First',
+        last_name: 'Last',
+        middle_name: 'Middle',
+        dob: '10/10/2011',
+        person_role: 'CLIENT',
+        pagination: { page: 0, page_size: 10 },
+      };
+      expect(apiPostSpy).toHaveBeenCalledWith('/people/_search', expectedParam);
     });
   });
 });
