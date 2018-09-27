@@ -1,5 +1,5 @@
 import { globalAlertService } from './GlobalAlertService';
-import { handleError } from './ApiErrorHandler';
+import { handleError, forbiddenMessage } from './ApiErrorHandler';
 
 describe('ApiErrorHandler', () => {
   describe('with a single error with incident id', () => {
@@ -125,5 +125,23 @@ describe('ApiErrorHandler', () => {
       }
       expect(isErrorThrowed).toEqual(true);
     });
+  });
+
+  it('handles 403 error', () => {
+    const error = {
+      response: {
+        status: 403,
+      },
+    };
+    let message;
+    let isErrorThrowed = false;
+    globalAlertService.subscribe(e => (message = e.message));
+    try {
+      handleError(error);
+    } catch (e) {
+      isErrorThrowed = true;
+    }
+    expect(message).toEqual(forbiddenMessage);
+    expect(isErrorThrowed).toEqual(true);
   });
 });
