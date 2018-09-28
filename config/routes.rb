@@ -29,6 +29,7 @@ Rails.application.routes.draw do
     end
 
     get 'security/check_permission/:permission', to: 'security#check_permission'
+    get 'security/refresh', to: 'security#refresh'
   end
 
   get '*path', to: "application#fallback_index_html", constraints: -> (request) do

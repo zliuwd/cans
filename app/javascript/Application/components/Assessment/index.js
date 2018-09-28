@@ -8,4 +8,4 @@ export { default as Item } from './Item.js';
 export { default as Rating } from './Rating.js';
 export { default as AssessmentService } from './Assessment.service';
 export { default as I18nService } from './I18n.service';
-export { default as SecurityService } from './Security.service';
+export { default as SecurityService } from './../common/Security.service';

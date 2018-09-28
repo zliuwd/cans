@@ -8,6 +8,7 @@ import Sticker from 'react-stickyfill';
 
 import './style.sass';
 import { Routes } from './routes';
+import TimeoutWarning from './components/common/TimeoutWarning';
 
 const App = () => {
   const basePath = process.env.CANS_BASE_PATH || '/cans';
@@ -22,6 +23,7 @@ const App = () => {
             </PageHeader>
           </div>
         </Sticker>
+        <TimeoutWarning />
         <Routes />
       </Fragment>
     </BrowserRouter>

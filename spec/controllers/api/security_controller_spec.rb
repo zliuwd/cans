@@ -28,5 +28,13 @@ module Api
         expect(response.status).to eq 200
       end
     end
+
+    describe '#refresh' do
+      it 'returns empty response with status: 200' do
+        get :refresh
+        expect(response.body).to eq ''
+        expect(response.status).to eq 200
+      end
+    end
   end
 end

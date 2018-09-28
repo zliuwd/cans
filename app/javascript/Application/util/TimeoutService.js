@@ -1,4 +1,6 @@
 import Cookies from 'universal-cookie';
+import { eventBus } from './eventBus';
+import { TIMEOUT_EVENT, SESSION_EXPIRATION_WARNING_TIME } from './constants';
 
 class TimeoutService {
   run() {
@@ -6,9 +8,17 @@ class TimeoutService {
     const expirationTime = cookies.get('_ca_cans_timeout');
     if (!expirationTime) {
       window.location.reload();
+      return;
+    }
+    const instance = this;
+    const expirationTimeMs = parseInt(expirationTime);
+    const warningTimeMs = expirationTimeMs - new Date().getTime();
+    const callback = () => instance.run();
+    if (warningTimeMs <= SESSION_EXPIRATION_WARNING_TIME) {
+      eventBus.post(TIMEOUT_EVENT);
+      setTimeout(callback, expirationTimeMs - new Date().getTime());
     } else {
-      const instance = this;
-      setTimeout(() => instance.run(), parseInt(expirationTime) - new Date().getTime());
+      setTimeout(callback, warningTimeMs - new Date().getTime());
     }
   }
 }
