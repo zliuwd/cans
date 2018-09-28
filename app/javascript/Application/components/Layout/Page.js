@@ -6,6 +6,7 @@ import { Client, ClientAddEditForm, ClientsContainer, ClientService } from '../C
 import BreadCrumbsBuilder from './BreadCrumbsBuilder';
 import { navigation } from '../../util/constants';
 import { AssessmentContainer } from '../Assessment';
+import Sticker from 'react-stickyfill';
 
 class Page extends Component {
   constructor(props) {
@@ -66,7 +67,9 @@ class Page extends Component {
         <BreadCrumbsBuilder navigateTo={this.props.navigateTo} client={this.state.client} />
         <Row>
           <Col xs="4">
-            <SideNav />
+            <Sticker>
+              <SideNav />
+            </Sticker>
           </Col>
           <Col xs="8" role={'main'} id={'main-content'}>
             <Row>
