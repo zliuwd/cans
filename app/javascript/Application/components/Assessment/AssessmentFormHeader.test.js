@@ -235,7 +235,7 @@ describe('<AssessmentFormHeader />', () => {
       const alert = wrapper.find(Alert);
       expect(alert.length).toBe(1);
       expect(wrapper.find(Alert).html()).toMatch(
-        /Prior to sharing the CANS assessment redact item number 7, 48 and EC.41/
+        /Since there is no Authorization for Release of Information on file, prior to sharing this CANS assessment redact the following domain item numbers: 7, 48, and EC.41./
       );
     });
 
