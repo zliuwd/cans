@@ -97,6 +97,24 @@ describe('ApiErrorHandler', () => {
     expect(isErrorThrowed).toEqual(true);
   });
 
+  it('Handles 401 error', () => {
+    const error = {
+      message: 'Error message',
+      response: { status: 401 },
+    };
+
+    let messages = [];
+    globalAlertService.subscribe(e => messages.push(e.message));
+    global.location = jest.fn();
+    global.location.reload = jest.fn();
+    try {
+      handleError(error);
+    } catch (e) {
+      //  ignore
+    }
+    expect(global.location.reload).toBeCalled();
+  });
+
   describe('when error status 409', () => {
     const error = {
       message: 'message',

@@ -22,6 +22,9 @@ function isResponseHandled(response) {
   const responseStatus = response && response.status;
 
   switch (responseStatus) {
+    case 401:
+      window.location.reload();
+      break;
     case 403:
       postError(forbiddenMessage);
       break;

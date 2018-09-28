@@ -10,11 +10,21 @@ module Infrastructure
 
     def call(environment)
       request = Rack::Request.new(environment)
-      return redirect_to_error_page(request.url) unless valid_privileges(request)
+      return do_call(environment) if matches?(request)
       @application.call(environment)
     end
 
     private
+
+    def matches?(request)
+      !request.fullpath.include?('/api/')
+    end
+
+    def do_call(environment)
+      request = Rack::Request.new(environment)
+      return redirect_to_error_page(request.url) unless valid_privileges(request)
+      @application.call(environment)
+    end
 
     def valid_privileges(request)
       request.session['privileges']&.include?('CANS-rollout')

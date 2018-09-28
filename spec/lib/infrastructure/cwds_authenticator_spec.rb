@@ -74,6 +74,17 @@ module Infrastructure
           end
         end
       end
+
+      context 'when api call is in progress' do
+        let(:environment) { Rack::MockRequest.env_for('http://example.com/api/test') }
+        it 'front end authentication is disabled' do
+          Feature.run_with_activated(:authentication) do
+            allow(application).to receive(:call).with(environment).and_return([200, {}, {}])
+            cwds_authenticator.call(environment)
+            security_policy.should_receive(:validate_access).exactly(0).times
+          end
+        end
+      end
     end
   end
 end

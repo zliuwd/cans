@@ -34,7 +34,8 @@
     "react-widgets": "^4.4.4",
     "react-widgets-moment": "^4.0.20",
     "react-wood-duck": "^0.1.57",
-    "reactstrap": "^6.0.1"
+    "reactstrap": "^6.0.1",
+    "universal-cookie": "^3.0.4"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.5",

@@ -9,5 +9,6 @@ Rails.application.config.session_store :redis_store, {
       namespace: "#{Rails.application.class.parent_name.downcase}_session"
     },
   ],
- expires_after: 4.hours
+  key: '_ca_cans_session',
+  expire_after: 4.hours,
 }
