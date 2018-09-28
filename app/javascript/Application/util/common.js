@@ -3,7 +3,11 @@ export function clone(object) {
 }
 
 export function stringify(value) {
-  return value ? '' + value : '';
+  if (typeof value !== 'undefined') {
+    return value === null ? '' : '' + value;
+  } else {
+    return '';
+  }
 }
 
 /**

@@ -36,6 +36,9 @@ describe('common', () => {
       ${true}      | ${'true'}
       ${undefined} | ${''}
       ${null}      | ${''}
+      ${''}        | ${''}
+      ${0}         | ${'0'}
+      ${false}     | ${'false'}
     `('$value', ({ value, string }) => {
       test(`converts ${value} to a string`, () => {
         expect(stringify(value)).toBe(string);
