@@ -50,7 +50,31 @@ class AssessmentContainer extends Component {
     }
     this.setState({ isEditable: isEditable });
     assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment();
+    this.activeCtrlP();
   }
+
+  componentWillUnmount() {
+    this.muteCtrlP();
+  }
+
+  activeCtrlP = () => {
+    if (!this.state.shouldPrintNow) {
+      window.addEventListener('keydown', this.handleCtrlP, false);
+    }
+  };
+
+  muteCtrlP = () => {
+    window.removeEventListener('keydown', this.handleCtrlP, false);
+  };
+
+  handleCtrlP = event => {
+    if (event.ctrlKey || event.metaKey) {
+      if (event.key === 'p') {
+        this.togglePrintNow();
+        event.preventDefault();
+      }
+    }
+  };
 
   async fetchNewAssessment() {
     this.setState({ assessmentServiceStatus: LoadingState.waiting });

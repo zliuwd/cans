@@ -103,6 +103,37 @@ describe('<AssessmentContainer />', () => {
       });
     });
 
+    describe('print through keyboard', () => {
+      it('should add and remove event handler', () => {
+        const adder = jest.spyOn(global, 'addEventListener').mockImplementation(() => {});
+        const remover = jest.spyOn(global, 'removeEventListener').mockImplementation(() => {});
+        const wrapper = shallow(<AssessmentContainer />);
+        expect(adder).toHaveBeenCalled();
+        wrapper.unmount();
+        expect(remover).toHaveBeenCalled();
+      });
+
+      it('when a user press ctrl+p', () => {
+        const wrapper = shallow(<AssessmentContainer {...defaultProps} />);
+        wrapper.instance().handleCtrlP({
+          ctrlKey: true,
+          key: 'p',
+          preventDefault: () => {},
+        });
+        expect(wrapper.find(Print).length).toBe(1);
+      });
+
+      it('when a user press meta+p', () => {
+        const wrapper = shallow(<AssessmentContainer {...defaultProps} />);
+        wrapper.instance().handleCtrlP({
+          metaKey: true,
+          key: 'p',
+          preventDefault: () => {},
+        });
+        expect(wrapper.find(Print).length).toBe(1);
+      });
+    });
+
     describe('warning message on absence of edit permission', () => {
       it('should render warning message', async () => {
         const props = {
