@@ -1,13 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { renderToString } from 'react-dom/server';
+import { isFirefox } from '../../util/common';
 
 import './style.sass';
-
-// Firefox browser prints iframe in different way than other browsers,
-// so we are detecting if user is in Firefox with this workaround
-// https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
-const isFirefox = typeof InstallTrigger !== 'undefined';
 
 const printFrameId = 'print-frame';
 

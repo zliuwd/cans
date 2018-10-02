@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Label, Input, Button as ButtonReactStrap } from 'reactstrap';
 import ClientService from './Client.service';
+import PaginationButtonFactory from '../common/pagination/PaginationButtonFactory';
+import Pagination from '../common/pagination/Pagination';
 import DateField from '../common/DateField';
 import { formatClientName } from './Client.helper';
 import { isoToLocalDate } from '../../util/dateHelper';
@@ -171,7 +173,7 @@ class ClientsContainer extends Component {
           <Col sm={4}>{this.renderFilterInput('lastName', 'Last Name')}</Col>
         </Row>
         <Row>
-          <Col sm={4}>{this.renderDateFilterInput('dob', 'Birth Date')}</Col>
+          <Col sm={4}>{this.renderDateFilterInput('dob', 'Date of Birth')}</Col>
         </Row>
         <Row>
           <Col sm={12}>
@@ -268,6 +270,9 @@ class ClientsContainer extends Component {
               pageSizeOptions={[10, 25, 50, 100]}
               showPaginationTop={isPaginationShown}
               showPaginationBottom={isPaginationShown}
+              PreviousComponent={PaginationButtonFactory({ direction: 'left' })}
+              NextComponent={PaginationButtonFactory({ direction: 'right' })}
+              PaginationComponent={Pagination}
               minRows={2}
               loading={loading}
               noDataText={'No records found'}

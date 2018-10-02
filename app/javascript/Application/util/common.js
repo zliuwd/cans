@@ -23,3 +23,8 @@ export function isEmpty(value) {
     (typeof value === 'string' && value.trim().length === 0)
   );
 }
+
+// Firefox browser behaves in a different way than other browsers with input fields type change
+// and prints iframe, so we are detecting if user is in Firefox with this workaround
+// https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
+export const isFirefox = typeof InstallTrigger !== 'undefined';
