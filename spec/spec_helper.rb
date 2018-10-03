@@ -3,6 +3,7 @@
 require 'active_support'
 require 'active_support/dependencies'
 require 'faraday'
+require 'timecop'
 
 # rubocop:disable Layout/CommentIndentation
 

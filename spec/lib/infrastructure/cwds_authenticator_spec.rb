@@ -81,7 +81,7 @@ module Infrastructure
           Feature.run_with_activated(:authentication) do
             allow(application).to receive(:call).with(environment).and_return([200, {}, {}])
             cwds_authenticator.call(environment)
-            security_policy.should_receive(:validate_access).exactly(0).times
+            expect(security_policy).to receive(:validate_access).exactly(0).times
           end
         end
       end
