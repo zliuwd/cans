@@ -233,13 +233,13 @@ def checkoutStage() {
 def buildDockerImageStage() {
   stage('Clone Repo') {
 		  cleanWs()
-		  git branch: 'master', credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL
+		  git branch: 'CANS-334-Implement-Semver-Versioning', credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL
 	}
 
 def image
 catchError {
   stage('Preparation') {
-         git branch: 'master', credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL
+         git branch: 'CANS-334-Implement-Semver-Versioning', credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL
       }
 
   def newTag
