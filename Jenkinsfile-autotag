@@ -246,6 +246,17 @@ catchError {
       }
 
   def newTag
+<<<<<<< HEAD
+      stage("Increment Tag") {
+        try {
+
+            //def prEvent = getPullRequestEvent()
+            //debug("Increment Tag: prEvent: ${prEvent}")
+
+            //def labels = getLabels(prEvent)
+            def labels = ["patch"]
+            debug("Increment Tag: labels: ${labels}")
+=======
   stage("Increment Tag") {
       try {
           // Link to Jenkins Job: http://jenkins.dev.cwds.io:8080/view/Dashboard/job/dashboard-autotag/
@@ -254,6 +265,7 @@ catchError {
 
           def labels = ["patch"]
           debug("Increment Tag: labels: ${labels}")
+>>>>>>> 21a098aa179d43a0d0bdc72dba419937335f77f7
 
           VersionIncrement increment = getVersionIncrement(labels)
           debug("Increment Tag: increment: ${increment}")
@@ -274,8 +286,9 @@ catchError {
   }
 
   stage('Build Docker Image') {
-    def GIT_REFSPEC = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
-    app = docker.build("cwds/cans:${GIT_REFSPEC}", "-f docker/web/Dockerfile .")
+    //def GIT_REFSPEC = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
+    //app = docker.build("cwds/cans:${GIT_REFSPEC}", "-f docker/web/Dockerfile .")
+    app = docker.build("cwds/cans:${env.BUILD_ID}", "-f docker/web/Dockerfile .")
     withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
            app.push(newTag)
            app.push('latest')
