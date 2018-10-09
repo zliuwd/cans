@@ -231,10 +231,55 @@ def checkoutStage() {
 }
 
 def buildDockerImageStage() {
+  stage('Clone Repo') {
+		  cleanWs()
+		  git branch: 'master', credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL
+	}
+
+def image
+catchError {
+  stage('Preparation') {
+         git branch: 'master', credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL
+      }
+
+  def newTag
+      stage("Increment Tag") {
+        try {
+            // Link to Jenkins Job: http://jenkins.dev.cwds.io:8080/view/Dashboard/job/dashboard-autotag/
+            def prEvent = getPullRequestEvent()
+            debug("Increment Tag: prEvent: ${prEvent}")
+
+            def labels = getLabels(prEvent)
+            debug("Increment Tag: labels: ${labels}")
+
+            VersionIncrement increment = getVersionIncrement(labels)
+            debug("Increment Tag: increment: ${increment}")
+            if(increment != null ) {
+                def tags = getTags()
+                debug("Increment Tag: tags: ${tags}")
+
+                newTag = getNewTag(tags, increment)
+                debug("Increment Tag: newTag: ${newTag}")
+
+                tagRepo(newTag)
+
+            }
+        }
+        catch(Exception ex) {
+            error "[ERROR] ${ex}"
+        }
+    }
+
   stage('Build Docker Image') {
-    app = docker.build("cwds/cans:${env.BUILD_ID}", "-f docker/web/Dockerfile .")
-  }
-}
+    def GIT_REFSPEC = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
+    app = docker.build("cwds/cans:${GIT_REFSPEC}", "-f docker/web/Dockerfile .")
+    withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
+           app.push(newTag)
+           app.push('latest')
+        }
+      }
+    }
+   }
 
 def lintAndUnitTestStages() {
   app.withRun("-e CI=true") { container ->
@@ -289,49 +334,11 @@ def acceptanceTestPreintStage() {
 }
 
 def publishImageStage() {
-  def image
-   catchError {
-      stage('Preparation') {
-         git branch: 'master', credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL
-      }
-  def newTag
-     stage("Increment Tag") {
-       try {
-           def prEvent = getPullRequestEvent()
-           debug("Increment Tag: prEvent: ${prEvent}")
-
-           def labels = getLabels(prEvent)
-           debug("Increment Tag: labels: ${labels}")
-
-           VersionIncrement increment = getVersionIncrement(labels)
-           debug("Increment Tag: increment: ${increment}")
-           if(increment != null ) {
-               def tags = getTags()
-               debug("Increment Tag: tags: ${tags}")
-
-               newTag = getNewTag(tags, increment)
-               debug("Increment Tag: newTag: ${newTag}")
-
-               tagRepo(newTag)
-
-           }
-       }
-       catch(Exception ex) {
-           error "[ERROR] ${ex}"
-       }
-   }
-  stage('Publish to Dockerhub') {
-    withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
-      app.push(newTag)
-      app.push('latest')
-    }
-  }
   stage('Trigger Security scan') {
     build job: 'tenable-scan', parameters: [
         [$class: 'StringParameterValue', name: 'CONTAINER_NAME', value: 'cans'],
         [$class: 'StringParameterValue', name: 'CONTAINER_VERSION', value: "${env.BUILD_ID}"]
-      ]
-    }
+    ]
   }
 }
 
