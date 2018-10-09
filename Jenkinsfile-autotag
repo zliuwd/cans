@@ -20,7 +20,7 @@ def getPullRequestEvent() {
 
 // Takes a Map of Maps containing the parsed JSON from the pull request event
 // Returns a list of label strings
-def getLabels(prEvent) {
+def getLabels(pullRequestEvent) {
   debug("getLabels( pullRequestEvent: ${pullRequestEvent} )")
   pullRequestEvent.labels.collect([]) { it.name }
 }
