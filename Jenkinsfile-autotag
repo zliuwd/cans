@@ -252,7 +252,7 @@ catchError {
           //def prEvent = getPullRequestEvent()
           //debug("Increment Tag: prEvent: ${prEvent}")
 
-          def labels = "patch"
+          def labels = ["patch"]
           debug("Increment Tag: labels: ${labels}")
 
           VersionIncrement increment = getVersionIncrement(labels)
