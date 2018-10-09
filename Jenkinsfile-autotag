@@ -246,32 +246,32 @@ catchError {
       }
 
   def newTag
-      stage("Increment Tag") {
-        try {
-            // Link to Jenkins Job: http://jenkins.dev.cwds.io:8080/view/Dashboard/job/dashboard-autotag/
-            def prEvent = getPullRequestEvent()
-            debug("Increment Tag: prEvent: ${prEvent}")
+  stage("Increment Tag") {
+      try {
+          // Link to Jenkins Job: http://jenkins.dev.cwds.io:8080/view/Dashboard/job/dashboard-autotag/
+          //def prEvent = getPullRequestEvent()
+          //debug("Increment Tag: prEvent: ${prEvent}")
 
-            def labels = getLabels(prEvent)
-            debug("Increment Tag: labels: ${labels}")
+          def labels = "PATCH"
+          debug("Increment Tag: labels: ${labels}")
 
-            VersionIncrement increment = getVersionIncrement(labels)
-            debug("Increment Tag: increment: ${increment}")
-            if(increment != null ) {
-                def tags = getTags()
-                debug("Increment Tag: tags: ${tags}")
+          VersionIncrement increment = getVersionIncrement(labels)
+          debug("Increment Tag: increment: ${increment}")
+          if(increment != null ) {
+              def tags = getTags()
+              debug("Increment Tag: tags: ${tags}")
 
-                newTag = getNewTag(tags, increment)
-                debug("Increment Tag: newTag: ${newTag}")
+              newTag = getNewTag(tags, increment)
+              debug("Increment Tag: newTag: ${newTag}")
 
-                tagRepo(newTag)
+              tagRepo(newTag)
 
-            }
-        }
-        catch(Exception ex) {
-            error "[ERROR] ${ex}"
-        }
-    }
+          }
+      }
+      catch(Exception ex) {
+          error "[ERROR] ${ex}"
+      }
+  }
 
   stage('Build Docker Image') {
     def GIT_REFSPEC = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
