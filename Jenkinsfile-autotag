@@ -15,6 +15,9 @@ def debug(String str) {
 
 // Returns Map of Maps containing the parsed JSON from the pull request event
 def getPullRequestEvent() {
+debug("prEvent: ${env}")
+debug("prEvent: ${env.pull_request_event}")
+
   readJSON text: env.pull_request_event
 }
 
