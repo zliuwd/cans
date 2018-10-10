@@ -304,7 +304,7 @@ catchError {
   def newTag
       stage("Increment Tag") {
         try {
-            def prEvent = getPullRequestEvent()
+            //def prEvent = getPullRequestEvent()
             debug("Increment Tag: prEvent: ${prEvent}")
             def labels
             def prlabels = getLabels(prEvent)
