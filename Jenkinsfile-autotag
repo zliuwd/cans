@@ -1,4 +1,5 @@
 def app
+def finalNewTag
 DOCKER_REGISTRY_CREDENTIALS_ID = '6ba8d05c-ca13-4818-8329-15d41a089ec0'
 GITHUB_CREDENTIALS_ID = '433ac100-b3c2-4519-b4d6-207c029a103b'
 GITHUB_URL = 'git@github.com:ca-cwds/cans.git'
@@ -242,7 +243,7 @@ catchError {
          git branch: 'master', credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL
       }
 
-  def newTag
+
       stage("Increment Tag") {
         try {
 
@@ -259,10 +260,10 @@ catchError {
                 def tags = getTags()
                 debug("Increment Tag: tags: ${tags}")
 
-                newTag = getNewTag(tags, increment)
-                debug("Increment Tag: newTag: ${newTag}")
+                finalNewTag = getNewTag(tags, increment)
+                debug("Increment Tag: finalNewTag: ${finalNewTag}")
 
-                tagRepo(newTag)
+                tagRepo(finalNewTag)
 
             }
         }
@@ -275,10 +276,7 @@ catchError {
     //def GIT_REFSPEC = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
     //app = docker.build("cwds/cans:${GIT_REFSPEC}", "-f docker/web/Dockerfile .")
     app = docker.build("cwds/cans:${env.BUILD_ID}", "-f docker/web/Dockerfile .")
-    withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
-           app.push(newTag)
-           app.push('latest')
-        }
+
       }
     }
    }
@@ -336,6 +334,12 @@ def acceptanceTestPreintStage() {
 }
 
 def publishImageStage() {
+  stage('Publish to Dockerhub') {
+    withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
+      app.push(finalNewTag)
+      app.push('latest')
+    }
+  }
   stage('Trigger Security scan') {
     build job: 'tenable-scan', parameters: [
         [$class: 'StringParameterValue', name: 'CONTAINER_NAME', value: 'cans'],
