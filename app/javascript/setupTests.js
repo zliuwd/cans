@@ -6,3 +6,11 @@ Enzyme.configure({ adapter: new Adapter() });
 global.shallow = shallow;
 global.render = render;
 global.mount = mount;
+
+const originalConsoleError = console.error;
+console.error = message => {
+  if (/(Failed prop type)/.test(message)) {
+    throw new Error(message);
+  }
+  originalConsoleError(message);
+};

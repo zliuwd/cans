@@ -34,6 +34,9 @@ export function jsDateToIso(value) {
   if (value === null) {
     return value;
   }
+  if (!(value instanceof Date)) {
+    return 'Invalid date';
+  }
   return moment(value).format(ISO_DATE_FORMAT);
 }
 

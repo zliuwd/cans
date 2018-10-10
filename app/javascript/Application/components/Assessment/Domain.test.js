@@ -35,6 +35,7 @@ const domainComponentDefault = (
     isAssessmentUnderSix={true}
     i18n={{ ...i18nDefault }}
     i18nAll={{ a: 'b' }}
+    index={1}
     onRatingUpdate={() => {}}
     onConfidentialityUpdate={() => {}}
     onAddCaregiverDomain={() => {}}
@@ -79,6 +80,7 @@ describe('<Domain />', () => {
           isAssessmentUnderSix={true}
           i18n={{ ...i18nDefault }}
           i18nAll={{}}
+          index={1}
           onRatingUpdate={() => {}}
           onConfidentialityUpdate={() => {}}
           onAddCaregiverDomain={() => {}}
@@ -110,6 +112,7 @@ describe('<Domain />', () => {
           isAssessmentUnderSix={true}
           i18n={{ ...i18nDefault }}
           i18nAll={{}}
+          index={1}
           onRatingUpdate={() => {}}
           onConfidentialityUpdate={() => {}}
           onAddCaregiverDomain={callbackMock}
@@ -142,6 +145,7 @@ describe('<Domain />', () => {
           isAssessmentUnderSix={true}
           i18n={{ ...i18nDefault }}
           i18nAll={{}}
+          index={1}
           onRatingUpdate={() => {}}
           onConfidentialityUpdate={() => {}}
           onAddCaregiverDomain={() => {}}
@@ -178,6 +182,7 @@ describe('<Domain />', () => {
                 isAssessmentUnderSix={true}
                 i18n={{ ...i18nDefault }}
                 i18nAll={{}}
+                index={1}
                 onRatingUpdate={() => {}}
                 onConfidentialityUpdate={() => {}}
                 onAddCaregiverDomain={() => {}}
@@ -217,6 +222,7 @@ describe('<Domain />', () => {
                 isAssessmentUnderSix={true}
                 i18n={{ ...i18nDefault }}
                 i18nAll={{}}
+                index={1}
                 onRatingUpdate={() => {}}
                 onConfidentialityUpdate={() => {}}
                 onAddCaregiverDomain={() => {}}

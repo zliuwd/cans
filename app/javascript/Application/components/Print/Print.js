@@ -32,7 +32,7 @@ class Print extends React.Component {
   print() {
     if (isFirefox) {
       this.printInFirefox();
-    } else {
+    } else if (!this.props.isTest) {
       this.printInOtherBrowser();
     }
     this.props.onClose();
@@ -44,8 +44,13 @@ class Print extends React.Component {
 }
 
 Print.propTypes = {
+  isTest: PropTypes.bool,
   node: PropTypes.node.isRequired,
   onClose: PropTypes.func.isRequired,
+};
+
+Print.defaultProps = {
+  isTest: false,
 };
 
 export default Print;
