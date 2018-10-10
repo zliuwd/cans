@@ -295,6 +295,11 @@ def acceptanceTestPreintStage() {
 }
 
 def publishImageStage() {
+  stage('Clone Repo') {
+      cleanWs()
+      git branch: 'master', credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL
+  }
+
 
 catchError {
   stage('Preparation') {
