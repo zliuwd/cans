@@ -11,11 +11,13 @@ import { CloseableAlert } from '../common/CloseableAlert';
 jest.mock('./SensitivityTypes.service');
 
 const defaultPropsEdit = {
-  match: { params: { id: 1 }, isNewForm: false },
+  match: { params: { id: 1 } },
+  isNewForm: false,
 };
 
 const defaultPropsAdd = {
-  match: { params: { id: undefined }, isNewForm: true },
+  match: { params: { id: undefined } },
+  isNewForm: true,
 };
 
 describe('<ClientAddEditForm />', () => {
@@ -404,6 +406,7 @@ describe('<ClientAddEditForm />', () => {
                 cases: [],
                 county: { id: 1, name: 'county' },
               }}
+              isNewForm={false}
             />
           )
             .find('ClientAddEditForm')
@@ -659,12 +662,23 @@ describe('<ClientAddEditForm />', () => {
       };
 
       it('sets error to state', async () => {
-        const clientServicePutSpy = jest.spyOn(ClientService, 'updateClient');
+        const clientServiceSpy = jest.spyOn(ClientService, 'updateClient');
+        const component = getWrapperEdit()
+          .find('ClientAddEditForm')
+          .dive();
+        clientServiceSpy.mockRejectedValue(error);
+        await component.instance().handleSubmit({ preventDefault: jest.fn() });
+        await component.update();
+        expect(component.state().error).toEqual({ message: 'duplicate entity' });
+      });
+
+      it('sets error to state when adding new client', async () => {
+        const clientServiceSpy = jest.spyOn(ClientService, 'addClient');
         const component = getWrapperAdd()
           .find('ClientAddEditForm')
           .dive();
-        clientServicePutSpy.mockRejectedValue(error);
-        await component.instance().handleSubmit();
+        clientServiceSpy.mockRejectedValue(error);
+        await component.instance().handleSubmit({ preventDefault: jest.fn() });
         await component.update();
         expect(component.state().error).toEqual({ message: 'duplicate entity' });
       });

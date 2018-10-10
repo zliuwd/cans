@@ -10,7 +10,7 @@ const enhanceDomainToCaregiver = domain => ({ ...domain, is_caregiver_domain: tr
 describe('<Assessment />', () => {
   describe('assessment form with data', () => {
     it('renders with 1 <Domain /> component', () => {
-      const wrapper = mount(<Assessment assessment={assessment} i18n={i18n} />);
+      const wrapper = mount(<Assessment assessment={assessment} onAssessmentUpdate={jest.fn()} i18n={i18n} />);
       expect(wrapper.find(Domain).length).toBe(1);
     });
   });

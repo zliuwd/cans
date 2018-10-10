@@ -11,7 +11,8 @@ import Client from '../Client/Client';
 
 describe('<Page />', () => {
   describe('layout', () => {
-    const getWrapper = () => shallow(<Page match={{ params: {} }} />);
+    const getWrapper = () =>
+      shallow(<Page match={{ params: {} }} location={{}} navigateTo={navigation.ASSESSMENT_ADD} />);
 
     it('renders with <SideNav /> links', async () => {
       const wrapper = getWrapper();
@@ -33,7 +34,8 @@ describe('<Page />', () => {
 });
 
 describe('when adding Assessment', () => {
-  const getWrapper = navigateTo => shallow(<Page match={{ params: { clientId: 1001 } }} navigateTo={navigateTo} />);
+  const getWrapper = navigateTo =>
+    shallow(<Page match={{ params: { clientId: '1001' } }} location={{}} navigateTo={navigateTo} />);
 
   it('renders < AssessmentContainer on Add/>', async () => {
     jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));

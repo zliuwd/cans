@@ -43,17 +43,21 @@ export class TimeoutWarning extends Component {
 
   render() {
     return (
-      <Modal isOpen={this.state.isOpened}>
-        <ModalBody>
-          <div>Due to inactivity your session is about to timeout, would you like to continue?</div>
-          <div>Any unsaved work will be lost.</div>
+      <Modal className="timeout-warning-modal" isOpen={this.state.isOpened}>
+        <ModalBody className="timeout-warning-modal-body">
+          <div className="timeout-warning-modal-exclamation-triangle">
+            <i className="fa fa-exclamation-triangle" />
+          </div>
+          <div className="timeout-warning-modal-heading">Session timeout!</div>
+          <div>Due to inactivity, your session is about to timeout. Any unsaved work will be lost.</div>
+          <div>Would you like to continue?</div>
         </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={this.refresh}>
-            Continue
-          </Button>{' '}
-          <Button color="secondary" onClick={this.logout}>
+        <ModalFooter className="timeout-warning-modal-footer">
+          <Button className="timeout-warning-modal-logout" onClick={this.logout}>
             Logout
+          </Button>{' '}
+          <Button className="timeout-warning-modal-stay-logged-in" onClick={this.refresh}>
+            Stay Logged In
           </Button>
         </ModalFooter>
       </Modal>

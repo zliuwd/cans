@@ -76,6 +76,7 @@ DateField.defaultProps = {
   isRequired: false,
   ariaLabelledBy: null,
   ariaDescribedBy: null,
+  value: null,
 };
 
 DateField.propTypes = {
@@ -84,7 +85,7 @@ DateField.propTypes = {
   id: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
 };
 
 export default DateField;
