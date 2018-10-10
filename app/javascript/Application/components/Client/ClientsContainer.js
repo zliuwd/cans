@@ -14,6 +14,7 @@ import Card from '@material-ui/core/Card/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import DataGrid from '@cwds/components/lib/DataGrid';
+import PersonSearchFormContainer from '../common/PersonSearchFormContainer';
 
 import './style.sass';
 
@@ -229,6 +230,16 @@ class ClientsContainer extends Component {
   renderAccessRestrictions = client =>
     client.sensitivity_type === 'SENSITIVE' ? 'Sensitive' : client.sensitivity_type === 'SEALED' ? 'Sealed' : null;
 
+  renderPersonSearchForm() {
+    return (
+      <PersonSearchFormContainer
+        // onSelect={person => this.onSelectPerson(person)}
+        searchPrompt="Search for any person (Children, parents, reporters, alleged perpetrators...)"
+        // isClientOnly={false}
+      />
+    );
+  }
+
   render = () => {
     const { records, pagination, clientsStatus } = this.state;
     const { page, pages, pageSize } = pagination;
@@ -255,33 +266,41 @@ class ClientsContainer extends Component {
     const isPaginationShown = records.length > 0;
     const loading = clientsStatus === LoadingState.waiting;
     return (
-      <Card className={'card'}>
-        <CardHeader className={'card-header-cans'} title="County Client List" action={this.renderAddChildButton()} />
-        <div className={'content'}>
-          <CardContent>
-            {this.renderFilterControls()}
-            <DataGrid
-              manual
-              data={records}
-              page={page}
-              pages={pages}
-              pageSize={pageSize}
-              columns={columns}
-              pageSizeOptions={[10, 25, 50, 100]}
-              showPaginationTop={isPaginationShown}
-              showPaginationBottom={isPaginationShown}
-              PreviousComponent={PaginationButtonFactory({ direction: 'left' })}
-              NextComponent={PaginationButtonFactory({ direction: 'right' })}
-              PaginationComponent={Pagination}
-              minRows={2}
-              loading={loading}
-              noDataText={'No records found'}
-              onPageChange={this.handleOnPageChange}
-              onPageSizeChange={this.handleOnPageSizeChange}
-            />
-          </CardContent>
-        </div>
-      </Card>
+      <div>
+        <Card className={'card'}>
+          <CardHeader className={'card-header-cans card-header-cans-client-search'} title="County Client Search" />
+          <div className={'content'}>
+            <CardContent>{this.renderPersonSearchForm()}</CardContent>
+          </div>
+        </Card>
+        <Card className={'card'}>
+          <CardHeader className={'card-header-cans'} title="County Client List" action={this.renderAddChildButton()} />
+          <div className={'content'}>
+            <CardContent>
+              {this.renderFilterControls()}
+              <DataGrid
+                manual
+                data={records}
+                page={page}
+                pages={pages}
+                pageSize={pageSize}
+                columns={columns}
+                pageSizeOptions={[10, 25, 50, 100]}
+                showPaginationTop={isPaginationShown}
+                showPaginationBottom={isPaginationShown}
+                PreviousComponent={PaginationButtonFactory({ direction: 'left' })}
+                NextComponent={PaginationButtonFactory({ direction: 'right' })}
+                PaginationComponent={Pagination}
+                minRows={2}
+                loading={loading}
+                noDataText={'No records found'}
+                onPageChange={this.handleOnPageChange}
+                onPageSizeChange={this.handleOnPageSizeChange}
+              />
+            </CardContent>
+          </div>
+        </Card>
+      </div>
     );
   };
 }
