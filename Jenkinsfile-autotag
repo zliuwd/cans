@@ -17,7 +17,7 @@ def debug(String str) {
 def getPullRequestEvent() {
   if (!env.pull_request_event){
     debug(" No Pr event, so use default patch label")
-   [name:"patch"]
+   {labels:{name:"patch"}}
   } else {
   readJSON text: env.pull_request_event
  }
@@ -311,8 +311,16 @@ catchError {
         try {
             def prEvent = getPullRequestEvent()
             debug("Increment Tag: prEvent: ${prEvent}")
-            def labels = getLabels(prEvent)
-            debug("Increment Tag: labels: ${labels}")
+            def prlabels = getLabels(prEvent)
+            def labels
+            if (!prlabels || prlabels.length <1){
+              labels = ["patch"]
+              debug(" Has Pr event, but no label in it, so use the default patch")
+            } else {
+              labels = prlabels
+              debug("Increment Tag: labels: ${labels}")
+            }
+
 
             VersionIncrement increment = getVersionIncrement(labels)
             debug("Increment Tag: increment: ${increment}")
