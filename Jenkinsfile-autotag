@@ -161,11 +161,6 @@ def tagRepo(String newTag) {
     }
 }
 
-
-
-
-//#########################################################
-
 switch(env.BUILD_JOB_TYPE) {
   case "master": buildMaster(); break;
   case "acceptance": buildAcceptance(); break;
@@ -309,12 +304,17 @@ catchError {
   def newTag
       stage("Increment Tag") {
         try {
-
-            //def prEvent = getPullRequestEvent()
-            //debug("Increment Tag: prEvent: ${prEvent}")
-
-            //def labels = getLabels(prEvent)
-            def labels = ["patch"]
+            def prEvent = getPullRequestEvent()
+            debug("Increment Tag: prEvent: ${prEvent}")
+            def labels
+            def prlabels = getLabels(prEvent)
+            if (!prlables || prlables.length < 1){
+                labels = ["patch"]
+                debug("use default labels: labels: ${labels}")
+              }
+            else {
+                 labels = prlabels
+              }
             debug("Increment Tag: labels: ${labels}")
 
             VersionIncrement increment = getVersionIncrement(labels)
