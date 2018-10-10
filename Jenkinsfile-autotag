@@ -18,8 +18,9 @@ def getPullRequestEvent() {
   if (!env.pull_request_event){
     debug(" No Prevent, so use default labels:patch")
     return ["patch"]
-  }else{
+  } else {
   readJSON text: env.pull_request_event
+ }
 }
 
 // Takes a Map of Maps containing the parsed JSON from the pull request event
