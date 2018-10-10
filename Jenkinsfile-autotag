@@ -295,12 +295,7 @@ def acceptanceTestPreintStage() {
 }
 
 def publishImageStage() {
-  stage('Clone Repo') {
-      cleanWs()
-      git branch: 'master', credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL
-  }
 
-def image
 catchError {
   stage('Preparation') {
          git branch: 'master', credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL
@@ -341,13 +336,14 @@ catchError {
       app.push('latest')
     }
   }
+}
   stage('Trigger Security scan') {
     build job: 'tenable-scan', parameters: [
         [$class: 'StringParameterValue', name: 'CONTAINER_NAME', value: 'cans'],
         [$class: 'StringParameterValue', name: 'CONTAINER_VERSION', value: "${env.BUILD_ID}"]
       ]
     }
-  }
+
 }
 
 def deployToPreintStage() {
