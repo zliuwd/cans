@@ -232,11 +232,6 @@ def checkoutStage() {
 }
 
 def buildDockerImageStage() {
-  stage('Clone Repo') {
-		  cleanWs()
-		  git branch: 'master', credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL
-	}
-
 def image
 catchError {
   stage('Preparation') {
@@ -247,11 +242,11 @@ catchError {
       stage("Increment Tag") {
         try {
 
-            //def prEvent = getPullRequestEvent()
-            //debug("Increment Tag: prEvent: ${prEvent}")
+            def prEvent = getPullRequestEvent()
+            debug("Increment Tag: prEvent: ${prEvent}")
 
-            //def labels = getLabels(prEvent)
-            def labels = ["patch"]
+            def labels = getLabels(prEvent)
+            //def labels = ["patch"]
             debug("Increment Tag: labels: ${labels}")
 
             VersionIncrement increment = getVersionIncrement(labels)
