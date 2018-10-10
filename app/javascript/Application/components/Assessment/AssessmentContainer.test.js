@@ -30,6 +30,8 @@ describe('<AssessmentContainer />', () => {
       const props = {
         location: { childId: 10 },
         match: { params: { id: 1 } },
+        isNewForm: false,
+        client: {},
       };
 
       beforeEach(() => {
@@ -64,7 +66,7 @@ describe('<AssessmentContainer />', () => {
 
     describe('page title', () => {
       it('should be "New CANS" for new assessment', () => {
-        const wrapper = shallow(<AssessmentContainer isNewForm={true} />);
+        const wrapper = shallow(<AssessmentContainer isNewForm={true} client={{}} />);
         const pageInfoText = wrapper
           .find('PageInfo')
           .render()
@@ -107,7 +109,7 @@ describe('<AssessmentContainer />', () => {
       it('should add and remove event handler', () => {
         const adder = jest.spyOn(global, 'addEventListener').mockImplementation(() => {});
         const remover = jest.spyOn(global, 'removeEventListener').mockImplementation(() => {});
-        const wrapper = shallow(<AssessmentContainer />);
+        const wrapper = shallow(<AssessmentContainer isNewForm={false} client={{}} />);
         expect(adder).toHaveBeenCalled();
         wrapper.unmount();
         expect(remover).toHaveBeenCalled();
@@ -139,6 +141,8 @@ describe('<AssessmentContainer />', () => {
         const props = {
           location: { childId: 1 },
           match: { params: { id: 1 } },
+          isNewForm: false,
+          client: {},
         };
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
         jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false));
@@ -157,6 +161,8 @@ describe('<AssessmentContainer />', () => {
       it('should not render warning message', async () => {
         const props = {
           location: { childId: 10 },
+          isNewForm: false,
+          client: {},
         };
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
         jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true));
@@ -169,6 +175,8 @@ describe('<AssessmentContainer />', () => {
       it('should not render warning message when assessment is new', async () => {
         const props = {
           location: { childId: 10 },
+          isNewForm: false,
+          client: {},
         };
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
         jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment));
@@ -181,6 +189,7 @@ describe('<AssessmentContainer />', () => {
     describe('assessment form with no existing assessment', () => {
       const props = {
         client: childInfoJson,
+        isNewForm: false,
       };
 
       it('calls fetchNewAssessment', async () => {
@@ -207,6 +216,8 @@ describe('<AssessmentContainer />', () => {
       it('calls fetchAssessment', async () => {
         const props = {
           location: { childId: 1 },
+          isNewForm: false,
+          client: {},
         };
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment');
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson));
@@ -237,7 +248,7 @@ describe('<AssessmentContainer />', () => {
       it('should render save success message on initial save', async () => {
         // given
         jest.spyOn(AssessmentService, 'postAssessment').mockReturnValue(Promise.resolve(assessment));
-        const wrapper = await shallow(<AssessmentContainer {...{ client: childInfoJson }} />);
+        const wrapper = await shallow(<AssessmentContainer client={childInfoJson} isNewForm={false} />);
 
         // when
         await wrapper.instance().handleSaveAssessment();
@@ -275,7 +286,7 @@ describe('<AssessmentContainer />', () => {
         jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment));
         jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true));
         jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment));
-        const wrapper = await shallow(<AssessmentContainer {...{ client: childInfoJson }} />);
+        const wrapper = await shallow(<AssessmentContainer client={childInfoJson} isNewForm={false} />);
         wrapper.setState({ assessment: { id: 1 } });
 
         // when
@@ -309,6 +320,7 @@ describe('<AssessmentContainer />', () => {
         const props = {
           match: { params: { id: 1 } },
           client: childInfoJson,
+          isNewForm: false,
         };
 
         const wrapper = shallow(<AssessmentContainer {...props} />);
@@ -365,6 +377,7 @@ describe('<AssessmentContainer />', () => {
         match: { params: { id: 1 } },
         history: { push: jest.fn() },
         client: childInfoJson,
+        isNewForm: false,
       };
       const wrapper = shallow(<AssessmentContainer {...props} />);
 
@@ -389,7 +402,7 @@ describe('<AssessmentContainer />', () => {
     describe('Cancel button', () => {
       it('redirects to client page', async () => {
         const wrapper = await mountWithRouter(
-          <AssessmentContainer match={{ params: { id: 1 } }} client={childInfoJson} />
+          <AssessmentContainer match={{ params: { id: 1 } }} client={childInfoJson} isNewForm={false} />
         );
         expect(wrapper.find('Redirect').length).toBe(0);
         await wrapper
@@ -405,7 +418,7 @@ describe('<AssessmentContainer />', () => {
     describe('Submit button', () => {
       it('is disabled/enabled based on the assessment validity', async () => {
         const wrapper = await mountWithRouter(
-          <AssessmentContainer match={{ params: { childId: 123 } }} client={childInfoJson} />
+          <AssessmentContainer match={{ params: { childId: 123 } }} client={childInfoJson} isNewForm={false} />
         );
         await wrapper
           .find('AssessmentContainer')
@@ -450,7 +463,12 @@ describe('<AssessmentContainer />', () => {
           length: 0,
         };
         const wrapper = await mountWithRouter(
-          <AssessmentContainer match={{ params: { id: 1 } }} client={childInfoJson} history={historyMock} />
+          <AssessmentContainer
+            match={{ params: { id: 1 } }}
+            client={childInfoJson}
+            history={historyMock}
+            isNewForm={false}
+          />
         );
         expect(wrapper.find('Redirect').length).toBe(0);
 
@@ -469,7 +487,7 @@ describe('<AssessmentContainer />', () => {
 
     describe('submit and save buttons', () => {
       it('should disable buttons when assessment service is working', async () => {
-        const wrapper = await mountWithRouter(<AssessmentContainer client={childInfoJson} />);
+        const wrapper = await mountWithRouter(<AssessmentContainer client={childInfoJson} isNewForm={false} />);
 
         // when
         wrapper
@@ -486,7 +504,7 @@ describe('<AssessmentContainer />', () => {
       });
 
       it('should enable buttons when assessment service is not working', async () => {
-        const wrapper = await mountWithRouter(<AssessmentContainer client={childInfoJson} />);
+        const wrapper = await mountWithRouter(<AssessmentContainer client={childInfoJson} isNewForm={false} />);
 
         // when
         wrapper
@@ -504,7 +522,7 @@ describe('<AssessmentContainer />', () => {
       });
 
       it('should disable buttons when assessment is not editable', async () => {
-        const wrapper = await mountWithRouter(<AssessmentContainer client={childInfoJson} />);
+        const wrapper = await mountWithRouter(<AssessmentContainer client={childInfoJson} isNewForm={false} />);
 
         // when
         wrapper

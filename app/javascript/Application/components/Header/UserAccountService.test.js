@@ -25,7 +25,7 @@ describe('UserAccountService', () => {
 
     describe('when could not fetch data', () => {
       it('returns empty object', () => {
-        getSpy.mockReturnValue(Promise.reject(new Error('e')));
+        getSpy.mockReturnValue(new Promise((resolve, reject) => setTimeout(() => reject(new Error('e')), 0)));
         UserAccountService.fetchCurrent().catch(actualResult => {
           expect(actualResult).toEqual({});
         });

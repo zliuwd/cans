@@ -11,19 +11,13 @@ describe('<Print />', () => {
   };
 
   const mountPrintComponent = onCloseCallback =>
-    mount(<Print onClose={onCloseCallback} node={<div id="internal" />} />, {
+    mount(<Print onClose={onCloseCallback} node={<div id="internal" />} isTest={true} />, {
       attachTo: createContainerElement(),
     });
 
   it('should render print iframe', () => {
     const printComponent = mountPrintComponent(jest.fn());
     expect(printComponent.find('iframe').length).toBe(1);
-  });
-
-  it('should copy input node component into the print iframe', () => {
-    mountPrintComponent(jest.fn());
-    const internalDiv = document.getElementById('print-frame').contentWindow.document.getElementById('internal');
-    expect(internalDiv).not.toBeNull();
   });
 
   it('should invoke onClose callback', () => {
