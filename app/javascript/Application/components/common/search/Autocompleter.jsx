@@ -1,13 +1,13 @@
-import PersonSuggestion from '../common/PersonSuggestion'
+import PersonSuggestion from '../PersonSuggestion'
 import PropTypes from 'prop-types'
 import React, {Component} from 'react'
 import Autocomplete from 'react-autocomplete'
-import SuggestionHeader from '../common/SuggestionHeader'
+// import SuggestionHeader from '../common/SuggestionHeader'
 // import CreateUnknownPerson from 'screenings/CreateUnknownPerson'
-import ShowMoreResults from '../common/ShowMoreResults'
+// import ShowMoreResults from '../common/ShowMoreResults' ***
 // import {logEvent} from 'utils/analytics'
 import moment from 'moment'
-import SearchByAddress from '../common/SearchByAddress'
+// import SearchByAddress from '../common/SearchByAddress' ***
 
 const MIN_SEARCHABLE_CHARS = 2
 
@@ -119,12 +119,18 @@ export default class Autocompleter extends Component {
   }
 
   onFocus() {
-    if (this.isSearchable(this.props.searchTerm) || this.props.searchAddress) {
-      this.setState({menuVisible: true})
-    } else {
-      this.hideMenu()
-    }
+    console.log(`onFocus autocompleter`)
+    // console.log(`onFocus autocompleter`, this.element_ref.refs.value)
+    // this.setState({menuVisible: true})
   }
+
+  // onFocus() {
+  //   if (this.isSearchable(this.props.searchTerm) || this.props.searchAddress) {
+  //     this.setState({menuVisible: true})
+  //   } else {
+  //     this.hideMenu()
+  //   }
+  // }
 
   renderMenu(items, _searchTerm, _style) {
     return (<div className='autocomplete-menu'>{items}</div>)
@@ -150,38 +156,64 @@ export default class Autocompleter extends Component {
       </div>)
   }
 
-  renderItem(item, isHighlighted, _styles) {
-    const {canCreateNewPerson, results, total} = this.props
-    const canLoadMoreResults = results && total > results.length
-    const buttonClassName = canLoadMoreResults && canCreateNewPerson ? ' col-md-6' : ''
-    const className = itemClassName(isHighlighted) + buttonClassName
-    const key = `${item.posInSet}-of-${item.setSize}`
-    const id = `search-result-${key}`
-    if (isHighlighted && this.inputRef) {
-      this.inputRef.setAttribute('aria-activedescendant', id)
-    }
-    if (item.showMoreResults) {
-      return (<div id={id} key={key} className={className}>
-        {<ShowMoreResults />}
-      </div>)
-    }
-    if (item.createNewPerson) {
-      return (<div id={id} key={key} className={className}>
-        {<CreateUnknownPerson />}
-      </div>)
-    }
-    return this.renderEachItem(item, id, isHighlighted)
+  renderItem(item, highlighted) {
+    return (
+      <div key={item.id} style={{ backgroundColor: highlighted ? '#eee' : 'transparent'}}>
+        {item.label}
+      </div>
+    )
+  }
+
+  // renderItem(item, isHighlighted, _styles) {
+  //   const {canCreateNewPerson, results, total} = this.props
+  //   const canLoadMoreResults = results && total > results.length
+  //   const buttonClassName = canLoadMoreResults && canCreateNewPerson ? ' col-md-6' : ''
+  //   const className = itemClassName(isHighlighted) + buttonClassName
+  //   const key = `${item.posInSet}-of-${item.setSize}`
+  //   const id = `search-result-${key}`
+  //   if (isHighlighted && this.inputRef) {
+  //     this.inputRef.setAttribute('aria-activedescendant', id)
+  //   }
+  //   if (item.showMoreResults) {
+  //     return (<div id={id} key={key} className={className}>
+  //       {<ShowMoreResults />}
+  //     </div>)
+  //   }
+  //   if (item.createNewPerson) {
+  //     return (<div id={id} key={key} className={className}>
+  //       {<CreateUnknownPerson />}
+  //     </div>)
+  //   }
+  //   return this.renderEachItem(item, id, isHighlighted)
+  // }
+
+  // getPeopleEffect({searchTerm, isClientOnly, searchAddress, sort}) {
+  getPeopleEffect({searchTerm}) {
+    return `Searching the API for ${searchTerm}`
+    // return call(get, '/api/v1/people', {
+    //   search_term: searchTerm,
+    //   is_client_only: isClientOnly,
+    //   ...addressParams(searchAddress),
+    //   ...searchAfterParams(sort),
+    // })
   }
 
   onChangeInput(_, value) {
-    const {onSearch, onChange, isAddressIncluded} = this.props
-    if (this.isSearchable(value) && !isAddressIncluded) {
-      onSearch(value)
-      this.setState({menuVisible: true})
-    } else {
-      this.hideMenu()
-    }
-    onChange(value)
+    console.log(`onChangeInput value`, value)
+    const response = this.getPeopleEffect({searchTerm: value})
+    console.log(`onChangeInput Autocompleter`, response)
+    this.setState({value})
+
+    // START HERE
+
+    // const {onSearch, onChange, isAddressIncluded} = this.props
+    // if (this.isSearchable(value) && !isAddressIncluded) {
+    //   // onSearch(value)
+    //   this.setState({menuVisible: true})
+    // } else {
+    //   this.hideMenu()
+    // }
+    // onChange(value)
   }
 
   renderInput(props) {
@@ -198,25 +230,69 @@ export default class Autocompleter extends Component {
     const createNewPerson = {createNewPerson: 'Create New Person', posInSet: 'create-new', setSize: 'the-same'}
     const suggestionHeader = [{suggestionHeader: 'suggestion Header'}]
     const canLoadMoreResults = results && total > results.length
-    addPosAndSetAttr(results) // Sequentually numbering items
-    const newResults = suggestionHeader.concat(results.concat(canLoadMoreResults ? showMoreResults : [], canCreateNewPerson ? createNewPerson : []))
+    // addPosAndSetAttr(results) // Sequentually numbering items
+    // const newResults = suggestionHeader.concat(results.concat(canLoadMoreResults ? showMoreResults : [], canCreateNewPerson ? createNewPerson : []))
+    const items = [
+      { id: 'client1', label: 'Client 1' },
+      { id: 'client2', label: 'Client 2' },
+      { id: 'client3', label: 'Client 3' },
+    ]
+    // return (
+    //   <Autocomplete
+    //     ref={(el) => (this.element_ref = el)}
+    //     items={items}
+    //     shouldItemRender={(item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) > -1}
+    //     getItemValue={item => item.label}
+    //     renderItem={(item, highlighted) =>
+    //       <div
+    //         key={item.id}
+    //         style={{ backgroundColor: highlighted ? '#eee' : 'transparent'}}
+    //       >
+    //         {item.label}
+    //       </div>
+    //     }
+    //     value={this.state.value}
+    //     onChange={e => this.setState({ value: e.target.value })}
+    //     onSelect={value => this.setState({ value })}
+    //     wrapperStyle={{display: 'block'}}
+    //   />
+    // )
 
     return (
       <Autocomplete
         ref={(el) => (this.element_ref = el)}
-        getItemValue={(_) => searchTerm}
-        inputProps={{id, onBlur: this.hideMenu, onFocus: this.onFocus}}
-        items={newResults}
-        onChange={this.onChangeInput}
-        onSelect={this.onItemSelect}
-        renderItem={this.renderItem}
-        open={this.state.menuVisible}
-        renderMenu={this.renderMenu}
-        value={searchTerm}
         wrapperStyle={{display: 'block'}}
+        inputProps={{id, onBlur: this.hideMenu, onFocus: this.onFocus}}
         renderInput={(props) => this.renderInput(props)}
+        value={this.state.value}
+        onChange={this.onChangeInput}
+        // onChange={e => this.setState({ value: e.target.value })}
+        renderMenu={this.renderMenu}
+        open={this.state.menuVisible}
+        items={items}
+        renderItem={this.renderItem}
+        getItemValue={item => item.label}
+        onSelect={value => this.setState({ value })}
+        shouldItemRender={(item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) > -1}
       />
     )
+
+    // return (
+    //   <Autocomplete
+    //     ref={(el) => (this.element_ref = el)}
+    //     getItemValue={(_) => searchTerm}
+    //     inputProps={{id, onBlur: this.hideMenu, onFocus: this.onFocus}}
+    //     items={newResults}
+    //     onChange={this.onChangeInput}
+    //     onSelect={this.onItemSelect}
+    //     renderItem={this.renderItem}
+    //     open={this.state.menuVisible}
+    //     renderMenu={this.renderMenu}
+    //     value={searchTerm}
+    //     wrapperStyle={{display: 'block'}}
+    //     renderInput={(props) => this.renderInput(props)}
+    //   />
+    // )
   }
 
   renderAddressSearch() {
@@ -242,34 +318,35 @@ export default class Autocompleter extends Component {
   }
 
   render() {
-    return (<div>{this.renderAutocomplete()}{this.renderAddressSearch()}</div>)
+    return this.renderAutocomplete()
+    // return (<div>{this.renderAutocomplete()}{this.renderAddressSearch()}</div>)
   }
 }
 
-Autocompleter.propTypes = {
-  canCreateNewPerson: PropTypes.bool,
-  id: PropTypes.string,
-  isAddressIncluded: PropTypes.bool,
-  isSelectable: PropTypes.func,
-  location: PropTypes.shape({pathname: PropTypes.string}),
-  onChange: PropTypes.func.isRequired,
-  onChangeAddress: PropTypes.func.isRequired,
-  onChangeCity: PropTypes.func.isRequired,
-  onChangeCounty: PropTypes.func.isRequired,
-  onClear: PropTypes.func.isRequired,
-  onLoadMoreResults: PropTypes.func.isRequired,
-  onSearch: PropTypes.func.isRequired,
-  onSelect: PropTypes.func.isRequired,
-  onToggleAddressSearch: PropTypes.func,
-  results: PropTypes.array,
-  searchAddress: PropTypes.string,
-  searchCity: PropTypes.string,
-  searchCounty: PropTypes.string,
-  searchTerm: PropTypes.string,
-  staffId: PropTypes.string,
-  startTime: PropTypes.string,
-  total: PropTypes.number,
-}
+// Autocompleter.propTypes = {
+//   canCreateNewPerson: PropTypes.bool,
+//   id: PropTypes.string,
+//   isAddressIncluded: PropTypes.bool,
+//   isSelectable: PropTypes.func,
+//   location: PropTypes.shape({pathname: PropTypes.string}),
+//   onChange: PropTypes.func.isRequired,
+//   onChangeAddress: PropTypes.func.isRequired,
+//   onChangeCity: PropTypes.func.isRequired,
+//   onChangeCounty: PropTypes.func.isRequired,
+//   onClear: PropTypes.func.isRequired,
+//   onLoadMoreResults: PropTypes.func.isRequired,
+//   onSearch: PropTypes.func.isRequired,
+//   onSelect: PropTypes.func.isRequired,
+//   onToggleAddressSearch: PropTypes.func,
+//   results: PropTypes.array,
+//   searchAddress: PropTypes.string,
+//   searchCity: PropTypes.string,
+//   searchCounty: PropTypes.string,
+//   searchTerm: PropTypes.string,
+//   staffId: PropTypes.string,
+//   startTime: PropTypes.string,
+//   total: PropTypes.number,
+// }
 
 Autocompleter.defaultProps = {
   isSelectable: () => true,

@@ -19,6 +19,8 @@ const navsWithChildProfileCrumb = [
   navigation.ASSESSMENT_EDIT,
 ];
 
+const navsWithClientSearchCrumb = [navigation.CLIENT_SEARCH];
+
 const addChildYouthListCrumbIfNeeded = (elements, navigateTo) => {
   if (navsWithChildYouthListCrumb.includes(navigateTo)) {
     elements.push(<Link to={''}>COUNTY CLIENT LIST</Link>);
@@ -28,6 +30,12 @@ const addChildYouthListCrumbIfNeeded = (elements, navigateTo) => {
 const addChildProfileCrumbIfNeeded = (elements, navigateTo, client) => {
   if (navsWithChildProfileCrumb.includes(navigateTo)) {
     elements.push(<Link to={`/clients/${client.id}`}>{formatClientName(client).toUpperCase()}</Link>);
+  }
+};
+
+const addClientSearchCrumbIfNeeded = (elements, navigateTo) => {
+  if (navsWithClientSearchCrumb.includes(navigateTo)) {
+    elements.push(<Link to={`/search`}>CLIENT SEARCH</Link>);
   }
 };
 
@@ -44,6 +52,7 @@ class BreadCrumbsBuilder extends React.Component {
     if (client) {
       addChildProfileCrumbIfNeeded(elements, navigateTo, client);
     }
+    addClientSearchCrumbIfNeeded(elements, navigateTo);
     return elements;
   }
 

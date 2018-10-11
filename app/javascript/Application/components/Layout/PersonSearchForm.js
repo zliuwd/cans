@@ -22,16 +22,19 @@ class PersonSearchForm extends React.Component {
         <a className="anchor" id="search-card-anchor" />
         <div className="card double-gap-bottom hidden-print" id="search-card">
           <div className="card-header">
-            <h2>Search</h2>
+            <h2>Search Clients Only</h2>
           </div>
           <div className={`card-body ${classNameAddressSearchDisabled}`}>
             <div className="row">
               <div className="col-md-12">
-                <label className="pull-left" htmlFor="screening_participants">
+                <label className="pull-left" htmlFor="client-search-autocompleter">
                   {searchPrompt}
                 </label>
                 <Autocompleter
-                  id="screening_participants"
+                  id="client-search-autocompleter"
+                  onChange={value => {
+                    console.log('onChange', value);
+                  }}
                   // {...autocompleterProps}
                   // isAddressIncluded={isAddressIncluded}
                 />

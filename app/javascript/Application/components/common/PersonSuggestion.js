@@ -1,13 +1,13 @@
-import AddressInfo from 'common/AddressInfo';
-import AgeInfo from 'common/AgeInfo';
-import GenderRaceAndEthnicity from 'common/GenderRaceAndEthnicity';
-import Languages from 'common/LanguageInfo';
+// import AddressInfo from 'common/AddressInfo'; ***
+// import AgeInfo from 'common/AgeInfo'; ***
+// import GenderRaceAndEthnicity from 'common/GenderRaceAndEthnicity'; ***
+// import Languages from 'common/LanguageInfo'; ***
 import PropTypes from 'prop-types';
 import React from 'react';
-import PhoneNumberInfo from 'common/PhoneNumberInfo';
-import legacySourceFormatter from 'utils/legacySourceFormatter';
-import sanitizeHtml from 'sanitize-html';
-import AvatarImg from '../../assets/images/default-profile.svg';
+// import PhoneNumberInfo from 'common/PhoneNumberInfo'; ***
+// import legacySourceFormatter from 'utils/legacySourceFormatter'; ***
+// import sanitizeHtml from 'sanitize-html'; ***
+// import AvatarImg from '../../assets/images/default-profile.svg';
 
 const PersonSuggestion = ({
   fullName,

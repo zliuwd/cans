@@ -8,6 +8,8 @@ import { navigation } from '../../util/constants';
 import { AssessmentContainer } from '../Assessment';
 import Sticker from 'react-stickyfill';
 
+import SearchContainer from '../Client/SearchContainer';
+
 class Page extends Component {
   constructor(props) {
     super(props);
@@ -55,6 +57,8 @@ class Page extends Component {
         return this.state.client && <AssessmentContainer isNewForm={true} {...params} />;
       case navigation.ASSESSMENT_EDIT:
         return this.state.client && <AssessmentContainer isNewForm={false} {...params} />;
+      case navigation.CLIENT_SEARCH:
+        return <SearchContainer />;
       default:
         return null;
     }
