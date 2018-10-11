@@ -39,6 +39,7 @@ class AssessmentContainer extends Component {
       },
       isEditable: false,
       shouldPrintNow: false,
+      isValidDate: false,
     };
   }
 
@@ -226,6 +227,8 @@ class AssessmentContainer extends Component {
 
   togglePrintNow = () => this.setState({ shouldPrintNow: !this.state.shouldPrintNow });
 
+  toggleSaveButton = () => this.setState({ isValidDate: !this.state.isValidDate });
+
   renderPrintButton = () => (
     <div
       onClick={this.togglePrintNow}
@@ -301,7 +304,10 @@ class AssessmentContainer extends Component {
           )}
         <AssessmentFormFooter
           onCancelClick={this.handleCancelClick}
-          isSaveButtonEnabled={isEditable && canPerformUpdates && !!this.state.assessment.event_date}
+          onKeyPress={this.toggleSaveButton}
+          isSaveButtonEnabled={
+            isEditable && canPerformUpdates && !!this.state.assessment.event_date && !!this.state.isValidDate
+          }
           onSaveAssessment={this.handleSaveAssessment}
           isSubmitButtonEnabled={isEditable && canPerformUpdates && isValidForSubmit}
           onSubmitAssessment={this.handleSubmitAssessment}

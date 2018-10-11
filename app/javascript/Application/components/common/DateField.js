@@ -6,7 +6,6 @@ import momentLocalizer from 'react-widgets-moment';
 import { isEmpty } from '../../util/common';
 import { isoToJsDate, isValidLocalDate, jsDateToIso, localToIsoDate } from '../../util/dateHelper';
 import { LOCAL_DATE_FORMAT } from '../../util/constants';
-
 import './style.sass';
 
 Moment.locale('en');
@@ -21,6 +20,7 @@ class DateField extends Component {
       value: dateValue(this.props.value),
       key: 0,
     };
+    this.handleOnKeyPress = this.props.onKeyPress;
   }
 
   static getDerivedStateFromProps(nextProps, currentState) {
@@ -62,6 +62,7 @@ class DateField extends Component {
         format={LOCAL_DATE_FORMAT}
         onBlur={this.handleOnBlur}
         onChange={this.handleOnChange}
+        onKeyPress={this.handleOnKeyPress}
         placeholder={'mm/dd/yyyy'}
         required={isRequired}
         aria-required={isRequired}
