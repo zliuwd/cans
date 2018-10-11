@@ -401,17 +401,22 @@ describe('<AssessmentContainer />', () => {
   describe('buttons', () => {
     describe('Cancel button', () => {
       it('redirects to client page', async () => {
-        const wrapper = await mountWithRouter(
-          <AssessmentContainer match={{ params: { id: 1 } }} client={childInfoJson} isNewForm={false} />
+        const wrapper = shallow(
+          <AssessmentContainer match={{ params: { id: 1 } }} client={childInfoJson} isNewForm={false} />,
+          { disableLifecycleMethods: true }
         );
-        expect(wrapper.find('Redirect').length).toBe(0);
-        await wrapper
-          .find('AssessmentContainer')
-          .instance()
-          .handleCancelClick();
-        const redirect = wrapper.update().find('Redirect');
-        expect(redirect.length).toBe(1);
-        expect(redirect.first().props().to.state.successAssessmentId).toBe(undefined);
+        await wrapper.instance().handleCancelClick();
+        expect(wrapper.state().redirection).toEqual({
+          shouldRedirect: true,
+        });
+        expect(wrapper.find('Redirect').exists()).toBe(true);
+
+        await wrapper.update();
+        wrapper.instance().componentDidUpdate();
+        expect(wrapper.state().redirection).toEqual({
+          shouldRedirect: false,
+        });
+        expect(wrapper.find('Redirect').exists()).toBe(false);
       });
     });
 
@@ -453,35 +458,33 @@ describe('<AssessmentContainer />', () => {
       });
 
       it('redirects to client page on Submit button clicked', async () => {
-        // given
         const assessmentServicePostSpy = jest.spyOn(AssessmentService, 'postAssessment');
         assessmentServicePostSpy.mockReturnValue(Promise.resolve({ id: 123 }));
-        const historyMock = {
-          push: () => {
-            historyMock.length += 1;
-          },
-          length: 0,
-        };
-        const wrapper = await mountWithRouter(
+        const wrapper = shallow(
           <AssessmentContainer
             match={{ params: { id: 1 } }}
             client={childInfoJson}
-            history={historyMock}
             isNewForm={false}
-          />
+            history={{ push: jest.fn() }}
+          />,
+          { disableLifecycleMethods: true }
         );
         expect(wrapper.find('Redirect').length).toBe(0);
 
-        // when
-        const instance = wrapper.find('AssessmentContainer').instance();
-        await instance.handleSubmitAssessment();
+        await wrapper.instance().handleSubmitAssessment();
+        expect(wrapper.state().redirection).toEqual({
+          shouldRedirect: true,
+          successAssessmentId: 123,
+        });
+        expect(wrapper.find('Redirect').exists()).toBe(true);
 
-        // then
         await wrapper.update();
-        const redirect = wrapper.find('Redirect');
-        expect(redirect.length).toBe(1);
-        expect(redirect.first().props().to.state.successAssessmentId).toBe(123);
-        expect(historyMock.length).toBe(1);
+        wrapper.instance().componentDidUpdate();
+        expect(wrapper.state().redirection).toEqual({
+          shouldRedirect: false,
+          successAssessmentId: 123,
+        });
+        expect(wrapper.find('Redirect').exists()).toBe(false);
       });
     });
 

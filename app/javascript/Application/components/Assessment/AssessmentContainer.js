@@ -53,6 +53,12 @@ class AssessmentContainer extends Component {
     this.activeCtrlP();
   }
 
+  componentDidUpdate() {
+    if (this.state.redirection.shouldRedirect) {
+      this.setState({ redirection: { ...this.state.redirection, shouldRedirect: false } });
+    }
+  }
+
   componentWillUnmount() {
     this.muteCtrlP();
   }
