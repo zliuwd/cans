@@ -69,7 +69,7 @@ def buildAcceptance() {
 def checkoutStage() {
   stage('Checkout') {
     cleanWs()
-    checkout scm: [$class: 'GitSCM', branches: [[name: '$pull_request_event_base_ref']]
+    checkout([$class: 'GitSCM', branches: [[name: '$pull_request_event_base_ref']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '433ac100-b3c2-4519-b4d6-207c029a103b']]])
   }
   stage('Calculate version'){
     try {
