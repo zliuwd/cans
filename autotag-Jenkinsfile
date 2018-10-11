@@ -162,8 +162,6 @@ def publishImageStage() {
    stage('Update version in GitHub'){
      tagRepo(newTag)
    }
-   }
-  }
   stage('Trigger Security scan') {
     build job: 'tenable-scan', parameters: [
         [$class: 'StringParameterValue', name: 'CONTAINER_NAME', value: 'cans'],
