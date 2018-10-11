@@ -1,13 +1,13 @@
-// import AddressInfo from 'common/AddressInfo'; ***
-// import AgeInfo from 'common/AgeInfo'; ***
-// import GenderRaceAndEthnicity from 'common/GenderRaceAndEthnicity'; ***
-// import Languages from 'common/LanguageInfo'; ***
+import AddressInfo from './AddressInfo';
+import AgeInfo from './AgeInfo';
+import GenderRaceAndEthnicity from './GenderRaceAndEthnicity';
+import Languages from './LanguageInfo';
 import PropTypes from 'prop-types';
 import React from 'react';
-// import PhoneNumberInfo from 'common/PhoneNumberInfo'; ***
-// import legacySourceFormatter from 'utils/legacySourceFormatter'; ***
-// import sanitizeHtml from 'sanitize-html'; ***
-// import AvatarImg from '../../assets/images/default-profile.svg';
+import PhoneNumberInfo from './PhoneNumberInfo';
+import legacySourceFormatter from '../../util/legacySourceFormatter';
+import sanitizeHtml from 'sanitize-html';
+import AvatarImg from '../../../../assets/images/default-profile.svg';
 
 const PersonSuggestion = ({
   fullName,
@@ -32,7 +32,7 @@ const PersonSuggestion = ({
     },
   });
 
-  const legacySourceString = legacySourceFormatter(legacyDescriptor || {});
+  // const legacySourceString = legacySourceFormatter(legacyDescriptor || {});
 
   return (
     <div className="row">
@@ -48,7 +48,7 @@ const PersonSuggestion = ({
             {isCsec && <span className="information-flag search-result">CSEC</span>}
             {isDeceased && <span className="information-flag search-result">Deceased</span>}
             {isProbationYouth && <span className="information-flag search-result">Probation Youth</span>}
-            <div>{legacySourceString}</div>
+            {/* <div>{legacySourceString}</div> */}
           </div>
         </div>
         <div className="row">
@@ -85,7 +85,7 @@ PersonSuggestion.propTypes = {
   isSealed: PropTypes.bool,
   isSensitive: PropTypes.bool,
   languages: PropTypes.array,
-  legacyDescriptor: PropTypes.object,
+  // legacyDescriptor: PropTypes.object,
   phoneNumber: PropTypes.object,
   races: PropTypes.array,
   ssn: PropTypes.string,
