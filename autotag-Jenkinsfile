@@ -341,7 +341,7 @@ def updateFiles(newTag) {
     debug("updateFiles( newTag: ${newTag} )")
 	def source = readFile file: 'package.json'
 	source = source.replace('"version": "0.1.0"', '"version": \"'+newTag+'\"')
-	writeFile file:'build.gradle', text: "$source"
+	writeFile file:'package.json', text: "$source"
 }
 
 // Tags the repo
