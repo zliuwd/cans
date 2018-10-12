@@ -19,7 +19,12 @@ const params = {
 };
 
 const getShallowWrapper = () => {
-  AssessmentService.search.mockReturnValue(Promise.resolve([{ id: 1 }, { id: 2 }]));
+  AssessmentService.search.mockReturnValue(
+    Promise.resolve([
+      { id: 1, person: { id: 100 }, county: { name: 'Yolo' } },
+      { id: 2, person: { id: 200 }, county: { name: 'Yolo' } },
+    ])
+  );
   return shallow(<ClientAssessmentHistory {...params} />);
 };
 
@@ -97,8 +102,7 @@ describe('<ClientAssessmentHistory', () => {
 
     describe('submit success message', () => {
       it('is rendered when needed', () => {
-        const browserHistory = [{ state: { successAssessmentId: 123 } }];
-        browserHistory.replace = jest.fn();
+        const browserHistory = { replace: jest.fn };
         // given + when
         const history = shallow(
           <ClientAssessmentHistory
@@ -124,19 +128,19 @@ describe('<ClientAssessmentHistory', () => {
 
       it('is not rendered on page reload', () => {
         // given
-        const browserHistory = [{ state: { successAssessmentId: 123 } }];
+        const browserHistory = { entries: [{ state: { successAssessmentId: 123 } }] };
         browserHistory.replace = function(newLocation) {
-          this.pop();
-          this.push(newLocation);
+          this.entries.pop();
+          this.entries.push(newLocation);
         };
 
         // when
         const assessmentHistory1 = shallow(
-          <ClientAssessmentHistory clientId={1004} location={browserHistory[0]} history={browserHistory} />
+          <ClientAssessmentHistory clientId={1004} location={browserHistory.entries[0]} history={browserHistory} />
         );
         expect(assessmentHistory1.find('CloseableAlert').length).toBe(1);
         const assessmentHistory2 = shallow(
-          <ClientAssessmentHistory clientId={1004} location={browserHistory[0]} history={browserHistory} />
+          <ClientAssessmentHistory clientId={1004} location={browserHistory.entries[0]} history={browserHistory} />
         );
 
         // then

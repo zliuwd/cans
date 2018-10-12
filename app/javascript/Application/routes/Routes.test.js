@@ -35,7 +35,7 @@ describe('<Router />', () => {
   describe('route config', () => {
     describe('/', () => {
       it('navigates to clients list page', () => {
-        executeTest(ClientsContainer, '/', '');
+        executeTest(<ClientsContainer />, '/', '');
       });
     });
 

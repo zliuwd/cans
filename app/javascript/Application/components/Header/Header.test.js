@@ -52,7 +52,7 @@ describe('Header', () => {
 
     it('should invoke #logout() on logout button click', async () => {
       // given
-      const spy = jest.spyOn(Header.prototype, 'logout');
+      const spy = jest.spyOn(Header.prototype, 'logout').mockImplementation(() => {});
       UserAccountService.fetchCurrent.mockReturnValue(
         Promise.resolve({
           staff_id: 'id',
