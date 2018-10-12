@@ -39,7 +39,7 @@ class AssessmentContainer extends Component {
       },
       isEditable: false,
       shouldPrintNow: false,
-      isValidDate: false,
+     isValidDate: true,
     };
   }
 
@@ -227,8 +227,6 @@ class AssessmentContainer extends Component {
 
   togglePrintNow = () => this.setState({ shouldPrintNow: !this.state.shouldPrintNow });
 
-  toggleSaveButton = () => this.setState({ isValidDate: !this.state.isValidDate });
-
   renderPrintButton = () => (
     <div
       onClick={this.togglePrintNow}
@@ -240,6 +238,22 @@ class AssessmentContainer extends Component {
       <i className={'fa fa-print'} /> Print
     </div>
   );
+
+  validateDate(date) {
+    const date_regex = /^\d{2}\/\d{2}\/\d{3}$/;
+    return date_regex.test(date);
+  }
+  handleKeyPress = date => {
+    const dateValue = date.target.value;
+    if (date === null) {
+      return;
+    }
+    if (!this.validateDate(dateValue)) {
+      this.setState({ isValidDate: false });
+    } else {
+      this.setState({ isValidDate: true });
+    }
+  };
 
   render() {
     const { client, isNewForm } = this.props;
@@ -266,7 +280,8 @@ class AssessmentContainer extends Component {
         {shouldPrintNow && (
           <Print node={<PrintAssessment assessment={assessment} i18n={i18n} />} onClose={this.togglePrintNow} />
         )}
-        <AssessmentFormHeader client={client} assessment={assessment} onAssessmentUpdate={this.updateAssessment} />
+        <AssessmentFormHeader client={client} assessment={assessment} onAssessmentUpdate={this.updateAssessment}
+        isValidDate={this.state.isValidDate} handleKeyPress={this.handleKeyPress} />
         <Assessment assessment={assessment} i18n={i18n} onAssessmentUpdate={this.updateAssessment} />
         {LoadingState.ready === assessmentServiceStatus &&
           isEditable && (
@@ -304,9 +319,9 @@ class AssessmentContainer extends Component {
           )}
         <AssessmentFormFooter
           onCancelClick={this.handleCancelClick}
-          onKeyPress={this.toggleSaveButton}
+          isValidDate={this.state.isValidDate}
           isSaveButtonEnabled={
-            isEditable && canPerformUpdates && !!this.state.assessment.event_date && !!this.state.isValidDate
+           this.state.isValidDate && isEditable && canPerformUpdates && this.state.assessment.event_date
           }
           onSaveAssessment={this.handleSaveAssessment}
           isSubmitButtonEnabled={isEditable && canPerformUpdates && isValidForSubmit}

@@ -17,9 +17,9 @@ import DateField from '../common/DateField';
 class AssessmentFormHeader extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      isValidDate: false,
-    };
+    // this.state = {
+    //   isValidDate: true,
+    // };
   }
   handleValueChange = event => this.changeFieldAndUpdateAssessment(event.target.name, event.target.value);
 
@@ -56,24 +56,6 @@ class AssessmentFormHeader extends PureComponent {
     this.props.onAssessmentUpdate(assessment);
   };
 
-  validateDate(date) {
-    const date_regex = /^\d{2}\/\d{2}\/\d{3}$/;
-    return date_regex.test(date);
-  }
-  handleKeyPress = date => {
-    const dateValue = date.target.value;
-    if (date === null) {
-      return;
-    }
-    if (this.validateDate(dateValue)) {
-      ('Valid Date');
-      this.setState({ isValidDate: true });
-    } else {
-      ('Invalid Date');
-      this.setState({ isValidDate: false });
-    }
-  };
-
   renderClientNameAndCounty() {
     const { first_name: firstName, last_name: lastName } = this.props.client;
     const county = this.props.assessment.county || {};
@@ -107,7 +89,7 @@ class AssessmentFormHeader extends PureComponent {
           id={'assessment-date'}
           value={this.props.assessment.event_date}
           onChange={value => this.changeFieldAndUpdateAssessment('event_date', value)}
-          onKeyPress={value => this.handleKeyPress(value)}
+          onKeyPress={value => this.props.handleKeyPress(value)}
           ariaLabelledBy={'assessment-date-label'}
         />
       </Fragment>
