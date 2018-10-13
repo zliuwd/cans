@@ -9,6 +9,7 @@ import { canUserAddClient } from '../../../util/authorization';
 // import {logEvent} from 'utils/analytics'
 import moment from 'moment';
 // import SearchByAddress from '../common/SearchByAddress'
+import { Redirect } from 'react-router-dom';
 
 const MIN_SEARCHABLE_CHARS = 2;
 
@@ -28,6 +29,11 @@ export default class Autocompleter extends Component {
     this.state = {
       menuVisible: false,
       searchTerm: '',
+      redirection: {
+        shouldRedirect: false,
+        clientId: null,
+        selectedClient: null,
+      },
       results: [
         {
           id: 'client1',
@@ -36,7 +42,13 @@ export default class Autocompleter extends Component {
           setSize: 3,
           suggestionHeader: false,
           fullName: 'Casey Test',
-          dateOfBirth: '2018/11/01',
+          first_name: 'Casey',
+          middle_name: '',
+          last_name: 'Test',
+          suffix: '',
+          dateOfBirth: '2018/10/01',
+          dob: '2018-10-01',
+          external_id: '0000-0000-0000-0000000',
           isCsec: false,
           isDeceased: false,
           gender: 'male',
@@ -51,6 +63,13 @@ export default class Autocompleter extends Component {
             state: 'CA',
             zip: '99999',
           },
+          county: {
+            export_id: '56',
+            external_id: '1123',
+            id: 56,
+            name: 'Yolo',
+          },
+          sensitivity_type: 'SEALED',
           phoneNumber: {
             type: 'Mobile',
             number: '5551114444',
@@ -63,22 +82,12 @@ export default class Autocompleter extends Component {
       ],
     };
 
-    // this.state = {
-    //   items: [
-    //     { id: 'client1', label: 'Client 1', posInSet: 1, setSize: 3, suggestionHeader: false },
-    //     { id: 'client2', label: 'Client 2', posInSet: 2, setSize: 3, suggestionHeader: false },
-    //     { id: 'client3', label: 'Client 3', posInSet: 3, setSize: 3, suggestionHeader: false },
-    //   ]
-    // }
-
     this.onFocus = this.onFocus.bind(this);
     this.hideMenu = this.hideMenu.bind(this);
     this.onItemSelect = this.onItemSelect.bind(this);
     this.renderMenu = this.renderMenu.bind(this);
     this.onChangeInput = this.onChangeInput.bind(this);
     this.renderItem = this.renderItem.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleToggleAddressSearch = this.handleToggleAddressSearch.bind(this);
     this.isSelectable = this.isSelectable.bind(this);
     this.shouldItemRender = this.shouldItemRender.bind(this);
   }
@@ -92,29 +101,29 @@ export default class Autocompleter extends Component {
     };
   }
 
-  searchAndFocus(...searchArgs) {
-    this.props.onSearch(...searchArgs);
-    this.setState({ menuVisible: true });
-    if (this.inputRef) {
-      this.inputRef.focus();
-    }
-  }
+  // searchAndFocus(...searchArgs) {
+  //   this.props.onSearch(...searchArgs);
+  //   this.setState({ menuVisible: true });
+  //   if (this.inputRef) {
+  //     this.inputRef.focus();
+  //   }
+  // }
 
-  handleSubmit() {
-    const { onClear, searchTerm } = this.props;
-    onClear();
-    this.searchAndFocus(searchTerm, this.constructAddress());
-  }
+  // handleSubmit() {
+  //   const { onClear, searchTerm } = this.props;
+  //   onClear();
+  //   this.searchAndFocus(searchTerm, this.constructAddress());
+  // }
 
-  handleToggleAddressSearch(event) {
-    const { onClear, searchTerm, onToggleAddressSearch } = this.props;
+  // handleToggleAddressSearch(event) {
+  //   const { onClear, searchTerm, onToggleAddressSearch } = this.props;
 
-    onClear();
-    if (!event.target.checked && this.isSearchable(this.props.searchTerm)) {
-      this.searchAndFocus(searchTerm);
-    }
-    onToggleAddressSearch(event);
-  }
+  //   onClear();
+  //   if (!event.target.checked && this.isSearchable(this.props.searchTerm)) {
+  //     this.searchAndFocus(searchTerm);
+  //   }
+  //   onToggleAddressSearch(event);
+  // }
 
   isSearchable(value) {
     return value && value.replace(/^\s+/, '').length >= MIN_SEARCHABLE_CHARS;
@@ -127,22 +136,14 @@ export default class Autocompleter extends Component {
     this.setState({ menuVisible: false });
   }
 
-  loadMoreResults() {
-    const { isAddressIncluded, onLoadMoreResults } = this.props;
-    if (isAddressIncluded) {
-      onLoadMoreResults(this.constructAddress());
-    } else {
-      onLoadMoreResults();
-    }
-  }
-
-  onSelect(item) {
-    // this.props.onClear();
-    // this.props.onChange('');
-    // this.props.onSelect(item);
-    this.setState({ searchTerm: item.fullName });
-    this.hideMenu();
-  }
+  // loadMoreResults() {
+  //   const { isAddressIncluded, onLoadMoreResults } = this.props;
+  //   if (isAddressIncluded) {
+  //     onLoadMoreResults(this.constructAddress());
+  //   } else {
+  //     onLoadMoreResults();
+  //   }
+  // }
 
   onButtonSelect(item) {
     if (item.createNewPerson) {
@@ -155,19 +156,25 @@ export default class Autocompleter extends Component {
   }
 
   isSelectable(person) {
-    if (person.isSealed) {
-      return false;
-    } else {
-      return true;
-    }
+    return person.isSealed;
     // canUserAddClient(userInfo, hasAddSensitivePerson, person, hasOverride);
+  }
+
+  onSelect(item) {
+    // this.props.onClear();
+    // this.props.onChange('');
+    // this.props.onSelect(item);
+    // this.setState({ searchTerm: item.fullName });
+    // this.hideMenu();
+
+    this.setState({ redirection: { shouldRedirect: true, selectedClient: item } });
   }
 
   onItemSelect(_value, item) {
     console.log(`Selected Client`, _value, item);
     // const { isSelectable, staffId, startTime } = this.props;
 
-    if (!this.isSelectable(item)) {
+    if (this.isSelectable(item)) {
       alert('You are not authorized to add this person.'); // eslint-disable-line no-alert
       return;
     }
@@ -283,11 +290,10 @@ export default class Autocompleter extends Component {
 
   // getPeopleEffect({searchTerm, isClientOnly, searchAddress, sort}) {
   getPeopleEffect({ searchTerm }) {
-    // return `Searching the API for: ${searchTerm}`
     const uri = 'http://jsonplaceholder.typicode.com/posts/1';
     // const uri = 'https://web.preint.cwds.io/intake/api/v1/people?search_term=ca&is_client_only=false'
     return fetch(uri);
-    // https://web.preint.cwds.io/intake/api/v1/people?search_term=ca&is_client_only=false
+
     // return call(get, '/api/v1/people', {
     //   search_term: searchTerm,
     //   is_client_only: isClientOnly,
@@ -355,29 +361,10 @@ export default class Autocompleter extends Component {
     // addPosAndSetAttr(results) // Sequentually numbering items ***
     // const newResults = suggestionHeader.concat(results.concat(canLoadMoreResults ? showMoreResults : [], canCreateNewPerson ? createNewPerson : []))
 
-    // return (
-    //   <Autocomplete
-    //     ref={(el) => (this.element_ref = el)}
-    //     items={items}
-    //     shouldItemRender={(item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) > -1}
-    //     getItemValue={item => item.label}
-    //     renderItem={(item, highlighted) =>
-    //       <div
-    //         key={item.id}
-    //         style={{ backgroundColor: highlighted ? '#eee' : 'transparent'}}
-    //       >
-    //         {item.label}
-    //       </div>
-    //     }
-    //     value={this.state.value}
-    //     onChange={e => this.setState({ value: e.target.value })}
-    //     onSelect={value => this.setState({ value })}
-    //     wrapperStyle={{display: 'block'}}
-    //   />
-    // )
     const { id } = this.props;
     const suggestionHeader = [{ suggestionHeader: 'suggestion Header', fullName: '' }];
     const newResults = suggestionHeader.concat(this.state.results);
+
     return (
       <Autocomplete
         ref={el => (this.element_ref = el)}
@@ -393,14 +380,17 @@ export default class Autocompleter extends Component {
         getItemValue={item => item.fullName}
         onSelect={this.onItemSelect}
         shouldItemRender={this.shouldItemRender}
-        // shouldItemRender={(item, searchTerm) => item.fullName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1}
       />
     );
   }
 
   render() {
+    const { redirection } = this.state;
+    const { shouldRedirect, selectedClient } = redirection;
+    if (shouldRedirect) {
+      return <Redirect push to={{ pathname: `/clients/new`, state: { selectedClient } }} />;
+    }
     return this.renderAutocomplete();
-    // return (<div>{this.renderAutocomplete()}{this.renderAddressSearch()}</div>)
   }
 }
 
