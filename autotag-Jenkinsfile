@@ -254,7 +254,6 @@ def notifyBuild(String buildStatus, Exception e) {
 // Takes an array of strings (labels)
 // Returns a VersionIncrement object
 def getVersionIncrement(labels) {
-    debug("getVersionIncrement( labels: ${labels} )")
 
     def versionIncrement = null
     def versionIncrementsFound = 0
