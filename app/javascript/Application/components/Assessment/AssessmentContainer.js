@@ -39,7 +39,7 @@ class AssessmentContainer extends Component {
       },
       isEditable: false,
       shouldPrintNow: false,
-     isValidDate: true,
+      isValidDate: true,
     };
   }
 
@@ -52,12 +52,6 @@ class AssessmentContainer extends Component {
     this.setState({ isEditable: isEditable });
     assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment();
     this.activeCtrlP();
-  }
-
-  componentDidUpdate() {
-    if (this.state.redirection.shouldRedirect) {
-      this.setState({ redirection: { ...this.state.redirection, shouldRedirect: false } });
-    }
   }
 
   componentWillUnmount() {
@@ -246,18 +240,18 @@ class AssessmentContainer extends Component {
   );
 
   validateDate(date) {
-    const date_regex = /^\d{2}\/\d{2}\/\d{3}$/;
-    return date_regex.test(date);
+    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+    return dateRegex.test(date);
   }
-  handleKeyPress = date => {
+  handleKeyUp = date => {
     const dateValue = date.target.value;
     if (date === null) {
       return;
     }
-    if (!this.validateDate(dateValue)) {
-      this.setState({ isValidDate: false });
-    } else {
+    if (this.validateDate(dateValue)) {
       this.setState({ isValidDate: true });
+    } else {
+      this.setState({ isValidDate: false });
     }
   };
 
@@ -280,14 +274,20 @@ class AssessmentContainer extends Component {
     const pageTitle = isNewForm ? 'New CANS' : 'CANS Assessment Form';
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus);
     const printButton = this.renderPrintButton();
+    console.log(this.state.isValidDate && isEditable && canPerformUpdates);
     return (
       <Fragment>
         <PageInfo title={pageTitle} actionNode={printButton} />
         {shouldPrintNow && (
           <Print node={<PrintAssessment assessment={assessment} i18n={i18n} />} onClose={this.togglePrintNow} />
         )}
-        <AssessmentFormHeader client={client} assessment={assessment} onAssessmentUpdate={this.updateAssessment}
-        isValidDate={this.state.isValidDate} handleKeyPress={this.handleKeyPress} />
+        <AssessmentFormHeader
+          client={client}
+          assessment={assessment}
+          onAssessmentUpdate={this.updateAssessment}
+          isValidDate={this.state.isValidDate}
+          onKeyUp={this.handleKeyUp}
+        />
         <Assessment assessment={assessment} i18n={i18n} onAssessmentUpdate={this.updateAssessment} />
         {LoadingState.ready === assessmentServiceStatus &&
           isEditable && (
@@ -327,7 +327,7 @@ class AssessmentContainer extends Component {
           onCancelClick={this.handleCancelClick}
           isValidDate={this.state.isValidDate}
           isSaveButtonEnabled={
-           this.state.isValidDate && isEditable && canPerformUpdates && this.state.assessment.event_date
+            this.state.isValidDate && isEditable && canPerformUpdates && !!this.state.assessment.event_date
           }
           onSaveAssessment={this.handleSaveAssessment}
           isSubmitButtonEnabled={isEditable && canPerformUpdates && isValidForSubmit}

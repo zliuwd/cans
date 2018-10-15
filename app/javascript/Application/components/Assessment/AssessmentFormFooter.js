@@ -12,7 +12,6 @@ class AssessmentFormFooter extends PureComponent {
       onSaveAssessment,
       isSubmitButtonEnabled,
       onSubmitAssessment,
-      isValidDate
     } = this.props;
     return (
       <Row className={'form-footer'}>

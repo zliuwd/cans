@@ -217,6 +217,8 @@ describe('<AssessmentContainer />', () => {
         const props = {
           location: { childId: 1 },
           isNewForm: false,
+          isValidDate: true,
+          isSaveButtonEnabled: true,
           client: {},
         };
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment');
@@ -287,7 +289,7 @@ describe('<AssessmentContainer />', () => {
         jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true));
         jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment));
         const wrapper = await shallow(<AssessmentContainer client={childInfoJson} isNewForm={false} />);
-        wrapper.setState({ assessment: { id: 1 } });
+        wrapper.setState({ assessment: { isValidDate: true } });
 
         // when
         await wrapper.instance().handleSaveAssessment();

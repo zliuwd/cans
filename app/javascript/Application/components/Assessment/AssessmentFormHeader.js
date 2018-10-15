@@ -15,12 +15,6 @@ import './style.sass';
 import DateField from '../common/DateField';
 
 class AssessmentFormHeader extends PureComponent {
-  constructor(props) {
-    super(props);
-    // this.state = {
-    //   isValidDate: true,
-    // };
-  }
   handleValueChange = event => this.changeFieldAndUpdateAssessment(event.target.name, event.target.value);
 
   handleHasCaregiverChange = event =>
@@ -89,7 +83,7 @@ class AssessmentFormHeader extends PureComponent {
           id={'assessment-date'}
           value={this.props.assessment.event_date}
           onChange={value => this.changeFieldAndUpdateAssessment('event_date', value)}
-          onKeyPress={value => this.props.handleKeyPress(value)}
+          onKeyUp={this.props.onKeyUp}
           ariaLabelledBy={'assessment-date-label'}
         />
       </Fragment>
@@ -305,11 +299,14 @@ class AssessmentFormHeader extends PureComponent {
     );
   }
 }
-
+AssessmentFormHeader.defaultProps = {
+  onKeyUp: null,
+};
 AssessmentFormHeader.propTypes = {
   assessment: PropTypes.object.isRequired,
   client: PropTypes.object.isRequired,
   onAssessmentUpdate: PropTypes.func.isRequired,
+  onKeyUp: PropTypes.func,
 };
 
 export default AssessmentFormHeader;

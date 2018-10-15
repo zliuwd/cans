@@ -20,7 +20,6 @@ class DateField extends Component {
       value: dateValue(this.props.value),
       key: 0,
     };
-    this.handleOnKeyPress = this.props.onKeyPress;
   }
 
   static getDerivedStateFromProps(nextProps, currentState) {
@@ -50,7 +49,7 @@ class DateField extends Component {
   };
 
   render() {
-    const { id, isRequired, ariaLabelledBy, ariaDescribedBy } = this.props;
+    const { id, isRequired, ariaLabelledBy, ariaDescribedBy, onKeyUp } = this.props;
     const { value, key } = this.state;
     return (
       <DateTimePicker
@@ -62,7 +61,7 @@ class DateField extends Component {
         format={LOCAL_DATE_FORMAT}
         onBlur={this.handleOnBlur}
         onChange={this.handleOnChange}
-        onKeyPress={this.handleOnKeyPress}
+        onKeyUp={onKeyUp}
         placeholder={'mm/dd/yyyy'}
         required={isRequired}
         aria-required={isRequired}
@@ -77,6 +76,7 @@ DateField.defaultProps = {
   isRequired: false,
   ariaLabelledBy: null,
   ariaDescribedBy: null,
+  onKeyUp: null,
   value: null,
 };
 
@@ -86,6 +86,7 @@ DateField.propTypes = {
   id: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
+  onKeyUp: PropTypes.func,
   value: PropTypes.string,
 };
 
