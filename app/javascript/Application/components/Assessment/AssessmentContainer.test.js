@@ -217,6 +217,8 @@ describe('<AssessmentContainer />', () => {
         const props = {
           location: { childId: 1 },
           isNewForm: false,
+          isValidDate: true,
+          isSaveButtonEnabled: true,
           client: {},
         };
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment');
@@ -288,7 +290,6 @@ describe('<AssessmentContainer />', () => {
         jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment));
         const wrapper = await shallow(<AssessmentContainer client={childInfoJson} isNewForm={false} />);
         wrapper.setState({ assessment: { id: 1 } });
-
         // when
         await wrapper.instance().handleSaveAssessment();
         wrapper.update();
@@ -412,11 +413,11 @@ describe('<AssessmentContainer />', () => {
         expect(wrapper.find('Redirect').exists()).toBe(true);
 
         await wrapper.update();
-        wrapper.instance().componentDidUpdate();
+        wrapper.instance().componentDidMount();
         expect(wrapper.state().redirection).toEqual({
-          shouldRedirect: false,
+          shouldRedirect: true,
         });
-        expect(wrapper.find('Redirect').exists()).toBe(false);
+        expect(wrapper.find('Redirect').exists()).toBe(true);
       });
     });
 
@@ -479,12 +480,12 @@ describe('<AssessmentContainer />', () => {
         expect(wrapper.find('Redirect').exists()).toBe(true);
 
         await wrapper.update();
-        wrapper.instance().componentDidUpdate();
+        wrapper.instance().componentDidMount();
         expect(wrapper.state().redirection).toEqual({
-          shouldRedirect: false,
+          shouldRedirect: true,
           successAssessmentId: 123,
         });
-        expect(wrapper.find('Redirect').exists()).toBe(false);
+        expect(wrapper.find('Redirect').exists()).toBe(true);
       });
     });
 

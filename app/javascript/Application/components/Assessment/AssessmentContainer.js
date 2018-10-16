@@ -274,7 +274,7 @@ class AssessmentContainer extends Component {
     const pageTitle = isNewForm ? 'New CANS' : 'CANS Assessment Form';
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus);
     const printButton = this.renderPrintButton();
-    this.state.isValidDate && isEditable && canPerformUpdates;
+
     return (
       <Fragment>
         <PageInfo title={pageTitle} actionNode={printButton} />
