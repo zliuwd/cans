@@ -97,9 +97,9 @@ def acceptanceTestStage() {
     hostname = sh(returnStdout: true, script: '/sbin/ifconfig eth0 | grep "inet addr:" | cut -d: -f2 | cut -d " " -f1').trim()
     withEnv(["HOST=${hostname}"]) {
       withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
-        sh "docker-compose up -d --build"
-        sh "sleep 120"
-        sh "docker-compose exec -T cans-test bundle exec rspec spec/acceptance"
+        sh "docker-compose -f docker-compose.ci.yml build"
+        sh "docker-compose -f docker-compose.ci.yml run cans-test-all"
+        sh "docker-compose -f docker-compose.ci.yml exec -T cans-test bundle exec rspec spec/acceptance"
       }
     }
   }
@@ -110,7 +110,7 @@ def a11yLintStage() {
     hostname = sh(returnStdout: true, script: '/sbin/ifconfig eth0 | grep "inet addr:" | cut -d: -f2 | cut -d " " -f1').trim()
     withEnv(["HOST=${hostname}"]) {
       withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
-        sh "docker-compose exec -T cans-test bundle exec rspec spec/a11y"
+        sh "docker-compose -f docker-compose.ci.yml exec -T cans-test bundle exec rspec spec/a11y"
       }
     }
   }
@@ -118,8 +118,9 @@ def a11yLintStage() {
 
 def acceptanceTestPreintStage() {
   stage('Acceptance Test Preint') {
-    sh "docker-compose up -d --build cans-test"
-    sh "docker-compose exec -T --env CANS_WEB_BASE_URL=https://cans.preint.cwds.io/cans cans-test bundle exec rspec spec/acceptance"
+    sh "docker-compose -f docker-compose.ci.yml build"
+    sh "docker-compose -f docker-compose.ci.yml run cans-test-all"
+    sh "docker-compose -f docker-compose.ci.yml exec -T --env CANS_WEB_BASE_URL=https://cans.preint.cwds.io/cans cans-test bundle exec rspec spec/acceptance"
   }
 }
 
@@ -159,7 +160,7 @@ def deployToIntegrationStage() {
 
 def cleanupStage() {
   stage('Cleanup') {
-    sh "docker-compose down"
+    sh "docker-compose -f docker-compose.ci.yml down"
     cleanWs()
   }
 }
