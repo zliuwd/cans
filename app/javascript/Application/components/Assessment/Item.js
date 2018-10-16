@@ -77,6 +77,7 @@ class Item extends Component {
   };
 
   renderConfidentialCheckbox = (isConfidential, confidential_by_default) => {
+    const code = this.props.item.code;
     return (
       <div>
         <form autoComplete="off">
@@ -85,6 +86,7 @@ class Item extends Component {
               onChange={this.handleConfidentialityChange}
               label={'Confidential'}
               value={stringify(isConfidential)}
+              id={code + 'Checkbox'}
               control={
                 <Checkbox
                   checked={isConfidential}
@@ -137,6 +139,7 @@ class Item extends Component {
                   <FormControlLabel
                     value={stringify(i)}
                     key={label}
+                    id={`input-${code}-${i}-select`}
                     control={
                       <Radio
                         value={stringify(i)}
