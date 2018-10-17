@@ -155,7 +155,6 @@ def publishImageStage() {
   stage('Publish to Dockerhub') {
     withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
       app.push()
-      app.push('latest')
     }
    }
    stage('Update version in GitHub'){
@@ -242,7 +241,7 @@ def notifyBuild(String buildStatus, Exception e) {
 
     // Send notifications
 
-    slackSend channel: "#cals-api", baseUrl: 'https://hooks.slack.com/services/', tokenCredentialId: 'slackmessagetpt2', color: colorCode, message: summary
+    slackSend channel: "#cans-dev", baseUrl: 'https://hooks.slack.com/services/', tokenCredentialId: 'slackmessagetpt2', color: colorCode, message: summary
     emailext(
             subject: subject,
             body: details,
