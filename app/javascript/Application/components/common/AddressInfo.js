@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const AddressInfo = address => {
-  const { type, streetAddress, city, state, zip } = address;
+const AddressInfo = ({ type, streetAddress, city, state, zip }) => {
+  // const { type, streetAddress, city, state, zip } = address;
   const stateZip = [state, zip].filter(Boolean).join(' ');
   return (
     <div>
@@ -12,7 +12,13 @@ const AddressInfo = address => {
     </div>
   );
 };
-
+AddressInfo.defaultProps = {
+  city: '',
+  state: '',
+  streetAddress: '',
+  type: '',
+  zip: '',
+};
 AddressInfo.propTypes = {
   city: PropTypes.string,
   state: PropTypes.string,

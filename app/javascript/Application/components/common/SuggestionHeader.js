@@ -22,6 +22,11 @@ const SuggestionHeader = ({ currentNumberOfResults, total, searchTerm }) => {
     </div>
   );
 };
+SuggestionHeader.defaultProps = {
+  currentNumberOfResults: 0,
+  searchTerm: '',
+  total: 0,
+};
 SuggestionHeader.propTypes = {
   currentNumberOfResults: PropTypes.number,
   searchTerm: PropTypes.string,

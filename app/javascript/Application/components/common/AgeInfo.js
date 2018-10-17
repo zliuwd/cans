@@ -36,7 +36,9 @@ const AgeInfo = ({ dateOfBirth }) => {
     </div>
   );
 };
-
+AgeInfo.defaultProps = {
+  dateOfBirth: '',
+};
 AgeInfo.propTypes = {
   dateOfBirth: PropTypes.string,
 };

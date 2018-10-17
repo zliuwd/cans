@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import SuggestionHeader from '../SuggestionHeader';
-import { canUserAddClient } from '../../../util/authorization';
+// import { canUserAddClient } from '../../../util/authorization';
 // import CreateUnknownPerson from 'screenings/CreateUnknownPerson'
 // import ShowMoreResults from '../common/ShowMoreResults'
 // import {logEvent} from 'utils/analytics'
-import moment from 'moment';
-// import SearchByAddress from '../common/SearchByAddress'
+// import moment from 'moment';
 import { Redirect } from 'react-router-dom';
 
 const MIN_SEARCHABLE_CHARS = 2;
@@ -31,15 +30,17 @@ export default class Autocompleter extends Component {
       searchTerm: '',
       redirection: {
         shouldRedirect: false,
-        clientId: null,
+        successClientId: null,
         selectedClient: null,
       },
       results: [
         {
           id: 'client1',
           label: 'Client 1',
-          posInSet: 1,
-          setSize: 3,
+          // posInSet: 1,
+          // setSize: 3,
+          posInSet: 0,
+          setSize: 0,
           suggestionHeader: false,
           fullName: 'Casey Test',
           first_name: 'Casey',
@@ -48,7 +49,7 @@ export default class Autocompleter extends Component {
           suffix: '',
           dateOfBirth: '2018/10/01',
           dob: '2018-10-01',
-          external_id: '0000-0000-0000-0000000',
+          external_id: 50000,
           isCsec: false,
           isDeceased: false,
           gender: 'male',
@@ -67,7 +68,7 @@ export default class Autocompleter extends Component {
             export_id: '56',
             external_id: '1123',
             id: 56,
-            name: 'Yolo',
+            name: 'Ventura',
           },
           sensitivity_type: 'SEALED',
           phoneNumber: {
@@ -92,14 +93,14 @@ export default class Autocompleter extends Component {
     this.shouldItemRender = this.shouldItemRender.bind(this);
   }
 
-  constructAddress() {
-    const { searchAddress, searchCity, searchCounty } = this.props;
-    return {
-      address: searchAddress,
-      city: searchCity,
-      county: searchCounty,
-    };
-  }
+  // constructAddress() {
+  //   const { searchAddress, searchCity, searchCounty } = this.props;
+  //   return {
+  //     address: searchAddress,
+  //     city: searchCity,
+  //     county: searchCounty,
+  //   };
+  // }
 
   // searchAndFocus(...searchArgs) {
   //   this.props.onSearch(...searchArgs);
@@ -145,15 +146,15 @@ export default class Autocompleter extends Component {
   //   }
   // }
 
-  onButtonSelect(item) {
-    if (item.createNewPerson) {
-      this.onSelect({ id: null });
-    } else if (item.suggestionHeader) {
-      return;
-    } else {
-      this.loadMoreResults();
-    }
-  }
+  // onButtonSelect(item) {
+  //   if (item.createNewPerson) {
+  //     this.onSelect({ id: null });
+  //   } else if (item.suggestionHeader) {
+  //     return;
+  //   } else {
+  //     this.loadMoreResults();
+  //   }
+  // }
 
   isSelectable(person) {
     return person.isSealed;
@@ -167,15 +168,18 @@ export default class Autocompleter extends Component {
     // this.setState({ searchTerm: item.fullName });
     // this.hideMenu();
 
-    this.setState({ redirection: { shouldRedirect: true, selectedClient: item } });
+    if (!item.suggestionHeader) {
+      console.log(`Selected Client `, item);
+      // if we did not click on the suggestion header, then redirect
+      this.setState({ redirection: { shouldRedirect: true, selectedClient: item, successClientId: item.external_id } });
+    }
   }
 
   onItemSelect(_value, item) {
-    console.log(`Selected Client`, _value, item);
     // const { isSelectable, staffId, startTime } = this.props;
 
     if (this.isSelectable(item)) {
-      alert('You are not authorized to add this person.'); // eslint-disable-line no-alert
+      window.alert('You are not authorized to add this person.'); // eslint-disable-line no-alert
       return;
     }
     this.onSelect(item);
@@ -208,14 +212,6 @@ export default class Autocompleter extends Component {
     }
   }
 
-  // onFocus() {
-  //   if (this.isSearchable(this.props.searchTerm) || this.props.searchAddress) {
-  //     this.setState({menuVisible: true})
-  //   } else {
-  //     this.hideMenu()
-  //   }
-  // }
-
   renderMenu(items, _searchTerm, _style) {
     return <div className="autocomplete-menu">{items}</div>;
   }
@@ -241,16 +237,6 @@ export default class Autocompleter extends Component {
     );
   }
 
-  // renderItem(item, highlighted, _styles) {
-  //   console.log(item, highlighted, _styles)
-
-  //   return (
-  //     <div key={item.id} style={{ backgroundColor: highlighted ? '#eee' : 'transparent'}}>
-  //       {item.label}
-  //     </div>
-  //   )
-  // }
-
   renderItem(item, isHighlighted, _styles) {
     // const {canCreateNewPerson, results, total} = this.props
     // const total = 0
@@ -265,34 +251,11 @@ export default class Autocompleter extends Component {
     return this.renderEachItem(item, id, isHighlighted);
   }
 
-  // renderItem(item, isHighlighted, _styles) {
-  //   const {canCreateNewPerson, results, total} = this.props
-  //   const canLoadMoreResults = results && total > results.length
-  //   const buttonClassName = canLoadMoreResults && canCreateNewPerson ? ' col-md-6' : ''
-  //   const className = itemClassName(isHighlighted) + buttonClassName
-  //   const key = `${item.posInSet}-of-${item.setSize}`
-  //   const id = `search-result-${key}`
-  //   if (isHighlighted && this.inputRef) {
-  //     this.inputRef.setAttribute('aria-activedescendant', id)
-  //   }
-  //   if (item.showMoreResults) {
-  //     return (<div id={id} key={key} className={className}>
-  //       {<ShowMoreResults />}
-  //     </div>)
-  //   }
-  //   if (item.createNewPerson) {
-  //     return (<div id={id} key={key} className={className}>
-  //       {<CreateUnknownPerson />}
-  //     </div>)
-  //   }
-  //   return this.renderEachItem(item, id, isHighlighted)
-  // }
-
   // getPeopleEffect({searchTerm, isClientOnly, searchAddress, sort}) {
   getPeopleEffect({ searchTerm }) {
     const uri = 'http://jsonplaceholder.typicode.com/posts/1';
     // const uri = 'https://web.preint.cwds.io/intake/api/v1/people?search_term=ca&is_client_only=false'
-    return fetch(uri);
+    return window.fetch(uri);
 
     // return call(get, '/api/v1/people', {
     //   search_term: searchTerm,
@@ -358,7 +321,7 @@ export default class Autocompleter extends Component {
     // const createNewPerson = { createNewPerson: 'Create New Person', posInSet: 'create-new', setSize: 'the-same' };
     // const suggestionHeader = [{ suggestionHeader: 'suggestion Header' }];
     // const canLoadMoreResults = results && total > results.length;
-    // addPosAndSetAttr(results) // Sequentually numbering items ***
+    addPosAndSetAttr(this.state.results); // Sequentually numbering items ***
     // const newResults = suggestionHeader.concat(results.concat(canLoadMoreResults ? showMoreResults : [], canCreateNewPerson ? createNewPerson : []))
 
     const { id } = this.props;
@@ -386,41 +349,36 @@ export default class Autocompleter extends Component {
 
   render() {
     const { redirection } = this.state;
-    const { shouldRedirect, selectedClient } = redirection;
+    const { shouldRedirect, successClientId } = redirection;
     if (shouldRedirect) {
-      return <Redirect push to={{ pathname: `/clients/new`, state: { selectedClient } }} />;
+      return (
+        <Redirect push to={{ pathname: `clients/${successClientId}`, state: { isNewForm: true, successClientId } }} />
+      );
+      // return <Redirect push to={{ pathname: `/clients/new`, state: { selectedClient } }} />;
     }
     return this.renderAutocomplete();
   }
 }
-
-// Autocompleter.propTypes = {
-//   canCreateNewPerson: PropTypes.bool,
-//   id: PropTypes.string,
-//   isAddressIncluded: PropTypes.bool,
-//   isSelectable: PropTypes.func,
-//   location: PropTypes.shape({pathname: PropTypes.string}),
-//   onChange: PropTypes.func.isRequired,
-//   onChangeAddress: PropTypes.func.isRequired,
-//   onChangeCity: PropTypes.func.isRequired,
-//   onChangeCounty: PropTypes.func.isRequired,
-//   onClear: PropTypes.func.isRequired,
-//   onLoadMoreResults: PropTypes.func.isRequired,
-//   onSearch: PropTypes.func.isRequired,
-//   onSelect: PropTypes.func.isRequired,
-//   onToggleAddressSearch: PropTypes.func,
-//   results: PropTypes.array,
-//   searchAddress: PropTypes.string,
-//   searchCity: PropTypes.string,
-//   searchCounty: PropTypes.string,
-//   searchTerm: PropTypes.string,
-//   staffId: PropTypes.string,
-//   startTime: PropTypes.string,
-//   total: PropTypes.number,
-// }
-
 Autocompleter.defaultProps = {
+  canCreateNewPerson: false,
+  id: '',
   isSelectable: () => true,
+  results: [],
+  searchTerm: '',
+  staffId: '',
+  startTime: '',
+  total: 0,
+};
+Autocompleter.propTypes = {
+  canCreateNewPerson: PropTypes.bool,
+  id: PropTypes.string,
+  isSelectable: PropTypes.func,
+  // onSelect: PropTypes.func.isRequired,
+  results: PropTypes.array,
+  searchTerm: PropTypes.string,
+  staffId: PropTypes.string,
+  startTime: PropTypes.string,
+  total: PropTypes.number,
 };
 
 Autocompleter.displayName = 'Autocompleter';

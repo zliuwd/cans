@@ -12,7 +12,11 @@ const GenderRaceAndEthnicity = ({ gender, races, ethnicity }) => {
     .join(', ');
   return genderRaceAndEthnicity ? <div>{genderRaceAndEthnicity}</div> : null;
 };
-
+GenderRaceAndEthnicity.defaultProps = {
+  ethnicity: {},
+  gender: '',
+  races: [],
+};
 GenderRaceAndEthnicity.propTypes = {
   ethnicity: PropTypes.object,
   gender: PropTypes.string,

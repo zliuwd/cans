@@ -17,7 +17,9 @@ const LanguageInfo = ({ languages }) => {
     </div>
   ) : null;
 };
-
+LanguageInfo.defaultProps = {
+  languages: [],
+};
 LanguageInfo.propTypes = {
   languages: PropTypes.array,
 };

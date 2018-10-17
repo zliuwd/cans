@@ -5,7 +5,7 @@ import Languages from './LanguageInfo';
 import PropTypes from 'prop-types';
 import React from 'react';
 import PhoneNumberInfo from './PhoneNumberInfo';
-import legacySourceFormatter from '../../util/legacySourceFormatter';
+// import legacySourceFormatter from '../../util/legacySourceFormatter';
 import sanitizeHtml from 'sanitize-html';
 import AvatarImg from '../../../../assets/images/default-profile.svg';
 
@@ -21,7 +21,7 @@ const PersonSuggestion = ({
   ssn,
   address,
   phoneNumber,
-  legacyDescriptor,
+  // legacyDescriptor,
   isSensitive,
   isSealed,
   isProbationYouth,
@@ -72,7 +72,23 @@ const PersonSuggestion = ({
     </div>
   );
 };
-
+PersonSuggestion.defaultProps = {
+  address: {},
+  dateOfBirth: '',
+  ethnicity: {},
+  fullName: '',
+  gender: '',
+  isCsec: false,
+  isDeceased: false,
+  isProbationYouth: false,
+  isSealed: false,
+  isSensitive: false,
+  languages: [],
+  // legacyDescriptor: {},
+  phoneNumber: {},
+  races: [],
+  ssn: '',
+};
 PersonSuggestion.propTypes = {
   address: PropTypes.object,
   dateOfBirth: PropTypes.string,

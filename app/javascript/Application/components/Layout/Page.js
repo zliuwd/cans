@@ -6,9 +6,8 @@ import { Client, ClientAddEditForm, ClientsContainer, ClientService } from '../C
 import BreadCrumbsBuilder from './BreadCrumbsBuilder';
 import { navigation } from '../../util/constants';
 import { AssessmentContainer } from '../Assessment';
+import { SearchContainer } from '../Search';
 import Sticker from 'react-stickyfill';
-
-import SearchContainer from '../Client/SearchContainer';
 
 class Page extends Component {
   constructor(props) {

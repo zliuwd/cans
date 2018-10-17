@@ -133,6 +133,7 @@ const prepareChildInfoValidation = (childInfo, isNewForm) => {
 class ClientAddEditForm extends Component {
   constructor(props) {
     super(props);
+    console.log(`ClientAddEditForm`, props);
     const { client, isNewForm } = props;
     this.state = {
       childInfo: prepareChildInfo(client),
@@ -379,7 +380,11 @@ class ClientAddEditForm extends Component {
         label={label}
         error={!childInfoValidation[field]}
         className={classes.textField}
-        value={stringify(childInfo[field])}
+        value={
+          this.props.location.state
+            ? stringify(this.props.location.state.selectedClient[field])
+            : stringify(childInfo[field])
+        }
         onChange={this.handleChange(field)}
         inputProps={{
           maxLength: maxLength,
@@ -404,7 +409,9 @@ class ClientAddEditForm extends Component {
           <Select
             id={'select-wrapper'}
             native
-            value={childInfo.county.name}
+            value={
+              this.props.location.state ? this.props.location.state.selectedClient.county.name : childInfo.county.name
+            }
             onChange={this.handleCountyChange}
             name="county"
             className={classes.textFieldSelect}
@@ -488,6 +495,15 @@ class ClientAddEditForm extends Component {
     }
     const { classes } = this.props;
     const { childInfo, sensitivityTypes } = this.state;
+
+    let sensitivityType = childInfo.sensitivity_type ? childInfo.sensitivity_type : 'N/A';
+
+    if (this.props.location.state) {
+      sensitivityType = this.props.location.state.selectedClient.sensitivity_type
+        ? this.props.location.state.selectedClient.sensitivity_type
+        : 'N/A';
+    }
+
     return (
       <div className={classes.root} id={'sensitivity_type_dropdown'}>
         <FormControl required={false} className={'mt-0 ' + classes.formControl}>
@@ -496,7 +512,7 @@ class ClientAddEditForm extends Component {
           </InputLabel>
           <Select
             native
-            value={childInfo.sensitivity_type !== null ? childInfo.sensitivity_type : 'N/A'}
+            value={sensitivityType}
             onChange={this.handleSensitivityTypeChange}
             name="sensitivity-type"
             className={classes.textFieldSelect}
@@ -561,6 +577,9 @@ class ClientAddEditForm extends Component {
     const { childInfo, childInfoValidation, redirection } = this.state;
     const { shouldRedirect, successClientId } = redirection;
 
+    if (this.props.location.state) {
+    }
+
     if (shouldRedirect) {
       return (
         <Redirect push to={{ pathname: this.redirectPath(childInfo.id), state: { isNewForm, successClientId } }} />
@@ -588,7 +607,7 @@ class ClientAddEditForm extends Component {
                 <MaskedDateField
                   id={'dob'}
                   isRequired
-                  value={childInfo.dob}
+                  value={this.props.location.state ? this.props.location.state.selectedClient.dob : childInfo.dob}
                   label="Date of Birth"
                   isFutureDatesAllowed={false}
                   error={!childInfoValidation['dob']}
@@ -601,7 +620,11 @@ class ClientAddEditForm extends Component {
 
                 <InputMask
                   mask="9999-9999-9999-9999999"
-                  value={childInfo.external_id}
+                  value={
+                    this.props.location.state
+                      ? this.props.location.state.selectedClient.external_id
+                      : childInfo.external_id
+                  }
                   onChange={this.handleChange('external_id')}
                 >
                   {() => (
@@ -638,6 +661,7 @@ ClientAddEditForm.propTypes = {
   classes: PropTypes.object.isRequired,
   client: PropTypes.object,
   isNewForm: PropTypes.bool.isRequired,
+  location: PropTypes.object,
 };
 
 ClientAddEditForm.defaultProps = {
@@ -652,6 +676,7 @@ ClientAddEditForm.defaultProps = {
     county: emptyCounty,
     cases: [{ external_id: '' }],
   },
+  location: null,
 };
 
 export default withStyles(styles)(ClientAddEditForm);
