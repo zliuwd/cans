@@ -3,8 +3,8 @@
 # Participants Controller handles all service request for
 # the creation and modification of screening participant objects.
 module Api
-  module V1
-    class PeopleController < ApiController # :nodoc:
+  #module V1
+    class PeopleSearchController < ActionController::API # :nodoc:
       def index
         response = PersonSearchRepository.search(search_params.to_hash,
           request.uuid,
@@ -40,5 +40,5 @@ module Api
           search_address: %i[street city county])
       end
     end
-  end
+  #end
 end
