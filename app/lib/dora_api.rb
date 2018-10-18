@@ -4,7 +4,7 @@
 class DoraAPI < JsonAPI
   class << self
     def api_url
-      Rails.application.config.intake[:dora_api_url]
+      Rails.application.config.cans[:dora_api_url]
     end
   end
 end

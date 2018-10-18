@@ -5,10 +5,9 @@
 module Api
   #module V1
     class PeopleSearchController < ActionController::API # :nodoc:
-      def index
-        response = PersonSearchRepository.search(search_params.to_hash,
-          request.uuid,
-          security_token: session[:security_token])
+      def index 
+        response = PersonSearchRepository.search(search_params.to_hash,request.uuid, security_token: session['security_token'])
+        debugger
         render json: response
       end
 
@@ -36,8 +35,9 @@ module Api
       end
 
       def search_params
-        params.permit(:search_term, :is_client_only, :search_after,
-          search_address: %i[street city county])
+        #params.permit(:search_term, :is_client_only, :search_after,
+         # search_address: %i[street city county])
+         params.permit(:search_term, :is_client_only, :format)
       end
     end
   #end

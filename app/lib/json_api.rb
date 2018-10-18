@@ -4,7 +4,7 @@ class JsonAPI # :nodoc:
   CONTENT_TYPE = 'application/json'
 
   def self.connection
-    Faraday.new(url: api_url) do |connection|
+      Faraday.new(url: api_url) do |connection|
       connection.response :json, content_type: /\bjson$/
       connection.use IntakeFaradayMiddleware::RaiseHttpException
       connection.adapter Faraday.default_adapter
@@ -12,14 +12,14 @@ class JsonAPI # :nodoc:
     end
   end
 
-  def self.make_api_call(security_token:, request_id:, url:, method:, payload: nil)
+  def self.make_api_call(security_token, url, method, payload = nil)
+    url = "https://doraapi.preint.cwds.io#{url}"
     connection.send(method) do |req|
       req.url url
       req.headers['Authorization'] = security_token
-      req.headers['REQUEST_ID'] = request_id
-      req.headers['SESSION_ID'] = security_token
       set_payload(req, method, payload)
     end
+    debugger
   rescue Faraday::Error => e
     raise_api_error(e.message, payload, url, method)
   end
@@ -39,6 +39,7 @@ class JsonAPI # :nodoc:
       req.options.params_encoder = Faraday::FlatParamsEncoder
       req.params = payload
     else
+    
       req.headers['Content-Type'] = CONTENT_TYPE
       req.body = payload.to_json
     end

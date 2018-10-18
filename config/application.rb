@@ -8,6 +8,7 @@ require "active_job/railtie"
 require "action_cable/engine"
 require "rails/test_unit/railtie"
 require "sprockets/railtie"
+require_relative '../app/lib/external_routes'
 # To enable db connection uncomment this line
 # require "active_record/railtie"
 
@@ -22,11 +23,13 @@ module Cans
     require 'infrastructure/cwds_permission_checker'
     require 'infrastructure/api_middleware'
     require 'infrastructure/timeout_middleware'
+    
 
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
     config.autoload_paths << Rails.root.join('lib')
     config.eager_load_paths << Rails.root.join('lib')
+
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -41,15 +44,13 @@ module Cans
     config.micro_services = config_for(:micro_services)
     config.relative_url_root = ENV['CANS_BASE_PATH'] || '/'
     config.assets.prefix = "#{ENV['CANS_BASE_PATH']}/packs"
-    config.intake = {
+    config.cans = {
       # authentication_base_url: ENV.fetch('AUTHENTICATION_URL', ''),
       # authentication_login_url: authentication_login_url,
       # authentication_logout_url: authentication_logout_url,
       # base_path: ENV.fetch('BASE_PATH', ''),
       client_only_search: ENV.fetch('CLIENT_ONLY_SEARCH', 'false') == 'true',
-      ferb_api_url: ENV.fetch('FERB_API_URL', nil),
-      dora_api_url: ENV.fetch('DORA_API_URL', nil),
-      sdm_path: ExternalRoutes.sdm_path
+      dora_api_url: ENV.fetch('DORA_API_URL', nil)
     }
   end
 end

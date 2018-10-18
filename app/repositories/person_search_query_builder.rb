@@ -29,7 +29,7 @@ module PersonSearchQueryBuilder
 
   def must
     # the client_only_search config option overrides the @is_client_only value
-    return [base_query] unless Rails.configuration.intake[:client_only_search] ||
+    return [base_query] unless Rails.configuration.cans[:client_only_search] ||
                                @is_client_only
 
     [base_query, client_only]

@@ -6,11 +6,10 @@ class PersonSearchRepository
   class << self
     def search(params, request_id, security_token: nil)
       response = DoraAPI.make_api_call(
-        security_token: security_token,
-        request_id: request_id,
-        url: ExternalRoutes.dora_people_light_index_path,
-        method: :post,
-        payload: search_query(params)
+        security_token,
+        ExternalRoutes.dora_people_light_index_path,
+        :post,
+        search_query(params)
       )
       body(response)
     end
