@@ -86,8 +86,6 @@ services:
       - ./spec/.:/app/spec
     environment:
       CANS_WEB_BASE_URL: 'cans-web:3000/cans'
-    depends_on:
-      - cans-web
     tty: true
     stdin_open: true
     networks:
@@ -96,6 +94,7 @@ services:
   cans-test-all:
     image: cans-cans-test:latest
     depends_on:
+      - cans-web
       - cans-test
     command: sh '/wait4all.sh'
     volumes:
