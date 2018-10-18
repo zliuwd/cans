@@ -217,6 +217,7 @@ describe('<AssessmentContainer />', () => {
         const props = {
           location: { childId: 1 },
           isNewForm: false,
+          isSaveButtonEnabled: true,
           client: {},
         };
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment');
@@ -288,7 +289,6 @@ describe('<AssessmentContainer />', () => {
         jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment));
         const wrapper = await shallow(<AssessmentContainer client={childInfoJson} isNewForm={false} />);
         wrapper.setState({ assessment: { id: 1 } });
-
         // when
         await wrapper.instance().handleSaveAssessment();
         wrapper.update();
@@ -488,6 +488,38 @@ describe('<AssessmentContainer />', () => {
       });
     });
 
+    describe('handleKeyUp', () => {
+      let wrapper;
+      let instance;
+      beforeEach(() => {
+        wrapper = shallow(
+          <AssessmentContainer match={{ params: { id: 1 } }} client={childInfoJson} isNewForm={false} />
+        );
+        instance = wrapper.instance();
+      });
+
+      it('should default isValidDate to true', () => {
+        expect(instance.state.isValidDate).toEqual(true);
+      });
+
+      it('should set isValidDate to true when date is valid', () => {
+        instance.setState({ isValidDate: false });
+        instance.handleKeyUp({ target: { value: '10/09/2018' } });
+        expect(instance.state.isValidDate).toEqual(true);
+      });
+
+      it('should set isValidDate to false when date is invalid', () => {
+        instance.handleKeyUp({ target: { value: '325982323' } });
+        expect(instance.state.isValidDate).toEqual(false);
+        instance.handleKeyUp({ target: { value: '10/2019/21' } });
+        expect(instance.state.isValidDate).toEqual(false);
+        instance.handleKeyUp({ target: { value: '' } });
+        expect(instance.state.isValidDate).toEqual(false);
+        instance.handleKeyUp({ target: {} });
+        expect(instance.state.isValidDate).toEqual(false);
+      });
+    });
+
     describe('submit and save buttons', () => {
       it('should disable buttons when assessment service is working', async () => {
         const wrapper = await mountWithRouter(<AssessmentContainer client={childInfoJson} isNewForm={false} />);
@@ -540,6 +572,40 @@ describe('<AssessmentContainer />', () => {
         // then
         expect(wrapper.find('Button#save-assessment').instance().props.disabled).toBeTruthy();
         expect(wrapper.find('Button#submit-assessment').instance().props.disabled).toBeTruthy();
+      });
+
+      it('should disable the save button when date is invalid', async () => {
+        const wrapper = await mountWithRouter(<AssessmentContainer client={childInfoJson} isNewForm={false} />);
+
+        // when
+        wrapper
+          .find('AssessmentContainer')
+          .instance()
+          .setState({
+            isValidDate: false,
+            isEditable: true,
+            assessment,
+          });
+
+        // then
+        expect(wrapper.find('Button#save-assessment').instance().props.disabled).toBeTruthy();
+      });
+
+      it('should enable the save button when date is valid', async () => {
+        const wrapper = await mountWithRouter(<AssessmentContainer client={childInfoJson} isNewForm={false} />);
+
+        // when
+        wrapper
+          .find('AssessmentContainer')
+          .instance()
+          .setState({
+            isValidDate: true,
+            isEditable: true,
+            assessment,
+          });
+
+        // then
+        expect(wrapper.find('Button#save-assessment').instance().props.disabled).toBeFalsy();
       });
     });
   });
