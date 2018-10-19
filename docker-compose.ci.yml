@@ -1,7 +1,17 @@
 version: '3.2'
 services:
+  db2:
+    image: cwds/db2data
+    hostname: db2data
+    expose:
+      - 50000
+    environment:
+      DB_CMS_DB2_PORT: ${DB_CMS_DB2_PORT}
+    networks:
+      - cans
+
   postgres:
-    image: cwds/postgresql_data:0.8.4_648-RC
+    image: cwds/postgresql_data:0.9.4_680-RC
     hostname: postgresql_data
     expose:
       - 5432
@@ -31,9 +41,10 @@ services:
       - cans
 
   cans-api:
-    image: cwds/cans-api:0.9.2_220-RC
+    image: cwds/cans-api:0.9.4
     hostname: cans-api
     depends_on:
+      - db2
       - postgres
       - perry
     restart: on-failure
@@ -52,6 +63,14 @@ services:
       DB_NS_SCHEMA: ${DB_NS_SCHEMA}
       DB_NS_USER: ${DB_NS_USER}
       DB_NS_PASSWORD: ${DB_NS_PASSWORD}
+      DB_CMS_JDBC_URL: ${DB_CMS_JDBC_URL}
+      DB_CMS_SCHEMA: ${DB_CMS_SCHEMA}
+      DB_CMS_USER: ${DB_CMS_USER}
+      DB_CMS_PASSWORD: ${DB_CMS_PASSWORD}
+      DB_CMS_RS_JDBC_URL: ${DB_CMS_RS_JDBC_URL}
+      DB_CMS_RS_SCHEMA: ${DB_CMS_RS_SCHEMA}
+      DB_CMS_RS_USER: ${DB_CMS_RS_USER}
+      DB_CMS_RS_PASSWORD: ${DB_CMS_RS_PASSWORD}
     networks:
       - cans
 
