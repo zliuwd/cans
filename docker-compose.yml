@@ -1,5 +1,11 @@
 version: '3.2'
 services:
+  db2:
+    image: cwds/db2data
+    hostname: db2data
+    ports:
+      - ${DB_CMS_DB2_PORT}:50000  
+      
   postgres:
     image: cwds/postgresql_data:0.8.4_648-RC
     hostname: postgresql_data

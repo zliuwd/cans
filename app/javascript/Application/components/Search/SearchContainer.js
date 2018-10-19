@@ -28,9 +28,9 @@ import PersonSearchForm from './PersonSearchForm';
 // };
 
 class SearchContainer extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+  constructor(props) {
+    super(props);
+  }
 
   renderAccessRestrictions = client =>
     client.sensitivity_type === 'SENSITIVE' ? 'Sensitive' : client.sensitivity_type === 'SEALED' ? 'Sealed' : null;
@@ -38,7 +38,7 @@ class SearchContainer extends Component {
   renderPersonSearchForm() {
     return (
       <PersonSearchForm
-        searchPrompt="Search CWS-CMS for clients only"
+        searchPrompt={this.props.searchPrompt}
         // isClientOnly={false}
         // onSelect={person => this.onSelectPerson(person)}
       />
@@ -48,7 +48,10 @@ class SearchContainer extends Component {
   render = () => {
     return (
       <Card className={'card'}>
-        <CardHeader className={'card-header-cans card-header-cans-client-search'} title="CANS Client Search" />
+        <CardHeader
+          className={'card-header-cans card-header-cans-client-search'}
+          searchTitle={this.props.searchTitle}
+        />
         <div className={'content'}>
           <CardContent>{this.renderPersonSearchForm()}</CardContent>
         </div>
