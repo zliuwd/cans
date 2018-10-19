@@ -110,9 +110,9 @@ describe('<AssessmentContainer />', () => {
         const adder = jest.spyOn(global, 'addEventListener').mockImplementation(() => {});
         const remover = jest.spyOn(global, 'removeEventListener').mockImplementation(() => {});
         const wrapper = shallow(<AssessmentContainer isNewForm={false} client={{}} />);
-        expect(adder).toHaveBeenCalled();
+        expect(adder).toHaveBeenCalledTimes(1);
         wrapper.unmount();
-        expect(remover).toHaveBeenCalled();
+        expect(remover).toHaveBeenCalledTimes(1);
       });
 
       it('when a user press ctrl+p', () => {
