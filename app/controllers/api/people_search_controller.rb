@@ -5,10 +5,11 @@
 module Api
   #module V1
     class PeopleSearchController < ActionController::API # :nodoc:
-      def index 
-        response = PersonSearchRepository.search(search_params.to_hash,request.uuid, security_token: session['security_token'])
-        debugger
+    
+      def index
+        response = PersonSearchRepository.search(search_params.to_hash, request.uuid, security_token: session['token'])
         render json: response
+      
       end
 
       def show

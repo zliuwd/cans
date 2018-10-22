@@ -14,6 +14,7 @@ import Card from '@material-ui/core/Card/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 // import DataGrid from '@cwds/components/lib/DataGrid';
+//import PersonSearchFormContainer from './PersonSearchFormContainer';
 import PersonSearchForm from './PersonSearchForm';
 
 // import './style.sass';
@@ -42,6 +43,7 @@ class SearchContainer extends Component {
         // isClientOnly={false}
         // onSelect={person => this.onSelectPerson(person)}
       />
+
     );
   }
 

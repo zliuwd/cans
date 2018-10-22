@@ -36,7 +36,8 @@ module Infrastructure
     end
 
     def login_url(callback)
-      perry_base_url = Rails.configuration.micro_services['perry_base_url']
+      #perry_base_url = Rails.configuration.micro_services['perry_base_url']
+      perry_base_url = "https://web.preint.cwds.io/perry"
       "#{perry_base_url}/authn/login?callback=#{callback}"
     end
   end

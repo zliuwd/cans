@@ -44,11 +44,18 @@ module Cans
     config.micro_services = config_for(:micro_services)
     config.relative_url_root = ENV['CANS_BASE_PATH'] || '/'
     config.assets.prefix = "#{ENV['CANS_BASE_PATH']}/packs"
+    authentication_login_url = <<~URL.strip
+     #{ENV.fetch('AUTHENTICATION_URL', '').chomp('/')}/authn/login?callback=
+    URL
+
+    authentication_logout_url = <<~URL.strip
+      #{ENV.fetch('AUTHENTICATION_URL', '').chomp('/')}/authn/logout
+    URL
     config.cans = {
-      # authentication_base_url: ENV.fetch('AUTHENTICATION_URL', ''),
-      # authentication_login_url: authentication_login_url,
-      # authentication_logout_url: authentication_logout_url,
-      # base_path: ENV.fetch('BASE_PATH', ''),
+      authentication_base_url: ENV.fetch('AUTHENTICATION_URL', ''),
+      #authentication_login_url: authentication_login_url,
+      #authentication_logout_url: authentication_logout_url,
+      base_path: ENV.fetch('BASE_PATH', ''),
       client_only_search: ENV.fetch('CLIENT_ONLY_SEARCH', 'false') == 'true',
       dora_api_url: ENV.fetch('DORA_API_URL', nil)
     }

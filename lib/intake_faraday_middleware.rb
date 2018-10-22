@@ -7,17 +7,14 @@ module IntakeFaradayMiddleware
   # RaiseHttpException handles the response codes at request level
   class RaiseHttpException < Faraday::Middleware
     def call(env)
-      debugger
       @app.call(env).on_complete do |response|
         handle_response(env, response)
       end
     end
 
     def handle_response(env, response) # rubocop:disable Metrics/MethodLength
-      debugger
       method = env[:method]
       status = response[:status]
-
       is_good = case status
                 when 200
                   %i[get put post].include? method
@@ -33,7 +30,6 @@ module IntakeFaradayMiddleware
     end
 
     def initialize(app)
-      debugger
       super app
       @parser = nil
     end

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import SuggestionHeader from '../SuggestionHeader';
+import { formatClientName } from '../../Client/Client.helper';
 // import { canUserAddClient } from '../../../util/authorization';
 // import CreateUnknownPerson from 'screenings/CreateUnknownPerson'
 // import ShowMoreResults from '../common/ShowMoreResults'
@@ -221,7 +222,6 @@ export default class Autocompleter extends Component {
     const total = this.state.results.length;
     const results = this.state.results;
     const searchTerm = this.state.searchTerm;
-
     const key = `${item.posInSet}-of-${item.setSize}`;
     if (item.suggestionHeader) {
       return (
@@ -230,15 +230,18 @@ export default class Autocompleter extends Component {
         </div>
       );
     }
+    debugger
     return (
       <div id={id} key={key} className={itemClassName(isHighlighted)}>
-        <PersonSuggestion {...item} />
+        <PersonSuggestion {...item._source} />
       </div>
     );
   }
 
+
   renderItem(item, isHighlighted, _styles) {
-    // const {canCreateNewPerson, results, total} = this.props
+
+    //const {canCreateNewPerson, results, total} = this.props
     // const total = 0
     // const results = [0,1,2]
 
@@ -247,7 +250,6 @@ export default class Autocompleter extends Component {
     // const className = itemClassName(isHighlighted) + buttonClassName
     const key = `${item.posInSet}-of-${item.setSize}`;
     const id = `search-result-${key}`;
-
     return this.renderEachItem(item, id, isHighlighted);
   }
 
@@ -276,6 +278,7 @@ export default class Autocompleter extends Component {
           return response.json();
         })
         .then(json => {
+          this.setState({results: json.hits.hits})
           // console.log(`onChangeInput API Response -`, JSON.stringify(json));
         });
 
@@ -307,17 +310,21 @@ export default class Autocompleter extends Component {
   }
 
   shouldItemRender(item, searchTerm) {
-    if (item.suggestionHeader) {
-      return true;
-    } else if (item.fullName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) {
-      return true;
-    } else {
-      return false;
+    var item_render = true
+    if (item.fullName != undefined && item.fullName != "") {
+      if (item.suggestionHeader) {
+        item_render = true;
+      } else if (item.fullName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) {
+        item_render = true;
+      } else {
+        item_render = false;
+      }
     }
+    return item_render;
   }
 
   renderAutocomplete() {
-    // const { searchTerm, id, results, canCreateNewPerson, total } = this.props;
+    /// const { searchTerm, id, results, canCreateNewPerson, total } = this.props;
     // const showMoreResults = { showMoreResults: 'Show More Results', posInSet: 'show-more', setSize: 'the-same' };
     // const createNewPerson = { createNewPerson: 'Create New Person', posInSet: 'create-new', setSize: 'the-same' };
     // const suggestionHeader = [{ suggestionHeader: 'suggestion Header' }];
@@ -328,10 +335,11 @@ export default class Autocompleter extends Component {
     const { id } = this.props;
     const suggestionHeader = [{ suggestionHeader: 'suggestion Header', fullName: '' }];
     const newResults = suggestionHeader.concat(this.state.results);
-
+    debugger
     return (
       <Autocomplete
         ref={el => (this.element_ref = el)}
+        //ref = ""
         wrapperStyle={{ display: 'block' }}
         inputProps={{ id, onBlur: this.hideMenu, onFocus: this.onFocus }}
         renderInput={props => this.renderInput(props)}

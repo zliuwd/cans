@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import Autocompleter from '../common/search/Autocompleter';
 
 class PersonSearchForm extends React.Component {
-  //   componentWillUnmount() {
-  //     this.props.onClear();
-  //     this.props.onChange('');
-  //   }
+    componentWillUnmount() {
+     this.props.onClear();
+     this.props.onChange('');
+   }
 
   render() {
-    const { searchPrompt } = this.props;
-    // const { searchPrompt, ...autocompleterProps } = this.props;
+    //const { searchPrompt } = this.props;
+
+    const { isAddressIncluded, searchPrompt, ...autocompleterProps } = this.props;
 
     return (
       <div>
@@ -24,10 +25,7 @@ class PersonSearchForm extends React.Component {
                 <label className="pull-left" htmlFor="client-search-autocompleter">
                   {searchPrompt}
                 </label>
-                <Autocompleter
-                  id="client-search-autocompleter"
-                  // {...autocompleterProps}
-                />
+                <Autocompleter id="client-search-autocompleter" {...autocompleterProps} isAddressIncludes={isAddressIncluded} />
               </div>
             </div>
           </div>

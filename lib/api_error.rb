@@ -6,7 +6,6 @@ class ApiError < StandardError
   attr_reader :api_error
 
   def initialize(exception_info)
-    debugger
     @api_error = generate_base_message(exception_info)
 
     unless exception_info[:response].nil?
