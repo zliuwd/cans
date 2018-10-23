@@ -1,11 +1,13 @@
 import {
   List,
-  Map,
-} from 'immutable'
+   Map,
+ } from 'immutable'
 import {
   selectCounties,
   systemCodeDisplayValue,
-} from 'selectors/systemCodeSelectors'
+} from './SystemCodeSelectors'
+// javascript/Application/components/Search/PeopleSearchSelectors.js
+// javascript/Application/components/Search/SystemCodeSelectors.js
 import {
   mapLanguages,
   mapIsSensitive,
@@ -15,9 +17,25 @@ import {
   mapEthnicities,
   mapAddress,
   mapPhoneNumber,
-} from 'utils/peopleSearchHelper'
-import {isCommaSuffix, formatHighlightedSuffix} from 'utils/nameFormatter'
-import {phoneNumberFormatter} from 'utils/phoneNumberFormatter'
+} from '../../util/PeopleSearchHelper'
+// app/javascript/Application/util/PeopleSearchHelper.js
+// import {isCommaSuffix, formatHighlightedSuffix} from 'utils/nameFormatter'
+// import {phoneNumberFormatter} from 'utils/phoneNumberFormatter'
+const isCommaSuffix = (suffix) => Boolean(
+  (typeof suffix === 'string') && NAME_SUFFIXES[suffix.toLowerCase()]
+)
+
+const formatHighlightedSuffix = (highlightedSuffix) => {
+  if (typeof highlightedSuffix !== 'string') { return null }
+
+  const suffix = highlightedSuffix.replace(/<\/?em>/gi, '')
+  const formattedSuffix = formatNameSuffix(suffix)
+  if (!formattedSuffix) { return formattedSuffix }
+  const rehighlightedSuffix = suffix === highlightedSuffix ?
+    formattedSuffix : `<em>${formattedSuffix}</em>`
+
+  return rehighlightedSuffix
+}
 
 const selectPeopleSearch = (state) => state.get('peopleSearch')
 export const selectSearchTermValue = (state) => (
@@ -78,12 +96,10 @@ const mapCounties = (counties, countyCodes) => counties.map((county) =>
 
 const hasActiveCsec = (_result) => false
 
-export const selectPeopleResults = (state) => selectPeopleSearch(state)
-  .get('results')
-  .map((fullResult) => {
+export const selectPeopleResults = (values) => values.map((fullResult) => {
+    debugger
     const result = fullResult.get('_source', Map())
     const highlight = fullResult.get('highlight', Map())
-    debugger
     return Map({
       legacy_id: result.get('id'),
       fullName: formatFullName(result, highlight),
