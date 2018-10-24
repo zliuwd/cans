@@ -6,6 +6,7 @@ import { Client, ClientAddEditForm, ClientsContainer, ClientService } from '../C
 import BreadCrumbsBuilder from './BreadCrumbsBuilder'
 import { navigation } from '../../util/constants'
 import { AssessmentContainer } from '../Assessment'
+import { SupervisorDashboard } from '../Supervisor'
 import Sticker from 'react-stickyfill'
 
 class Page extends Component {
@@ -55,6 +56,8 @@ class Page extends Component {
         return this.state.client && <AssessmentContainer isNewForm={true} {...params} />
       case navigation.ASSESSMENT_EDIT:
         return this.state.client && <AssessmentContainer isNewForm={false} {...params} />
+      case navigation.STAFF_LIST:
+        return <SupervisorDashboard />
       default:
         return null
     }

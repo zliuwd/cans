@@ -19,6 +19,7 @@ const Routes = () => {
         path="/clients/:clientId/assessments/:id"
         children={route => page(route, navigation.ASSESSMENT_EDIT)}
       />
+      <Route exact path="/staff" children={route => page(route, navigation.STAFF_LIST)} />
     </Switch>
   )
 }
