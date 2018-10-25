@@ -8,8 +8,9 @@ module Api
     
       def index
         response = PersonSearchRepository.search(search_params.to_hash, request.uuid, security_token: session['token'])
-        render json: response
       
+        render json: response
+              
       end
 
       def show

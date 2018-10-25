@@ -4,6 +4,7 @@ import moment from 'moment';
 import sanitizeHtml from 'sanitize-html';
 
 const AgeInfo = ({ dateOfBirth }) => {
+
   const sanitizedDob = sanitizeHtml(dateOfBirth, { allowedTags: [] });
   const dob = moment.utc(sanitizedDob, 'YYYY-MM-DD');
 

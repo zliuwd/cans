@@ -98,27 +98,27 @@ const hasActiveCsec = (_result) => false
 
 export const selectPeopleResults = (values) => values.map((fullResult) => {
     debugger
-    const result = fullResult.get('_source', Map())
-    const highlight = fullResult.get('highlight', Map())
-    return Map({
-      legacy_id: result.get('id'),
-      fullName: formatFullName(result, highlight),
-      legacyDescriptor: result.get('legacy_descriptor'),
-      gender: result.get('gender'),
-      languages: mapLanguages(state, result),
-      races: mapRaces(state, result),
-      ethnicity: mapEthnicities(state, result),
-      dateOfBirth: formatDOB(result.get('date_of_birth'), highlight.has('searchable_date_of_birth')),
-      isDeceased: Boolean(result.get('date_of_death')),
-      isCsec: hasActiveCsec(result),
-      ssn: formatSSN(maybeHighlightedField(result, highlight, 'ssn') || result.get('ssn')),
-      clientCounties: mapCounties(result.get('client_counties', List()), selectCounties(state)),
-      address: mapAddress(state, result),
-      phoneNumber: formatPhoneNumber(mapPhoneNumber(result).first()),
-      isSensitive: mapIsSensitive(result),
-      isSealed: mapIsSealed(result),
-      isProbationYouth: mapIsProbationYouth(result),
-    })
+    ///const result = fullResult.get('_source', Map())
+    //const highlight = fullResult.get('highlight', Map())
+    return {
+      legacy_id: "ftbeter dg",
+      fullName: "Chirag",
+      legacyDescriptor: "sjgydshd",
+      gender: "Male",
+      languages: "Hindi, English",
+      races: "Asian",
+      ethnicity: "ethnicity",
+      dateOfBirth: "01/06/1991",
+      isDeceased: "No",
+      isCsec: "isCsec",
+      ssn: "ssn456",
+      clientCounties: "India",
+      address: "0.23423, 0.23423",
+      phoneNumber: "234546783",
+      isSensitive: "No",
+      isSealed: "No",
+      isProbationYouth: "No",
+    }
   })
 
 export const selectStartTime = (state) => selectPeopleSearch(state)

@@ -14,23 +14,29 @@ const PersonSuggestion = ({
   first_name,
   middle_name,
   last_name,
-  dateOfBirth,
+  date_of_birth,
   isCsec,
+  csec,
   isDeceased,
   gender,
   languages,
   races,
   ethnicity,
   ssn,
-  address,
+  addresses,
   phoneNumber,
-  // legacyDescriptor,
+  phone_numbers,
+  client_counties,
+  legacyDescriptor,
+  legacy_descriptor,
   isSensitive,
+  sensitivity_indicator,
+  race_ethnicity,
+  race_codes,
   isSealed,
   isProbationYouth,
 }) => {
 
-  debugger
 
   const sanitizedField = field => ({
     dangerouslySetInnerHTML: { 
@@ -38,7 +44,7 @@ const PersonSuggestion = ({
     },
   });
   // const legacySourceString = legacySourceFormatter(legacyDescriptor || {});
-debugger
+
   return (
     <div className="row">
       <div className="col-md-2 profile-picture">
@@ -49,7 +55,8 @@ debugger
       <div className="col-md-10">
         <div className="row">
           <div className="col-md-12">
-            <strong className="highlighted" {...sanitizedField(first_name + " " +middle_name+ " " +last_name)}/> 
+            <strong className="highlighted" {...sanitizedField(first_name + " " +middle_name+ " " +last_name)}/>
+            <div  {...sanitizedField("Client ID "+legacy_descriptor.legacy_ui_id+" in CWS-CMS") }/>
             {isCsec && <span className="information-flag search-result">CSEC</span>}
             {isDeceased && <span className="information-flag search-result">Deceased</span>}
             {isProbationYouth && <span className="information-flag search-result">Probation Youth</span>}
@@ -57,19 +64,16 @@ debugger
         </div>
         <div className="row">
           <div className="col-md-6">
-            <GenderRaceAndEthnicity gender={gender} races={races} ethnicity={ethnicity} />
-            <AgeInfo dateOfBirth={dateOfBirth} />
-            //<Languages languages={languages} />
-            {ssn && (
-              <div>
-                <strong className="c-gray half-pad-right">SSN</strong>
-                <span className="highlighted" {...sanitizedField(ssn)} />
-              </div>
-            )}
+            <GenderRaceAndEthnicity gender={gender} races={race_ethnicity.race_codes} ethnicity={race_ethnicity} />
+            <AgeInfo dateOfBirth={date_of_birth} />
+ 
+
           </div>
           <div className="col-md-6">
-            {address && <AddressInfo {...address} />}
-            {phoneNumber && <PhoneNumberInfo {...phoneNumber} />}
+            {addresses && <AddressInfo type={addresses[0].type.description} streetAddress={ addresses[0].street_name} city={addresses[0].city} state={addresses[0].state} zip={addresses[0].zip} />}
+           
+
+            {phone_numbers && <PhoneNumberInfo number={phone_numbers[0].number} type={phone_numbers[0].type} />}
           </div>
         </div>
       </div>

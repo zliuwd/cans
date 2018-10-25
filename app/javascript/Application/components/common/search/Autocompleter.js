@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import SuggestionHeader from '../SuggestionHeader';
 import { formatClientName } from '../../Client/Client.helper';
+import { selectPeopleResults } from '../../Search/PeopleSearchSelectors'
+
 // import { canUserAddClient } from '../../../util/authorization';
 // import CreateUnknownPerson from 'screenings/CreateUnknownPerson'
 // import ShowMoreResults from '../common/ShowMoreResults'
@@ -230,9 +232,9 @@ export default class Autocompleter extends Component {
         </div>
       );
     }
-    debugger
     return (
       <div id={id} key={key} className={itemClassName(isHighlighted)}>
+        
         <PersonSuggestion {...item._source} />
       </div>
     );
@@ -335,7 +337,7 @@ export default class Autocompleter extends Component {
     const { id } = this.props;
     const suggestionHeader = [{ suggestionHeader: 'suggestion Header', fullName: '' }];
     const newResults = suggestionHeader.concat(this.state.results);
-    debugger
+  
     return (
       <Autocomplete
         ref={el => (this.element_ref = el)}
