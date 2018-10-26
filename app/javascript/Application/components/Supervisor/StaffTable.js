@@ -12,10 +12,14 @@ const columns = [
   {
     Header: 'Total Clients',
     accessor: 'clients_count',
+    className: 'text-center',
+    headerClassName: 'text-center',
   },
   {
     Header: 'In Progress',
     accessor: 'in_progress_count',
+    className: 'text-center',
+    headerClassName: 'text-center',
   },
 ]
 
