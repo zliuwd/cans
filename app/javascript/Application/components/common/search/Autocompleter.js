@@ -25,9 +25,10 @@ const itemClassName = isHighlighted => `search-item${isHighlighted ? ' highlight
 export default class Autocompleter extends Component {
   constructor(props) {
     super(props);
+    const searchTerm = sessionStorage.getItem('searchTerm');
     this.state = {
       menuVisible: false,
-      searchTerm: '',
+      searchTerm: searchTerm ? searchTerm : '',
       redirection: {
         shouldRedirect: false,
         successClientId: null,
@@ -49,7 +50,7 @@ export default class Autocompleter extends Component {
           suffix: '',
           dateOfBirth: '2018/10/01',
           dob: '2018-10-01',
-          external_id: 50000,
+          external_id: 50001,
           isCsec: false,
           isDeceased: false,
           gender: 'male',
@@ -130,6 +131,10 @@ export default class Autocompleter extends Component {
     return value && value.replace(/^\s+/, '').length >= MIN_SEARCHABLE_CHARS;
   }
 
+  componentDidMount() {
+    this.onFocus();
+  }
+
   hideMenu() {
     if (this.inputRef) {
       this.inputRef.setAttribute('aria-activedescendant', '');
@@ -169,7 +174,6 @@ export default class Autocompleter extends Component {
     // this.hideMenu();
 
     if (!item.suggestionHeader) {
-      console.log(`Selected Client `, item);
       // if we did not click on the suggestion header, then redirect
       this.setState({ redirection: { shouldRedirect: true, selectedClient: item, successClientId: item.external_id } });
     }
@@ -177,6 +181,8 @@ export default class Autocompleter extends Component {
 
   onItemSelect(_value, item) {
     // const { isSelectable, staffId, startTime } = this.props;
+    sessionStorage.setItem('searchTerm','Test');
+    // sessionStorage.setItem('results', 'results');
 
     if (this.isSelectable(item)) {
       window.alert('You are not authorized to add this person.'); // eslint-disable-line no-alert
@@ -184,6 +190,14 @@ export default class Autocompleter extends Component {
     }
     this.onSelect(item);
   }
+
+  // sessionStorage(search_term, value) {
+  //   window.sessionStorage
+  //   sessionStorage.setItem("search_term");
+  //   const last_name=sessionStorage.getItem("search_term");
+  //   return search_term;
+
+  // }
 
   // onItemSelect(_value, item) {
   //   const { isSelectable, staffId, startTime } = this.props;
@@ -217,7 +231,7 @@ export default class Autocompleter extends Component {
   }
 
   renderEachItem(item, id, isHighlighted) {
-    // const {total, results, searchTerm} = this.props
+    ///const {total, results, searchTerm} = this.props;
     const total = this.state.results.length;
     const results = this.state.results;
     const searchTerm = this.state.searchTerm;
