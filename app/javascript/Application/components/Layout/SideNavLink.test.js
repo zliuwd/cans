@@ -14,7 +14,7 @@ describe('active <SideNavLink />', () => {
   it('renders with active css class', () => {
     expect(
       getWrapper(true)
-        .find('#side-nav')
+        .find('.sidebar-item')
         .hasClass('active')
     ).toBe(true)
   })
@@ -22,7 +22,7 @@ describe('active <SideNavLink />', () => {
   it('renders with no active css class', () => {
     expect(
       getWrapper(false)
-        .find('#side-nav')
+        .find('.sidebar-item')
         .hasClass('active')
     ).toBe(false)
   })
@@ -35,8 +35,8 @@ describe('<SideNavLink /> text', () => {
         <SideNavLink isActive={true} text={'Reports'} href={'/reports'} onClick={jest.fn()} />
       </MemoryRouter>
     )
-    expect(wrapper.find('#side-nav').text()).toBe('Reports')
-    expect(wrapper.find('#side-nav').text()).not.toBe('Report')
+    expect(wrapper.find('.sidebar-item').text()).toBe('Reports')
+    expect(wrapper.find('.sidebar-item').text()).not.toBe('Report')
   })
 })
 
@@ -54,7 +54,7 @@ describe('<SideNavLink /> onClick', () => {
     })
   })
 
-  describe('when key pressed for accessability', () => {
+  describe('when key pressed for accessibility', () => {
     it('call onClick', () => {
       const onClickFunction = jest.fn()
       const wrapper = mount(

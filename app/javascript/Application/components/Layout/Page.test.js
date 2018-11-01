@@ -9,6 +9,7 @@ import { navigation } from '../../util/constants'
 import AssessmentContainer from '../Assessment/AssessmentContainer'
 import ClientAddEditForm from '../Client/ClientAddEditForm'
 import Client from '../Client/Client'
+import SearchContainer from '../Search/SearchContainer'
 import { SupervisorDashboard } from '../Supervisor'
 
 describe('<Page />', () => {
@@ -23,6 +24,7 @@ describe('<Page />', () => {
 
       expect(sideNav.length).toBe(1)
       expect(sideNav.dive().find({ text: 'County Client List' }).length).toBe(1)
+      expect(sideNav.dive().find({ text: 'Client Search' }).length).toBe(1)
     })
 
     it('renders with <BreadCrumbsBuilder /> links', async () => {
@@ -91,5 +93,15 @@ describe('<Page />', () => {
     const wrapper = shallow(<Page match={{ params: {} }} location={{}} navigateTo={navigation.STAFF_LIST} />)
     await wrapper.instance().componentDidMount()
     expect(wrapper.find(SupervisorDashboard).exists()).toBe(true)
+  })
+})
+
+describe('when searching for clients', () => {
+  const getWrapper = navigateTo => shallow(<Page match={{ params: {} }} location={{}} navigateTo={navigateTo} />)
+  it('renders < SearchContainer />', async () => {
+    jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
+    const wrapper = getWrapper(navigation.CLIENT_SEARCH)
+    await wrapper.instance().componentDidMount()
+    expect(wrapper.find(SearchContainer).length).toBe(1)
   })
 })

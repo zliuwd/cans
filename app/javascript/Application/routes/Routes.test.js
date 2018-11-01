@@ -67,6 +67,10 @@ describe('<Router />', () => {
       testRoute('/clients/:clientId/assessments/:id', navigation.ASSESSMENT_EDIT)
     })
 
+    it('renders a search route', () => {
+      testRoute('/search', navigation.CLIENT_SEARCH)
+    })
+
     it('renders a supervisor dashboard route', () => {
       testRoute('/staff', navigation.STAFF_LIST)
     })

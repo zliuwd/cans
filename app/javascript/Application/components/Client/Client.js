@@ -14,12 +14,10 @@ import './style.sass'
 class Client extends Component {
   constructor(props) {
     super(props)
-
     const { isNewForm, successClientId } = (this.props.location || {}).state || {}
     if (successClientId && this.props.history) {
       this.props.history.replace({ ...this.props.location, state: {} })
     }
-
     this.state = {
       isNewForm,
       shouldRenderClientMessage: !!successClientId,
