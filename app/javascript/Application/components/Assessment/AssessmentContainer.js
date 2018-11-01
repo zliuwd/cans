@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react'
 import { Redirect, Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { CloseableAlert, alertType } from '../common/CloseableAlert'
+import { clone } from '../../util/common'
+import PageModal from '../common/PageModal'
 import {
   Assessment,
   AssessmentFormHeader,
@@ -41,6 +43,8 @@ class AssessmentContainer extends Component {
       isEditable: false,
       shouldPrintNow: false,
       isValidDate: true,
+      isCaregiverWarningShown: false,
+      focusedCaregiverId: '',
     }
   }
 
@@ -63,6 +67,11 @@ class AssessmentContainer extends Component {
 
   componentWillUnmount() {
     this.muteCtrlP()
+  }
+
+  handleWarningShow = (switcher, caregiverIndex) => {
+    caregiverIndex = caregiverIndex || null
+    this.setState({ isCaregiverWarningShown: switcher, focusedCaregiverId: caregiverIndex })
   }
 
   activeCtrlP = () => {
@@ -153,6 +162,24 @@ class AssessmentContainer extends Component {
     })
   }
 
+  handleCaregiverRemoveAll = (name, value) => {
+    let tempAssessment = clone(this.state.assessment)
+    tempAssessment[name] = value
+    this.updateAssessment(tempAssessment)
+  }
+
+  handleCaregiverRemove = caregiverIndex => {
+    let tempAssessment = clone(this.state.assessment)
+    if (caregiverIndex !== null) {
+      const domains = tempAssessment.state.domains
+      const newDomains = domains.filter(domain => domain.caregiver_index !== caregiverIndex)
+      tempAssessment.state.domains = newDomains
+      this.updateAssessment(tempAssessment)
+    } else {
+      this.handleCaregiverRemoveAll('has_caregiver', false)
+    }
+  }
+
   initialSave(assessment) {
     this.setState({
       assessment,
@@ -163,7 +190,7 @@ class AssessmentContainer extends Component {
   }
 
   updateUrlWithAssessment(assessment) {
-    this.props.history.push(`/clients/${this.props.client.identifier}/assessments/${assessment.id}`)
+    this.props.history.push(`/clients/${this.props.client.id}/assessments/${assessment.id}`)
   }
 
   hideSaveSuccessMessage = () => {
@@ -255,6 +282,29 @@ class AssessmentContainer extends Component {
     this.setState({ isValidDate: this.validateDate(dateValue) })
   }
 
+  renderWarning = () => {
+    const caregiverWarning = (
+      <div>
+        You are about to remove the <strong className="cargiver-text-block">caregiver</strong> from this Assessment.
+      </div>
+    )
+    return this.state.isCaregiverWarningShown ? (
+      <PageModal
+        isOpen={true}
+        title={'Warning'}
+        warningDescription={caregiverWarning}
+        description={'This may effect some of your entries.'}
+        removeButtonLabel={'Remove'}
+        cancelButtonLabel={'Cancel'}
+        onCancel={() => this.handleWarningShow(false)}
+        onRemove={() => {
+          this.handleWarningShow(false)
+          this.handleCaregiverRemove(this.state.focusedCaregiverId)
+        }}
+      />
+    ) : null
+  }
+
   render() {
     const { client, isNewForm } = this.props
     const {
@@ -269,14 +319,14 @@ class AssessmentContainer extends Component {
     } = this.state
     const { shouldRedirect, successAssessmentId } = redirection
     if (shouldRedirect) {
-      return <Redirect push to={{ pathname: `/clients/${client.identifier}`, state: { successAssessmentId } }} />
+      return <Redirect push to={{ pathname: `/clients/${client.id}`, state: { successAssessmentId } }} />
     }
     const pageTitle = isNewForm ? 'New CANS' : 'CANS Assessment Form'
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus)
     const printButton = this.renderPrintButton()
-
     return (
       <Fragment>
+        {this.renderWarning()}
         <PageInfo title={pageTitle} actionNode={printButton} />
         {shouldPrintNow && (
           <Print node={<PrintAssessment assessment={assessment} i18n={i18n} />} onClose={this.togglePrintNow} />
@@ -286,8 +336,15 @@ class AssessmentContainer extends Component {
           assessment={assessment}
           onAssessmentUpdate={this.updateAssessment}
           onKeyUp={this.handleKeyUp}
+          handleWarningShow={this.handleWarningShow}
+          isCaregiverWarningShown={this.state.isCaregiverWarningShown}
         />
-        <Assessment assessment={assessment} i18n={i18n} onAssessmentUpdate={this.updateAssessment} />
+        <Assessment
+          assessment={assessment}
+          i18n={i18n}
+          onAssessmentUpdate={this.updateAssessment}
+          handleWarningShow={this.handleWarningShow}
+        />
         {LoadingState.ready === assessmentServiceStatus &&
           isEditable && (
             <Typography variant="headline" className={'submit-validation-message'}>
@@ -300,8 +357,8 @@ class AssessmentContainer extends Component {
             type={alertType.SUCCESS}
             message={
               <Fragment>
-                Success! CANS assessment has been saved. <Link to={`/clients/${client.identifier}`}>Click here</Link> to
-                return to Child/Youth profile.
+                Success! CANS assessment has been saved. <Link to={`/clients/${client.id}`}>Click here</Link> to return
+                to Child/Youth profile.
               </Fragment>
             }
             onClose={this.hideSaveSuccessMessage}

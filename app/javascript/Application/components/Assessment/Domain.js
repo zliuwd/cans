@@ -81,7 +81,7 @@ class Domain extends Component {
 
   handleRemoveCaregiverDomain = event => {
     if (isA11yAllowedInput(event)) {
-      this.props.onRemoveCaregiverDomain(this.props.domain.caregiver_index)
+      this.props.handleWarningShow(true, this.props.domain.caregiver_index)
     }
   }
 
@@ -198,6 +198,7 @@ class Domain extends Component {
 Domain.propTypes = {
   canReleaseConfidentialInfo: PropTypes.bool.isRequired,
   domain: PropTypes.object.isRequired,
+  handleWarningShow: PropTypes.func,
   i18n: PropTypes.object.isRequired,
   i18nAll: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
@@ -206,7 +207,10 @@ Domain.propTypes = {
   onCaregiverNameUpdate: PropTypes.func.isRequired,
   onConfidentialityUpdate: PropTypes.func.isRequired,
   onRatingUpdate: PropTypes.func.isRequired,
-  onRemoveCaregiverDomain: PropTypes.func.isRequired,
+}
+
+Domain.defaultProps = {
+  handleWarningShow: () => {},
 }
 
 export default Domain

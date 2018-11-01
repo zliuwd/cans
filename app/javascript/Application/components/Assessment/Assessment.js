@@ -141,6 +141,7 @@ class Assessment extends Component {
               onAddCaregiverDomain={this.addCaregiverDomainAfter}
               onRemoveCaregiverDomain={this.removeCaregiverDomain}
               onCaregiverNameUpdate={this.updateCaregiverName}
+              handleWarningShow={this.props.handleWarningShow}
             />
           )
         })}
@@ -151,8 +152,13 @@ class Assessment extends Component {
 
 Assessment.propTypes = {
   assessment: PropTypes.object.isRequired,
+  handleWarningShow: PropTypes.func,
   i18n: PropTypes.object.isRequired,
   onAssessmentUpdate: PropTypes.func.isRequired,
+}
+
+Assessment.defaultProps = {
+  handleWarningShow: () => {},
 }
 
 export default Assessment
