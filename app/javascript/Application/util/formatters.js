@@ -17,5 +17,5 @@ export function addTrailingSlash(url) {
   if (!url) {
     return '/'
   }
-  return url[url.length - 1] === '/' ? url : url + '/'
+  return url[url.length - 1] === '/' ? url : `${url}/`
 }

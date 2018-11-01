@@ -96,7 +96,7 @@ class Assessment extends Component {
   removeAllCaregiverDomains() {
     const assessment = clone(this.props.assessment)
     const domains = assessment.state.domains
-    let caregiverDomains = domains.filter(domain => domain.is_caregiver_domain)
+    const caregiverDomains = domains.filter(domain => domain.is_caregiver_domain)
     for (const caregiverDomain of caregiverDomains) {
       domains.splice(domains.findIndex(domain => domain.id === caregiverDomain.id), 1)
     }

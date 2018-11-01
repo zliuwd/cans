@@ -17,8 +17,8 @@ import Grid from '@material-ui/core/Grid'
 import './style.sass'
 
 const mapPropsToState = props => ({
-  title: props.i18n['_title_'] || '',
-  description: props.i18n['_description_'] || 'No Description',
+  title: props.i18n._title_ || '',
+  description: props.i18n._description_ || 'No Description',
   caregiverName: props.domain.caregiver_name || '',
 })
 

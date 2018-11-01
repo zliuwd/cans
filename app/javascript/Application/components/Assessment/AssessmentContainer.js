@@ -99,7 +99,7 @@ class AssessmentContainer extends Component {
       const instrument = await AssessmentService.fetchNewAssessment()
       return this.onFetchNewAssessmentSuccess(instrument)
     } catch (e) {
-      this.setState({ assessmentServiceStatus: LoadingState.error })
+      return this.setState({ assessmentServiceStatus: LoadingState.error })
     }
   }
 
@@ -129,7 +129,7 @@ class AssessmentContainer extends Component {
       const assessment = await AssessmentService.fetch(id)
       return this.onFetchAssessmentSuccess(assessment)
     } catch (e) {
-      this.setState({ assessmentServiceStatus: LoadingState.error })
+      return this.setState({ assessmentServiceStatus: LoadingState.error })
     }
   }
 
@@ -163,13 +163,13 @@ class AssessmentContainer extends Component {
   }
 
   handleCaregiverRemoveAll = (name, value) => {
-    let tempAssessment = clone(this.state.assessment)
+    const tempAssessment = clone(this.state.assessment)
     tempAssessment[name] = value
     this.updateAssessment(tempAssessment)
   }
 
   handleCaregiverRemove = caregiverIndex => {
-    let tempAssessment = clone(this.state.assessment)
+    const tempAssessment = clone(this.state.assessment)
     if (caregiverIndex !== null) {
       const domains = tempAssessment.state.domains
       const newDomains = domains.filter(domain => domain.caregiver_index !== caregiverIndex)
@@ -382,7 +382,7 @@ class AssessmentContainer extends Component {
         <AssessmentFormFooter
           onCancelClick={this.handleCancelClick}
           isSaveButtonEnabled={
-            this.state.isValidDate && isEditable && canPerformUpdates && !!this.state.assessment.event_date
+            this.state.isValidDate && isEditable && canPerformUpdates && Boolean(this.state.assessment.event_date)
           }
           onSaveAssessment={this.handleSaveAssessment}
           isSubmitButtonEnabled={isEditable && canPerformUpdates && isValidForSubmit}
