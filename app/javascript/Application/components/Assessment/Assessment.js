@@ -152,13 +152,9 @@ class Assessment extends Component {
 
 Assessment.propTypes = {
   assessment: PropTypes.object.isRequired,
-  handleWarningShow: PropTypes.func,
+  handleWarningShow: PropTypes.func.isRequired,
   i18n: PropTypes.object.isRequired,
   onAssessmentUpdate: PropTypes.func.isRequired,
-}
-
-Assessment.defaultProps = {
-  handleWarningShow: () => {},
 }
 
 export default Assessment

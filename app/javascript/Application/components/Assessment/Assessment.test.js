@@ -10,7 +10,9 @@ const enhanceDomainToCaregiver = domain => ({ ...domain, is_caregiver_domain: tr
 describe('<Assessment />', () => {
   describe('assessment form with data', () => {
     it('renders with 1 <Domain /> component', () => {
-      const wrapper = mount(<Assessment assessment={assessment} onAssessmentUpdate={jest.fn()} i18n={i18n} />)
+      const wrapper = mount(
+        <Assessment assessment={assessment} onAssessmentUpdate={jest.fn()} handleWarningShow={jest.fn()} i18n={i18n} />
+      )
       expect(wrapper.find(Domain).length).toBe(1)
     })
   })
@@ -22,7 +24,14 @@ describe('<Assessment />', () => {
         const initialAssessment = clone(assessment)
         const updatedAssessment = clone(assessment)
         const mockFn = jest.fn()
-        const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+        const wrapper = shallow(
+          <Assessment
+            onAssessmentUpdate={mockFn}
+            handleWarningShow={mockFn}
+            assessment={initialAssessment}
+            i18n={i18n}
+          />
+        )
 
         // when
         updatedAssessment.has_caregiver = true
@@ -44,7 +53,14 @@ describe('<Assessment />', () => {
         initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'b' })
         initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'c' })
         const mockFn = jest.fn()
-        const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+        const wrapper = shallow(
+          <Assessment
+            onAssessmentUpdate={mockFn}
+            assessment={initialAssessment}
+            handleWarningShow={mockFn}
+            i18n={i18n}
+          />
+        )
 
         // when
         updatedAssessment.has_caregiver = false
@@ -63,7 +79,9 @@ describe('<Assessment />', () => {
       describe('rating', () => {
         it('is invoked when item rating is updated', () => {
           const mockFn = jest.fn()
-          const wrapper = mount(<Assessment onAssessmentUpdate={mockFn} assessment={assessment} i18n={i18n} />)
+          const wrapper = mount(
+            <Assessment onAssessmentUpdate={mockFn} handleWarningShow={mockFn} assessment={assessment} i18n={i18n} />
+          )
           expect(assessment.state.domains[0].items[0].rating).toBe(1)
           wrapper.instance().handleUpdateItemRating('1', 2)
           const newAssessment = clone(assessment)
@@ -76,7 +94,14 @@ describe('<Assessment />', () => {
           const mockFn = jest.fn()
           const initialAssessment = clone(assessment)
           initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0])
-          const wrapper = mount(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+          const wrapper = mount(
+            <Assessment
+              onAssessmentUpdate={mockFn}
+              assessment={initialAssessment}
+              handleWarningShow={mockFn}
+              i18n={i18n}
+            />
+          )
 
           // when
           expect(initialAssessment.state.domains[0].items[0].rating).toBe(1)
@@ -94,7 +119,14 @@ describe('<Assessment />', () => {
         it('is invoked when item confidentiality is updated', () => {
           const mockFn = jest.fn()
           const initialAssessment = clone(assessment)
-          const wrapper = mount(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+          const wrapper = mount(
+            <Assessment
+              onAssessmentUpdate={mockFn}
+              assessment={initialAssessment}
+              handleWarningShow={mockFn}
+              i18n={i18n}
+            />
+          )
           expect(initialAssessment.state.domains[0].items[3].confidential).toBe(false)
           wrapper.instance().handleUpdateItemConfidentiality('EXPOSURE', true)
           const newAssessment = clone(assessment)
@@ -107,7 +139,14 @@ describe('<Assessment />', () => {
           const mockFn = jest.fn()
           const initialAssessment = clone(assessment)
           initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0])
-          const wrapper = mount(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+          const wrapper = mount(
+            <Assessment
+              onAssessmentUpdate={mockFn}
+              handleWarningShow={mockFn}
+              assessment={initialAssessment}
+              i18n={i18n}
+            />
+          )
 
           // when
           expect(initialAssessment.state.domains[0].items[3].confidential).toBe(false)
@@ -130,7 +169,14 @@ describe('<Assessment />', () => {
         const mockFn = jest.fn()
         const initialAssessment = clone(assessment)
         initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0])
-        const wrapper = mount(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+        const wrapper = mount(
+          <Assessment
+            onAssessmentUpdate={mockFn}
+            handleWarningShow={mockFn}
+            assessment={initialAssessment}
+            i18n={i18n}
+          />
+        )
         expect(initialAssessment.state.domains[0].caregiver_name).toBeUndefined()
 
         // when
@@ -151,7 +197,14 @@ describe('<Assessment />', () => {
         // given
         const initialAssessment = clone(assessment)
         const mockFn = jest.fn()
-        const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+        const wrapper = shallow(
+          <Assessment
+            onAssessmentUpdate={mockFn}
+            handleWarningShow={mockFn}
+            assessment={initialAssessment}
+            i18n={i18n}
+          />
+        )
 
         // when
         wrapper.instance().addInitialCaregiverDomain()
@@ -168,7 +221,14 @@ describe('<Assessment />', () => {
         const initialAssessment = clone(assessment)
         initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0])
         const mockFn = jest.fn()
-        const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+        const wrapper = shallow(
+          <Assessment
+            onAssessmentUpdate={mockFn}
+            handleWarningShow={mockFn}
+            assessment={initialAssessment}
+            i18n={i18n}
+          />
+        )
         const instance = wrapper.instance()
 
         // when
@@ -189,7 +249,14 @@ describe('<Assessment />', () => {
           initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'b' })
           initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'c' })
           const mockFn = jest.fn()
-          const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+          const wrapper = shallow(
+            <Assessment
+              onAssessmentUpdate={mockFn}
+              handleWarningShow={mockFn}
+              assessment={initialAssessment}
+              i18n={i18n}
+            />
+          )
           const instance = wrapper.instance()
 
           // when
@@ -207,7 +274,14 @@ describe('<Assessment />', () => {
           initialAssessment.has_caregiver = true
           initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0])
           const mockFn = jest.fn()
-          const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+          const wrapper = shallow(
+            <Assessment
+              onAssessmentUpdate={mockFn}
+              handleWarningShow={mockFn}
+              assessment={initialAssessment}
+              i18n={i18n}
+            />
+          )
           const instance = wrapper.instance()
 
           // when
@@ -229,7 +303,14 @@ describe('<Assessment />', () => {
         initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'b' })
         initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'c' })
         const mockFn = jest.fn()
-        const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+        const wrapper = shallow(
+          <Assessment
+            onAssessmentUpdate={mockFn}
+            handleWarningShow={mockFn}
+            assessment={initialAssessment}
+            i18n={i18n}
+          />
+        )
 
         expect(initialAssessment.state.domains.length).toBe(3)
 
