@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import SubordinateLoadingBoundary from './SubordinateLoadingBoundary'
-import { LoadingState } from '../../util/loadingHelper'
+import { LoadingState } from '../../../util/loadingHelper'
 import SubordinateService from './Subordinate.service'
 
 jest.mock('./Subordinate.service')

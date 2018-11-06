@@ -1,7 +1,7 @@
 import SubordinateService from './Subordinate.service'
-import apiEndpoints from '../../App.api'
+import apiEndpoints from '../../../App.api'
 
-jest.mock('../../App.api')
+jest.mock('../../../App.api')
 
 describe('SubordinateService', () => {
   describe('#fetch', () => {

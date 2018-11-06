@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { LoadingState } from '../../util/loadingHelper'
+import { LoadingState } from '../../../util/loadingHelper'
 import SubordinateService from './Subordinate.service'
 
 class SubordinateLoadingBoundary extends React.PureComponent {

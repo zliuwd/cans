@@ -25,6 +25,7 @@ const Routes = () => {
       />
       <Route exact path="/search" children={route => page(route, navigation.CLIENT_SEARCH)} />
       <Route exact path="/staff" children={route => page(route, navigation.STAFF_LIST)} />
+      <Route exact path="/staff/:staffId" children={route => page(route, navigation.STAFF_READ)} />
     </Switch>
   )
 }

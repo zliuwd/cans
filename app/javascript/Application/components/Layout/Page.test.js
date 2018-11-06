@@ -10,7 +10,7 @@ import AssessmentContainer from '../Assessment/AssessmentContainer'
 import ClientAddEditForm from '../Client/ClientAddEditForm'
 import Client from '../Client/Client'
 import SearchContainer from '../Search/SearchContainer'
-import { SupervisorDashboard } from '../Supervisor'
+import { SupervisorDashboard, CaseLoadPage } from '../Staff'
 
 describe('<Page />', () => {
   describe('layout', () => {
@@ -93,6 +93,14 @@ describe('<Page />', () => {
     const wrapper = shallow(<Page match={{ params: {} }} location={{}} navigateTo={navigation.STAFF_LIST} />)
     await wrapper.instance().componentDidMount()
     expect(wrapper.find(SupervisorDashboard).exists()).toBe(true)
+  })
+
+  it('renders <CaseLoadPage /> when navigated to', async () => {
+    const wrapper = shallow(
+      <Page match={{ params: { staffId: '101' } }} location={{}} navigateTo={navigation.STAFF_READ} />
+    )
+    await wrapper.instance().componentDidMount()
+    expect(wrapper.find(CaseLoadPage).exists()).toBe(true)
   })
 })
 

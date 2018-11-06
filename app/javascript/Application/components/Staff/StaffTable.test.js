@@ -2,16 +2,21 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import DataGrid from '@cwds/components/lib/DataGrid'
 import StaffTable from './StaffTable'
+import StaffNameLink from './StaffNameLink'
 import { staff as mockStaff } from './staff.mocks.test'
 
 describe('<StaffTable />', () => {
   const render = staff => shallow(<StaffTable staff={staff} />)
 
+  const findColumn = headerText =>
+    render([])
+      .props()
+      .columns.find(column => column.Header === headerText)
+
   const assertColumnIsCentered = headerText => {
-    const columns = render([]).props().columns
-    const totalColumn = columns.find(column => column.Header === headerText)
-    expect(totalColumn.className).toBe('text-center')
-    expect(totalColumn.headerClassName).toBe('text-center')
+    const column = findColumn(headerText)
+    expect(column.className).toBe('text-center')
+    expect(column.headerClassName).toBe('text-center')
   }
 
   it('renders a DataGrid', () => {
@@ -24,9 +29,15 @@ describe('<StaffTable />', () => {
 
   it('shows all rows without pagination', () => {
     const grid = render([]).find(DataGrid)
+    const moreThanEnough = 1000
     expect(grid.props().showPagination).toBe(false)
-    expect(grid.props().defaultPageSize).toBe(1000)
-    expect(grid.props().minRows).toBe(3)
+    expect(grid.props().defaultPageSize).toBe(moreThanEnough)
+  })
+
+  it('always displays enough rows for a No Records message', () => {
+    const grid = render([]).find(DataGrid)
+    const spaceForMessage = 3
+    expect(grid.props().minRows).toBe(spaceForMessage)
   })
 
   it('sorts by staffName by default', () => {
@@ -37,6 +48,11 @@ describe('<StaffTable />', () => {
   it('uses the list of staff people as data', () => {
     const grid = render(mockStaff)
     expect(grid.props().data).toBe(mockStaff)
+  })
+
+  it('renders staff names as links', () => {
+    const staffNameColumn = findColumn('Staff Name')
+    expect(staffNameColumn.Cell).toBe(StaffNameLink)
   })
 
   it('centers the "Total Clients" column', () => {

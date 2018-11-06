@@ -20,10 +20,6 @@ export class ClientService {
     return apiPost('/people/_search', payload)
   }
 
-  static socialWorkerClient(id) {
-    return apiGet(`/staff/${id}/people`)
-  }
-
   static addClient(childInfoObj) {
     return apiPost(`/people`, childInfoObj)
   }

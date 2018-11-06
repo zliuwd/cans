@@ -1,4 +1,4 @@
-import { apiGet } from '../../App.api'
+import { apiGet } from '../../../App.api'
 
 class SubordinateService {
   static fetch() {

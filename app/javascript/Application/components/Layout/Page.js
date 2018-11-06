@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Container, Row, Col } from 'reactstrap'
 import { SideNav } from './'
-import { Client, ClientAddEditForm, ClientsContainer, ClientService } from '../Client'
+import { Client, ClientAddEditForm, ClientService } from '../Client'
 import BreadCrumbsBuilder from './BreadCrumbsBuilder'
 import { navigation } from '../../util/constants'
 import { AssessmentContainer } from '../Assessment'
 import { SearchContainer } from '../Search'
-import { SupervisorDashboard } from '../Supervisor'
+import { SupervisorDashboard, CaseLoadPage, CurrentUserCaseLoadPage } from '../Staff'
 import Sticker from 'react-stickyfill'
 
 class Page extends Component {
@@ -46,7 +46,7 @@ class Page extends Component {
     }
     switch (this.props.navigateTo) {
       case navigation.CHILD_LIST:
-        return <ClientsContainer />
+        return <CurrentUserCaseLoadPage />
       case navigation.CHILD_PROFILE:
         return this.state.client && <Client {...params} />
       case navigation.CHILD_PROFILE_ADD:
@@ -61,6 +61,8 @@ class Page extends Component {
         return <SearchContainer />
       case navigation.STAFF_LIST:
         return <SupervisorDashboard />
+      case navigation.STAFF_READ:
+        return <CaseLoadPage staffId={this.props.match.params.staffId} />
       default:
         return null
     }
@@ -94,6 +96,7 @@ Page.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       clientId: PropTypes.string,
+      staffId: PropTypes.string,
     }).isRequired,
   }).isRequired,
   navigateTo: PropTypes.oneOf(Object.values(navigation)).isRequired,

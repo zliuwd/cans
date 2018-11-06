@@ -74,5 +74,9 @@ describe('<Router />', () => {
     it('renders a supervisor dashboard route', () => {
       testRoute('/staff', navigation.STAFF_LIST)
     })
+
+    it('renders a route for staff case load pages', () => {
+      testRoute('/staff/:staffId', navigation.STAFF_READ)
+    })
   })
 })

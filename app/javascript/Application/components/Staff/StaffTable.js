@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import DataGrid from '@cwds/components/lib/DataGrid'
+import StaffNameLink from './StaffNameLink'
 import { staffPropType } from './StaffHelper'
 
 const columns = [
@@ -8,6 +9,7 @@ const columns = [
     Header: 'Staff Name',
     id: 'staffName',
     accessor: staff => `${staff.staff_person.last_name}, ${staff.staff_person.first_name}`,
+    Cell: StaffNameLink,
   },
   {
     Header: 'Total Clients',
@@ -35,13 +37,16 @@ const columns = [
   },
 ]
 
+const MAX_SUBORDINATES = 1000
+const MIN_ROWS = 3
+
 const StaffTable = ({ staff }) => (
   <DataGrid
     data={staff}
     columns={columns}
     showPagination={false}
-    defaultPageSize={1000}
-    minRows={3}
+    defaultPageSize={MAX_SUBORDINATES}
+    minRows={MIN_ROWS}
     defaultSorted={[{ id: 'staffName' }]}
   />
 )

@@ -2,10 +2,10 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { Card, CardHeader, CardBody } from '@cwds/components/lib/Cards'
 import CardTitle from '@cwds/components/lib/Cards/CardTitle'
-import StaffTable from './StaffTable'
+import StaffTable from '../StaffTable'
 import SubordinateCard from './SubordinateCard'
-import { LoadingState } from '../../util/loadingHelper'
-import { staff as mockStaff } from './staff.mocks.test'
+import { LoadingState } from '../../../util/loadingHelper'
+import { staff as mockStaff } from '../staff.mocks.test'
 
 describe('<SubordinateCard />', () => {
   describe('when loading', () => {

@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Card, CardHeader, CardBody } from '@cwds/components/lib/Cards'
 import CardTitle from '@cwds/components/lib/Cards/CardTitle'
-import StaffTable from './StaffTable'
-import { LoadingState } from '../../util/loadingHelper'
-import { staffPropType } from './StaffHelper'
+import StaffTable from '../StaffTable'
+import { LoadingState } from '../../../util/loadingHelper'
+import { staffPropType } from '../StaffHelper'
 import './style.sass'
 
 const SubordinateCard = ({ loadingState, staff }) => {

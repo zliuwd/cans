@@ -10,3 +10,5 @@ export const staffPropType = PropTypes.shape({
   in_progress_count: PropTypes.number.isRequired,
   completed_count: PropTypes.number.isRequired,
 })
+
+export const failedFetching = { message: 'Fail to fetch data from server side!' }
