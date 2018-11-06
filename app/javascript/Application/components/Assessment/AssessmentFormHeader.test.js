@@ -5,6 +5,7 @@ import { Alert } from '@cwds/components'
 import { assessment, client } from './assessment.mocks.test'
 import { clone } from '../../util/common'
 import { Input } from 'reactstrap'
+import ConductedByField from './ConductedByField'
 
 describe('<AssessmentFormHeader />', () => {
   describe('components', () => {
@@ -18,6 +19,10 @@ describe('<AssessmentFormHeader />', () => {
 
     it('renders with 1 <Input /> component', () => {
       expect(getLength(Input)).toBe(1)
+    })
+
+    it('renders with 1 <ConductedByField> component', () => {
+      expect(getLength(ConductedByField)).toBe(1)
     })
 
     it('renders with case numbers dropdown', () => {
@@ -224,6 +229,39 @@ describe('<AssessmentFormHeader />', () => {
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       const alert = wrapper.find(Alert)
       expect(alert.length).toBe(0)
+    })
+  })
+
+  describe('Assessment Conducted by', () => {
+    const mockFn = jest.fn()
+    it('renders input', () => {
+      const props = { assessment, client, onAssessmentUpdate: mockFn }
+      const wrapper = shallow(<AssessmentFormHeader {...props} />)
+      expect(wrapper.find('#conducted-by').length).toBe(1)
+    })
+
+    it('disabled when assessment completed ', () => {
+      const completedAssessment = clone(assessment)
+      completedAssessment.status = 'COMPLETED'
+      const props = { assessment: completedAssessment, client, onAssessmentUpdate: mockFn }
+      const wrapper = shallow(<AssessmentFormHeader {...props} />)
+      expect(wrapper.find('#conducted-by').prop('isDisabled')).toBeTruthy()
+    })
+
+    describe('#handleConductedByChange', () => {
+      it('calls onAssessmentUpdate when conducted_by is changed', () => {
+        const conductedByValue = 'NAME'
+        const props = { assessment, client, onAssessmentUpdate: mockFn }
+        const wrapper = shallow(<AssessmentFormHeader {...props} />)
+        const event = { target: { name: 'conducted_by', value: conductedByValue } }
+        wrapper
+          .find('#conducted-by')
+          .props()
+          .onChange(event)
+        const updatedAssessment = clone(assessment)
+        updatedAssessment.conducted_by = conductedByValue
+        expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
+      })
     })
   })
 })

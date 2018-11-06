@@ -140,6 +140,7 @@ class PrintAssessment extends PureComponent {
     const clientName = formatClientName(assessment.person)
     const countyName = assessment.county.name ? `${assessment.county.name} County` : ''
     const eventDate = isoToLocalDate(assessment.event_date)
+    const conductedBy = assessment.conducted_by || ''
     const caseNumber = (assessment.the_case || {}).external_id
     const hasCaregiver = assessment.has_caregiver
     const canReleaseInfo = assessment.can_release_confidential_info
@@ -153,6 +154,7 @@ class PrintAssessment extends PureComponent {
         </div>
         <div style={headerRow}>
           {this.renderHeaderRecord('Date', eventDate)}
+          {this.renderHeaderRecord('Conducted by', conductedBy)}
           {this.renderHeaderRecord('Case Number', caseNumber)}
           {this.renderHeaderRecord('Complete as', assessment.completed_as)}
         </div>

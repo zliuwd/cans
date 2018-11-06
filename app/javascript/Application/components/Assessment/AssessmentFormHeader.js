@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react'
 import { Row, Col, Label, Input } from 'reactstrap'
-import { resetConfidentialByDefaultItems } from './AssessmentHelper'
+import { resetConfidentialByDefaultItems, AssessmentStatus } from './AssessmentHelper'
 import { formatClientName } from '../Client/Client.helper'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
@@ -13,6 +13,7 @@ import { Alert } from '@cwds/components'
 import { clone, stringify } from '../../util/common'
 import './style.sass'
 import DateField from '../common/DateField'
+import ConductedByField from './ConductedByField'
 
 class AssessmentFormHeader extends PureComponent {
   handleValueChange = event => this.changeFieldAndUpdateAssessment(event.target.name, event.target.value)
@@ -44,6 +45,12 @@ class AssessmentFormHeader extends PureComponent {
   handleSelectCaseNumber = event => {
     const assessment = clone(this.props.assessment)
     assessment.the_case = this.findCaseByExternalId(event.target.value)
+    this.props.onAssessmentUpdate(assessment)
+  }
+
+  handleConductedByChange = event => {
+    const assessment = clone(this.props.assessment)
+    assessment.conducted_by = event.target.value
     this.props.onAssessmentUpdate(assessment)
   }
 
@@ -106,7 +113,7 @@ class AssessmentFormHeader extends PureComponent {
           id={'select-case'}
           value={(this.props.assessment.the_case || {}).external_id}
           onChange={this.handleSelectCaseNumber}
-          style={{ fontSize: '1.5rem', height: '3.6rem' }}
+          className={'assessment-form-header-input'}
         >
           {this.renderCaseNumbersDropdownOptions()}
         </Input>
@@ -268,8 +275,15 @@ class AssessmentFormHeader extends PureComponent {
         <Row>{this.renderClientNameAndCounty()}</Row>
         <Row className={'assessment-form-header-inputs'}>
           <Col sm={3}>{this.renderDateSelect()}</Col>
-          <Col sm={5}>{this.renderCaseSelect()}</Col>
-          <Col sm={4}>{}</Col>
+          <Col sm={5}>
+            <ConductedByField
+              id={'conducted-by'}
+              value={this.props.assessment.conducted_by}
+              onChange={this.handleConductedByChange}
+              isDisabled={this.props.assessment.status === AssessmentStatus.completed}
+            />
+          </Col>
+          <Col sm={4}>{this.renderCaseSelect()}</Col>
         </Row>
         <Row>
           <Col xs={6}>{this.renderHasCaregiverQuestion()}</Col>
