@@ -99,7 +99,7 @@ class Item extends Component {
           <FormControl>
             <FormControlLabel
               onChange={this.handleConfidentialityChange}
-              label={'Confidential'}
+              label={confidential_by_default ? 'Confidential' : 'Discretion Needed'}
               value={stringify(isConfidential)}
               id={`${code}Checkbox`}
               control={
@@ -187,7 +187,7 @@ class Item extends Component {
                 naValue={this.handleNaValueSetting(rating)}
               />
             ) : null}
-            <Typography variant="title" style={{ marginRight: 15 }}>
+            <Typography variant="title" style={{ marginRight: confidential_by_default ? '4rem' : '1.5rem' }}>
               {this.renderConfidentialCheckbox(isConfidential, confidential_by_default)}
             </Typography>
             {rating_type === 'REGULAR' ? (

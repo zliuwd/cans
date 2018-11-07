@@ -16,6 +16,18 @@ const itemDefault = {
   rating: -1,
 }
 
+const nonSUDItem = {
+  code: 'lf10family',
+  under_six_id: 1,
+  above_six_id: 101,
+  required: true,
+  confidential: true,
+  confidential_by_default: false,
+  rating_type: 'REGULAR',
+  has_na_option: false,
+  rating: -1,
+}
+
 const itemWithNaChecked = {
   code: 'lf10family',
   under_six_id: 1,
@@ -247,5 +259,43 @@ describe('<Item />', () => {
           .prop('disabled')
       ).toEqual(true)
     })
+  })
+
+  it('should have "Confidential" title when item is confidential by default', () => {
+    const wrapper = shallow(
+      <Item
+        isAssessmentUnderSix={false}
+        item={{ ...itemDefault }}
+        i18n={{ ...i18nDefault }}
+        canReleaseConfidentialInfo={false}
+        onRatingUpdate={() => {}}
+        onConfidentialityUpdate={() => {}}
+      />
+    )
+    expect(
+      wrapper
+        .find(FormControlLabel)
+        .dive()
+        .prop('label')
+    ).toEqual('Confidential')
+  })
+
+  it('should have "Discretion Needed" title when item is not confidential by default', () => {
+    const wrapper = shallow(
+      <Item
+        isAssessmentUnderSix={false}
+        item={{ ...nonSUDItem }}
+        i18n={{ ...i18nDefault }}
+        canReleaseConfidentialInfo={false}
+        onRatingUpdate={() => {}}
+        onConfidentialityUpdate={() => {}}
+      />
+    )
+    expect(
+      wrapper
+        .find(FormControlLabel)
+        .dive()
+        .prop('label')
+    ).toEqual('Discretion Needed')
   })
 })
