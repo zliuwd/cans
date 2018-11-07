@@ -40,6 +40,26 @@ module Api
       end
     end
 
+    describe '#show' do
+      let(:subordinate) { { id: 101 } }
+      let(:subordinate_response) do
+        instance_double('Faraday::Response', body: subordinate, status: 200)
+      end
+
+      it 'returns response with subordinate\'s info and statistics' do
+        request.session[:token] = 'token'
+        allow(Staff::StaffRepository).to receive(:new)
+          .with('token')
+          .and_return(staff_repository)
+        allow(staff_repository).to receive(:show)
+          .with('101')
+          .and_return(subordinate_response)
+        get :show, params: { id: 101 }
+        expect(response.status).to eq 200
+        expect(response.body).to eq subordinate.to_json
+      end
+    end
+
     describe '#social_worker_clients' do
       let(:user_id) { 100 }
       let(:clients) { [{ id: 1, first_name: 'Jim' }, { id: 2, first_name: 'Mike' }] }

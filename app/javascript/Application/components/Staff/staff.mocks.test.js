@@ -1,6 +1,18 @@
 export const staff = [
   {
-    staff_person: { first_name: 'Jory', last_name: 'Cassel' },
+    staff_person: {
+      first_name: 'Jory',
+      last_name: 'Cassel',
+      phone_number: '9167654321',
+      phone_ext_code: '4321',
+      email: 'e@mail.com',
+      county: {
+        id: 44,
+        name: 'Santa Cruz',
+        external_id: '1111',
+        export_id: '44',
+      },
+    },
     clients_count: 10,
     no_prior_cans_count: 4,
     in_progress_count: 5,

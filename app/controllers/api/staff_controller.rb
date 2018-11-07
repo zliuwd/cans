@@ -7,6 +7,11 @@ module Api
       render json: response.body, status: response.status
     end
 
+    def show
+      response = Staff::StaffRepository.new(session[:token]).show(params[:id])
+      render json: response.body, status: response.status
+    end
+
     def social_worker_clients
       response = Staff::StaffRepository.new(session[:token]).social_worker_clients(params[:id])
       render json: response.body, status: response.status

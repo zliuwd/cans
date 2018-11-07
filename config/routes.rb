@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     resources :sensitivity_types, only: [:index] do
     end
 
-    resources :staff, only: [] do
+    resources :staff, only: [:show] do
       collection do
         get 'subordinates', to: 'staff#subordinates_index'
         get 'assessments', to: 'staff#assessments'

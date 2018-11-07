@@ -3,9 +3,28 @@ import { shallow } from 'enzyme'
 import CaseLoadPage from './CaseLoadPage'
 import ClientsLoadingBoundary from './ClientsLoadingBoundary'
 import { ClientListCard } from '../../Client'
+import StaffLoadingBoundary from './SubordinateInfoCard/StaffLoadingBoundary'
+import SubordinateInfoCard from './SubordinateInfoCard/SubordinateInfoCard'
+
+jest.mock('../../../util/CurrentUser')
 
 describe('<CaseLoadPage />', () => {
-  const render = (staffId = 'ABC') => shallow(<CaseLoadPage staffId={staffId} />)
+  const render = (staffId = 'ABC') => shallow(<CaseLoadPage staffId={staffId} />, { disableLifecycleMethods: true })
+
+  it('renders SubordinateInfoCard within a StaffLoadingBoundary', async () => {
+    const wrapper = render()
+    expect(
+      wrapper
+        .find(StaffLoadingBoundary)
+        .find(SubordinateInfoCard)
+        .exists()
+    ).toBeTruthy()
+  })
+
+  it('passes its staffId to the StaffLoadingBoundary', () => {
+    const wrapper = render('WWW')
+    expect(wrapper.find(StaffLoadingBoundary).props().staffId).toBe('WWW')
+  })
 
   it('renders ClientListCard within a ClientsLoadingBoundary', () => {
     const wrapper = render()
@@ -17,7 +36,7 @@ describe('<CaseLoadPage />', () => {
     ).toBe(true)
   })
 
-  it('passes its staffId to the loading boundary', () => {
+  it('passes its staffId to the ClientsLoadingBoundary', () => {
     const wrapper = render('WWW')
     expect(wrapper.find(ClientsLoadingBoundary).props().staffId).toBe('WWW')
   })

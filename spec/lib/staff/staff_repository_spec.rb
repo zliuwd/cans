@@ -16,14 +16,23 @@ module Staff
           .and_return(response)
         expect(staff_repository.subordinates_index).to eq(response)
       end
+    end
 
-      describe '#social_worker_clients' do
-        it 'returns clients assigned the social worker' do
-          allow(http_service).to receive(:call)
-            .with('/staff/0X5/people', :get, token)
-            .and_return(response)
-          expect(staff_repository.social_worker_clients('0X5')).to eq(response)
-        end
+    describe '#social_worker_clients' do
+      it 'returns clients assigned the social worker' do
+        allow(http_service).to receive(:call)
+          .with('/staff/0X5/people', :get, token)
+          .and_return(response)
+        expect(staff_repository.social_worker_clients('0X5')).to eq(response)
+      end
+    end
+
+    describe '#show' do
+      it 'returns social worker' do
+        allow(http_service).to receive(:call)
+          .with('/staff/0X5', :get, token)
+          .and_return(response)
+        expect(staff_repository.show('0X5')).to eq(response)
       end
     end
 
