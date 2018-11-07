@@ -3,16 +3,20 @@ import PropTypes from 'prop-types'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
-import RadioGroup from '@material-ui/core/RadioGroup'
-import Radio from '@material-ui/core/Radio'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import classNames from 'classnames'
 import { shouldItemBeRendered } from './AssessmentHelper'
-import { Rating } from './'
+import ItemNaCheckbox from './ItemNaCheckbox'
+import ItemBooleanRating from './ItemBooleanRating'
+import ItemRegularRating from './ItemRegularRating'
+import ItemDescriptionRating from './ItemDescriptionRating'
 import { getI18nValuesByPrefix } from './I18nHelper'
 import { stringify } from '../../util/common'
+
+const noRating = -1
+const naRating = 8
 
 const initI18nValue = i18n => ({
   title: (i18n._title_ || '').toUpperCase(),
@@ -63,6 +67,17 @@ class Item extends Component {
     const caregiverIndex = this.props.caregiverIndex
     const newValue = parseInt(onChangeEvent.target.value)
     this.props.onRatingUpdate(code, newValue, caregiverIndex)
+  }
+
+  // once NaCheckboxk be checked the value will be change back to noRating
+  handleNaValueSetting = rating => {
+    let naValue
+    if (rating === naRating) {
+      naValue = noRating
+    } else {
+      naValue = naRating
+    }
+    return stringify(naValue)
   }
 
   handleConfidentialityChange = onChangeEvent => {
@@ -116,56 +131,6 @@ class Item extends Component {
     ) : null
   }
 
-  renderRatingDescriptionsIfNeeded = (code, ratingDescriptions, isBooleanRating, rating, has_na_option) => {
-    const labelId = `${code}-inter-controls-label`
-    return ratingDescriptions.length > 0 ? (
-      <div>
-        <Typography id={labelId} variant="display1" style={{ marginTop: '1.5rem' }}>
-          Ratings:
-        </Typography>
-        <form autoComplete="off">
-          <FormControl className={'item-form-control'}>
-            <RadioGroup name="rating_desc" value={stringify(rating)} onChange={this.handleRatingChange}>
-              {has_na_option ? (
-                <FormControlLabel
-                  value={stringify(8)}
-                  control={<Radio value={stringify(8)} color={'default'} />}
-                  label={<Typography variant="headline">N/A</Typography>}
-                  style={{ fontSize: '1.3rem' }}
-                />
-              ) : null}
-              {ratingDescriptions.map((label, i) => {
-                return (
-                  <FormControlLabel
-                    value={stringify(i)}
-                    key={label}
-                    id={`input-${code}-${i}-select`}
-                    control={
-                      <Radio
-                        value={stringify(i)}
-                        color={'default'}
-                        inputProps={{
-                          id: `input-${code}-${i}`,
-                          'aria-labelledby': labelId,
-                        }}
-                      />
-                    }
-                    style={{ fontSize: '1.3rem' }}
-                    label={
-                      <Typography variant="headline">
-                        {this.getRadioValueForLabel(isBooleanRating, i)} = {label}
-                      </Typography>
-                    }
-                  />
-                )
-              })}
-            </RadioGroup>
-          </FormControl>
-        </form>
-      </div>
-    ) : null
-  }
-
   render = () => {
     const { item, isAssessmentUnderSix, caregiverIndex } = this.props
     const {
@@ -185,6 +150,12 @@ class Item extends Component {
       'fa fa-chevron-right': !isExpanded,
       'fa fa-chevron-down': isExpanded,
     })
+    const ratingProps = {
+      itemCode: code,
+      hasNaOption: has_na_option,
+      rating,
+      onRatingUpdate: this.handleRatingChange,
+    }
     return shouldItemBeRendered(isAssessmentUnderSix, item) ? (
       <div>
         <Paper>
@@ -209,19 +180,21 @@ class Item extends Component {
               {itemNumber}
               {caregiverIndex}. {title}
             </Typography>
-
-            <Typography variant="title" style={{ marginRight: 10 }}>
+            {this.props.item.has_na_option ? (
+              <ItemNaCheckbox
+                rating={rating}
+                handleRatingChange={this.handleRatingChange}
+                naValue={this.handleNaValueSetting(rating)}
+              />
+            ) : null}
+            <Typography variant="title" style={{ marginRight: 15 }}>
               {this.renderConfidentialCheckbox(isConfidential, confidential_by_default)}
             </Typography>
-            <Typography variant="title">
-              <Rating
-                itemCode={code}
-                rating_type={rating_type}
-                hasNaOption={has_na_option}
-                rating={rating}
-                onRatingUpdate={this.handleRatingChange}
-              />
-            </Typography>
+            {rating_type === 'REGULAR' ? (
+              <ItemRegularRating {...ratingProps} />
+            ) : (
+              <ItemBooleanRating {...ratingProps} />
+            )}
           </Toolbar>
         </Paper>
         {isExpanded ? (
@@ -229,7 +202,17 @@ class Item extends Component {
             <Typography variant="display1">Item Description:</Typography>
             <Typography variant="headline">{description}</Typography>
             {this.renderQtcIfNeeded(qtcDescriptions)}
-            {this.renderRatingDescriptionsIfNeeded(code, ratingDescriptions, isBooleanRating, rating, has_na_option)}
+            {ratingDescriptions.length > 0 ? (
+              <ItemDescriptionRating
+                code={code}
+                ratingDescriptions={ratingDescriptions}
+                isBooleanRating={isBooleanRating}
+                rating={rating}
+                isNaOption={has_na_option}
+                handleRatingChange={this.handleRatingChange}
+                getRadioValueForLabel={this.getRadioValueForLabel}
+              />
+            ) : null}
           </Paper>
         ) : null}
       </div>
