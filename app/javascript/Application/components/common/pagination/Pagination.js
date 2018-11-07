@@ -32,6 +32,7 @@ class Pagination extends PaginationRT {
       PreviousComponent,
       NextComponent,
     } = this.props
+    const ENTER_KEY = 13
 
     return (
       <div className={classnames(className, '-pagination')} style={this.props.style}>
@@ -71,7 +72,7 @@ class Pagination extends PaginationRT {
                   value={this.state.page === '' ? '' : this.state.page + 1}
                   onBlur={this.applyPage}
                   onKeyPress={e => {
-                    if (e.which === 13 || e.keyCode === 13) {
+                    if (e.which === ENTER_KEY || e.keyCode === ENTER_KEY) {
                       this.applyPage()
                     }
                   }}

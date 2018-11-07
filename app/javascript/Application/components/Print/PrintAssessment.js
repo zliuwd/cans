@@ -47,6 +47,9 @@ class PrintAssessment extends PureComponent {
     const title = itemI18n._title_ || ''
     const itemNumber = this.state.isAssessmentUnderSix ? item.under_six_id : item.above_six_id
     const isRegularType = item.rating_type === 'REGULAR'
+    const RATING_2 = 2
+    const RATING_3 = 3
+    const RATING_8 = 8
     return (
       <div key={caregiverIndex + itemNumber} style={itemStyle}>
         <div style={itemTitleWrapper}>
@@ -68,11 +71,11 @@ class PrintAssessment extends PureComponent {
             <div style={optionLabelStyle}>Rating:</div>
           </div>
           <div style={flex}>
-            {item.has_na_option && this.renderOption(item.rating === 8, 'N/A')}
+            {item.has_na_option && this.renderOption(item.rating === RATING_8, 'N/A')}
             {this.renderOption(item.rating === 0, isRegularType ? '0' : 'No')}
             {this.renderOption(item.rating === 1, isRegularType ? '1' : 'Yes')}
-            {isRegularType && this.renderOption(item.rating === 2, '2')}
-            {isRegularType && this.renderOption(item.rating === 3, '3')}
+            {isRegularType && this.renderOption(item.rating === RATING_2, '2')}
+            {isRegularType && this.renderOption(item.rating === RATING_3, '3')}
           </div>
         </div>
       </div>

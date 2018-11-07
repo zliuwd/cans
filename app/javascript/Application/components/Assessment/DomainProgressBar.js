@@ -8,10 +8,11 @@ import './style.sass'
 const buildState = (isAssessmentUnderSix, domain) => {
   const total = domain.items.filter(item => shouldItemBeRendered(isAssessmentUnderSix, item) && item.required)
   const filled = total.filter(item => item.rating !== -1)
+  const HUNDRED = 100
   return {
     total: total.length,
     filled: filled.length,
-    progress: Math.round((filled.length / total.length) * 100),
+    progress: Math.round((filled.length / total.length) * HUNDRED),
   }
 }
 

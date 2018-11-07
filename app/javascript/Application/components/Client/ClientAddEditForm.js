@@ -19,6 +19,7 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import MaskedDateField from '../common/MaskedDateField'
 import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles'
+import { StatusCode } from '../../util/constants'
 
 import './style.sass'
 
@@ -300,7 +301,7 @@ class ClientAddEditForm extends Component {
 
   handleError = error => {
     const errorResponse = error.response
-    if (errorResponse && errorResponse.status === 409) {
+    if (errorResponse && errorResponse.status === StatusCode.CONFLICT) {
       const errorMessage =
         errorResponse.data &&
         errorResponse.data.issue_details &&

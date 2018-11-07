@@ -1,6 +1,7 @@
 const caseNumberRegexp = /^\d{4}-\d{3}-\d{4}-\d{8}$/i
 
 export function validate(fieldName, value) {
+  const MIN_EXTERNAL_ID_LENGTH = 18
   switch (fieldName) {
     case 'first_name':
     case 'last_name':
@@ -9,7 +10,8 @@ export function validate(fieldName, value) {
     case 'suffix':
       return value.length >= 0
     case 'external_id':
-      return value.length > 18 && (/^\d{4}-\d{4}-\d{4}-\d{7}$/i.test(value) || /^\d{19}$/i.test(value))
+      const length = value.length > MIN_EXTERNAL_ID_LENGTH
+      return length && (/^\d{4}-\d{4}-\d{4}-\d{7}$/i.test(value) || /^\d{19}$/i.test(value))
     case 'dob':
       return Boolean(value)
     case 'county':

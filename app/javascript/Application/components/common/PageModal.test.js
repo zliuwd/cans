@@ -79,7 +79,6 @@ describe('<PageModal />', () => {
       const wrapper = shallow(<PageModal {...props} />)
       const CancelButtonLabel = wrapper.find('.warning-modal-logout').props().children
       expect(CancelButtonLabel).toEqual('Cancel')
-      expect(CancelButtonLabel.length).toBe(6)
     })
 
     it('verify remove button label', () => {
@@ -87,7 +86,6 @@ describe('<PageModal />', () => {
       const wrapper = shallow(<PageModal {...props} />)
       const RemoveButtonLabel = wrapper.find('.warning-modal-stay-logged-in').props().children
       expect(RemoveButtonLabel).toEqual('Remove')
-      expect(RemoveButtonLabel.length).toBe(6)
     })
   })
 

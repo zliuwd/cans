@@ -21,3 +21,9 @@ export const ClientStatus = Object.freeze({
   COMPLETED: 'Completed',
   NO_PRIOR_CANS: 'No prior CANS',
 })
+
+export const StatusCode = Object.freeze({
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  CONFLICT: 409,
+})

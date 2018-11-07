@@ -16,6 +16,12 @@ module.exports = {
     node: true,
     'jest/globals': true,
   },
+  "overrides": [{
+    "files": [ "*test*" ],
+    "rules": {
+      'no-magic-numbers': ["off"],
+    }
+  }],
   rules: {
     'array-bracket-spacing': [2, 'never'],
     'babel/no-invalid-this': 1,
@@ -80,8 +86,6 @@ module.exports = {
     'react/jsx-curly-spacing': [2, 'never'],
     'react/jsx-indent-props': [2, 2],
     'react/no-danger': [2],
-    'react/no-did-mount-set-state': [1],
-    'react/no-did-update-set-state': [1],
     'react/no-unused-state': 2,
     'react/no-multi-comp': 2,
     'react/no-typos': 2,

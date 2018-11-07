@@ -118,6 +118,7 @@ class Item extends Component {
 
   renderRatingDescriptionsIfNeeded = (code, ratingDescriptions, isBooleanRating, rating, has_na_option) => {
     const labelId = `${code}-inter-controls-label`
+    const RATING_VALUE = 8
     return ratingDescriptions.length > 0 ? (
       <div>
         <Typography id={labelId} variant="display1" style={{ marginTop: '1.5rem' }}>
@@ -128,8 +129,8 @@ class Item extends Component {
             <RadioGroup name="rating_desc" value={stringify(rating)} onChange={this.handleRatingChange}>
               {has_na_option ? (
                 <FormControlLabel
-                  value={stringify(8)}
-                  control={<Radio value={stringify(8)} color={'default'} />}
+                  value={stringify(RATING_VALUE)}
+                  control={<Radio value={stringify(RATING_VALUE)} color={'default'} />}
                   label={<Typography variant="headline">N/A</Typography>}
                   style={{ fontSize: '1.3rem' }}
                 />

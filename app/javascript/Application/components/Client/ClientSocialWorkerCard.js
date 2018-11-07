@@ -6,6 +6,10 @@ import DataGrid from '@cwds/components/lib/DataGrid'
 import './style.sass'
 
 const ClientSocialWorkerCard = props => {
+  const PAGE_SIZE_SMALL = 10
+  const PAGE_SIZE_MEDIUM = 25
+  const PAGE_SIZE_LARGE = 50
+
   return (
     <Card className="card-cans-client-list">
       <CardHeader>
@@ -20,7 +24,7 @@ const ClientSocialWorkerCard = props => {
           className="client-grid"
           minRows={2}
           noDataText={'No records found'}
-          pageSizeOptions={[10, 25, 50]}
+          pageSizeOptions={[PAGE_SIZE_SMALL, PAGE_SIZE_MEDIUM, PAGE_SIZE_LARGE]}
           showPaginationBottom={true}
         />
       </CardBody>

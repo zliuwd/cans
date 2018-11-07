@@ -1,4 +1,5 @@
 import { globalAlertService } from './GlobalAlertService'
+import { StatusCode } from './constants'
 
 export const forbiddenMessage = "You don't have appropriate permissions to view this record"
 
@@ -22,13 +23,13 @@ function isResponseHandled(response) {
   const responseStatus = response && response.status
 
   switch (responseStatus) {
-    case 401:
+    case StatusCode.UNAUTHORIZED:
       window.location.reload()
       break
-    case 403:
+    case StatusCode.FORBIDDEN:
       postError(forbiddenMessage)
       break
-    case 409:
+    case StatusCode.CONFLICT:
       break
     default:
       const details = response.data && response.data.issue_details
