@@ -264,7 +264,6 @@ export const instrument = {
   id: 1,
   prototype: {
     id: 0,
-    under_six: false,
     domains: [
       {
         id: 0,

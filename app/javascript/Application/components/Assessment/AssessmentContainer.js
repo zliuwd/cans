@@ -119,7 +119,7 @@ class AssessmentContainer extends Component {
       county: this.props.client.county,
       assessment_type: AssessmentType.initial,
       status: AssessmentStatus.inProgress,
-      state: instrument.prototype,
+      state: { ...instrument.prototype, under_six: false },
       event_date: getCurrentIsoDate(),
       has_caregiver: true,
       completed_as: 'COMMUNIMETRIC',
