@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { CloseableAlert, alertType } from '../common/CloseableAlert'
 import { clone } from '../../util/common'
 import PageModal from '../common/PageModal'
+import ConfidentialityWarning from '../common/ConfidentialityWarning'
 import {
   Assessment,
   AssessmentFormHeader,
@@ -44,6 +45,7 @@ class AssessmentContainer extends Component {
       shouldPrintNow: false,
       isValidDate: true,
       isCaregiverWarningShown: false,
+      isSubmitWarningShown: false,
       focusedCaregiverId: '',
     }
   }
@@ -67,6 +69,13 @@ class AssessmentContainer extends Component {
 
   componentWillUnmount() {
     this.muteCtrlP()
+  }
+
+  handleSubmitWarning = switcher => {
+    if (this.state.assessment.can_release_confidential_info === false) {
+      this.setState({ isSubmitWarningShown: switcher })
+    }
+    return null
   }
 
   handleWarningShow = (switcher, caregiverIndex) => {
@@ -324,9 +333,19 @@ class AssessmentContainer extends Component {
     const pageTitle = isNewForm ? 'New CANS' : 'CANS Assessment Form'
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus)
     const printButton = this.renderPrintButton()
+
     return (
       <Fragment>
         {this.renderWarning()}
+        {this.state.isSubmitWarningShown ? (
+          <ConfidentialityWarning
+            onCancel={() => this.handleSubmitWarning()}
+            onRemove={() => {
+              this.handleSubmitWarning()
+              this.handleSubmitAssessment()
+            }}
+          />
+        ) : null}
         <PageInfo title={pageTitle} actionNode={printButton} />
         {shouldPrintNow && (
           <Print node={<PrintAssessment assessment={assessment} i18n={i18n} />} onClose={this.togglePrintNow} />
@@ -386,7 +405,11 @@ class AssessmentContainer extends Component {
           }
           onSaveAssessment={this.handleSaveAssessment}
           isSubmitButtonEnabled={isEditable && canPerformUpdates && isValidForSubmit}
-          onSubmitAssessment={this.handleSubmitAssessment}
+          onSubmitAssessment={
+            this.state.assessment.can_release_confidential_info === true
+              ? this.handleSubmitAssessment
+              : this.handleSubmitWarning
+          }
         />
       </Fragment>
     )

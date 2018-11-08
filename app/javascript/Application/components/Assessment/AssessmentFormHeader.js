@@ -8,8 +8,8 @@ import FormControl from '@material-ui/core/FormControl'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from '@material-ui/core/Switch'
-import Radio from '@material-ui/core/Radio'
 import { Alert } from '@cwds/components'
+import Radio from '@material-ui/core/Radio'
 import { clone, stringify } from '../../util/common'
 import './style.sass'
 import DateField from '../common/DateField'
@@ -133,8 +133,8 @@ class AssessmentFormHeader extends PureComponent {
   renderConfidentialWarningAlertIfNeeded = () =>
     this.props.assessment.can_release_confidential_info ? null : (
       <Alert color={'warning'}>
-        Since there is no Authorization for Release of Information on file, prior to sharing this CANS assessment redact
-        the following domain item numbers: 7, 48, and EC.41.
+        By selecting NO, Items 7, 48, and EC 41 (Substance Use Disorder Items) from this CANS assessment will be
+        redacted when printed.
       </Alert>
     )
 

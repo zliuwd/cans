@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('path')
 module.exports = {
   verbose: true,
   testURL: 'http://localhost/',
@@ -26,4 +26,4 @@ module.exports = {
       statements: 90,
     },
   },
-};
+}

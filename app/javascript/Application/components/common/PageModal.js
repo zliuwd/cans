@@ -35,13 +35,13 @@ const PageModal = ({
 
 PageModal.propTypes = {
   cancelButtonLabel: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  description: PropTypes.node.isRequired,
   isOpen: PropTypes.bool,
   onCancel: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
   removeButtonLabel: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  warningDescription: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
+  warningDescription: PropTypes.node.isRequired,
 }
 
 PageModal.defaultProps = {

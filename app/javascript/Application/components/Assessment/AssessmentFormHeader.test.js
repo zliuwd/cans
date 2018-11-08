@@ -214,10 +214,10 @@ describe('<AssessmentFormHeader />', () => {
     it('should render Alert component when canReleaseInformation is false', () => {
       const props = { assessment, client, onAssessmentUpdate: jest.fn() }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
-      const alert = wrapper.find(Alert)
+      const alert = wrapper.find('Alert')
       expect(alert.length).toBe(1)
-      expect(wrapper.find(Alert).html()).toMatch(
-        /Since there is no Authorization for Release of Information on file, prior to sharing this CANS assessment redact the following domain item numbers: 7, 48, and EC.41./
+      expect(wrapper.find('Alert').html()).toMatch(
+        'By selecting NO, Items 7, 48, and EC 41 (Substance Use Disorder Items) from this CANS assessment will be redacted when printed.'
       )
     })
 
