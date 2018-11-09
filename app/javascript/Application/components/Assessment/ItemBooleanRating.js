@@ -6,14 +6,12 @@ import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { stringify } from '../../util/common'
 import { withStyles } from '@material-ui/core/styles'
+import { ieStyleFixer } from './ItemStyling'
+
+const ieFixStyle = ieStyleFixer()
 
 const PrimRadio = withStyles({
-  root: {
-    width: '5px',
-    '&$checked': {
-      color: '#09798E',
-    },
-  },
+  root: ieFixStyle.radio,
   checked: {},
 })(Radio)
 
@@ -25,6 +23,7 @@ const ItemBooleanRating = props => {
   const radioButtons = boolRating.map((label, i) => {
     return (
       <FormControlLabel
+        style={ieFixStyle.label}
         key={`bool-${i}`}
         value={stringify(i)}
         disabled={props.rating === 8}
@@ -60,7 +59,7 @@ const ItemBooleanRating = props => {
             id={`${code}-bool-rating`}
             value={stringify(props.rating)}
             onChange={props.onRatingUpdate}
-            style={{ flexWrap: 'nowrap', flexDirection: 'row', alignItems: 'center' }}
+            style={{ flexWrap: 'nowrap', flexDirection: 'row' }}
           >
             {radioButtons}
           </RadioGroup>
