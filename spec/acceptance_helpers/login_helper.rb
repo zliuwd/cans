@@ -4,12 +4,20 @@ module LoginHelper
   def login(login_config = default_json)
     visit '/'
     return unless need_login?
+    enter_credentials login_config
+  end
+
+  def enter_credentials(login_config = default_json)
     fill_in 'Authorization JSON', with: JSON.generate(login_config)
     click_button 'Sign In'
   end
 
   def logout
     visit '/'
+    click_logout
+  end
+
+  def click_logout
     find('.profile-avatar button').click
     find('.profile-avatar a').click
   end

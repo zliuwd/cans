@@ -19,4 +19,13 @@ feature 'Index Page' do
     logout
     expect(page).not_to have_content('CANS')
   end
+
+  scenario 'Logging out clears your last visited page' do
+    login supervisor_json
+    expect(page).to have_content('Assigned Staff')
+    click_logout
+    enter_credentials
+    expect(page).not_to have_content('Assigned Staff')
+    logout
+  end
 end

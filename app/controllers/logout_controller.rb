@@ -10,8 +10,7 @@ class LogoutController < ActionController::Base
 
   def logout_url
     referer_url = request.referer || request.base_url
-    param_remover = Infrastructure::QueryParamRemover.new
-    callback_url = param_remover.remove_query_param(referer_url, 'accessCode')
+    callback_url = Addressable::URI.parse(referer_url).site + ENV.fetch('CANS_BASE_PATH', '')
     perry_base_url = Rails.configuration.micro_services['perry_base_url']
     "#{perry_base_url}/authn/logout?callback=#{callback_url}"
   end
