@@ -6,13 +6,13 @@ export class ConfidentialityWarning extends PureComponent {
   render() {
     const onCompleteWarning = (
       <div>
-        You selected <strong className="cargiver-text-block">no</strong> for
-        <strong>Authorization for Release of Information.</strong>
+        You selected <strong className="cargiver-text-block">&apos;no&apos;</strong> for
+        <strong> Authorization for Release of Information.</strong>
       </div>
     )
     const onCompleteDescription = (
       <div>
-        In doing so items <strong className="cargiver-text-block">7, 48 and ec 41</strong> in this CANS assessment{' '}
+        In doing so items <strong>7, 48 and EC 41</strong> in this CANS assessment{' '}
         <strong className="cargiver-text-block">will be redacted </strong> when printed.
       </div>
     )
