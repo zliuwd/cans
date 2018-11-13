@@ -60,6 +60,10 @@ export const itemTitleWrapper = {
   margin: '0.2rem 0.2rem',
 }
 
+export const redactedRating = {
+  width: '7.6rem',
+}
+
 export const itemTitle = {
   fontSize: '1rem',
 }

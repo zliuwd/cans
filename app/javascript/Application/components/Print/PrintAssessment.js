@@ -19,6 +19,7 @@ import {
   domainTitleStyle,
   domainHeaderStyle,
   flex,
+  redactedRating,
   textAlignCenter,
   timeStampStyle,
   thinGrayBorder,
@@ -35,6 +36,30 @@ class PrintAssessment extends PureComponent {
     this.state = {
       isAssessmentUnderSix: Boolean(this.props.assessment.state.under_six),
     }
+  }
+
+  renderOptions = (item, isRegularType) => {
+    const optionCodes = {
+      notApplicable: 8,
+      value0orNo: 0,
+      value1orYes: 1,
+      value2: 2,
+      value3: 3,
+    }
+    return (
+      <div style={flex}>
+        <div style={itemTitleWrapper}>
+          <div style={optionLabelStyle}>Rating:</div>
+        </div>
+        <div style={flex}>
+          {item.has_na_option && this.renderOption(item.rating === optionCodes.notApplicable, 'N/A')}
+          {this.renderOption(item.rating === optionCodes.value0orNo, isRegularType ? '0' : 'No')}
+          {this.renderOption(item.rating === optionCodes.value1orYes, isRegularType ? '1' : 'Yes')}
+          {isRegularType && this.renderOption(item.rating === optionCodes.value2, '2')}
+          {isRegularType && this.renderOption(item.rating === optionCodes.value3, '3')}
+        </div>
+      </div>
+    )
   }
 
   renderOption = (isChecked, label) => (
@@ -58,24 +83,17 @@ class PrintAssessment extends PureComponent {
         </div>
         <div style={flex}>
           <div style={itemTitleWrapper}>
-            <div style={optionLabelStyle}>Confidential</div>
+            <div style={optionLabelStyle}>{item.confidential_by_default ? 'Confidential' : 'Discretion Needed'} </div>
           </div>
           <div style={itemTitleWrapper}>
             <input type={'checkbox'} checked={item.confidential} readOnly />
           </div>
         </div>
-        <div style={flex}>
-          <div style={itemTitleWrapper}>
-            <div style={optionLabelStyle}>Rating:</div>
-          </div>
-          <div style={flex}>
-            {item.has_na_option && this.renderOption(item.rating === 8, 'N/A')}
-            {this.renderOption(item.rating === 0, isRegularType ? '0' : 'No')}
-            {this.renderOption(item.rating === 1, isRegularType ? '1' : 'Yes')}
-            {isRegularType && this.renderOption(item.rating === 2, '2')}
-            {isRegularType && this.renderOption(item.rating === 3, '3')}
-          </div>
-        </div>
+        {!(item.confidential_by_default && item.confidential) ? (
+          this.renderOptions(item, isRegularType)
+        ) : (
+          <div style={redactedRating} />
+        )}
       </div>
     )
   }
