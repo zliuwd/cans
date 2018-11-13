@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
 import Domain from './Domain'
-import { DomainProgressBar } from './index'
+import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
 
 const domainDefault = {
   id: '1',
@@ -49,6 +49,19 @@ describe('<Domain />', () => {
     expect(() => shallow(domainComponentDefault)).not.toThrow()
   })
 
+  it('renders DomainScore', () => {
+    const wrapper = shallow(domainComponentDefault)
+
+    expect(wrapper.find(DomainScore).length).toBe(1)
+  })
+
+  it('should render ItemList when extended', () => {
+    const wrapper = shallow(domainComponentDefault)
+    wrapper.instance().handleExpandedChange()
+    wrapper.update()
+    expect(wrapper.find(DomainItemList).length).toBe(1)
+  })
+
   describe('progress bar', () => {
     it('should render progress bar when folded', () => {
       const wrapper = shallow(domainComponentDefault)
@@ -66,64 +79,42 @@ describe('<Domain />', () => {
   })
 
   describe('caregiver domain', () => {
-    it('renders caregiver index and caregiver control buttons', () => {
-      const domain = {
-        ...domainDefault,
-        is_caregiver_domain: true,
-        caregiver_index: 'a',
-      }
-      const domainComponent = (
-        <Domain
-          key={'1'}
-          canReleaseConfidentialInfo={true}
-          domain={{ ...domain }}
-          isAssessmentUnderSix={true}
-          i18n={{ ...i18nDefault }}
-          i18nAll={{}}
-          index={1}
-          onRatingUpdate={() => {}}
-          onConfidentialityUpdate={() => {}}
-          onAddCaregiverDomain={() => {}}
-          handleWarningShow={() => {}}
-          onCaregiverNameUpdate={() => {}}
-        />
-      )
-      const wrapper = mount(domainComponent)
+    const callbackMock = jest.fn()
+    const domain = {
+      ...domainDefault,
+      is_caregiver_domain: true,
+      caregiver_index: 'a',
+    }
+    const domainComponent = (
+      <Domain
+        key={'1'}
+        canReleaseConfidentialInfo={true}
+        domain={{ ...domain }}
+        isAssessmentUnderSix={true}
+        i18n={{ ...i18nDefault }}
+        i18nAll={{}}
+        index={1}
+        onRatingUpdate={() => {}}
+        onConfidentialityUpdate={() => {}}
+        onAddCaregiverDomain={callbackMock}
+        handleWarningShow={() => {}}
+        onCaregiverNameUpdate={() => {}}
+      />
+    )
+    let wrapper
+    beforeEach(() => {
+      wrapper = mount(domainComponent)
       wrapper.instance().handleExpandedChange()
       wrapper.update()
-      const foldedText = wrapper.text()
-      expect(foldedText).toMatch(/Title/)
-      expect(foldedText).toMatch(/- REMOVE CAREGIVER/)
-      expect(foldedText).toMatch(/\+ ADD CAREGIVER/)
     })
 
-    it('invokes onAddCaregiverDomain() callback', () => {
-      const domain = {
-        ...domainDefault,
-        is_caregiver_domain: true,
-        caregiver_index: 'a',
-      }
-      const callbackMock = jest.fn()
-      const domainComponent = (
-        <Domain
-          key={'1'}
-          canReleaseConfidentialInfo={true}
-          domain={{ ...domain }}
-          isAssessmentUnderSix={true}
-          i18n={{ ...i18nDefault }}
-          i18nAll={{}}
-          index={1}
-          onRatingUpdate={() => {}}
-          onConfidentialityUpdate={() => {}}
-          onAddCaregiverDomain={callbackMock}
-          handleWarningShow={() => {}}
-          onCaregiverNameUpdate={() => {}}
-        />
-      )
-      const wrapper = mount(domainComponent)
-      wrapper.instance().handleExpandedChange()
-      wrapper.update()
+    it('will render DomainCaregiverControls', () => {
+      expect(wrapper.find(DomainCaregiverControls).length).toBe(1)
+    })
+
+    it('will invoke onAddCaregiverDomain() callback', () => {
       const addCaregiverButton = wrapper.find('.caregiver-control').at(1)
+      expect(wrapper.find(DomainCaregiverControls).length).toBe(1)
       addCaregiverButton.simulate('click')
       addCaregiverButton.simulate('keypress', { key: 'Enter' })
       addCaregiverButton.simulate('keypress', { key: 'Space' })
@@ -131,31 +122,6 @@ describe('<Domain />', () => {
     })
 
     it('invokes onRemoveCaregiverDomain() callback', () => {
-      const domain = {
-        ...domainDefault,
-        is_caregiver_domain: true,
-        caregiver_index: 'a',
-      }
-      const callbackMock = jest.fn()
-      const domainComponent = (
-        <Domain
-          key={'1'}
-          canReleaseConfidentialInfo={true}
-          domain={{ ...domain }}
-          isAssessmentUnderSix={true}
-          i18n={{ ...i18nDefault }}
-          i18nAll={{}}
-          index={1}
-          onRatingUpdate={() => {}}
-          onConfidentialityUpdate={() => {}}
-          onAddCaregiverDomain={() => {}}
-          handleWarningShow={callbackMock}
-          onCaregiverNameUpdate={() => {}}
-        />
-      )
-      const wrapper = mount(domainComponent)
-      wrapper.instance().handleExpandedChange()
-      wrapper.update()
       const removeCaregiverButton = wrapper.find('.caregiver-control').at(0)
       removeCaregiverButton.simulate('click')
       removeCaregiverButton.simulate('keypress', { key: 'Enter' })

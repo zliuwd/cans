@@ -26,6 +26,7 @@ import {
 import { formatClientName } from '../Client/Client.helper'
 import { isoToLocalDate } from '../../util/dateHelper'
 import { shouldDomainBeRendered, shouldItemBeRendered } from '../Assessment/AssessmentHelper'
+import { totalScoreCalculation } from '../Assessment/DomainScoreHelper.js'
 import moment from 'moment'
 
 class PrintAssessment extends PureComponent {
@@ -83,11 +84,13 @@ class PrintAssessment extends PureComponent {
     const { code, caregiver_index: caregiverIndex, items } = domain
     const title = (domainI18n._title_ || '').toUpperCase()
     const caregiverName = domain.caregiver_name || ''
+    const totalScore = totalScoreCalculation(items)
     return (
       <div key={code + caregiverIndex}>
         <div style={domainHeaderStyle}>
           <div style={domainTitleStyle}>
             {title} {caregiverName && `- ${caregiverName}`}
+            {`- ( Domain Total Score: ${totalScore} )`}
           </div>
         </div>
         <div style={thinGrayBorder}>
