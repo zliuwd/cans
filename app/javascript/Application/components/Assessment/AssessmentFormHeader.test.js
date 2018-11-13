@@ -4,8 +4,8 @@ import { AssessmentFormHeader } from './index'
 import { Alert } from '@cwds/components'
 import { assessment, client } from './assessment.mocks.test'
 import { clone } from '../../util/common'
-import { Input } from 'reactstrap'
 import ConductedByField from './ConductedByField'
+import { Card, CardHeader, CardContent } from '@material-ui/core'
 
 describe('<AssessmentFormHeader />', () => {
   describe('components', () => {
@@ -17,25 +17,24 @@ describe('<AssessmentFormHeader />', () => {
       expect(getLength('.assessment-form-header-label')).toBe(3)
     })
 
-    it('renders with 1 <Input /> component', () => {
-      expect(getLength(Input)).toBe(1)
-    })
-
     it('renders with 1 <ConductedByField> component', () => {
       expect(getLength(ConductedByField)).toBe(1)
     })
+  })
 
-    it('renders with case numbers dropdown', () => {
+  describe('case number', () => {
+    it('renders with case number', () => {
       const clientWithCases = clone(client)
       clientWithCases.cases = [{ id: 101, external_id: '1001' }, { id: 102, external_id: '1002' }]
       const props = { assessment, client: clientWithCases, onAssessmentUpdate: jest.fn(), onKeyUp: jest.fn() }
-      const wrapper = shallow(<AssessmentFormHeader {...props} />)
-      const caseNumberOptions = wrapper
-        .find('#select-case')
-        .dive()
-        .find('option')
-      expect(caseNumberOptions.length).toBe(3)
-      expect(caseNumberOptions.map(option => option.get(0).props.value)).toEqual([undefined, '1002', '1001'])
+      const caseNumber = shallow(<AssessmentFormHeader {...props} />).find('#case-number')
+      expect(caseNumber.text()).toBe('1001')
+    })
+
+    it('renders without case number when not exists', () => {
+      const props = { assessment, client, onAssessmentUpdate: jest.fn(), onKeyUp: jest.fn() }
+      const caseNumber = shallow(<AssessmentFormHeader {...props} />).find('#case-number')
+      expect(caseNumber.text()).toBe('')
     })
   })
 
@@ -53,9 +52,9 @@ describe('<AssessmentFormHeader />', () => {
       ).toBe('Assessment Date *')
     })
 
-    it('renderCaseSelect() returns correct label text', () => {
+    it('renderCaseNumber() returns correct label text', () => {
       expect(
-        mount(wrapped.instance().renderCaseSelect())
+        mount(wrapped.instance().renderCaseNumber())
           .find('Label')
           .text()
       ).toBe('Case Number')
@@ -177,7 +176,7 @@ describe('<AssessmentFormHeader />', () => {
     })
   })
 
-  describe('#toggleUnderSix()', () => {
+  describe('#updateUnderSix()', () => {
     it('will set under_six to its opposite', () => {
       // given
       const mockFn = jest.fn()
@@ -185,7 +184,7 @@ describe('<AssessmentFormHeader />', () => {
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(assessment.state.under_six).toBe(false)
       // when
-      wrapper.instance().toggleUnderSix()
+      wrapper.instance().updateUnderSix(true)
       // then
       const updatedAssessment = clone(assessment)
       updatedAssessment.state.under_six = true
@@ -197,8 +196,8 @@ describe('<AssessmentFormHeader />', () => {
     it('displays correct client name', () => {
       const props = { assessment, client, onAssessmentUpdate: jest.fn() }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
-      expect(wrapper.find('#child-name').text()).toBe('Doe, John')
-      expect(wrapper.find('#county-name').text()).toBe('Calaveras County')
+      const headerTitle = shallow(wrapper.find(CardHeader).props().title)
+      expect(headerTitle.find('#child-name').text()).toBe('Doe, John')
     })
   })
 
@@ -206,7 +205,17 @@ describe('<AssessmentFormHeader />', () => {
     it('displays default message', () => {
       const props = { assessment, client: {}, onAssessmentUpdate: jest.fn() }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
-      expect(wrapper.find('#no-data').text()).toBe('Client Info')
+      const headerTitle = shallow(wrapper.find(CardHeader).props().title)
+      expect(headerTitle.find('#no-data').text()).toBe('Client Info')
+    })
+  })
+
+  describe('with county', () => {
+    it('displays correct county name', () => {
+      const props = { assessment, client, onAssessmentUpdate: jest.fn() }
+      const wrapper = shallow(<AssessmentFormHeader {...props} />)
+      const headerAction = shallow(wrapper.find(CardHeader).props().action)
+      expect(headerAction.find('#county-name').text()).toBe('Calaveras County')
     })
   })
 
@@ -261,6 +270,26 @@ describe('<AssessmentFormHeader />', () => {
         const updatedAssessment = clone(assessment)
         updatedAssessment.conducted_by = conductedByValue
         expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
+      })
+    })
+  })
+
+  describe('AssessmentFormHeader Card', () => {
+    describe('when loading', () => {
+      const props = { assessment, client, onAssessmentUpdate: jest.fn() }
+      const wrapper = shallow(<AssessmentFormHeader {...props} />)
+
+      it('renders AssessmentFormHeader Card ', () => {
+        const card = wrapper.find(Card)
+        expect(card.exists()).toBe(true)
+      })
+
+      it('has a card header', () => {
+        expect(wrapper.find(CardHeader).exists()).toBe(true)
+      })
+
+      it('has a card content', () => {
+        expect(wrapper.find(CardContent).exists()).toBe(true)
       })
     })
   })

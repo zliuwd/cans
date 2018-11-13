@@ -53,6 +53,15 @@
   font-size: 1.5rem
   color: $label-dark
 
+.assessment-header-card-header
+  border-bottom: #ccc 0.25rem solid !important
+
+.assessment-header-date
+  overflow: visible
+
+.assessment-form-header-case-number
+  margin-top: 1.2rem
+
 .assessment-form-header-input
   font-size: 1.5rem
   height: 3.6rem
@@ -62,9 +71,40 @@
   font-weight: 600
 
 .county-name-block
-  color: $link
-  font-size: 1.25rem
-  font-weight: bold
+  font-size: 1.6rem
+  font-weight: 600
+  width: 15.0rem
+  margin-top: 1.0rem
+
+%button-in-group
+  background: #fff
+  color: #0e6f89
+  height: 3.4rem
+  width: 9.0rem
+  padding: 0 30
+  font-size: 1.2rem
+  text-align: center
+  margin-top: 0.35rem
+  border: 1px solid black
+  border-radius: 0
+  border: 1.0rem
+  outline-style: solid
+  outline-color: #0e6f89
+  outline-width: thin
+
+.age-button
+  @extend %button-in-group
+
+.age-button-selected
+  @extend %button-in-group
+  background: #0e6f89
+  color: #fff
+
+.age-button:hover
+  @extend .age-button-selected
+  
+.age-button-selected:hover
+  @extend .age-button-selected
 
 //********************
 //AssessmentFormFooter

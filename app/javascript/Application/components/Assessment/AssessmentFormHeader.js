@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react'
-import { Row, Col, Label, Input } from 'reactstrap'
+import { Row, Col, Label } from 'reactstrap'
 import { resetConfidentialByDefaultItems, AssessmentStatus } from './AssessmentHelper'
 import { formatClientName } from '../Client/Client.helper'
 import PropTypes from 'prop-types'
@@ -7,13 +7,13 @@ import Typography from '@material-ui/core/Typography'
 import FormControl from '@material-ui/core/FormControl'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Switch from '@material-ui/core/Switch'
-import { Alert } from '@cwds/components'
 import Radio from '@material-ui/core/Radio'
+import { Alert, Button } from '@cwds/components'
 import { clone, stringify } from '../../util/common'
 import './style.sass'
 import DateField from '../common/DateField'
 import ConductedByField from './ConductedByField'
+import { Card, CardHeader, CardContent } from '@material-ui/core'
 
 class AssessmentFormHeader extends PureComponent {
   handleValueChange = event => this.changeFieldAndUpdateAssessment(event.target.name, event.target.value)
@@ -56,31 +56,35 @@ class AssessmentFormHeader extends PureComponent {
 
   findCaseByExternalId = externalId => (this.props.client.cases || []).find(aCase => aCase.external_id === externalId)
 
-  toggleUnderSix = () => {
+  updateUnderSix = value => {
     const assessment = clone(this.props.assessment)
-    assessment.state.under_six = !assessment.state.under_six
+    assessment.state.under_six = value
     this.props.onAssessmentUpdate(assessment)
   }
 
-  renderClientNameAndCounty() {
+  renderClientName() {
     const { first_name: firstName, last_name: lastName } = this.props.client
+    return (
+      <div className={'child-name-block'}>
+        {firstName && lastName ? (
+          <span id={'child-name'}>{formatClientName(this.props.client)}</span>
+        ) : (
+          <span id={'no-data'}>Client Info</span>
+        )}
+      </div>
+    )
+  }
+  renderCounty() {
     const county = this.props.assessment.county || {}
     const countyName = county.name ? `${county.name} County` : ''
     return (
-      <Col sm={12}>
-        <div className={'child-name-block'}>
-          {firstName && lastName ? (
-            <span id={'child-name'}>{formatClientName(this.props.client)}</span>
-          ) : (
-            <span id={'no-data'}>Client Info</span>
-          )}
-        </div>
+      <div>
         {countyName ? (
           <div className={'county-name-block'}>
             <span id={'county-name'}>{countyName}</span>
           </div>
         ) : null}
-      </Col>
+      </div>
     )
   }
 
@@ -102,32 +106,19 @@ class AssessmentFormHeader extends PureComponent {
     )
   }
 
-  renderCaseSelect() {
+  renderCaseNumber() {
+    const { cases } = this.props.client
+    const caseNumber = cases === undefined || cases.length === 0 ? '' : cases[0].external_id
     return (
       <Fragment>
-        <Label for={'select-case'} className={'assessment-form-header-label'}>
+        <Label for={'case-number'} className={'assessment-form-header-label'}>
           Case Number
         </Label>
-        <Input
-          type={'select'}
-          id={'select-case'}
-          value={(this.props.assessment.the_case || {}).external_id}
-          onChange={this.handleSelectCaseNumber}
-          className={'assessment-form-header-input'}
-        >
-          {this.renderCaseNumbersDropdownOptions()}
-        </Input>
+        <div id={'case-number'} className={'assessment-form-header-case-number'}>
+          {caseNumber}
+        </div>
       </Fragment>
     )
-  }
-
-  renderCaseNumbersDropdownOptions = () => {
-    const cases = this.props.client.cases || []
-    return [...cases, {}].reverse().map(theCase => (
-      <option key={theCase.id || 0} value={theCase.external_id}>
-        {theCase.external_id}
-      </option>
-    ))
   }
 
   renderConfidentialWarningAlertIfNeeded = () =>
@@ -249,52 +240,62 @@ class AssessmentFormHeader extends PureComponent {
   renderToggleUnderSixQuestion() {
     const isUnderSix = this.props.assessment.state.under_six
     return (
-      <Typography variant="body1" style={{ textAlign: 'left' }} className={'assessment-form-header-label'}>
-        Age: 0-5
-        <FormControlLabel
-          id={'age-switch'}
-          control={
-            <Switch
-              checked={!isUnderSix}
-              value={stringify(isUnderSix)}
-              onChange={this.toggleUnderSix}
-              color="default"
-              inputProps={{ id: 'age-switch-input', 'aria-labelledby': 'age-switch' }}
-            />
-          }
-          label={<span className={'assessment-form-header-label'}>6-21</span>}
-          style={{ marginLeft: '0px', marginRight: '0px' }}
-        />
-      </Typography>
+      <Fragment>
+        <Label className={'assessment-form-header-label'}>Select CANS Template</Label>
+        <Button onClick={() => this.updateUnderSix(true)} className={isUnderSix ? 'age-button-selected' : 'age-button'}>
+          Age: 0-5
+        </Button>
+
+        <Button
+          onClick={() => this.updateUnderSix(false)}
+          className={isUnderSix ? 'age-button' : 'age-button-selected'}
+        >
+          Age: 6-21
+        </Button>
+      </Fragment>
     )
   }
 
   render() {
     return (
       <Fragment>
-        <Row>{this.renderClientNameAndCounty()}</Row>
-        <Row className={'assessment-form-header-inputs'}>
-          <Col sm={3}>{this.renderDateSelect()}</Col>
-          <Col sm={5}>
-            <ConductedByField
-              id={'conducted-by'}
-              value={this.props.assessment.conducted_by}
-              onChange={this.handleConductedByChange}
-              isDisabled={this.props.assessment.status === AssessmentStatus.completed}
-            />
-          </Col>
-          <Col sm={4}>{this.renderCaseSelect()}</Col>
-        </Row>
-        <Row>
-          <Col xs={6}>{this.renderHasCaregiverQuestion()}</Col>
-          <Col xs={6}>{this.renderCanReleaseInfoQuestion()}</Col>
-        </Row>
-        <Row>
-          <Col xs={12}>{this.renderConfidentialWarningAlertIfNeeded()}</Col>
-        </Row>
-        <Row>
-          <Col xs={12}>{this.renderToggleUnderSixQuestion()}</Col>
-        </Row>
+        <Card style={{ marginBottom: 20, marginLeft: 0, marginRight: 0 }} className={'assessment-header-date'}>
+          <CardHeader
+            title={this.renderClientName()}
+            action={this.renderCounty()}
+            className={'assessment-header-card-header'}
+          />
+          <CardContent
+            style={{
+              textAlign: 'left',
+              marginLeft: 0,
+              marginRight: 0,
+              backgroundColor: 'white',
+            }}
+          >
+            <Row className={'assessment-form-header-inputs'}>
+              <Col sm={3}>{this.renderDateSelect()}</Col>
+              <Col xs={3}>{this.renderToggleUnderSixQuestion()}</Col>
+              <Col sm={3}>
+                <ConductedByField
+                  id={'conducted-by'}
+                  value={this.props.assessment.conducted_by}
+                  onChange={this.handleConductedByChange}
+                  isDisabled={this.props.assessment.status === AssessmentStatus.completed}
+                />
+              </Col>
+              <Col sm={3}>{this.renderCaseNumber()}</Col>
+            </Row>
+            <Row>
+              <Col xs={6}>{this.renderHasCaregiverQuestion()}</Col>
+              <Col xs={6}>{this.renderCanReleaseInfoQuestion()}</Col>
+            </Row>
+
+            <Row>
+              <Col xs={12}>{this.renderConfidentialWarningAlertIfNeeded()}</Col>
+            </Row>
+          </CardContent>
+        </Card>
       </Fragment>
     )
   }
