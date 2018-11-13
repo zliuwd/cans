@@ -11,7 +11,7 @@ const SubordinateInfoRecord = ({ caption, value }) => (
 
 SubordinateInfoRecord.propTypes = {
   caption: PropTypes.string.isRequired,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
 
 SubordinateInfoRecord.defaultProps = {

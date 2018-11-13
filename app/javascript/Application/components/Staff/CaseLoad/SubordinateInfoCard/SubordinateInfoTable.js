@@ -7,7 +7,9 @@ import { staffInfoDefaultProps, staffInfoPropTypes } from '../../StaffHelper'
 import { formatPhoneWithExtCode } from '../../../../util/formatters'
 
 const SubordinateInfoTable = ({ staffInfo }) => {
-  const phone = formatPhoneWithExtCode(staffInfo.staff_person.phone_number, staffInfo.staff_person.phone_ext_code)
+  const { phone_number: phoneNumber, phone_ext_code: phoneExtCode, email } = staffInfo.staff_person
+  const phone = formatPhoneWithExtCode(phoneNumber, phoneExtCode)
+  const emailNode = staffInfo.staff_person.email ? <a href={`mailto:${email}`}>{email}</a> : ''
   return (
     <Container>
       <Row>
@@ -23,7 +25,7 @@ const SubordinateInfoTable = ({ staffInfo }) => {
         <Col xs={6}>
           <SubordinateInfoRecord caption={'County'} value={staffInfo.staff_person.county.name} />
           <SubordinateInfoRecord caption={'Phone'} value={phone} />
-          <SubordinateInfoRecord caption={'Email'} value={staffInfo.staff_person.email} />
+          <SubordinateInfoRecord caption={'Email'} value={emailNode} />
         </Col>
       </Row>
     </Container>

@@ -19,7 +19,16 @@ export const staff = [
     completed_count: 1,
   },
   {
-    staff_person: { first_name: 'Rodrik', last_name: 'Cassel' },
+    staff_person: {
+      first_name: 'Rodrik',
+      last_name: 'Cassel',
+      county: {
+        id: 44,
+        name: 'Santa Cruz',
+        external_id: '1111',
+        export_id: '44',
+      },
+    },
     clients_count: 12,
     no_prior_cans_count: 8,
     in_progress_count: 2,
