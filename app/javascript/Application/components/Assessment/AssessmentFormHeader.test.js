@@ -13,8 +13,8 @@ describe('<AssessmentFormHeader />', () => {
       shallow(<AssessmentFormHeader {...{ assessment, client, onAssessmentUpdate: jest.fn() }} />)
     const getLength = component => getShallowWrapper().find(component).length
 
-    it('renders with 3 assessment-form-header-label labels', () => {
-      expect(getLength('.assessment-form-header-label')).toBe(3)
+    it('renders with 3 assessment-form-header-label label', () => {
+      expect(getLength('.assessment-form-header-label')).toBe(1)
     })
 
     it('renders with 1 <ConductedByField> component', () => {
@@ -23,7 +23,10 @@ describe('<AssessmentFormHeader />', () => {
   })
 
   it('displays age buttons as unselected when under_six is undefined', () => {
-    const agelessAssessment = { ...assessment, state: { ...assessment.state, under_six: undefined } }
+    const agelessAssessment = {
+      ...assessment,
+      state: { ...assessment.state, under_six: undefined },
+    }
     const wrapper = shallow(
       <AssessmentFormHeader assessment={agelessAssessment} client={client} onAssessmentUpdate={jest.fn()} />
     )
@@ -32,7 +35,10 @@ describe('<AssessmentFormHeader />', () => {
   })
 
   it('selects first age button when under_six is true', () => {
-    const agelessAssessment = { ...assessment, state: { ...assessment.state, under_six: true } }
+    const agelessAssessment = {
+      ...assessment,
+      state: { ...assessment.state, under_six: true },
+    }
     const wrapper = shallow(
       <AssessmentFormHeader assessment={agelessAssessment} client={client} onAssessmentUpdate={jest.fn()} />
     )
@@ -40,7 +46,10 @@ describe('<AssessmentFormHeader />', () => {
   })
 
   it('selects second age button when under_six is false', () => {
-    const agelessAssessment = { ...assessment, state: { ...assessment.state, under_six: false } }
+    const agelessAssessment = {
+      ...assessment,
+      state: { ...assessment.state, under_six: false },
+    }
     const wrapper = shallow(
       <AssessmentFormHeader assessment={agelessAssessment} client={client} onAssessmentUpdate={jest.fn()} />
     )
@@ -53,13 +62,23 @@ describe('<AssessmentFormHeader />', () => {
         ...assessment,
         service_source_ui_id: '0687-9473-7673-8000672',
       }
-      const props = { assessment: assessmentWithCaseNumber, client, onAssessmentUpdate: jest.fn(), onKeyUp: jest.fn() }
+      const props = {
+        assessment: assessmentWithCaseNumber,
+        client,
+        onAssessmentUpdate: jest.fn(),
+        onKeyUp: jest.fn(),
+      }
       const caseNumber = shallow(<AssessmentFormHeader {...props} />).find('#case-number')
       expect(caseNumber.text()).toBe('0687-9473-7673-8000672')
     })
 
     it('renders without case number when not exists', () => {
-      const props = { assessment, client, onAssessmentUpdate: jest.fn(), onKeyUp: jest.fn() }
+      const props = {
+        assessment,
+        client,
+        onAssessmentUpdate: jest.fn(),
+        onKeyUp: jest.fn(),
+      }
       const caseNumber = shallow(<AssessmentFormHeader {...props} />).find('#case-number')
       expect(caseNumber.text()).toBe('')
     })
@@ -77,14 +96,6 @@ describe('<AssessmentFormHeader />', () => {
           .find('Label')
           .text()
       ).toBe('Assessment Date *')
-    })
-
-    it('renderCaseNumber() returns correct label text', () => {
-      expect(
-        mount(wrapped.instance().renderCaseNumber())
-          .find('Label')
-          .text()
-      ).toBe('Case/Referral Number')
     })
 
     it('renderHasCaregiverQuestion() returns correct label text', () => {
@@ -129,7 +140,11 @@ describe('<AssessmentFormHeader />', () => {
       const mockFn = jest.fn()
       const sentAssessment = clone(assessment)
       sentAssessment.has_caregiver = true
-      const props = { assessment: sentAssessment, client, onAssessmentUpdate: mockFn }
+      const props = {
+        assessment: sentAssessment,
+        client,
+        onAssessmentUpdate: mockFn,
+      }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
 
       // when
@@ -154,7 +169,11 @@ describe('<AssessmentFormHeader />', () => {
         { id: 102, external_id: '1002' },
         { id: 103, external_id: '1003' },
       ]
-      const props = { assessment: sentAssessment, client: clientWithCases, onAssessmentUpdate: mockFn }
+      const props = {
+        assessment: sentAssessment,
+        client: clientWithCases,
+        onAssessmentUpdate: mockFn,
+      }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
 
       // when
@@ -171,7 +190,11 @@ describe('<AssessmentFormHeader />', () => {
       const mockFn = jest.fn()
       const sentAssessment = clone(assessment)
       sentAssessment.the_case = { id: 101, external_id: '1001' }
-      const props = { assessment: sentAssessment, client: clone(client), onAssessmentUpdate: mockFn }
+      const props = {
+        assessment: sentAssessment,
+        client: clone(client),
+        onAssessmentUpdate: mockFn,
+      }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
 
       // when
@@ -189,11 +212,17 @@ describe('<AssessmentFormHeader />', () => {
       const mockFn = jest.fn()
       const sentAssessment = clone(assessment)
       sentAssessment.can_release_confidential_info = true
-      const props = { assessment: sentAssessment, client, onAssessmentUpdate: mockFn }
+      const props = {
+        assessment: sentAssessment,
+        client,
+        onAssessmentUpdate: mockFn,
+      }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(sentAssessment.state.domains[0].items[3].confidential).toBe(false)
       // when
-      const event = { target: { name: 'can_release_confidential_info', value: 'false' } }
+      const event = {
+        target: { name: 'can_release_confidential_info', value: 'false' },
+      }
       wrapper.instance().handleCanReleaseInfoChange(event)
       // then
       const updatedAssessment = clone(assessment)
@@ -260,7 +289,11 @@ describe('<AssessmentFormHeader />', () => {
     it('should not render Alert component when canReleaseInformation is true', () => {
       const sentAssessment = clone(assessment)
       sentAssessment.can_release_confidential_info = true
-      const props = { assessment: sentAssessment, client, onAssessmentUpdate: jest.fn() }
+      const props = {
+        assessment: sentAssessment,
+        client,
+        onAssessmentUpdate: jest.fn(),
+      }
 
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       const alert = wrapper.find(Alert)
@@ -279,7 +312,11 @@ describe('<AssessmentFormHeader />', () => {
     it('disabled when assessment completed ', () => {
       const completedAssessment = clone(assessment)
       completedAssessment.status = 'COMPLETED'
-      const props = { assessment: completedAssessment, client, onAssessmentUpdate: mockFn }
+      const props = {
+        assessment: completedAssessment,
+        client,
+        onAssessmentUpdate: mockFn,
+      }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(wrapper.find('#conducted-by').prop('isDisabled')).toBeTruthy()
     })
@@ -289,7 +326,9 @@ describe('<AssessmentFormHeader />', () => {
         const conductedByValue = 'NAME'
         const props = { assessment, client, onAssessmentUpdate: mockFn }
         const wrapper = shallow(<AssessmentFormHeader {...props} />)
-        const event = { target: { name: 'conducted_by', value: conductedByValue } }
+        const event = {
+          target: { name: 'conducted_by', value: conductedByValue },
+        }
         wrapper
           .find('#conducted-by')
           .props()
