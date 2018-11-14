@@ -36,7 +36,20 @@ describe('<SubordinateInfoCardTable />', () => {
     })
     expect(rows.at(2).props()).toEqual({
       caption: 'Email',
-      value: 'e@mail.com',
+      value: <a href="mailto:e@mail.com">e@mail.com</a>,
+    })
+  })
+
+  it('renders empty Phone and Email SubordinateInfoTableRecord elements', () => {
+    const rows = render(mockStaff[1]).find(SubordinateInfoRecord)
+    expect(rows.length).toBe(3)
+    expect(rows.at(1).props()).toEqual({
+      caption: 'Phone',
+      value: '',
+    })
+    expect(rows.at(2).props()).toEqual({
+      caption: 'Email',
+      value: '',
     })
   })
 })
