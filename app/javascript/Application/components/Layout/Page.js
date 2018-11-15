@@ -6,8 +6,13 @@ import { Client, ClientAddEditForm, ClientService } from '../Client'
 import BreadCrumbsBuilder from './BreadCrumbsBuilder'
 import { navigation } from '../../util/constants'
 import { AssessmentContainer } from '../Assessment'
+import { AssessmentChangeLog } from '../Assessment'
 import { SearchContainer } from '../Search'
-import { SupervisorDashboard, CaseLoadPage, CurrentUserCaseLoadPage } from '../Staff'
+import {
+  SupervisorDashboard,
+  CaseLoadPage,
+  CurrentUserCaseLoadPage,
+} from '../Staff'
 import Sticker from 'react-stickyfill'
 
 class Page extends Component {
@@ -52,11 +57,25 @@ class Page extends Component {
       case navigation.CHILD_PROFILE_ADD:
         return <ClientAddEditForm isNewForm={true} {...params} />
       case navigation.CHILD_PROFILE_EDIT:
-        return this.state.client && <ClientAddEditForm isNewForm={false} {...params} />
+        return (
+          this.state.client && (
+            <ClientAddEditForm isNewForm={false} {...params} />
+          )
+        )
       case navigation.ASSESSMENT_ADD:
-        return this.state.client && <AssessmentContainer isNewForm={true} {...params} />
+        return (
+          this.state.client && (
+            <AssessmentContainer isNewForm={true} {...params} />
+          )
+        )
       case navigation.ASSESSMENT_EDIT:
-        return this.state.client && <AssessmentContainer isNewForm={false} {...params} />
+        return (
+          this.state.client && (
+            <AssessmentContainer isNewForm={false} {...params} />
+          )
+        )
+      case navigation.ASSESSMENT_CHANGELOG:
+        return this.state.client && <AssessmentChangeLog />
       case navigation.CLIENT_SEARCH:
         return <SearchContainer />
       case navigation.STAFF_LIST:
@@ -72,7 +91,10 @@ class Page extends Component {
     if (!this.state.isLoaded) return null
     return (
       <Container>
-        <BreadCrumbsBuilder navigateTo={this.props.navigateTo} client={this.state.client} />
+        <BreadCrumbsBuilder
+          navigateTo={this.props.navigateTo}
+          client={this.state.client}
+        />
         <Row>
           <Col xs="3">
             <Sticker>
