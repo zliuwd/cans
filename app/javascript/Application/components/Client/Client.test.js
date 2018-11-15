@@ -100,6 +100,24 @@ describe('<Client />', () => {
       expect(getLength('#no-data')).not.toBe(1)
     })
 
+    it('first name should be bold', () => {
+      expect(
+        wrapper
+          .find(Grid)
+          .at(3)
+          .html()
+      ).toEqual(expect.stringContaining('<b>test</b>'))
+    })
+
+    it('last name should be bold', () => {
+      expect(
+        wrapper
+          .find(Grid)
+          .at(5)
+          .html()
+      ).toEqual(expect.stringContaining('<b>user</b>'))
+    })
+
     it('date of birth rendered properly', () => {
       expect(
         wrapper

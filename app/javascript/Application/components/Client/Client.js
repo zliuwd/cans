@@ -82,9 +82,9 @@ class Client extends Component {
 
                   {client && client.identifier ? (
                     <Grid container spacing={24} id={'client-info-content'}>
-                      {this.renderClientData(client.first_name, 'First Name')}
+                      {this.renderClientData(<b>{client.first_name}</b>, 'First Name')}
                       {this.renderClientData(client.middle_name, 'Middle Name')}
-                      {this.renderClientData(client.last_name, 'Last Name')}
+                      {this.renderClientData(<b>{client.last_name}</b>, 'Last Name')}
                       {this.renderClientData(client.suffix, 'Suffix')}
                       {this.renderClientData(isoToLocalDate(client.dob), 'Date of Birth')}
                       {this.renderClientData(this.formatCounties(client.counties), 'Counties', 3, 'counties')}
