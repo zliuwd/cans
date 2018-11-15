@@ -136,57 +136,54 @@ class AssessmentFormHeader extends PureComponent {
     const hasCaregiver = (this.props.assessment || {}).has_caregiver
     return (
       <Fragment>
-        <Col sm={12}>
-          <Typography id={'has-caregiver-label'} variant="headline" classes={{ root: 'assessment-form-header-label' }}>
-            Child/Youth has Caregiver?
-          </Typography>
-        </Col>
-        <Col sm={12}>
-          <FormControl>
-            <fieldset>
-              <legend />
-              <RadioGroup
-                id={'has-caregiver'}
-                name={'has_caregiver'}
-                value={stringify(hasCaregiver)}
-                onChange={this.handleHasCaregiverChange}
-                className={'assessment-form-header-radio-group'}
-              >
-                <FormControlLabel
-                  id={'has-caregiver-yes'}
-                  value={stringify(true)}
-                  control={
-                    <Radio
-                      color="default"
-                      inputProps={{
-                        id: 'input-has-caregiver-yes',
-                        'aria-labelledby': 'has-caregiver-label',
-                      }}
-                    />
-                  }
-                  label={'Yes'}
-                  classes={{ label: 'assessment-form-header-label' }}
-                />
-                <FormControlLabel
-                  id={'has-caregiver-no'}
-                  value={stringify(false)}
-                  control={
-                    <Radio
-                      onClick={this.handleHasCaregiverSwitcher}
-                      color="default"
-                      inputProps={{
-                        id: 'input-has-caregiver-no',
-                        'aria-labelledby': 'has-caregiver-label',
-                      }}
-                    />
-                  }
-                  label={'No'}
-                  classes={{ label: 'assessment-form-header-label' }}
-                />
-              </RadioGroup>
-            </fieldset>
-          </FormControl>
-        </Col>
+        <Typography id={'has-caregiver-label'} variant="headline" classes={{ root: 'assessment-form-header-label' }}>
+          Child/Youth has Caregiver?
+        </Typography>
+
+        <FormControl>
+          <fieldset>
+            <legend />
+            <RadioGroup
+              id={'has-caregiver'}
+              name={'has_caregiver'}
+              value={stringify(hasCaregiver)}
+              onChange={this.handleHasCaregiverChange}
+              className={'assessment-form-header-radio-group'}
+            >
+              <FormControlLabel
+                id={'has-caregiver-yes'}
+                value={stringify(true)}
+                control={
+                  <Radio
+                    color="default"
+                    inputProps={{
+                      id: 'input-has-caregiver-yes',
+                      'aria-labelledby': 'has-caregiver-label',
+                    }}
+                  />
+                }
+                label={'Yes'}
+                classes={{ label: 'assessment-form-header-label' }}
+              />
+              <FormControlLabel
+                id={'has-caregiver-no'}
+                value={stringify(false)}
+                control={
+                  <Radio
+                    onClick={this.handleHasCaregiverSwitcher}
+                    color="default"
+                    inputProps={{
+                      id: 'input-has-caregiver-no',
+                      'aria-labelledby': 'has-caregiver-label',
+                    }}
+                  />
+                }
+                label={'No'}
+                classes={{ label: 'assessment-form-header-label' }}
+              />
+            </RadioGroup>
+          </fieldset>
+        </FormControl>
       </Fragment>
     )
   }
@@ -195,53 +192,49 @@ class AssessmentFormHeader extends PureComponent {
     const canReleaseConfidentialInfo = (this.props.assessment || {}).can_release_confidential_info
     return (
       <Fragment>
-        <Col sm={12}>
-          <Typography id={'can-release-label'} variant="headline" classes={{ root: 'assessment-form-header-label' }}>
-            Authorization for release of information on file?
-          </Typography>
-        </Col>
-        <Col sm={12}>
-          <FormControl>
-            <fieldset>
-              <legend />
-              <RadioGroup
-                name={'can_release_confidential_info'}
-                value={stringify(canReleaseConfidentialInfo)}
-                onChange={this.handleCanReleaseInfoChange}
-                className={'assessment-form-header-radio-group'}
-              >
-                <FormControlLabel
-                  value={stringify(true)}
-                  control={
-                    <Radio
-                      color="default"
-                      inputProps={{
-                        id: 'input-can-release-yes',
-                        'aria-labelledby': 'can-release-label',
-                      }}
-                    />
-                  }
-                  label={'Yes'}
-                  classes={{ label: 'assessment-form-header-label' }}
-                />
-                <FormControlLabel
-                  value={stringify(false)}
-                  control={
-                    <Radio
-                      color="default"
-                      inputProps={{
-                        id: 'input-can-release-no',
-                        'aria-labelledby': 'can-release-label',
-                      }}
-                    />
-                  }
-                  label={'No'}
-                  classes={{ label: 'assessment-form-header-label' }}
-                />
-              </RadioGroup>
-            </fieldset>
-          </FormControl>
-        </Col>
+        <Typography id={'can-release-label'} variant="headline" classes={{ root: 'assessment-form-header-label' }}>
+          Authorization for release of information on file?
+        </Typography>
+        <FormControl>
+          <fieldset>
+            <legend />
+            <RadioGroup
+              name={'can_release_confidential_info'}
+              value={stringify(canReleaseConfidentialInfo)}
+              onChange={this.handleCanReleaseInfoChange}
+              className={'assessment-form-header-radio-group'}
+            >
+              <FormControlLabel
+                value={stringify(true)}
+                control={
+                  <Radio
+                    color="default"
+                    inputProps={{
+                      id: 'input-can-release-yes',
+                      'aria-labelledby': 'can-release-label',
+                    }}
+                  />
+                }
+                label={'Yes'}
+                classes={{ label: 'assessment-form-header-label' }}
+              />
+              <FormControlLabel
+                value={stringify(false)}
+                control={
+                  <Radio
+                    color="default"
+                    inputProps={{
+                      id: 'input-can-release-no',
+                      'aria-labelledby': 'can-release-label',
+                    }}
+                  />
+                }
+                label={'No'}
+                classes={{ label: 'assessment-form-header-label' }}
+              />
+            </RadioGroup>
+          </fieldset>
+        </FormControl>
       </Fragment>
     )
   }
