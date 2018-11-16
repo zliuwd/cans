@@ -109,6 +109,15 @@ describe('<Client />', () => {
       ).toEqual(expect.stringContaining('<b>test</b>'))
     })
 
+    it('middle name should be bold', () => {
+      expect(
+        wrapper
+          .find(Grid)
+          .at(4)
+          .html()
+      ).toEqual(expect.stringContaining('<b>name</b>'))
+    })
+
     it('last name should be bold', () => {
       expect(
         wrapper

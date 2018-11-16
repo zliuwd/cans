@@ -60,11 +60,11 @@ class Client extends Component {
     const { isNewForm, shouldRenderClientMessage } = this.state
     return (
       <Fragment>
-        <PageInfo title={'Child/Youth Profile'} />
+        <PageInfo title={'Client Information'} />
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Card className={'card'}>
-              <CardHeader className={'card-header-cans'} title="Child/Youth Information" />
+              <CardHeader className={'card-header-cans'} title="Client Information" />
               <div className={'content'}>
                 <CardContent>
                   {shouldRenderClientMessage && (
@@ -83,7 +83,7 @@ class Client extends Component {
                   {client && client.identifier ? (
                     <Grid container spacing={24} id={'client-info-content'}>
                       {this.renderClientData(<b>{client.first_name}</b>, 'First Name')}
-                      {this.renderClientData(client.middle_name, 'Middle Name')}
+                      {this.renderClientData(<b>{client.middle_name}</b>, 'Middle Name')}
                       {this.renderClientData(<b>{client.last_name}</b>, 'Last Name')}
                       {this.renderClientData(client.suffix, 'Suffix')}
                       {this.renderClientData(isoToLocalDate(client.dob), 'Date of Birth')}
