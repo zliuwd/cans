@@ -61,7 +61,7 @@ class Client extends Component {
       <Fragment>
         <Grid container spacing={24}>
           <Grid item xs={12}>
-            <Card className={'card'}>
+            <Card className={'card client-information-card'}>
               <CardHeader className={'card-header-cans'} title="Client Information" />
               <div className={'content'}>
                 <CardContent>
