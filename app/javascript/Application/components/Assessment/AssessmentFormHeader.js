@@ -208,12 +208,13 @@ class AssessmentFormHeader extends PureComponent {
           <Col sm={3}>{this.renderCaseNumber()}</Col>
         </Row>
         <Row>
-          <Col xs={6}>{this.renderHasCaregiverQuestion()}</Col>
-          <Col xs={6}>{this.renderCanReleaseInfoQuestion()}</Col>
+          <Col xs={3}>{this.renderHasCaregiverQuestion()}</Col>
+          <Col xs={3}>{this.renderCanReleaseInfoQuestion()}</Col>
         </Row>
 
-        <Row>
-          <Col xs={12}>
+        <Row className={'authorization-warning'}>
+          <Col xs={4} />
+          <Col xs={8}>
             <ConfidentialityAlert
               canReleaseInformation={Boolean(this.props.assessment.can_release_confidential_info)}
             />
