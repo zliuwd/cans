@@ -61,6 +61,7 @@ module LoginHelper
       'county_cws_code': '1123',
       'county_name': 'Ventura',
       'privileges': [
+        'CANS-staff-person-subordinates-read',
         'CWS Case Management System',
         'Resource Management',
         'Resource Mgmt Placement Facility Maint',

@@ -2,8 +2,9 @@ import React from 'react'
 import { Redirect } from 'react-router'
 import UserAccountService from '../components/common/UserAccountService'
 import { LoadingState } from '../util/loadingHelper'
+import { permissions } from '../util/constants'
 
-class RoleRedirect extends React.PureComponent {
+class PermissionRedirect extends React.PureComponent {
   constructor() {
     super()
     this.state = {
@@ -19,18 +20,25 @@ class RoleRedirect extends React.PureComponent {
     })
   }
 
+  userPermissionChk = permission => {
+    const { user } = this.state
+    return user && user.privileges && user.privileges.includes(permission)
+  }
+
   render() {
-    const { loadingState, user } = this.state
+    const { loadingState } = this.state
 
     if (loadingState !== LoadingState.ready && loadingState !== LoadingState.error) {
       return null
     }
 
-    if (user && user.roles && user.roles.includes('Supervisor')) {
+    if (this.userPermissionChk(permissions.SUBORDINATES_READ)) {
       return <Redirect to={'/staff'} />
+    } else if (this.userPermissionChk(permissions.CLIENTS_READ)) {
+      return <Redirect to={'/clients'} />
     }
-    return <Redirect to={'/clients'} />
+    return <Redirect to={'/search'} />
   }
 }
 
-export default RoleRedirect
+export default PermissionRedirect
