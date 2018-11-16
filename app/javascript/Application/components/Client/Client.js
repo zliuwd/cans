@@ -4,7 +4,6 @@ import Card from '@material-ui/core/Card/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
 import PropTypes from 'prop-types'
-import { PageInfo } from '../Layout'
 import ClientAssessmentHistory from './ClientAssessmentHistory'
 import { CloseableAlert, alertType } from '../common/CloseableAlert'
 import { isoToLocalDate } from '../../util/dateHelper'
@@ -60,7 +59,6 @@ class Client extends Component {
     const { isNewForm, shouldRenderClientMessage } = this.state
     return (
       <Fragment>
-        <PageInfo title={'Client Information'} />
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Card className={'card'}>

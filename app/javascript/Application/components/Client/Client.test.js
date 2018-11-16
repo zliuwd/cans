@@ -5,7 +5,6 @@ import Card from '@material-ui/core/Card/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
-import { PageInfo } from '../Layout'
 import { MemoryRouter } from 'react-router-dom'
 
 const client = {
@@ -44,10 +43,6 @@ describe('<Client />', () => {
 
     it('renders with <CardContent /> component', () => {
       expect(getLength(CardContent)).toBe(1)
-    })
-
-    it('renders with <PageInfo /> component', () => {
-      expect(getLength(PageInfo)).toBe(1)
     })
   })
 
