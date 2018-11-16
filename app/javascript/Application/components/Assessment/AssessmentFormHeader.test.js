@@ -1,28 +1,20 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
 import { AssessmentFormHeader } from './index'
-import { Alert } from '@cwds/components'
 import { assessment, client } from './assessment.mocks.test'
 import { clone } from '../../util/common'
-import ConductedByField from './ConductedByField'
+import ConductedByField from './AssessmentFormHeader/ConductedByField'
+import ConfidentialityAlert from './AssessmentFormHeader/ConfidentialityAlert'
+import UnderSixQuestion from './AssessmentFormHeader/UnderSixQuestion'
 import { Card, CardHeader, CardContent } from '@material-ui/core'
 
 describe('<AssessmentFormHeader />', () => {
-  describe('components', () => {
-    const getShallowWrapper = () =>
-      shallow(<AssessmentFormHeader {...{ assessment, client, onAssessmentUpdate: jest.fn() }} />)
-    const getLength = component => getShallowWrapper().find(component).length
-
-    it('renders with 3 assessment-form-header-label label', () => {
-      expect(getLength('.assessment-form-header-label')).toBe(1)
-    })
-
-    it('renders with 1 <ConductedByField> component', () => {
-      expect(getLength(ConductedByField)).toBe(1)
-    })
+  it('renders with 1 <ConductedByField> component', () => {
+    const wrapper = shallow(<AssessmentFormHeader {...{ assessment, client, onAssessmentUpdate: jest.fn() }} />)
+    expect(wrapper.find(ConductedByField).exists()).toBe(true)
   })
 
-  it('displays age buttons as unselected when under_six is undefined', () => {
+  it('renders the under_six question when under_six is unknown', () => {
     const agelessAssessment = {
       ...assessment,
       state: { ...assessment.state, under_six: undefined },
@@ -30,30 +22,18 @@ describe('<AssessmentFormHeader />', () => {
     const wrapper = shallow(
       <AssessmentFormHeader assessment={agelessAssessment} client={client} onAssessmentUpdate={jest.fn()} />
     )
-    expect(wrapper.find('.age-button').length).toBe(2)
-    expect(wrapper.find('.age-button-selected').exists()).toBe(false)
+    expect(wrapper.find(UnderSixQuestion).props().isUnderSix).toBe(null)
   })
 
-  it('selects first age button when under_six is true', () => {
-    const agelessAssessment = {
+  it('renders the under_six question when under_six is set', () => {
+    const underSixAssessment = {
       ...assessment,
       state: { ...assessment.state, under_six: true },
     }
     const wrapper = shallow(
-      <AssessmentFormHeader assessment={agelessAssessment} client={client} onAssessmentUpdate={jest.fn()} />
+      <AssessmentFormHeader assessment={underSixAssessment} client={client} onAssessmentUpdate={jest.fn()} />
     )
-    expect(wrapper.find('.age-button-selected').html()).toContain('Age: 0-5')
-  })
-
-  it('selects second age button when under_six is false', () => {
-    const agelessAssessment = {
-      ...assessment,
-      state: { ...assessment.state, under_six: false },
-    }
-    const wrapper = shallow(
-      <AssessmentFormHeader assessment={agelessAssessment} client={client} onAssessmentUpdate={jest.fn()} />
-    )
-    expect(wrapper.find('.age-button-selected').html()).toContain('Age: 6-21')
+    expect(wrapper.find(UnderSixQuestion).props().isUnderSix).toBe(true)
   })
 
   describe('case number', () => {
@@ -84,7 +64,7 @@ describe('<AssessmentFormHeader />', () => {
     })
   })
 
-  describe('renders 5 assessment-form-header-label labels with correct text', () => {
+  describe('labels', () => {
     let wrapped
     beforeEach(() => {
       wrapped = shallow(<AssessmentFormHeader {...{ assessment, client, onAssessmentUpdate: jest.fn() }} />)
@@ -134,7 +114,7 @@ describe('<AssessmentFormHeader />', () => {
     })
   })
 
-  describe('#handleHasCaregiverChange()', () => {
+  describe('HasCaregiverQuestion onHasCaregiverChange', () => {
     it('will update has_caregiver in assessment', () => {
       // given
       const mockFn = jest.fn()
@@ -145,63 +125,15 @@ describe('<AssessmentFormHeader />', () => {
         client,
         onAssessmentUpdate: mockFn,
       }
-      const wrapper = shallow(<AssessmentFormHeader {...props} />)
+      const hasCaregiverQuestion = shallow(<AssessmentFormHeader {...props} />).find('HasCaregiverQuestion')
 
       // when
       const event = { target: { name: 'has_caregiver', value: 'false' } }
-      wrapper.instance().handleHasCaregiverChange(event)
+      hasCaregiverQuestion.props().onHasCaregiverChange(event)
 
       // then
       const updatedAssessment = clone(assessment)
       updatedAssessment.has_caregiver = false
-      expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
-    })
-  })
-
-  describe('#handleSelectCaseNumber()', () => {
-    it('will update case in assessment with a case object', () => {
-      // given
-      const mockFn = jest.fn()
-      const sentAssessment = clone(assessment)
-      const clientWithCases = clone(client)
-      clientWithCases.cases = [
-        { id: 101, external_id: '1001' },
-        { id: 102, external_id: '1002' },
-        { id: 103, external_id: '1003' },
-      ]
-      const props = {
-        assessment: sentAssessment,
-        client: clientWithCases,
-        onAssessmentUpdate: mockFn,
-      }
-      const wrapper = shallow(<AssessmentFormHeader {...props} />)
-
-      // when
-      wrapper.instance().handleSelectCaseNumber({ target: { value: '1002' } })
-
-      // then
-      const updatedAssessment = clone(assessment)
-      updatedAssessment.the_case = { id: 102, external_id: '1002' }
-      expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
-    })
-
-    it('will update case in assessment with an undefined value', () => {
-      // given
-      const mockFn = jest.fn()
-      const sentAssessment = clone(assessment)
-      sentAssessment.the_case = { id: 101, external_id: '1001' }
-      const props = {
-        assessment: sentAssessment,
-        client: clone(client),
-        onAssessmentUpdate: mockFn,
-      }
-      const wrapper = shallow(<AssessmentFormHeader {...props} />)
-
-      // when
-      wrapper.instance().handleSelectCaseNumber({ target: { value: undefined } })
-
-      // then
-      const updatedAssessment = clone(assessment)
       expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
     })
   })
@@ -232,7 +164,7 @@ describe('<AssessmentFormHeader />', () => {
     })
   })
 
-  describe('#updateUnderSix()', () => {
+  describe('UnderSixQuestion onChange', () => {
     it('will set under_six to its opposite', () => {
       // given
       const mockFn = jest.fn()
@@ -240,7 +172,10 @@ describe('<AssessmentFormHeader />', () => {
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(assessment.state.under_six).toBe(false)
       // when
-      wrapper.instance().updateUnderSix(true)
+      wrapper
+        .find(UnderSixQuestion)
+        .props()
+        .onChange(true)
       // then
       const updatedAssessment = clone(assessment)
       updatedAssessment.state.under_six = true
@@ -275,30 +210,19 @@ describe('<AssessmentFormHeader />', () => {
     })
   })
 
-  describe('warning alert', () => {
-    it('should render Alert component when canReleaseInformation is false', () => {
-      const props = { assessment, client, onAssessmentUpdate: jest.fn() }
-      const wrapper = shallow(<AssessmentFormHeader {...props} />)
-      const alert = wrapper.find('Alert')
-      expect(alert.length).toBe(1)
-      expect(wrapper.find('Alert').html()).toMatch(
-        'By selecting NO, Items 7, 48, and EC 41 (Substance Use Disorder Items) from this CANS assessment will be redacted when printed.'
-      )
-    })
+  it('renders a confidentiality warning alert', () => {
+    const sentAssessment = clone(assessment)
+    sentAssessment.can_release_confidential_info = true
+    const props = {
+      assessment: sentAssessment,
+      client,
+      onAssessmentUpdate: jest.fn(),
+    }
 
-    it('should not render Alert component when canReleaseInformation is true', () => {
-      const sentAssessment = clone(assessment)
-      sentAssessment.can_release_confidential_info = true
-      const props = {
-        assessment: sentAssessment,
-        client,
-        onAssessmentUpdate: jest.fn(),
-      }
-
-      const wrapper = shallow(<AssessmentFormHeader {...props} />)
-      const alert = wrapper.find(Alert)
-      expect(alert.length).toBe(0)
-    })
+    const wrapper = shallow(<AssessmentFormHeader {...props} />)
+    const alert = wrapper.find(ConfidentialityAlert)
+    expect(alert.exists()).toBe(true)
+    expect(alert.props().canReleaseInformation).toBe(true)
   })
 
   describe('Assessment Conducted by', () => {
