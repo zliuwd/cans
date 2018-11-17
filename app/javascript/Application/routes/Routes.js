@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom'
 import { Page } from '../components/Layout'
 import { navigation } from '../util/constants'
 import PermissionRedirect from './PermissionRedirect'
+import PermissionRedirectBoundary from './PermissionRedirectBoundary'
 
 const page = (route, navigateTo) => <Page navigateTo={navigateTo} {...route} />
 
@@ -11,7 +12,9 @@ const Routes = () => {
   return (
     <Switch>
       <Route exact path="/">
-        <PermissionRedirect />
+        <PermissionRedirectBoundary>
+          <PermissionRedirect />
+        </PermissionRedirectBoundary>
       </Route>
       <Route exact path="/clients" children={route => page(route, navigation.CHILD_LIST)} />
       <Route exact path="/clients/new" children={route => page(route, navigation.CHILD_PROFILE_ADD)} />
