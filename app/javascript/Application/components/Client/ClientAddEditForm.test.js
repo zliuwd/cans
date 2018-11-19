@@ -25,7 +25,7 @@ describe('<ClientAddEditForm />', () => {
   const getWrapperEdit = () => shallow(<ClientAddEditForm {...defaultPropsEdit} />)
   const client = {
     cases: [{ external_id: '' }],
-    county: { id: 0, name: '' },
+    county: { name: '' },
     dob: '',
     external_id: '',
     first_name: '',
@@ -471,12 +471,12 @@ describe('<ClientAddEditForm />', () => {
   describe('#fetchUserAccount', () => {
     describe('when successful', () => {
       it('sets userCounty', async () => {
-        jest.spyOn(UserAccountService, 'fetchCurrent').mockResolvedValue({ county_code: '49', county_name: 'Sonoma' })
+        jest.spyOn(UserAccountService, 'fetchCurrent').mockResolvedValue({ county_name: 'Sonoma' })
         const component = getWrapperAdd()
           .find('ClientAddEditForm')
           .dive()
         await component.instance().fetchUserAccount()
-        expect(component.state('userCounty')).toEqual({ id: 49, name: 'Sonoma' })
+        expect(component.state('userCounty')).toEqual({ name: 'Sonoma' })
       })
     })
 
@@ -487,7 +487,7 @@ describe('<ClientAddEditForm />', () => {
           .find('ClientAddEditForm')
           .dive()
         await component.instance().fetchUserAccount()
-        expect(component.state('userCounty')).toEqual({ id: 0, name: '' })
+        expect(component.state('userCounty')).toEqual({ name: '' })
       })
     })
   })

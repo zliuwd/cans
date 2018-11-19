@@ -12,7 +12,8 @@ module User
       perry_account_response = @security_gateway.validate_token(token)
       perry_account_json = JSON.parse(perry_account_response, symbolize_names: true)
       perry_account_json[:staff_id] = perry_account_json[:staffId]
-      perry_account_json.delete(:staffId)
+      perry_account_json = perry_account_json.slice(:first_name, :last_name, :county_name,
+                                                    :privileges, :staff_id)
       perry_account_json
     end
   end

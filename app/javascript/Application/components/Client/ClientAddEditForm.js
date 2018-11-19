@@ -102,7 +102,6 @@ const helperTextProps = {
 }
 
 const emptyCounty = {
-  id: 0,
   name: '',
 }
 
@@ -181,7 +180,7 @@ class ClientAddEditForm extends Component {
 
   fetchUserAccount() {
     return UserAccountService.fetchCurrent()
-      .then(user => this.setState({ userCounty: { id: parseInt(user.county_code), name: user.county_name } }))
+      .then(user => this.setState({ userCounty: { name: user.county_name } }))
       .catch(() => {})
   }
 
