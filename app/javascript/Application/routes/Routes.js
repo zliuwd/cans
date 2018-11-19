@@ -3,7 +3,8 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { Page } from '../components/Layout'
 import { navigation } from '../util/constants'
-import RoleRedirect from './RoleRedirect'
+import PermissionRedirect from './PermissionRedirect'
+import PermissionRedirectBoundary from './PermissionRedirectBoundary'
 
 const page = (route, navigateTo) => <Page navigateTo={navigateTo} {...route} />
 
@@ -11,7 +12,9 @@ const Routes = () => {
   return (
     <Switch>
       <Route exact path="/">
-        <RoleRedirect />
+        <PermissionRedirectBoundary>
+          <PermissionRedirect />
+        </PermissionRedirectBoundary>
       </Route>
       <Route
         exact

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import { Routes } from './'
 import { Route, Switch } from 'react-router-dom'
 import { navigation } from '../util/constants'
-import RoleRedirect from './RoleRedirect'
+import PermissionRedirect from './PermissionRedirect'
 
 describe('<Router />', () => {
   describe('#render', () => {
@@ -40,7 +40,7 @@ describe('<Router />', () => {
         .find({ path: '/' })
       expect(route.exists()).toBe(true)
       expect(route.props().exact).toBe(true)
-      expect(route.find(RoleRedirect).exists()).toBe(true)
+      expect(route.find(PermissionRedirect).exists()).toBe(true)
     })
 
     it('renders a client list route', () => {

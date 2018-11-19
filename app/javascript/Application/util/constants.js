@@ -22,3 +22,9 @@ export const ClientStatus = Object.freeze({
   COMPLETED: 'Completed',
   NO_PRIOR_CANS: 'No prior CANS',
 })
+
+export const permissions = Object.freeze({
+  SUBORDINATES_READ: 'CANS-staff-person-subordinates-read',
+  CLIENTS_READ: 'CANS-staff-person-clients-read',
+  CLIENT_SEARCH: 'CANS-client-search',
+})

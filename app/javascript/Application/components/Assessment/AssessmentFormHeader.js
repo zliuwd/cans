@@ -8,11 +8,13 @@ import FormControl from '@material-ui/core/FormControl'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
-import { Alert, Button } from '@cwds/components'
 import { clone, stringify } from '../../util/common'
 import './style.sass'
 import DateField from '../common/DateField'
-import ConductedByField from './ConductedByField'
+import ConductedByField from './AssessmentFormHeader/ConductedByField'
+import HasCaregiverQuestion from './AssessmentFormHeader/HasCaregiverQuestion'
+import ConfidentialityAlert from './AssessmentFormHeader/ConfidentialityAlert'
+import UnderSixQuestion from './AssessmentFormHeader/UnderSixQuestion'
 import { Card, CardHeader, CardContent } from '@material-ui/core'
 
 class AssessmentFormHeader extends PureComponent {
@@ -39,12 +41,6 @@ class AssessmentFormHeader extends PureComponent {
     if (!canReleaseInfo) {
       resetConfidentialByDefaultItems(assessment)
     }
-    this.props.onAssessmentUpdate(assessment)
-  }
-
-  handleSelectCaseNumber = event => {
-    const assessment = clone(this.props.assessment)
-    assessment.the_case = this.findCaseByExternalId(event.target.value)
     this.props.onAssessmentUpdate(assessment)
   }
 
@@ -91,7 +87,12 @@ class AssessmentFormHeader extends PureComponent {
   renderDateSelect() {
     return (
       <Fragment>
-        <Label required id={'assessment-date-label'} className={'assessment-form-header-label'}>
+        <Label
+          required
+          id={'assessment-date-label'}
+          className={'assessment-form-header-label'}
+          htmlFor="assessment-date_input"
+        >
           Assessment Date *
         </Label>
         <DateField
@@ -109,9 +110,9 @@ class AssessmentFormHeader extends PureComponent {
   renderCaseNumber() {
     return (
       <Fragment>
-        <Label for={'case-number'} className={'assessment-form-header-label'}>
+        <div htmlFor={'case-number'} className={'assessment-form-header-case-number-label'}>
           Case/Referral Number
-        </Label>
+        </div>
         <div id={'case-number'} className={'assessment-form-header-case-number'}>
           {this.props.assessment.service_source_ui_id}
         </div>
@@ -119,67 +120,14 @@ class AssessmentFormHeader extends PureComponent {
     )
   }
 
-  renderConfidentialWarningAlertIfNeeded = () =>
-    this.props.assessment.can_release_confidential_info ? null : (
-      <Alert color={'warning'}>
-        By selecting NO, Items 7, 48, and EC 41 (Substance Use Disorder Items) from this CANS assessment will be
-        redacted when printed.
-      </Alert>
-    )
-
   renderHasCaregiverQuestion() {
     const hasCaregiver = (this.props.assessment || {}).has_caregiver
     return (
-      <Fragment>
-        <Col sm={12}>
-          <Typography id={'has-caregiver-label'} variant="headline" classes={{ root: 'assessment-form-header-label' }}>
-            Child/Youth has Caregiver?
-          </Typography>
-        </Col>
-        <Col sm={12}>
-          <FormControl>
-            <RadioGroup
-              id={'has-caregiver'}
-              name={'has_caregiver'}
-              value={stringify(hasCaregiver)}
-              onChange={this.handleHasCaregiverChange}
-              className={'assessment-form-header-radio-group'}
-            >
-              <FormControlLabel
-                id={'has-caregiver-yes'}
-                value={stringify(true)}
-                control={
-                  <Radio
-                    color="default"
-                    inputProps={{
-                      id: 'input-has-caregiver-yes',
-                      'aria-labelledby': 'has-caregiver-label',
-                    }}
-                  />
-                }
-                label={'Yes'}
-                classes={{ label: 'assessment-form-header-label' }}
-              />
-              <FormControlLabel
-                id={'has-caregiver-no'}
-                value={stringify(false)}
-                control={
-                  <Radio
-                    onClick={this.handleHasCaregiverSwitcher}
-                    color="default"
-                    inputProps={{
-                      id: 'input-has-caregiver-no',
-                      'aria-labelledby': 'has-caregiver-label',
-                    }}
-                  />
-                }
-                label={'No'}
-                classes={{ label: 'assessment-form-header-label' }}
-              />
-            </RadioGroup>
-          </FormControl>
-        </Col>
-      </Fragment>
+      <HasCaregiverQuestion
+        hasCaregiver={hasCaregiver}
+        onHasCaregiverChange={this.handleHasCaregiverChange}
+        onHasCaregiverNoClicked={this.handleHasCaregiverSwitcher}
+      />
     )
   }
 
@@ -187,13 +135,12 @@ class AssessmentFormHeader extends PureComponent {
     const canReleaseConfidentialInfo = (this.props.assessment || {}).can_release_confidential_info
     return (
       <Fragment>
-        <Col sm={12}>
-          <Typography id={'can-release-label'} variant="headline" classes={{ root: 'assessment-form-header-label' }}>
-            Authorization for release of information on file?
-          </Typography>
-        </Col>
-        <Col sm={12}>
-          <FormControl>
+        <Typography id={'can-release-label'} variant="headline" classes={{ root: 'assessment-form-header-label' }}>
+          Authorization for release of information on file?
+        </Typography>
+        <FormControl>
+          <fieldset>
+            <legend />
             <RadioGroup
               name={'can_release_confidential_info'}
               value={stringify(canReleaseConfidentialInfo)}
@@ -229,31 +176,51 @@ class AssessmentFormHeader extends PureComponent {
                 classes={{ label: 'assessment-form-header-label' }}
               />
             </RadioGroup>
-          </FormControl>
-        </Col>
+          </fieldset>
+        </FormControl>
       </Fragment>
     )
   }
 
-  renderToggleUnderSixQuestion() {
-    const isUnderSix = this.props.assessment.state.under_six
+  renderCardContent() {
     return (
-      <Fragment>
-        <Label className={'assessment-form-header-label'}>Select CANS Template</Label>
-        <Button
-          onClick={() => this.updateUnderSix(true)}
-          className={isUnderSix === true ? 'age-button-selected' : 'age-button'}
-        >
-          Age: 0-5
-        </Button>
+      <CardContent
+        style={{
+          textAlign: 'left',
+          marginLeft: 0,
+          marginRight: 0,
+          backgroundColor: 'white',
+        }}
+      >
+        <Row className={'assessment-form-header-inputs'}>
+          <Col sm={3}>{this.renderDateSelect()}</Col>
+          <Col xs={3}>
+            <UnderSixQuestion isUnderSix={this.props.assessment.state.under_six} onChange={this.updateUnderSix} />
+          </Col>
+          <Col sm={3}>
+            <ConductedByField
+              id={'conducted-by'}
+              value={this.props.assessment.conducted_by}
+              onChange={this.handleConductedByChange}
+              isDisabled={this.props.assessment.status === AssessmentStatus.completed}
+            />
+          </Col>
+          <Col sm={3}>{this.renderCaseNumber()}</Col>
+        </Row>
+        <Row>
+          <Col xs={3}>{this.renderHasCaregiverQuestion()}</Col>
+          <Col xs={3}>{this.renderCanReleaseInfoQuestion()}</Col>
+        </Row>
 
-        <Button
-          onClick={() => this.updateUnderSix(false)}
-          className={isUnderSix === false ? 'age-button-selected' : 'age-button'}
-        >
-          Age: 6-21
-        </Button>
-      </Fragment>
+        <Row className={'authorization-warning'}>
+          <Col xs={4} />
+          <Col xs={8}>
+            <ConfidentialityAlert
+              canReleaseInformation={Boolean(this.props.assessment.can_release_confidential_info)}
+            />
+          </Col>
+        </Row>
+      </CardContent>
     )
   }
 
@@ -266,36 +233,7 @@ class AssessmentFormHeader extends PureComponent {
             action={this.renderCounty()}
             className={'assessment-header-card-header'}
           />
-          <CardContent
-            style={{
-              textAlign: 'left',
-              marginLeft: 0,
-              marginRight: 0,
-              backgroundColor: 'white',
-            }}
-          >
-            <Row className={'assessment-form-header-inputs'}>
-              <Col sm={3}>{this.renderDateSelect()}</Col>
-              <Col xs={3}>{this.renderToggleUnderSixQuestion()}</Col>
-              <Col sm={3}>
-                <ConductedByField
-                  id={'conducted-by'}
-                  value={this.props.assessment.conducted_by}
-                  onChange={this.handleConductedByChange}
-                  isDisabled={this.props.assessment.status === AssessmentStatus.completed}
-                />
-              </Col>
-              <Col sm={3}>{this.renderCaseNumber()}</Col>
-            </Row>
-            <Row>
-              <Col xs={6}>{this.renderHasCaregiverQuestion()}</Col>
-              <Col xs={6}>{this.renderCanReleaseInfoQuestion()}</Col>
-            </Row>
-
-            <Row>
-              <Col xs={12}>{this.renderConfidentialWarningAlertIfNeeded()}</Col>
-            </Row>
-          </CardContent>
+          {this.renderCardContent()}
         </Card>
       </Fragment>
     )

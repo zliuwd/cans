@@ -31,6 +31,8 @@ feature 'Pages are accessible' do
     # to comply with accessibility rules
     click_button 'Select date'
     click_button 'Select date'
+    # Select age group to see the domains
+    click_button 'Age: 6-21'
     # Expanding one domain and one item in it to assert their accessibility
     find('#domain0-expand').click
     find('#PSYCHOSIS-item-expand').click

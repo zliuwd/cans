@@ -96,7 +96,6 @@ class Domain extends Component {
       isAssessmentUnderSix,
       canReleaseConfidentialInfo,
     }
-    const progressBar = <DomainProgressBar isAssessmentUnderSix={isAssessmentUnderSix} domain={domain} />
     const totalScore = totalScoreCalculation(items)
     return shouldDomainBeRendered(isAssessmentUnderSix, domain) ? (
       <Fragment>
@@ -118,7 +117,7 @@ class Domain extends Component {
                 </Typography>
               </Grid>
               <Grid item xs={4} className={'domain-metric'}>
-                {progressBar}
+                <DomainProgressBar isAssessmentUnderSix={isAssessmentUnderSix} domain={domain} />
                 <DomainScore totalScore={totalScore} key={index} />
               </Grid>
             </Grid>
@@ -158,7 +157,7 @@ Domain.propTypes = {
   i18n: PropTypes.object.isRequired,
   i18nAll: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
-  isAssessmentUnderSix: PropTypes.bool.isRequired,
+  isAssessmentUnderSix: PropTypes.bool,
   onAddCaregiverDomain: PropTypes.func.isRequired,
   onCaregiverNameUpdate: PropTypes.func.isRequired,
   onConfidentialityUpdate: PropTypes.func.isRequired,
@@ -167,6 +166,7 @@ Domain.propTypes = {
 
 Domain.defaultProps = {
   handleWarningShow: () => {},
+  isAssessmentUnderSix: null,
 }
 
 export default Domain
