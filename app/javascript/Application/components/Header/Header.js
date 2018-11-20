@@ -1,10 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { GlobalHeader } from 'react-wood-duck'
-import { trimSafely, addTrailingSlash } from '../../util/formatters'
+import { trimSafely } from '../../util/formatters'
+import { logoutUrl } from '../../util/navigationUtil'
 import UserAccountService from '../common/UserAccountService'
-
-const logoutUrl = `${addTrailingSlash(process.env.CANS_BASE_PATH)}user/logout`
 
 class Header extends React.Component {
   constructor(props) {
@@ -61,7 +60,7 @@ class Header extends React.Component {
   }
 
   logout() {
-    window.location.href = logoutUrl
+    window.location.href = logoutUrl()
   }
 
   render = () => {

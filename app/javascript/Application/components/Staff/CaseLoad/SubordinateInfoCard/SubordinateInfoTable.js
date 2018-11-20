@@ -9,7 +9,7 @@ import { formatPhoneWithExtCode } from '../../../../util/formatters'
 const SubordinateInfoTable = ({ staffInfo }) => {
   const { phone_number: phoneNumber, phone_ext_code: phoneExtCode, email } = staffInfo.staff_person
   const phone = formatPhoneWithExtCode(phoneNumber, phoneExtCode)
-  const emailNode = staffInfo.staff_person.email ? <a href={`mailto:${email}`}>{email}</a> : ''
+  const emailNode = email ? <a href={`mailto:${email}`}>{email}</a> : ''
   return (
     <Container>
       <Row>

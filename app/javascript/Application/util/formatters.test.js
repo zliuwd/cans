@@ -1,4 +1,11 @@
-import { trimSafely, addTrailingSlash, formatPhoneWithExtCode, formatPhoneNumber } from './formatters'
+import {
+  trimSafely,
+  addTrailingSlash,
+  formatPhoneWithExtCode,
+  formatPhoneNumber,
+  removeTrailingSlash,
+  removeLeadingSlash,
+} from './formatters'
 
 describe('formatters', () => {
   describe('#trimSafely()', () => {
@@ -34,6 +41,40 @@ describe('formatters', () => {
       expect(addTrailingSlash(undefined)).toEqual('/')
       expect(addTrailingSlash(null)).toEqual('/')
       expect(addTrailingSlash('')).toEqual('/')
+    })
+  })
+
+  describe('#removeTrailingSlash()', () => {
+    it('should remove trailing slash', () => {
+      expect(removeTrailingSlash('www.home.com/')).toEqual('www.home.com')
+      expect(removeTrailingSlash('/')).toEqual('')
+    })
+
+    it('should return input string when no trailing slash', () => {
+      expect(removeTrailingSlash('/www.home.com')).toEqual('/www.home.com')
+    })
+
+    it('should return empty string when input has nothing', () => {
+      expect(removeTrailingSlash(undefined)).toEqual('')
+      expect(removeTrailingSlash(null)).toEqual('')
+      expect(removeTrailingSlash('')).toEqual('')
+    })
+  })
+
+  describe('#removeLeadingSlash()', () => {
+    it('should remove leading slash', () => {
+      expect(removeLeadingSlash('/page-url')).toEqual('page-url')
+      expect(removeLeadingSlash('/')).toEqual('')
+    })
+
+    it('should return input string when no leading slash', () => {
+      expect(removeLeadingSlash('www.home.com/')).toEqual('www.home.com/')
+    })
+
+    it('should return empty string when input has nothing', () => {
+      expect(removeLeadingSlash(undefined)).toEqual('')
+      expect(removeLeadingSlash(null)).toEqual('')
+      expect(removeLeadingSlash('')).toEqual('')
     })
   })
 

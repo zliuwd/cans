@@ -1,7 +1,12 @@
 import { globalAlertService } from './GlobalAlertService'
-import { handleError, forbiddenMessage } from './ApiErrorHandler'
+import { handleError } from './ApiErrorHandler'
 
 describe('ApiErrorHandler', () => {
+  const cansBasePathTmp = process.env.CANS_BASE_PATH
+  beforeAll(() => (process.env.CANS_BASE_PATH = '/cans'))
+
+  afterAll(() => (process.env.CANS_BASE_PATH = cansBasePathTmp))
+
   describe('with a single error with incident id', () => {
     const error = {
       response: {
@@ -145,21 +150,22 @@ describe('ApiErrorHandler', () => {
     })
   })
 
-  it('handles 403 error', () => {
+  it('navigates user to error page on 403 error', () => {
     const error = {
-      response: {
-        status: 403,
-      },
+      message: 'Error message',
+      response: { status: 403 },
     }
-    let message
-    let isErrorThrowed = false
-    globalAlertService.subscribe(e => (message = e.message))
+
+    const messages = []
+    globalAlertService.subscribe(e => messages.push(e.message))
+    global.location = jest.fn()
+    global.location.assign = jest.fn()
+
     try {
       handleError(error)
     } catch (e) {
-      isErrorThrowed = true
+      //  ignore
     }
-    expect(message).toEqual(forbiddenMessage)
-    expect(isErrorThrowed).toEqual(true)
+    expect(global.location.assign).toHaveBeenCalledWith('/cans/error_page')
   })
 })

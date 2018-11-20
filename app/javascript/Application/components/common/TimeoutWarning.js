@@ -3,11 +3,9 @@ import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap'
 import { TIMEOUT_EVENT } from './../../util/constants'
 import { eventBus } from './../../util/eventBus'
 import { SecurityService } from './Security.service'
+import { logoutUrl } from '../../util/navigationUtil'
 
 import './style.sass'
-import { addTrailingSlash } from '../../util/formatters'
-
-const logoutUrl = `${addTrailingSlash(process.env.CANS_BASE_PATH)}user/logout`
 
 export class TimeoutWarning extends Component {
   constructor(context) {
@@ -38,7 +36,7 @@ export class TimeoutWarning extends Component {
   }
 
   logout() {
-    window.location.href = logoutUrl
+    window.location.href = logoutUrl()
   }
 
   render() {

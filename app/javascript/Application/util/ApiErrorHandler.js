@@ -1,6 +1,5 @@
 import { globalAlertService } from './GlobalAlertService'
-
-export const forbiddenMessage = "You don't have appropriate permissions to view this record"
+import { createUrl } from './navigationUtil'
 
 const ApiErrorHandler = {
   handleError,
@@ -26,7 +25,7 @@ function isResponseHandled(response) {
       window.location.reload()
       break
     case 403:
-      postError(forbiddenMessage)
+      window.location.assign(createUrl('error_page'))
       break
     case 409:
       break
