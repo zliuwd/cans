@@ -11,8 +11,10 @@ module Infrastructure
     def validate_access(request)
       session_token = request.session['token']
       return session_token if session_token && @security_gateway.validate_token(session_token)
+
       new_token = fetch_new_token(request.params['accessCode'])
       return unless new_token
+
       request.session['token'] = new_token
       set_privileges(request, new_token)
     end

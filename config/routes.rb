@@ -10,8 +10,9 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :clients, only: [:show] do
-    end
+    resources :people_searches, only: :index
+
+    resources :clients, only: [:show]
 
     resources :instruments, only: [:show] do
       member do
@@ -35,9 +36,6 @@ Rails.application.routes.draw do
       collection do
         get 'subordinates', to: 'staff#subordinates_index'
         get 'assessments', to: 'staff#assessments'
-      end
-      member do
-        get 'people', to: 'staff#social_worker_clients'
       end
       member do
         get 'people', to: 'staff#social_worker_clients'

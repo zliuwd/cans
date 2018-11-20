@@ -33,6 +33,7 @@ class SearchAssessmentHistory extends Component {
         })
       })
       .catch(err => {
+        this.setState({ fetchStatus: LoadingState.error })
         throw err
       })
   }
@@ -59,7 +60,7 @@ class SearchAssessmentHistory extends Component {
   render() {
     const { assessments, fetchStatus } = this.state
     return (
-      <Card className="card hidden-print">
+      <Card className="card hidden-print assessment-history-card">
         <CardHeader className="card-header-search">
           <CardTitle>{'Assessment History'}</CardTitle>
         </CardHeader>

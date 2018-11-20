@@ -94,6 +94,7 @@ describe('<SearchAssessmentHistory', () => {
   describe('assessment history', () => {
     describe('when more than 3 assessments', () => {
       it('renders 3 in progress assessments', async () => {
+        const numAssessmentsToExpect = 3
         // given + when
         const wrapper = await prepareWrapper([
           { id: 1, status: 'IN_PROGRESS' },
@@ -104,7 +105,7 @@ describe('<SearchAssessmentHistory', () => {
         ])
 
         // then
-        expect(wrapper.find(SearchAssessmentHistoryRecord).length).toBe(3)
+        expect(wrapper.find(SearchAssessmentHistoryRecord).length).toBe(numAssessmentsToExpect)
       })
 
       it('renders only in progress assessments in the correct order with created_timestamp only', async () => {

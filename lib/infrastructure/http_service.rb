@@ -27,6 +27,7 @@ module Infrastructure
 
     def set_payload(request, method, payload)
       return request if payload.nil?
+
       if method == :get
         request.params = payload
       else

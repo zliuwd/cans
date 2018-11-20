@@ -7,7 +7,7 @@ feature 'Index Page' do
   scenario 'CANS-Worker lands on client list and can logout' do
     login
     expect(page).to have_content('CANS')
-    expect(page).to have_content('County Client List')
+    expect(page).to have_content('Client List')
     logout
     expect(page).not_to have_content('CANS')
   end

@@ -4,6 +4,7 @@ module LoginHelper
   def login(login_config = default_json)
     visit '/'
     return unless need_login?
+
     enter_credentials login_config
   end
 
@@ -37,6 +38,7 @@ module LoginHelper
       'county_cws_code': '1123',
       'county_name': 'Ventura',
       'privileges': [
+        'CANS-staff-person-clients-read',
         'CWS Case Management System',
         'Resource Management',
         'Resource Mgmt Placement Facility Maint',

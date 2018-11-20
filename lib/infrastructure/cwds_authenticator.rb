@@ -13,6 +13,7 @@ module Infrastructure
     def call(environment)
       request = Rack::Request.new(environment)
       return do_call(environment) if matches?(request)
+
       @application.call(environment)
     end
 
@@ -24,9 +25,11 @@ module Infrastructure
 
     def do_call(environment)
       return @application.call(environment) unless Feature.active?(:authentication)
+
       request = Rack::Request.new(environment)
       security_policy = Infrastructure::SecurityPolicy.new
       return redirect_to_login(request.url) unless security_policy.validate_access(request)
+
       @application.call(environment)
     end
 

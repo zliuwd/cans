@@ -11,6 +11,7 @@ module Infrastructure
     def call(environment)
       request = Rack::Request.new(environment)
       return do_call(environment) if matches?(request)
+
       @application.call(environment)
     end
 
@@ -23,6 +24,7 @@ module Infrastructure
     def do_call(environment)
       request = Rack::Request.new(environment)
       return redirect_to_error_page(request.url) unless valid_privileges(request)
+
       @application.call(environment)
     end
 

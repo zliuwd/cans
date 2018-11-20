@@ -12,23 +12,22 @@ import Client from '../Client/Client'
 import SearchContainer from '../Search/SearchContainer'
 import { SupervisorDashboard, CaseLoadPage } from '../Staff'
 
+const getWrapper = (navigateTo, params = {}) =>
+  shallow(<Page match={{ params }} location={{}} navigateTo={navigateTo} />)
+
 describe('<Page />', () => {
   describe('layout', () => {
-    const getWrapper = () =>
-      shallow(<Page match={{ params: {} }} location={{}} navigateTo={navigation.ASSESSMENT_ADD} />)
-
     it('renders with <SideNav /> links', async () => {
-      const wrapper = getWrapper()
+      const wrapper = getWrapper(navigation.ASSESSMENT_ADD)
       await wrapper.instance().componentDidMount()
       const sideNav = wrapper.find(SideNav)
-
       expect(sideNav.length).toBe(1)
       expect(sideNav.dive().find({ text: 'County Client List' }).length).toBe(1)
       expect(sideNav.dive().find({ text: 'Client Search' }).length).toBe(1)
     })
 
     it('renders with <BreadCrumbsBuilder /> links', async () => {
-      const wrapper = getWrapper()
+      const wrapper = getWrapper(navigation.ASSESSMENT_ADD)
       await wrapper.instance().componentDidMount()
       const breadCrumbsBuilder = wrapper.find(BreadCrumbsBuilder)
 
@@ -36,7 +35,7 @@ describe('<Page />', () => {
     })
 
     it('splits sidebar and main content 3:9', async () => {
-      const wrapper = getWrapper()
+      const wrapper = getWrapper(navigation.ASSESSMENT_ADD)
       await wrapper.instance().componentDidMount()
       const cols = wrapper.find(Row).find(Col)
       const sideCol = cols.at(0)
@@ -47,43 +46,60 @@ describe('<Page />', () => {
       expect(mainCol.props().xs).toEqual('9')
       expect(mainCol.props().role).toEqual('main')
     })
+
+    describe('client search page', () => {
+      it('renders main content 12 columns wide', async () => {
+        const wrapper = getWrapper(navigation.CLIENT_SEARCH)
+        await wrapper.instance().componentDidMount()
+        const cols = wrapper.find(Row).find(Col)
+        const mainCol = cols.at(0)
+
+        expect(mainCol.props().xs).toEqual('12')
+        expect(mainCol.props().role).toEqual('main')
+      })
+    })
   })
 
   describe('when adding Assessment', () => {
-    const getWrapper = navigateTo =>
-      shallow(<Page match={{ params: { clientId: '1001' } }} location={{}} navigateTo={navigateTo} />)
-
     it('renders < AssessmentContainer on Add/>', async () => {
       jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-      const wrapper = getWrapper(navigation.ASSESSMENT_ADD)
+      const wrapper = getWrapper(navigation.ASSESSMENT_ADD, {
+        clientId: '1001',
+      })
       await wrapper.instance().componentDidMount()
       expect(wrapper.find(AssessmentContainer).length).toBe(1)
     })
 
     it('renders < AssessmentContainer on Edit />', async () => {
       jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-      const wrapper = getWrapper(navigation.ASSESSMENT_EDIT)
+      const wrapper = getWrapper(navigation.ASSESSMENT_EDIT, {
+        clientId: '1001',
+      })
       await wrapper.instance().componentDidMount()
       expect(wrapper.find(AssessmentContainer).length).toBe(1)
     })
 
     it('renders < ClientAddEditForm for Edit Profile/>', async () => {
       jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-      const wrapper = getWrapper(navigation.CHILD_PROFILE_EDIT)
+      const wrapper = getWrapper(navigation.CHILD_PROFILE_EDIT, {
+        clientId: '1001',
+      })
       await wrapper.instance().componentDidMount()
       expect(wrapper.find(ClientAddEditForm).length).toBe(1)
     })
 
     it('renders < ClientAddEditForm for Add CANS/>', async () => {
       jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-      const wrapper = getWrapper(navigation.CHILD_PROFILE_ADD)
+      const wrapper = getWrapper(navigation.CHILD_PROFILE_ADD, {
+        clientId: '1001',
+      })
       await wrapper.instance().componentDidMount()
       expect(wrapper.find(ClientAddEditForm).length).toBe(1)
     })
 
     it('renders < Client />', async () => {
       jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-      const wrapper = getWrapper(navigation.CHILD_PROFILE)
+      const wrapper = getWrapper(navigation.CHILD_PROFILE, { clientId: '1001' })
       await wrapper.instance().componentDidMount()
       expect(wrapper.find(Client).length).toBe(1)
     })
@@ -105,7 +121,6 @@ describe('<Page />', () => {
 })
 
 describe('when searching for clients', () => {
-  const getWrapper = navigateTo => shallow(<Page match={{ params: {} }} location={{}} navigateTo={navigateTo} />)
   it('renders < SearchContainer />', async () => {
     jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
     const wrapper = getWrapper(navigation.CLIENT_SEARCH)

@@ -68,23 +68,51 @@ class Page extends Component {
     }
   }
 
+  renderWithSidebar(content) {
+    return (
+      <Row>
+        <Col xs="3">
+          <Sticker>
+            <SideNav />
+          </Sticker>
+        </Col>
+        <Col xs="9" role={'main'} id={'main-content'}>
+          <Row>
+            <Col xs="12">{content}</Col>
+          </Row>
+        </Col>
+      </Row>
+    )
+  }
+
+  renderWithoutSidebar(content) {
+    return (
+      <Row>
+        <Col xs="12" role={'main'} id={'main-content'}>
+          <Row>
+            <Col xs="12">{content}</Col>
+          </Row>
+        </Col>
+      </Row>
+    )
+  }
+
+  renderRow() {
+    switch (this.props.navigateTo) {
+      case navigation.CLIENT_SEARCH:
+        return this.renderWithoutSidebar(this.renderContent())
+      default:
+        return this.renderWithSidebar(this.renderContent())
+    }
+  }
+
   render() {
     if (!this.state.isLoaded) return null
+
     return (
       <Container>
         <BreadCrumbsBuilder navigateTo={this.props.navigateTo} client={this.state.client} />
-        <Row>
-          <Col xs="3">
-            <Sticker>
-              <SideNav />
-            </Sticker>
-          </Col>
-          <Col xs="9" role={'main'} id={'main-content'}>
-            <Row>
-              <Col xs="12">{this.renderContent()}</Col>
-            </Row>
-          </Col>
-        </Row>
+        {this.renderRow()}
       </Container>
     )
   }

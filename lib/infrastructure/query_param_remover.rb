@@ -5,6 +5,7 @@ module Infrastructure
     def remove_query_param(url, param)
       return url unless param
       return '' unless url
+
       uri = Addressable::URI.parse(url)
       remove_value(uri, param)
       uri.to_s

@@ -9,6 +9,7 @@ module Infrastructure
     def call(environment)
       request = Rack::Request.new(environment)
       return do_call(environment) if matches?(request)
+
       @application.call(environment)
     end
 
@@ -18,6 +19,7 @@ module Infrastructure
       request = Rack::Request.new(environment)
       session_token = request.session['token']
       return @application.call(environment) if session_token
+
       [401, {}, []]
     end
 
