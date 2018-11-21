@@ -83,12 +83,12 @@ describe('<Client />', () => {
 
     const getLength = component => wrapper.find(component).length
 
-    it('renders with 11 <Grid /> components', () => {
-      expect(getLength(Grid)).toBe(11)
+    it('renders with 10 <Grid /> components', () => {
+      expect(getLength(Grid)).toBe(10)
     })
 
-    it('renders with 8 ".label-text" styled elements', () => {
-      expect(getLength('.label-text')).toBe(8)
+    it('renders with 7 ".label-text" styled elements', () => {
+      expect(getLength('.label-text')).toBe(7)
     })
 
     it('does not render No Child Data Found', () => {
@@ -120,6 +120,15 @@ describe('<Client />', () => {
           .at(5)
           .html()
       ).toEqual(expect.stringContaining('<b>user</b>'))
+    })
+
+    it('suffix should be bold', () => {
+      expect(
+        wrapper
+          .find(Grid)
+          .at(6)
+          .html()
+      ).toEqual(expect.stringContaining('<b>Mr.</b>'))
     })
 
     it('date of birth rendered properly', () => {
@@ -174,32 +183,6 @@ describe('<Client />', () => {
         const nullCountiesParams = { ...params }
         nullCountiesParams.client.counties = null
         expect(clientWrapper(nullCountiesParams).find('#client-data-counties')).toBeDefined()
-      })
-    })
-
-    describe('Access Restrictions label', () => {
-      it('renders with Unrestricted', () => {
-        expect(wrapper.find('#client-data-sensitivity-type').html()).toEqual(expect.stringContaining('Unrestricted'))
-      })
-
-      it('renders with Sealed', () => {
-        const sealedParams = { ...params }
-        sealedParams.client.sensitivity_type = 'SEALED'
-        expect(
-          clientWrapper(sealedParams)
-            .find('#client-data-sensitivity-type')
-            .html()
-        ).toEqual(expect.stringContaining('Sealed'))
-      })
-
-      it('renders with Sensitive', () => {
-        const sensitiveParams = { ...params }
-        sensitiveParams.client.sensitivity_type = 'SENSITIVE'
-        expect(
-          clientWrapper(sensitiveParams)
-            .find('#client-data-sensitivity-type')
-            .html()
-        ).toEqual(expect.stringContaining('Sensitive'))
       })
     })
   })

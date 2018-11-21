@@ -83,16 +83,10 @@ class Client extends Component {
                       {this.renderClientData(<b>{client.first_name}</b>, 'First Name')}
                       {this.renderClientData(<b>{client.middle_name}</b>, 'Middle Name')}
                       {this.renderClientData(<b>{client.last_name}</b>, 'Last Name')}
-                      {this.renderClientData(client.suffix, 'Suffix')}
+                      {this.renderClientData(<b>{client.suffix}</b>, 'Suffix')}
                       {this.renderClientData(isoToLocalDate(client.dob), 'Date of Birth')}
                       {this.renderClientData(this.formatCounties(client.counties), 'Counties', 3, 'counties')}
                       {this.renderClientData(client.external_id, 'Client Id', 6)}
-                      {this.renderClientData(
-                        this.sensitivityTypeLabel(client.sensitivity_type),
-                        'Access Restrictions',
-                        6,
-                        'sensitivity-type'
-                      )}
                     </Grid>
                   ) : (
                     <span id={'no-data'}>No Child Data Found</span>
