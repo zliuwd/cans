@@ -730,10 +730,10 @@ describe('<AssessmentContainer />', () => {
 
         await wrapper.instance().handleSubmitAssessment()
         expect(wrapper.state().redirection).toEqual({
-          shouldRedirect: true,
+          shouldRedirect: false,
           successAssessmentId: 123,
         })
-        expect(wrapper.find('Redirect').exists()).toBe(true)
+        expect(wrapper.find('Redirect').exists()).toBe(false)
 
         await wrapper.update()
         wrapper.instance().componentDidUpdate()

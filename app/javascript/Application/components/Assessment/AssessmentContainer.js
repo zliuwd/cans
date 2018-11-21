@@ -255,7 +255,7 @@ class AssessmentContainer extends Component {
         this.setState({
           assessmentServiceStatus: LoadingState.ready,
           redirection: {
-            shouldRedirect: true,
+            shouldRedirect: false,
             successAssessmentId: submittedAssessment.id,
           },
         })
@@ -269,7 +269,7 @@ class AssessmentContainer extends Component {
         this.setState({
           assessmentServiceStatus: LoadingState.ready,
           redirection: {
-            shouldRedirect: true,
+            shouldRedirect: false,
             successAssessmentId: submittedAssessment.id,
           },
         })
