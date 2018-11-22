@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import AvatarImg from '../../../../../assets/images/default-profile.svg'
 import FullName from './SearchResults/FullName'
 import Gender from './SearchResults/Gender'
 import AgeInfo from './SearchResults/AgeInfo'
@@ -24,7 +23,7 @@ const PersonSuggestion = ({
       <div className="col-md-5">
         <div className="row">
           <div className="col-md-4 profile-picture">
-            <img className="avatar-img" src={AvatarImg} alt="Avatar" />
+            <i className="fa fa-user" />
             {isSensitive && <div className="information-flag image-caption">Sensitive</div>}
             {isSealed && <div className="information-flag image-caption">Sealed</div>}
           </div>
