@@ -27,6 +27,7 @@ import {
 import './style.sass'
 import { getCurrentIsoDate } from '../../util/dateHelper'
 import moment from 'moment'
+import { logPageAction } from '../../util/analytics'
 
 class AssessmentContainer extends Component {
   constructor(props) {
@@ -242,6 +243,13 @@ class AssessmentContainer extends Component {
         this.setState({ assessmentServiceStatus: LoadingState.error })
       }
     }
+    if (this.state.assessment.id) {
+      // Capture New Relic data after the assessment has been successfully saved
+      logPageAction('assessmentSave', {
+        assessment_id: this.state.assessment.id,
+        assessment_county: this.state.assessment.county.name,
+      })
+    }
   }
 
   handleSubmitAssessment = async () => {
@@ -276,6 +284,13 @@ class AssessmentContainer extends Component {
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
       }
+    }
+    if (this.state.assessment.id) {
+      // Capture New Relic data after the assessment has been successfully submitted
+      logPageAction('assessmentSubmit', {
+        assessment_id: this.state.assessment.id,
+        assessment_county: this.state.assessment.county.name,
+      })
     }
   }
 

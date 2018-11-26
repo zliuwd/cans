@@ -4,11 +4,13 @@ import { Container, Row, Col } from 'reactstrap'
 import { SideNav } from './'
 import { Client, ClientAddEditForm, ClientService } from '../Client'
 import BreadCrumbsBuilder from './BreadCrumbsBuilder'
-import { navigation } from '../../util/constants'
+import { navigation, dashboards } from '../../util/constants'
 import { AssessmentContainer } from '../Assessment'
 import { SearchContainer } from '../Search'
 import { SupervisorDashboard, CaseLoadPage, CurrentUserCaseLoadPage } from '../Staff'
 import Sticker from 'react-stickyfill'
+import UserAccountService from '../common/UserAccountService'
+import { logPageAction } from '../../util/analytics'
 
 class Page extends Component {
   constructor(props) {
@@ -21,13 +23,16 @@ class Page extends Component {
 
   async componentDidMount() {
     const client = await this.fetchClientIfNeeded()
-    await this.setState({ client, isLoaded: true })
+    const currentUser = await UserAccountService.fetchCurrent()
+    await this.setState({ client, isLoaded: true, currentUser: currentUser })
+    this.logDashboardVisitToNewRelic()
   }
 
   async componentDidUpdate(prevProps) {
     if (prevProps === this.props) return
     const client = await this.fetchClientIfNeeded()
     await this.setState({ client })
+    this.logDashboardVisitToNewRelic()
   }
 
   async fetchClientIfNeeded() {
@@ -37,6 +42,16 @@ class Page extends Component {
       client = await ClientService.fetch(clientId).catch(() => {})
     }
     return client
+  }
+
+  logDashboardVisitToNewRelic = () => {
+    if (Object.values(dashboards).includes(this.props.navigateTo)) {
+      logPageAction('visitDashboard', {
+        staff_id: this.state.currentUser.staff_id,
+        staff_county: this.state.currentUser.county_name,
+        dashboard: this.props.navigateTo,
+      })
+    }
   }
 
   renderContent() {

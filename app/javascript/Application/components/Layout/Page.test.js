@@ -10,12 +10,23 @@ import AssessmentContainer from '../Assessment/AssessmentContainer'
 import ClientAddEditForm from '../Client/ClientAddEditForm'
 import Client from '../Client/Client'
 import SearchContainer from '../Search/SearchContainer'
-import { SupervisorDashboard, CaseLoadPage } from '../Staff'
+import { SupervisorDashboard, CaseLoadPage, CurrentUserCaseLoadPage } from '../Staff'
+import * as Analytics from '../../util/analytics'
+import UserAccountService from '../common/UserAccountService'
+
+jest.mock('../../util/analytics')
+jest.mock('../common/UserAccountService')
 
 const getWrapper = (navigateTo, params = {}) =>
   shallow(<Page match={{ params }} location={{}} navigateTo={navigateTo} />)
 
 describe('<Page />', () => {
+  const analyticsSpy = jest.spyOn(Analytics, 'logPageAction')
+  const accountServiceSpy = jest.spyOn(UserAccountService, 'fetchCurrent').mockReturnValue({})
+  beforeEach(() => {
+    analyticsSpy.mockReset()
+  })
+
   describe('layout', () => {
     it('renders with <SideNav /> links', async () => {
       const wrapper = getWrapper(navigation.ASSESSMENT_ADD)
@@ -105,10 +116,40 @@ describe('<Page />', () => {
     })
   })
 
-  it('renders <SupervisorDashboard /> when navigated to', async () => {
-    const wrapper = shallow(<Page match={{ params: {} }} location={{}} navigateTo={navigation.STAFF_LIST} />)
-    await wrapper.instance().componentDidMount()
-    expect(wrapper.find(SupervisorDashboard).exists()).toBe(true)
+  describe('when Supervisor logs in', () => {
+    it('renders <SupervisorDashboard /> when navigated to', async () => {
+      const wrapper = shallow(<Page match={{ params: {} }} location={{}} navigateTo={navigation.STAFF_LIST} />)
+      await wrapper.instance().componentDidMount()
+      expect(wrapper.find(SupervisorDashboard).exists()).toBe(true)
+    })
+
+    it('logs Supervisor dashboard visit to New Relic', async () => {
+      const wrapper = shallow(<Page match={{ params: {} }} location={{}} navigateTo={navigation.STAFF_LIST} />)
+      await wrapper.instance().componentDidMount()
+      expect(analyticsSpy).toHaveBeenCalledWith('visitDashboard', {
+        staff_id: accountServiceSpy.staff_id,
+        staff_county: accountServiceSpy.county_name,
+        dashboard: 'STAFF_LIST',
+      })
+    })
+  })
+
+  describe('when case worker logs in', () => {
+    it('renders <CurrentUserCaseLoadPage /> when navigated to', async () => {
+      const wrapper = shallow(<Page match={{ params: {} }} location={{}} navigateTo={navigation.CHILD_LIST} />)
+      await wrapper.instance().componentDidMount()
+      expect(wrapper.find(CurrentUserCaseLoadPage).exists()).toBe(true)
+    })
+
+    it('logs CaseWorker dashboard visit to New Relic', async () => {
+      const wrapper = shallow(<Page match={{ params: {} }} location={{}} navigateTo={navigation.CHILD_LIST} />)
+      await wrapper.instance().componentDidMount()
+      expect(analyticsSpy).toHaveBeenCalledWith('visitDashboard', {
+        staff_id: accountServiceSpy.staff_id,
+        staff_county: accountServiceSpy.county_name,
+        dashboard: 'CHILD_LIST',
+      })
+    })
   })
 
   it('renders <CaseLoadPage /> when navigated to', async () => {
@@ -118,13 +159,23 @@ describe('<Page />', () => {
     await wrapper.instance().componentDidMount()
     expect(wrapper.find(CaseLoadPage).exists()).toBe(true)
   })
-})
 
-describe('when searching for clients', () => {
-  it('renders < SearchContainer />', async () => {
-    jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-    const wrapper = getWrapper(navigation.CLIENT_SEARCH)
-    await wrapper.instance().componentDidMount()
-    expect(wrapper.find(SearchContainer).length).toBe(1)
+  describe('when searching for clients', () => {
+    it('renders < SearchContainer />', async () => {
+      jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
+      const wrapper = getWrapper(navigation.CLIENT_SEARCH)
+      await wrapper.instance().componentDidMount()
+      expect(wrapper.find(SearchContainer).length).toBe(1)
+    })
+
+    it('logs Search dashboard visit to New Relic', async () => {
+      const wrapper = getWrapper(navigation.CLIENT_SEARCH)
+      await wrapper.instance().componentDidMount()
+      expect(analyticsSpy).toHaveBeenCalledWith('visitDashboard', {
+        staff_id: accountServiceSpy.staff_id,
+        staff_county: accountServiceSpy.county_name,
+        dashboard: 'CLIENT_SEARCH',
+      })
+    })
   })
 })

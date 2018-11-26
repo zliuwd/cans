@@ -21,7 +21,9 @@ import { LoadingState } from '../../util/loadingHelper'
 import { CloseableAlert } from '../common/CloseableAlert'
 import { getCurrentIsoDate } from '../../util/dateHelper'
 import { Print } from '../Print'
+import * as Analytics from '../../util/analytics'
 
+jest.mock('../../util/analytics')
 jest.useFakeTimers()
 
 const defaultProps = {
@@ -32,6 +34,11 @@ const defaultProps = {
 }
 
 describe('<AssessmentContainer />', () => {
+  const analyticsSpy = jest.spyOn(Analytics, 'logPageAction')
+  beforeEach(() => {
+    analyticsSpy.mockReset()
+  })
+
   describe('init AssessmentContainer', () => {
     describe('page layout', () => {
       const props = {
@@ -583,6 +590,18 @@ describe('<AssessmentContainer />', () => {
         expect(wrapper.find(CloseableAlert).length).toBe(0)
       })
     })
+
+    it('should log analytics to New Relic when assessment is saved', async () => {
+      const assessmentServicePutSpy = jest.spyOn(AssessmentService, 'update')
+      const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+      assessmentServicePutSpy.mockReturnValue(Promise.resolve(assessment))
+      wrapper.setState({ assessment: assessment })
+      await wrapper.instance().handleSaveAssessment()
+      expect(analyticsSpy).toHaveBeenCalledWith('assessmentSave', {
+        assessment_id: 1,
+        assessment_county: assessment.county.name,
+      })
+    })
   })
 
   describe('submit assessment', () => {
@@ -618,6 +637,18 @@ describe('<AssessmentContainer />', () => {
         wrapper.setState({ assessment: { id: 1 } })
         wrapper.instance().handleSubmitAssessment()
         expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { id: 1, person: childInfoJson, status: 'COMPLETED' })
+      })
+    })
+
+    it('should log analytics to New Relic when assessment is submitted', async () => {
+      const assessmentServicePutSpy = jest.spyOn(AssessmentService, 'update')
+      const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+      assessmentServicePutSpy.mockReturnValue(Promise.resolve(assessment))
+      wrapper.setState({ assessment: assessment })
+      await wrapper.instance().handleSubmitAssessment()
+      expect(analyticsSpy).toHaveBeenCalledWith('assessmentSubmit', {
+        assessment_id: 1,
+        assessment_county: assessment.county.name,
       })
     })
   })

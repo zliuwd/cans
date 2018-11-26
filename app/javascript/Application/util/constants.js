@@ -27,3 +27,9 @@ export const permissions = Object.freeze({
   CLIENTS_READ: 'CANS-staff-person-clients-read',
   CLIENT_SEARCH: 'CANS-client-search',
 })
+
+export const dashboards = Object.freeze({
+  CHILD_LIST: 'CHILD_LIST',
+  CLIENT_SEARCH: 'CLIENT_SEARCH',
+  STAFF_LIST: 'STAFF_LIST',
+})
