@@ -4,70 +4,17 @@ require 'faker'
 require 'active_support/time'
 
 module ResourceHelper
-  def post_new_client
-    visit '/clients/new'
-    expect(page).to have_content 'Add Child/Youth'
-    client = fake_client
-    fill_and_save_client_info client
-    client['id'] = current_url.split('/').last
-    client
-  end
-
-  def post_new_assessment(client)
-    fill_and_save_assessment_form client
+  def post_new_assessment
+    fill_and_save_assessment_form
   end
 
   private
 
-  def fake_client
-    {
-      'first_name' => Faker::Name.first_name,
-      'last_name' => Faker::Name.last_name,
-      'dob' => Faker::Date.between(20.years.ago, 10.years.ago).strftime('%m/%d/%Y'),
-      'client_id' => fake_client_id,
-      'case_number_0' => fake_case_number,
-      'case_number_1' => fake_case_number,
-      'county' => 'Ventura'
-    }
-  end
-
-  def fake_client_id
-    "#{Faker::Number.number(4)}-#{Faker::Number.number(4)}-"\
-      "#{Faker::Number.number(4)}-#{Faker::Number.number(7)}"
-  end
-
-  def fake_case_number
-    "#{Faker::Number.number(4)}-#{Faker::Number.number(3)}-"\
-      "#{Faker::Number.number(4)}-#{Faker::Number.number(8)}"
-  end
-
-  def focus_and_fill_in(selector, text)
-    element = find(selector)
-    element.click
-    element.set(text)
-  end
-
-  def fill_and_save_client_info(client)
-    fill_client_info client
-    click_button 'Save'
-    expect(page).to have_content 'Child/Youth Profile'
-  end
-
-  # rubocop:disable Metrics/AbcSize
-  def fill_client_info(client)
-    fill_in('First Name', with: client['first_name'])
-    fill_in('Last Name', with: client['last_name'])
-    focus_and_fill_in('#dob', client['dob'])
-    find('.case-numbers-single-control').click
-    focus_and_fill_in('#caseNumber0', client['case_number_0'])
-    focus_and_fill_in('#caseNumber1', client['case_number_1'])
-    focus_and_fill_in('#external_id', client['client_id'])
-    find('#county-select').find(:xpath, 'option[57]').select_option
-  end
-  # rubocop:enable Metrics/AbcSize
-
-  def fill_and_save_assessment_form(client)
+  def fill_and_save_assessment_form
     click_button 'New CANS'
+    click_button 'Age: 6-21'
+    find('#has-caregiver-yes').click
+    click_button 'Age: 6-21'
     behavioral_domain = [
       '#domain0-expand',
       '#PSYCHOSIS-item-expand',
@@ -111,10 +58,10 @@ module ResourceHelper
     behavioral_domain.each { |element| find(element).click }
     click_button 'Save'
     expect(page).to have_content 'Success! CANS assessment has been saved'
-    fill_and_submit_assessment_form_6_20 client
+    fill_and_submit_assessment_form_6_21
   end
 
-  def fill_and_submit_assessment_form_6_20(client)
+  def fill_and_submit_assessment_form_6_21
     fetch_life_domain
     fetch_risk_domain
     fetch_cultural_domain
@@ -122,8 +69,10 @@ module ResourceHelper
     fetch_caregiver_domain
     fetch_traumatic_domain
     click_button 'Complete'
-    expect(page).to have_content 'Success! CANS assessment has been completed.'
-    save_assessment_form_age_0_5 client
+    click_button 'I Agree'
+    click_button 'Cancel'
+    expect(page).to have_content 'Complete'
+    save_assessment_form_age_0_5
   end
 
   def fetch_life_domain
@@ -380,14 +329,15 @@ module ResourceHelper
     traumatic_domain.each { |element| find(element).click }
   end
 
-  def save_assessment_form_age_0_5(client)
+  def save_assessment_form_age_0_5
     click_button 'New CANS'
-    click_button 'Save'
-    expect(page).to have_content 'Success! CANS assessment has been saved'
-    fill_and_complete_assessment_form_age_0_5 client
+    click_button 'Age: 0-5'
+    find('#has-caregiver-yes').click
+    click_button 'Age: 0-5'
+    fill_and_complete_assessment_form_age_0_5
   end
 
-  def fill_and_complete_assessment_form_age_0_5(_client)
+  def fill_and_complete_assessment_form_age_0_5
     fetch_challenges_domain
     fetch_functioning_domain
     fetch_risk_behaviors_domain
@@ -397,11 +347,12 @@ module ResourceHelper
     fetch_caregiver_resources_domain
     fetch_minor_traumatic_domain
     click_button 'Complete'
+    click_button 'I Agree'
+    click_button 'Cancel'
   end
 
   def fetch_challenges_domain
     challenges_domain = [
-      '#age-switch',
       '#domain5-expand',
       '#IMPULSIVITY_HYPERACTIVITY-item-expand',
       '#input-IMPULSIVITY_HYPERACTIVITY-0-select',

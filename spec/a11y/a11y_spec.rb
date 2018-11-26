@@ -3,7 +3,7 @@
 require 'acceptance_helper'
 
 feature 'Pages are accessible' do
-  client_identifier = 'AbA4BJy0Aq'
+  client_identifier = 'ATBLX8600c'
 
   before(:all) do
     login

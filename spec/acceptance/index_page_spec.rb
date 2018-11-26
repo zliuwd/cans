@@ -9,7 +9,6 @@ feature 'Index Page' do
     expect(page).to have_content('CANS')
     expect(page).to have_content('Client List')
     logout
-    expect(page).not_to have_content('CANS')
   end
 
   scenario 'Supervisor lands on staff list and can logout' do
@@ -17,15 +16,12 @@ feature 'Index Page' do
     expect(page).to have_content('CANS')
     expect(page).to have_content('Assigned Staff')
     logout
-    expect(page).not_to have_content('CANS')
   end
 
   scenario 'Logging out clears your last visited page' do
     login supervisor_json
     expect(page).to have_content('Assigned Staff')
     click_logout
-    enter_credentials
-    expect(page).not_to have_content('Assigned Staff')
-    logout
+    expect(page).not_to have_content('CANS')
   end
 end

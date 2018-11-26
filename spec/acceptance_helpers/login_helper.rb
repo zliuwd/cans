@@ -19,8 +19,8 @@ module LoginHelper
   end
 
   def click_logout
-    find('.profile-avatar button').click
-    find('.profile-avatar a').click
+    find('.profile-avatar').click
+    find('.c_dropdown').click
   end
 
   private
@@ -33,7 +33,7 @@ module LoginHelper
     {
       'user': 'RACFID',
       'staffId': '0X5',
-      'roles': ['CANS-worker'],
+      'roles': ['CWS-admin', 'Supervisor', 'CANS-worker'],
       'county_code': '56',
       'county_cws_code': '1123',
       'county_name': 'Ventura',
@@ -49,6 +49,16 @@ module LoginHelper
         'Facility-search-rollout',
         'RFA-rollout',
         'CANS-rollout',
+        'CANS-staff-person-subordinates-read',
+        'CANS-staff-person-read',
+        'CANS-staff-person-clients-read',
+        'CANS-assessment-read',
+        'CANS-assessment-create',
+        'CANS-assessment-in-progress-update',
+        'CANS-assessment-completed-update',
+        'CANS-assessment-completed-delete',
+        'CANS-assessment-in-progress-delete',
+        'CANS-assessment-complete',
         'development-not-in-use'
       ]
     }
