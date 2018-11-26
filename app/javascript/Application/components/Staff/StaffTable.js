@@ -37,15 +37,14 @@ const columns = [
   },
 ]
 
-const MAX_SUBORDINATES = 1000
 const MIN_ROWS = 3
 
 const StaffTable = ({ staff }) => (
   <DataGrid
     data={staff}
     columns={columns}
-    showPagination={false}
-    defaultPageSize={MAX_SUBORDINATES}
+    pageSizeOptions={[10, 25, 50]}
+    showPagination={true}
     minRows={MIN_ROWS}
     defaultSorted={[{ id: 'staffName' }]}
   />

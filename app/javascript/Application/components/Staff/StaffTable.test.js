@@ -27,11 +27,12 @@ describe('<StaffTable />', () => {
     ).toBe(true)
   })
 
-  it('shows all rows without pagination', () => {
+  it('shows all rows with pagination', () => {
     const grid = render([]).find(DataGrid)
-    const moreThanEnough = 1000
-    expect(grid.props().showPagination).toBe(false)
+    const moreThanEnough = 10
+    expect(grid.props().showPagination).toBe(true)
     expect(grid.props().defaultPageSize).toBe(moreThanEnough)
+    expect(grid.props().pageSizeOptions).toEqual([10, 25, 50])
   })
 
   it('always displays enough rows for a No Records message', () => {
