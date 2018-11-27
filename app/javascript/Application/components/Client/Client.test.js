@@ -1,7 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Client } from './index'
-import { Card, CardHeader, CardBody } from '@cwds/components/lib/Cards'
+import Card from '@material-ui/core/Card/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
 import { MemoryRouter } from 'react-router-dom'
 
@@ -39,8 +41,8 @@ describe('<Client />', () => {
       expect(getLength(CardHeader)).toBe(1)
     })
 
-    it('renders with <CardBody /> component', () => {
-      expect(getLength(CardBody)).toBe(1)
+    it('renders with <CardContent /> component', () => {
+      expect(getLength(CardContent)).toBe(1)
     })
   })
 
