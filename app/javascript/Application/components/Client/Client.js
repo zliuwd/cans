@@ -4,7 +4,6 @@ import Card from '@material-ui/core/Card/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
 import PropTypes from 'prop-types'
-import { PageInfo } from '../Layout'
 import ClientAssessmentHistory from './ClientAssessmentHistory'
 import { CloseableAlert, alertType } from '../common/CloseableAlert'
 import { isoToLocalDate } from '../../util/dateHelper'
@@ -60,11 +59,10 @@ class Client extends Component {
     const { isNewForm, shouldRenderClientMessage } = this.state
     return (
       <Fragment>
-        <PageInfo title={'Child/Youth Profile'} />
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Card className={'card'}>
-              <CardHeader className={'card-header-cans'} title="Child/Youth Information" />
+              <CardHeader className={'card-header-cans'} title="Child Information" />
               <div className={'content'}>
                 <CardContent>
                   {shouldRenderClientMessage && (
@@ -82,19 +80,13 @@ class Client extends Component {
 
                   {client && client.identifier ? (
                     <Grid container spacing={24} id={'client-info-content'}>
-                      {this.renderClientData(client.first_name, 'First Name')}
-                      {this.renderClientData(client.middle_name, 'Middle Name')}
-                      {this.renderClientData(client.last_name, 'Last Name')}
-                      {this.renderClientData(client.suffix, 'Suffix')}
+                      {this.renderClientData(<b>{client.first_name}</b>, 'First Name')}
+                      {this.renderClientData(<b>{client.middle_name}</b>, 'Middle Name')}
+                      {this.renderClientData(<b>{client.last_name}</b>, 'Last Name')}
+                      {this.renderClientData(<b>{client.suffix}</b>, 'Suffix')}
                       {this.renderClientData(isoToLocalDate(client.dob), 'Date of Birth')}
                       {this.renderClientData(this.formatCounties(client.counties), 'Counties', 3, 'counties')}
                       {this.renderClientData(client.external_id, 'Client Id', 6)}
-                      {this.renderClientData(
-                        this.sensitivityTypeLabel(client.sensitivity_type),
-                        'Access Restrictions',
-                        6,
-                        'sensitivity-type'
-                      )}
                     </Grid>
                   ) : (
                     <span id={'no-data'}>No Child Data Found</span>

@@ -18,9 +18,9 @@ feature 'Pages are accessible' do
     expect(page).to have_content 'CANS'
   end
 
-  scenario 'Child/Youth Profile page is accessible' do
+  scenario 'Child Information page is accessible' do
     visit "/clients/#{client_identifier}"
-    expect(page).to have_content 'Child/Youth Profile'
+    expect(page).to have_content 'Child Information'
     expect(page).to be_accessible
   end
 
