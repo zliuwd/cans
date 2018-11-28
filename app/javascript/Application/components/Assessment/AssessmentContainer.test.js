@@ -5,6 +5,7 @@ import ClientService from '../Client/Client.service'
 import { shallow, mount } from 'enzyme'
 import { PageInfo } from '../Layout'
 import Typography from '@material-ui/core/Typography/Typography'
+import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
 import AssessmentFormFooter from './AssessmentFormFooter'
 import { Link } from 'react-router-dom'
 import PageModal from '../common/PageModal'
@@ -64,6 +65,11 @@ describe('<AssessmentContainer />', () => {
       it('renders with 1 <AssessmentFormHeader /> component', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         expect(getLength(wrapper, AssessmentFormHeader)).toBe(1)
+      })
+
+      it('renders with 1 <AssessmentSummaryCard /> component', () => {
+        const wrapper = shallow(<AssessmentContainer {...props} />)
+        expect(getLength(wrapper, AssessmentSummaryCard)).toBe(1)
       })
 
       it('renders with 1 <Typography /> component', async () => {

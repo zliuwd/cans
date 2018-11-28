@@ -13,6 +13,7 @@ import {
   I18nService,
   SecurityService,
 } from './'
+import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
 import Typography from '@material-ui/core/Typography'
 import { PageInfo } from '../Layout'
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper'
@@ -388,6 +389,12 @@ class AssessmentContainer extends Component {
           onKeyUp={this.handleKeyUp}
           handleWarningShow={this.handleWarningShow}
           isCaregiverWarningShown={this.state.isCaregiverWarningShown}
+        />
+        <AssessmentSummaryCard
+          assessmentStatus={assessment.status}
+          domains={assessment && assessment.state && assessment.state.domains}
+          i18n={i18n}
+          isUnderSix={Boolean(isUnderSix)}
         />
         <Assessment
           assessment={assessment}
