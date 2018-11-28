@@ -110,7 +110,7 @@ class Domain extends Component {
                 <Typography variant="title" style={{ color: '#0e6f89', fontSize: 16 }}>
                   {title} {caregiverName && `- ${caregiverName}`}
                   {description ? (
-                    <Tooltip title={description} placement="top" classes={{ tooltip: 'domain-tooltip' }}>
+                    <Tooltip title={description} placement="top" classes={{ tooltip: 'assessment-tooltip' }}>
                       <i className="fa fa-question-circle domain-help-icon" />
                     </Tooltip>
                   ) : null}

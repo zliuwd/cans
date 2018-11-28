@@ -40,7 +40,7 @@ const SummaryGrid = ({ domainFilter, domains, header, i18n, itemFilter }) => {
 SummaryGrid.propTypes = {
   domainFilter: PropTypes.func,
   domains: DomainsPropType,
-  header: PropTypes.string.isRequired,
+  header: PropTypes.node.isRequired,
   i18n: PropTypes.object.isRequired,
   itemFilter: PropTypes.func,
 }

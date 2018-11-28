@@ -2,6 +2,7 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { i18n } from './DomainHelper.test'
 import SummaryGrid from './SummaryGrid'
+import SummaryHeader from './SummaryHeader'
 import StrengthsSummary from './StrengthsSummary'
 
 describe('<StrengthsSummary />', () => {
@@ -14,7 +15,12 @@ describe('<StrengthsSummary />', () => {
   })
 
   it('has a Strengths header', () => {
-    expect(shallow(<StrengthsSummary i18n={i18n} />).props().header).toBe('Strengths')
+    expect(shallow(<StrengthsSummary i18n={i18n} />).props().header).toEqual(
+      <SummaryHeader
+        title="Strengths"
+        tooltip={'Ratings of 0 or 1 in the Strengths Domain. These are central or useful in planning.'}
+      />
+    )
   })
 
   it('passes i18n info to the summary grid', () => {

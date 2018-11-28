@@ -2,14 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { DomainsPropType, isStrengthsDomain } from './DomainHelper'
 import SummaryGrid from './SummaryGrid'
+import SummaryHeader from './SummaryHeader'
 
 const hasTargetRating = item => item.rating === 0 || item.rating === 1
+const tooltip = 'Ratings of 0 or 1 in the Strengths Domain. These are central or useful in planning.'
 
 const StrengthsSummary = ({ domains, i18n }) => (
   <SummaryGrid
     domainFilter={isStrengthsDomain}
     domains={domains}
-    header="Strengths"
+    header={<SummaryHeader title="Strengths" tooltip={tooltip} />}
     i18n={i18n}
     itemFilter={hasTargetRating}
   />

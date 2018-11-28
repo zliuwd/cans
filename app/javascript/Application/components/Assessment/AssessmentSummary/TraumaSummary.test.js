@@ -2,6 +2,7 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { i18n } from './DomainHelper.test'
 import SummaryGrid from './SummaryGrid'
+import SummaryHeader from './SummaryHeader'
 import TraumaSummary from './TraumaSummary'
 
 describe('<TraumaSummary />', () => {
@@ -14,7 +15,12 @@ describe('<TraumaSummary />', () => {
   })
 
   it('has a Trauma header', () => {
-    expect(shallow(<TraumaSummary i18n={i18n} />).props().header).toBe('Trauma')
+    expect(shallow(<TraumaSummary i18n={i18n} />).props().header).toEqual(
+      <SummaryHeader
+        title="Trauma"
+        tooltip={'Includes all "Yes" ratings from the Potentially Traumatic/Adverse Childhood Experiences module.'}
+      />
+    )
   })
 
   it('passes i18n info to the summary grid', () => {

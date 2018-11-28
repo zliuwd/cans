@@ -2,6 +2,7 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { i18n } from './DomainHelper.test'
 import SummaryGrid from './SummaryGrid'
+import SummaryHeader from './SummaryHeader'
 import ActionRequiredSummary from './ActionRequiredSummary'
 
 describe('<ActionRequiredSummary />', () => {
@@ -14,7 +15,14 @@ describe('<ActionRequiredSummary />', () => {
   })
 
   it('has an Action Required header', () => {
-    expect(shallow(<ActionRequiredSummary i18n={i18n} />).props().header).toBe('Action Required')
+    expect(shallow(<ActionRequiredSummary i18n={i18n} />).props().header).toEqual(
+      <SummaryHeader
+        title="Action Required"
+        tooltip={
+          'Ratings of 2 from all domains except Strengths. This rating indicates that this need interferes with functioning.'
+        }
+      />
+    )
   })
 
   it('passes i18n info to the summary grid', () => {

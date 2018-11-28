@@ -132,6 +132,8 @@ class Page extends Component {
   renderRow() {
     switch (this.props.navigateTo) {
       case navigation.CLIENT_SEARCH:
+      case navigation.ASSESSMENT_ADD:
+      case navigation.ASSESSMENT_EDIT:
         return this.renderWithoutSidebar(this.renderContent())
       default:
         return this.renderWithSidebar(this.renderContent())

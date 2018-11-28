@@ -31,7 +31,7 @@ describe('<Page />', () => {
 
   describe('layout', () => {
     it('renders with <SideNav /> links', async () => {
-      const wrapper = getWrapper(navigation.ASSESSMENT_ADD)
+      const wrapper = getWrapper(navigation.CHILD_PROFILE)
       await wrapper.instance().componentDidMount()
       const sideNav = wrapper.find(SideNav)
       expect(sideNav.length).toBe(1)
@@ -48,7 +48,7 @@ describe('<Page />', () => {
     })
 
     it('splits sidebar and main content 3:9', async () => {
-      const wrapper = getWrapper(navigation.ASSESSMENT_ADD)
+      const wrapper = getWrapper(navigation.CHILD_PROFILE)
       await wrapper.instance().componentDidMount()
       const cols = wrapper.find(Row).find(Col)
       const sideCol = cols.at(0)
@@ -126,6 +126,16 @@ describe('<Page />', () => {
       expect(wrapper.find(AssessmentContainer).length).toBe(1)
     })
 
+    it('renders Add content 12 columns wide', async () => {
+      const wrapper = getWrapper(navigation.ASSESSMENT_ADD)
+      await wrapper.instance().componentDidMount()
+      const cols = wrapper.find(Row).find(Col)
+      const mainCol = cols.at(0)
+
+      expect(mainCol.props().xs).toEqual('12')
+      expect(mainCol.props().role).toEqual('main')
+    })
+
     it('renders < AssessmentContainer on Edit />', async () => {
       jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
       const wrapper = getWrapper(navigation.ASSESSMENT_EDIT, {
@@ -133,6 +143,16 @@ describe('<Page />', () => {
       })
       await wrapper.instance().componentDidMount()
       expect(wrapper.find(AssessmentContainer).length).toBe(1)
+    })
+
+    it('renders Edit content 12 columns wide', async () => {
+      const wrapper = getWrapper(navigation.ASSESSMENT_EDIT)
+      await wrapper.instance().componentDidMount()
+      const cols = wrapper.find(Row).find(Col)
+      const mainCol = cols.at(0)
+
+      expect(mainCol.props().xs).toEqual('12')
+      expect(mainCol.props().role).toEqual('main')
     })
 
     it('renders < ClientAddEditForm for Edit Profile/>', async () => {
