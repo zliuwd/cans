@@ -1,5 +1,40 @@
-.client-search-button
-  text-align: right
-  margin-left: 65.0rem
-  margin-top: 1.0rem
-  text-transform: uppercase
+@import '../../styles/global/colors.sass'
+
+//******************
+//  PageHeader
+//******************
+.page-header-mast > .container > .row > .col-xs-5
+  flex: 1
+  display: flex
+  justify-content: flex-end
+
+.header-buttons-block
+  display: flex
+  align-items: center
+  padding-right: 3rem
+
+.header-button
+  background-color: $astronaut-blue
+  border-color: $astronaut-blue
+  font-size: 0.6rem
+  font-weight: bold
+  margin-left: 1.2rem
+  min-width: 9rem
+
+  &:disabled
+    color: $white
+    background-color: $astronaut-blue
+    border-color: $astronaut-blue
+
+  &:hover
+    background-color: $dark-cerulean
+    border-color: $dark-cerulean
+
+.header-button-icon
+  font-size: 1.4rem !important
+  vertical-align: bottom
+  margin-left: 0.4rem
+  margin-right: 1.2rem
+
+.header-button-caption
+  margin-right: 0.8rem

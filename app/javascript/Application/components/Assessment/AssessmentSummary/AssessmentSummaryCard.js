@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Card, CardBody, CardHeader } from '@cwds/components/lib/Cards'
-import CardTitle from '@cwds/components/lib/Cards/CardTitle'
+import { Card, CardBody, CardHeader, CardTitle } from '@cwds/components'
 import { AssessmentStatus } from '../AssessmentHelper'
 import AssessmentSummary from './AssessmentSummary'
 import './style.sass'

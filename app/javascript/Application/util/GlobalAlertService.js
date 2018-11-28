@@ -14,6 +14,14 @@ class GlobalAlertService {
       message: message || 'An error has occurred',
     })
   }
+
+  postSuccess = ({ message, isAutoCloseable = true }) => {
+    eventBus.post(ALERT_EVENT, {
+      type: alertType.SUCCESS,
+      message,
+      isAutoCloseable,
+    })
+  }
 }
 
 export const globalAlertService = new GlobalAlertService()

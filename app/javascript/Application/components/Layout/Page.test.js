@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { Row, Col } from 'reactstrap'
 import { Page, SideNav } from './'
-import BreadCrumbsBuilder from './BreadCrumbsBuilder'
+import BreadCrumbsBuilder from './BreadCrumb/BreadCrumbsBuilder'
 import { childInfoJson } from '../Client/Client.helper.test'
 import { ClientService } from '../Client/Client.service'
 import { navigation } from '../../util/constants'
@@ -10,6 +10,8 @@ import AssessmentContainer from '../Assessment/AssessmentContainer'
 import ClientAddEditForm from '../Client/ClientAddEditForm'
 import Client from '../Client/Client'
 import SearchContainer from '../Search/SearchContainer'
+import { buildSearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
+import { PageHeader } from '../Header'
 import { SupervisorDashboard, CaseLoadPage, CurrentUserCaseLoadPage } from '../Staff'
 import * as Analytics from '../../util/analytics'
 import UserAccountService from '../common/UserAccountService'
@@ -56,6 +58,49 @@ describe('<Page />', () => {
       expect(sideCol.find(SideNav).exists()).toEqual(true)
       expect(mainCol.props().xs).toEqual('9')
       expect(mainCol.props().role).toEqual('main')
+    })
+
+    describe('<PageHeader />', () => {
+      it('should render PageHeader', () => {
+        const page = getWrapper(navigation.ASSESSMENT_ADD)
+        page.instance().setState({ isLoaded: true })
+        const pageHeaderProps = page.find(PageHeader).props()
+        expect(pageHeaderProps.leftButton).toBe(null)
+        expect(pageHeaderProps.rightButton).toEqual(buildSearchClientsButton())
+        expect(pageHeaderProps.navigateTo).toEqual(navigation.ASSESSMENT_ADD)
+      })
+
+      it('should have default header buttons initially', () => {
+        const page = getWrapper(navigation.ASSESSMENT_ADD)
+        const header = page.state().header
+        expect(header.leftButton).toBe(null)
+        expect(header.rightButton).toEqual(buildSearchClientsButton())
+      })
+
+      describe('#updateHeaderButtons()', () => {
+        it('should update header buttons', () => {
+          const page = getWrapper(navigation.ASSESSMENT_ADD)
+          const leftButton = <div className={'button-left'} />
+          const rightButton = <div className={'button-right'} />
+          page.instance().updateHeaderButtons(leftButton, rightButton)
+          const header = page.state().header
+          expect(header.leftButton).toBe(leftButton)
+          expect(header.rightButton).toBe(rightButton)
+        })
+      })
+
+      describe('#updateHeaderButtonsToDefault()', () => {
+        it('should update header buttons to default values', () => {
+          const page = getWrapper(navigation.ASSESSMENT_ADD)
+          const leftButton = <div className={'button-left'} />
+          const rightButton = <div className={'button-right'} />
+          page.instance().updateHeaderButtons(leftButton, rightButton)
+          page.instance().updateHeaderButtonsToDefault(leftButton, rightButton)
+          const header = page.state().header
+          expect(header.leftButton).toBe(null)
+          expect(header.rightButton).toBe(buildSearchClientsButton())
+        })
+      })
     })
 
     describe('client search page', () => {

@@ -1,0 +1,57 @@
+@import './colors.sass'
+
+//***************************************
+//  @cwds/components Button overrides
+//***************************************
+%button-fix
+  font-size: 1.1rem
+  font-weight: 600
+
+.button-fix-primary
+  @extend %button-fix
+  padding: 1rem 1rem
+  min-width: 12rem
+  background-color: $dark-cyan
+  border-color: $dark-cyan
+
+  &:hover
+    background-color: $pine-green
+    border-color: $pine-green
+
+  &:disabled
+    background-color: $zumthor
+    border-color: $zumthor
+
+.button-fix-link
+  @extend %button-fix
+  padding: 1rem 0
+  margin: 0 2rem
+  color: $dark-cyan
+
+  &:hover
+    color: $pine-green
+
+//***************************************
+//  @cwds/components DataGrid overrides
+//***************************************
+.ReactTable span.-pageInfo
+  display: flex !important
+  align-items: center
+
+.ReactTable span.-pageInfo *
+  margin: 0 0.3rem
+
+.ReactTable .-pagination .-pageSizeOptions
+  margin: 0 1rem !important
+
+.ReactTable .-pagination .-previous
+  margin-top: 0.9rem !important
+
+.ReactTable .-pageJump input
+  margin-top: 0
+
+.ReactTable .-pagination .-next
+  margin-top: 0.9rem !important
+
+.Select-placeholder, .Select--single > .Select-control .Select-value
+  padding: 1rem 0.7rem !important

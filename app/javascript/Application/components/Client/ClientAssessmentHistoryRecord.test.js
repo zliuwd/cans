@@ -68,7 +68,7 @@ describe('ClientAssessmentHistory', () => {
         .text()
     ).toEqual('10/10/2015 CANS')
     const assessmentInfo = wrapper
-      .find('.item-info')
+      .find('.history-item-info')
       .get(0)
       .props.children.filter(el => el.type !== 'br')
     expect(assessmentInfo).toEqual([
@@ -90,7 +90,7 @@ describe('ClientAssessmentHistory', () => {
         .text()
     ).toEqual('01/05/2018 CANS')
     const timestamp = wrapper
-      .find('.item-info')
+      .find('.history-item-info')
       .get(0)
       .props.children.filter(el => el.type !== 'br')
     expect(timestamp).toEqual(['Completed on 06/06/2018 by Name 2 LastName 2', 'Case: ', 'County: Alameda'])
@@ -102,7 +102,7 @@ describe('ClientAssessmentHistory', () => {
 
     // then
     const timestamp = wrapper
-      .find('.item-info')
+      .find('.history-item-info')
       .get(0)
       .props.children.filter(el => el.type !== 'br')
     expect(timestamp).toEqual(['Saved on 06/06/2018 by Name 3 LastName 3', 'Case: ', 'County: Alameda'])

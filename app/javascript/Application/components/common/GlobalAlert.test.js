@@ -24,6 +24,13 @@ describe('<GlobalAlert>', () => {
       expect(alert.render().text()).toBe('Error message')
     })
 
+    it('shows autocloseable success alert', () => {
+      globalAlertService.postSuccess({ message: 'Success message', isAutoCloseable: true })
+      const alert = findAlerts()
+      expect(alert.length).toBe(1)
+      expect(alert.props().isAutoCloseable).toBeTruthy()
+    })
+
     it('shows multiple alerts', () => {
       globalAlertService.postError({ message: 'Error message' })
       globalAlertService.postError({ message: 'Other Error message' })

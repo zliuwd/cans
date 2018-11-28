@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { navigation } from '../../util/constants'
+import { navigation } from '../../../util/constants'
 import BreadCrumb from './BreadCrumb'
-import { formatClientName } from '../Client/Client.helper'
+import { formatClientName } from '../../Client/Client.helper'
 import { Link } from 'react-router-dom'
 
 const navsWithChildYouthListCrumb = [

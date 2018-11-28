@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Card, CardHeader, CardBody } from '@cwds/components/lib/Cards'
-import CardTitle from '@cwds/components/lib/Cards/CardTitle'
+import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
 import { SearchAssessmentHistory } from './index'
 import AssessmentService from '../Assessment/Assessment.service'
 import SearchAssessmentHistoryRecord from './SearchAssessmentHistoryRecord'

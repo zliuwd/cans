@@ -4,11 +4,17 @@ import DateField from './DateField'
 import { jsDateToIso } from '../../util/dateHelper'
 
 describe('DateField', () => {
-  function mountDateField({ id = '', onChange = () => null, onKeyUp = () => null, required = undefined, value } = {}) {
+  function mountDateField({
+    id = '',
+    onChange = () => null,
+    onRawValueUpdate = () => null,
+    required = undefined,
+    value,
+  } = {}) {
     const props = {
       id,
       onChange,
-      onKeyUp,
+      onRawValueUpdate,
       required,
       value,
     }
@@ -40,14 +46,6 @@ describe('DateField', () => {
     expect(onChange).toHaveBeenCalledWith(jsDateToIso(date))
   })
 
-  it('calls parent onKeyUp with date string when DateTimePicker calls onKeyUp', () => {
-    const onKeyUp = jasmine.createSpy('onKeyUp')
-    const dateTimePicker = mountDateField({ onKeyUp }).find('DateTimePicker')
-    const date = new Date()
-    dateTimePicker.props().onKeyUp(date)
-    expect(onKeyUp).toHaveBeenCalledWith(date)
-  })
-
   it('does not render a required date field', () => {
     const component = mountDateField()
     expect(component.find('input').prop('required')).toEqual(undefined)
@@ -71,6 +69,32 @@ describe('DateField', () => {
     const dateTimePicker = mountDateField({}).find('DateTimePicker')
     expect(dateTimePicker.props().format).toEqual('MM/DD/YYYY')
     expect(dateTimePicker.props().placeholder).toEqual('mm/dd/yyyy')
+  })
+
+  describe('onRawValueUpdate', () => {
+    it('calls parent onRawValueUpdate with the event when DateTimePicker calls onKeyUp', () => {
+      const onRawValueUpdate = jasmine.createSpy('onRawValueUpdate')
+      const dateTimePicker = mountDateField({ onRawValueUpdate }).find('DateTimePicker')
+      const event = { target: { value: new Date() } }
+      dateTimePicker.props().onKeyUp(event)
+      expect(onRawValueUpdate).toHaveBeenCalledWith(event)
+    })
+
+    it('calls parent onRawValueUpdate with the event when DateTimePicker calls onBlur', () => {
+      const onRawValueUpdate = jasmine.createSpy('onRawValueUpdate')
+      const dateTimePicker = mountDateField({ onRawValueUpdate }).find('DateTimePicker')
+      const event = { target: { value: new Date() } }
+      dateTimePicker.props().onBlur(event)
+      expect(onRawValueUpdate).toHaveBeenCalledWith(event)
+    })
+
+    it('calls parent onRawValueUpdate with event when DateTimePicker calls onChange', () => {
+      const onRawValueUpdate = jasmine.createSpy('onRawValueUpdate')
+      const dateTimePicker = mountDateField({ onRawValueUpdate }).find('DateTimePicker')
+      const date = new Date()
+      dateTimePicker.props().onChange(date)
+      expect(onRawValueUpdate).toHaveBeenCalledWith({ target: { value: date } })
+    })
   })
 
   describe('when value is null, emptystring, or undefined', () => {

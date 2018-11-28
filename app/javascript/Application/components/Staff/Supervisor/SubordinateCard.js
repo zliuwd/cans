@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Card, CardHeader, CardBody } from '@cwds/components/lib/Cards'
-import CardTitle from '@cwds/components/lib/Cards/CardTitle'
+import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
 import StaffTable from '../StaffTable'
 import { LoadingState } from '../../../util/loadingHelper'
 import { staffPropType } from '../StaffHelper'
@@ -12,7 +11,7 @@ const SubordinateCard = ({ loadingState, staff }) => {
   return (
     <Card className={'card supervisor-card'} loading={loadingProp}>
       <CardHeader>
-        <CardTitle>Assigned Staff</CardTitle>
+        <CardTitle className={'card-title-fix'}>Assigned Staff</CardTitle>
       </CardHeader>
       <CardBody>
         <StaffTable staff={staff} />

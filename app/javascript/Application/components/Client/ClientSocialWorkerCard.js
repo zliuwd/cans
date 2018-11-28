@@ -1,15 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Card, CardHeader, CardBody } from '@cwds/components/lib/Cards'
-import CardTitle from '@cwds/components/lib/Cards/CardTitle'
-import DataGrid from '@cwds/components/lib/DataGrid'
+import { Card, CardHeader, CardBody, CardTitle, DataGrid } from '@cwds/components'
 import './style.sass'
 
 const ClientSocialWorkerCard = props => {
   return (
     <Card className="card-cans-client-list">
       <CardHeader>
-        <CardTitle tag="h4">
+        <CardTitle className={'card-title-fix'}>
           Client List<span className="client-list-records-amount">({props.title})</span>
         </CardTitle>
       </CardHeader>

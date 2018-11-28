@@ -2,9 +2,9 @@ import React from 'react'
 import BreadCrumbsBuilder from './BreadCrumbsBuilder'
 import BreadCrumb from './BreadCrumb'
 import { Link } from 'react-router-dom'
-import { childInfoJson } from '../Client/Client.helper.test'
+import { childInfoJson } from '../../Client/Client.helper.test'
 import { shallow } from 'enzyme'
-import { navigation } from '../../util/constants'
+import { navigation } from '../../../util/constants'
 
 const shallowBreadCrumbsBuilder = navigateTo =>
   shallow(<BreadCrumbsBuilder navigateTo={navigateTo} client={childInfoJson} />)

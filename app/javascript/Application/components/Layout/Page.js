@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Container, Row, Col } from 'reactstrap'
 import { SideNav } from './'
 import { Client, ClientAddEditForm, ClientService } from '../Client'
-import BreadCrumbsBuilder from './BreadCrumbsBuilder'
+import BreadCrumbsBuilder from './BreadCrumb/BreadCrumbsBuilder'
 import { navigation, dashboards } from '../../util/constants'
 import { AssessmentContainer } from '../Assessment'
 import { SearchContainer } from '../Search'
@@ -11,6 +11,10 @@ import { SupervisorDashboard, CaseLoadPage, CurrentUserCaseLoadPage } from '../S
 import Sticker from 'react-stickyfill'
 import UserAccountService from '../common/UserAccountService'
 import { logPageAction } from '../../util/analytics'
+import { PageHeader } from '../Header'
+import { buildSearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
+
+const defaultHeaderButtons = { leftButton: null, rightButton: buildSearchClientsButton() }
 
 class Page extends Component {
   constructor(props) {
@@ -18,6 +22,7 @@ class Page extends Component {
     this.state = {
       isLoaded: false,
       client: undefined,
+      header: defaultHeaderButtons,
     }
   }
 
@@ -54,10 +59,22 @@ class Page extends Component {
     }
   }
 
+  updateHeaderButtons = (leftButton, rightButton) => {
+    this.setState({ header: { leftButton, rightButton } })
+  }
+
+  updateHeaderButtonsToDefault = () => {
+    this.setState({ header: defaultHeaderButtons })
+  }
+
   renderContent() {
     const params = {
       ...this.props,
       ...this.state,
+      pageHeaderButtonsController: {
+        updateHeaderButtons: this.updateHeaderButtons,
+        updateHeaderButtonsToDefault: this.updateHeaderButtonsToDefault,
+      },
     }
     switch (this.props.navigateTo) {
       case navigation.CHILD_LIST:
@@ -69,9 +86,9 @@ class Page extends Component {
       case navigation.CHILD_PROFILE_EDIT:
         return this.state.client && <ClientAddEditForm isNewForm={false} {...params} />
       case navigation.ASSESSMENT_ADD:
-        return this.state.client && <AssessmentContainer isNewForm={true} {...params} />
+        return this.state.client && <AssessmentContainer {...params} />
       case navigation.ASSESSMENT_EDIT:
-        return this.state.client && <AssessmentContainer isNewForm={false} {...params} />
+        return this.state.client && <AssessmentContainer {...params} />
       case navigation.CLIENT_SEARCH:
         return <SearchContainer />
       case navigation.STAFF_LIST:
@@ -122,13 +139,20 @@ class Page extends Component {
   }
 
   render() {
-    if (!this.state.isLoaded) return null
-
+    const { isLoaded, header } = this.state
+    if (!isLoaded) return null
     return (
-      <Container>
-        <BreadCrumbsBuilder navigateTo={this.props.navigateTo} client={this.state.client} />
-        {this.renderRow()}
-      </Container>
+      <Fragment>
+        <PageHeader
+          navigateTo={this.props.navigateTo}
+          leftButton={header.leftButton}
+          rightButton={header.rightButton}
+        />
+        <Container>
+          <BreadCrumbsBuilder navigateTo={this.props.navigateTo} client={this.state.client} />
+          {this.renderRow()}
+        </Container>
+      </Fragment>
     )
   }
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { DomainsPropType } from './DomainHelper'
 import { getI18nByCode } from '../I18nHelper'
-import DataGrid from '@cwds/components/lib/DataGrid'
+import { DataGrid } from '@cwds/components'
 
 const SummaryGrid = ({ domainFilter, domains, header, i18n, itemFilter }) => {
   const columns = [

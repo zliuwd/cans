@@ -36,7 +36,7 @@ class ClientAssessmentHistoryRecord extends Component {
     const updatedByName = `${user.first_name} ${user.last_name}`
     const caseNumber = (theCase || {}).external_id || ''
     return (
-      <Typography variant={'title'} color={'textSecondary'} className={'item-info'}>
+      <Typography variant={'title'} className={'history-item-info'}>
         {`${actionVerb} on ${formattedTimestamp} by ${updatedByName}`}
         <br />
         {`Case: ${caseNumber}`}

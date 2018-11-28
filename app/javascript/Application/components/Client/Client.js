@@ -95,11 +95,7 @@ class Client extends Component {
               </div>
             </Card>
           </Grid>
-          <ClientAssessmentHistory
-            clientIdentifier={client.identifier}
-            location={this.props.location}
-            history={this.props.history}
-          />
+          <ClientAssessmentHistory clientIdentifier={client.identifier} />
         </Grid>
       </Fragment>
     )

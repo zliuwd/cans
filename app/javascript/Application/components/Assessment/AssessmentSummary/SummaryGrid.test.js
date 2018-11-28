@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { i18n } from './DomainHelper.test'
-import DataGrid from '@cwds/components/lib/DataGrid'
+import { DataGrid } from '@cwds/components'
 import SummaryGrid from './SummaryGrid'
 
 describe('<SummaryGrid />', () => {

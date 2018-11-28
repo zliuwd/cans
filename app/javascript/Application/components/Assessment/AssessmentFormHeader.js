@@ -50,8 +50,6 @@ class AssessmentFormHeader extends PureComponent {
     this.props.onAssessmentUpdate(assessment)
   }
 
-  findCaseByExternalId = externalId => (this.props.client.cases || []).find(aCase => aCase.external_id === externalId)
-
   updateUnderSix = value => {
     const assessment = clone(this.props.assessment)
     assessment.state.under_six = value
@@ -100,7 +98,7 @@ class AssessmentFormHeader extends PureComponent {
           id={'assessment-date'}
           value={this.props.assessment.event_date}
           onChange={value => this.changeFieldAndUpdateAssessment('event_date', value)}
-          onKeyUp={this.props.onKeyUp}
+          onRawValueUpdate={this.props.onKeyUp}
           ariaLabelledBy={'assessment-date-label'}
         />
       </Fragment>
