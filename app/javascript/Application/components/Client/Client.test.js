@@ -152,7 +152,7 @@ describe('<Client />', () => {
       })
     })
 
-    describe('Counties Label', () => {
+    describe('County Label', () => {
       it('renders with county', () => {
         const oneCountyParams = { ...params }
         oneCountyParams.client.counties = [{ name: 'Yolo' }]

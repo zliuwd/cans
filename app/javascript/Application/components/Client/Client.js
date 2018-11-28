@@ -62,7 +62,7 @@ class Client extends Component {
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Card className={'card'}>
-              <CardHeader className={'card-header-cans'} title="Child Information" />
+              <CardHeader className={'card-header-cans'} title="Client Information" />
               <div className={'content'}>
                 <CardContent>
                   {shouldRenderClientMessage && (
@@ -85,7 +85,7 @@ class Client extends Component {
                       {this.renderClientData(<b>{client.last_name}</b>, 'Last Name')}
                       {this.renderClientData(<b>{client.suffix}</b>, 'Suffix')}
                       {this.renderClientData(isoToLocalDate(client.dob), 'Date of Birth')}
-                      {this.renderClientData(this.formatCounties(client.counties), 'Counties', 3, 'counties')}
+                      {this.renderClientData(this.formatCounties(client.counties), 'County', 3, 'counties')}
                       {this.renderClientData(client.external_id, 'Client Id', 6)}
                     </Grid>
                   ) : (
