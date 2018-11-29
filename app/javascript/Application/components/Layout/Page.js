@@ -13,6 +13,7 @@ import UserAccountService from '../common/UserAccountService'
 import { logPageAction } from '../../util/analytics'
 import { PageHeader } from '../Header'
 import { buildSearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
+import './style.sass'
 
 const defaultHeaderButtons = {
   leftButton: null,
@@ -114,7 +115,7 @@ class Page extends Component {
           </Sticker>
         </Col>
         <Col xs="9" role={'main'} id={'main-content'}>
-          <Row>
+          <Row className={'content-with-sidebar'}>
             <Col xs="12">{content}</Col>
           </Row>
         </Col>
@@ -126,7 +127,7 @@ class Page extends Component {
     return (
       <Row>
         <Col xs="12" role={'main'} id={'main-content'}>
-          <Row>
+          <Row className={'content-with-out-sidebar'}>
             <Col xs="12">{content}</Col>
           </Row>
         </Col>
@@ -156,12 +157,17 @@ class Page extends Component {
           leftButton={header.leftButton}
           rightButton={header.rightButton}
         />
+
         <Container>
-          <BreadCrumbsBuilder
-            navigateTo={this.props.navigateTo}
-            client={this.state.client}
-            url={this.props.match.url}
-          />
+          <Sticker>
+            <div className="breadcrumb-container">
+              <BreadCrumbsBuilder
+                navigateTo={this.props.navigateTo}
+                client={this.state.client}
+                url={this.props.match.url}
+              />
+            </div>
+          </Sticker>
           {this.renderRow()}
         </Container>
       </Fragment>
