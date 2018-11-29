@@ -9,7 +9,7 @@ const AssessmentSummaryCard = ({ assessmentStatus, ...props }) =>
   assessmentStatus === AssessmentStatus.completed ? (
     <Card className="card assessment-summary-card">
       <CardHeader>
-        <CardTitle>CANS Summary</CardTitle>
+        <CardTitle className="assessment-summary-card-title">CANS Summary</CardTitle>
       </CardHeader>
       <CardBody>
         <AssessmentSummary {...props} />
