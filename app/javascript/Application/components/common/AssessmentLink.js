@@ -7,9 +7,12 @@ class AssessmentLink extends PureComponent {
   render() {
     const { id, event_date: eventDate, person } = this.props.assessment
     const formattedEventDate = isoToLocalDate(eventDate)
+    const linkUrl = this.props.location
+      ? `${this.props.location}/clients/${person.id}/assessments/${id}`
+      : `/clients/${person.id}/assessments/${id}`
 
     return (
-      <Link to={`/clients/${person.id}/assessments/${id}`} className={'underlined'}>
+      <Link to={linkUrl} className={'underlined'}>
         {`${formattedEventDate} CANS`}
       </Link>
     )

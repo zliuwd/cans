@@ -19,15 +19,17 @@ const navsWithChildProfileCrumb = [
   navigation.CHILD_PROFILE_EDIT,
   navigation.ASSESSMENT_ADD,
   navigation.ASSESSMENT_EDIT,
+  navigation.SEARCH_ASSESSMENT_EDIT,
   navigation.ASSESSMENT_CHANGELOG,
 ]
 const navWithAssessmentFromCrumb = [
   navigation.ASSESSMENT_ADD,
   navigation.ASSESSMENT_EDIT,
+  navigation.SEARCH_ASSESSMENT_EDIT,
   navigation.ASSESSMENT_CHANGELOG,
 ]
 
-const navsWithClientSearchCrumb = [navigation.CLIENT_SEARCH]
+const navsWithClientSearchCrumb = [navigation.CLIENT_SEARCH, navigation.SEARCH_ASSESSMENT_EDIT]
 const navsWithAssessmentChangeLogCrumb = [
   navigation.ASSESSMENT_ADD,
   navigation.ASSESSMENT_EDIT,
@@ -77,13 +79,13 @@ class BreadCrumbsBuilder extends React.Component {
   prepareNavigationElements() {
     const elements = []
     const { navigateTo, client, url, assessmentId } = this.props
+    addClientSearchCrumbIfNeeded(elements, navigateTo)
     addChildYouthListCrumbIfNeeded(elements, navigateTo)
     if (client) {
       addChildProfileCrumbIfNeeded(elements, navigateTo, client)
       addAssessmentFromCrumbIfNeeded(elements, navigateTo, client, assessmentId)
       addChangeLogCrumbIfNeeded(elements, navigateTo, url)
     }
-    addClientSearchCrumbIfNeeded(elements, navigateTo)
 
     return elements
   }

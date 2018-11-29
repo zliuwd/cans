@@ -21,7 +21,7 @@ class SearchAssessmentHistoryRecord extends PureComponent {
         <Row>
           <Col xs="12">
             <Row>
-              <Col xs="12">{<AssessmentLink assessment={this.props.assessment} />}</Col>
+              <Col xs="12">{<AssessmentLink assessment={this.props.assessment} location={'search'} />}</Col>
             </Row>
             <Row>
               <Col xs="12">{<AssessmentRecordInfo assessment={this.props.assessment} />}</Col>
