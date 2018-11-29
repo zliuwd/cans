@@ -165,6 +165,7 @@ class Page extends Component {
                 navigateTo={this.props.navigateTo}
                 client={this.state.client}
                 url={this.props.match.url}
+                assessmentId={this.props.match.params.id}
               />
             </div>
           </Sticker>
