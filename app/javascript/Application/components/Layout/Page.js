@@ -5,7 +5,7 @@ import { SideNav } from './'
 import { Client, ClientAddEditForm, ClientService } from '../Client'
 import BreadCrumbsBuilder from './BreadCrumb/BreadCrumbsBuilder'
 import { navigation, dashboards } from '../../util/constants'
-import { AssessmentContainer } from '../Assessment'
+import { AssessmentContainer, ChangeLogPage } from '../Assessment'
 import { SearchContainer } from '../Search'
 import { SupervisorDashboard, CaseLoadPage, CurrentUserCaseLoadPage } from '../Staff'
 import Sticker from 'react-stickyfill'
@@ -14,7 +14,10 @@ import { logPageAction } from '../../util/analytics'
 import { PageHeader } from '../Header'
 import { buildSearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
 
-const defaultHeaderButtons = { leftButton: null, rightButton: buildSearchClientsButton() }
+const defaultHeaderButtons = {
+  leftButton: null,
+  rightButton: buildSearchClientsButton(),
+}
 
 class Page extends Component {
   constructor(props) {
@@ -89,6 +92,8 @@ class Page extends Component {
         return this.state.client && <AssessmentContainer {...params} />
       case navigation.ASSESSMENT_EDIT:
         return this.state.client && <AssessmentContainer {...params} />
+      case navigation.ASSESSMENT_CHANGELOG:
+        return this.state.client && <ChangeLogPage {...params} />
       case navigation.CLIENT_SEARCH:
         return <SearchContainer />
       case navigation.STAFF_LIST:
@@ -132,6 +137,7 @@ class Page extends Component {
   renderRow() {
     switch (this.props.navigateTo) {
       case navigation.CLIENT_SEARCH:
+      case navigation.ASSESSMENT_CHANGELOG:
       case navigation.ASSESSMENT_ADD:
       case navigation.ASSESSMENT_EDIT:
         return this.renderWithoutSidebar(this.renderContent())
@@ -151,7 +157,11 @@ class Page extends Component {
           rightButton={header.rightButton}
         />
         <Container>
-          <BreadCrumbsBuilder navigateTo={this.props.navigateTo} client={this.state.client} />
+          <BreadCrumbsBuilder
+            navigateTo={this.props.navigateTo}
+            client={this.state.client}
+            url={this.props.match.url}
+          />
           {this.renderRow()}
         </Container>
       </Fragment>

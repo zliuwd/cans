@@ -6,8 +6,8 @@ import { childInfoJson } from '../../Client/Client.helper.test'
 import { shallow } from 'enzyme'
 import { navigation } from '../../../util/constants'
 
-const shallowBreadCrumbsBuilder = navigateTo =>
-  shallow(<BreadCrumbsBuilder navigateTo={navigateTo} client={childInfoJson} />)
+const shallowBreadCrumbsBuilder = (navigateTo, url = '') =>
+  shallow(<BreadCrumbsBuilder navigateTo={navigateTo} client={childInfoJson} url={url} />)
 
 const diveToBreadCrumb = component => component.find(BreadCrumb).dive()
 
@@ -27,6 +27,7 @@ const assertLinkNumberMatches = (component, linkNumber, matcher) =>
 const assertChildYouthListCrumbIsPresent = component => assertLinkNumberMatches(component, 0, /COUNTY CLIENT LIST/)
 const assertClientSearchCrumbIsPresent = component => assertLinkNumberMatches(component, 0, /CLIENT SEARCH/)
 const assertChildInfoCrumbIsPresent = component => assertLinkNumberMatches(component, 1, /CHILD, TEST/)
+const assertAssessmentChangeLogCrumbIsPresent = component => assertLinkNumberMatches(component, 1, /CANS CHANGE LOG/)
 
 describe('bread crumb builder', () => {
   it('builds bread crumbs for CHILD_LIST navigation', () => {
@@ -86,5 +87,13 @@ describe('bread crumb builder', () => {
     assertDashboardCrumbIsPresent(component)
     assertHasLinks(component, 1)
     assertClientSearchCrumbIsPresent(component)
+  })
+
+  it('builds bread crumbs for ASSESSMENT_CHANGELOG navigation', () => {
+    const url = '/clients/123/assessments/999/changelog'
+    const component = shallowBreadCrumbsBuilder(navigation.ASSESSMENT_CHANGELOG, url)
+    assertDashboardCrumbIsPresent(component)
+    assertHasLinks(component, 2)
+    assertAssessmentChangeLogCrumbIsPresent(component)
   })
 })

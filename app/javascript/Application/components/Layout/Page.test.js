@@ -6,7 +6,7 @@ import BreadCrumbsBuilder from './BreadCrumb/BreadCrumbsBuilder'
 import { childInfoJson } from '../Client/Client.helper.test'
 import { ClientService } from '../Client/Client.service'
 import { navigation } from '../../util/constants'
-import AssessmentContainer from '../Assessment/AssessmentContainer'
+import { AssessmentContainer, ChangeLogPage } from '../Assessment'
 import ClientAddEditForm from '../Client/ClientAddEditForm'
 import Client from '../Client/Client'
 import SearchContainer from '../Search/SearchContainer'
@@ -106,6 +106,18 @@ describe('<Page />', () => {
     describe('client search page', () => {
       it('renders main content 12 columns wide', async () => {
         const wrapper = getWrapper(navigation.CLIENT_SEARCH)
+        await wrapper.instance().componentDidMount()
+        const cols = wrapper.find(Row).find(Col)
+        const mainCol = cols.at(0)
+
+        expect(mainCol.props().xs).toEqual('12')
+        expect(mainCol.props().role).toEqual('main')
+      })
+    })
+
+    describe('assessment change log page', () => {
+      it('renders main content 12 columns wide', async () => {
+        const wrapper = getWrapper(navigation.ASSESSMENT_CHANGELOG)
         await wrapper.instance().componentDidMount()
         const cols = wrapper.find(Row).find(Col)
         const mainCol = cols.at(0)
@@ -241,6 +253,22 @@ describe('<Page />', () => {
         staff_county: accountServiceSpy.county_name,
         dashboard: 'CLIENT_SEARCH',
       })
+    })
+  })
+
+  describe('when viewing assessment change log history', () => {
+    it('renders <AssessmentChangeLog /> when navigated to', async () => {
+      jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
+
+      const wrapper = shallow(
+        <Page
+          match={{ params: { clientId: '1001', id: '1' } }}
+          location={{}}
+          navigateTo={navigation.ASSESSMENT_CHANGELOG}
+        />
+      )
+      await wrapper.instance().componentDidMount()
+      expect(wrapper.find(ChangeLogPage).exists()).toBe(true)
     })
   })
 })

@@ -12,8 +12,14 @@ const navsWithChildYouthListCrumb = [
   navigation.CHILD_PROFILE_ADD,
   navigation.CHILD_PROFILE_EDIT,
 ]
-const navsWithChildProfileCrumb = [navigation.CHILD_PROFILE_EDIT, navigation.ASSESSMENT_ADD, navigation.ASSESSMENT_EDIT]
+const navsWithChildProfileCrumb = [
+  navigation.CHILD_PROFILE_EDIT,
+  navigation.ASSESSMENT_ADD,
+  navigation.ASSESSMENT_EDIT,
+  navigation.ASSESSMENT_CHANGELOG,
+]
 const navsWithClientSearchCrumb = [navigation.CLIENT_SEARCH]
+const navsWithAssessmentChangeLogCrumb = [navigation.ASSESSMENT_CHANGELOG]
 
 const addChildYouthListCrumbIfNeeded = (elements, navigateTo) => {
   if (navsWithChildYouthListCrumb.includes(navigateTo)) {
@@ -33,6 +39,12 @@ const addClientSearchCrumbIfNeeded = (elements, navigateTo) => {
   }
 }
 
+const addChangeLogCrumbIfNeeded = (elements, navigateTo, url) => {
+  if (navsWithAssessmentChangeLogCrumb.includes(navigateTo)) {
+    elements.push(<Link to={url}>CANS CHANGE LOG</Link>)
+  }
+}
+
 class BreadCrumbsBuilder extends React.Component {
   constructor(props) {
     super(props)
@@ -41,12 +53,14 @@ class BreadCrumbsBuilder extends React.Component {
 
   prepareNavigationElements() {
     const elements = []
-    const { navigateTo, client } = this.props
+    const { navigateTo, client, url } = this.props
     addChildYouthListCrumbIfNeeded(elements, navigateTo)
     if (client) {
       addChildProfileCrumbIfNeeded(elements, navigateTo, client)
+      addChangeLogCrumbIfNeeded(elements, navigateTo, url)
     }
     addClientSearchCrumbIfNeeded(elements, navigateTo)
+
     return elements
   }
 
@@ -59,10 +73,12 @@ class BreadCrumbsBuilder extends React.Component {
 BreadCrumbsBuilder.propTypes = {
   client: PropTypes.object,
   navigateTo: PropTypes.oneOf(Object.values(navigation)).isRequired,
+  url: PropTypes.string,
 }
 
 BreadCrumbsBuilder.defaultProps = {
   client: null,
+  url: '',
 }
 
 export default BreadCrumbsBuilder
