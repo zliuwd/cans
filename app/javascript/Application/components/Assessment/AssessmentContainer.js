@@ -287,8 +287,9 @@ class AssessmentContainer extends Component {
     assessment.person = this.props.client
     if (assessment.id) {
       try {
+        const submittedAssessment = await AssessmentService.update(assessment.id, assessment)
         await AssessmentService.update(assessment.id, assessment)
-        this.setState({ assessmentServiceStatus: LoadingState.ready })
+        this.setState({ assessmentServiceStatus: LoadingState.ready, assessment: submittedAssessment })
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
       }
@@ -296,7 +297,7 @@ class AssessmentContainer extends Component {
       try {
         const submittedAssessment = await AssessmentService.postAssessment(assessment)
         this.updateUrlWithAssessment(submittedAssessment)
-        this.setState({ assessmentServiceStatus: LoadingState.ready })
+        this.setState({ assessmentServiceStatus: LoadingState.ready, assessment: submittedAssessment })
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
       }
