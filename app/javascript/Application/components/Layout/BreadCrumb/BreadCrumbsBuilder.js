@@ -41,7 +41,7 @@ const addClientSearchCrumbIfNeeded = (elements, navigateTo) => {
 
 const addChangeLogCrumbIfNeeded = (elements, navigateTo, url) => {
   if (navsWithAssessmentChangeLogCrumb.includes(navigateTo)) {
-    elements.push(<Link to={url}>CANS CHANGE LOG</Link>)
+    elements.push(<Link to={url}>CANS Change Log</Link>)
   }
 }
 

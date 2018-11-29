@@ -3,6 +3,7 @@ import { shallow } from 'enzyme'
 import PrintChangeLog from './PrintChangeLog'
 import ChangeLogDate from './ChangeLogDate'
 import ChangeLogStatus from './ChangeLogStatus'
+import ChangeLogName from './ChangeLogName'
 
 describe('<PrintChangeLog />', () => {
   const defaultProps = {
@@ -13,6 +14,9 @@ describe('<PrintChangeLog />', () => {
       last_name: 'Doe',
       suffix: '',
     },
+  }
+
+  const defaultHistory = {
     history: [
       {
         id: 1,
@@ -30,7 +34,11 @@ describe('<PrintChangeLog />', () => {
     let wrapper
 
     beforeEach(() => {
-      wrapper = shallow(<PrintChangeLog {...defaultProps} />)
+      const props = {
+        ...defaultHistory,
+        ...defaultProps,
+      }
+      wrapper = shallow(<PrintChangeLog {...props} />)
     })
 
     it('renders a change log table wrapper', () => {
@@ -75,18 +83,25 @@ describe('<PrintChangeLog />', () => {
   })
 
   describe('print info', () => {
-    it('renders the clients full name', () => {
-      const wrapper = shallow(<PrintChangeLog {...defaultProps} />)
+    let wrapper
+
+    beforeEach(() => {
+      const props = {
+        ...defaultHistory,
+        ...defaultProps,
+      }
+      wrapper = shallow(<PrintChangeLog {...props} />)
+    })
+
+    it('renders the full name of the client', () => {
       expect(wrapper.find('h3.print-client-name').text()).toBe('Client: Doe, Annie B')
     })
 
     it('renders the assessment id', () => {
-      const wrapper = shallow(<PrintChangeLog {...defaultProps} />)
       expect(wrapper.find('h3.print-assessment-id').text()).toBe('Assessment ID: 1')
     })
 
     it('renders a formatted date', () => {
-      const wrapper = shallow(<PrintChangeLog {...defaultProps} />)
       expect(
         wrapper
           .find('tr.print-change-log-row')
@@ -99,19 +114,7 @@ describe('<PrintChangeLog />', () => {
       ).toBe('11/01/2018 5:07:10 PM')
     })
 
-    it('renders a user id', () => {
-      const wrapper = shallow(<PrintChangeLog {...defaultProps} />)
-      expect(
-        wrapper
-          .find('tr.print-change-log-row')
-          .find('td')
-          .at(1)
-          .text()
-      ).toBe('RACFID')
-    })
-
     it('renders the change type', () => {
-      const wrapper = shallow(<PrintChangeLog {...defaultProps} />)
       expect(
         wrapper
           .find('tr.print-change-log-row')
@@ -122,6 +125,45 @@ describe('<PrintChangeLog />', () => {
           .find('div')
           .text()
       ).toBe('Saved')
+    })
+
+    describe('name column', () => {
+      it('renders a user id if no first and last name', () => {
+        expect(
+          wrapper
+            .find('tr.print-change-log-row')
+            .find('td')
+            .at(1)
+            .find(ChangeLogName)
+            .dive()
+            .find('div')
+            .text()
+        ).toBe('RACFID')
+      })
+
+      it('renders the last and first name', () => {
+        const props = {
+          history: [
+            {
+              user_id: 'RACFID',
+              user_first_name: 'Casey',
+              user_last_name: 'Test',
+            },
+          ],
+          ...defaultProps,
+        }
+        const wrapper = shallow(<PrintChangeLog {...props} />)
+        expect(
+          wrapper
+            .find('tr.print-change-log-row')
+            .find('td')
+            .at(1)
+            .find(ChangeLogName)
+            .dive()
+            .find('div')
+            .text()
+        ).toBe('Test, Casey')
+      })
     })
   })
 })

@@ -49,6 +49,8 @@ describe('<AssessmentChangeLog />', () => {
         {
           id: 1,
           user_id: 'RACFID',
+          user_first_name: 'Casey',
+          user_last_name: 'Test',
           entity_id: 1,
           changed_at: '2018-11-01T17:07:10.043Z',
           change_type: 'ADD',
@@ -89,6 +91,22 @@ describe('<AssessmentChangeLog />', () => {
 
     it('renders a data grid when there is change log data', () => {
       expect(wrapper.find(DataGrid).exists()).toBe(true)
+    })
+  })
+
+  describe('page info', () => {
+    it('renders the card title with client name and dob', () => {
+      const props = {
+        changeHistory: [{ changed_at: '2018-11-01T17:07:10.043Z' }],
+        ...defaultProps,
+      }
+      const wrapper = shallow(<AssessmentChangeLog {...props} />)
+      expect(
+        wrapper
+          .find(CardTitle)
+          .dive()
+          .text()
+      ).toBe('CANS Change Log: Abbott, See K 08/14/2005')
     })
   })
 })

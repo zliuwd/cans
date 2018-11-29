@@ -18,14 +18,14 @@ describe('ChangeLogName', () => {
     expect(wrapper.find('div').exists()).toBe(true)
   })
 
-  it('renders the first and last name', () => {
+  it('renders the last and first name', () => {
     const change = {
       user_first_name: 'Casey',
       user_last_name: 'Test',
       ...defaultChange,
     }
     const wrapper = shallow(<ChangeLogName original={change} />)
-    expect(wrapper.find('div').text()).toBe('Casey Test')
+    expect(wrapper.find('div').text()).toBe('Test, Casey')
   })
 
   it('renders user_id if there is no first and last name', () => {

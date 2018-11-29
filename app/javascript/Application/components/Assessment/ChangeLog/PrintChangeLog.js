@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { formatClientName } from '../../Client'
 import ChangeLogDate from './ChangeLogDate'
 import ChangeLogStatus from './ChangeLogStatus'
+import ChangeLogName from './ChangeLogName'
 import { clientPropTypes } from './ChangeLogHelper'
 
 class PrintChangeLog extends Component {
@@ -47,7 +48,7 @@ class PrintChangeLog extends Component {
                   fontSize,
                 }}
               >
-                {record.user_id}
+                {<ChangeLogName original={record} />}
               </td>
               <td
                 style={{

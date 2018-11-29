@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 const ChangeLogName = ({ original }) => {
   const displayFullName =
     original.user_first_name && original.user_last_name
-      ? `${original.user_first_name} ${original.user_last_name}`
+      ? `${original.user_last_name}, ${original.user_first_name}`
       : null
 
   const displayUserId = original.user_id ? original.user_id : null

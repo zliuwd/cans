@@ -9,6 +9,8 @@ import PrintButton from '../../common/PrintButton'
 import PrintChangeLog from './PrintChangeLog'
 import { formatClientName } from '../../Client'
 import { clientPropTypes, changeHistoryPropType } from './ChangeLogHelper'
+import moment from 'moment'
+import { trimSafely } from '../../../util/formatters'
 
 const columnConfig = [
   {
@@ -29,7 +31,17 @@ const columnConfig = [
 ]
 
 const AssessmentChangeLog = ({ client, match, changeHistory }) => {
-  return changeHistory.length > 0 ? (
+  const changeHistoryLength = changeHistory.length
+  const pageSize = changeHistoryLength > 9 ? 10 : changeHistoryLength
+  const clientDob = client.dob
+    ? moment(client.dob)
+        .utcOffset(0)
+        .format('MM/DD/YYYY')
+    : ''
+  const title = `CANS Change Log: ${formatClientName(client)} ${clientDob}`
+  const showPagination = changeHistoryLength > 10
+
+  return changeHistoryLength > 0 ? (
     <Fragment>
       <Row>
         <Col xs="12">
@@ -43,13 +55,13 @@ const AssessmentChangeLog = ({ client, match, changeHistory }) => {
         <Col xs="12">
           <Card className="change-log-card">
             <CardHeader className="change-log-header">
-              <CardTitle className="change-log-title">{`CANS Change Log: ${formatClientName(client)}`}</CardTitle>
+              <CardTitle className="change-log-title">{trimSafely(title)}</CardTitle>
             </CardHeader>
             <CardBody className="pt-0 change-log-body">
               <DataGrid
                 data={changeHistory}
-                showPagination={true}
-                defaultPageSize={10}
+                showPagination={showPagination}
+                defaultPageSize={pageSize}
                 columns={columnConfig}
                 className="assessment-change-log"
               />
