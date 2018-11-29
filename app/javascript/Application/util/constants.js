@@ -18,6 +18,14 @@ export const navigation = Object.freeze({
   STAFF_READ: 'STAFF_READ',
 })
 
+export const BreadCrumbLinks = Object.freeze({
+  CLIENT_LIST: 'Client List',
+  CANS_ASSESSMENT_FORM: 'CANS Assessment Form',
+  STAFF_LIST: 'Staff List',
+  ASSIGNED_STAFF: 'Assigned Staff',
+  CLIENT_SEARCH: 'Client Search',
+})
+
 export const ClientStatus = Object.freeze({
   IN_PROGRESS: 'In progress',
   COMPLETED: 'Completed',

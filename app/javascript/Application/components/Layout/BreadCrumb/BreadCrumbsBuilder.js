@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { navigation } from '../../../util/constants'
+import { navigation, BreadCrumbLinks } from '../../../util/constants'
 import BreadCrumb from './BreadCrumb'
-import { formatClientName } from '../../Client/Client.helper'
+import { formatName } from './BreadCrumbHelper'
 import { Link } from 'react-router-dom'
 
 const navsWithChildYouthListCrumb = [
@@ -30,36 +30,35 @@ const navWithAssessmentFromCrumb = [
 ]
 
 const navsWithClientSearchCrumb = [navigation.CLIENT_SEARCH, navigation.SEARCH_ASSESSMENT_EDIT]
-const navsWithAssessmentChangeLogCrumb = [
-  navigation.ASSESSMENT_ADD,
-  navigation.ASSESSMENT_EDIT,
-  navigation.SEARCH_ASSESSMENT_EDIT,
-  navigation.ASSESSMENT_CHANGELOG,
-]
+const navsWithAssessmentChangeLogCrumb = [navigation.ASSESSMENT_CHANGELOG]
 
 const addChildYouthListCrumbIfNeeded = (elements, navigateTo) => {
   if (navsWithChildYouthListCrumb.includes(navigateTo)) {
-    elements.push(<Link to={'/clients'}>CLIENT LIST</Link>)
+    elements.push(<Link to={'/clients'}>{BreadCrumbLinks.CLIENT_LIST}</Link>)
   }
 }
 
 const addChildProfileCrumbIfNeeded = (elements, navigateTo, client) => {
   if (navsWithChildProfileCrumb.includes(navigateTo)) {
-    elements.push(<Link to={`/clients/${client.identifier}`}>{formatClientName(client).toUpperCase()}</Link>)
+    elements.push(<Link to={`/clients/${client.identifier}`}>{formatName(client)}</Link>)
   }
 }
 
 const addAssessmentFromCrumbIfNeeded = (elements, navigateTo, client, assessmentId) => {
-  if (navWithAssessmentFromCrumb.includes(navigateTo)) {
+  if (navigateTo === navigation.ASSESSMENT_EDIT || navigation.SEARCH_ASSESSMENT_EDIT) {
+    elements.push(BreadCrumbLinks.CANS_ASSESSMENT_FORM)
+  } else if (navWithAssessmentFromCrumb.includes(navigateTo)) {
     elements.push(
-      <Link to={`/clients/${client.identifier}/assessments/${assessmentId}`}>{'CANS ASSESSMENT FORM'}</Link>
+      <Link to={`/clients/${client.identifier}/assessments/${assessmentId}`}>
+        {BreadCrumbLinks.CANS_ASSESSMENT_FORM}
+      </Link>
     )
   }
 }
 
 const addClientSearchCrumbIfNeeded = (elements, navigateTo) => {
   if (navsWithClientSearchCrumb.includes(navigateTo)) {
-    elements.push(<Link to={`/search`}>CLIENT SEARCH</Link>)
+    elements.push(<Link to={`/search`}>{BreadCrumbLinks.CLIENT_SEARCH}</Link>)
   }
 }
 

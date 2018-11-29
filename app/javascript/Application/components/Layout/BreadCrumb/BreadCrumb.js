@@ -8,7 +8,7 @@ const BreadCrumb = ({ navigationElements }) => (
     <div className="row">
       <div className="col-xs-7 row-padding">
         <span className={'breadcrumbs'}>
-          Back to: <a href="/dashboard">DASHBOARD</a>{' '}
+          <a href="/dashboard">DashBoard</a>{' '}
           {navigationElements.map((nav, index) => <span key={index}> &gt; {nav}</span>)}
         </span>
       </div>
