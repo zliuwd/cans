@@ -26,6 +26,11 @@ const Routes = () => {
         path="/clients/:clientId/assessments/:id"
         children={route => page(route, navigation.ASSESSMENT_EDIT)}
       />
+      <Route
+        exact
+        path="/clients/:clientId/assessments/:id/changelog"
+        children={route => page(route, navigation.ASSESSMENT_CHANGELOG)}
+      />
       <Route exact path="/search" children={route => page(route, navigation.CLIENT_SEARCH)} />
       <Route exact path="/staff" children={route => page(route, navigation.STAFF_LIST)} />
       <Route exact path="/staff/:staffId" children={route => page(route, navigation.STAFF_READ)} />

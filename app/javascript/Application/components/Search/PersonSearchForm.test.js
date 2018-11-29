@@ -1,8 +1,7 @@
 import React from 'react'
 import { PersonSearchForm } from './index'
 import { shallow } from 'enzyme'
-import { Card, CardHeader, CardBody } from '@cwds/components/lib/Cards'
-import CardTitle from '@cwds/components/lib/Cards/CardTitle'
+import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
 import Autocompleter from './Autocomplete/Autocompleter'
 
 describe('<PersonSearchForm />', () => {

@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Card, CardHeader, CardBody } from '@cwds/components/lib/Cards'
-import CardTitle from '@cwds/components/lib/Cards/CardTitle'
+import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
 import StaffTable from '../StaffTable'
 import SubordinateCard from './SubordinateCard'
 import { LoadingState } from '../../../util/loadingHelper'

@@ -13,8 +13,8 @@ import {
   I18nService,
   SecurityService,
 } from './'
+import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
 import Typography from '@material-ui/core/Typography'
-import { PageInfo } from '../Layout'
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper'
 import { Print, PrintAssessment } from '../Print'
 import {
@@ -23,6 +23,8 @@ import {
   validateAssessmentForSubmit,
   defaultEmptyAssessment,
 } from './AssessmentHelper'
+import { globalAlertService } from '../../util/GlobalAlertService'
+import { buildSaveAssessmentButton, buildPrintAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 
 import './style.sass'
 import { getCurrentIsoDate } from '../../util/dateHelper'
@@ -37,21 +39,19 @@ class AssessmentContainer extends Component {
       assessmentServiceStatus: LoadingState.idle,
       i18n: {},
       isValidForSubmit: false,
-      shouldRenderSaveSuccessMessage: false,
-      redirection: {
-        shouldRedirect: false,
-        successAssessmentId: null,
-      },
+      shouldRedirectToClientProfile: false,
       isEditable: false,
       shouldPrintNow: false,
       isValidDate: true,
       isCaregiverWarningShown: false,
       isSubmitWarningShown: false,
+      isSaveButtonEnabled: false,
       focusedCaregiverId: '',
     }
   }
 
   async componentDidMount() {
+    this.initHeaderButtons(this.state.isSaveButtonEnabled)
     const assessmentId = this.props.match.params.id
     let isEditable = assessmentId === undefined
     if (!isEditable) {
@@ -63,13 +63,37 @@ class AssessmentContainer extends Component {
   }
 
   componentDidUpdate() {
-    if (this.state.redirection.shouldRedirect) {
-      this.setState({ redirection: { ...this.state.redirection, shouldRedirect: false } })
-    }
+    this.updateSaveButtonStatusIfNeeded()
   }
 
   componentWillUnmount() {
     this.muteCtrlP()
+    this.props.pageHeaderButtonsController.updateHeaderButtonsToDefault()
+  }
+
+  initHeaderButtons(isSaveButtonEnabled) {
+    const leftButton = buildSaveAssessmentButton(this.handleSaveAssessment, isSaveButtonEnabled)
+    const rightButton = buildPrintAssessmentButton(this.togglePrintNow)
+    this.props.pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
+  }
+
+  updateSaveButtonStatusIfNeeded() {
+    const newSaveButtonStatus = this.shouldSaveButtonBeEnabled()
+    if (this.state.isSaveButtonEnabled !== newSaveButtonStatus) {
+      this.initHeaderButtons(newSaveButtonStatus)
+      this.setState({ isSaveButtonEnabled: newSaveButtonStatus })
+    }
+  }
+
+  shouldSaveButtonBeEnabled() {
+    const { assessment, assessmentServiceStatus, isEditable, isValidDate } = this.state
+    return (
+      isValidDate &&
+      isEditable &&
+      assessment.state.under_six !== undefined &&
+      Boolean(assessment.event_date) &&
+      isReadyForAction(assessmentServiceStatus)
+    )
   }
 
   handleSubmitWarning = switcher => {
@@ -177,11 +201,9 @@ class AssessmentContainer extends Component {
   }
 
   getCaregiverDomainsNumber = () => {
-    const domains = this.state.assessment.state.domains
-    const caregiverDomainNumber = domains.filter(domain => {
+    return this.state.assessment.state.domains.filter(domain => {
       return domain.is_caregiver_domain === true
     }).length
-    return caregiverDomainNumber
   }
 
   handleCaregiverRemoveAll = (name, value) => {
@@ -197,27 +219,33 @@ class AssessmentContainer extends Component {
       this.handleCaregiverRemoveAll('has_caregiver', false)
     } else {
       const domains = tempAssessment.state.domains
-      const newDomains = domains.filter(domain => domain.caregiver_index !== caregiverIndex)
-      tempAssessment.state.domains = newDomains
+      tempAssessment.state.domains = domains.filter(domain => domain.caregiver_index !== caregiverIndex)
       this.updateAssessment(tempAssessment)
     }
   }
 
+  postSuccessMessage() {
+    const { client } = this.props
+    const message = (
+      <Fragment>
+        Success! CANS assessment has been saved. <Link to={`/clients/${client.identifier}`}>Click here</Link> to return
+        to Child/Youth profile.
+      </Fragment>
+    )
+    globalAlertService.postSuccess({ message })
+  }
+
   initialSave(assessment) {
+    this.postSuccessMessage()
     this.setState({
       assessment,
       assessmentServiceStatus: LoadingState.ready,
-      shouldRenderSaveSuccessMessage: true,
     })
     this.updateUrlWithAssessment(assessment)
   }
 
   updateUrlWithAssessment(assessment) {
     this.props.history.push(`/clients/${this.props.client.identifier}/assessments/${assessment.id}`)
-  }
-
-  hideSaveSuccessMessage = () => {
-    this.setState({ shouldRenderSaveSuccessMessage: false })
   }
 
   handleSaveAssessment = async () => {
@@ -227,10 +255,10 @@ class AssessmentContainer extends Component {
     if (assessment.id) {
       try {
         const updatedAssessment = await AssessmentService.update(assessment.id, assessment)
+        this.postSuccessMessage()
         this.setState({
           assessment: updatedAssessment,
           assessmentServiceStatus: LoadingState.ready,
-          shouldRenderSaveSuccessMessage: true,
         })
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
@@ -260,13 +288,8 @@ class AssessmentContainer extends Component {
     if (assessment.id) {
       try {
         const submittedAssessment = await AssessmentService.update(assessment.id, assessment)
-        this.setState({
-          assessmentServiceStatus: LoadingState.ready,
-          redirection: {
-            shouldRedirect: false,
-            successAssessmentId: submittedAssessment.id,
-          },
-        })
+        await AssessmentService.update(assessment.id, assessment)
+        this.setState({ assessmentServiceStatus: LoadingState.ready, assessment: submittedAssessment })
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
       }
@@ -274,13 +297,7 @@ class AssessmentContainer extends Component {
       try {
         const submittedAssessment = await AssessmentService.postAssessment(assessment)
         this.updateUrlWithAssessment(submittedAssessment)
-        this.setState({
-          assessmentServiceStatus: LoadingState.ready,
-          redirection: {
-            shouldRedirect: false,
-            successAssessmentId: submittedAssessment.id,
-          },
-        })
+        this.setState({ assessmentServiceStatus: LoadingState.ready, assessment: submittedAssessment })
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
       }
@@ -294,21 +311,9 @@ class AssessmentContainer extends Component {
     }
   }
 
-  handleCancelClick = () => this.setState({ redirection: { shouldRedirect: true } })
+  handleCancelClick = () => this.setState({ shouldRedirectToClientProfile: true })
 
   togglePrintNow = () => this.setState({ shouldPrintNow: !this.state.shouldPrintNow })
-
-  renderPrintButton = () => (
-    <div
-      onClick={this.togglePrintNow}
-      onKeyPress={this.togglePrintNow}
-      className={'print-link'}
-      role={'button'}
-      tabIndex={0}
-    >
-      <i className={'fa fa-print'} /> Print
-    </div>
-  )
 
   validateDate(date) {
     return moment(date, 'MM/DD/YYYY', true).isValid()
@@ -343,26 +348,20 @@ class AssessmentContainer extends Component {
   }
 
   render() {
-    const { client, isNewForm } = this.props
+    const { client } = this.props
     const {
-      redirection,
+      shouldRedirectToClientProfile,
       isValidForSubmit,
       assessment,
       i18n,
       assessmentServiceStatus,
-      shouldRenderSaveSuccessMessage,
       isEditable,
-      isValidDate,
       shouldPrintNow,
     } = this.state
-    const { shouldRedirect, successAssessmentId } = redirection
-    if (shouldRedirect) {
-      return <Redirect push to={{ pathname: `/clients/${client.identifier}`, state: { successAssessmentId } }} />
+    if (shouldRedirectToClientProfile) {
+      return <Redirect push to={{ pathname: `/clients/${client.identifier}` }} />
     }
-    const pageTitle = isNewForm ? 'New CANS' : 'CANS Assessment Form'
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus)
-    const printButton = this.renderPrintButton()
-
     const isUnderSix = assessment && assessment.state && assessment.state.under_six
 
     return (
@@ -377,7 +376,6 @@ class AssessmentContainer extends Component {
             }}
           />
         ) : null}
-        <PageInfo title={pageTitle} actionNode={printButton} />
         {shouldPrintNow && (
           <Print node={<PrintAssessment assessment={assessment} i18n={i18n} />} onClose={this.togglePrintNow} />
         )}
@@ -388,6 +386,12 @@ class AssessmentContainer extends Component {
           onKeyUp={this.handleKeyUp}
           handleWarningShow={this.handleWarningShow}
           isCaregiverWarningShown={this.state.isCaregiverWarningShown}
+        />
+        <AssessmentSummaryCard
+          assessmentStatus={assessment.status}
+          domains={assessment && assessment.state && assessment.state.domains}
+          i18n={i18n}
+          isUnderSix={Boolean(isUnderSix)}
         />
         <Assessment
           assessment={assessment}
@@ -403,21 +407,6 @@ class AssessmentContainer extends Component {
               active.
             </Typography>
           )}
-        {shouldRenderSaveSuccessMessage ? (
-          <CloseableAlert
-            type={alertType.SUCCESS}
-            message={
-              <Fragment>
-                Success! CANS assessment has been saved. <Link to={`/clients/${client.identifier}`}>Click here</Link> to
-                return to Child/Youth profile.
-              </Fragment>
-            }
-            onClose={this.hideSaveSuccessMessage}
-            className={'assessment-save-success'}
-            isCloseable
-            isAutoCloseable
-          />
-        ) : null}
         {LoadingState.ready === assessmentServiceStatus &&
           !isEditable && (
             <div className={'permission-warning-alert'}>
@@ -430,18 +419,17 @@ class AssessmentContainer extends Component {
               />
             </div>
           )}
-        <AssessmentFormFooter
-          onCancelClick={this.handleCancelClick}
-          isSaveButtonEnabled={isValidDate && isEditable && canPerformUpdates && Boolean(assessment.event_date)}
-          onSaveAssessment={this.handleSaveAssessment}
-          isSubmitButtonEnabled={isEditable && canPerformUpdates && isValidForSubmit}
-          onSubmitAssessment={
-            this.state.assessment.can_release_confidential_info === true
-              ? this.handleSubmitAssessment
-              : this.handleSubmitWarning
-          }
-          isUnderSix={isUnderSix}
-        />
+        {isUnderSix !== undefined && (
+          <AssessmentFormFooter
+            onCancelClick={this.handleCancelClick}
+            isSubmitButtonEnabled={isEditable && canPerformUpdates && isValidForSubmit}
+            onSubmitAssessment={
+              this.state.assessment.can_release_confidential_info === true
+                ? this.handleSubmitAssessment
+                : this.handleSubmitWarning
+            }
+          />
+        )}
       </Fragment>
     )
   }
@@ -450,8 +438,11 @@ class AssessmentContainer extends Component {
 AssessmentContainer.propTypes = {
   client: PropTypes.object.isRequired,
   history: PropTypes.object,
-  isNewForm: PropTypes.bool.isRequired,
   match: PropTypes.object,
+  pageHeaderButtonsController: PropTypes.shape({
+    updateHeaderButtons: PropTypes.func.isRequired,
+    updateHeaderButtonsToDefault: PropTypes.func.isRequired,
+  }).isRequired,
 }
 
 AssessmentContainer.defaultProps = {

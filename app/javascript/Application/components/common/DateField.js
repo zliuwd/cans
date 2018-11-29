@@ -33,10 +33,13 @@ class DateField extends Component {
       return
     }
     this.setState({ value: date })
-    this.props.onChange(jsDateToIso(date))
+    const isoDate = jsDateToIso(date)
+    this.props.onRawValueUpdate({ target: { value: date } })
+    this.props.onChange(isoDate)
   }
 
   handleOnBlur = event => {
+    this.props.onRawValueUpdate(event)
     const date = event.target.value
     if (isEmpty(date) || !isValidLocalDate(date)) {
       // recreate <DateTimePicker> to clear raw data in it as a workaround
@@ -49,7 +52,7 @@ class DateField extends Component {
   }
 
   render() {
-    const { id, isRequired, ariaLabelledBy, ariaDescribedBy, onKeyUp } = this.props
+    const { id, isRequired, ariaLabelledBy, ariaDescribedBy, onRawValueUpdate } = this.props
     const { value, key } = this.state
     return (
       <DateTimePicker
@@ -61,7 +64,7 @@ class DateField extends Component {
         format={LOCAL_DATE_FORMAT}
         onBlur={this.handleOnBlur}
         onChange={this.handleOnChange}
-        onKeyUp={onKeyUp}
+        onKeyUp={onRawValueUpdate}
         placeholder={'mm/dd/yyyy'}
         required={isRequired}
         aria-required={isRequired}
@@ -76,7 +79,7 @@ DateField.defaultProps = {
   isRequired: false,
   ariaLabelledBy: null,
   ariaDescribedBy: null,
-  onKeyUp: () => {},
+  onRawValueUpdate: () => {},
   value: null,
 }
 
@@ -86,7 +89,7 @@ DateField.propTypes = {
   id: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
-  onKeyUp: PropTypes.func,
+  onRawValueUpdate: PropTypes.func,
   value: PropTypes.string,
 }
 

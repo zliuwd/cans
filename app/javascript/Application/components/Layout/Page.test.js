@@ -2,14 +2,16 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { Row, Col } from 'reactstrap'
 import { Page, SideNav } from './'
-import BreadCrumbsBuilder from './BreadCrumbsBuilder'
+import BreadCrumbsBuilder from './BreadCrumb/BreadCrumbsBuilder'
 import { childInfoJson } from '../Client/Client.helper.test'
 import { ClientService } from '../Client/Client.service'
 import { navigation } from '../../util/constants'
-import AssessmentContainer from '../Assessment/AssessmentContainer'
+import { AssessmentContainer, ChangeLogPage } from '../Assessment'
 import ClientAddEditForm from '../Client/ClientAddEditForm'
 import Client from '../Client/Client'
 import SearchContainer from '../Search/SearchContainer'
+import { buildSearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
+import { PageHeader } from '../Header'
 import { SupervisorDashboard, CaseLoadPage, CurrentUserCaseLoadPage } from '../Staff'
 import * as Analytics from '../../util/analytics'
 import UserAccountService from '../common/UserAccountService'
@@ -29,7 +31,7 @@ describe('<Page />', () => {
 
   describe('layout', () => {
     it('renders with <SideNav /> links', async () => {
-      const wrapper = getWrapper(navigation.ASSESSMENT_ADD)
+      const wrapper = getWrapper(navigation.CHILD_PROFILE)
       await wrapper.instance().componentDidMount()
       const sideNav = wrapper.find(SideNav)
       expect(sideNav.length).toBe(1)
@@ -46,7 +48,7 @@ describe('<Page />', () => {
     })
 
     it('splits sidebar and main content 3:9', async () => {
-      const wrapper = getWrapper(navigation.ASSESSMENT_ADD)
+      const wrapper = getWrapper(navigation.CHILD_PROFILE)
       await wrapper.instance().componentDidMount()
       const cols = wrapper.find(Row).find(Col)
       const sideCol = cols.at(0)
@@ -58,9 +60,64 @@ describe('<Page />', () => {
       expect(mainCol.props().role).toEqual('main')
     })
 
+    describe('<PageHeader />', () => {
+      it('should render PageHeader', () => {
+        const page = getWrapper(navigation.ASSESSMENT_ADD)
+        page.instance().setState({ isLoaded: true })
+        const pageHeaderProps = page.find(PageHeader).props()
+        expect(pageHeaderProps.leftButton).toBe(null)
+        expect(pageHeaderProps.rightButton).toEqual(buildSearchClientsButton())
+        expect(pageHeaderProps.navigateTo).toEqual(navigation.ASSESSMENT_ADD)
+      })
+
+      it('should have default header buttons initially', () => {
+        const page = getWrapper(navigation.ASSESSMENT_ADD)
+        const header = page.state().header
+        expect(header.leftButton).toBe(null)
+        expect(header.rightButton).toEqual(buildSearchClientsButton())
+      })
+
+      describe('#updateHeaderButtons()', () => {
+        it('should update header buttons', () => {
+          const page = getWrapper(navigation.ASSESSMENT_ADD)
+          const leftButton = <div className={'button-left'} />
+          const rightButton = <div className={'button-right'} />
+          page.instance().updateHeaderButtons(leftButton, rightButton)
+          const header = page.state().header
+          expect(header.leftButton).toBe(leftButton)
+          expect(header.rightButton).toBe(rightButton)
+        })
+      })
+
+      describe('#updateHeaderButtonsToDefault()', () => {
+        it('should update header buttons to default values', () => {
+          const page = getWrapper(navigation.ASSESSMENT_ADD)
+          const leftButton = <div className={'button-left'} />
+          const rightButton = <div className={'button-right'} />
+          page.instance().updateHeaderButtons(leftButton, rightButton)
+          page.instance().updateHeaderButtonsToDefault(leftButton, rightButton)
+          const header = page.state().header
+          expect(header.leftButton).toBe(null)
+          expect(header.rightButton).toBe(buildSearchClientsButton())
+        })
+      })
+    })
+
     describe('client search page', () => {
       it('renders main content 12 columns wide', async () => {
         const wrapper = getWrapper(navigation.CLIENT_SEARCH)
+        await wrapper.instance().componentDidMount()
+        const cols = wrapper.find(Row).find(Col)
+        const mainCol = cols.at(0)
+
+        expect(mainCol.props().xs).toEqual('12')
+        expect(mainCol.props().role).toEqual('main')
+      })
+    })
+
+    describe('assessment change log page', () => {
+      it('renders main content 12 columns wide', async () => {
+        const wrapper = getWrapper(navigation.ASSESSMENT_CHANGELOG)
         await wrapper.instance().componentDidMount()
         const cols = wrapper.find(Row).find(Col)
         const mainCol = cols.at(0)
@@ -81,6 +138,16 @@ describe('<Page />', () => {
       expect(wrapper.find(AssessmentContainer).length).toBe(1)
     })
 
+    it('renders Add content 12 columns wide', async () => {
+      const wrapper = getWrapper(navigation.ASSESSMENT_ADD)
+      await wrapper.instance().componentDidMount()
+      const cols = wrapper.find(Row).find(Col)
+      const mainCol = cols.at(0)
+
+      expect(mainCol.props().xs).toEqual('12')
+      expect(mainCol.props().role).toEqual('main')
+    })
+
     it('renders < AssessmentContainer on Edit />', async () => {
       jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
       const wrapper = getWrapper(navigation.ASSESSMENT_EDIT, {
@@ -88,6 +155,16 @@ describe('<Page />', () => {
       })
       await wrapper.instance().componentDidMount()
       expect(wrapper.find(AssessmentContainer).length).toBe(1)
+    })
+
+    it('renders Edit content 12 columns wide', async () => {
+      const wrapper = getWrapper(navigation.ASSESSMENT_EDIT)
+      await wrapper.instance().componentDidMount()
+      const cols = wrapper.find(Row).find(Col)
+      const mainCol = cols.at(0)
+
+      expect(mainCol.props().xs).toEqual('12')
+      expect(mainCol.props().role).toEqual('main')
     })
 
     it('renders < ClientAddEditForm for Edit Profile/>', async () => {
@@ -176,6 +253,22 @@ describe('<Page />', () => {
         staff_county: accountServiceSpy.county_name,
         dashboard: 'CLIENT_SEARCH',
       })
+    })
+  })
+
+  describe('when viewing assessment change log history', () => {
+    it('renders <AssessmentChangeLog /> when navigated to', async () => {
+      jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
+
+      const wrapper = shallow(
+        <Page
+          match={{ params: { clientId: '1001', id: '1' } }}
+          location={{}}
+          navigateTo={navigation.ASSESSMENT_CHANGELOG}
+        />
+      )
+      await wrapper.instance().componentDidMount()
+      expect(wrapper.find(ChangeLogPage).exists()).toBe(true)
     })
   })
 })

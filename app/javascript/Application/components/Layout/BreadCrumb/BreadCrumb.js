@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import './style.sass'
+import '../style.sass'
 
 const BreadCrumb = ({ navigationElements }) => (
   <div className="container" role="navigation">

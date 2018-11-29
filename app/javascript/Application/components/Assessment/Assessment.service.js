@@ -19,6 +19,9 @@ export class AssessmentService {
   static postAssessment(assessment) {
     return apiPost('/assessments', assessment)
   }
+  static getAllChanges(id) {
+    return apiGet(`/assessments/${id}/changes`)
+  }
 }
 
 export default AssessmentService

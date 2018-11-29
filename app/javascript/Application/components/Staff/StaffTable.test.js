@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import DataGrid from '@cwds/components/lib/DataGrid'
+import { DataGrid } from '@cwds/components'
 import StaffTable from './StaffTable'
 import StaffNameLink from './StaffNameLink'
 import { staff as mockStaff } from './staff.mocks.test'

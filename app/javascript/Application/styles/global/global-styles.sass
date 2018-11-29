@@ -1,16 +1,16 @@
 @import "colors.sass"
-@import "data-grid.sass"
+@import "cwds-conflict-fixes.sass"
 
 a
-  color: $link
+  color: $link !important
   text-decoration: underline
 
 a:visited
-  color: $link
+  color: $link !important
   text-decoration: underline
 
 .content
-  border-left: 4px solid $aspen
+  border-left: 4px
   background-color: $content-background
 
 .underlined
@@ -25,9 +25,6 @@ a:visited
   color: $label
   font-size: 1.5rem
   font-weight: 400
-
-.cancel-button
-  color: $link
 
 .cancel-button-darker
   color: $link-on-gray-back

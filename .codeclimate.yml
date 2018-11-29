@@ -32,6 +32,8 @@ exclude_patterns:
   - "config/"
   - "coverage/"
   - "node_modules/"
+  - "**/*.test.*"
+  - "**/*.mocks.*"
   - "**/spec/"
   - "**/test/"
   - "**/tests/"

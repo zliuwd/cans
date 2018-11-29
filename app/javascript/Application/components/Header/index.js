@@ -1,2 +1,2 @@
 export { default as Header } from './Header'
-export { default as SearchButton } from './SearchButton'
+export { default as PageHeader } from './PageHeader'

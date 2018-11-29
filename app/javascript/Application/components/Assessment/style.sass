@@ -1,19 +1,15 @@
 @import '../../styles/global/colors.sass'
 //********************
-//AssessmentContainer
-//********************
-.assessment-save-success
-  margin-top: 2rem
-
-.print-link
-  cursor: pointer
-  color: $link
-  text-align: right
-  padding-right: 1rem
-
-//********************
 //AssessmentForm
 //********************
+.assessment-tooltip
+  background-color: #1a1a1a
+  color: #fff
+  font-size: 1.4rem
+  text-align: left
+  width: 30rem
+  border: 0.2rem solid white
+
 .submit-validation-message
   margin-top: 2rem
   padding-left: 4rem
@@ -25,9 +21,9 @@
 //********************
 .authorization-warning
   margin-left: 0.5rem
-  
-.warning-text   
-  color: #BB3709  
+
+.warning-text
+  color: #BB3709
   font-weight: bold
 
 .cargiver-text-block
@@ -74,8 +70,8 @@
   margin-top: 1.5rem
 
 .assessment-form-header-input
-  font-size: 1.5rem
-  height: 3.6rem
+  font-size: 1.5rem !important
+  height: 3.6rem !important
 
 .child-name-block
   font-size: 1.8rem
@@ -117,7 +113,7 @@
 
 .age-button:hover
   @extend .age-button-selected
-  
+
 .age-button-selected:hover
   @extend .age-button-selected
 
@@ -125,7 +121,9 @@
 //AssessmentFormFooter
 //********************
 .form-footer
-  padding: 2.5rem
+  display: flex
+  justify-content: flex-end
+  padding: 2.5rem 0
 
 //********************
 //AssessmentHistory
@@ -134,9 +132,16 @@
   font-size: 2rem
 
 //********************
+//AssessmentSummary
+//********************
+.assessment-summary-help-icon
+  color: $light-gray
+  font-size: 1.2rem
+  margin: .1rem 0 0 .7rem
+
+//********************
 //Domain
 //********************
-
 .domain-metric
   display: flex
   flexWrap: nowrap
@@ -153,20 +158,11 @@
   padding: 0.5rem 0 0 1rem
   width: 22rem
 
-
 .domain-score-badge
   height: 1.8rem
   width: 3.0rem
   padding: 0.4rem 0 0 0
   margin: 0 1rem 0 0.5rem
-
-.domain-tooltip
-  background-color: #1a1a1a
-  color: #fff
-  font-size: 1.4rem
-  text-align: left
-  width: 30rem
-  border: 0.2rem solid white
 
 .domain-help-icon
   color: $venice-blue
@@ -218,8 +214,6 @@
   margin-right: 1.5rem
   margin-left: 0.5rem
 
-
-
 //********************
 //Item
 //********************
@@ -247,3 +241,24 @@
   .rw-widget-picker,
   .rw-datetime-picker .rw-select > *
     height: 3.4rem !important
+
+//********************
+// AssessmentChangeLog
+//******************** 
+button.change-log-print-button
+  float: right
+  i.fa-print
+    font-size: 2rem
+    margin-right: 1.5rem
+    vertical-align: middle
+  span
+    font-size: 1.1rem
+.change-log-card
+  margin-top: 1.5rem
+  .change-log-header
+    padding: 2rem
+    .change-log-title
+      font-size: 2rem
+      margin-top: 0
+  .change-log-body
+    padding: 2rem 1.5rem

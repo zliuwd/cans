@@ -15,13 +15,9 @@ export class GlobalAlert extends Component {
     globalAlertService.subscribe(this.onAlertEvent)
   }
 
-  onAlertEvent = ({ message, type }) => {
+  onAlertEvent = ({ message, type, isAutoCloseable }) => {
     const alerts = clone(this.state.alerts)
-    alerts.push({
-      message: message,
-      type: type,
-    })
-
+    alerts.push({ message, type, isAutoCloseable })
     this.setState({
       alerts: alerts,
     })
@@ -51,6 +47,7 @@ export class GlobalAlert extends Component {
                 className={'global-alert'}
                 message={alert.message}
                 type={alert.type}
+                isAutoCloseable={alert.isAutoCloseable}
                 isCloseable={true}
                 onClose={() => this.onAlertClose(index)}
               />

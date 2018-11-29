@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DataGrid from '@cwds/components/lib/DataGrid'
+import { DataGrid } from '@cwds/components'
 import StaffNameLink from './StaffNameLink'
 import { staffPropType } from './StaffHelper'
 

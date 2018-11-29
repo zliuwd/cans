@@ -3,10 +3,9 @@ import { Assessment, AssessmentContainer, AssessmentFormHeader, AssessmentServic
 import { childInfoJson } from '../Client/Client.helper.test'
 import ClientService from '../Client/Client.service'
 import { shallow, mount } from 'enzyme'
-import { PageInfo } from '../Layout'
 import Typography from '@material-ui/core/Typography/Typography'
+import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
 import AssessmentFormFooter from './AssessmentFormFooter'
-import { Link } from 'react-router-dom'
 import PageModal from '../common/PageModal'
 import {
   assessment,
@@ -21,15 +20,18 @@ import { LoadingState } from '../../util/loadingHelper'
 import { CloseableAlert } from '../common/CloseableAlert'
 import { getCurrentIsoDate } from '../../util/dateHelper'
 import { Print } from '../Print'
+import { globalAlertService } from '../../util/GlobalAlertService'
 import * as Analytics from '../../util/analytics'
 
 jest.mock('../../util/analytics')
-jest.useFakeTimers()
 
 const defaultProps = {
   location: { childId: 1 },
   match: { params: { id: 1 } },
-  isNewForm: false,
+  pageHeaderButtonsController: {
+    updateHeaderButtons: () => {},
+    updateHeaderButtonsToDefault: () => {},
+  },
   client: childInfoJson,
 }
 
@@ -44,7 +46,10 @@ describe('<AssessmentContainer />', () => {
       const props = {
         location: { childId: 10 },
         match: { params: { id: 1 } },
-        isNewForm: false,
+        pageHeaderButtonsController: {
+          updateHeaderButtons: () => {},
+          updateHeaderButtonsToDefault: () => {},
+        },
         client: {},
       }
 
@@ -56,63 +61,121 @@ describe('<AssessmentContainer />', () => {
 
       const getLength = (wrapper, component) => wrapper.find(component).length
 
-      it('renders with 1 <PageInfo /> component', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        expect(getLength(wrapper, PageInfo)).toBe(1)
-      })
-
       it('renders with 1 <AssessmentFormHeader /> component', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         expect(getLength(wrapper, AssessmentFormHeader)).toBe(1)
       })
 
+      it('renders with 1 <AssessmentSummaryCard /> component', () => {
+        const wrapper = shallow(<AssessmentContainer {...props} />)
+        expect(getLength(wrapper, AssessmentSummaryCard)).toBe(1)
+      })
+
       it('renders with 1 <Typography /> component', async () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         await wrapper.instance().componentDidMount()
+        await wrapper.instance().setState({ assessment })
         expect(getLength(wrapper, Typography)).toBe(1)
       })
 
-      it('renders with 1 <AssessmentFormFooter /> component', () => {
+      it('renders without <AssessmentFormFooter /> component initially', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
-        expect(getLength(wrapper, AssessmentFormFooter)).toBe(1)
+        expect(getLength(wrapper, AssessmentFormFooter)).toBe(0)
       })
     })
 
-    describe('page title', () => {
-      it('should be "New CANS" for new assessment', () => {
-        const wrapper = shallow(<AssessmentContainer isNewForm={true} client={{}} />)
-        const pageInfoText = wrapper
-          .find('PageInfo')
-          .render()
-          .text()
-        expect(pageInfoText).toMatch(/New CANS/)
-        expect(pageInfoText).toMatch(/Print/)
+    describe('page header buttons', () => {
+      it('should update page header buttons on componentDidMount', () => {
+        const updateHeaderButtonsMock = jest.fn()
+        const props = {
+          ...defaultProps,
+          match: { params: {} },
+          pageHeaderButtonsController: {
+            updateHeaderButtons: updateHeaderButtonsMock,
+            updateHeaderButtonsToDefault: () => {},
+          },
+        }
+        shallow(<AssessmentContainer {...props} />)
+        expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
       })
 
-      it('should be "CANS Assessment Form" for the existent assessment', () => {
-        const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
-        const pageInfoText = wrapper
-          .find('PageInfo')
-          .render()
-          .text()
-        expect(pageInfoText).toMatch(/CANS Assessment Form/)
-        expect(pageInfoText).toMatch(/Print/)
+      it('should update page header buttons on componentDidUpdate', () => {
+        const updateHeaderButtonsMock = jest.fn()
+        const props = {
+          ...defaultProps,
+          match: { params: {} },
+          pageHeaderButtonsController: {
+            updateHeaderButtons: updateHeaderButtonsMock,
+            updateHeaderButtonsToDefault: () => {},
+          },
+        }
+        const wrapper = shallow(<AssessmentContainer {...props} />)
+        expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
+        wrapper.instance().shouldSaveButtonBeEnabled = jest.fn(() => true)
+        wrapper.instance().componentDidUpdate()
+        expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(2)
+      })
+
+      describe('#updateSaveButtonStatusIfNeeded()', () => {
+        it('should update page header buttons when needed', () => {
+          const updateHeaderButtonsMock = jest.fn()
+          const props = {
+            ...defaultProps,
+            match: { params: {} },
+            pageHeaderButtonsController: {
+              updateHeaderButtons: updateHeaderButtonsMock,
+              updateHeaderButtonsToDefault: () => {},
+            },
+          }
+          const wrapper = shallow(<AssessmentContainer {...props} />)
+          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
+          wrapper.instance().shouldSaveButtonBeEnabled = jest.fn(() => true)
+          wrapper.instance().componentDidUpdate()
+          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(2)
+        })
+
+        it('should not update page header buttons when it is not needed', () => {
+          const updateHeaderButtonsMock = jest.fn()
+          const props = {
+            ...defaultProps,
+            match: { params: {} },
+            pageHeaderButtonsController: {
+              updateHeaderButtons: updateHeaderButtonsMock,
+              updateHeaderButtonsToDefault: () => {},
+            },
+          }
+          const wrapper = shallow(<AssessmentContainer {...props} />)
+          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
+          wrapper.instance().shouldSaveButtonBeEnabled = jest.fn(() => false)
+          wrapper.instance().componentDidUpdate()
+          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
+        })
+      })
+
+      it('should reset page header buttons to default values on component will unmount ', () => {
+        const updateToDefaultMock = jest.fn()
+        const props = {
+          ...defaultProps,
+          match: { params: {} },
+          pageHeaderButtonsController: {
+            updateHeaderButtons: () => {},
+            updateHeaderButtonsToDefault: updateToDefaultMock,
+          },
+        }
+        const wrapper = shallow(<AssessmentContainer {...props} />)
+        wrapper.instance().componentWillUnmount()
+        expect(updateToDefaultMock).toHaveBeenCalledTimes(1)
       })
     })
 
     describe('print assessment', () => {
-      it('should render <Print /> on print button click', () => {
+      it('should render <Print /> on togglePrintNow()', () => {
         // given
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
         expect(wrapper.find(Print).length).toBe(0)
 
         // when
-        wrapper
-          .find('PageInfo')
-          .dive()
-          .find('.print-link')
-          .simulate('click')
-        wrapper.update()
+        wrapper.instance().togglePrintNow()
 
         // then
         expect(wrapper.find(Print).length).toBe(1)
@@ -123,7 +186,9 @@ describe('<AssessmentContainer />', () => {
       it('should add and remove event handler', () => {
         const adder = jest.spyOn(global, 'addEventListener').mockImplementation(() => {})
         const remover = jest.spyOn(global, 'removeEventListener').mockImplementation(() => {})
-        const wrapper = shallow(<AssessmentContainer isNewForm={false} client={{}} />)
+        const wrapper = shallow(
+          <AssessmentContainer client={{}} pageHeaderButtonsController={defaultProps.pageHeaderButtonsController} />
+        )
         expect(adder).toHaveBeenCalledTimes(1)
         wrapper.unmount()
         expect(remover).toHaveBeenCalledTimes(1)
@@ -386,7 +451,10 @@ describe('<AssessmentContainer />', () => {
         const props = {
           location: { childId: 1 },
           match: { params: { id: 1 } },
-          isNewForm: false,
+          pageHeaderButtonsController: {
+            updateHeaderButtons: () => {},
+            updateHeaderButtonsToDefault: () => {},
+          },
           client: {},
         }
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
@@ -407,7 +475,10 @@ describe('<AssessmentContainer />', () => {
         const props = {
           location: { childId: 10 },
           match: { params: { id: '123' } },
-          isNewForm: false,
+          pageHeaderButtonsController: {
+            updateHeaderButtons: () => {},
+            updateHeaderButtonsToDefault: () => {},
+          },
           client: {},
         }
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
@@ -421,11 +492,15 @@ describe('<AssessmentContainer />', () => {
       it('should not render warning message when assessment is new', async () => {
         const props = {
           location: { childId: 10 },
-          isNewForm: false,
+          pageHeaderButtonsController: {
+            updateHeaderButtons: () => {},
+            updateHeaderButtonsToDefault: () => {},
+          },
           client: {},
+          assessment: assessment,
         }
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment))
+        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
         const wrapper = await shallow(<AssessmentContainer {...props} />)
         await wrapper.instance().componentDidMount()
         expect(wrapper.find(CloseableAlert).length).toBe(0)
@@ -435,7 +510,10 @@ describe('<AssessmentContainer />', () => {
     describe('assessment form with no existing assessment', () => {
       const props = {
         client: childInfoJson,
-        isNewForm: false,
+        pageHeaderButtonsController: {
+          updateHeaderButtons: () => {},
+          updateHeaderButtonsToDefault: () => {},
+        },
       }
 
       it('calls fetchNewAssessment', async () => {
@@ -475,20 +553,23 @@ describe('<AssessmentContainer />', () => {
         expect(wrapper.find('.submit-validation-message').exists()).toBe(false)
       })
 
-      it('passes an unset age group to the assessment footer', () => {
+      it('hides the assessment footer', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         wrapper.instance().onFetchNewAssessmentSuccess(instrument)
-        const footer = wrapper.find(AssessmentFormFooter)
-        expect(footer.props().isUnderSix).toBe(null)
+        expect(wrapper.find(AssessmentFormFooter).exists()).toBeFalsy()
       })
     })
 
     describe('assessment form with an existing assessment', () => {
       const props = {
         location: { childId: 1 },
-        isNewForm: false,
+        pageHeaderButtonsController: {
+          updateHeaderButtons: () => {},
+          updateHeaderButtonsToDefault: () => {},
+        },
         isSaveButtonEnabled: true,
         client: {},
+        assessment,
       }
 
       it('calls fetchAssessment', async () => {
@@ -500,11 +581,10 @@ describe('<AssessmentContainer />', () => {
         expect(assessmentServiceGetSpy).toHaveBeenCalledWith()
       })
 
-      it('passes the selected age group to the assessment footer', () => {
+      it('shows the assessment footer', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.setState({ assessment })
-        const footer = wrapper.find(AssessmentFormFooter)
-        expect(footer.props().isUnderSix).toBe(false)
+        wrapper.instance().onFetchAssessmentSuccess(assessment)
+        expect(wrapper.find(AssessmentFormFooter).exists()).toBeTruthy()
       })
     })
   })
@@ -525,17 +605,18 @@ describe('<AssessmentContainer />', () => {
         expect(assessmentServicePostSpy).toHaveBeenCalledWith(assessment)
       })
 
-      it('should render save success message on initial save', async () => {
+      it('should invoke globalAlertService with success message on initial save', async () => {
         // given
+        const postSuccessSpy = jest.spyOn(globalAlertService, 'postSuccess')
         jest.spyOn(AssessmentService, 'postAssessment').mockReturnValue(Promise.resolve(assessment))
-        const wrapper = await shallow(<AssessmentContainer client={childInfoJson} isNewForm={false} />)
+        const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
 
         // when
         await wrapper.instance().handleSaveAssessment()
         wrapper.update()
 
         // then
-        expect(wrapper.find(CloseableAlert).length).toBe(1)
+        expect(postSuccessSpy).toHaveBeenCalledTimes(1)
       })
     })
 
@@ -544,50 +625,37 @@ describe('<AssessmentContainer />', () => {
         const assessmentServicePutSpy = jest.spyOn(AssessmentService, 'update')
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
         assessmentServicePutSpy.mockReturnValue(Promise.resolve(assessment))
-        wrapper.setState({ assessment: { id: 1 } })
+        wrapper.setState({ assessment: { ...assessment, id: 1 } })
         wrapper.instance().handleSaveAssessment()
-        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { id: 1, person: childInfoJson })
+        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { ...assessment, id: 1, person: childInfoJson })
       })
 
       it('should update state with assessment', async () => {
         const assessmentServicePutSpy = jest.spyOn(AssessmentService, 'update')
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
         assessmentServicePutSpy.mockReturnValue(Promise.resolve(assessment))
-        wrapper.setState({ assessment: { id: 1 } })
+        wrapper.setState({ assessment: { ...assessment, id: 1 } })
         await wrapper.instance().handleSaveAssessment()
-        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { id: 1, person: childInfoJson })
+        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { ...assessment, id: 1, person: childInfoJson })
         expect(wrapper.state('assessment').id).toBe(1)
         expect(wrapper.state('assessment').state.domains).toBeTruthy()
       })
 
-      it('should render save success message on save', async () => {
+      it('should post success message on save', async () => {
         // given
+        const postSuccessSpy = jest.spyOn(globalAlertService, 'postSuccess')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
         jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment))
         jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
-        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment))
-        const wrapper = await shallow(<AssessmentContainer client={childInfoJson} isNewForm={false} />)
-        wrapper.setState({ assessment: { id: 1 } })
+        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
+        const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
+        wrapper.setState({ assessment: { ...assessment, id: 1 } })
         // when
         await wrapper.instance().handleSaveAssessment()
         wrapper.update()
 
         // then
-        const alertWrapper = wrapper.find(CloseableAlert)
-        expect(alertWrapper.length).toBe(1)
-        const linkWrapper = alertWrapper
-          .first()
-          .dive()
-          .find(Link)
-          .first()
-        expect(linkWrapper.props().to).toBe('/clients/aaaaaaaaaa')
-
-        // when 2 (the message is auto closed)
-        jest.runAllTimers()
-        wrapper.update()
-
-        // then 2
-        expect(wrapper.find(CloseableAlert).length).toBe(0)
+        expect(postSuccessSpy).toHaveBeenCalledTimes(1)
       })
     })
 
@@ -611,7 +679,10 @@ describe('<AssessmentContainer />', () => {
         const props = {
           match: { params: { id: 1 } },
           client: childInfoJson,
-          isNewForm: false,
+          pageHeaderButtonsController: {
+            updateHeaderButtons: () => {},
+            updateHeaderButtonsToDefault: () => {},
+          },
         }
 
         const wrapper = shallow(<AssessmentContainer {...props} />)
@@ -634,9 +705,14 @@ describe('<AssessmentContainer />', () => {
         const assessmentServicePutSpy = jest.spyOn(AssessmentService, 'update')
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
         assessmentServicePutSpy.mockReturnValue(Promise.resolve(assessment))
-        wrapper.setState({ assessment: { id: 1 } })
+        wrapper.setState({ assessment: { ...assessment, id: 1 } })
         wrapper.instance().handleSubmitAssessment()
-        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { id: 1, person: childInfoJson, status: 'COMPLETED' })
+        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, {
+          ...assessment,
+          id: 1,
+          person: childInfoJson,
+          status: 'COMPLETED',
+        })
       })
     })
 
@@ -680,7 +756,10 @@ describe('<AssessmentContainer />', () => {
         match: { params: { id: 1 } },
         history: { push: jest.fn() },
         client: childInfoJson,
-        isNewForm: false,
+        pageHeaderButtonsController: {
+          updateHeaderButtons: () => {},
+          updateHeaderButtonsToDefault: () => {},
+        },
       }
       const wrapper = shallow(<AssessmentContainer {...props} />)
 
@@ -704,30 +783,16 @@ describe('<AssessmentContainer />', () => {
   describe('buttons', () => {
     describe('Cancel button', () => {
       it('redirects to client page', async () => {
-        const wrapper = shallow(
-          <AssessmentContainer match={{ params: { id: 1 } }} client={childInfoJson} isNewForm={false} />,
-          { disableLifecycleMethods: true }
-        )
+        const wrapper = shallow(<AssessmentContainer {...defaultProps} />, { disableLifecycleMethods: true })
         await wrapper.instance().handleCancelClick()
-        expect(wrapper.state().redirection).toEqual({
-          shouldRedirect: true,
-        })
+        expect(wrapper.state().shouldRedirectToClientProfile).toEqual(true)
         expect(wrapper.find('Redirect').exists()).toBe(true)
-
-        await wrapper.update()
-        wrapper.instance().componentDidUpdate()
-        expect(wrapper.state().redirection).toEqual({
-          shouldRedirect: false,
-        })
-        expect(wrapper.find('Redirect').exists()).toBe(false)
       })
     })
 
     describe('Submit button', () => {
       it('is disabled/enabled based on the assessment validity', () => {
-        const wrapper = mount(
-          <AssessmentContainer match={{ params: { childId: 123 } }} client={childInfoJson} isNewForm={false} />
-        )
+        const wrapper = mount(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({
           isValidForSubmit: false,
           assessmentServiceStatus: LoadingState.ready,
@@ -744,45 +809,13 @@ describe('<AssessmentContainer />', () => {
         })
         expect(wrapper.find('Button#submit-assessment').props().disabled).toBe(false)
       })
-
-      it('redirects to client page on Submit button clicked', async () => {
-        const assessmentServicePostSpy = jest.spyOn(AssessmentService, 'postAssessment')
-        assessmentServicePostSpy.mockReturnValue(Promise.resolve({ id: 123 }))
-        const wrapper = shallow(
-          <AssessmentContainer
-            match={{ params: { id: 1 } }}
-            client={childInfoJson}
-            isNewForm={false}
-            history={{ push: jest.fn() }}
-          />,
-          { disableLifecycleMethods: true }
-        )
-        expect(wrapper.find('Redirect').length).toBe(0)
-
-        await wrapper.instance().handleSubmitAssessment()
-        expect(wrapper.state().redirection).toEqual({
-          shouldRedirect: false,
-          successAssessmentId: 123,
-        })
-        expect(wrapper.find('Redirect').exists()).toBe(false)
-
-        await wrapper.update()
-        wrapper.instance().componentDidUpdate()
-        expect(wrapper.state().redirection).toEqual({
-          shouldRedirect: false,
-          successAssessmentId: 123,
-        })
-        expect(wrapper.find('Redirect').exists()).toBe(false)
-      })
     })
 
     describe('handleKeyUp', () => {
       let wrapper
       let instance
       beforeEach(() => {
-        wrapper = shallow(
-          <AssessmentContainer match={{ params: { id: 1 } }} client={childInfoJson} isNewForm={false} />
-        )
+        wrapper = shallow(<AssessmentContainer {...defaultProps} />)
         instance = wrapper.instance()
       })
 
@@ -808,9 +841,9 @@ describe('<AssessmentContainer />', () => {
       })
     })
 
-    describe('submit and save buttons', () => {
-      it('should disable buttons when assessment service is working', () => {
-        const wrapper = mount(<AssessmentContainer client={childInfoJson} isNewForm={false} />)
+    describe('complete button', () => {
+      it('should be disabled when assessment service is working', () => {
+        const wrapper = mount(<AssessmentContainer {...defaultProps} />)
 
         // when
         wrapper.setState({
@@ -820,12 +853,11 @@ describe('<AssessmentContainer />', () => {
         })
 
         // then
-        expect(wrapper.find('Button#save-assessment').props().disabled).toBeTruthy()
         expect(wrapper.find('Button#submit-assessment').props().disabled).toBeTruthy()
       })
 
-      it('should enable buttons when assessment service is done loading', () => {
-        const wrapper = mount(<AssessmentContainer client={childInfoJson} isNewForm={false} />)
+      it('should be enabled when assessment service is done loading', () => {
+        const wrapper = mount(<AssessmentContainer {...defaultProps} />)
 
         // when
         wrapper.setState({
@@ -836,12 +868,11 @@ describe('<AssessmentContainer />', () => {
         })
 
         // then
-        expect(wrapper.find('Button#save-assessment').instance().props.disabled).toBeFalsy()
         expect(wrapper.find('Button#submit-assessment').instance().props.disabled).toBeFalsy()
       })
 
-      it('should disable buttons when assessment is not editable', () => {
-        const wrapper = mount(<AssessmentContainer client={childInfoJson} isNewForm={false} />)
+      it('should be disabled when assessment is not editable', () => {
+        const wrapper = mount(<AssessmentContainer {...defaultProps} />)
 
         // when
         wrapper.setState({
@@ -852,38 +883,113 @@ describe('<AssessmentContainer />', () => {
         })
 
         // then
-        expect(wrapper.find('Button#save-assessment').instance().props.disabled).toBeTruthy()
         expect(wrapper.find('Button#submit-assessment').instance().props.disabled).toBeTruthy()
       })
+    })
+  })
 
-      it('should disable the save button when date is invalid', () => {
-        const wrapper = mount(<AssessmentContainer client={childInfoJson} isNewForm={false} />)
+  describe('#shouldSaveButtonBeEnabled()', () => {
+    const getInstance = () => shallow(<AssessmentContainer {...defaultProps} />).instance()
 
-        // when
-        wrapper.setState({
+    it('should return true when save button should be enabled', () => {
+      const instance = getInstance()
+      instance.setState({
+        isValidDate: true,
+        isEditable: true,
+        assessment: {
+          event_date: '2010-10-13',
+          state: {
+            domains: [],
+            under_six: false,
+          },
+        },
+        assessmentServiceStatus: LoadingState.ready,
+      })
+      expect(instance.shouldSaveButtonBeEnabled()).toBeTruthy()
+
+      instance.setState({
+        isValidDate: true,
+        isEditable: true,
+        assessment: {
+          ...assessment,
+          event_date: '2010-10-13',
+          state: {
+            domains: [],
+            under_six: true,
+          },
+        },
+        assessmentServiceStatus: LoadingState.idle,
+      })
+      expect(instance.shouldSaveButtonBeEnabled()).toBeTruthy()
+    })
+
+    describe('false response', () => {
+      it('should return false when date is invalid', () => {
+        const instance = getInstance()
+        instance.setState({
           isValidDate: false,
           isEditable: true,
+          assessment: {
+            event_date: '2010-10-13',
+            state: {
+              domains: [],
+              under_six: false,
+            },
+          },
           assessmentServiceStatus: LoadingState.ready,
-          assessment,
         })
-
-        // then
-        expect(wrapper.find('Button#save-assessment').instance().props.disabled).toBeTruthy()
+        expect(instance.shouldSaveButtonBeEnabled()).toBeFalsy()
       })
 
-      it('should enable the save button when date is valid', async () => {
-        const wrapper = mount(<AssessmentContainer client={childInfoJson} isNewForm={false} />)
+      it('should return false when is not editable by user', () => {
+        const instance = getInstance()
+        instance.setState({
+          isValidDate: true,
+          isEditable: false,
+          assessment: {
+            event_date: '2010-10-13',
+            state: {
+              domains: [],
+              under_six: false,
+            },
+          },
+          assessmentServiceStatus: LoadingState.ready,
+        })
+        expect(instance.shouldSaveButtonBeEnabled()).toBeFalsy()
+      })
 
-        // when
-        wrapper.setState({
+      it('should return false when is no event date', () => {
+        const instance = getInstance()
+        instance.setState({
           isValidDate: true,
           isEditable: true,
+          assessment: {
+            event_date: null,
+            state: {
+              domains: [],
+              under_six: false,
+            },
+          },
           assessmentServiceStatus: LoadingState.ready,
-          assessment,
         })
+        expect(instance.shouldSaveButtonBeEnabled()).toBeFalsy()
+      })
 
-        // then
-        expect(wrapper.find('Button#save-assessment').props().disabled).toBeFalsy()
+      it('should return false when under_six flag is undefined', () => {
+        const instance = getInstance()
+        instance.setState({
+          isValidDate: true,
+          isEditable: true,
+          assessment: {
+            event_date: '2010-10-13',
+            state: {
+              domains: [],
+              under_six: undefined,
+            },
+          },
+          assessmentServiceStatus: LoadingState.ready,
+        })
+        expect(instance.shouldSaveButtonBeEnabled()).toBeFalsy()
       })
     })
   })

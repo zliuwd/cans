@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     resources :assessments, only: [:show, :create, :update] do
       collection do
         post '_search', to: 'assessments#search'
+        get ':id/changes', to: 'assessments#changes'
       end
     end
 

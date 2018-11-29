@@ -1,9 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import App from './App'
-import { Header, SearchButton } from './components/Header'
-import { PageHeader } from 'react-wood-duck'
+import { Header } from './components/Header/'
 import { Routes } from './routes'
+import TimeoutWarning from './components/common/TimeoutWarning'
 
 describe('<App />', () => {
   const getWrapper = () => shallow(<App />)
@@ -13,18 +13,8 @@ describe('<App />', () => {
     expect(getLength(Header)).toBe(1)
   })
 
-  it('renders with <PageHeader /> component', () => {
-    expect(getLength(PageHeader)).toBe(1)
-  })
-
-  it('renders with <SearchButton /> component', () => {
-    const wrapper = getWrapper()
-    expect(
-      wrapper
-        .find(PageHeader)
-        .dive()
-        .find(SearchButton).length
-    ).toBe(1)
+  it('renders with <TimeoutWarning /> component', () => {
+    expect(getLength(TimeoutWarning)).toBe(1)
   })
 
   it('renders with <Routes /> component', () => {

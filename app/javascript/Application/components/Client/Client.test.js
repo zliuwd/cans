@@ -5,7 +5,6 @@ import Card from '@material-ui/core/Card/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
-import { PageInfo } from '../Layout'
 import { MemoryRouter } from 'react-router-dom'
 
 const client = {
@@ -44,10 +43,6 @@ describe('<Client />', () => {
 
     it('renders with <CardContent /> component', () => {
       expect(getLength(CardContent)).toBe(1)
-    })
-
-    it('renders with <PageInfo /> component', () => {
-      expect(getLength(PageInfo)).toBe(1)
     })
   })
 
@@ -88,16 +83,52 @@ describe('<Client />', () => {
 
     const getLength = component => wrapper.find(component).length
 
-    it('renders with 11 <Grid /> components', () => {
-      expect(getLength(Grid)).toBe(11)
+    it('renders with 10 <Grid /> components', () => {
+      expect(getLength(Grid)).toBe(10)
     })
 
-    it('renders with 8 ".label-text" styled elements', () => {
-      expect(getLength('.label-text')).toBe(8)
+    it('renders with 7 ".label-text" styled elements', () => {
+      expect(getLength('.label-text')).toBe(7)
     })
 
     it('does not render No Child Data Found', () => {
       expect(getLength('#no-data')).not.toBe(1)
+    })
+
+    it('first name should be bold', () => {
+      expect(
+        wrapper
+          .find(Grid)
+          .at(3)
+          .html()
+      ).toEqual(expect.stringContaining('<b>test</b>'))
+    })
+
+    it('middle name should be bold', () => {
+      expect(
+        wrapper
+          .find(Grid)
+          .at(4)
+          .html()
+      ).toEqual(expect.stringContaining('<b>name</b>'))
+    })
+
+    it('last name should be bold', () => {
+      expect(
+        wrapper
+          .find(Grid)
+          .at(5)
+          .html()
+      ).toEqual(expect.stringContaining('<b>user</b>'))
+    })
+
+    it('suffix should be bold', () => {
+      expect(
+        wrapper
+          .find(Grid)
+          .at(6)
+          .html()
+      ).toEqual(expect.stringContaining('<b>Mr.</b>'))
     })
 
     it('date of birth rendered properly', () => {
@@ -121,7 +152,7 @@ describe('<Client />', () => {
       })
     })
 
-    describe('Counties Label', () => {
+    describe('County Label', () => {
       it('renders with county', () => {
         const oneCountyParams = { ...params }
         oneCountyParams.client.counties = [{ name: 'Yolo' }]
@@ -152,32 +183,6 @@ describe('<Client />', () => {
         const nullCountiesParams = { ...params }
         nullCountiesParams.client.counties = null
         expect(clientWrapper(nullCountiesParams).find('#client-data-counties')).toBeDefined()
-      })
-    })
-
-    describe('Access Restrictions label', () => {
-      it('renders with Unrestricted', () => {
-        expect(wrapper.find('#client-data-sensitivity-type').html()).toEqual(expect.stringContaining('Unrestricted'))
-      })
-
-      it('renders with Sealed', () => {
-        const sealedParams = { ...params }
-        sealedParams.client.sensitivity_type = 'SEALED'
-        expect(
-          clientWrapper(sealedParams)
-            .find('#client-data-sensitivity-type')
-            .html()
-        ).toEqual(expect.stringContaining('Sealed'))
-      })
-
-      it('renders with Sensitive', () => {
-        const sensitiveParams = { ...params }
-        sensitiveParams.client.sensitivity_type = 'SENSITIVE'
-        expect(
-          clientWrapper(sensitiveParams)
-            .find('#client-data-sensitivity-type')
-            .html()
-        ).toEqual(expect.stringContaining('Sensitive'))
       })
     })
   })

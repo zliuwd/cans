@@ -8,7 +8,6 @@ import Button from '@material-ui/core/Button/Button'
 import { ClientAssessmentHistoryRecord } from './'
 import { Link } from 'react-router-dom'
 import { AssessmentService } from '../Assessment/Assessment.service'
-import { CloseableAlert, alertType } from '../common/CloseableAlert'
 import { LoadingState } from '../../util/loadingHelper'
 
 import './style.sass'
@@ -16,14 +15,9 @@ import './style.sass'
 class ClientAssessmentHistory extends Component {
   constructor(context) {
     super(context)
-    const { successAssessmentId } = (this.props.location || {}).state || {}
-    if (successAssessmentId && this.props.history) {
-      this.props.history.replace({ ...this.props.location, state: {} })
-    }
     this.state = {
       assessments: [],
       fetchStatus: LoadingState.idle,
-      shouldRenderSuccessMessage: Boolean(successAssessmentId),
     }
   }
 
@@ -60,24 +54,13 @@ class ClientAssessmentHistory extends Component {
   }
 
   render() {
-    const { assessments, fetchStatus, shouldRenderSuccessMessage } = this.state
+    const { assessments, fetchStatus } = this.state
     return (
       <Grid item xs={12}>
         <Card className={'card'}>
           <CardHeader className={'card-header-cans'} title="Assessment History" action={this.renderAddCansButton()} />
-
           <div className={'content'}>
-            <CardContent>
-              {shouldRenderSuccessMessage && (
-                <CloseableAlert
-                  type={alertType.SUCCESS}
-                  message={'Success! CANS assessment has been completed.'}
-                  isCloseable
-                  isAutoCloseable
-                />
-              )}
-              {this.renderAssessments(assessments, fetchStatus)}
-            </CardContent>
+            <CardContent>{this.renderAssessments(assessments, fetchStatus)}</CardContent>
           </div>
         </Card>
       </Grid>
@@ -87,8 +70,6 @@ class ClientAssessmentHistory extends Component {
 
 ClientAssessmentHistory.propTypes = {
   clientIdentifier: PropTypes.string,
-  history: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
 }
 
 ClientAssessmentHistory.defaultProps = {
