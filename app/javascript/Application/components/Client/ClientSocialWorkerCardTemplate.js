@@ -24,7 +24,7 @@ export function SocialWorkerCardTemplate(client) {
       },
       accessor: client => renderDate(client.dob),
       className: 'client-list-table-cell-center',
-      sortable: false,
+      sortable: true,
     },
     {
       id: 'CANS Status',
@@ -36,7 +36,7 @@ export function SocialWorkerCardTemplate(client) {
         return formatClientStatus(client.status)
       },
       className: 'client-list-table-cell-center',
-      sortable: false,
+      sortable: true,
     },
     {
       id: 'Reminder Date',
@@ -48,7 +48,7 @@ export function SocialWorkerCardTemplate(client) {
         return renderDate(client.reminder_date)
       },
       className: 'client-list-table-cell-center',
-      sortable: false,
+      sortable: true,
     },
   ]
   return template
