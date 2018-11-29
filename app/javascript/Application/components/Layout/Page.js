@@ -93,6 +93,8 @@ class Page extends Component {
         return this.state.client && <AssessmentContainer {...params} />
       case navigation.ASSESSMENT_EDIT:
         return this.state.client && <AssessmentContainer {...params} />
+      case navigation.SEARCH_ASSESSMENT_EDIT:
+        return this.state.client && <AssessmentContainer {...params} />
       case navigation.ASSESSMENT_CHANGELOG:
         return this.state.client && <ChangeLogPage {...params} />
       case navigation.CLIENT_SEARCH:

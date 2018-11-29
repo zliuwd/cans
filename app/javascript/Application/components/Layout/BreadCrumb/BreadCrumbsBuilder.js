@@ -33,6 +33,7 @@ const navsWithClientSearchCrumb = [navigation.CLIENT_SEARCH, navigation.SEARCH_A
 const navsWithAssessmentChangeLogCrumb = [
   navigation.ASSESSMENT_ADD,
   navigation.ASSESSMENT_EDIT,
+  navigation.SEARCH_ASSESSMENT_EDIT,
   navigation.ASSESSMENT_CHANGELOG,
 ]
 
