@@ -19,6 +19,7 @@ export const navigation = Object.freeze({
 })
 
 export const BreadCrumbLinks = Object.freeze({
+  HOME: 'Home',
   CLIENT_LIST: 'Client List',
   CANS_ASSESSMENT_FORM: 'CANS Assessment Form',
   STAFF_LIST: 'Staff List',

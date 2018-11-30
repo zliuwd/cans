@@ -168,6 +168,7 @@ class Page extends Component {
                 client={this.state.client}
                 url={this.props.match.url}
                 assessmentId={this.props.match.params.id}
+                user={this.state.currentUser}
               />
             </div>
           </Sticker>
