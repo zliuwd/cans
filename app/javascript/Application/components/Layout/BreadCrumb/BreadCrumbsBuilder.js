@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 import { navigation, BreadCrumbLinks, permissions } from '../../../util/constants'
 import UserPermissionChecker from '../../../util/UserPermissionChecker'
 import BreadCrumb from './BreadCrumb'
-import { formatName } from './BreadCrumbHelper'
+import { formatName, selfChecker, removeDuplicateBreadCrumb } from './BreadCrumbHelper'
 import { Link } from 'react-router-dom'
+
+const navsWithStaffProfileCrumb = [navigation.STAFF_READ]
 
 const navsWithChildYouthListCrumb = [
   navigation.CHILD_LIST,
@@ -21,6 +23,7 @@ const navsWithChildProfileCrumb = [
   navigation.ASSESSMENT_ADD,
   navigation.ASSESSMENT_EDIT,
   navigation.SEARCH_ASSESSMENT_EDIT,
+  navigation.SEARCH_CHILD_PROFILE,
   navigation.ASSESSMENT_CHANGELOG,
 ]
 const navWithAssessmentFromCrumb = [
@@ -30,7 +33,11 @@ const navWithAssessmentFromCrumb = [
   navigation.ASSESSMENT_CHANGELOG,
 ]
 
-const navsWithClientSearchCrumb = [navigation.CLIENT_SEARCH, navigation.SEARCH_ASSESSMENT_EDIT]
+const navsWithClientSearchCrumb = [
+  navigation.CLIENT_SEARCH,
+  navigation.SEARCH_ASSESSMENT_EDIT,
+  navigation.SEARCH_CHILD_PROFILE,
+]
 const navsWithAssessmentChangeLogCrumb = [navigation.ASSESSMENT_CHANGELOG]
 
 const homeCrumbHandler = (user, elements) => {
@@ -49,29 +56,32 @@ const homeCrumbHandler = (user, elements) => {
   elements.push(<Link to={url}>{linkText}</Link>)
 }
 
-// we just compare the first and second breadcrumb if duplicated we delete the first
-
-const removeDuplicateBreadCrumb = elements => {
-  if (elements[0].props.children === elements[1].props.children) {
-    elements.shift()
+const addStaffProfileIfNeeded = (elements, navigateTo) => {
+  if (navsWithStaffProfileCrumb.includes(navigateTo)) {
+    elements.push(<Link to={'/clients'}>{'STAFFNAME'}</Link>)
   }
-  return elements
 }
 
 const addChildYouthListCrumbIfNeeded = (elements, navigateTo) => {
-  if (navsWithChildYouthListCrumb.includes(navigateTo)) {
+  if (selfChecker(navigateTo, 'CHILD_LIST')) {
+    elements.push(BreadCrumbLinks.CLIENT_LIST)
+  } else if (navsWithChildYouthListCrumb.includes(navigateTo)) {
     elements.push(<Link to={'/clients'}>{BreadCrumbLinks.CLIENT_LIST}</Link>)
   }
 }
 
 const addChildProfileCrumbIfNeeded = (elements, navigateTo, client) => {
-  if (navsWithChildProfileCrumb.includes(navigateTo)) {
+  if (selfChecker(navigateTo, 'PROFILE_OVERALL')) {
+    elements.push(formatName(client))
+  } else if (navigateTo === navigation.SEARCH_ASSESSMENT_EDIT) {
+    elements.push(<Link to={`/search/clients/${client.identifier}`}>{formatName(client)}</Link>)
+  } else if (navsWithChildProfileCrumb.includes(navigateTo)) {
     elements.push(<Link to={`/clients/${client.identifier}`}>{formatName(client)}</Link>)
   }
 }
 
 const addAssessmentFromCrumbIfNeeded = (elements, navigateTo, client, assessmentId) => {
-  if (navigateTo === navigation.ASSESSMENT_EDIT || navigation.SEARCH_ASSESSMENT_EDIT) {
+  if (selfChecker(navigateTo, 'ASSESSMENT_EDIT')) {
     elements.push(BreadCrumbLinks.CANS_ASSESSMENT_FORM)
   } else if (navWithAssessmentFromCrumb.includes(navigateTo)) {
     elements.push(
@@ -83,7 +93,9 @@ const addAssessmentFromCrumbIfNeeded = (elements, navigateTo, client, assessment
 }
 
 const addClientSearchCrumbIfNeeded = (elements, navigateTo) => {
-  if (navsWithClientSearchCrumb.includes(navigateTo)) {
+  if (selfChecker(navigateTo, 'CLIENT_SEARCH')) {
+    elements.push(BreadCrumbLinks.CLIENT_SEARCH)
+  } else if (navsWithClientSearchCrumb.includes(navigateTo)) {
     elements.push(<Link to={`/search`}>{BreadCrumbLinks.CLIENT_SEARCH}</Link>)
   }
 }
@@ -106,6 +118,7 @@ class BreadCrumbsBuilder extends React.Component {
     const elements = []
     const { navigateTo, client, url, assessmentId, user } = this.props
     homeCrumbHandler(user, elements)
+    addStaffProfileIfNeeded(elements, navigateTo)
     addClientSearchCrumbIfNeeded(elements, navigateTo)
     addChildYouthListCrumbIfNeeded(elements, navigateTo)
     if (client) {
@@ -114,6 +127,7 @@ class BreadCrumbsBuilder extends React.Component {
       addChangeLogCrumbIfNeeded(elements, navigateTo, url)
     }
     return removeDuplicateBreadCrumb(elements)
+    // return elements
   }
 
   render() {

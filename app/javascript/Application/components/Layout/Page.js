@@ -89,16 +89,22 @@ class Page extends Component {
         return <ClientAddEditForm isNewForm={true} {...params} />
       case navigation.CHILD_PROFILE_EDIT:
         return this.state.client && <ClientAddEditForm isNewForm={false} {...params} />
+
       case navigation.ASSESSMENT_ADD:
         return this.state.client && <AssessmentContainer {...params} />
       case navigation.ASSESSMENT_EDIT:
         return this.state.client && <AssessmentContainer {...params} />
-      case navigation.SEARCH_ASSESSMENT_EDIT:
-        return this.state.client && <AssessmentContainer {...params} />
+
       case navigation.ASSESSMENT_CHANGELOG:
         return this.state.client && <ChangeLogPage {...params} />
+
       case navigation.CLIENT_SEARCH:
         return <SearchContainer />
+      case navigation.SEARCH_CHILD_PROFILE:
+        return this.state.client && <Client {...params} />
+      case navigation.SEARCH_ASSESSMENT_EDIT:
+        return this.state.client && <AssessmentContainer {...params} />
+
       case navigation.STAFF_LIST:
         return <SupervisorDashboard />
       case navigation.STAFF_READ:
