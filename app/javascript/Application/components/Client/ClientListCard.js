@@ -10,7 +10,7 @@ const ClientListCard = ({ clients, loadingState }) => (
     title={clients.length}
     columns={SocialWorkerCardTemplate()}
     data={clients}
-    defaultSortSetting={[
+    defaultSorted={[
       {
         id: 'fullName',
         asc: true,

@@ -14,7 +14,7 @@ describe('<ClientListCard />', () => {
 
   it('hard codes the sort props', () => {
     const card = render([]).find(ClientSocialWorkerCard)
-    expect(card.props().defaultSortSetting).toEqual([
+    expect(card.props().defaultSorted).toEqual([
       {
         id: 'fullName',
         asc: true,
