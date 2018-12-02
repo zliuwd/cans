@@ -11,7 +11,7 @@ const CaseLoadPage = ({ staffId }) => (
       <SubordinateInfoCard />
     </StaffLoadingBoundary>
 
-    <ClientsLoadingBoundary staffId={staffId}>
+    <ClientsLoadingBoundary staffId={staffId} comeFrom={'STAFF'}>
       <ClientListCard />
     </ClientsLoadingBoundary>
   </Fragment>

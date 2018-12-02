@@ -6,7 +6,7 @@ import BreadCrumb from './BreadCrumb'
 import { formatName, selfChecker, removeDuplicateBreadCrumb } from './BreadCrumbHelper'
 import { Link } from 'react-router-dom'
 
-const navsWithStaffProfileCrumb = [navigation.STAFF_READ]
+const navsWithStaffProfileCrumb = [navigation.STAFF_CHILD_PROFILE]
 
 const navsWithChildYouthListCrumb = [
   navigation.CHILD_LIST,
@@ -18,6 +18,7 @@ const navsWithChildYouthListCrumb = [
   navigation.ASSESSMENT_CHANGELOG,
 ]
 const navsWithChildProfileCrumb = [
+  navigation.STAFF_CHILD_PROFILE,
   navigation.CHILD_PROFILE,
   navigation.CHILD_PROFILE_EDIT,
   navigation.ASSESSMENT_ADD,
@@ -57,6 +58,9 @@ const homeCrumbHandler = (user, elements) => {
 }
 
 const addStaffProfileIfNeeded = (elements, navigateTo, staffPerson) => {
+  if (selfChecker(navigateTo, 'STAFF_READ')) {
+    elements.push(formatName(staffPerson))
+  }
   if (navsWithStaffProfileCrumb.includes(navigateTo)) {
     elements.push(<Link to={`/staff/${staffPerson.identifier}`}>{formatName(staffPerson)}</Link>)
   }
@@ -118,6 +122,7 @@ class BreadCrumbsBuilder extends React.Component {
     const elements = []
     const { navigateTo, client, url, assessmentId, user, subordinate } = this.props
     homeCrumbHandler(user, elements)
+    console.log(subordinate)
     if (subordinate) {
       addStaffProfileIfNeeded(elements, navigateTo, this.props.subordinate.staff_person)
     }

@@ -133,6 +133,8 @@ class Page extends Component {
         return <SupervisorDashboard />
       case navigation.STAFF_READ:
         return <CaseLoadPage staffId={this.props.match.params.staffId} />
+      case navigation.STAFF_CHILD_PROFILE:
+        return this.state.client && <Client {...params} />
       default:
         return null
     }
@@ -180,7 +182,6 @@ class Page extends Component {
   }
 
   render() {
-    console.log(this.state.subordinate)
     const { isLoaded, header } = this.state
     if (!isLoaded) return null
     return (
