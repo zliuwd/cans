@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 const CaseLoadPageTempNameCell = props => {
-  console.log(props)
   return (
     <Link
       id="clientName"
@@ -16,6 +15,7 @@ const CaseLoadPageTempNameCell = props => {
 }
 
 CaseLoadPageTempNameCell.propTypes = {
+  column: PropTypes.object.isRequired,
   original: PropTypes.object.isRequired,
   value: PropTypes.string.isRequired,
 }

@@ -48,6 +48,16 @@ class ClientAssessmentHistoryRecord extends Component {
 
   render() {
     const { id, event_date: eventDate, status, person } = this.props.assessment
+    const comeFrom = this.props.comeFrom
+    let url
+    switch (comeFrom) {
+      case 'STAFF':
+        url = `/staff/${this.props.userId}/clients/${person.identifier}/assessments/${id}`
+        break
+      default:
+        url = `/clients/${person.identifier}/assessments/${id}`
+    }
+
     const formattedEventDate = isoToLocalDate(eventDate)
     return (
       <Container className={'history-item'}>
@@ -62,7 +72,7 @@ class ClientAssessmentHistoryRecord extends Component {
           <Col xs="12">
             <Row>
               <Col xs="12">
-                <Link to={`/clients/${person.identifier}/assessments/${id}`} className={'underlined'}>
+                <Link to={url} className={'underlined'}>
                   {`${formattedEventDate} CANS`}
                 </Link>
               </Col>
@@ -79,6 +89,13 @@ class ClientAssessmentHistoryRecord extends Component {
 
 ClientAssessmentHistoryRecord.propTypes = {
   assessment: PropTypes.object.isRequired,
+  comeFrom: PropTypes.string,
+  userId: PropTypes.string,
+}
+
+ClientAssessmentHistoryRecord.defaultProps = {
+  comeFrom: null,
+  userId: null,
 }
 
 export default ClientAssessmentHistoryRecord

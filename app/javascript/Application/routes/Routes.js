@@ -40,7 +40,12 @@ const Routes = () => {
       <Route
         exact
         path="/staff/:staffId/clients/:clientId"
-        children={route => page(route, navigation.STAFF_CHILD_PROFILE)}
+        children={route => page(route, navigation.STAFF_CHILD_PROFILE_OVERALL)}
+      />
+      <Route
+        exact
+        path="/staff/:staffId/clients/:clientId/assessments/:id"
+        children={route => page(route, navigation.STAFF_ASSESSMENT_EDIT)}
       />
 
       <Route

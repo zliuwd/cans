@@ -49,7 +49,14 @@ class ClientAssessmentHistory extends Component {
     return fetchStatus === LoadingState.ready && assessments.length === 0 ? (
       <div id="no-data">No assessments currently exist for this child/youth.</div>
     ) : (
-      assessments.map(assessment => <ClientAssessmentHistoryRecord assessment={assessment} key={assessment.id} />)
+      assessments.map(assessment => (
+        <ClientAssessmentHistoryRecord
+          assessment={assessment}
+          key={assessment.id}
+          comeFrom={this.props.comeFrom}
+          userId={this.props.userId}
+        />
+      ))
     )
   }
 
@@ -70,10 +77,14 @@ class ClientAssessmentHistory extends Component {
 
 ClientAssessmentHistory.propTypes = {
   clientIdentifier: PropTypes.string,
+  comeFrom: PropTypes.string,
+  userId: PropTypes.string,
 }
 
 ClientAssessmentHistory.defaultProps = {
   clientIdentifier: null,
+  comeFrom: null,
+  userId: null,
 }
 
 export default ClientAssessmentHistory

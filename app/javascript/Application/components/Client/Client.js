@@ -95,7 +95,11 @@ class Client extends Component {
               </div>
             </Card>
           </Grid>
-          <ClientAssessmentHistory clientIdentifier={client.identifier} />
+          <ClientAssessmentHistory
+            clientIdentifier={client.identifier}
+            comeFrom={this.props.navigateTo === 'STAFF_CHILD_PROFILE_OVERALL' ? 'STAFF' : null}
+            userId={this.props.match.params.staffId}
+          />
         </Grid>
       </Fragment>
     )
@@ -106,6 +110,8 @@ Client.propTypes = {
   client: PropTypes.object,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
+  navigateTo: PropTypes.string.isRequired,
 }
 
 Client.defaultProps = {

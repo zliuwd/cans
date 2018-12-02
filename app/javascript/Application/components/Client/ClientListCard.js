@@ -25,11 +25,13 @@ ClientListCard.propTypes = {
   clients: PropTypes.arrayOf(PropTypes.object),
   comeFrom: PropTypes.string,
   loadingState: PropTypes.oneOf(Object.values(LoadingState)),
+  staffId: PropTypes.string,
 }
 
 ClientListCard.defaultProps = {
   clients: [],
-  comeFrom: undefined,
+  comeFrom: null,
   loadingState: LoadingState.waiting,
+  staffId: '',
 }
 export default ClientListCard
