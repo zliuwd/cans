@@ -56,9 +56,9 @@ const homeCrumbHandler = (user, elements) => {
   elements.push(<Link to={url}>{linkText}</Link>)
 }
 
-const addStaffProfileIfNeeded = (elements, navigateTo) => {
+const addStaffProfileIfNeeded = (elements, navigateTo, staffPerson) => {
   if (navsWithStaffProfileCrumb.includes(navigateTo)) {
-    elements.push(<Link to={'/clients'}>{'STAFFNAME'}</Link>)
+    elements.push(<Link to={`/staff/${staffPerson.identifier}`}>{formatName(staffPerson)}</Link>)
   }
 }
 
@@ -116,9 +116,12 @@ class BreadCrumbsBuilder extends React.Component {
 
   prepareNavigationElements() {
     const elements = []
-    const { navigateTo, client, url, assessmentId, user } = this.props
+    const { navigateTo, client, url, assessmentId, user, subordinate } = this.props
     homeCrumbHandler(user, elements)
-    addStaffProfileIfNeeded(elements, navigateTo)
+    if (subordinate) {
+      addStaffProfileIfNeeded(elements, navigateTo, this.props.subordinate.staff_person)
+    }
+
     addClientSearchCrumbIfNeeded(elements, navigateTo)
     addChildYouthListCrumbIfNeeded(elements, navigateTo)
     if (client) {
@@ -140,6 +143,7 @@ BreadCrumbsBuilder.propTypes = {
   assessmentId: PropTypes.string,
   client: PropTypes.object,
   navigateTo: PropTypes.oneOf(Object.values(navigation)).isRequired,
+  subordinate: PropTypes.object,
   url: PropTypes.string,
   user: PropTypes.object.isRequired,
 }
@@ -147,6 +151,7 @@ BreadCrumbsBuilder.propTypes = {
 BreadCrumbsBuilder.defaultProps = {
   assessmentId: '',
   client: null,
+  subordinate: null,
   url: '',
 }
 

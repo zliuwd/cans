@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Container, Row, Col } from 'reactstrap'
 import { SideNav } from './'
 import { Client, ClientAddEditForm, ClientService } from '../Client'
+import StaffService from '../Staff/Staff.service'
 import BreadCrumbsBuilder from './BreadCrumb/BreadCrumbsBuilder'
 import { navigation, dashboards } from '../../util/constants'
 import { AssessmentContainer, ChangeLogPage } from '../Assessment'
@@ -20,28 +21,42 @@ const defaultHeaderButtons = {
   rightButton: buildSearchClientsButton(),
 }
 
+const defalutSubordinate = {
+  staff_person: {
+    identifier: 'null',
+    first_name: 'null',
+    last_name: 'null',
+  },
+}
+
 class Page extends Component {
   constructor(props) {
     super(props)
     this.state = {
       isLoaded: false,
       client: undefined,
+      subordinate: defalutSubordinate,
       header: defaultHeaderButtons,
     }
   }
 
   async componentDidMount() {
-    const client = await this.fetchClientIfNeeded()
-    const currentUser = await UserAccountService.fetchCurrent()
-    await this.setState({ client, isLoaded: true, currentUser: currentUser })
+    await this.fetchClientIfNeeded()
+    await this.fetchSubordinateIfNeeded()
+    await this.fetchuser()
     this.logDashboardVisitToNewRelic()
   }
 
   async componentDidUpdate(prevProps) {
     if (prevProps === this.props) return
-    const client = await this.fetchClientIfNeeded()
-    await this.setState({ client })
+    await this.fetchClientIfNeeded()
+    await this.fetchSubordinateIfNeeded()
     this.logDashboardVisitToNewRelic()
+  }
+
+  async fetchuser() {
+    const user = await UserAccountService.fetchCurrent()
+    this.setState({ isLoaded: true, currentUser: user })
   }
 
   async fetchClientIfNeeded() {
@@ -50,7 +65,16 @@ class Page extends Component {
     if (clientId) {
       client = await ClientService.fetch(clientId).catch(() => {})
     }
-    return client
+    this.setState({ client })
+  }
+
+  async fetchSubordinateIfNeeded() {
+    let subordinate
+    const { staffId } = this.props.match.params
+    if (staffId) {
+      subordinate = await StaffService.fetch(staffId).catch(() => {})
+    }
+    this.setState({ subordinate })
   }
 
   logDashboardVisitToNewRelic = () => {
@@ -156,6 +180,7 @@ class Page extends Component {
   }
 
   render() {
+    console.log(this.state.subordinate)
     const { isLoaded, header } = this.state
     if (!isLoaded) return null
     return (
@@ -175,6 +200,7 @@ class Page extends Component {
                 url={this.props.match.url}
                 assessmentId={this.props.match.params.id}
                 user={this.state.currentUser}
+                subordinate={this.state.subordinate}
               />
             </div>
           </Sticker>
