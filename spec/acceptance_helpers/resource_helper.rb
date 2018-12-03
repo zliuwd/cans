@@ -14,7 +14,6 @@ module ResourceHelper
     click_button 'New CANS'
     click_button 'Age: 6-21'
     find('#has-caregiver-yes').click
-    click_button 'Age: 6-21'
     behavioral_domain = [
       '#domain0-expand',
       '#PSYCHOSIS-item-expand',
@@ -68,9 +67,9 @@ module ResourceHelper
     fetch_strengths_domain
     fetch_caregiver_domain
     fetch_traumatic_domain
-    click_button 'Complete'
+    find('#submit-assessment').click
     click_button 'I Agree'
-    click_button 'Cancel'
+    find('#cancel-assessment').click
     expect(page).to have_content 'Complete'
     save_assessment_form_age_0_5
   end
@@ -333,7 +332,6 @@ module ResourceHelper
     click_button 'New CANS'
     click_button 'Age: 0-5'
     find('#has-caregiver-yes').click
-    click_button 'Age: 0-5'
     fill_and_complete_assessment_form_age_0_5
   end
 
@@ -346,9 +344,9 @@ module ResourceHelper
     fetch_dyadic_domain
     fetch_caregiver_resources_domain
     fetch_minor_traumatic_domain
-    click_button 'Complete'
+    find('#submit-assessment').click
     click_button 'I Agree'
-    click_button 'Cancel'
+    find('#cancel-assessment').click
   end
 
   def fetch_challenges_domain
