@@ -1,11 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Link, MemoryRouter } from 'react-router-dom'
-import {
-  buildSaveAssessmentButton,
-  buildPrintAssessmentButton,
-  buildSearchClientsButton,
-} from './PageHeaderButtonsBuilder'
+import { buildSaveAssessmentButton, buildSearchClientsButton } from './PageHeaderButtonsBuilder'
 
 describe('<PageHeaderButtonsBuilder />', () => {
   it('#buildSaveAssessmentButton()', () => {
@@ -16,16 +12,10 @@ describe('<PageHeaderButtonsBuilder />', () => {
     expect(saveAssessmentButton.find('span').text()).toBe('Save')
   })
 
-  it('#buildPrintAssessmentButton()', () => {
-    const saveAssessmentButton = shallow(buildPrintAssessmentButton(jest.fn()))
-    expect(saveAssessmentButton.find('i').props().className).toContain('fa-print')
-    expect(saveAssessmentButton.find('span').text()).toBe('Print')
-  })
-
   it('#buildSearchClientsButton()', () => {
-    const saveAssessmentButton = shallow(<MemoryRouter>{buildSearchClientsButton()}</MemoryRouter>)
-    expect(saveAssessmentButton.find(Link).props().to).toContain('/search')
-    expect(saveAssessmentButton.find('i').props().className).toContain('fa-search')
-    expect(saveAssessmentButton.find('span').text()).toBe('Client Search')
+    const clientSearchButton = shallow(<MemoryRouter>{buildSearchClientsButton()}</MemoryRouter>)
+    expect(clientSearchButton.find(Link).props().to).toContain('/search')
+    expect(clientSearchButton.find('i').props().className).toContain('fa-search')
+    expect(clientSearchButton.find('span').text()).toBe('Client Search')
   })
 })

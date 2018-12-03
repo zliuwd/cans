@@ -19,7 +19,6 @@ import {
 import { LoadingState } from '../../util/loadingHelper'
 import { CloseableAlert } from '../common/CloseableAlert'
 import { getCurrentIsoDate } from '../../util/dateHelper'
-import { Print } from '../Print'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import * as Analytics from '../../util/analytics'
 
@@ -168,53 +167,6 @@ describe('<AssessmentContainer />', () => {
       })
     })
 
-    describe('print assessment', () => {
-      it('should render <Print /> on togglePrintNow()', () => {
-        // given
-        const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
-        expect(wrapper.find(Print).length).toBe(0)
-
-        // when
-        wrapper.instance().togglePrintNow()
-
-        // then
-        expect(wrapper.find(Print).length).toBe(1)
-      })
-    })
-
-    describe('print through keyboard', () => {
-      it('should add and remove event handler', () => {
-        const adder = jest.spyOn(global, 'addEventListener').mockImplementation(() => {})
-        const remover = jest.spyOn(global, 'removeEventListener').mockImplementation(() => {})
-        const wrapper = shallow(
-          <AssessmentContainer client={{}} pageHeaderButtonsController={defaultProps.pageHeaderButtonsController} />
-        )
-        expect(adder).toHaveBeenCalledTimes(1)
-        wrapper.unmount()
-        expect(remover).toHaveBeenCalledTimes(1)
-      })
-
-      it('when a user press ctrl+p', () => {
-        const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
-        wrapper.instance().handleCtrlP({
-          ctrlKey: true,
-          key: 'p',
-          preventDefault: () => {},
-        })
-        expect(wrapper.find(Print).length).toBe(1)
-      })
-
-      it('when a user press meta+p', () => {
-        const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
-        wrapper.instance().handleCtrlP({
-          metaKey: true,
-          key: 'p',
-          preventDefault: () => {},
-        })
-        expect(wrapper.find(Print).length).toBe(1)
-      })
-    })
-
     describe('renders component and shows warning', () => {
       const props = { ...defaultProps }
       it('updates state when user clicks I agree and removes warning', () => {
@@ -289,7 +241,10 @@ describe('<AssessmentContainer />', () => {
           assessment: {
             ...assessment,
             has_caregiver: true,
-            state: { ...assessment.state, domains: [...domainWithTwoCaregiver] },
+            state: {
+              ...assessment.state,
+              domains: [...domainWithTwoCaregiver],
+            },
           },
           isCaregiverWarningShown: true,
           focusedCaregiverId: 'a',
@@ -311,7 +266,10 @@ describe('<AssessmentContainer />', () => {
           assessment: {
             ...assessment,
             has_caregiver: true,
-            state: { ...assessment.state, domains: [...domainWithTwoCaregiver] },
+            state: {
+              ...assessment.state,
+              domains: [...domainWithTwoCaregiver],
+            },
           },
           isCaregiverWarningShown: true,
           focusedCaregiverId: null,
@@ -627,7 +585,11 @@ describe('<AssessmentContainer />', () => {
         assessmentServicePutSpy.mockReturnValue(Promise.resolve(assessment))
         wrapper.setState({ assessment: { ...assessment, id: 1 } })
         wrapper.instance().handleSaveAssessment()
-        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { ...assessment, id: 1, person: childInfoJson })
+        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, {
+          ...assessment,
+          id: 1,
+          person: childInfoJson,
+        })
       })
 
       it('should update state with assessment', async () => {
@@ -636,7 +598,11 @@ describe('<AssessmentContainer />', () => {
         assessmentServicePutSpy.mockReturnValue(Promise.resolve(assessment))
         wrapper.setState({ assessment: { ...assessment, id: 1 } })
         await wrapper.instance().handleSaveAssessment()
-        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, { ...assessment, id: 1, person: childInfoJson })
+        expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, {
+          ...assessment,
+          id: 1,
+          person: childInfoJson,
+        })
         expect(wrapper.state('assessment').id).toBe(1)
         expect(wrapper.state('assessment').state.domains).toBeTruthy()
       })
@@ -783,7 +749,9 @@ describe('<AssessmentContainer />', () => {
   describe('buttons', () => {
     describe('Cancel button', () => {
       it('redirects to client page', async () => {
-        const wrapper = shallow(<AssessmentContainer {...defaultProps} />, { disableLifecycleMethods: true })
+        const wrapper = shallow(<AssessmentContainer {...defaultProps} />, {
+          disableLifecycleMethods: true,
+        })
         await wrapper.instance().handleCancelClick()
         expect(wrapper.state().shouldRedirectToClientProfile).toEqual(true)
         expect(wrapper.find('Redirect').exists()).toBe(true)

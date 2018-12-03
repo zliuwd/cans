@@ -1,6 +1,7 @@
 import React, { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
-import { Print } from '../Print'
+import { Print } from '../../Print'
+import { buildButton } from '../PageHeaderButtonsBuilder'
 
 class PrintButton extends Component {
   constructor(props) {
@@ -38,14 +39,9 @@ class PrintButton extends Component {
   }
 
   renderPrintButton = () => {
-    const { className } = this.props
+    const { isEnabled } = this.props
 
-    return (
-      <button className={`print-button ${className}`} onClick={this.togglePrintNow} onKeyPress={this.togglePrintNow}>
-        <i className="fa fa-print" />
-        <span>{'Print'}</span>
-      </button>
-    )
+    return buildButton('Print', 'fa-print', this.togglePrintNow, isEnabled)
   }
 
   render() {
@@ -62,8 +58,8 @@ class PrintButton extends Component {
 }
 
 PrintButton.propTypes = {
-  className: PropTypes.string.isRequired,
-  node: PropTypes.element.isRequired,
+  isEnabled: PropTypes.bool.isRequired,
+  node: PropTypes.node.isRequired,
 }
 
 export default PrintButton

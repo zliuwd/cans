@@ -1,16 +1,17 @@
-import React, { Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Card, CardHeader, CardTitle, CardBody, DataGrid } from '@cwds/components'
+import { Row, Col } from 'reactstrap'
 import ChangeLogDate from './ChangeLogDate'
 import ChangeLogStatus from './ChangeLogStatus'
 import ChangeLogName from './ChangeLogName'
-import { Row, Col } from 'reactstrap'
-import PrintButton from '../../common/PrintButton'
 import PrintChangeLog from './PrintChangeLog'
 import { formatClientName } from '../../Client'
 import { clientPropTypes, changeHistoryPropType } from './ChangeLogHelper'
-import moment from 'moment'
 import { trimSafely } from '../../../util/formatters'
+import { isoToLocalDate } from '../../../util/dateHelper'
+import { buildSearchClientsButton } from '../../Header/PageHeaderButtonsBuilder'
+import PrintButton from '../../Header/PageHeaderButtons/PrintButton'
 
 const columnConfig = [
   {
@@ -30,27 +31,38 @@ const columnConfig = [
   },
 ]
 
-const AssessmentChangeLog = ({ client, match, changeHistory }) => {
-  const changeHistoryLength = changeHistory.length
-  const pageSize = changeHistoryLength > 9 ? 10 : changeHistoryLength
-  const clientDob = client.dob
-    ? moment(client.dob)
-        .utcOffset(0)
-        .format('MM/DD/YYYY')
-    : ''
-  const title = `CANS Change Log: ${formatClientName(client)} ${clientDob}`
-  const showPagination = changeHistoryLength > 10
+class AssessmentChangeLog extends Component {
+  componentDidMount() {
+    const { changeHistory } = this.props
+    const changeHistoryLength = changeHistory.length
+    const enablePrintButton = changeHistoryLength > 0
 
-  return changeHistoryLength > 0 ? (
-    <Fragment>
-      <Row>
-        <Col xs="12">
-          <PrintButton
-            className={'change-log-print-button'}
-            node={<PrintChangeLog history={changeHistory} client={client} assessmentId={match.params.id} />}
-          />
-        </Col>
-      </Row>
+    this.initHeaderButtons(enablePrintButton)
+  }
+
+  componentWillUnmount() {
+    this.props.pageHeaderButtonsController.updateHeaderButtonsToDefault()
+  }
+
+  initHeaderButtons(enablePrintButton) {
+    const { changeHistory, client, match } = this.props
+    const node = <PrintChangeLog history={changeHistory} client={client} assessmentId={match.params.id} />
+    const leftButton = buildSearchClientsButton()
+    const rightButton = <PrintButton node={node} isEnabled={enablePrintButton} />
+    this.props.pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
+  }
+
+  render() {
+    const { client, changeHistory } = this.props
+    const changeHistoryLength = changeHistory.length
+    const minRows = 0
+    const defaultPageSize = 10
+
+    const clientDob = client.dob ? isoToLocalDate(client.dob) : ''
+    const title = `CANS Change Log: ${formatClientName(client)} ${clientDob}`
+    const showPagination = changeHistoryLength > defaultPageSize
+
+    return changeHistoryLength > 0 ? (
       <Row>
         <Col xs="12">
           <Card className="change-log-card">
@@ -61,7 +73,8 @@ const AssessmentChangeLog = ({ client, match, changeHistory }) => {
               <DataGrid
                 data={changeHistory}
                 showPagination={showPagination}
-                defaultPageSize={pageSize}
+                minRows={minRows}
+                defaultPageSize={defaultPageSize}
                 columns={columnConfig}
                 className="assessment-change-log"
               />
@@ -69,8 +82,8 @@ const AssessmentChangeLog = ({ client, match, changeHistory }) => {
           </Card>
         </Col>
       </Row>
-    </Fragment>
-  ) : null
+    ) : null
+  }
 }
 
 AssessmentChangeLog.propTypes = {
@@ -81,6 +94,10 @@ AssessmentChangeLog.propTypes = {
       clientId: PropTypes.string,
       id: PropTypes.string,
     }).isRequired,
+  }).isRequired,
+  pageHeaderButtonsController: PropTypes.shape({
+    updateHeaderButtons: PropTypes.func.isRequired,
+    updateHeaderButtonsToDefault: PropTypes.func.isRequired,
   }).isRequired,
 }
 

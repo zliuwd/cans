@@ -16,7 +16,7 @@ import {
 import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
 import Typography from '@material-ui/core/Typography'
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper'
-import { Print, PrintAssessment } from '../Print'
+import { PrintAssessment } from '../Print'
 import {
   AssessmentStatus,
   AssessmentType,
@@ -24,8 +24,8 @@ import {
   defaultEmptyAssessment,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
-import { buildSaveAssessmentButton, buildPrintAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
-
+import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
+import PrintButton from '../Header/PageHeaderButtons/PrintButton'
 import './style.sass'
 import { getCurrentIsoDate } from '../../util/dateHelper'
 import moment from 'moment'
@@ -41,7 +41,6 @@ class AssessmentContainer extends Component {
       isValidForSubmit: false,
       shouldRedirectToClientProfile: false,
       isEditable: false,
-      shouldPrintNow: false,
       isValidDate: true,
       isCaregiverWarningShown: false,
       isSubmitWarningShown: false,
@@ -59,7 +58,6 @@ class AssessmentContainer extends Component {
     }
     this.setState({ isEditable: isEditable })
     assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment()
-    this.activeCtrlP()
   }
 
   componentDidUpdate() {
@@ -67,13 +65,14 @@ class AssessmentContainer extends Component {
   }
 
   componentWillUnmount() {
-    this.muteCtrlP()
     this.props.pageHeaderButtonsController.updateHeaderButtonsToDefault()
   }
 
   initHeaderButtons(isSaveButtonEnabled) {
+    const { assessment, i18n } = this.state
+    const node = <PrintAssessment assessment={assessment} i18n={i18n} />
     const leftButton = buildSaveAssessmentButton(this.handleSaveAssessment, isSaveButtonEnabled)
-    const rightButton = buildPrintAssessmentButton(this.togglePrintNow)
+    const rightButton = <PrintButton node={node} isEnabled={true} />
     this.props.pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
   }
 
@@ -105,26 +104,10 @@ class AssessmentContainer extends Component {
 
   handleWarningShow = (switcher, caregiverIndex) => {
     caregiverIndex = caregiverIndex || null
-    this.setState({ isCaregiverWarningShown: switcher, focusedCaregiverId: caregiverIndex })
-  }
-
-  activeCtrlP = () => {
-    if (!this.state.shouldPrintNow) {
-      window.addEventListener('keydown', this.handleCtrlP, false)
-    }
-  }
-
-  muteCtrlP = () => {
-    window.removeEventListener('keydown', this.handleCtrlP, false)
-  }
-
-  handleCtrlP = event => {
-    if (event.ctrlKey || event.metaKey) {
-      if (event.key === 'p') {
-        this.togglePrintNow()
-        event.preventDefault()
-      }
-    }
+    this.setState({
+      isCaregiverWarningShown: switcher,
+      focusedCaregiverId: caregiverIndex,
+    })
   }
 
   async fetchNewAssessment() {
@@ -289,7 +272,10 @@ class AssessmentContainer extends Component {
       try {
         const submittedAssessment = await AssessmentService.update(assessment.id, assessment)
         await AssessmentService.update(assessment.id, assessment)
-        this.setState({ assessmentServiceStatus: LoadingState.ready, assessment: submittedAssessment })
+        this.setState({
+          assessmentServiceStatus: LoadingState.ready,
+          assessment: submittedAssessment,
+        })
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
       }
@@ -297,7 +283,10 @@ class AssessmentContainer extends Component {
       try {
         const submittedAssessment = await AssessmentService.postAssessment(assessment)
         this.updateUrlWithAssessment(submittedAssessment)
-        this.setState({ assessmentServiceStatus: LoadingState.ready, assessment: submittedAssessment })
+        this.setState({
+          assessmentServiceStatus: LoadingState.ready,
+          assessment: submittedAssessment,
+        })
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
       }
@@ -312,8 +301,6 @@ class AssessmentContainer extends Component {
   }
 
   handleCancelClick = () => this.setState({ shouldRedirectToClientProfile: true })
-
-  togglePrintNow = () => this.setState({ shouldPrintNow: !this.state.shouldPrintNow })
 
   validateDate(date) {
     return moment(date, 'MM/DD/YYYY', true).isValid()
@@ -356,7 +343,6 @@ class AssessmentContainer extends Component {
       i18n,
       assessmentServiceStatus,
       isEditable,
-      shouldPrintNow,
     } = this.state
     if (shouldRedirectToClientProfile) {
       return <Redirect push to={{ pathname: `/clients/${client.identifier}` }} />
@@ -376,9 +362,6 @@ class AssessmentContainer extends Component {
             }}
           />
         ) : null}
-        {shouldPrintNow && (
-          <Print node={<PrintAssessment assessment={assessment} i18n={i18n} />} onClose={this.togglePrintNow} />
-        )}
         <AssessmentFormHeader
           client={client}
           assessment={assessment}

@@ -1,16 +1,16 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import ChangeLogBoundary from './ChangeLogBoundary'
+import ChangeLogLoadingBoundary from './ChangeLogLoadingBoundary'
 import LoadingBoundary from '../../common/LoadingBoundary'
 
 jest.mock('../Assessment.service')
 
-describe('<ChangeLogBoundary />', () => {
+describe('<ChangeLogLoadingBoundary />', () => {
   const render = id =>
     shallow(
-      <ChangeLogBoundary id={id}>
+      <ChangeLogLoadingBoundary id={id}>
         <div />
-      </ChangeLogBoundary>
+      </ChangeLogLoadingBoundary>
     )
 
   it('renders LoadingBoundary and sets props', () => {

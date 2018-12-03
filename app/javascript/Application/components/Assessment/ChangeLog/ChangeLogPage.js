@@ -1,16 +1,14 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import ChangeLogBoundary from './ChangeLogBoundary'
+import ChangeLogLoadingBoundary from './ChangeLogLoadingBoundary'
 import AssessmentChangeLog from './AssessmentChangeLog'
 import { clientPropTypes } from './ChangeLogHelper'
 
 const ChangeLogPage = params => {
   return (
-    <Fragment>
-      <ChangeLogBoundary id={params.match.params.id}>
-        <AssessmentChangeLog {...params} />
-      </ChangeLogBoundary>
-    </Fragment>
+    <ChangeLogLoadingBoundary id={params.match.params.id}>
+      <AssessmentChangeLog {...params} />
+    </ChangeLogLoadingBoundary>
   )
 }
 
