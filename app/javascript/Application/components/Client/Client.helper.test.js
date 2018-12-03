@@ -1,4 +1,4 @@
-import { formatClientName, formatClientStatus } from './Client.helper'
+import { clientCaseReferralNumber, formatClientName, formatClientStatus } from './Client.helper'
 
 describe('Client.helper', () => {
   describe('formatClientName', () => {
@@ -60,6 +60,23 @@ describe('Client.helper', () => {
       const expectedStatus = formatClientStatus(status)
 
       expect(expectedStatus).toEqual('Unknown')
+    })
+  })
+
+  describe('case or referralnumber label', () => {
+    it('renders with Case Number label', () => {
+      const caseNumberLabel = clientCaseReferralNumber('CASE')
+      expect(caseNumberLabel).toBe('Case Number')
+    })
+
+    it('renders with Referral Number label', () => {
+      const referralNumberLabel = clientCaseReferralNumber('REFERRAL')
+      expect(referralNumberLabel).toBe('Referral Number')
+    })
+
+    it('renders with Case/Referral Number label', () => {
+      const noCaseReferralNumberLabel = clientCaseReferralNumber('')
+      expect(noCaseReferralNumberLabel).toBe('Case/Referral Number')
     })
   })
 })

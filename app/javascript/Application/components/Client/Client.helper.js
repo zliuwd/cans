@@ -16,3 +16,15 @@ export function formatClientStatus(status) {
 }
 
 export const failedFetching = { message: 'Fail to fetch data from server side!' }
+
+export function clientCaseReferralNumber(serviceSource) {
+  let caseReferralNumber = ''
+  if (serviceSource === 'CASE') {
+    caseReferralNumber = 'Case Number'
+  } else if (serviceSource === 'REFERRAL') {
+    caseReferralNumber = 'Referral Number'
+  } else {
+    caseReferralNumber = 'Case/Referral Number'
+  }
+  return caseReferralNumber
+}

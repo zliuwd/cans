@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react'
 import { Row, Col, Label } from 'reactstrap'
 import { resetConfidentialByDefaultItems, AssessmentStatus } from './AssessmentHelper'
-import { formatClientName } from '../Client/Client.helper'
+import { clientCaseReferralNumber, formatClientName } from '../Client/Client.helper'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import FormControl from '@material-ui/core/FormControl'
@@ -106,12 +106,17 @@ class AssessmentFormHeader extends PureComponent {
   }
 
   renderCaseNumber() {
+    const caseReferralNumber = clientCaseReferralNumber(this.props.assessment.service_source)
     return (
       <Fragment>
-        <div htmlFor={'case-number'} className={'assessment-form-header-case-number-label'}>
-          Case/Referral Number
+        <div
+          id={'case-or-referral-number-label'}
+          htmlFor={'case-or-referral-number'}
+          className={'assessment-form-header-case-or-referral-number-label'}
+        >
+          {caseReferralNumber}
         </div>
-        <div id={'case-number'} className={'assessment-form-header-case-number'}>
+        <div id={'case-or-referral-number'} className={'assessment-form-header-case-or-referral-number'}>
           {this.props.assessment.service_source_ui_id}
         </div>
       </Fragment>

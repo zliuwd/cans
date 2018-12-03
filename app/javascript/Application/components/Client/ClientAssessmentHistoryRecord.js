@@ -5,6 +5,7 @@ import { Container, Row, Col } from 'reactstrap'
 import Typography from '@material-ui/core/Typography'
 import { isoToLocalDate } from '../../util/dateHelper'
 import { StatusIcon } from '../common/StatusIcon'
+import { clientCaseReferralNumber } from './Client.helper'
 
 import './style.sass'
 
@@ -26,7 +27,8 @@ class ClientAssessmentHistoryRecord extends Component {
       updated_by: updatedBy,
       created_timestamp: createdTimestamp,
       created_by: createdBy,
-      the_case: theCase,
+      service_source: serviceSource,
+      service_source_ui_id: serviceSourceUiId,
       status,
       county,
     } = this.props.assessment
@@ -34,12 +36,12 @@ class ClientAssessmentHistoryRecord extends Component {
     const formattedTimestamp = isoToLocalDate(updatedTimestamp || createdTimestamp)
     const user = updatedBy || createdBy || {}
     const updatedByName = `${user.first_name} ${user.last_name}`
-    const caseNumber = (theCase || {}).external_id || ''
+    const caseReferralNumber = clientCaseReferralNumber(serviceSource)
     return (
       <Typography variant={'title'} className={'history-item-info'}>
         {`${actionVerb} on ${formattedTimestamp} by ${updatedByName}`}
         <br />
-        {`Case: ${caseNumber}`}
+        {`${caseReferralNumber}: ${serviceSourceUiId}`}
         <br />
         {`County: ${county ? county.name : ''}`}
       </Typography>

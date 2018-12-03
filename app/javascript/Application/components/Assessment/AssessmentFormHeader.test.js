@@ -37,10 +37,11 @@ describe('<AssessmentFormHeader />', () => {
   })
 
   describe('case number', () => {
-    it('renders with case number', () => {
+    it('renders with case number and Case Number label', () => {
       const assessmentWithCaseNumber = {
         ...assessment,
         service_source_ui_id: '0687-9473-7673-8000672',
+        service_source: 'CASE',
       }
       const props = {
         assessment: assessmentWithCaseNumber,
@@ -48,19 +49,44 @@ describe('<AssessmentFormHeader />', () => {
         onAssessmentUpdate: jest.fn(),
         onKeyUp: jest.fn(),
       }
-      const caseNumber = shallow(<AssessmentFormHeader {...props} />).find('#case-number')
+      const caseWrapper = shallow(<AssessmentFormHeader {...props} />)
+      const caseNumber = caseWrapper.find('#case-or-referral-number')
+      const caseNumberLabel = caseWrapper.find('#case-or-referral-number-label')
       expect(caseNumber.text()).toBe('0687-9473-7673-8000672')
+      expect(caseNumberLabel.text()).toBe('Case Number')
     })
 
-    it('renders without case number when not exists', () => {
+    it('renders with referral number and Referral Number label', () => {
+      const assessmentWithReferralNumber = {
+        ...assessment,
+        service_source_ui_id: '4704-9166-3831-2001287',
+        service_source: 'REFERRAL',
+      }
+      const props = {
+        assessment: assessmentWithReferralNumber,
+        client,
+        onAssessmentUpdate: jest.fn(),
+        onKeyUp: jest.fn(),
+      }
+      const referralWrapper = shallow(<AssessmentFormHeader {...props} />)
+      const referralNumber = referralWrapper.find('#case-or-referral-number')
+      const referralNumberLabel = referralWrapper.find('#case-or-referral-number-label')
+      expect(referralNumber.text()).toBe('4704-9166-3831-2001287')
+      expect(referralNumberLabel.text()).toBe('Referral Number')
+    })
+
+    it('renders without case/referral number when not exists and Case/Referral Number label', () => {
       const props = {
         assessment,
         client,
         onAssessmentUpdate: jest.fn(),
         onKeyUp: jest.fn(),
       }
-      const caseNumber = shallow(<AssessmentFormHeader {...props} />).find('#case-number')
+      const caseReferralWrapper = shallow(<AssessmentFormHeader {...props} />)
+      const caseNumber = caseReferralWrapper.find('#case-or-referral-number')
+      const referralNumberLabel = caseReferralWrapper.find('#case-or-referral-number-label')
       expect(caseNumber.text()).toBe('')
+      expect(referralNumberLabel.text()).toBe('Case/Referral Number')
     })
   })
 
