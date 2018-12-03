@@ -21,7 +21,7 @@ export function selfChecker(navigateTo, keyWords) {
 export function removeDuplicateBreadCrumb(elements) {
   if (elements.length > 1) {
     if (elements[0].props.children === elements[1]) {
-      // check if user permission dashboard same as current route, if so delete the plain text
+      // check if user permission dashboard same as current route, if so delete the active breadcrumb
       elements.splice(0, 1)
     } else if (typeof elements[1] !== 'string' && elements[0].props.children === elements[1].props.children) {
       // check 'string' for current page case, if not, then check if there were duplicate

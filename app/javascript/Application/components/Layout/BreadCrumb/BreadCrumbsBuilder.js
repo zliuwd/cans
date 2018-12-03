@@ -132,6 +132,7 @@ class BreadCrumbsBuilder extends React.Component {
   prepareNavigationElements() {
     const elements = []
     const { navigateTo, client, url, assessmentId, user, subordinate } = this.props
+    console.log(navigateTo)
     homeCrumbHandler(user, elements)
     addStaffListIfNeeded(elements, navigateTo)
     if (subordinate) {
