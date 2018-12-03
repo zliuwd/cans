@@ -6,6 +6,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.5.1'
 
 gem 'addressable', '~> 2.5.2'
+gem 'cwds-authentication', '~> 0.1.0',
+    git: 'https://github.com/ca-cwds/cwds-authentication.git'
 gem 'dora', '~> 0.1.0', git: 'https://github.com/ca-cwds/dora_api'
 gem 'faraday', '~> 0.13.1'
 gem 'faraday_middleware', '~> 0.12.2'

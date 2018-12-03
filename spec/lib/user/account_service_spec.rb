@@ -4,7 +4,7 @@ require 'spec_helper'
 
 module User
   describe AccountService do
-    let(:security_gateway) { instance_double('Infrastructure::SecurityGateway') }
+    let(:security_gateway) { instance_double('Cwds::Authentication::SecurityGateway') }
     let(:test_subject) { User::AccountService.new(security_gateway) }
 
     describe '#get_perry_account' do

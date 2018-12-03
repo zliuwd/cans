@@ -4,7 +4,7 @@ require 'json'
 
 module User
   class AccountService
-    def initialize(security_gateway = Infrastructure::SecurityGateway.new)
+    def initialize(security_gateway = Cwds::Authentication::SecurityGateway.new)
       @security_gateway = security_gateway
     end
 
