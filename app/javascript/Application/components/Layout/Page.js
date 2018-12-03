@@ -123,7 +123,7 @@ class Page extends Component {
         return this.state.client && <ChangeLogPage {...params} />
 
       case navigation.CLIENT_SEARCH:
-        return <SearchContainer />
+        return <SearchContainer {...params} />
       case navigation.SEARCH_CHILD_PROFILE:
         return this.state.client && <Client {...params} />
       case navigation.SEARCH_ASSESSMENT_EDIT:
@@ -133,7 +133,7 @@ class Page extends Component {
         return <SupervisorDashboard />
       case navigation.STAFF_READ:
         return <CaseLoadPage staffId={this.props.match.params.staffId} />
-      case navigation.STAFF_CHILD_PROFILE_OVERALL:
+      case navigation.STAFF_CHILD_PROFILE:
         return this.state.client && <Client {...params} />
       case navigation.STAFF_ASSESSMENT_EDIT:
         return this.state.client && <AssessmentContainer {...params} />

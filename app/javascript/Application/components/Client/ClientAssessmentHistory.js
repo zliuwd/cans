@@ -53,7 +53,7 @@ class ClientAssessmentHistory extends Component {
         <ClientAssessmentHistoryRecord
           assessment={assessment}
           key={assessment.id}
-          comeFrom={this.props.comeFrom}
+          navFrom={this.props.navFrom}
           userId={this.props.userId}
         />
       ))
@@ -77,13 +77,13 @@ class ClientAssessmentHistory extends Component {
 
 ClientAssessmentHistory.propTypes = {
   clientIdentifier: PropTypes.string,
-  comeFrom: PropTypes.string,
+  navFrom: PropTypes.string,
   userId: PropTypes.string,
 }
 
 ClientAssessmentHistory.defaultProps = {
   clientIdentifier: null,
-  comeFrom: null,
+  navFrom: null,
   userId: null,
 }
 

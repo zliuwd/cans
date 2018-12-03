@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import ClientAssessmentHistory from './ClientAssessmentHistory'
 import { CloseableAlert, alertType } from '../common/CloseableAlert'
 import { isoToLocalDate } from '../../util/dateHelper'
-
+import NavFromProducer from '../../util/NavFromProducer'
 import './style.sass'
 
 class Client extends Component {
@@ -97,7 +97,7 @@ class Client extends Component {
           </Grid>
           <ClientAssessmentHistory
             clientIdentifier={client.identifier}
-            comeFrom={this.props.navigateTo === 'STAFF_CHILD_PROFILE_OVERALL' ? 'STAFF' : null}
+            navFrom={NavFromProducer(this.props.navigateTo)}
             userId={this.props.match.params.staffId}
           />
         </Grid>

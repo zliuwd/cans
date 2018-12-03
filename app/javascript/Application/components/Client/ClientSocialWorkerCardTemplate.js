@@ -4,12 +4,12 @@ import ClientCardTemplateNameCell from './ClientCardTemplateNameCell'
 import CaseLoadPageTempNameCell from '../Staff/CaseLoad/CaseLoadPageTempNameCell'
 import './style.sass'
 
-export function SocialWorkerCardTemplate(comeFrom, stafId) {
+export function SocialWorkerCardTemplate(navFrom, stafId) {
   function renderDate(datetime) {
     return !datetime || datetime === null ? null : isoToLocalDate(datetime)
   }
-  function cellTempSwitcher(comeFrom) {
-    switch (comeFrom) {
+  function cellTempSwitcher(navFrom) {
+    switch (navFrom) {
       case 'STAFF':
         return CaseLoadPageTempNameCell
 
@@ -24,7 +24,7 @@ export function SocialWorkerCardTemplate(comeFrom, stafId) {
       accessor: client => {
         return formatClientName(client)
       },
-      Cell: cellTempSwitcher(comeFrom),
+      Cell: cellTempSwitcher(navFrom),
       rol: stafId,
     },
 

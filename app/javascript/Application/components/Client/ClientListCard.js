@@ -5,10 +5,10 @@ import ClientSocialWorkerCard from './ClientSocialWorkerCard'
 import { SocialWorkerCardTemplate } from './ClientSocialWorkerCardTemplate'
 import { LoadingState } from '../../util/loadingHelper'
 
-const ClientListCard = ({ clients, loadingState, comeFrom, staffId }) => (
+const ClientListCard = ({ clients, loadingState, navFrom, staffId }) => (
   <ClientSocialWorkerCard
     title={clients.length}
-    columns={SocialWorkerCardTemplate(comeFrom, staffId)}
+    columns={SocialWorkerCardTemplate(navFrom, staffId)}
     data={clients}
     defaultSortSetting={[
       {
@@ -17,20 +17,20 @@ const ClientListCard = ({ clients, loadingState, comeFrom, staffId }) => (
       },
     ]}
     loading={loadingState === LoadingState.waiting}
-    comeFrom={comeFrom}
+    navFrom={navFrom}
   />
 )
 
 ClientListCard.propTypes = {
   clients: PropTypes.arrayOf(PropTypes.object),
-  comeFrom: PropTypes.string,
   loadingState: PropTypes.oneOf(Object.values(LoadingState)),
+  navFrom: PropTypes.string,
   staffId: PropTypes.string,
 }
 
 ClientListCard.defaultProps = {
   clients: [],
-  comeFrom: null,
+  navFrom: null,
   loadingState: LoadingState.waiting,
   staffId: '',
 }

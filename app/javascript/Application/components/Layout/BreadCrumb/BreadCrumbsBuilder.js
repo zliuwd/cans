@@ -6,7 +6,7 @@ import BreadCrumb from './BreadCrumb'
 import { formatName, selfChecker, removeDuplicateBreadCrumb } from './BreadCrumbHelper'
 import { Link } from 'react-router-dom'
 
-const navsWithStaffProfileCrumb = [navigation.STAFF_CHILD_PROFILE_OVERALL, navigation.STAFF_ASSESSMENT_EDIT]
+const navsWithStaffProfileCrumb = [navigation.STAFF_CHILD_PROFILE, navigation.STAFF_ASSESSMENT_EDIT]
 
 const navsWithChildYouthListCrumb = [
   navigation.CHILD_LIST,

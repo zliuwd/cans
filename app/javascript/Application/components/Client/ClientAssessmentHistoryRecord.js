@@ -5,6 +5,7 @@ import { Container, Row, Col } from 'reactstrap'
 import Typography from '@material-ui/core/Typography'
 import { isoToLocalDate } from '../../util/dateHelper'
 import { StatusIcon } from '../common/StatusIcon'
+import { navigation } from '../../util/constants'
 
 import './style.sass'
 
@@ -48,11 +49,14 @@ class ClientAssessmentHistoryRecord extends Component {
 
   render() {
     const { id, event_date: eventDate, status, person } = this.props.assessment
-    const comeFrom = this.props.comeFrom
+    const navFrom = this.props.navFrom
     let url
-    switch (comeFrom) {
-      case 'STAFF':
+    switch (navFrom) {
+      case navigation.STAFF_CHILD_PROFILE:
         url = `/staff/${this.props.userId}/clients/${person.identifier}/assessments/${id}`
+        break
+      case navigation.SEARCH_CHILD_PROFILE:
+        url = `/search/clients/${person.identifier}/assessments/${id}`
         break
       default:
         url = `/clients/${person.identifier}/assessments/${id}`
@@ -89,12 +93,12 @@ class ClientAssessmentHistoryRecord extends Component {
 
 ClientAssessmentHistoryRecord.propTypes = {
   assessment: PropTypes.object.isRequired,
-  comeFrom: PropTypes.string,
+  navFrom: PropTypes.string,
   userId: PropTypes.string,
 }
 
 ClientAssessmentHistoryRecord.defaultProps = {
-  comeFrom: null,
+  navFrom: null,
   userId: null,
 }
 

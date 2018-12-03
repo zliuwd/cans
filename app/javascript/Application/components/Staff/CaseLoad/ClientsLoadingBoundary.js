@@ -12,7 +12,7 @@ class ClientsLoadingBoundary extends React.PureComponent {
       staffId: '',
       loadingState: LoadingState.waiting,
       clients: [],
-      comeFrom: '',
+      navFrom: '',
     }
   }
 
@@ -25,7 +25,7 @@ class ClientsLoadingBoundary extends React.PureComponent {
     if (!Array.isArray(clients)) {
       this.setState({
         loadingState: LoadingState.error,
-        comeFrom: this.props.comeFrom,
+        navFrom: this.props.navFrom,
       })
       handleError(failedFetching)
     } else {
@@ -33,26 +33,26 @@ class ClientsLoadingBoundary extends React.PureComponent {
         staffId: this.props.staffId,
         loadingState: LoadingState.ready,
         clients,
-        comeFrom: this.props.comeFrom,
+        navFrom: this.props.navFrom,
       })
     }
   }
 
   render() {
     const children = this.props.children
-    const { loadingState, clients, comeFrom, staffId } = this.state
+    const { loadingState, clients, navFrom, staffId } = this.state
     return loadingState === LoadingState.ready
-      ? React.cloneElement(children, { loadingState, clients, comeFrom, staffId })
+      ? React.cloneElement(children, { loadingState, clients, navFrom, staffId })
       : React.cloneElement(children, { loadingState })
   }
 }
 
 ClientsLoadingBoundary.propTypes = {
   children: PropTypes.node.isRequired,
-  comeFrom: PropTypes.string,
+  navFrom: PropTypes.string,
   staffId: PropTypes.string.isRequired,
 }
 ClientsLoadingBoundary.defaultProps = {
-  comeFrom: undefined,
+  navFrom: undefined,
 }
 export default ClientsLoadingBoundary
