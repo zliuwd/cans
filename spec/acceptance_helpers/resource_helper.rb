@@ -55,7 +55,7 @@ module ResourceHelper
       '#ADJUSTMENT_TO_TRAUMA-item-expand',
       '#domain0-expand'
     ]
-    behavioral_domain.each { |element| find(element).click }
+    behavioral_domain.each { |element| find(element, wait: 15).click }
     click_button 'Save'
     expect(page).to have_content 'Success! CANS assessment has been saved'
     fill_and_submit_assessment_form_6_21
