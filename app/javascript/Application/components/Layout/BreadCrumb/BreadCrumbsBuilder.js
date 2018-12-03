@@ -6,7 +6,11 @@ import BreadCrumb from './BreadCrumb'
 import { formatName, selfChecker, removeDuplicateBreadCrumb } from './BreadCrumbHelper'
 import { Link } from 'react-router-dom'
 
-const navsWithStaffProfileCrumb = [navigation.STAFF_CHILD_PROFILE, navigation.STAFF_ASSESSMENT_EDIT]
+const navsWithStaffProfileCrumb = [
+  navigation.STAFF_LIST,
+  navigation.STAFF_CHILD_PROFILE,
+  navigation.STAFF_ASSESSMENT_EDIT,
+]
 
 const navsWithChildYouthListCrumb = [
   navigation.CHILD_LIST,
@@ -56,6 +60,12 @@ const homeCrumbHandler = (user, elements) => {
     linkText = BreadCrumbLinks.CLIENT_SEARCH
   }
   elements.push(<Link to={url}>{linkText}</Link>)
+}
+
+const addStaffListIfNeeded = (elements, navigateTo) => {
+  if (selfChecker(navigateTo, 'STAFF_LIST')) {
+    elements.push(BreadCrumbLinks.STAFF_LIST)
+  }
 }
 
 const addStaffProfileIfNeeded = (elements, navigateTo, staffPerson) => {
@@ -123,12 +133,14 @@ class BreadCrumbsBuilder extends React.Component {
     const elements = []
     const { navigateTo, client, url, assessmentId, user, subordinate } = this.props
     homeCrumbHandler(user, elements)
+    addStaffListIfNeeded(elements, navigateTo)
     if (subordinate) {
       addStaffProfileIfNeeded(elements, navigateTo, this.props.subordinate.staff_person)
     }
 
     addClientSearchCrumbIfNeeded(elements, navigateTo)
     addChildYouthListCrumbIfNeeded(elements, navigateTo)
+
     if (client) {
       addChildProfileCrumbIfNeeded(elements, navigateTo, client)
       addAssessmentFromCrumbIfNeeded(elements, navigateTo, client, assessmentId)
