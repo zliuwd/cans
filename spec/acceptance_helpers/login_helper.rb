@@ -49,9 +49,6 @@ module LoginHelper
         'Facility-search-rollout',
         'RFA-rollout',
         'CANS-rollout',
-        'CANS-staff-person-subordinates-read',
-        'CANS-staff-person-read',
-        'CANS-staff-person-clients-read',
         'CANS-assessment-read',
         'CANS-assessment-create',
         'CANS-assessment-in-progress-update',
@@ -59,6 +56,8 @@ module LoginHelper
         'CANS-assessment-completed-delete',
         'CANS-assessment-in-progress-delete',
         'CANS-assessment-complete',
+        'CANS-client-read',
+        'CANS-client-search',
         'development-not-in-use'
       ]
     }
@@ -84,6 +83,18 @@ module LoginHelper
         'Facility-search-rollout',
         'RFA-rollout',
         'CANS-rollout',
+        'CANS-assessment-read',
+        'CANS-assessment-create',
+        'CANS-assessment-in-progress-update',
+        'CANS-assessment-completed-update',
+        'CANS-assessment-completed-delete',
+        'CANS-assessment-in-progress-delete',
+        'CANS-assessment-complete',
+        'CANS-client-read',
+        'CANS-client-search',
+        'CANS-staff-person-subordinates-read',
+        'CANS-staff-person-read',
+        'CANS-staff-person-clients-read',
         'development-not-in-use'
       ]
     }

@@ -23,6 +23,7 @@ const ItemRegularRating = props => {
   const radioButtons = Array.from({ length: regularRating }).map((n, i) => {
     return (
       <FormControlLabel
+        id={`label-${code}-${i}`}
         style={ieFixStyle.label}
         key={`reg-${i}`}
         value={stringify(i)}

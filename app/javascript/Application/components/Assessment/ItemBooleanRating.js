@@ -23,6 +23,7 @@ const ItemBooleanRating = props => {
   const radioButtons = boolRating.map((label, i) => {
     return (
       <FormControlLabel
+        id={`label-${code}-${i}`}
         style={ieFixStyle.label}
         key={`bool-${i}`}
         value={stringify(i)}
