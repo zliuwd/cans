@@ -20,40 +20,34 @@ describe('<AssessmentChangeLog />', () => {
 
   const defaultChangeHistory = [{ changed_at: '2018-11-01T17:07:10.043Z' }]
 
-  const defaultPageHeaderButtonsController = {
-    updateHeaderButtons: () => {},
-    updateHeaderButtonsToDefault: () => {},
+  const render = (
+    changeHistory = defaultChangeHistory,
+    updateHeaderButtons = () => {},
+    updateHeaderButtonsToDefault = () => {}
+  ) => {
+    const props = {
+      changeHistory,
+      pageHeaderButtonsController: {
+        updateHeaderButtons,
+        updateHeaderButtonsToDefault,
+      },
+      ...defaultProps,
+    }
+
+    return shallow(<AssessmentChangeLog {...props} />)
   }
 
   describe('page layout', () => {
     let wrapper
-    const props = {
-      changeHistory: [
-        {
-          user_id: 'RACFID',
-          user_first_name: 'Casey',
-          user_last_name: 'Test',
-          changed_at: '2018-11-01T17:07:10.043Z',
-          assessment_change_type: 'CREATED',
-        },
-      ],
-      pageHeaderButtonsController: defaultPageHeaderButtonsController,
-      ...defaultProps,
-    }
 
-    it('renders nothing when there is no change log data', async () => {
-      const props = {
-        changeHistory: [],
-        pageHeaderButtonsController: defaultPageHeaderButtonsController,
-        ...defaultProps,
-      }
-      wrapper = shallow(<AssessmentChangeLog {...props} />)
-
+    it('renders nothing when there is no change log data', () => {
+      const changeHistory = []
+      wrapper = render(changeHistory)
       expect(wrapper.type()).toBe(null)
     })
 
     beforeEach(() => {
-      wrapper = shallow(<AssessmentChangeLog {...props} />)
+      wrapper = render()
     })
 
     it('renders a Row', () => {
@@ -85,12 +79,7 @@ describe('<AssessmentChangeLog />', () => {
     let wrapper
 
     beforeEach(() => {
-      const props = {
-        changeHistory: defaultChangeHistory,
-        pageHeaderButtonsController: defaultPageHeaderButtonsController,
-        ...defaultProps,
-      }
-      wrapper = shallow(<AssessmentChangeLog {...props} />)
+      wrapper = render()
     })
 
     it('renders the card title with client name and dob', () => {
@@ -108,54 +97,68 @@ describe('<AssessmentChangeLog />', () => {
   })
 
   describe('page header buttons', () => {
+    let wrapper
     const updateHeaderButtonsMock = jest.fn()
-    const props = {
-      changeHistory: defaultChangeHistory,
-      pageHeaderButtonsController: {
-        updateHeaderButtons: updateHeaderButtonsMock,
-        updateHeaderButtonsToDefault: () => {},
-      },
-      ...defaultProps,
-    }
 
-    it('should update page header buttons on componentDidMount', () => {
-      shallow(<AssessmentChangeLog {...props} />)
-      expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
+    describe('componentDidMount', () => {
+      it('should update page header buttons', () => {
+        render(defaultChangeHistory, updateHeaderButtonsMock)
+        expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
+        updateHeaderButtonsMock.mockClear()
+      })
     })
 
-    it('should reset page header buttons to default values on componentWillUnmount', () => {
-      const updateToDefaultMock = jest.fn()
-      const props = {
-        changeHistory: defaultChangeHistory,
-        pageHeaderButtonsController: {
-          updateHeaderButtons: () => {},
-          updateHeaderButtonsToDefault: updateToDefaultMock,
-        },
-        ...defaultProps,
-      }
-      const wrapper = shallow(<AssessmentChangeLog {...props} />)
-      wrapper.instance().componentWillUnmount()
-      expect(updateToDefaultMock).toHaveBeenCalledTimes(1)
+    describe('componentDidUpdate', () => {
+      describe('changeHistory prop was updated', () => {
+        it('should update page header buttons', () => {
+          wrapper = render(defaultChangeHistory, updateHeaderButtonsMock)
+          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
+          wrapper.setProps({
+            changeHistory: [defaultChangeHistory[0], { changed_at: '2018-12-01T17:07:10.043Z' }],
+          })
+          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(2)
+          updateHeaderButtonsMock.mockClear()
+        })
+      })
+
+      describe('changeHistory prop was not updated', () => {
+        it('should not update page header buttons', () => {
+          const wrapper = render(defaultChangeHistory, updateHeaderButtonsMock)
+          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
+          wrapper.setProps({ changeHistory: defaultChangeHistory })
+          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
+          updateHeaderButtonsMock.mockClear()
+        })
+      })
+    })
+
+    describe('componentWillUnmount', () => {
+      it('should reset page header buttons to default values', () => {
+        const updateToDefaultMock = jest.fn()
+        const wrapper = render(defaultChangeHistory, () => {}, updateToDefaultMock)
+        wrapper.unmount()
+        expect(updateToDefaultMock).toHaveBeenCalledTimes(1)
+      })
     })
 
     describe('print button status', () => {
-      it('should be enabled when there is change log data', () => {
-        const wrapper = shallow(<AssessmentChangeLog {...props} />)
-        const spy = jest.spyOn(wrapper.instance(), 'initHeaderButtons')
-        wrapper.instance().componentDidMount()
-        expect(spy).toHaveBeenCalledWith(true)
+      describe('change log data exists', () => {
+        it('print button should be enabled', () => {
+          const wrapper = render()
+          const spy = jest.spyOn(wrapper.instance(), 'initHeaderButtons')
+          wrapper.instance().componentDidMount()
+          expect(spy).toHaveBeenCalledWith(true)
+        })
       })
 
-      it('should be disabled when there is no change log data', () => {
-        const props = {
-          changeHistory: [],
-          pageHeaderButtonsController: defaultPageHeaderButtonsController,
-          ...defaultProps,
-        }
-        const wrapper = shallow(<AssessmentChangeLog {...props} />)
-        const spy = jest.spyOn(wrapper.instance(), 'initHeaderButtons')
-        wrapper.instance().componentDidMount()
-        expect(spy).toHaveBeenCalledWith(false)
+      describe('change log data does not exist', () => {
+        it('print button should be disabled', () => {
+          const changeHistory = []
+          const wrapper = render(changeHistory)
+          const spy = jest.spyOn(wrapper.instance(), 'initHeaderButtons')
+          wrapper.instance().componentDidMount()
+          expect(spy).toHaveBeenCalledWith(false)
+        })
       })
     })
   })

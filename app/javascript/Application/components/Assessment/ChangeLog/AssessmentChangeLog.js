@@ -33,11 +33,13 @@ const columnConfig = [
 
 class AssessmentChangeLog extends Component {
   componentDidMount() {
-    const { changeHistory } = this.props
-    const changeHistoryLength = changeHistory.length
-    const enablePrintButton = changeHistoryLength > 0
-
+    const enablePrintButton = this.shouldPrintButtonBeEnabled()
     this.initHeaderButtons(enablePrintButton)
+  }
+
+  componentDidUpdate(prevProps) {
+    const { changeHistory: prevChangeHistory } = prevProps
+    this.updatePrintButtonIfNeeded(prevChangeHistory)
   }
 
   componentWillUnmount() {
@@ -49,7 +51,25 @@ class AssessmentChangeLog extends Component {
     const node = <PrintChangeLog history={changeHistory} client={client} assessmentId={match.params.id} />
     const leftButton = buildSearchClientsButton()
     const rightButton = <PrintButton node={node} isEnabled={enablePrintButton} />
+
     this.props.pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
+  }
+
+  updatePrintButtonIfNeeded(prevChangeHistory) {
+    const { changeHistory } = this.props
+    const changeHistoryUpdated = prevChangeHistory !== changeHistory
+    if (changeHistoryUpdated) {
+      const enablePrintButton = this.shouldPrintButtonBeEnabled()
+      this.initHeaderButtons(enablePrintButton)
+    }
+  }
+
+  shouldPrintButtonBeEnabled() {
+    const { changeHistory } = this.props
+    const changeHistoryLength = changeHistory.length
+    const enablePrintButton = changeHistoryLength > 0
+
+    return enablePrintButton
   }
 
   render() {
