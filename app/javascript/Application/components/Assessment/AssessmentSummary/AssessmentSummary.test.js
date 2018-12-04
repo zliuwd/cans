@@ -44,12 +44,12 @@ describe('<AssessmentSummary />', () => {
     ).toBe(true)
   })
 
-  it('renders all summaries in a single row on large screens', () => {
+  it('renders all summaries in a single row on extra large screens', () => {
     const wrapper = render()
     const sumSize = wrapper
       .find(Row)
       .find(Col)
-      .reduce((sum, col) => sum + col.props().lg, 0)
+      .reduce((sum, col) => sum + col.props().xl, 0)
     expect(sumSize).toBe(12)
   })
 

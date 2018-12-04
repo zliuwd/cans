@@ -14,16 +14,16 @@ const AssessmentSummary = ({ domains, i18n, isUnderSix }) => {
   const filteredDomains = domains.filter(domain => (isUnderSix ? domain.under_six : domain.above_six))
   return (
     <Row>
-      <Col xs={ROW_SIZE} lg={size}>
+      <Col xs={ROW_SIZE} xl={size}>
         <StrengthsSummary domains={filteredDomains} i18n={i18n} />
       </Col>
-      <Col xs={ROW_SIZE} lg={size}>
+      <Col xs={ROW_SIZE} xl={size}>
         <ActionRequiredSummary domains={filteredDomains} i18n={i18n} />
       </Col>
-      <Col xs={ROW_SIZE} lg={size}>
+      <Col xs={ROW_SIZE} xl={size}>
         <ImmediateActionRequiredSummary domains={filteredDomains} i18n={i18n} />
       </Col>
-      <Col xs={ROW_SIZE} lg={size}>
+      <Col xs={ROW_SIZE} xl={size}>
         <TraumaSummary domains={filteredDomains} i18n={i18n} />
       </Col>
     </Row>
