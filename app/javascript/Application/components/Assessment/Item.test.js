@@ -3,6 +3,8 @@ import { mount, shallow } from 'enzyme'
 import Item from './Item'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import ItemCommentIcon from './ItemCommentIcon'
+import ItemComment from './ItemComment'
 
 const itemDefault = {
   code: 'lf10family',
@@ -14,6 +16,11 @@ const itemDefault = {
   rating_type: 'REGULAR',
   has_na_option: false,
   rating: -1,
+}
+
+const itemWithComment = {
+  ...itemDefault,
+  comment: 'a comment',
 }
 
 const nonSUDItem = {
@@ -74,6 +81,7 @@ const itemComponentDefault = (
     i18n={{ ...i18nDefault }}
     onRatingUpdate={() => {}}
     onConfidentialityUpdate={() => {}}
+    onCommentUpdate={() => {}}
   />
 )
 
@@ -87,6 +95,22 @@ const mountItem = item => {
       i18n={{ ...i18nDefault }}
       onRatingUpdate={() => {}}
       onConfidentialityUpdate={() => {}}
+      onCommentUpdate={() => {}}
+    />
+  )
+}
+
+const shallowItem = item => {
+  return shallow(
+    <Item
+      key={'1'}
+      canReleaseConfidentialInfo={true}
+      item={item}
+      isAssessmentUnderSix={false}
+      i18n={{ ...i18nDefault }}
+      onRatingUpdate={() => {}}
+      onConfidentialityUpdate={() => {}}
+      onCommentUpdate={() => {}}
     />
   )
 }
@@ -107,13 +131,13 @@ describe('<Item />', () => {
 
   it('when chevron button get focus and press tab item will not expand', async () => {
     const wrapper = mount({ ...itemComponentDefault })
-    wrapper.find('i').simulate('keydown', { key: 'Tab' })
+    wrapper.find('i.fa-chevron-right').simulate('keydown', { key: 'Tab' })
     expect(wrapper.instance().state.isExpanded).toEqual(false)
   })
 
   it('when chevron button get focus and press a key other than Tab, item will expand', async () => {
     const wrapper = mount({ ...itemComponentDefault })
-    wrapper.find('i').simulate('keydown', { key: 'Enter' })
+    wrapper.find('i.fa-chevron-right').simulate('keydown', { key: 'Enter' })
     expect(wrapper.instance().state.isExpanded).toEqual(true)
   })
 
@@ -144,6 +168,26 @@ describe('<Item />', () => {
     })
     const foldedText = wrapper.text()
     expect(foldedText).toMatch(/1a\. /)
+  })
+
+  describe('ItemCommentIcon in the toolbar', () => {
+    it('should render ItemCommentIcon with item-toolbar-comment-icon style', () => {
+      const wrapper = shallowItem(itemDefault)
+      const commentIcon = wrapper.find(ItemCommentIcon)
+      expect(commentIcon.props().className.includes('item-toolbar-comment-icon')).toBeTruthy()
+    })
+
+    it('should render outlined ItemCommentIcon when no comment for the item', () => {
+      const wrapper = shallowItem(itemDefault)
+      const commentIcon = wrapper.find(ItemCommentIcon)
+      expect(commentIcon.props().isSolid).toBeFalsy()
+    })
+
+    it('should render solid ItemCommentIcon when item has a comment', () => {
+      const wrapper = shallowItem(itemWithComment)
+      const commentIcon = wrapper.find(ItemCommentIcon)
+      expect(commentIcon.props().isSolid).toBeTruthy()
+    })
   })
 
   describe('N/A option', () => {
@@ -228,6 +272,7 @@ describe('<Item />', () => {
           item={{ ...itemDefault }}
           isAssessmentUnderSix={false}
           i18n={{ ...i18nDefault }}
+          onCommentUpdate={() => {}}
           onRatingUpdate={() => {}}
           onConfidentialityUpdate={onConfidentialityUpdateMock}
         />
@@ -246,6 +291,7 @@ describe('<Item />', () => {
           item={{ ...itemDefault }}
           i18n={{ ...i18nDefault }}
           canReleaseConfidentialInfo={false}
+          onCommentUpdate={() => {}}
           onRatingUpdate={() => {}}
           onConfidentialityUpdate={() => {}}
         />
@@ -261,6 +307,38 @@ describe('<Item />', () => {
     })
   })
 
+  describe('#handleCommentChange()', () => {
+    it('should propagate handleCommentChange to onChange ItemComment prop', () => {
+      const onCommentUpdateMock = jest.fn()
+      const wrapper = shallow(
+        <Item
+          isAssessmentUnderSix={false}
+          item={{ ...itemDefault }}
+          i18n={{ ...i18nDefault }}
+          canReleaseConfidentialInfo={false}
+          onCommentUpdate={onCommentUpdateMock}
+          onRatingUpdate={() => {}}
+          onConfidentialityUpdate={() => {}}
+        />
+      )
+      wrapper.setState({ isExpanded: true })
+      wrapper
+        .find(ItemComment)
+        .props()
+        .onChange('new comment')
+      expect(onCommentUpdateMock).toHaveBeenCalledTimes(1)
+      expect(onCommentUpdateMock).toHaveBeenCalledWith('lf10family', 'new comment', undefined)
+    })
+  })
+
+  describe('ItemComment', () => {
+    it('should be rendered with a comment in props', () => {
+      const wrapper = shallowItem(itemWithComment)
+      wrapper.setState({ isExpanded: true })
+      expect(wrapper.find(ItemComment).props().comment).toBe('a comment')
+    })
+  })
+
   it('should have "Confidential" title when item is confidential by default', () => {
     const wrapper = shallow(
       <Item
@@ -268,6 +346,7 @@ describe('<Item />', () => {
         item={{ ...itemDefault }}
         i18n={{ ...i18nDefault }}
         canReleaseConfidentialInfo={false}
+        onCommentUpdate={() => {}}
         onRatingUpdate={() => {}}
         onConfidentialityUpdate={() => {}}
       />
@@ -287,6 +366,7 @@ describe('<Item />', () => {
         item={{ ...nonSUDItem }}
         i18n={{ ...i18nDefault }}
         canReleaseConfidentialInfo={false}
+        onCommentUpdate={() => {}}
         onRatingUpdate={() => {}}
         onConfidentialityUpdate={() => {}}
       />

@@ -5,7 +5,7 @@ import Divider from '@material-ui/core/Divider'
 import PropTypes from 'prop-types'
 
 const DomainItemList = props => {
-  const itemlist = props.items.map((item, index) => {
+  return props.items.map((item, index) => {
     const { code } = item
     const itemI18n = getI18nByCode(props.i18nAll, code)
     return (
@@ -16,6 +16,7 @@ const DomainItemList = props => {
           caregiverIndex={props.caregiverIndex}
           i18n={itemI18n}
           onRatingUpdate={props.onRatingUpdate}
+          onCommentUpdate={props.onItemCommentUpdate}
           onConfidentialityUpdate={props.onConfidentialityUpdate}
           isAssessmentUnderSix={props.isAssessmentUnderSix}
           canReleaseConfidentialInfo={props.canReleaseConfidentialInfo}
@@ -24,7 +25,6 @@ const DomainItemList = props => {
       </div>
     )
   })
-  return itemlist
 }
 
 DomainItemList.propTypes = {
@@ -34,6 +34,7 @@ DomainItemList.propTypes = {
   isAssessmentUnderSix: PropTypes.bool.isRequired,
   items: PropTypes.array.isRequired,
   onConfidentialityUpdate: PropTypes.func.isRequired,
+  onItemCommentUpdate: PropTypes.func.isRequired,
   onRatingUpdate: PropTypes.func.isRequired,
 }
 

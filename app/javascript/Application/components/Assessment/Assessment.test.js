@@ -123,6 +123,18 @@ describe('<Assessment />', () => {
     })
   })
 
+  describe('#handleUpdateItemComment()', () => {
+    it('should be propagated as a onItemCommentUpdate prop for Domain', () => {
+      const onAssessmentUpdateMock = jest.fn()
+      const wrapper = shallow(
+        <Assessment onAssessmentUpdate={onAssessmentUpdateMock} assessment={assessment} i18n={i18n} />
+      )
+      const domains = wrapper.find(Domain)
+      domains.forEach(domain => domain.props().onItemCommentUpdate())
+      expect(onAssessmentUpdateMock).toHaveBeenCalledTimes(domains.length)
+    })
+  })
+
   describe('#updateCaregiverName()', () => {
     describe('onCareGiverNameUpdate call back', () => {
       it('is invoked when caregiver name is updated', () => {

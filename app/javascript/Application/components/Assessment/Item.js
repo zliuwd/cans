@@ -14,6 +14,8 @@ import ItemRegularRating from './ItemRegularRating'
 import ItemDescriptionRating from './ItemDescriptionRating'
 import { getI18nValuesByPrefix } from './I18nHelper'
 import { stringify } from '../../util/common'
+import ItemComment from './ItemComment'
+import ItemCommentIcon from './ItemCommentIcon'
 
 const noRating = -1
 const naRating = 8
@@ -67,6 +69,12 @@ class Item extends Component {
     const caregiverIndex = this.props.caregiverIndex
     const newValue = parseInt(onChangeEvent.target.value)
     this.props.onRatingUpdate(code, newValue, caregiverIndex)
+  }
+
+  handleCommentChange = comment => {
+    const code = this.props.item.code
+    const caregiverIndex = this.props.caregiverIndex
+    this.props.onCommentUpdate(code, comment, caregiverIndex)
   }
 
   // once NaCheckboxk be checked the value will be change back to noRating
@@ -142,6 +150,7 @@ class Item extends Component {
       confidential_by_default,
       under_six_id,
       above_six_id,
+      comment,
     } = item
     const itemNumber = isAssessmentUnderSix ? under_six_id : above_six_id
     const { isExpanded, title, description, qtcDescriptions, ratingDescriptions } = this.state
@@ -168,7 +177,6 @@ class Item extends Component {
               onClick={this.switchExpandedState}
               onKeyDown={this.handleKeyCheck}
             />
-
             <Typography
               variant="title"
               style={{
@@ -187,6 +195,7 @@ class Item extends Component {
                 naValue={this.handleNaValueSetting(rating)}
               />
             ) : null}
+            <ItemCommentIcon isSolid={Boolean(item.comment)} className={'item-toolbar-comment-icon'} />
             <Typography variant="title" style={{ marginRight: confidential_by_default ? '4rem' : '1.5rem' }}>
               {this.renderConfidentialCheckbox(isConfidential, confidential_by_default)}
             </Typography>
@@ -213,6 +222,7 @@ class Item extends Component {
                 getRadioValueForLabel={this.getRadioValueForLabel}
               />
             ) : null}
+            <ItemComment itemCode={code} comment={comment} onChange={this.handleCommentChange} />
           </Paper>
         ) : null}
       </div>
@@ -227,6 +237,7 @@ Item.propTypes = {
   i18n: PropTypes.object.isRequired,
   isAssessmentUnderSix: PropTypes.bool.isRequired,
   item: PropTypes.object.isRequired,
+  onCommentUpdate: PropTypes.func.isRequired,
   onConfidentialityUpdate: PropTypes.func.isRequired,
   onRatingUpdate: PropTypes.func.isRequired,
 }

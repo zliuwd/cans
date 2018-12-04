@@ -81,6 +81,7 @@ class Domain extends Component {
       isAssessmentUnderSix,
       domain,
       onRatingUpdate,
+      onItemCommentUpdate,
       onConfidentialityUpdate,
       canReleaseConfidentialInfo,
       index,
@@ -92,6 +93,7 @@ class Domain extends Component {
       caregiverIndex: domain.caregiver_index,
       i18nAll,
       onRatingUpdate,
+      onItemCommentUpdate,
       onConfidentialityUpdate,
       isAssessmentUnderSix,
       canReleaseConfidentialInfo,
@@ -132,7 +134,7 @@ class Domain extends Component {
                 }}
               >
                 {is_caregiver_domain && this.renderCaregiverName()}
-                {<DomainItemList {...itemListProps} />}
+                <DomainItemList {...itemListProps} />
                 {is_caregiver_domain && (
                   <DomainCaregiverControls
                     onRemoveCaregiverDomain={this.handleRemoveCaregiverDomain}
@@ -161,6 +163,7 @@ Domain.propTypes = {
   onAddCaregiverDomain: PropTypes.func.isRequired,
   onCaregiverNameUpdate: PropTypes.func.isRequired,
   onConfidentialityUpdate: PropTypes.func.isRequired,
+  onItemCommentUpdate: PropTypes.func.isRequired,
   onRatingUpdate: PropTypes.func.isRequired,
 }
 

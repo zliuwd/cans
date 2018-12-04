@@ -1,5 +1,5 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import DomainItemList from './DomainItemList'
 import Item from './Item'
 
@@ -13,6 +13,7 @@ describe('<DomainItemList/>', () => {
     onConfidentialityUpdate: () => {
       return 'onConfidentialityUpdate haveBeenCalled'
     },
+    onItemCommentUpdate: () => {},
     onRatingUpdate: () => {
       return 'onRatingUpdate haveBeenCalled'
     },
@@ -51,5 +52,15 @@ describe('<DomainItemList/>', () => {
     expect(target.item).toEqual({ code: 'code1' })
     expect(target.onConfidentialityUpdate()).toBe('onConfidentialityUpdate haveBeenCalled')
     expect(target.onRatingUpdate()).toBe('onRatingUpdate haveBeenCalled')
+  })
+
+  it('should propagate onItemCommentUpdate from props to onCommentUpdate Items` prop', () => {
+    const onItemCommentUpdateMock = jest.fn()
+    const props = {
+      ...fakeItemListProps,
+      onItemCommentUpdate: onItemCommentUpdateMock,
+    }
+    const wrapper = shallow(<DomainItemList {...props} />)
+    wrapper.find(Item).forEach(item => expect(item.props().onCommentUpdate).toBe(onItemCommentUpdateMock))
   })
 })

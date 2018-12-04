@@ -31,6 +31,10 @@ class Assessment extends Component {
     this.updateItem(code, 'rating', rating, caregiverIndex)
   }
 
+  handleUpdateItemComment = (code, comment, caregiverIndex) => {
+    this.updateItem(code, 'comment', comment, caregiverIndex)
+  }
+
   handleUpdateItemConfidentiality = (code, isConfidential, caregiverIndex) => {
     this.updateItem(code, 'confidential', isConfidential, caregiverIndex)
   }
@@ -137,6 +141,7 @@ class Assessment extends Component {
               isAssessmentUnderSix={isUnderSix}
               canReleaseConfidentialInfo={canReleaseConfidentialInfo}
               onRatingUpdate={this.handleUpdateItemRating}
+              onItemCommentUpdate={this.handleUpdateItemComment}
               onConfidentialityUpdate={this.handleUpdateItemConfidentiality}
               onAddCaregiverDomain={this.addCaregiverDomainAfter}
               onRemoveCaregiverDomain={this.removeCaregiverDomain}

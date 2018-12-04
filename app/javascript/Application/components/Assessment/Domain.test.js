@@ -36,6 +36,7 @@ const domainComponentDefault = (
     i18n={{ ...i18nDefault }}
     i18nAll={{ a: 'b' }}
     index={1}
+    onItemCommentUpdate={() => {}}
     onRatingUpdate={() => {}}
     onConfidentialityUpdate={() => {}}
     onAddCaregiverDomain={() => {}}
@@ -51,8 +52,30 @@ describe('<Domain />', () => {
 
   it('renders DomainScore', () => {
     const wrapper = shallow(domainComponentDefault)
-
     expect(wrapper.find(DomainScore).length).toBe(1)
+  })
+
+  it('should propagate onItemCommentUpdate from props to DomainItemList props', () => {
+    const onItemCommentUpdateMock = jest.fn()
+    const wrapper = shallow(
+      <Domain
+        key={'1'}
+        canReleaseConfidentialInfo={true}
+        domain={{ ...domainDefault }}
+        isAssessmentUnderSix={true}
+        i18n={{ ...i18nDefault }}
+        i18nAll={{}}
+        index={1}
+        onItemCommentUpdate={onItemCommentUpdateMock}
+        onRatingUpdate={() => {}}
+        onConfidentialityUpdate={() => {}}
+        onAddCaregiverDomain={() => {}}
+        handleWarningShow={() => {}}
+        onCaregiverNameUpdate={() => {}}
+      />
+    )
+    wrapper.setState({ expanded: true })
+    expect(wrapper.find(DomainItemList).props().onItemCommentUpdate).toBe(onItemCommentUpdateMock)
   })
 
   it('should render ItemList when extended', () => {
@@ -94,6 +117,7 @@ describe('<Domain />', () => {
         i18n={{ ...i18nDefault }}
         i18nAll={{}}
         index={1}
+        onItemCommentUpdate={() => {}}
         onRatingUpdate={() => {}}
         onConfidentialityUpdate={() => {}}
         onAddCaregiverDomain={callbackMock}
@@ -149,6 +173,7 @@ describe('<Domain />', () => {
                 i18n={{ ...i18nDefault }}
                 i18nAll={{}}
                 index={1}
+                onItemCommentUpdate={() => {}}
                 onRatingUpdate={() => {}}
                 onConfidentialityUpdate={() => {}}
                 onAddCaregiverDomain={() => {}}
@@ -189,6 +214,7 @@ describe('<Domain />', () => {
                 i18n={{ ...i18nDefault }}
                 i18nAll={{}}
                 index={1}
+                onItemCommentUpdate={() => {}}
                 onRatingUpdate={() => {}}
                 onConfidentialityUpdate={() => {}}
                 onAddCaregiverDomain={() => {}}

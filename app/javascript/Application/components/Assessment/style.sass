@@ -229,6 +229,56 @@
   margin-top: 1rem
 
 //********************
+// ItemComment
+//********************
+.item-comment-wrapper
+  display: flex
+  justify-content: center
+
+.item-comment-block
+  display: flex
+  flex-wrap: wrap
+  width: 60%
+
+.item-comment-label
+  color: $black
+  margin-left: 0.8rem
+  vertical-align: text-bottom
+
+.item-comment-textarea
+  font-size: 1.5rem
+  margin-top: 0
+  min-height: 7rem
+  &::placeholder
+    color: $light-gray
+
+.item-comment-textarea-empty
+  @extend .item-comment-textarea
+  min-height: 3.2rem
+  height: 3.2rem
+
+.item-toolbar-comment-icon
+  margin-right: 2rem
+
+.item-comment-text-length
+  width: 100%
+  text-align: right
+
+//********************
+// ItemCommentIcon
+//********************
+%comment-icon
+  font-size: 1.7rem
+
+.comment-icon-outlined
+  @extend %comment-icon
+  color: $suva-gray
+
+.comment-icon-solid
+  @extend %comment-icon
+  color: $aspen
+
+//********************
 // Date picker
 //********************
 .rw-datetime-picker
