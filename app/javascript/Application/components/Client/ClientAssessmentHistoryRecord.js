@@ -41,7 +41,7 @@ class ClientAssessmentHistoryRecord extends Component {
       <Typography variant={'title'} className={'history-item-info'}>
         {`${actionVerb} on ${formattedTimestamp} by ${updatedByName}`}
         <br />
-        {`${caseReferralNumber}: ${serviceSourceUiId}`}
+        {`${caseReferralNumber}: ${serviceSourceUiId || ''}`}
         <br />
         {`County: ${county ? county.name : ''}`}
       </Typography>
