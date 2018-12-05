@@ -32,10 +32,16 @@ module Cans
 
     config.middleware.use SystemInformation::SystemInformationMiddleware
     config.middleware
+          .insert_after(SystemInformation::SystemInformationMiddleware,
+            Cwds::Authentication::Authenticator)
+    config.middleware
           .insert_after(Cwds::Authentication::Authenticator,
             Infrastructure::CwdsPermissionChecker)
     config.middleware
-          .insert_after(SystemInformation::SystemInformationMiddleware,
+          .insert_after(Infrastructure::CwdsPermissionChecker,
+            Cwds::Authentication::ApiMiddleware)
+    config.middleware
+          .insert_after(Cwds::Authentication::ApiMiddleware,
             Infrastructure::TimeoutMiddleware)
     config.micro_services = config_for(:micro_services)
     config.relative_url_root = ENV['CANS_BASE_PATH'] || '/'
