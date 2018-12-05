@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Row, Col } from 'reactstrap'
-import { Page, SideNav } from './'
+import { Page } from './'
 import BreadCrumbsBuilder from './BreadCrumb/BreadCrumbsBuilder'
 import { childInfoJson } from '../Client/Client.helper.test'
 import { ClientService } from '../Client/Client.service'
@@ -30,15 +30,6 @@ describe('<Page />', () => {
   })
 
   describe('layout', () => {
-    it('renders with <SideNav /> links', async () => {
-      const wrapper = getWrapper(navigation.CHILD_PROFILE)
-      await wrapper.instance().componentDidMount()
-      const sideNav = wrapper.find(SideNav)
-      expect(sideNav.length).toBe(1)
-      expect(sideNav.dive().find({ text: 'County Client List' }).length).toBe(1)
-      expect(sideNav.dive().find({ text: 'Client Search' }).length).toBe(1)
-    })
-
     it('renders with <BreadCrumbsBuilder /> links', async () => {
       const wrapper = getWrapper(navigation.ASSESSMENT_ADD)
       await wrapper.instance().componentDidMount()
@@ -47,16 +38,13 @@ describe('<Page />', () => {
       expect(breadCrumbsBuilder.length).toBe(1)
     })
 
-    it('splits sidebar and main content 3:9', async () => {
+    it('renders main content into 12 column grid', async () => {
       const wrapper = getWrapper(navigation.CHILD_PROFILE)
       await wrapper.instance().componentDidMount()
       const cols = wrapper.find(Row).find(Col)
-      const sideCol = cols.at(0)
-      const mainCol = cols.at(1)
+      const mainCol = cols.at(0)
 
-      expect(sideCol.props().xs).toEqual('3')
-      expect(sideCol.find(SideNav).exists()).toEqual(true)
-      expect(mainCol.props().xs).toEqual('9')
+      expect(mainCol.props().xs).toEqual('12')
       expect(mainCol.props().role).toEqual('main')
     })
 

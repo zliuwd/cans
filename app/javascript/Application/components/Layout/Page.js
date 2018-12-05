@@ -1,14 +1,12 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Container, Row, Col } from 'reactstrap'
-import { SideNav } from './'
 import { Client, ClientAddEditForm, ClientService } from '../Client'
 import BreadCrumbsBuilder from './BreadCrumb/BreadCrumbsBuilder'
 import { navigation, dashboards } from '../../util/constants'
 import { AssessmentContainer, ChangeLogPage } from '../Assessment'
 import { SearchContainer } from '../Search'
 import { SupervisorDashboard, CaseLoadPage, CurrentUserCaseLoadPage } from '../Staff'
-import Sticker from 'react-stickyfill'
 import UserAccountService from '../common/UserAccountService'
 import { logPageAction } from '../../util/analytics'
 import { PageHeader } from '../Header'
@@ -105,47 +103,6 @@ class Page extends Component {
     }
   }
 
-  renderWithSidebar(content) {
-    return (
-      <Row>
-        <Col xs="3">
-          <Sticker>
-            <SideNav />
-          </Sticker>
-        </Col>
-        <Col xs="9" role={'main'} id={'main-content'}>
-          <Row>
-            <Col xs="12">{content}</Col>
-          </Row>
-        </Col>
-      </Row>
-    )
-  }
-
-  renderWithoutSidebar(content) {
-    return (
-      <Row>
-        <Col xs="12" role={'main'} id={'main-content'}>
-          <Row>
-            <Col xs="12">{content}</Col>
-          </Row>
-        </Col>
-      </Row>
-    )
-  }
-
-  renderRow() {
-    switch (this.props.navigateTo) {
-      case navigation.CLIENT_SEARCH:
-      case navigation.ASSESSMENT_CHANGELOG:
-      case navigation.ASSESSMENT_ADD:
-      case navigation.ASSESSMENT_EDIT:
-        return this.renderWithoutSidebar(this.renderContent())
-      default:
-        return this.renderWithSidebar(this.renderContent())
-    }
-  }
-
   render() {
     const { isLoaded, header } = this.state
     if (!isLoaded) return null
@@ -162,7 +119,11 @@ class Page extends Component {
             client={this.state.client}
             url={this.props.match.url}
           />
-          {this.renderRow()}
+          <Row>
+            <Col xs="12" role={'main'} id={'main-content'}>
+              {this.renderContent()}
+            </Col>
+          </Row>
         </Container>
       </Fragment>
     )
