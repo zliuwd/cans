@@ -17,6 +17,7 @@ Bundler.require(*Rails.groups)
 
 module Cans
   class Application < Rails::Application
+    require 'infrastructure/cwds_permission_checker'
     require 'infrastructure/timeout_middleware'
 
     # Initialize configuration defaults for originally generated Rails version.
@@ -30,6 +31,9 @@ module Cans
     # the framework and any gems in your application.
 
     config.middleware.use SystemInformation::SystemInformationMiddleware
+    config.middleware
+          .insert_after(Cwds::Authentication::Authenticator,
+            Infrastructure::CwdsPermissionChecker)
     config.middleware
           .insert_after(SystemInformation::SystemInformationMiddleware,
             Infrastructure::TimeoutMiddleware)
