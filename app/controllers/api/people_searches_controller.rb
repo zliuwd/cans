@@ -13,7 +13,7 @@ module Api
     private
 
     def search_params
-      params.permit(:search_term, :is_client_only)
+      params.permit(:search_term, :is_client_only, search_after: [])
     end
   end
 end

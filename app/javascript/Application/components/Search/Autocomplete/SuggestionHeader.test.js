@@ -4,8 +4,7 @@ import { shallow } from 'enzyme'
 
 describe('<SuggestionHeader />', () => {
   const defaultProps = {
-    currentNumberOfResults: 10,
-    totalResults: 100,
+    totalResults: 106,
     searchTerm: 'casey',
   }
 
@@ -17,19 +16,42 @@ describe('<SuggestionHeader />', () => {
       })
 
       it('renders with 1 <strong> element', () => {
-        const wrapper = shallow(<SuggestionHeader {...defaultProps} />)
+        const props = {
+          page: 2,
+          currentNumberOfResults: 10,
+          ...defaultProps,
+        }
+        const wrapper = shallow(<SuggestionHeader {...props} />)
         expect(wrapper.find('strong').length).toBe(1)
       })
     })
 
     describe('renders text in the suggestion header', () => {
-      it('renders the number of results', () => {
-        const wrapper = shallow(<SuggestionHeader {...defaultProps} />)
-        expect(wrapper.find('strong').text()).toEqual(`Showing 1-10 of 100 results for "casey"`)
+      describe('displays the correct range of results, number of results, and search term', () => {
+        it('on the second page', () => {
+          const props = {
+            page: 2,
+            currentNumberOfResults: 10,
+            ...defaultProps,
+          }
+          const wrapper = shallow(<SuggestionHeader {...props} />)
+          expect(wrapper.find('strong').text()).toEqual(`Showing 11-20 of 106 results for "casey"`)
+        })
+
+        it('on the last page', () => {
+          const props = {
+            page: 11,
+            currentNumberOfResults: 6,
+            ...defaultProps,
+          }
+          const wrapper = shallow(<SuggestionHeader {...props} />)
+          expect(wrapper.find('strong').text()).toEqual(`Showing 101-106 of 106 results for "casey"`)
+        })
       })
 
       it('renders no results when currentNumberOfResults is less than 1', () => {
         const props = {
+          page: 0,
           currentNumberOfResults: 0,
           totalResults: 0,
           searchTerm: 'casey',
@@ -40,6 +62,7 @@ describe('<SuggestionHeader />', () => {
 
       it('renders null when totalResults is null', () => {
         const props = {
+          page: 0,
           currentNumberOfResults: 0,
           totalResults: null,
           searchTerm: 'casey',

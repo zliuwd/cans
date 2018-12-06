@@ -6,6 +6,7 @@ import Autocompleter from './Autocompleter'
 import Autocomplete from 'react-autocomplete'
 import SuggestionHeader from './SuggestionHeader'
 import PersonSuggestion from './PersonSuggestion'
+import SearchPagination from './SearchPagination'
 import { defaultProps, propsWithResults } from '../clientresults.mocks'
 
 describe('<Autocompleter />', () => {
@@ -60,7 +61,7 @@ describe('<Autocompleter />', () => {
         autocompleteInput.instance().value = 'annie'
         autocompleteInput.simulate('change')
 
-        expect(spy).toHaveBeenCalledTimes(0)
+        expect(spy).toHaveBeenCalledTimes(1)
       })
 
       describe('when there are client results', () => {
@@ -85,6 +86,16 @@ describe('<Autocompleter />', () => {
 
           expect(wrapper.find(PersonSuggestion).exists()).toBe(true)
         })
+
+        it('renders a <SearchPagination /> on focus', () => {
+          const wrapper = mount(<Autocompleter {...propsWithResults} />)
+          wrapper.setState({ searchTerm: 'annie' })
+          wrapper
+            .find(Autocomplete)
+            .find('#client-search-autocompleter')
+            .simulate('focus')
+          expect(wrapper.find(SearchPagination).exists()).toBe(true)
+        })
       })
 
       describe('when there are no client results', () => {
@@ -108,6 +119,16 @@ describe('<Autocompleter />', () => {
             .simulate('focus')
 
           expect(wrapper.find(PersonSuggestion).exists()).toBe(false)
+        })
+
+        it('renders a <SearchPagination /> on focus', () => {
+          const wrapper = mount(<Autocompleter {...defaultProps} />)
+          wrapper.setState({ searchTerm: 'annie' })
+          wrapper
+            .find(Autocomplete)
+            .find('#client-search-autocompleter')
+            .simulate('focus')
+          expect(wrapper.find(SearchPagination).exists()).toBe(true)
         })
       })
     })
@@ -176,6 +197,15 @@ describe('<Autocompleter />', () => {
             .simulate('focus')
 
           expect(wrapper.find(PersonSuggestion).exists()).toBe(false)
+        })
+
+        it('does not render a <SearchPagination /> on focus', () => {
+          const wrapper = mount(<Autocompleter {...defaultProps} />)
+          wrapper
+            .find(Autocomplete)
+            .find('#client-search-autocompleter')
+            .simulate('focus')
+          expect(wrapper.find(SearchPagination).exists()).toBe(false)
         })
       })
     })

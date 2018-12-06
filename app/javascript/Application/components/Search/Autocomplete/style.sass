@@ -67,3 +67,60 @@
     .client-search-matched-field
         color: $light-blue
         font-weight: bold
+
+//********************
+//Suggestion Footer
+//********************
+.suggestion-footer-wrapper
+    padding-top: 1.5rem
+    .suggestion-footer
+        width: 19rem
+        margin: 0 auto
+        .pagination-wrapper
+            display: inline-block
+            min-width: 10rem
+            button
+                padding: .75rem 1.25rem
+                border: .1rem solid $medium-gray
+                color: $light-blue
+                background-color: #f9f9f9
+                cursor: pointer
+            button.prev-page
+                position: relative
+                top: .1rem
+                padding-top: .55rem
+                padding-bottom: .55rem
+                font-size: 1.8rem
+                border-radius: .4rem 0 0 .4rem
+                border-right: 0
+                height: 4rem
+            button.prev-page:disabled
+                i.fa-caret-left
+                    color: $dark-gray
+            button.next-page
+                position: relative
+                top: .1rem
+                padding-top: .55rem
+                padding-bottom: .55rem            
+                font-size: 1.8rem
+                border-radius: 0 .4rem .4rem 0
+                margin-right: 0
+                height: 4rem
+            button.next-page:disabled
+                i.fa-caret-right
+                    color: $dark-gray
+            input.current-page-number
+                display: inline-block
+                text-align: center
+                width: 3.5rem
+                height: 4rem
+                margin-right: 1.5rem
+                border-radius: 0
+            div.total-pages-wrapper
+                display: inline-block
+                width: auto
+                margin-right: 1.5rem
+                span.total-pages
+                    margin-left: .5rem
+                    color: $light-blue
+    

@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import ItemComment from './ItemComment'
-import { Input } from '@cwds/components'
 import ItemCommentIcon from './ItemCommentIcon'
 
 describe('<ItemComment />', () => {
@@ -23,7 +22,7 @@ describe('<ItemComment />', () => {
       describe('and has an empty value', () => {
         it('should render a folded version of the component', () => {
           const wrapper = getWrapper()
-          const input = wrapper.find(Input).dive()
+          const input = wrapper.find('textarea')
           expect(input.props().className.includes('item-comment-textarea-empty')).toBeTruthy()
         })
       })
@@ -31,7 +30,7 @@ describe('<ItemComment />', () => {
       describe('and has a value that is not empty', () => {
         it('should render an extended version of the component', () => {
           const wrapper = getWrapper('a comment')
-          const input = wrapper.find(Input).dive()
+          const input = wrapper.find('textarea')
           expect(input.props().className.includes('item-comment-textarea-empty')).toBeFalsy()
           expect(input.props().className.includes('item-comment-textarea')).toBeTruthy()
         })
@@ -43,7 +42,7 @@ describe('<ItemComment />', () => {
         it('should render a extended version of the component', () => {
           const wrapper = getWrapper('')
           wrapper.setState({ isFocused: true })
-          const input = wrapper.find(Input).dive()
+          const input = wrapper.find('textarea')
           expect(input.props().className.includes('item-comment-textarea-empty')).toBeFalsy()
           expect(input.props().className.includes('item-comment-textarea')).toBeTruthy()
         })
@@ -53,7 +52,7 @@ describe('<ItemComment />', () => {
         it('should render an extended version of the component', () => {
           const wrapper = getWrapper('a comment')
           wrapper.setState({ isFocused: true })
-          const input = wrapper.find(Input).dive()
+          const input = wrapper.find('textarea')
           expect(input.props().className.includes('item-comment-textarea-empty')).toBeFalsy()
           expect(input.props().className.includes('item-comment-textarea')).toBeTruthy()
         })
@@ -73,24 +72,24 @@ describe('<ItemComment />', () => {
     })
 
     describe('comment length indicator', () => {
-      it('should be rendered when ItemComment is focused', () => {
+      it('should be rendered and have an `item-comment-text-length` style when ItemComment is focused', () => {
         const wrapper = getWrapper('a comment')
         wrapper.setState({ isFocused: true })
         expect(wrapper.find('span.item-comment-text-length').exists()).toBeTruthy()
       })
 
-      it('should be hidden when ItemComment is not focused', () => {
+      it('should have hidden style when ItemComment is not focused', () => {
         const wrapper = getWrapper('a comment')
-        expect(wrapper.find('span.item-comment-text-length').exists()).toBeFalsy()
+        expect(wrapper.find('span.item-comment-text-length-hidden').exists()).toBeTruthy()
       })
     })
   })
 
   describe('#handleInternalValueUpdate()', () => {
-    it('should be propagated to Input onChange prop', () => {
+    it('should be propagated to textarea onChange prop', () => {
       const wrapper = getWrapper()
       wrapper
-        .find(Input)
+        .find('textarea')
         .props()
         .onChange({ target: { value: 'new value' } })
       expect(wrapper.state().value).toBe('new value')
@@ -98,10 +97,10 @@ describe('<ItemComment />', () => {
   })
 
   describe('#handleOnFocus()', () => {
-    it('should be propagated to Input onFocus prop', () => {
+    it('should be propagated to textarea onFocus prop', () => {
       const wrapper = getWrapper()
       wrapper
-        .find(Input)
+        .find('textarea')
         .props()
         .onFocus()
       expect(wrapper.state().isFocused).toBeTruthy()
@@ -109,10 +108,10 @@ describe('<ItemComment />', () => {
   })
 
   describe('#handleOnBlur()', () => {
-    it('should be propagated to Input onBlur prop', () => {
+    it('should be propagated to textarea onBlur prop', () => {
       const wrapper = getWrapper()
       wrapper
-        .find(Input)
+        .find('textarea')
         .props()
         .onBlur()
       expect(wrapper.state().isFocused).toBeFalsy()

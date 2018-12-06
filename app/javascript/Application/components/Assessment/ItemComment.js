@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Input, Label } from '@cwds/components'
+import { Label } from '@cwds/components'
 import ItemCommentIcon from './ItemCommentIcon'
 
 const maxCommentLength = 250
@@ -34,7 +34,8 @@ class ItemComment extends Component {
   render() {
     const { isFocused, value } = this.state
     const isFolded = !isFocused && !value
-    const classSuffix = isFolded ? '-empty' : ''
+    const inputClassSuffix = isFolded ? '-empty' : ''
+    const lengthClassSuffix = isFocused ? '' : '-hidden'
     const inputId = `comment-${this.props.itemCode}`
     return (
       <div className={'item-comment-wrapper'}>
@@ -43,17 +44,18 @@ class ItemComment extends Component {
             <ItemCommentIcon isSolid={Boolean(value)} />
             <span className={'item-comment-label'}>Comment</span>
           </Label>
-          <Input
+          <textarea
             id={inputId}
-            type={'textarea'}
-            className={`item-comment-textarea${classSuffix}`}
+            className={`item-comment-textarea${inputClassSuffix}`}
             value={value}
             onChange={this.handleInternalValueUpdate}
             onFocus={this.handleOnFocus}
             onBlur={this.handleOnBlur}
             maxLength={maxCommentLength}
           />
-          {isFocused && <span className={'item-comment-text-length'}>{`${value.length}/${maxCommentLength}`}</span>}
+          <span className={`item-comment-text-length${lengthClassSuffix}`}>{`${
+            value.length
+          }/${maxCommentLength}`}</span>
         </div>
       </div>
     )

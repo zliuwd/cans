@@ -43,11 +43,26 @@ export const domainTitleStyle = {
 
 export const itemStyle = {
   display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'flex-start',
+  flexDirection: 'column',
   padding: '0 1rem 0 1rem',
   backgroundColor: 'transparent',
   borderBottom: 'thin solid gray',
+  pageBreakInside: 'avoid',
+}
+
+export const itemMainLine = {
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'flex-start',
+  backgroundColor: 'transparent',
+  pageBreakInside: 'avoid',
+}
+
+export const itemComment = {
+  fontSize: '0.8rem',
+  alignSelf: 'center',
+  width: '90%',
+  backgroundColor: 'transparent',
   pageBreakInside: 'avoid',
 }
 

@@ -11,6 +11,8 @@ import {
   headerRecord,
   headerRow,
   itemStyle,
+  itemMainLine,
+  itemComment,
   itemTitleWrapper,
   itemTitle,
   optionStyle,
@@ -29,6 +31,8 @@ import { isoToLocalDate } from '../../util/dateHelper'
 import { shouldDomainBeRendered, shouldItemBeRendered } from '../Assessment/AssessmentHelper'
 import { totalScoreCalculation } from '../Assessment/DomainScoreHelper.js'
 import moment from 'moment'
+
+const isItemHidden = item => item.confidential_by_default && item.confidential
 
 class PrintAssessment extends PureComponent {
   constructor(props) {
@@ -75,25 +79,24 @@ class PrintAssessment extends PureComponent {
     const isRegularType = item.rating_type === 'REGULAR'
     return (
       <div key={caregiverIndex + itemNumber} style={itemStyle}>
-        <div style={itemTitleWrapper}>
-          <div style={itemTitle}>
-            {itemNumber}
-            {caregiverIndex}. {title}
-          </div>
-        </div>
-        <div style={flex}>
+        <div style={itemMainLine}>
           <div style={itemTitleWrapper}>
-            <div style={optionLabelStyle}>{item.confidential_by_default ? 'Confidential' : 'Discretion Needed'} </div>
+            <div style={itemTitle}>
+              {itemNumber}
+              {caregiverIndex}. {title}
+            </div>
           </div>
-          <div style={itemTitleWrapper}>
-            <input type={'checkbox'} checked={item.confidential} readOnly />
+          <div style={flex}>
+            <div style={itemTitleWrapper}>
+              <div style={optionLabelStyle}>{item.confidential_by_default ? 'Confidential' : 'Discretion Needed'} </div>
+            </div>
+            <div style={itemTitleWrapper}>
+              <input type={'checkbox'} checked={item.confidential} readOnly />
+            </div>
           </div>
+          {!isItemHidden(item) ? this.renderOptions(item, isRegularType) : <div style={redactedRating} />}
         </div>
-        {!(item.confidential_by_default && item.confidential) ? (
-          this.renderOptions(item, isRegularType)
-        ) : (
-          <div style={redactedRating} />
-        )}
+        {item.comment && !isItemHidden(item) ? <div style={itemComment}>Comment: {item.comment}</div> : null}
       </div>
     )
   }
@@ -108,7 +111,7 @@ class PrintAssessment extends PureComponent {
         <div style={domainHeaderStyle}>
           <div style={domainTitleStyle}>
             {title} {caregiverName && `- ${caregiverName}`}
-            {`- ( Domain Total Score: ${totalScore} )`}
+            {`- (Domain Total Score: ${totalScore})`}
           </div>
         </div>
         <div style={thinGrayBorder}>
