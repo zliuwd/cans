@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/ca-cwds/dora_api
-  revision: 2969d0c198a646757332775b97f85da2ea7225b7
+  revision: c2636b141dbf478f077ede0705bc5e663b62387b
   specs:
-    dora (0.1.1)
+    dora (0.2.0)
 
 GIT
   remote: https://github.com/ca-cwds/system_information.git
@@ -333,7 +333,7 @@ DEPENDENCIES
   capybara (>= 2.15, < 4.0)
   chromedriver-helper
   coffee-rails (~> 4.2)
-  dora (~> 0.1.0)!
+  dora (~> 0.2.0)!
   dotenv-rails
   faker
   faraday (~> 0.13.1)

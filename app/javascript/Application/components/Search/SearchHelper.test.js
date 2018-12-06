@@ -1,10 +1,19 @@
 import { fromJS } from 'immutable'
-import { mapLanguages, mapRaces, mapIsSensitive, mapIsSealed, mapPhoneNumber, mapAddress } from './SearchHelper'
+import {
+  mapLanguages,
+  mapRaces,
+  mapIsSensitive,
+  mapIsSealed,
+  mapPhoneNumber,
+  mapAddress,
+  encodedSearchAfterParams,
+} from './SearchHelper'
 import {
   resultWithPhoneNumbers,
   resultWithTwoAddresses,
   addressPlacementHome,
   addressCommon,
+  sortAfterScore,
 } from './clientresults.mocks'
 import { RESIDENCE_TYPES } from '../../enums/AddressType'
 import { unableToDetermineCodes } from '../../enums/SystemCodes'
@@ -19,6 +28,7 @@ describe('SearchHelper', () => {
     raceTypes,
     unableToDetermineCodes,
   }
+
   describe('mapLanguages', () => {
     it('maps languages object to values, sorting by primary', () => {
       const result = fromJS({
@@ -234,5 +244,15 @@ describe('SearchHelper', () => {
 
       expect(racesResult.toJS()).toEqual(['Unknown'])
     })
+  })
+})
+
+describe('encodedSearchAfterParams', () => {
+  it('returns url encoded query string params', () => {
+    const sortAfter = [sortAfterScore, 'person-summary#9GE4pyI0N3']
+
+    expect(encodedSearchAfterParams(sortAfter)).toBe(
+      'search_after%5B%5D=125.48025&search_after%5B%5D=person-summary%239GE4pyI0N3'
+    )
   })
 })

@@ -71,3 +71,12 @@ export const mapPhoneNumber = result =>
   addressMaybe(result)
     .map(address => address.get('phone_numbers'))
     .valueOrElse(List())
+
+export const encodedSearchAfterParams = sortAfter => {
+  return sortAfter
+    ? sortAfter
+        .map(item => `search_after${encodeURIComponent('[]')}=${encodeURIComponent(item)}`)
+        .filter(Boolean)
+        .join('&')
+    : null
+}

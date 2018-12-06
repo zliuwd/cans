@@ -3,10 +3,12 @@ import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 import Autocomplete from 'react-autocomplete'
 import SuggestionHeader from './SuggestionHeader'
+import SearchPagination from './SearchPagination'
 import PersonSuggestion from './PersonSuggestion'
 import { trimSafely } from '../../../util/formatters'
 
 const MIN_SEARCHABLE_CHARS = 2
+const disablePagination = false
 
 const addPosAndSetAttr = results => {
   const one = 1
@@ -38,6 +40,7 @@ export default class Autocompleter extends Component {
     this.renderMenu = this.renderMenu.bind(this)
     this.onChangeInput = this.onChangeInput.bind(this)
     this.renderItem = this.renderItem.bind(this)
+    this.changePage = this.changePage.bind(this)
   }
 
   hideMenu() {
@@ -52,8 +55,10 @@ export default class Autocompleter extends Component {
   }
 
   onSelect(item) {
-    // if we didn't select the suggestion header, then redirect
-    if (!item.suggestionHeader) {
+    this.element_ref.setIgnoreBlur(true)
+
+    // if we didn't select the suggestion header and the pagination footer, then redirect
+    if (!item.suggestionHeader && !item.suggestionFooter) {
       this.setState({
         redirection: {
           shouldRedirect: true,
@@ -76,49 +81,75 @@ export default class Autocompleter extends Component {
     }
   }
 
+  changePage(direction) {
+    const { searchTerm } = this.state
+    const { getPrevPage, getNextPage } = this.props
+
+    if (direction === 'prev') {
+      getPrevPage()
+    } else if (direction === 'next') {
+      const { results } = this.props
+      const numResults = results.length
+      const sortAfter = results[numResults - 1].sort
+
+      getNextPage(searchTerm, sortAfter)
+    }
+  }
+
   renderMenu(items, _searchTerm, _style) {
     return <div className="autocomplete-menu">{items}</div>
   }
 
   renderEachItem(item, id, isHighlighted) {
     const { searchTerm } = this.state
+    const { results, totalResults, page } = this.props
     const key = `${item.posInSet}-of-${item.setSize}`
 
     if (item.suggestionHeader) {
       return (
         <div id={id} className={'suggestion-header-wrapper'} key={key} aria-live="polite">
           <SuggestionHeader
-            currentNumberOfResults={this.props.results.length}
-            totalResults={this.props.totalResults}
+            page={page}
+            currentNumberOfResults={results.length}
+            totalResults={totalResults}
             searchTerm={searchTerm}
           />
         </div>
       )
+    } else if (item.suggestionFooter) {
+      return (
+        <div id={id} className={'suggestion-footer-wrapper'} key={key} aria-live="polite">
+          <SearchPagination
+            isDisabled={disablePagination}
+            totalResults={totalResults}
+            changePage={this.changePage}
+            page={page}
+          />
+        </div>
+      )
+    } else {
+      return (
+        <div id={id} key={key} className={itemClassName(isHighlighted)}>
+          <PersonSuggestion {...item} />
+        </div>
+      )
     }
-
-    return (
-      <div id={id} key={key} className={itemClassName(isHighlighted)}>
-        <PersonSuggestion {...item} />
-      </div>
-    )
   }
 
   renderItem(item, isHighlighted, _styles) {
     const key = `${item.posInSet}-of-${item.setSize}`
     const id = `search-result-${key}`
-
     return this.renderEachItem(item, id, isHighlighted)
   }
 
   onChangeInput(_, searchTerm) {
+    this.props.onClear()
     const trimmedSearchTerm = trimSafely(searchTerm)
-
     if (this.isSearchable(trimSafely(trimmedSearchTerm))) {
       this.setState({ searchTerm, menuVisible: true })
       this.props.onChange(trimmedSearchTerm)
     } else {
       this.hideMenu()
-      this.props.onClear()
       this.setState({ searchTerm })
     }
   }
@@ -147,7 +178,14 @@ export default class Autocompleter extends Component {
         setSize: results.length,
       },
     ]
-    const newResults = suggestionHeader.concat(results)
+    const suggestionFooter = [
+      {
+        suggestionFooter: 'suggestion Footer',
+        posInSet: 'footer',
+        setSize: results.length,
+      },
+    ]
+    const newResults = suggestionHeader.concat(results).concat(suggestionFooter)
     return (
       <Autocomplete
         ref={el => (this.element_ref = el)}
@@ -187,16 +225,22 @@ export default class Autocompleter extends Component {
 }
 
 Autocompleter.defaultProps = {
+  getNextPage: () => {},
+  getPrevPage: () => {},
   onChange: () => {},
   onClear: () => {},
+  page: 0,
   results: [],
   totalResults: 0,
 }
 
 Autocompleter.propTypes = {
+  getNextPage: PropTypes.func,
+  getPrevPage: PropTypes.func,
   id: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   onClear: PropTypes.func,
+  page: PropTypes.number,
   results: PropTypes.array,
   totalResults: PropTypes.number,
 }
