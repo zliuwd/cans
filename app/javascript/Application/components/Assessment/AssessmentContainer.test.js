@@ -1,5 +1,12 @@
 import React from 'react'
-import { Assessment, AssessmentContainer, AssessmentFormHeader, AssessmentService, SecurityService } from './index'
+import {
+  Assessment,
+  AssessmentContainer,
+  AssessmentFormHeader,
+  AssessmentService,
+  I18nService,
+  SecurityService,
+} from './index'
 import { childInfoJson } from '../Client/Client.helper.test'
 import ClientService from '../Client/Client.service'
 import { shallow, mount } from 'enzyme'
@@ -84,7 +91,7 @@ describe('<AssessmentContainer />', () => {
     })
 
     describe('page header buttons', () => {
-      it('should update page header buttons on componentDidMount', () => {
+      it('should update page header buttons when all data loaded', async () => {
         const updateHeaderButtonsMock = jest.fn()
         const props = {
           ...defaultProps,
@@ -94,11 +101,13 @@ describe('<AssessmentContainer />', () => {
             updateHeaderButtonsToDefault: () => {},
           },
         }
-        shallow(<AssessmentContainer {...props} />)
+        const wrapper = shallow(<AssessmentContainer {...props} />, { disableLifecycleMethods: true })
+        await wrapper.instance().onFetchI18nSuccess({ key: 'value' })
         expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
       })
 
-      it('should update page header buttons on componentDidUpdate', () => {
+      it('should update page header buttons on componentDidUpdate', async () => {
+        jest.spyOn(I18nService, 'fetchByInstrumentId').mockReturnValue(Promise.resolve({ key: 'value' }))
         const updateHeaderButtonsMock = jest.fn()
         const props = {
           ...defaultProps,
@@ -108,11 +117,10 @@ describe('<AssessmentContainer />', () => {
             updateHeaderButtonsToDefault: () => {},
           },
         }
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
+        const wrapper = shallow(<AssessmentContainer {...props} />, { disableLifecycleMethods: true })
         wrapper.instance().shouldSaveButtonBeEnabled = jest.fn(() => true)
         wrapper.instance().componentDidUpdate()
-        expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(2)
+        expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
       })
 
       describe('#updateSaveButtonStatusIfNeeded()', () => {
@@ -126,11 +134,10 @@ describe('<AssessmentContainer />', () => {
               updateHeaderButtonsToDefault: () => {},
             },
           }
-          const wrapper = shallow(<AssessmentContainer {...props} />)
-          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
+          const wrapper = shallow(<AssessmentContainer {...props} />, { disableLifecycleMethods: true })
           wrapper.instance().shouldSaveButtonBeEnabled = jest.fn(() => true)
           wrapper.instance().componentDidUpdate()
-          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(2)
+          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
         })
 
         it('should not update page header buttons when it is not needed', () => {
@@ -143,11 +150,10 @@ describe('<AssessmentContainer />', () => {
               updateHeaderButtonsToDefault: () => {},
             },
           }
-          const wrapper = shallow(<AssessmentContainer {...props} />)
-          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
+          const wrapper = shallow(<AssessmentContainer {...props} />, { disableLifecycleMethods: true })
           wrapper.instance().shouldSaveButtonBeEnabled = jest.fn(() => false)
           wrapper.instance().componentDidUpdate()
-          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
+          expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(0)
         })
       })
 

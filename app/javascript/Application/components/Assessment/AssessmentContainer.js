@@ -50,13 +50,8 @@ class AssessmentContainer extends Component {
   }
 
   async componentDidMount() {
-    this.initHeaderButtons(this.state.isSaveButtonEnabled)
     const assessmentId = this.props.match.params.id
-    let isEditable = assessmentId === undefined
-    if (!isEditable) {
-      isEditable = await SecurityService.checkPermission(`assessment:write:${assessmentId}`)
-    }
-    this.setState({ isEditable: isEditable })
+    await this.updateIsEditableState(assessmentId)
     assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment()
   }
 
@@ -66,6 +61,12 @@ class AssessmentContainer extends Component {
 
   componentWillUnmount() {
     this.props.pageHeaderButtonsController.updateHeaderButtonsToDefault()
+  }
+
+  async updateIsEditableState(assessmentId) {
+    const isEditable =
+      assessmentId === undefined || (await SecurityService.checkPermission(`assessment:write:${assessmentId}`))
+    this.setState({ isEditable })
   }
 
   initHeaderButtons(isSaveButtonEnabled) {
@@ -168,10 +169,11 @@ class AssessmentContainer extends Component {
     }
   }
 
-  onFetchI18nSuccess(i18n) {
-    this.setState({
+  async onFetchI18nSuccess(i18n) {
+    await this.setState({
       i18n: i18n,
     })
+    this.initHeaderButtons(this.state.isSaveButtonEnabled)
   }
 
   updateAssessment = assessment => {
