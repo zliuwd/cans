@@ -248,7 +248,8 @@
 .item-comment-textarea
   font-size: 1.5rem
   margin-top: 0
-  min-height: 7rem
+  height: 7rem
+  transition: height 1s
   &::placeholder
     color: $light-gray
 
@@ -262,7 +263,14 @@
 
 .item-comment-text-length
   width: 100%
+  overflow: hidden
   text-align: right
+  transition: height 1s
+  height: 1.8rem
+
+.item-comment-text-length-hidden
+  @extend .item-comment-text-length
+  height: 0
 
 //********************
 // ItemCommentIcon
