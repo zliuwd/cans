@@ -4,7 +4,7 @@ module Infrastructure
   class TimeoutMiddleware
     def initialize(application)
       @application = application
-      @timeout = CwdsStore::Store::EXPIRATION_TIME
+      @timeout = Rails.application.config.session_options[:expire_after]
     end
 
     def call(environment)
