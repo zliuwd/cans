@@ -1,11 +1,16 @@
 import React from 'react'
 import AssessmentFormFooter from './AssessmentFormFooter'
+import SecurityService from '../common/Security.service'
 import { shallow } from 'enzyme'
+
+jest.mock('../common/Security.service')
+jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
 
 describe('AssessmentFormFooter', () => {
   const render = ({ isSubmitButtonEnabled = true, onCancelClick = jest.fn(), onSubmitAssessment = jest.fn() }) =>
     shallow(
       <AssessmentFormFooter
+        client={{ identifier: 'aaa' }}
         isSubmitButtonEnabled={isSubmitButtonEnabled}
         onCancelClick={onCancelClick}
         onSubmitAssessment={onSubmitAssessment}

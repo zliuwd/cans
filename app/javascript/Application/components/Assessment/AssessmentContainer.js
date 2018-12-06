@@ -404,6 +404,7 @@ class AssessmentContainer extends Component {
           )}
         {isUnderSix !== undefined && (
           <AssessmentFormFooter
+            client={client}
             onCancelClick={this.handleCancelClick}
             isSubmitButtonEnabled={isEditable && canPerformUpdates && isValidForSubmit}
             onSubmitAssessment={
