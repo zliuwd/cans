@@ -4,11 +4,11 @@ import Grid from '@material-ui/core/Grid'
 import Card from '@material-ui/core/Card/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
-import Button from '@material-ui/core/Button/Button'
 import { ClientAssessmentHistoryRecord } from './'
-import { Link } from 'react-router-dom'
 import { AssessmentService } from '../Assessment/Assessment.service'
 import { LoadingState } from '../../util/loadingHelper'
+import AuthBoundary, { buildCreateAssessmentPermission } from '../common/AuthBoundary'
+import AddCansButton from './AddCansButton'
 
 import './style.sass'
 
@@ -37,11 +37,9 @@ class ClientAssessmentHistory extends Component {
   renderAddCansButton() {
     const clientIdentifier = this.props.clientIdentifier
     return (
-      <Link to={`/clients/${clientIdentifier}/assessments`}>
-        <Button size="small" color="inherit" className={'card-header-cans-button'}>
-          New CANS
-        </Button>
-      </Link>
+      <AuthBoundary permission={buildCreateAssessmentPermission(clientIdentifier)}>
+        <AddCansButton clientIdentifier={clientIdentifier} />
+      </AuthBoundary>
     )
   }
 
@@ -58,7 +56,11 @@ class ClientAssessmentHistory extends Component {
     return (
       <Grid item xs={12}>
         <Card className={'card'}>
-          <CardHeader className={'card-header-cans'} title="Assessment History" action={this.renderAddCansButton()} />
+          <CardHeader
+            className={'card-header-cans card-header-cans-action'}
+            title="Assessment History"
+            action={this.renderAddCansButton()}
+          />
           <div className={'content'}>
             <CardContent>{this.renderAssessments(assessments, fetchStatus)}</CardContent>
           </div>

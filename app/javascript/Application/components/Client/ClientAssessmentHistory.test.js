@@ -1,16 +1,17 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import Card from '@material-ui/core/Card/Card'
-import Button from '@material-ui/core/Button/Button'
 import CardHeader from '@material-ui/core/CardHeader/index'
 import CardContent from '@material-ui/core/CardContent/index'
 import Grid from '@material-ui/core/Grid/Grid'
-import { MemoryRouter } from 'react-router-dom'
 import { ClientAssessmentHistory } from './index'
 import AssessmentService from '../Assessment/Assessment.service'
 import ClientAssessmentHistoryRecord from './ClientAssessmentHistoryRecord'
+import SecurityService from '../common/Security.service'
+import AddCansButton from './AddCansButton'
 
 jest.mock('../Assessment/Assessment.service')
+jest.mock('../common/Security.service')
 
 const params = {
   clientIdentifier: 'aaaaaaaaaa',
@@ -59,22 +60,20 @@ describe('<ClientAssessmentHistory', () => {
       expect(getLength(CardContent)).toBe(1)
     })
 
-    it('renders with <Link /> that navigates to /assessments', () => {
-      const wrapper = mount(
-        <MemoryRouter>
-          <ClientAssessmentHistory {...params} />
-        </MemoryRouter>
-      ).find(CardHeader)
-      expect(wrapper.props().action.props.to).toBe('/clients/aaaaaaaaaa/assessments')
-    })
-
-    it('renders with <Button /> in the Card header', () => {
-      const wrapper = mount(
-        <MemoryRouter>
-          <ClientAssessmentHistory {...params} />
-        </MemoryRouter>
-      ).find(Button)
-      expect(wrapper.text()).toBe('New CANS')
+    it('renders with <Button /> in the Card header', async () => {
+      jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
+      const wrapper = await prepareWrapper([{ id: 1 }, { id: 2 }])
+      const cardHeader = wrapper.find(CardHeader)
+      const actionWrapper = shallow(cardHeader.dive().props().action)
+      const button = actionWrapper.find(AddCansButton)
+      expect(button.exists()).toBe(true)
+      expect(
+        button
+          .dive()
+          .find('#new-cans-button')
+          .dive()
+          .text()
+      ).toBe('New CANS')
     })
   })
 

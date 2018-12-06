@@ -7,6 +7,7 @@ feature 'Assessment Page' do
     login
     visit '/clients'
     visit '/clients/0PcpFQu0QM'
+    expect(page).to have_content 'NEW CANS'
     post_new_assessment
     expect(page).to have_content 'Complete'
   end
