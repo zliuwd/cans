@@ -21,7 +21,6 @@ class AssessmentFormFooter extends PureComponent {
             id={'submit-assessment'}
             className={'button-fix-primary'}
             color={'primary'}
-            disabled={!isSubmitButtonEnabled}
             onClick={onSubmitAssessment}
           >
             Complete

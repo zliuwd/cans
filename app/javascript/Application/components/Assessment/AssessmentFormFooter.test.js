@@ -26,19 +26,18 @@ describe('AssessmentFormFooter', () => {
     })
   })
 
-  describe('submit button', () => {
+  describe('complete button', () => {
     it('can invoke a callback when enabled', () => {
       const mockFn = jest.fn()
       const footer = render({ onSubmitAssessment: mockFn })
-      const submitButton = footer.find('Button#submit-assessment')
-      expect(submitButton.props().disabled).toBe(false)
-      submitButton.simulate('click')
+      const completeButton = footer.find('Button#submit-assessment')
+      completeButton.simulate('click')
       expect(mockFn).toHaveBeenCalledTimes(1)
     })
 
     it('can be disabled', () => {
       const footer = render({ isSubmitButtonEnabled: false })
-      expect(footer.find('Button#submit-assessment').props().disabled).toBe(true)
+      expect(footer.find('AuthBoundary').props().andCondition).toBe(false)
     })
   })
 })
