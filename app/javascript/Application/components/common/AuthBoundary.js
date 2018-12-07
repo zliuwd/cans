@@ -4,7 +4,7 @@ import LoadingBoundary from './LoadingBoundary'
 import SecurityService from './Security.service'
 
 class AuthBoundary extends React.PureComponent {
-  disabled = (permission, andCondition, orCondition) => {
+  isDisabled = (permission, andCondition, orCondition) => {
     return SecurityService.checkPermission(permission).then(
       isAuthorized => !((isAuthorized && andCondition) || orCondition)
     )
@@ -15,7 +15,7 @@ class AuthBoundary extends React.PureComponent {
     return (
       <LoadingBoundary
         childNodeFetchedPropName={'disabled'}
-        fetch={() => this.disabled(permission, andCondition, orCondition)}
+        fetch={() => this.isDisabled(permission, andCondition, orCondition)}
         isHiddenWhileLoading={true}
         eagerRefreshFlagObject={{ andCondition, orCondition }}
       >
