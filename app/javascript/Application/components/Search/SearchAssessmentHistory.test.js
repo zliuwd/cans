@@ -1,10 +1,10 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
 import { SearchAssessmentHistory } from './index'
 import AssessmentService from '../Assessment/Assessment.service'
 import SearchAssessmentHistoryRecord from './SearchAssessmentHistoryRecord'
 import AssessmentLink from '../common/AssessmentLink'
+import AssessmentRecordInfo from '../common/AssessmentRecordInfo'
 
 jest.mock('../Assessment/Assessment.service')
 
@@ -65,28 +65,8 @@ describe('<SearchAssessmentHistory', () => {
   describe('components', () => {
     const wrapper = getShallowWrapper()
 
-    it('renders a card', () => {
-      expect(wrapper.find(Card).exists()).toBe(true)
-    })
-
-    it('renders a card header', () => {
-      expect(wrapper.find(CardHeader).exists()).toBe(true)
-    })
-
-    it('renders a card title', () => {
-      expect(wrapper.find(CardTitle).exists()).toBe(true)
-    })
-
-    it('renders a card body', () => {
-      expect(wrapper.find(CardBody).exists()).toBe(true)
-    })
-  })
-
-  describe('card title', () => {
-    it('should be "Assessment History"', () => {
-      const wrapper = getShallowWrapper()
-      const cardTitle = wrapper.find(CardTitle).props().children
-      expect(cardTitle).toMatch(/Assessment History/)
+    it('renders a div with className row', () => {
+      expect(wrapper.find('.row').exists()).toBe(true)
     })
   })
 
@@ -114,36 +94,43 @@ describe('<SearchAssessmentHistory', () => {
             id: 1,
             status: 'IN_PROGRESS',
             created_timestamp: '2018-10-27T15:59:46.930Z',
+            person: { first_name: 'Rajesh' },
           },
           {
             id: 2,
             status: 'IN_PROGRESS',
             created_timestamp: '2018-10-26T15:59:46.930Z',
+            person: { first_name: 'Girish' },
           },
           {
             id: 3,
             status: 'IN_PROGRESS',
             created_timestamp: '2018-10-28T20:56:19.684Z',
+            person: { first_name: 'Yama' },
           },
           {
             id: 4,
             status: 'IN_PROGRESS',
             created_timestamp: '2018-10-25T20:56:19.684Z',
+            person: { first_name: 'Shrinkhala' },
           },
           {
             id: 5,
             status: 'IN_PROGRESS',
             created_timestamp: '2018-10-24T20:56:19.684Z',
+            person: { first_name: 'Sisan' },
           },
           {
             id: 6,
             status: 'COMPLETED',
             created_timestamp: '2018-10-23T20:56:19.684Z',
+            person: { first_name: 'Laure' },
           },
           {
             id: 7,
             status: 'COMPLETED',
             created_timestamp: '2018-10-22T20:56:19.684Z',
+            person: { first_name: 'Mcflo' },
           },
         ])
 
@@ -152,27 +139,31 @@ describe('<SearchAssessmentHistory', () => {
             .find(SearchAssessmentHistoryRecord)
             .at(0)
             .dive()
+            .find(AssessmentRecordInfo)
+            .dive()
             .find(AssessmentLink)
             .props()
             .assessment.timestamp.utc()
             .format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`
         ).toBe('2018-10-28T20:56:19.684Z')
-
         expect(
           `${wrapper
             .find(SearchAssessmentHistoryRecord)
             .at(1)
+            .dive()
+            .find(AssessmentRecordInfo)
             .dive()
             .find(AssessmentLink)
             .props()
             .assessment.timestamp.utc()
             .format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`
         ).toBe('2018-10-27T15:59:46.930Z')
-
         expect(
           `${wrapper
             .find(SearchAssessmentHistoryRecord)
             .at(2)
+            .dive()
+            .find(AssessmentRecordInfo)
             .dive()
             .find(AssessmentLink)
             .props()
@@ -188,39 +179,46 @@ describe('<SearchAssessmentHistory', () => {
             id: 1,
             status: 'IN_PROGRESS',
             created_timestamp: '2018-10-27T15:59:46.930Z',
+            person: { first_name: 'Kulman' },
           },
           {
             id: 2,
             status: 'IN_PROGRESS',
             created_timestamp: '2018-10-26T15:59:46.930Z',
+            person: { first_name: 'Hari' },
           },
           {
             id: 3,
             status: 'IN_PROGRESS',
             created_timestamp: '2018-10-20T15:59:46.930Z',
             updated_timestamp: '2018-10-28T20:56:19.684Z',
+            person: { first_name: 'Sandeep' },
           },
           {
             id: 4,
             status: 'IN_PROGRESS',
             created_timestamp: '2018-10-19T15:59:46.930Z',
             updated_timestamp: '2018-10-25T20:56:19.684Z',
+            person: { first_name: 'Priyanka' },
           },
           {
             id: 5,
             status: 'IN_PROGRESS',
             created_timestamp: '2018-10-18T15:59:46.930Z',
             updated_timestamp: '2018-10-24T20:56:19.684Z',
+            person: { first_name: 'Rajesh' },
           },
           {
             id: 6,
             status: 'COMPLETED',
             created_timestamp: '2018-10-23T20:56:19.684Z',
+            person: { first_name: 'Rajesh' },
           },
           {
             id: 7,
             status: 'COMPLETED',
             created_timestamp: '2018-10-22T20:56:19.684Z',
+            person: { first_name: 'Rajesh' },
           },
         ])
 
@@ -229,27 +227,31 @@ describe('<SearchAssessmentHistory', () => {
             .find(SearchAssessmentHistoryRecord)
             .at(0)
             .dive()
+            .find(AssessmentRecordInfo)
+            .dive()
             .find(AssessmentLink)
             .props()
             .assessment.timestamp.utc()
             .format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`
         ).toBe('2018-10-28T20:56:19.684Z')
-
         expect(
           `${wrapper
             .find(SearchAssessmentHistoryRecord)
             .at(1)
+            .dive()
+            .find(AssessmentRecordInfo)
             .dive()
             .find(AssessmentLink)
             .props()
             .assessment.timestamp.utc()
             .format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`
         ).toBe('2018-10-27T15:59:46.930Z')
-
         expect(
           `${wrapper
             .find(SearchAssessmentHistoryRecord)
             .at(2)
+            .dive()
+            .find(AssessmentRecordInfo)
             .dive()
             .find(AssessmentLink)
             .props()

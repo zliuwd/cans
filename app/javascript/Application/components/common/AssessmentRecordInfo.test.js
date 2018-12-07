@@ -1,15 +1,16 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Typography from '@material-ui/core/Typography'
+import { Card } from '@cwds/components'
 import AssessmentRecordInfo from './AssessmentRecordInfo'
 import { assessmentInProgress, assessmentWithNoUpdateInfo } from '../Assessment/assessment.mocks.test'
 import { getActionVerbByStatus } from '../Assessment/AssessmentHelper'
 import { isoToLocalDate } from '../../util/dateHelper'
+import AssessmentLink from '../common/AssessmentLink'
 
 const prepareWrapper = assessment => shallow(<AssessmentRecordInfo assessment={assessment} />)
 
 describe('AssessmentRecordInfo', () => {
-  it('renders a Typography component with assessment info', () => {
+  it('renders a Card component with assessment info', () => {
     const {
       updated_timestamp: updatedTimestamp,
       updated_by: updatedBy,
@@ -22,7 +23,10 @@ describe('AssessmentRecordInfo', () => {
     } = assessmentInProgress
 
     const wrapper = prepareWrapper(assessmentInProgress)
-    const assessmentInfo = wrapper.children().map(child => child.props().children)
+    const assessmentInfo = wrapper
+      .find('div')
+      .children()
+      .map(child => child.props().children)
 
     const clientName = `${person.first_name} ${person.middle_name} ${person.last_name} ${
       person.suffix === '' ? '' : `, ${person.suffix}`
@@ -34,16 +38,18 @@ describe('AssessmentRecordInfo', () => {
     const caseNumber = (theCase || {}).external_id || ''
 
     expect(wrapper.length).toEqual(1)
-    expect(wrapper.type()).toEqual(Typography)
+    expect(wrapper.type()).toEqual(Card)
     expect(assessmentInfo).toEqual([
       `Client name: ${clientName}`,
-      `${actionVerb} on ${formattedTimestamp} by ${updatedByName}`,
+      <AssessmentLink assessment={assessmentInProgress} key={createdTimestamp} />,
+      `${actionVerb} on ${formattedTimestamp} by`,
+      `${updatedByName}`,
       `Case: ${caseNumber}`,
       `County: ${county.name}`,
     ])
   })
 
-  it('renders a Typography component with no updated_by info (create info only)', () => {
+  it('renders a Card component with no updated_by info (create info only)', () => {
     const {
       updated_timestamp: updatedTimestamp,
       updated_by: updatedBy,
@@ -56,7 +62,10 @@ describe('AssessmentRecordInfo', () => {
     } = assessmentWithNoUpdateInfo
 
     const wrapper = prepareWrapper(assessmentWithNoUpdateInfo)
-    const assessmentInfo = wrapper.children().map(child => child.props().children)
+    const assessmentInfo = wrapper
+      .find('div')
+      .children()
+      .map(child => child.props().children)
 
     const clientName = `${person.first_name} ${person.middle_name} ${person.last_name} ${
       person.suffix === '' ? '' : `, ${person.suffix}`
@@ -68,10 +77,12 @@ describe('AssessmentRecordInfo', () => {
     const caseNumber = (theCase || {}).external_id || ''
 
     expect(wrapper.length).toEqual(1)
-    expect(wrapper.type()).toEqual(Typography)
+    expect(wrapper.type()).toEqual(Card)
     expect(assessmentInfo).toEqual([
       `Client name: ${clientName}`,
-      `${actionVerb} on ${formattedTimestamp} by ${updatedByName}`,
+      <AssessmentLink assessment={assessmentWithNoUpdateInfo} key={updatedTimestamp} />,
+      `${actionVerb} on ${formattedTimestamp} by`,
+      `${updatedByName}`,
       `Case: ${caseNumber}`,
       `County: ${county.name}`,
     ])
@@ -90,7 +101,10 @@ describe('AssessmentRecordInfo', () => {
     } = noCountyAssessment
 
     const wrapper = prepareWrapper(noCountyAssessment)
-    const assessmentInfo = wrapper.children().map(child => child.props().children)
+    const assessmentInfo = wrapper
+      .find('div')
+      .children()
+      .map(child => child.props().children)
 
     const clientName = `${person.first_name} ${person.middle_name} ${person.last_name} ${
       person.suffix === '' ? '' : `, ${person.suffix}`
@@ -102,10 +116,12 @@ describe('AssessmentRecordInfo', () => {
     const caseNumber = (theCase || {}).external_id || ''
 
     expect(wrapper.length).toEqual(1)
-    expect(wrapper.type()).toEqual(Typography)
+    expect(wrapper.type()).toEqual(Card)
     expect(assessmentInfo).toEqual([
       `Client name: ${clientName}`,
-      `${actionVerb} on ${formattedTimestamp} by ${updatedByName}`,
+      <AssessmentLink assessment={noCountyAssessment} key={updatedTimestamp} />,
+      `${actionVerb} on ${formattedTimestamp} by`,
+      `${updatedByName}`,
       `Case: ${caseNumber}`,
       'County: ',
     ])
