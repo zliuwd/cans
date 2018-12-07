@@ -17,6 +17,7 @@ class AuthBoundary extends React.PureComponent {
         childNodeFetchedPropName={'disabled'}
         fetch={() => this.disabled(permission, andCondition, orCondition)}
         isHiddenWhileLoading={true}
+        eagerRefreshFlagObject={{ andCondition, orCondition }}
       >
         {children}
       </LoadingBoundary>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { LoadingState } from '../../util/loadingHelper'
 
 class LoadingBoundary extends React.PureComponent {
-  constructor() {
+  constructor(props) {
     super()
     this.state = {
       loadingState: LoadingState.waiting,
@@ -13,6 +13,12 @@ class LoadingBoundary extends React.PureComponent {
 
   async componentDidMount() {
     await this.fetch()
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (prevProps.eagerRefreshFlagObject !== this.props.eagerRefreshFlagObject) {
+      await this.fetch()
+    }
   }
 
   fetch = async () => {
@@ -43,12 +49,14 @@ class LoadingBoundary extends React.PureComponent {
 LoadingBoundary.propTypes = {
   childNodeFetchedPropName: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  eagerRefreshFlagObject: PropTypes.any,
   fetch: PropTypes.func.isRequired,
   isHiddenWhileLoading: PropTypes.bool,
 }
 
 LoadingBoundary.defaultProps = {
   isHiddenWhileLoading: true,
+  eagerRefreshFlagObject: null,
 }
 
 export default LoadingBoundary
