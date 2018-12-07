@@ -43,9 +43,9 @@ const buildCreateAssessmentPermission = clientIdentifier => {
 
 const buildCompleteAssessmentPermission = assessment => {
   let permission
-  if (assessment.id !== null && assessment.id !== undefined) {
+  if (assessment && assessment.id !== null && assessment.id !== undefined) {
     permission = `assessment:complete:${assessment.id}`
-  } else if (assessment.person !== null && assessment.person !== undefined) {
+  } else if (assessment && assessment.person !== null && assessment.person !== undefined) {
     permission = `client:completeAssessment:${assessment.person.identifier}`
   }
   return permission

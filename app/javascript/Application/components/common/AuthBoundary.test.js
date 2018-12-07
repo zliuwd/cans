@@ -117,4 +117,12 @@ describe('buildCompleteAssessmentPermission', () => {
     }
     expect(buildCompleteAssessmentPermission(assessment)).toEqual('assessment:complete:1')
   })
+
+  it('returns empty string when assessment is undefined', () => {
+    expect(buildCompleteAssessmentPermission(undefined)).toEqual(undefined)
+  })
+
+  it('returns empty string when object is not an assessment object', () => {
+    expect(buildCompleteAssessmentPermission({})).toEqual(undefined)
+  })
 })
