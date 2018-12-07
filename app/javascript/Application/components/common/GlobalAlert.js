@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Container, Row, Col } from 'reactstrap'
 import { CloseableAlert } from './CloseableAlert'
 import { globalAlertService } from '../../util/GlobalAlertService'
-import { clone } from '../../util/common'
 
 let nextKey = 0
 
@@ -16,7 +15,7 @@ export class GlobalAlert extends Component {
   }
 
   onAlertEvent = ({ message, type, isAutoCloseable }) => {
-    const alerts = clone(this.state.alerts)
+    const alerts = this.state.alerts.slice()
     alerts.push({ message, type, isAutoCloseable })
     this.setState({
       alerts: alerts,
@@ -24,7 +23,7 @@ export class GlobalAlert extends Component {
   }
 
   onAlertClose = index => {
-    const alerts = clone(this.state.alerts)
+    const alerts = this.state.alerts.slice()
     alerts.splice(index, 1)
     this.setState({
       alerts: alerts,
