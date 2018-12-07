@@ -7,8 +7,10 @@ import CardContent from '@material-ui/core/CardContent'
 import { ClientAssessmentHistoryRecord } from './'
 import { AssessmentService } from '../Assessment/Assessment.service'
 import { LoadingState } from '../../util/loadingHelper'
-import AuthBoundary, { buildCreateAssessmentPermission } from '../common/AuthBoundary'
-import AddCansButton from './AddCansButton'
+import AuthBoundary, {
+  buildCreateAssessmentPermission,
+} from '../common/AuthBoundary'
+import AddCansLink from './AddCansLink'
 
 import './style.sass'
 
@@ -24,7 +26,9 @@ class ClientAssessmentHistory extends Component {
   componentDidMount() {
     const { clientIdentifier } = this.props
     if (clientIdentifier) {
-      return AssessmentService.search({ client_identifier: clientIdentifier }).then(data => {
+      return AssessmentService.search({
+        client_identifier: clientIdentifier,
+      }).then(data => {
         this.setState({
           assessments: data,
           fetchStatus: LoadingState.ready,
@@ -34,20 +38,29 @@ class ClientAssessmentHistory extends Component {
     return null
   }
 
-  renderAddCansButton() {
+  renderAddCansLink() {
     const clientIdentifier = this.props.clientIdentifier
     return (
-      <AuthBoundary permission={buildCreateAssessmentPermission(clientIdentifier)}>
-        <AddCansButton clientIdentifier={clientIdentifier} />
+      <AuthBoundary
+        permission={buildCreateAssessmentPermission(clientIdentifier)}
+      >
+        <AddCansLink clientIdentifier={clientIdentifier} />
       </AuthBoundary>
     )
   }
 
   renderAssessments = (assessments, fetchStatus) => {
     return fetchStatus === LoadingState.ready && assessments.length === 0 ? (
-      <div id="no-data">No assessments currently exist for this child/youth.</div>
+      <div id="no-data">
+        No assessments currently exist for this child/youth.
+      </div>
     ) : (
-      assessments.map(assessment => <ClientAssessmentHistoryRecord assessment={assessment} key={assessment.id} />)
+      assessments.map(assessment => (
+        <ClientAssessmentHistoryRecord
+          assessment={assessment}
+          key={assessment.id}
+        />
+      ))
     )
   }
 
@@ -59,10 +72,12 @@ class ClientAssessmentHistory extends Component {
           <CardHeader
             className={'card-header-cans card-header-cans-action'}
             title="Assessment History"
-            action={this.renderAddCansButton()}
+            action={this.renderAddCansLink()}
           />
           <div className={'content'}>
-            <CardContent>{this.renderAssessments(assessments, fetchStatus)}</CardContent>
+            <CardContent>
+              {this.renderAssessments(assessments, fetchStatus)}
+            </CardContent>
           </div>
         </Card>
       </Grid>

@@ -13,11 +13,10 @@ class AddCansButton extends Component {
     return (
       <Button
         className={'button-fix-primary card-header-cans-button'}
-        color={'primary'}
         id="new-cans-button"
         disabled={this.isDisabled()}
       >
-        New CANS
+        add cans
       </Button>
     )
   }
@@ -27,7 +26,9 @@ class AddCansButton extends Component {
     return this.isDisabled() ? (
       this.renderButton()
     ) : (
-      <Link to={`/clients/${clientIdentifier}/assessments`}>{this.renderButton()}</Link>
+      <Link to={`/clients/${clientIdentifier}/assessments`}>
+        {this.renderButton()}
+      </Link>
     )
   }
 }
