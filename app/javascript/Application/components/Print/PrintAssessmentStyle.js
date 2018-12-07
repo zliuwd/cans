@@ -41,6 +41,13 @@ export const domainTitleStyle = {
   fontWeight: 500,
 }
 
+export const domainComment = {
+  fontSize: '0.8rem',
+  fontStyle: 'italic',
+  backgroundColor: 'transparent',
+  pageBreakInside: 'avoid',
+}
+
 export const itemStyle = {
   display: 'flex',
   flexDirection: 'column',
@@ -60,6 +67,7 @@ export const itemMainLine = {
 
 export const itemComment = {
   fontSize: '0.8rem',
+  fontStyle: 'italic',
   alignSelf: 'center',
   width: '90%',
   backgroundColor: 'transparent',
