@@ -10,7 +10,7 @@ describe('AssessmentFormFooter', () => {
   const render = ({ isSubmitButtonEnabled = true, onCancelClick = jest.fn(), onSubmitAssessment = jest.fn() }) =>
     shallow(
       <AssessmentFormFooter
-        client={{ identifier: 'aaa' }}
+        assessment={{ person: { identifier: 'aaa' } }}
         isSubmitButtonEnabled={isSubmitButtonEnabled}
         onCancelClick={onCancelClick}
         onSubmitAssessment={onSubmitAssessment}

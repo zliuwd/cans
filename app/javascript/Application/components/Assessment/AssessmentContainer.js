@@ -351,7 +351,7 @@ class AssessmentContainer extends Component {
     }
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus)
     const isUnderSix = assessment && assessment.state && assessment.state.under_six
-
+    assessment.person = client
     return (
       <Fragment>
         {this.renderWarning()}
@@ -406,7 +406,7 @@ class AssessmentContainer extends Component {
           )}
         {isUnderSix !== undefined && (
           <AssessmentFormFooter
-            client={client}
+            assessment={assessment}
             onCancelClick={this.handleCancelClick}
             isSubmitButtonEnabled={isEditable && canPerformUpdates && isValidForSubmit}
             onSubmitAssessment={

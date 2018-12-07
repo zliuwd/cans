@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import AuthBoundary, { buildCreateAssessmentPermission } from './AuthBoundary'
+import AuthBoundary, { buildCreateAssessmentPermission, buildCompleteAssessmentPermission } from './AuthBoundary'
 import SecurityService from './Security.service'
 import LoadingBoundary from './LoadingBoundary'
 import { Button } from '@cwds/components'
@@ -91,5 +91,30 @@ describe('buildCreateAssessmentPermission', () => {
   it('returns correct value', () => {
     const clientIdentifier = 'aaa'
     expect(buildCreateAssessmentPermission(clientIdentifier)).toEqual('client:createAssessment:aaa')
+  })
+})
+
+describe('buildCompleteAssessmentPermission', () => {
+  it('returns client:completeAssessment when assessment.id = null', () => {
+    const assessment = {
+      id: null,
+      person: { identifier: 'aaa' },
+    }
+    expect(buildCompleteAssessmentPermission(assessment)).toEqual('client:completeAssessment:aaa')
+  })
+
+  it('returns client:completeAssessment when assessment.id = undefined', () => {
+    const assessment = {
+      person: { identifier: 'aaa' },
+    }
+    expect(buildCompleteAssessmentPermission(assessment)).toEqual('client:completeAssessment:aaa')
+  })
+
+  it('returns assessment:complete when assessment.id defined', () => {
+    const assessment = {
+      id: 1,
+      person: { identifier: 'aaa' },
+    }
+    expect(buildCompleteAssessmentPermission(assessment)).toEqual('assessment:complete:1')
   })
 })

@@ -7,16 +7,13 @@ import './style.sass'
 
 class AssessmentFormFooter extends PureComponent {
   render() {
-    const { isSubmitButtonEnabled, onCancelClick, onSubmitAssessment, client } = this.props
+    const { isSubmitButtonEnabled, onCancelClick, onSubmitAssessment, assessment } = this.props
     return (
       <div className={'form-footer'}>
         <Button id={'cancel-assessment'} color={'link'} className={'button-fix-link'} onClick={onCancelClick}>
           Cancel
         </Button>
-        <AuthBoundary
-          permission={buildCompleteAssessmentPermission(client.identifier)}
-          andCondition={isSubmitButtonEnabled}
-        >
+        <AuthBoundary permission={buildCompleteAssessmentPermission(assessment)} andCondition={isSubmitButtonEnabled}>
           <Button
             id={'submit-assessment'}
             className={'button-fix-primary'}
@@ -32,7 +29,7 @@ class AssessmentFormFooter extends PureComponent {
 }
 
 AssessmentFormFooter.propTypes = {
-  client: PropTypes.object.isRequired,
+  assessment: PropTypes.object.isRequired,
   isSubmitButtonEnabled: PropTypes.bool.isRequired,
   onCancelClick: PropTypes.func.isRequired,
   onSubmitAssessment: PropTypes.func.isRequired,
