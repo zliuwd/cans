@@ -7,9 +7,7 @@ import CardContent from '@material-ui/core/CardContent'
 import { ClientAssessmentHistoryRecord } from './'
 import { AssessmentService } from '../Assessment/Assessment.service'
 import { LoadingState } from '../../util/loadingHelper'
-import AuthBoundary, {
-  buildCreateAssessmentPermission,
-} from '../common/AuthBoundary'
+import AuthBoundary, { buildCreateAssessmentPermission } from '../common/AuthBoundary'
 import AddCansLink from './AddCansLink'
 
 import './style.sass'
@@ -41,9 +39,7 @@ class ClientAssessmentHistory extends Component {
   renderAddCansLink() {
     const clientIdentifier = this.props.clientIdentifier
     return (
-      <AuthBoundary
-        permission={buildCreateAssessmentPermission(clientIdentifier)}
-      >
+      <AuthBoundary permission={buildCreateAssessmentPermission(clientIdentifier)}>
         <AddCansLink clientIdentifier={clientIdentifier} />
       </AuthBoundary>
     )
@@ -51,16 +47,9 @@ class ClientAssessmentHistory extends Component {
 
   renderAssessments = (assessments, fetchStatus) => {
     return fetchStatus === LoadingState.ready && assessments.length === 0 ? (
-      <div id="no-data">
-        No assessments currently exist for this child/youth.
-      </div>
+      <div id="no-data">No assessments currently exist for this child/youth.</div>
     ) : (
-      assessments.map(assessment => (
-        <ClientAssessmentHistoryRecord
-          assessment={assessment}
-          key={assessment.id}
-        />
-      ))
+      assessments.map(assessment => <ClientAssessmentHistoryRecord assessment={assessment} key={assessment.id} />)
     )
   }
 
@@ -75,9 +64,7 @@ class ClientAssessmentHistory extends Component {
             action={this.renderAddCansLink()}
           />
           <div className={'content'}>
-            <CardContent>
-              {this.renderAssessments(assessments, fetchStatus)}
-            </CardContent>
+            <CardContent>{this.renderAssessments(assessments, fetchStatus)}</CardContent>
           </div>
         </Card>
       </Grid>

@@ -56,11 +56,15 @@
 .history-item-info
   color: $label
 
-.add-cans-span
-  position: relative
-  top: 1rem
-  color: $light-blue
-  text-transform: uppercase
+.card-header-cans-action
+  > div:nth-child(2)
+    margin: 0
+    align-self: flex-end
+    
+  .add-cans-span
+    color: $light-blue
+    text-transform: uppercase
+    text-decoration: underline
 
 //**************************
 //  ClientAddEditForm

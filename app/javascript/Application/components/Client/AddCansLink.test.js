@@ -4,13 +4,12 @@ import { Link } from 'react-router-dom'
 import AddCansLink from './AddCansLink'
 
 describe('<AddCansLink/>', () => {
-  it('renders <Link/> And span', () => {
+  it('renders <Link/> with a child span', () => {
     const wrapper = shallow(<AddCansLink clientIdentifier={'aaa'} />)
     const link = wrapper.find(Link)
     expect(link.exists()).toEqual(true)
-    const button = wrapper.find('#new-cans-button')
-    expect(button.exists()).toEqual(true)
-    expect(button.prop('disabled')).toEqual(false)
+    const span = wrapper.find('span.add-cans-span')
+    expect(span.exists()).toEqual(true)
   })
 
   it('renders with <Link /> that navigates to /assessments', () => {
@@ -19,49 +18,36 @@ describe('<AddCansLink/>', () => {
   })
 
   it('renders a span only when disabled', () => {
-    const wrapper = shallow(
-      <AddCansLink clientIdentifier={'aaa'} disabled={true} />
-    )
+    const wrapper = shallow(<AddCansLink clientIdentifier={'aaa'} disabled={true} />)
     const link = wrapper.find(Link)
     expect(link.exists()).toEqual(false)
-    const button = wrapper.find('#new-cans-button')
-    expect(button.exists()).toEqual(true)
-    expect(button.prop('disabled')).toEqual(true)
+    const span = wrapper.find('span.add-cans-span')
+    expect(span.exists()).toEqual(true)
   })
 
   describe('#isDisabled()', () => {
     it('returns true when boolean passed', () => {
-      const wrapper = shallow(
-        <AddCansLink clientIdentifier={'aaa'} disabled={true} />
-      )
+      const wrapper = shallow(<AddCansLink clientIdentifier={'aaa'} disabled={true} />)
       expect(wrapper.instance().isDisabled()).toEqual(true)
     })
 
     it('returns true when string passed', () => {
-      const wrapper = shallow(
-        <AddCansLink clientIdentifier={'aaa'} disabled={'true'} />
-      )
+      const wrapper = shallow(<AddCansLink clientIdentifier={'aaa'} disabled={'true'} />)
       expect(wrapper.instance().isDisabled()).toEqual(true)
     })
 
     it('returns false when boolean passed', () => {
-      const wrapper = shallow(
-        <AddCansLink clientIdentifier={'aaa'} disabled={false} />
-      )
+      const wrapper = shallow(<AddCansLink clientIdentifier={'aaa'} disabled={false} />)
       expect(wrapper.instance().isDisabled()).toEqual(false)
     })
 
     it('returns false when string passed', () => {
-      const wrapper = shallow(
-        <AddCansLink clientIdentifier={'aaa'} disabled={'false'} />
-      )
+      const wrapper = shallow(<AddCansLink clientIdentifier={'aaa'} disabled={'false'} />)
       expect(wrapper.instance().isDisabled()).toEqual(false)
     })
 
     it('returns false when random string passed', () => {
-      const wrapper = shallow(
-        <AddCansLink clientIdentifier={'aaa'} disabled={'someRandomString'} />
-      )
+      const wrapper = shallow(<AddCansLink clientIdentifier={'aaa'} disabled={'someRandomString'} />)
       expect(wrapper.instance().isDisabled()).toEqual(false)
     })
   })

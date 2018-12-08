@@ -8,7 +8,7 @@ import { ClientAssessmentHistory } from './index'
 import AssessmentService from '../Assessment/Assessment.service'
 import ClientAssessmentHistoryRecord from './ClientAssessmentHistoryRecord'
 import SecurityService from '../common/Security.service'
-import AddCansButton from './AddCansButton'
+import AddCansLink from './AddCansLink'
 
 jest.mock('../Assessment/Assessment.service')
 jest.mock('../common/Security.service')
@@ -22,8 +22,16 @@ const params = {
 const getShallowWrapper = () => {
   AssessmentService.search.mockReturnValue(
     Promise.resolve([
-      { id: 1, person: { id: 1, identifier: 'aaaaaaaaaa' }, county: { name: 'Yolo' } },
-      { id: 2, person: { id: 2, identifier: 'bbbbbbbbbb' }, county: { name: 'Yolo' } },
+      {
+        id: 1,
+        person: { id: 1, identifier: 'aaaaaaaaaa' },
+        county: { name: 'Yolo' },
+      },
+      {
+        id: 2,
+        person: { id: 2, identifier: 'bbbbbbbbbb' },
+        county: { name: 'Yolo' },
+      },
     ])
   )
   return shallow(<ClientAssessmentHistory {...params} />)
@@ -60,20 +68,19 @@ describe('<ClientAssessmentHistory', () => {
       expect(getLength(CardContent)).toBe(1)
     })
 
-    it('renders with <Button /> in the Card header', async () => {
+    it('renders with <AddCansLink /> in the Card header', async () => {
       jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
       const wrapper = await prepareWrapper([{ id: 1 }, { id: 2 }])
       const cardHeader = wrapper.find(CardHeader)
       const actionWrapper = shallow(cardHeader.dive().props().action)
-      const button = actionWrapper.find(AddCansButton)
-      expect(button.exists()).toBe(true)
+      const link = actionWrapper.find(AddCansLink)
+      expect(link.exists()).toBe(true)
       expect(
-        button
+        link
           .dive()
-          .find('#new-cans-button')
-          .dive()
+          .find('span.add-cans-span')
           .text()
-      ).toBe('New CANS')
+      ).toBe('add cans')
     })
   })
 
