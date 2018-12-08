@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Typography from '@material-ui/core/Typography'
+import { Card, CardBody } from '@cwds/components'
+import AssessmentLink from '../common/AssessmentLink'
 import { isoToLocalDate } from '../../util/dateHelper'
 import { getActionVerbByStatus } from '../Assessment/AssessmentHelper'
+import Ellipsis from '../common/Ellipsis'
 
 class AssessmentRecordInfo extends Component {
   renderAssessmentInfo = assessment => {
@@ -26,12 +28,21 @@ class AssessmentRecordInfo extends Component {
     const caseNumber = (theCase || {}).external_id || ''
     const countyName = county ? county.name : ''
     return (
-      <Typography variant={'title'} color={'textSecondary'} className={'item-info'}>
-        <p>{`Client name: ${clientName}`}</p>
-        <p>{`${actionVerb} on ${formattedTimestamp} by ${updatedByName}`}</p>
-        <p>{`Case: ${caseNumber}`}</p>
-        <p>{`County: ${countyName}`}</p>
-      </Typography>
+      <Card>
+        <CardBody>
+          <Ellipsis id={assessment.id} />
+          <div>
+            <p className="assessment-client-name no-margin">{`Client name: ${clientName}`}</p>
+            <p className="no-margin">
+              <AssessmentLink assessment={this.props.assessment} />
+            </p>
+            <p className="no-margin mid-gray">{`${actionVerb} on ${formattedTimestamp} by`}</p>
+            <p className="no-margin mid-gray">{updatedByName}</p>
+            <p className="no-margin mid-gray">{`Case: ${caseNumber}`}</p>
+            <p className="no-margin mid-gray">{`County: ${countyName}`}</p>
+          </div>
+        </CardBody>
+      </Card>
     )
   }
 

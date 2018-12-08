@@ -12,6 +12,12 @@ describe('<SearchContainer />', () => {
         expect(wrapper.find(PersonSearchForm).exists()).toBe(true)
       })
 
+      it('renders h4 with ASSESSMENTS_TITLE', () => {
+        const wrapper = shallow(<SearchContainer />)
+        expect(wrapper.find('h4').exists()).toBe(true)
+        expect(wrapper.find('h4').text()).toBe('Recently Updated CANS')
+      })
+
       it('renders with a <SearchAssessmentHistory /> component', () => {
         const wrapper = shallow(<SearchContainer />)
         expect(wrapper.find(SearchAssessmentHistory).exists()).toBe(true)
