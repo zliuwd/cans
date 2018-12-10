@@ -20,6 +20,7 @@ import {
   optionLabelStyle,
   domainTitleStyle,
   domainHeaderStyle,
+  domainComment,
   flex,
   redactedRating,
   textAlignCenter,
@@ -33,6 +34,8 @@ import { totalScoreCalculation } from '../Assessment/DomainScoreHelper.js'
 import moment from 'moment'
 
 const isItemHidden = item => item.confidential_by_default && item.confidential
+
+const hasConfidentialItems = domain => domain.items.filter(isItemHidden).length > 0
 
 class PrintAssessment extends PureComponent {
   constructor(props) {
@@ -102,7 +105,7 @@ class PrintAssessment extends PureComponent {
   }
 
   renderDomain = (domain, domainI18n) => {
-    const { code, caregiver_index: caregiverIndex, items } = domain
+    const { code, caregiver_index: caregiverIndex, items, comment } = domain
     const title = (domainI18n._title_ || '').toUpperCase()
     const caregiverName = domain.caregiver_name || ''
     const totalScore = totalScoreCalculation(items)
@@ -113,6 +116,7 @@ class PrintAssessment extends PureComponent {
             {title} {caregiverName && `- ${caregiverName}`}
             {`- (Domain Total Score: ${totalScore})`}
           </div>
+          {comment && !hasConfidentialItems(domain) && <div style={domainComment}>Domain Comment: {comment}</div>}
         </div>
         <div style={thinGrayBorder}>
           {items.map((item, index) => {

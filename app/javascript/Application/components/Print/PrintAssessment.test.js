@@ -19,10 +19,17 @@ describe('<PrintAssessment />', () => {
     expect(actualHtml).toEqual(printFixture)
   })
 
-  it('should render confidential item and redact rating when confidential by default and confidential is true', () => {
+  it('should render confidential item and redact comment and rating when confidential by default and confidential is true', () => {
     const printConfidential = shallow(<PrintAssessment assessment={assessmentWithConfidentialItem} i18n={i18nPrint} />)
     const printConfidentialHtml = printConfidential.html()
     expect(printConfidentialHtml).toContain('Confidential')
     expect(printConfidentialHtml).toContain('<div style="width:7.6rem"></div>') // Redacted rating
+    expect(printConfidentialHtml).not.toContain('This item comment is not supposed to be printed')
+  })
+
+  it('should redact domain comment when it contains at least one item with confidential by default and confidential is true', () => {
+    const printConfidential = shallow(<PrintAssessment assessment={assessmentWithConfidentialItem} i18n={i18nPrint} />)
+    const printConfidentialHtml = printConfidential.html()
+    expect(printConfidentialHtml).not.toContain('This domain comment is not supposed to be printed')
   })
 })
