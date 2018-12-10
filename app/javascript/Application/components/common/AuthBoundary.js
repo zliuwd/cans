@@ -5,9 +5,13 @@ import SecurityService from './Security.service'
 
 class AuthBoundary extends React.PureComponent {
   isDisabled = (permission, andCondition, orCondition) => {
-    return SecurityService.checkPermission(permission).then(
-      isAuthorized => !((isAuthorized && andCondition) || orCondition)
-    )
+    if (!andCondition) {
+      return Promise.resolve(true)
+    }
+    if (orCondition) {
+      return Promise.resolve(false)
+    }
+    return SecurityService.checkPermission(permission).then(isAuthorized => !isAuthorized)
   }
 
   render() {

@@ -55,7 +55,7 @@ describe('<AuthBoundary />', () => {
       const loadingBoundary = wrapper.find(LoadingBoundary)
       const fetch = loadingBoundary.props().fetch
       expect(await fetch()).toBe(true)
-      expect(checkPermissionSpy).toHaveBeenCalledTimes(1)
+      expect(checkPermissionSpy).toHaveBeenCalledTimes(0)
     })
 
     it('returns disabled=false when the user has permissions and andCondition function return true', async () => {
@@ -73,7 +73,7 @@ describe('<AuthBoundary />', () => {
       const loadingBoundary = wrapper.find(LoadingBoundary)
       const fetch = loadingBoundary.props().fetch
       expect(await fetch()).toBe(false)
-      expect(checkPermissionSpy).toHaveBeenCalledTimes(1)
+      expect(checkPermissionSpy).toHaveBeenCalledTimes(0)
     })
 
     it('returns disabled=false when the does not have permissions but orCondition function return true', async () => {
@@ -82,7 +82,7 @@ describe('<AuthBoundary />', () => {
       const loadingBoundary = wrapper.find(LoadingBoundary)
       const fetch = loadingBoundary.props().fetch
       expect(await fetch()).toBe(false)
-      expect(checkPermissionSpy).toHaveBeenCalledTimes(1)
+      expect(checkPermissionSpy).toHaveBeenCalledTimes(0)
     })
   })
 })
