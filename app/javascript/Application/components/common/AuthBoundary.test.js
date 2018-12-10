@@ -34,6 +34,7 @@ describe('<AuthBoundary />', () => {
     it('returns disabled=false when the user has permissions', async () => {
       const checkPermissionSpy = jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
       const wrapper = await render(defaultProps)
+      wrapper.instance().clearCache()
       const loadingBoundary = wrapper.find(LoadingBoundary)
       const fetch = loadingBoundary.props().fetch
       expect(await fetch()).toBe(false)
@@ -43,6 +44,7 @@ describe('<AuthBoundary />', () => {
     it('returns disabled=true when the user does not have permissions', async () => {
       const checkPermissionSpy = jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false))
       const wrapper = await render(defaultProps)
+      wrapper.instance().clearCache()
       const loadingBoundary = wrapper.find(LoadingBoundary)
       const fetch = loadingBoundary.props().fetch
       expect(await fetch()).toBe(true)
@@ -52,6 +54,7 @@ describe('<AuthBoundary />', () => {
     it('returns disabled=true when the user has permissions but andCondition=false', async () => {
       const checkPermissionSpy = jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
       const wrapper = await render({ ...defaultProps, andCondition: false })
+      wrapper.instance().clearCache()
       const loadingBoundary = wrapper.find(LoadingBoundary)
       const fetch = loadingBoundary.props().fetch
       expect(await fetch()).toBe(true)
@@ -61,6 +64,7 @@ describe('<AuthBoundary />', () => {
     it('returns disabled=false when the user has permissions and andCondition function return true', async () => {
       const checkPermissionSpy = jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
       const wrapper = await render({ ...defaultProps, andCondition: () => true })
+      wrapper.instance().clearCache()
       const loadingBoundary = wrapper.find(LoadingBoundary)
       const fetch = loadingBoundary.props().fetch
       expect(await fetch()).toBe(false)
@@ -70,6 +74,7 @@ describe('<AuthBoundary />', () => {
     it('returns disabled=false when the does not have permissions but orCondition=true', async () => {
       const checkPermissionSpy = jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false))
       const wrapper = await render({ ...defaultProps, orCondition: true })
+      wrapper.instance().clearCache()
       const loadingBoundary = wrapper.find(LoadingBoundary)
       const fetch = loadingBoundary.props().fetch
       expect(await fetch()).toBe(false)
@@ -79,10 +84,33 @@ describe('<AuthBoundary />', () => {
     it('returns disabled=false when the does not have permissions but orCondition function return true', async () => {
       const checkPermissionSpy = jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false))
       const wrapper = await render({ ...defaultProps, orCondition: () => true })
+      wrapper.instance().clearCache()
       const loadingBoundary = wrapper.find(LoadingBoundary)
       const fetch = loadingBoundary.props().fetch
       expect(await fetch()).toBe(false)
       expect(checkPermissionSpy).toHaveBeenCalledTimes(0)
+    })
+
+    it('returns disabled=false and does not call checkPermission second time when has permissions', async () => {
+      const checkPermissionSpy = jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
+      const wrapper = await render({ ...defaultProps })
+      wrapper.instance().clearCache()
+      const loadingBoundary = wrapper.find(LoadingBoundary)
+      const fetch = loadingBoundary.props().fetch
+      expect(await fetch()).toBe(false)
+      expect(await fetch()).toBe(false)
+      expect(checkPermissionSpy).toHaveBeenCalledTimes(1)
+    })
+
+    it('returns disabled=true and does not call checkPermission second time does not have permissions', async () => {
+      const checkPermissionSpy = jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false))
+      const wrapper = await render({ ...defaultProps })
+      wrapper.instance().clearCache()
+      const loadingBoundary = wrapper.find(LoadingBoundary)
+      const fetch = loadingBoundary.props().fetch
+      expect(await fetch()).toBe(true)
+      expect(await fetch()).toBe(true)
+      expect(checkPermissionSpy).toHaveBeenCalledTimes(1)
     })
   })
 })

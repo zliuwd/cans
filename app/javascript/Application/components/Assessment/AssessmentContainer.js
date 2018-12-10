@@ -178,7 +178,6 @@ class AssessmentContainer extends Component {
 
   updateAssessment = assessment => {
     const isValidForSubmit = validateAssessmentForSubmit(assessment)
-    assessment.person = this.props.client
     this.setState({
       assessment,
       assessmentServiceStatus: LoadingState.ready,
@@ -237,6 +236,7 @@ class AssessmentContainer extends Component {
   handleSaveAssessment = async () => {
     this.setState({ assessmentServiceStatus: LoadingState.updating })
     const assessment = this.state.assessment
+    assessment.person = this.props.client
     if (assessment.id) {
       try {
         const updatedAssessment = await AssessmentService.update(assessment.id, assessment)
@@ -269,6 +269,7 @@ class AssessmentContainer extends Component {
     this.setState({ assessmentServiceStatus: LoadingState.updating })
     const assessment = Object.assign({}, this.state.assessment)
     assessment.status = AssessmentStatus.completed
+    assessment.person = this.props.client
     if (assessment.id) {
       try {
         const submittedAssessment = await AssessmentService.update(assessment.id, assessment)

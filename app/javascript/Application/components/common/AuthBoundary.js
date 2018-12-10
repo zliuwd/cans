@@ -3,14 +3,21 @@ import PropTypes from 'prop-types'
 import LoadingBoundary from './LoadingBoundary'
 import SecurityService from './Security.service'
 
+const permissionsCache = new Map()
+
 class AuthBoundary extends React.PureComponent {
+/*
   isDisabled = (permission, andCondition, orCondition) => {
     return SecurityService.checkPermission(permission).then(
       isAuthorized => !((isAuthorized && andCondition) || orCondition)
     )
+  }*/
+
+  clearCache = () => {
+    permissionsCache.clear()
   }
 
-  /*isDisabled = permission => {
+  isDisabled = permission => {
     if (!this.props.andCondition) {
       return Promise.resolve(true)
     }
@@ -19,12 +26,22 @@ class AuthBoundary extends React.PureComponent {
       return Promise.resolve(false)
     }
 
-    return SecurityService.checkPermission(permission).then(isAuthorized => !isAuthorized)
-  }*/
+    const cachedAuthResult = permissionsCache.get(permission)
+    if (cachedAuthResult !== undefined) {
+      return Promise.resolve(!cachedAuthResult)
+    }
 
-/*  isDisabled = permission => {
+    return SecurityService.checkPermission(permission).then(isAuthorized => {
+      permissionsCache.set(permission, isAuthorized)
+      return !isAuthorized
+    })
+  }
+
+/*
+  isDisabled = permission => {
     return Promise.resolve(false)
-  }*/
+  }
+*/
 
   render() {
     const { children, permission, andCondition, orCondition } = this.props
