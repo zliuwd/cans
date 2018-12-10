@@ -5,6 +5,7 @@
   "scripts": {
     "start": "webpack-dashboard -- ./bin/webpack-dev-server",
     "build": "npm-run-all",
+    "dev": "foreman start -f Procfile.dev;",
     "lint": "yarn run eslint --ext .js --ext .jsx app/javascript",
     "licenses-report": "bundle exec license_finder report --save=legal/licenses.csv --format csv --columns=name version licenses homepage",
     "prettier-check": "prettier --list-different 'src/**/*.js'",

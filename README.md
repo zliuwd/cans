@@ -60,6 +60,8 @@ PERRY_BASE_URL=https://web.preint.cwds.io/perry
 ```
 
 Then run Rails (`rails s`), Redis (`redis-server`), and the React server (`yarn start` or `./bin/webpack-dev-server`).
+OR
+Run rails and webpack dev sever using single comamnd `yarn dev`
 
 ## Running everything locally with Docker
 
