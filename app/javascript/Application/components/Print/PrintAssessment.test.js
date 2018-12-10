@@ -32,4 +32,11 @@ describe('<PrintAssessment />', () => {
     const printConfidentialHtml = printConfidential.html()
     expect(printConfidentialHtml).not.toContain('This domain comment is not supposed to be printed')
   })
+
+  it('should not crash if the assessment has no county', () => {
+    const assessment = { ...assessmentPrint, county: undefined }
+    expect(() => {
+      shallow(<PrintAssessment assessment={assessment} i18n={i18nPrint} />)
+    }).not.toThrow()
+  })
 })
