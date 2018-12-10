@@ -5,21 +5,33 @@ import SecurityService from './Security.service'
 
 class AuthBoundary extends React.PureComponent {
   isDisabled = (permission, andCondition, orCondition) => {
-    if (!andCondition) {
+    return SecurityService.checkPermission(permission).then(
+      isAuthorized => !((isAuthorized && andCondition) || orCondition)
+    )
+  }
+
+  /*isDisabled = permission => {
+    if (!this.props.andCondition) {
       return Promise.resolve(true)
     }
-    if (orCondition) {
+
+    if (this.props.orCondition) {
       return Promise.resolve(false)
     }
+
     return SecurityService.checkPermission(permission).then(isAuthorized => !isAuthorized)
-  }
+  }*/
+
+/*  isDisabled = permission => {
+    return Promise.resolve(false)
+  }*/
 
   render() {
     const { children, permission, andCondition, orCondition } = this.props
     return (
       <LoadingBoundary
         childNodeFetchedPropName={'disabled'}
-        fetch={() => this.isDisabled(permission, andCondition, orCondition)}
+        fetch={() => this.isDisabled(permission)}
         isHiddenWhileLoading={true}
         eagerRefreshFlagObject={{ andCondition, orCondition }}
       >
