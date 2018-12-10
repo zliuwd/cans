@@ -13,7 +13,18 @@ module Api
     private
 
     def search_params
-      params.permit(:search_term, :is_client_only, search_after: [])
+      demographic_search_params.permit(:search_term,
+                                       :is_client_only,
+                                       search_after: [],
+                                       person: {})
+    end
+
+    def demographic_search_params
+      hash = params.permit(:search_term, :is_client_only, search_after: []).to_h
+                   .merge(person: {
+                            date_of_birth: { gte: 'now-22y' }
+                          })
+      ActionController::Parameters.new(hash)
     end
   end
 end

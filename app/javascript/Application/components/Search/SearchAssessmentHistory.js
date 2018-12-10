@@ -4,7 +4,6 @@ import SearchAssessmentHistoryRecord from './SearchAssessmentHistoryRecord'
 import { AssessmentService } from '../Assessment/Assessment.service'
 import { LoadingState } from '../../util/loadingHelper'
 import moment from 'moment'
-import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
 import { AssessmentStatus } from '../Assessment/AssessmentHelper'
 
 class SearchAssessmentHistory extends Component {
@@ -58,14 +57,7 @@ class SearchAssessmentHistory extends Component {
 
   render() {
     const { assessments, fetchStatus } = this.state
-    return (
-      <Card className="card hidden-print assessment-history-card">
-        <CardHeader className="card-header-search">
-          <CardTitle className={'card-title-fix'}>{'Assessment History'}</CardTitle>
-        </CardHeader>
-        <CardBody className="card-body-search">{this.renderAssessments(assessments, fetchStatus)}</CardBody>
-      </Card>
-    )
+    return <div className="row">{this.renderAssessments(assessments, fetchStatus)}</div>
   }
 }
 
