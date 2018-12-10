@@ -166,7 +166,7 @@ class PrintAssessment extends PureComponent {
   renderHeader() {
     const assessment = this.props.assessment
     const clientName = formatClientName(assessment.person)
-    const countyName = assessment.county.name ? `${assessment.county.name} County` : ''
+    const countyName = assessment.county && assessment.county.name ? `${assessment.county.name} County` : ''
     const eventDate = isoToLocalDate(assessment.event_date)
     const conductedBy = assessment.conducted_by || ''
     const caseNumber = (assessment.the_case || {}).external_id
