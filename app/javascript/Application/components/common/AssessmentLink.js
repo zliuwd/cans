@@ -9,7 +9,7 @@ class AssessmentLink extends PureComponent {
     const formattedEventDate = isoToLocalDate(eventDate)
 
     return (
-      <Link to={`/clients/${person.id}/assessments/${id}`} className={'underlined'}>
+      <Link to={`/clients/${person.identifier}/assessments/${id}`} className={'underlined'}>
         {`${formattedEventDate} CANS`}
       </Link>
     )

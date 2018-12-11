@@ -26,7 +26,7 @@ describe('AssessmentRecordIcon', () => {
     const { id, person } = assessmentInProgress
     const wrapper = prepareWrapper(assessmentInProgress)
 
-    expect(wrapper.props().to).toEqual(`/clients/${person.id}/assessments/${id}`)
+    expect(wrapper.props().to).toEqual(`/clients/${person.identifier}/assessments/${id}`)
   })
 
   it('the Link text is the formatted date + " CANS ', () => {
