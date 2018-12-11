@@ -148,7 +148,7 @@ class PrintAssessment extends PureComponent {
 
   renderSummaryRecord = (title, value) => (
     <div style={headerRecord}>
-      <strong>{title}</strong> <br /> {value && value.map(val => <div>{val}</div>)}
+      <strong>{title}</strong> <br /> {value && value.map(val => <div key={val}>{val}</div>)}
     </div>
   )
 
@@ -200,7 +200,6 @@ class PrintAssessment extends PureComponent {
 
   renderSummary() {
     const summaryCodes = this.props.summaryCodes()
-    console.log(summaryCodes)
     if (Object.keys(summaryCodes).length < 1) {
       return null
     } else {
