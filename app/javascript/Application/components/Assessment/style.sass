@@ -1,4 +1,5 @@
 @import '../../styles/global/colors.sass'
+$toolbar-comment-icon-right-margin: 2rem
 //********************
 //AssessmentForm
 //********************
@@ -228,6 +229,26 @@
 .permission-warning-alert
   margin-top: 1rem
 
+.item-confidential-checkbox
+  $confidential-checkbox-width: 13rem !global
+  $confidential-checkbox-right-margin: 1.5rem !global
+  width: $confidential-checkbox-width
+  margin-right: $confidential-checkbox-right-margin
+
+.item-bool-rating
+  $bool-rating-width: 8.5rem !global
+  width: $bool-rating-width
+
+.item-reg-rating
+  $reg-rating-width: 12.5rem !global
+  width: $reg-rating-width
+
+.reg-rating-domain-comment-accordion-comment-icon
+ margin-right: $toolbar-comment-icon-right-margin + $confidential-checkbox-width + $confidential-checkbox-right-margin + $reg-rating-width
+
+.bool-rating-domain-comment-accordion-comment-icon
+  margin-right: $toolbar-comment-icon-right-margin + $confidential-checkbox-width + $confidential-checkbox-right-margin + $bool-rating-width
+
 //********************
 // ItemComment
 //********************
@@ -259,7 +280,7 @@
   height: 3.2rem
 
 .item-toolbar-comment-icon
-  margin-right: 2rem
+  margin-right: $toolbar-comment-icon-right-margin
 
 .item-comment-text-length
   width: 100%
@@ -287,6 +308,55 @@
   color: $aspen
 
 //********************
+// DomainComment
+//********************
+.domain-comment-accordion-paper
+  box-shadow: none
+
+.domain-comment-wrapper
+  display: flex
+  justify-content: center
+
+.domain-comment-block
+  display: flex
+  flex-wrap: wrap
+  width: 100%
+
+.domain-comment-label
+  color: $black
+  margin-left: 0.8rem
+  vertical-align: text-bottom
+
+.domain-comment-textarea
+  font-size: 1.5rem
+  margin-top: 0
+  min-height: 20rem
+  &::placeholder
+    color: $light-gray
+
+.domain-comment-textarea-empty
+  @extend .domain-comment-textarea
+  min-height: 12rem
+  height: 12rem
+
+.domain-comment-text-length
+  width: 100%
+  overflow: hidden
+  text-align: right
+  transition: height 1s
+  height: 1.8rem
+
+.domain-comment-text-length-hidden
+  @extend .item-comment-text-length
+  height: 0
+
+//********************
+// DomainCommentIcon
+//********************
+.domain-toolbar-comment-icon
+  margin-right: $toolbar-comment-icon-right-margin
+  margin-top: auto
+//********************
 // Date picker
 //********************
 .rw-datetime-picker
@@ -302,7 +372,7 @@
 
 //********************
 // AssessmentChangeLog
-//******************** 
+//********************
 button.change-log-print-button
   float: right
   i.fa-print

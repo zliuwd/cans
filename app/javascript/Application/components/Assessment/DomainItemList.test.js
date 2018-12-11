@@ -5,7 +5,7 @@ import Item from './Item'
 
 describe('<DomainItemList/>', () => {
   const fakeItemListProps = {
-    items: [{ code: 'code1' }, { code: 'code2' }],
+    items: [{ code: 'code1', above_six_id: 1, rating: -1 }, { code: 'code2', above_six_id: 2, rating: -1 }],
     caregiverIndex: 'a',
     i18nAll: { i18nkey: 'i18nvalue' },
     isAssessmentUnderSix: false,
@@ -28,10 +28,6 @@ describe('<DomainItemList/>', () => {
     wrapper.unmount()
   })
 
-  it('will render a div for each Item', () => {
-    expect(wrapper.find('div').length).toBe(2)
-  })
-
   it('will render a Item for each item in the props', () => {
     expect(wrapper.find('Item').length).toBe(2)
   })
@@ -49,9 +45,18 @@ describe('<DomainItemList/>', () => {
     expect(target.caregiverIndex).toBe('a')
     expect(target.i18n).toEqual({})
     expect(target.isAssessmentUnderSix).toBe(false)
-    expect(target.item).toEqual({ code: 'code1' })
+    expect(target.item).toEqual({ code: 'code1', above_six_id: 1, rating: -1 })
     expect(target.onConfidentialityUpdate()).toBe('onConfidentialityUpdate haveBeenCalled')
     expect(target.onRatingUpdate()).toBe('onRatingUpdate haveBeenCalled')
+  })
+
+  it('will not render an Item with undefined above_six_id, on the above_six assessment', () => {
+    const props = {
+      ...fakeItemListProps,
+      items: [{ code: 'code1', above_six_id: 1, rating: -1 }, { code: 'code2', rating: -1 }],
+    }
+    const wrapper = shallow(<DomainItemList {...props} />)
+    expect(wrapper.find('Item').length).toBe(1)
   })
 
   it('should propagate onItemCommentUpdate from props to onCommentUpdate Items` prop', () => {

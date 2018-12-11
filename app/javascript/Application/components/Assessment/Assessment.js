@@ -119,6 +119,16 @@ class Assessment extends Component {
     this.props.onAssessmentUpdate(assessment)
   }
 
+  updateDomainComment = (code, comment, caregiverIndex) => {
+    const assessment = clone(this.props.assessment)
+    assessment.state.domains.map(domain => {
+      if (domain.caregiver_index === caregiverIndex && domain.code === code) {
+        domain.comment = comment
+      }
+    })
+    this.props.onAssessmentUpdate(assessment)
+  }
+
   render() {
     const i18n = this.props.i18n
     const assessmentDto = this.props.assessment
@@ -146,6 +156,7 @@ class Assessment extends Component {
               onAddCaregiverDomain={this.addCaregiverDomainAfter}
               onRemoveCaregiverDomain={this.removeCaregiverDomain}
               onCaregiverNameUpdate={this.updateCaregiverName}
+              onDomainCommentUpdate={this.updateDomainComment}
               handleWarningShow={this.props.handleWarningShow}
             />
           )

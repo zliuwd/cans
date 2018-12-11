@@ -42,11 +42,7 @@ const ItemBooleanRating = props => {
     )
   })
   return (
-    <div
-      style={{
-        display: 'flex',
-      }}
-    >
+    <div className={'item-bool-rating'} style={{ display: 'flex' }}>
       <form autoComplete="off">
         <FormControl
           style={{

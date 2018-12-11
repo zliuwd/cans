@@ -7,18 +7,18 @@ import Checkbox from '@material-ui/core/Checkbox'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import classNames from 'classnames'
-import { shouldItemBeRendered } from './AssessmentHelper'
 import ItemNaCheckbox from './ItemNaCheckbox'
 import ItemBooleanRating from './ItemBooleanRating'
 import ItemRegularRating from './ItemRegularRating'
 import ItemDescriptionRating from './ItemDescriptionRating'
 import { getI18nValuesByPrefix } from './I18nHelper'
 import { stringify } from '../../util/common'
-import ItemComment from './ItemComment'
-import ItemCommentIcon from './ItemCommentIcon'
+import Comment from '../common/Comment'
+import CommentIcon from '../common/CommentIcon'
 
 const noRating = -1
 const naRating = 8
+const maxCommentLength = 250
 
 const initI18nValue = i18n => ({
   title: (i18n._title_ || '').toUpperCase(),
@@ -165,7 +165,7 @@ class Item extends Component {
       rating,
       onRatingUpdate: this.handleRatingChange,
     }
-    return shouldItemBeRendered(isAssessmentUnderSix, item) ? (
+    return (
       <div>
         <Paper>
           <Toolbar style={{ justifyContent: 'left' }}>
@@ -195,8 +195,8 @@ class Item extends Component {
                 naValue={this.handleNaValueSetting(rating)}
               />
             ) : null}
-            <ItemCommentIcon isSolid={Boolean(item.comment)} className={'item-toolbar-comment-icon'} />
-            <Typography variant="title" style={{ marginRight: confidential_by_default ? '4rem' : '1.5rem' }}>
+            <CommentIcon isSolid={Boolean(item.comment)} className={'item-toolbar-comment-icon'} />
+            <Typography variant="title" className={'item-confidential-checkbox'}>
               {this.renderConfidentialCheckbox(isConfidential, confidential_by_default)}
             </Typography>
             {rating_type === 'REGULAR' ? (
@@ -222,11 +222,17 @@ class Item extends Component {
                 getRadioValueForLabel={this.getRadioValueForLabel}
               />
             ) : null}
-            <ItemComment itemCode={code} comment={comment} onChange={this.handleCommentChange} />
+            <Comment
+              id={code}
+              comment={comment}
+              onChange={this.handleCommentChange}
+              prefix={'item-comment'}
+              maxCommentLength={maxCommentLength}
+            />
           </Paper>
         ) : null}
       </div>
-    ) : null
+    )
   }
 }
 /* eslint-enable camelcase */
