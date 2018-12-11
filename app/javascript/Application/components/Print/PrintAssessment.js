@@ -200,7 +200,8 @@ class PrintAssessment extends PureComponent {
 
   renderSummary() {
     const summaryCodes = this.props.summaryCodes()
-    if (Object.keys(summaryCodes).length < 1) {
+    const maxObjectSize = 1
+    if (Object.keys(summaryCodes).length < maxObjectSize) {
       return null
     } else {
       return (
