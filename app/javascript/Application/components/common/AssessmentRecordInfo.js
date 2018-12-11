@@ -6,21 +6,12 @@ import { getActionVerbByStatus } from '../Assessment/AssessmentHelper'
 import AssessmentLink from '../common/AssessmentLink'
 import Ellipsis from '../common/Ellipsis'
 import AssessmentRecordStatus from '../common/AssessmentRecordStatus'
-import { clientCaseReferralNumber } from '../Client'
 
 class AssessmentRecordInfo extends Component {
   renderInfo = (header, assessment, assessmentInfo) => {
     const { id, status } = assessment
 
-    const {
-      clientName,
-      actionVerb,
-      formattedTimestamp,
-      updatedByName,
-      countyName,
-      caseReferralNumber,
-      serviceSourceUiId,
-    } = assessmentInfo
+    const { clientName, actionVerb, formattedTimestamp, updatedByName, countyName, serviceSourceUiId } = assessmentInfo
 
     const statusHeader = <AssessmentRecordStatus status={status} />
     const clientNameHeader = <div className="assessment-record-client-name">{`Client name: ${clientName}`}</div>
@@ -37,7 +28,7 @@ class AssessmentRecordInfo extends Component {
             </p>
             <p>{`${actionVerb} on ${formattedTimestamp} by`}</p>
             <p>{updatedByName}</p>
-            <p>{`${caseReferralNumber}: ${serviceSourceUiId || ''}`}</p>
+            <p>{`Case: ${serviceSourceUiId || ''}`}</p>
             <p>{`County: ${countyName}`}</p>
           </div>
         </CardBody>
@@ -51,7 +42,6 @@ class AssessmentRecordInfo extends Component {
       updated_by: updatedBy,
       created_timestamp: createdTimestamp,
       created_by: createdBy,
-      service_source: serviceSource,
       service_source_ui_id: serviceSourceUiId,
       status,
       county,
@@ -66,7 +56,6 @@ class AssessmentRecordInfo extends Component {
     const formattedTimestamp = isoToLocalDate(updatedTimestamp || createdTimestamp)
     const user = updatedBy || createdBy || {}
     const updatedByName = `${user.first_name} ${user.last_name}`
-    const caseReferralNumber = clientCaseReferralNumber(serviceSource)
     const countyName = county ? county.name : ''
 
     const assessmentInfo = {
@@ -75,7 +64,6 @@ class AssessmentRecordInfo extends Component {
       formattedTimestamp,
       updatedByName,
       countyName,
-      caseReferralNumber,
       serviceSourceUiId,
     }
 

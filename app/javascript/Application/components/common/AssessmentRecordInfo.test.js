@@ -2,10 +2,20 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { Card, CardBody } from '@cwds/components'
 import AssessmentRecordInfo from './AssessmentRecordInfo'
-import { assessmentInProgress, assessmentWithNoUpdateInfo } from '../Assessment/assessment.mocks.test'
 import AssessmentLink from '../common/AssessmentLink'
 import Ellipsis from '../common/Ellipsis'
 import AssessmentRecordStatus from '../common/AssessmentRecordStatus'
+import {
+  assessmentInProgressWithCaseNumber,
+  assessmentCompletedWithCaseNumber,
+  assessmentWithNoUpdateInfoWithCaseNumber,
+  assessmentInProgressWithReferralNumber,
+  assessmentCompletedWithReferralNumber,
+  assessmentWithNoUpdateInfoWithReferralNumber,
+  assessmentInProgressWithNoClientandReferralNumber,
+  assessmentCompletedWithNoClientandReferralNumber,
+  assessmentWithNoUpdateInfoWithNoClientandReferralNumber,
+} from '../Assessment/assessment.mocks.test'
 
 const prepareWrapper = (assessment, header) => shallow(<AssessmentRecordInfo assessment={assessment} header={header} />)
 
@@ -14,7 +24,7 @@ describe('AssessmentRecordInfo', () => {
     let wrapper
 
     beforeEach(() => {
-      wrapper = prepareWrapper(assessmentInProgress, 'client-profile')
+      wrapper = prepareWrapper(assessmentInProgressWithCaseNumber, 'client-profile')
     })
 
     it('renders a Card component', () => {
@@ -36,14 +46,14 @@ describe('AssessmentRecordInfo', () => {
     describe('assessment record info headers', () => {
       describe('header prop equals assessment-status', () => {
         it('renders a status icon header', () => {
-          const wrapper = prepareWrapper(assessmentInProgress, 'assessment-status')
+          const wrapper = prepareWrapper(assessmentInProgressWithCaseNumber, 'assessment-status')
           expect(wrapper.find(AssessmentRecordStatus).exists()).toBe(true)
         })
       })
 
       describe('header prop equals assessment-client-name', () => {
         it('renders a client name header', () => {
-          const wrapper = prepareWrapper(assessmentInProgress, 'assessment-client-name')
+          const wrapper = prepareWrapper(assessmentInProgressWithCaseNumber, 'assessment-client-name')
           expect(wrapper.find('div.assessment-record-client-name').exists()).toBe(true)
         })
       })
@@ -54,126 +64,180 @@ describe('AssessmentRecordInfo', () => {
     })
   })
 
-  describe('component info', () => {
-    describe('with an assessment status header', () => {
-      const header = 'assessment-status'
+  describe('ClientAssessmentHistoryWithCaseNumber', () => {
+    it('renders IN_PROGRESS assessment with all fields', () => {
+      const { id } = assessmentInProgressWithCaseNumber
+      const wrapper = prepareWrapper(assessmentInProgressWithCaseNumber, 'assessment-client-name')
+      const assessmentInfo = wrapper
+        .find('div.assessment-record-info')
+        .children()
+        .map(child => child.props().children)
 
-      it('renders a Card component with assessment info', () => {
-        const { id } = assessmentInProgress
-        const wrapper = prepareWrapper(assessmentInProgress, header)
-        const assessmentInfoChildren = wrapper.find('div.assessment-record-info').children()
-
-        expect(wrapper.find(Ellipsis).props().id).toBe(97500)
-        expect(assessmentInfoChildren.at(0).matchesElement(<AssessmentRecordStatus status="IN_PROGRESS" />)).toEqual(
-          true
-        )
-        expect(assessmentInfoChildren.at(1).props().children).toEqual(
-          <AssessmentLink assessment={assessmentInProgress} key={id} />
-        )
-        expect(assessmentInfoChildren.at(2).props().children).toEqual('Saved on 06/06/2015 by')
-        expect(assessmentInfoChildren.at(3).props().children).toEqual('Name 1 Last_Name 1')
-        expect(assessmentInfoChildren.at(4).props().children).toEqual('Case: 4444-333-4444-88888888')
-        expect(assessmentInfoChildren.at(5).props().children).toEqual('County: Alameda')
-      })
-
-      it('renders a Card component with no updated_by info (create info only)', () => {
-        const { id } = assessmentWithNoUpdateInfo
-        const wrapper = prepareWrapper(assessmentWithNoUpdateInfo, header)
-        const assessmentInfoChildren = wrapper.find('div.assessment-record-info').children()
-
-        expect(wrapper.find(Ellipsis).props().id).toBe(97502)
-        expect(assessmentInfoChildren.at(0).matchesElement(<AssessmentRecordStatus status="IN_PROGRESS" />)).toEqual(
-          true
-        )
-        expect(assessmentInfoChildren.at(1).props().children).toEqual(
-          <AssessmentLink assessment={assessmentWithNoUpdateInfo} key={id} />
-        )
-        expect(assessmentInfoChildren.at(2).props().children).toEqual('Saved on 06/06/2018 by')
-        expect(assessmentInfoChildren.at(3).props().children).toEqual('Name 3 Last_Name 3')
-        expect(assessmentInfoChildren.at(4).props().children).toEqual('Case: ')
-        expect(assessmentInfoChildren.at(5).props().children).toEqual('County: Alameda')
-      })
-
-      it('renders when there is no county', () => {
-        const { county, ...noCountyAssessment } = assessmentWithNoUpdateInfo
-        const { id } = noCountyAssessment
-        const wrapper = prepareWrapper(noCountyAssessment, header)
-        const assessmentInfoChildren = wrapper.find('div.assessment-record-info').children()
-
-        expect(wrapper.find(Ellipsis).props().id).toBe(97502)
-        expect(assessmentInfoChildren.at(0).matchesElement(<AssessmentRecordStatus status="IN_PROGRESS" />)).toEqual(
-          true
-        )
-        expect(assessmentInfoChildren.at(1).props().children).toEqual(
-          <AssessmentLink assessment={noCountyAssessment} key={id} />
-        )
-        expect(assessmentInfoChildren.at(2).props().children).toEqual('Saved on 06/06/2018 by')
-        expect(assessmentInfoChildren.at(3).props().children).toEqual('Name 3 Last_Name 3')
-        expect(assessmentInfoChildren.at(4).props().children).toEqual('Case: ')
-        expect(assessmentInfoChildren.at(5).props().children).toEqual('County: ')
-      })
+      expect(wrapper.find(Ellipsis).props().id).toBe(97501)
+      expect(assessmentInfo).toEqual([
+        'Client name: Casey Middle Test, Jr',
+        <AssessmentLink assessment={assessmentInProgressWithCaseNumber} key={id} />,
+        'Saved on 06/06/2015 by',
+        'Name 1 LastName 1',
+        'Case: 4444-333-4444-88888888',
+        'County: Alameda',
+      ])
     })
 
-    describe('with a client name header', () => {
-      const header = 'assessment-client-name'
+    it('renders COMPLETED assessment with all fields', () => {
+      const { id } = assessmentCompletedWithCaseNumber
+      const wrapper = prepareWrapper(assessmentCompletedWithCaseNumber, 'assessment-client-name')
+      const assessmentInfo = wrapper
+        .find('div.assessment-record-info')
+        .children()
+        .map(child => child.props().children)
 
-      it('renders a Card component with assessment info', () => {
-        const { id } = assessmentInProgress
-        const wrapper = prepareWrapper(assessmentInProgress, header)
-        const assessmentInfo = wrapper
-          .find('div.assessment-record-info')
-          .children()
-          .map(child => child.props().children)
+      expect(wrapper.find(Ellipsis).props().id).toBe(97502)
+      expect(assessmentInfo).toEqual([
+        'Client name: Casey Middle Test, Jr',
+        <AssessmentLink assessment={assessmentCompletedWithCaseNumber} key={id} />,
+        'Completed on 06/06/2018 by',
+        'Name 2 LastName 2',
+        'Case: 4444-333-4444-88888888',
+        'County: Alameda',
+      ])
+    })
 
-        expect(wrapper.find(Ellipsis).props().id).toBe(97500)
-        expect(assessmentInfo).toEqual([
-          'Client name: Casey Middle Test, Jr',
-          <AssessmentLink assessment={assessmentInProgress} key={id} />,
-          'Saved on 06/06/2015 by',
-          'Name 1 Last_Name 1',
-          'Case: 4444-333-4444-88888888',
-          'County: Alameda',
-        ])
-      })
+    it('renders assessment with no update info (create info only)', () => {
+      const { id } = assessmentWithNoUpdateInfoWithCaseNumber
+      const wrapper = prepareWrapper(assessmentWithNoUpdateInfoWithCaseNumber, 'assessment-client-name')
+      const assessmentInfo = wrapper
+        .find('div.assessment-record-info')
+        .children()
+        .map(child => child.props().children)
 
-      it('renders a Card component with no updated_by info (create info only)', () => {
-        const { id } = assessmentWithNoUpdateInfo
-        const wrapper = prepareWrapper(assessmentWithNoUpdateInfo, header)
-        const assessmentInfo = wrapper
-          .find('div.assessment-record-info')
-          .children()
-          .map(child => child.props().children)
+      expect(wrapper.find(Ellipsis).props().id).toBe(97503)
+      expect(assessmentInfo).toEqual([
+        'Client name: Casey Middle Test, Jr',
+        <AssessmentLink assessment={assessmentWithNoUpdateInfoWithCaseNumber} key={id} />,
+        'Saved on 06/06/2018 by',
+        'Name 3 LastName 3',
+        'Case: 4444-333-4444-88888888',
+        'County: Alameda',
+      ])
+    })
+  })
 
-        expect(wrapper.find(Ellipsis).props().id).toBe(97502)
-        expect(assessmentInfo).toEqual([
-          'Client name: Casey Middle Test, Jr',
-          <AssessmentLink assessment={assessmentWithNoUpdateInfo} key={id} />,
-          'Saved on 06/06/2018 by',
-          'Name 3 Last_Name 3',
-          'Case: ',
-          'County: Alameda',
-        ])
-      })
+  describe('ClientAssessmentHistoryWithReferralNumber', () => {
+    it('renders IN_PROGRESS assessment with all fields', () => {
+      const { id } = assessmentInProgressWithReferralNumber
+      const wrapper = prepareWrapper(assessmentInProgressWithReferralNumber, 'assessment-client-name')
+      const assessmentInfo = wrapper
+        .find('div.assessment-record-info')
+        .children()
+        .map(child => child.props().children)
 
-      it('renders when there is no county', () => {
-        const { county, ...noCountyAssessment } = assessmentWithNoUpdateInfo
-        const { id } = noCountyAssessment
-        const wrapper = prepareWrapper(noCountyAssessment, header)
-        const assessmentInfo = wrapper
-          .find('div.assessment-record-info')
-          .children()
-          .map(child => child.props().children)
+      expect(wrapper.find(Ellipsis).props().id).toBe(97501)
+      expect(assessmentInfo).toEqual([
+        'Client name: Casey Middle Test, Jr',
+        <AssessmentLink assessment={assessmentInProgressWithReferralNumber} key={id} />,
+        'Saved on 06/06/2015 by',
+        'Name 1 LastName 1',
+        'Case: 4444-333-4444-88888888',
+        'County: Alameda',
+      ])
+    })
 
-        expect(wrapper.find(Ellipsis).props().id).toBe(97502)
-        expect(assessmentInfo).toEqual([
-          'Client name: Casey Middle Test, Jr',
-          <AssessmentLink assessment={noCountyAssessment} key={id} />,
-          'Saved on 06/06/2018 by',
-          'Name 3 Last_Name 3',
-          'Case: ',
-          'County: ',
-        ])
-      })
+    it('renders COMPLETED assessment with all fields', () => {
+      const { id } = assessmentCompletedWithReferralNumber
+      const wrapper = prepareWrapper(assessmentCompletedWithReferralNumber, 'assessment-client-name')
+      const assessmentInfo = wrapper
+        .find('div.assessment-record-info')
+        .children()
+        .map(child => child.props().children)
+
+      expect(wrapper.find(Ellipsis).props().id).toBe(97502)
+      expect(assessmentInfo).toEqual([
+        'Client name: Casey Middle Test, Jr',
+        <AssessmentLink assessment={assessmentCompletedWithReferralNumber} key={id} />,
+        'Completed on 06/06/2018 by',
+        'Name 2 LastName 2',
+        'Case: 4444-333-4444-88888888',
+        'County: Alameda',
+      ])
+    })
+
+    it('renders assessment with no update info (create info only)', () => {
+      const { id } = assessmentWithNoUpdateInfoWithReferralNumber
+      const wrapper = prepareWrapper(assessmentWithNoUpdateInfoWithReferralNumber, 'assessment-client-name')
+      const assessmentInfo = wrapper
+        .find('div.assessment-record-info')
+        .children()
+        .map(child => child.props().children)
+
+      expect(wrapper.find(Ellipsis).props().id).toBe(97503)
+      expect(assessmentInfo).toEqual([
+        'Client name: Casey Middle Test, Jr',
+        <AssessmentLink assessment={assessmentWithNoUpdateInfoWithReferralNumber} key={id} />,
+        'Saved on 06/06/2018 by',
+        'Name 3 LastName 3',
+        'Case: 4444-333-4444-88888888',
+        'County: Alameda',
+      ])
+    })
+  })
+
+  describe('ClientAssessmentHistoryWithNoClientorReferralNumber', () => {
+    it('renders IN_PROGRESS assessment with all fields', () => {
+      const { id } = assessmentInProgressWithNoClientandReferralNumber
+      const wrapper = prepareWrapper(assessmentInProgressWithNoClientandReferralNumber, 'assessment-client-name')
+      const assessmentInfo = wrapper
+        .find('div.assessment-record-info')
+        .children()
+        .map(child => child.props().children)
+
+      expect(wrapper.find(Ellipsis).props().id).toBe(97501)
+      expect(assessmentInfo).toEqual([
+        'Client name: Casey Middle Test, Jr',
+        <AssessmentLink assessment={assessmentInProgressWithNoClientandReferralNumber} key={id} />,
+        'Saved on 06/06/2015 by',
+        'Name 1 LastName 1',
+        'Case: ',
+        'County: Alameda',
+      ])
+    })
+
+    it('renders COMPLETED assessment with all fields', () => {
+      const { id } = assessmentCompletedWithNoClientandReferralNumber
+      const wrapper = prepareWrapper(assessmentCompletedWithNoClientandReferralNumber, 'assessment-client-name')
+      const assessmentInfo = wrapper
+        .find('div.assessment-record-info')
+        .children()
+        .map(child => child.props().children)
+
+      expect(wrapper.find(Ellipsis).props().id).toBe(97502)
+      expect(assessmentInfo).toEqual([
+        'Client name: Casey Middle Test, Jr',
+        <AssessmentLink assessment={assessmentCompletedWithNoClientandReferralNumber} key={id} />,
+        'Completed on 06/06/2018 by',
+        'Name 2 LastName 2',
+        'Case: ',
+        'County: Alameda',
+      ])
+    })
+
+    it('renders assessment with no update info (create info only)', () => {
+      const { id } = assessmentWithNoUpdateInfoWithNoClientandReferralNumber
+      const wrapper = prepareWrapper(assessmentWithNoUpdateInfoWithNoClientandReferralNumber, 'assessment-client-name')
+      const assessmentInfo = wrapper
+        .find('div.assessment-record-info')
+        .children()
+        .map(child => child.props().children)
+
+      expect(wrapper.find(Ellipsis).props().id).toBe(97503)
+      expect(assessmentInfo).toEqual([
+        'Client name: Casey Middle Test, Jr',
+        <AssessmentLink assessment={assessmentWithNoUpdateInfoWithNoClientandReferralNumber} key={id} />,
+        'Saved on 06/06/2018 by',
+        'Name 3 LastName 3',
+        'Case: ',
+        'County: Alameda',
+      ])
     })
   })
 })

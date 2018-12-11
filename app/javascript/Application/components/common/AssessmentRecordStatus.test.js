@@ -6,7 +6,9 @@ import { Icon } from '@cwds/components'
 describe('AssessmentRecordStatus', () => {
   describe('when the status is IN_PROGRESS', () => {
     it('renders a spinner icon and the correct status', () => {
-      const expectedResult = AssessmentRecordStatus({ status: 'IN_PROGRESS' })
+      const expectedResult = AssessmentRecordStatus({
+        status: AssessmentStatus.inProgress,
+      })
       expect(expectedResult).toEqual(
         <div className="status-icon-wrapper">
           <i className="fa fa-spinner fa-2x" aria-hidden="true" />
