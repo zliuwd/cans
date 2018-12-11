@@ -1,11 +1,11 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import ItemComment from './ItemComment'
-import ItemCommentIcon from './ItemCommentIcon'
+import Comment from '../common/Comment'
+import CommentIcon from '../common/CommentIcon'
 
-describe('<ItemComment />', () => {
+describe('<Comment />', () => {
   const getWrapper = (comment, onChange = () => {}) =>
-    shallow(<ItemComment comment={comment} itemCode={'a-code'} onChange={onChange} />)
+    shallow(<Comment comment={comment} id={'ele-id'} prefix={'ele-comment'} onChange={onChange} />)
 
   describe('initialization', () => {
     it('should propagate comment prop to state`s value', () => {
@@ -17,13 +17,38 @@ describe('<ItemComment />', () => {
     })
   })
 
+  describe('textarea character length', () => {
+    const wrapperWithInputLength = (comment, maxCommentLength, onChange = () => {}) =>
+      shallow(
+        <Comment
+          comment={comment}
+          id={'ele-id'}
+          prefix={'ele-comment'}
+          onChange={onChange}
+          maxCommentLength={maxCommentLength || 250}
+        />
+      )
+
+    it('allows 250 max chars by default', () => {
+      const wrapper = wrapperWithInputLength('')
+      const input = wrapper.find('textarea')
+      expect(input.props().maxLength).toEqual(250)
+    })
+
+    it('passes maxCommentLength prop to set maxLength on textarea', () => {
+      const wrapper = wrapperWithInputLength('', 2500)
+      const input = wrapper.find('textarea')
+      expect(input.props().maxLength).toEqual(2500)
+    })
+  })
+
   describe('styling', () => {
     describe('when not focused', () => {
       describe('and has an empty value', () => {
         it('should render a folded version of the component', () => {
-          const wrapper = getWrapper()
+          const wrapper = getWrapper('')
           const input = wrapper.find('textarea')
-          expect(input.props().className.includes('item-comment-textarea-empty')).toBeTruthy()
+          expect(input.props().className.includes('ele-comment-textarea-empty')).toBeTruthy()
         })
       })
 
@@ -31,8 +56,8 @@ describe('<ItemComment />', () => {
         it('should render an extended version of the component', () => {
           const wrapper = getWrapper('a comment')
           const input = wrapper.find('textarea')
-          expect(input.props().className.includes('item-comment-textarea-empty')).toBeFalsy()
-          expect(input.props().className.includes('item-comment-textarea')).toBeTruthy()
+          expect(input.props().className.includes('ele-comment-textarea-empty')).toBeFalsy()
+          expect(input.props().className.includes('ele-comment-textarea')).toBeTruthy()
         })
       })
     })
@@ -43,8 +68,8 @@ describe('<ItemComment />', () => {
           const wrapper = getWrapper('')
           wrapper.setState({ isFocused: true })
           const input = wrapper.find('textarea')
-          expect(input.props().className.includes('item-comment-textarea-empty')).toBeFalsy()
-          expect(input.props().className.includes('item-comment-textarea')).toBeTruthy()
+          expect(input.props().className.includes('ele-comment-textarea-empty')).toBeFalsy()
+          expect(input.props().className.includes('ele-comment-textarea')).toBeTruthy()
         })
       })
 
@@ -53,8 +78,8 @@ describe('<ItemComment />', () => {
           const wrapper = getWrapper('a comment')
           wrapper.setState({ isFocused: true })
           const input = wrapper.find('textarea')
-          expect(input.props().className.includes('item-comment-textarea-empty')).toBeFalsy()
-          expect(input.props().className.includes('item-comment-textarea')).toBeTruthy()
+          expect(input.props().className.includes('ele-comment-textarea-empty')).toBeFalsy()
+          expect(input.props().className.includes('ele-comment-textarea')).toBeTruthy()
         })
       })
     })
@@ -62,25 +87,25 @@ describe('<ItemComment />', () => {
     describe('ItemCommentIcon', () => {
       it('should be solid when a comment is not empty', () => {
         const wrapper = getWrapper('a comment')
-        expect(wrapper.find(ItemCommentIcon).props().isSolid).toBeTruthy()
+        expect(wrapper.find(CommentIcon).props().isSolid).toBeTruthy()
       })
 
       it('should be outlined when a comment is empty', () => {
         const wrapper = getWrapper('')
-        expect(wrapper.find(ItemCommentIcon).props().isSolid).toBeFalsy()
+        expect(wrapper.find(CommentIcon).props().isSolid).toBeFalsy()
       })
     })
 
     describe('comment length indicator', () => {
-      it('should be rendered and have an `item-comment-text-length` style when ItemComment is focused', () => {
+      it('should be rendered and have an `ele-comment-text-length` style when ItemComment is focused', () => {
         const wrapper = getWrapper('a comment')
         wrapper.setState({ isFocused: true })
-        expect(wrapper.find('span.item-comment-text-length').exists()).toBeTruthy()
+        expect(wrapper.find('span.ele-comment-text-length').exists()).toBeTruthy()
       })
 
       it('should have hidden style when ItemComment is not focused', () => {
         const wrapper = getWrapper('a comment')
-        expect(wrapper.find('span.item-comment-text-length-hidden').exists()).toBeTruthy()
+        expect(wrapper.find('span.ele-comment-text-length-hidden').exists()).toBeTruthy()
       })
     })
   })

@@ -42,11 +42,7 @@ const ItemRegularRating = props => {
     )
   })
   return (
-    <div
-      style={{
-        display: 'flex',
-      }}
-    >
+    <div className={'item-reg-rating'} style={{ display: 'flex' }}>
       <form autoComplete="off">
         <FormControl
           style={{

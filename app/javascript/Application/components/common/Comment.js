@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Label } from '@cwds/components'
-import ItemCommentIcon from './ItemCommentIcon'
+import CommentIcon from './CommentIcon'
 
-const maxCommentLength = 250
-
-class ItemComment extends Component {
+class Comment extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -33,43 +31,45 @@ class ItemComment extends Component {
 
   render() {
     const { isFocused, value } = this.state
+    const { prefix, maxCommentLength, id } = this.props
     const isFolded = !isFocused && !value
     const inputClassSuffix = isFolded ? '-empty' : ''
     const lengthClassSuffix = isFocused ? '' : '-hidden'
-    const inputId = `comment-${this.props.itemCode}`
+    const inputId = `${id}-${prefix}`
     return (
-      <div className={'item-comment-wrapper'}>
-        <div className={'item-comment-block'}>
+      <div className={`${prefix}-wrapper`}>
+        <div className={`${prefix}-block`}>
           <Label for={inputId}>
-            <ItemCommentIcon isSolid={Boolean(value)} />
-            <span className={'item-comment-label'}>Comment</span>
+            <CommentIcon isSolid={Boolean(value)} />
+            <span className={`${prefix}-label`}>Comment</span>
           </Label>
           <textarea
             id={inputId}
-            className={`item-comment-textarea${inputClassSuffix}`}
+            className={`${prefix}-textarea${inputClassSuffix}`}
             value={value}
             onChange={this.handleInternalValueUpdate}
             onFocus={this.handleOnFocus}
             onBlur={this.handleOnBlur}
             maxLength={maxCommentLength}
           />
-          <span className={`item-comment-text-length${lengthClassSuffix}`}>{`${
-            value.length
-          }/${maxCommentLength}`}</span>
+          <span className={`${prefix}-text-length${lengthClassSuffix}`}>{`${value.length}/${maxCommentLength}`}</span>
         </div>
       </div>
     )
   }
 }
 
-ItemComment.propTypes = {
+Comment.propTypes = {
   comment: PropTypes.string,
-  itemCode: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  maxCommentLength: PropTypes.number,
   onChange: PropTypes.func.isRequired,
+  prefix: PropTypes.string.isRequired,
 }
 
-ItemComment.defaultProps = {
+Comment.defaultProps = {
   comment: '',
+  maxCommentLength: 250,
 }
 
-export default ItemComment
+export default Comment

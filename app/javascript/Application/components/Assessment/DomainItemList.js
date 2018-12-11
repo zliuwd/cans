@@ -1,6 +1,7 @@
 import React from 'react'
 import { getI18nByCode } from './I18nHelper'
 import Item from './Item'
+import { shouldItemBeRendered } from './AssessmentHelper'
 import Divider from '@material-ui/core/Divider'
 import PropTypes from 'prop-types'
 
@@ -8,7 +9,8 @@ const DomainItemList = props => {
   return props.items.map((item, index) => {
     const { code } = item
     const itemI18n = getI18nByCode(props.i18nAll, code)
-    return (
+    const isAssessmentUnderSix = props.isAssessmentUnderSix
+    return shouldItemBeRendered(isAssessmentUnderSix, item) ? (
       <div key={`${code}`}>
         <Item
           key={`${index}-${code}`}
@@ -18,12 +20,12 @@ const DomainItemList = props => {
           onRatingUpdate={props.onRatingUpdate}
           onCommentUpdate={props.onItemCommentUpdate}
           onConfidentialityUpdate={props.onConfidentialityUpdate}
-          isAssessmentUnderSix={props.isAssessmentUnderSix}
+          isAssessmentUnderSix={isAssessmentUnderSix}
           canReleaseConfidentialInfo={props.canReleaseConfidentialInfo}
         />
         <Divider />
       </div>
-    )
+    ) : null
   })
 }
 

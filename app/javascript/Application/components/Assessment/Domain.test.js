@@ -2,6 +2,8 @@ import React from 'react'
 import { shallow, mount } from 'enzyme'
 import Domain from './Domain'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
+import DomainCommentAccordion from './DomainCommentAccordion'
+import CommentIcon from '../common/CommentIcon'
 
 const domainDefault = {
   id: '1',
@@ -37,6 +39,7 @@ const domainComponentDefault = (
     i18nAll={{ a: 'b' }}
     index={1}
     onItemCommentUpdate={() => {}}
+    onDomainCommentUpdate={() => {}}
     onRatingUpdate={() => {}}
     onConfidentialityUpdate={() => {}}
     onAddCaregiverDomain={() => {}}
@@ -67,6 +70,7 @@ describe('<Domain />', () => {
         i18nAll={{}}
         index={1}
         onItemCommentUpdate={onItemCommentUpdateMock}
+        onDomainCommentUpdate={() => {}}
         onRatingUpdate={() => {}}
         onConfidentialityUpdate={() => {}}
         onAddCaregiverDomain={() => {}}
@@ -101,6 +105,46 @@ describe('<Domain />', () => {
     })
   })
 
+  describe('DomainCommentAccordion', () => {
+    it('should render domain comment when extended', () => {
+      const wrapper = shallow(domainComponentDefault)
+      wrapper.instance().handleExpandedChange()
+      expect(wrapper.instance().state.expanded).toBeTruthy()
+      expect(wrapper.find(DomainCommentAccordion).length).toBe(1)
+    })
+
+    it('should propogate onDomainCommentUpdate prop to DomainCommentAccordion props', () => {
+      const onDomainCommentUpdateMock = jest.fn()
+      const wrapper = shallow(
+        <Domain
+          key={'1'}
+          canReleaseConfidentialInfo={true}
+          domain={{ ...domainDefault }}
+          isAssessmentUnderSix={true}
+          i18n={{ ...i18nDefault }}
+          i18nAll={{}}
+          index={1}
+          onItemCommentUpdate={() => {}}
+          onDomainCommentUpdate={onDomainCommentUpdateMock}
+          onRatingUpdate={() => {}}
+          onConfidentialityUpdate={() => {}}
+          onAddCaregiverDomain={() => {}}
+          handleWarningShow={() => {}}
+          onCaregiverNameUpdate={() => {}}
+        />
+      )
+      wrapper.instance().handleExpandedChange()
+      expect(wrapper.find(DomainCommentAccordion).props().onDomainCommentUpdate).toBe(onDomainCommentUpdateMock)
+    })
+  })
+
+  describe('CommentIcon', () => {
+    it('renders comment icon on the domain header', () => {
+      const wrapper = shallow(domainComponentDefault)
+      expect(wrapper.find(CommentIcon).length).toBe(1)
+    })
+  })
+
   describe('caregiver domain', () => {
     const callbackMock = jest.fn()
     const domain = {
@@ -118,6 +162,7 @@ describe('<Domain />', () => {
         i18nAll={{}}
         index={1}
         onItemCommentUpdate={() => {}}
+        onDomainCommentUpdate={() => {}}
         onRatingUpdate={() => {}}
         onConfidentialityUpdate={() => {}}
         onAddCaregiverDomain={callbackMock}
@@ -174,6 +219,7 @@ describe('<Domain />', () => {
                 i18nAll={{}}
                 index={1}
                 onItemCommentUpdate={() => {}}
+                onDomainCommentUpdate={() => {}}
                 onRatingUpdate={() => {}}
                 onConfidentialityUpdate={() => {}}
                 onAddCaregiverDomain={() => {}}
@@ -215,6 +261,7 @@ describe('<Domain />', () => {
                 i18nAll={{}}
                 index={1}
                 onItemCommentUpdate={() => {}}
+                onDomainCommentUpdate={() => {}}
                 onRatingUpdate={() => {}}
                 onConfidentialityUpdate={() => {}}
                 onAddCaregiverDomain={() => {}}

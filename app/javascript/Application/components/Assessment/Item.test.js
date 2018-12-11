@@ -3,8 +3,8 @@ import { mount, shallow } from 'enzyme'
 import Item from './Item'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import ItemCommentIcon from './ItemCommentIcon'
-import ItemComment from './ItemComment'
+import CommentIcon from '../common/CommentIcon'
+import Comment from '../common/Comment'
 
 const itemDefault = {
   code: 'lf10family',
@@ -170,22 +170,22 @@ describe('<Item />', () => {
     expect(foldedText).toMatch(/1a\. /)
   })
 
-  describe('ItemCommentIcon in the toolbar', () => {
-    it('should render ItemCommentIcon with item-toolbar-comment-icon style', () => {
+  describe('CommentIcon in the toolbar', () => {
+    it('should render CommentIcon with item-toolbar-comment-icon style', () => {
       const wrapper = shallowItem(itemDefault)
-      const commentIcon = wrapper.find(ItemCommentIcon)
+      const commentIcon = wrapper.find(CommentIcon)
       expect(commentIcon.props().className.includes('item-toolbar-comment-icon')).toBeTruthy()
     })
 
-    it('should render outlined ItemCommentIcon when no comment for the item', () => {
+    it('should render outlined CommentIcon when no comment for the item', () => {
       const wrapper = shallowItem(itemDefault)
-      const commentIcon = wrapper.find(ItemCommentIcon)
+      const commentIcon = wrapper.find(CommentIcon)
       expect(commentIcon.props().isSolid).toBeFalsy()
     })
 
-    it('should render solid ItemCommentIcon when item has a comment', () => {
+    it('should render solid CommentIcon when item has a comment', () => {
       const wrapper = shallowItem(itemWithComment)
-      const commentIcon = wrapper.find(ItemCommentIcon)
+      const commentIcon = wrapper.find(CommentIcon)
       expect(commentIcon.props().isSolid).toBeTruthy()
     })
   })
@@ -308,7 +308,7 @@ describe('<Item />', () => {
   })
 
   describe('#handleCommentChange()', () => {
-    it('should propagate handleCommentChange to onChange ItemComment prop', () => {
+    it('should propagate handleCommentChange to onChange Comment prop', () => {
       const onCommentUpdateMock = jest.fn()
       const wrapper = shallow(
         <Item
@@ -323,7 +323,7 @@ describe('<Item />', () => {
       )
       wrapper.setState({ isExpanded: true })
       wrapper
-        .find(ItemComment)
+        .find(Comment)
         .props()
         .onChange('new comment')
       expect(onCommentUpdateMock).toHaveBeenCalledTimes(1)
@@ -331,11 +331,11 @@ describe('<Item />', () => {
     })
   })
 
-  describe('ItemComment', () => {
+  describe('Comment', () => {
     it('should be rendered with a comment in props', () => {
       const wrapper = shallowItem(itemWithComment)
       wrapper.setState({ isExpanded: true })
-      expect(wrapper.find(ItemComment).props().comment).toBe('a comment')
+      expect(wrapper.find(Comment).props().comment).toBe('a comment')
     })
   })
 

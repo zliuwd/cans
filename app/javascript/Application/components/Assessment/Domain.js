@@ -8,6 +8,8 @@ import Tooltip from '@material-ui/core/Tooltip'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Input } from 'reactstrap'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
+import DomainCommentAccordion from './DomainCommentAccordion'
+import CommentIcon from '../common/CommentIcon'
 import { shouldDomainBeRendered } from './AssessmentHelper'
 import { isA11yAllowedInput } from '../../util/events'
 import Grid from '@material-ui/core/Grid'
@@ -119,6 +121,7 @@ class Domain extends Component {
                 </Typography>
               </Grid>
               <Grid item xs={4} className={'domain-metric'}>
+                <CommentIcon isSolid={Boolean(domain.comment)} className={'domain-toolbar-comment-icon'} />
                 <DomainProgressBar isAssessmentUnderSix={isAssessmentUnderSix} domain={domain} />
                 <DomainScore totalScore={totalScore} key={index} />
               </Grid>
@@ -135,6 +138,12 @@ class Domain extends Component {
               >
                 {is_caregiver_domain && this.renderCaregiverName()}
                 <DomainItemList {...itemListProps} />
+                <DomainCommentAccordion
+                  id={`${domain.code}-${domain.caregiver_index}`}
+                  title={title}
+                  domain={domain}
+                  onDomainCommentUpdate={this.props.onDomainCommentUpdate}
+                />
                 {is_caregiver_domain && (
                   <DomainCaregiverControls
                     onRemoveCaregiverDomain={this.handleRemoveCaregiverDomain}
@@ -163,6 +172,7 @@ Domain.propTypes = {
   onAddCaregiverDomain: PropTypes.func.isRequired,
   onCaregiverNameUpdate: PropTypes.func.isRequired,
   onConfidentialityUpdate: PropTypes.func.isRequired,
+  onDomainCommentUpdate: PropTypes.func.isRequired,
   onItemCommentUpdate: PropTypes.func.isRequired,
   onRatingUpdate: PropTypes.func.isRequired,
 }

@@ -135,6 +135,45 @@ describe('<Assessment />', () => {
     })
   })
 
+  describe('#updateDomainComment()', () => {
+    it('should be propagated as a onDomainCommentUpdate prop for Domain', () => {
+      const onAssessmentUpdateMock = jest.fn()
+      const wrapper = shallow(
+        <Assessment onAssessmentUpdate={onAssessmentUpdateMock} assessment={assessment} i18n={i18n} />
+      )
+      const domains = wrapper.find(Domain)
+      domains.forEach(domain => domain.props().onDomainCommentUpdate())
+      expect(onAssessmentUpdateMock).toHaveBeenCalledTimes(domains.length)
+    })
+
+    it('updates the domain comment when invoked', () => {
+      const mockFn = jest.fn()
+      const initialAssessment = clone(assessment)
+      initialAssessment.state.domains[0] = { ...initialAssessment.state.domains[0], code: 'AGV' }
+      const wrapper = mount(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+      wrapper.instance().updateDomainComment('AGV', 'a domain comment')
+      const updatedAssessment = initialAssessment
+      updatedAssessment.state.domains[0] = {
+        ...initialAssessment.state.domains[0],
+        code: 'AGV',
+        comment: 'a domain comment',
+      }
+      expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
+    })
+
+    it('updates domain comment for caregiver domain when invoked', () => {
+      const mockFn = jest.fn()
+      const initialAssessment = clone(assessment)
+      initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0])
+      const wrapper = mount(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+      wrapper.instance().updateDomainComment('123', 'caregiver domain comment', 'a')
+      const updatedAssessment = initialAssessment
+      updatedAssessment.state.domains[0] = enhanceDomainToCaregiver(updatedAssessment.state.domains[0])
+      updatedAssessment.state.domains[0].comment = 'caregiver domain comment'
+      expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
+    })
+  })
+
   describe('#updateCaregiverName()', () => {
     describe('onCareGiverNameUpdate call back', () => {
       it('is invoked when caregiver name is updated', () => {
