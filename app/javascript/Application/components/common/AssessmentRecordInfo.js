@@ -30,7 +30,7 @@ class AssessmentRecordInfo extends Component {
     return (
       <Card>
         <CardBody>
-          <Ellipsis id={assessment.id} />
+          <Ellipsis id={assessment.id} clientId={assessment.person.identifier} />
           <div>
             <p className="assessment-client-name no-margin">{`Client name: ${clientName}`}</p>
             <p className="no-margin">
