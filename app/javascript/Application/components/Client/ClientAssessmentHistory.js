@@ -9,6 +9,7 @@ import { AssessmentService } from '../Assessment/Assessment.service'
 import { LoadingState } from '../../util/loadingHelper'
 import AuthBoundary, { buildCreateAssessmentPermission } from '../common/AuthBoundary'
 import AddCansLink from './AddCansLink'
+import { Row } from 'reactstrap'
 
 import './style.sass'
 
@@ -64,7 +65,9 @@ class ClientAssessmentHistory extends Component {
             action={this.renderAddCansLink()}
           />
           <div className={'content'}>
-            <CardContent>{this.renderAssessments(assessments, fetchStatus)}</CardContent>
+            <CardContent>
+              <Row>{this.renderAssessments(assessments, fetchStatus)}</Row>
+            </CardContent>
           </div>
         </Card>
       </Grid>

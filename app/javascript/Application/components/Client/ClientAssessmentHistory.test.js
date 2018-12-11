@@ -75,12 +75,6 @@ describe('<ClientAssessmentHistory', () => {
       const actionWrapper = shallow(cardHeader.dive().props().action)
       const link = actionWrapper.find(AddCansLink)
       expect(link.exists()).toBe(true)
-      expect(
-        link
-          .dive()
-          .find('span.add-cans-span')
-          .text()
-      ).toBe('add cans')
     })
   })
 

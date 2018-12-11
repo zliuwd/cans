@@ -5,7 +5,7 @@ import AssessmentLink from './AssessmentLink'
 import { assessmentInProgress } from '../Assessment/assessment.mocks.test'
 import { isoToLocalDate } from '../../util/dateHelper'
 
-describe('AssessmentRecordIcon', () => {
+describe('AssessmentLink', () => {
   const prepareWrapper = assessment => {
     return shallow(<AssessmentLink assessment={assessment} />)
   }
@@ -22,11 +22,11 @@ describe('AssessmentRecordIcon', () => {
     expect(wrapper.length).toEqual(1)
   })
 
-  it('the "to" property includes the person id and the assessment id', () => {
+  it('the "to" property includes the person identifier and the assessment id', () => {
     const { id, person } = assessmentInProgress
     const wrapper = prepareWrapper(assessmentInProgress)
 
-    expect(wrapper.props().to).toEqual(`/clients/${person.id}/assessments/${id}`)
+    expect(wrapper.props().to).toEqual(`/clients/${person.identifier}/assessments/${id}`)
   })
 
   it('the Link text is the formatted date + " CANS ', () => {

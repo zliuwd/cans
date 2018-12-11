@@ -6,7 +6,7 @@ class SearchAssessmentHistoryRecord extends PureComponent {
   render() {
     return (
       <div className="col-md-4">
-        <AssessmentRecordInfo assessment={this.props.assessment} />
+        <AssessmentRecordInfo assessment={this.props.assessment} header={'assessment-client-name'} />
       </div>
     )
   }

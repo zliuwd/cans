@@ -1,9 +1,8 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Link } from 'react-router-dom'
 import ClientAssessmentHistoryRecord from './ClientAssessmentHistoryRecord'
+import AssessmentRecordInfo from '../common/AssessmentRecordInfo'
 
-jest.mock('../Assessment/Assessment.service')
 const getShallowWrapper = assessment => shallow(<ClientAssessmentHistoryRecord assessment={assessment} />)
 
 // Client with Case Number
@@ -65,21 +64,7 @@ describe('ClientAssessmentHistoryWithCaseNumber', () => {
     const wrapper = getShallowWrapper(assessmentInProgressWithCaseNumber)
 
     // then
-    expect(
-      wrapper
-        .find(Link)
-        .children()
-        .text()
-    ).toEqual('10/10/2015 CANS')
-    const assessmentInfo = wrapper
-      .find('.history-item-info')
-      .get(0)
-      .props.children.filter(el => el.type !== 'br')
-    expect(assessmentInfo).toEqual([
-      'Saved on 06/06/2015 by Name 1 LastName 1',
-      'Case Number: 4444-333-4444-88888888',
-      'County: Alameda',
-    ])
+    expect(wrapper.find(AssessmentRecordInfo).exists()).toBe(true)
   })
 
   it('renders COMPLETED assessment with all fields', async () => {
@@ -87,21 +72,7 @@ describe('ClientAssessmentHistoryWithCaseNumber', () => {
     const wrapper = getShallowWrapper(assessmentCompletedWithCaseNumber)
 
     // then
-    expect(
-      wrapper
-        .find(Link)
-        .children()
-        .text()
-    ).toEqual('01/05/2018 CANS')
-    const timestamp = wrapper
-      .find('.history-item-info')
-      .get(0)
-      .props.children.filter(el => el.type !== 'br')
-    expect(timestamp).toEqual([
-      'Completed on 06/06/2018 by Name 2 LastName 2',
-      'Case Number: 4444-333-4444-88888888',
-      'County: Alameda',
-    ])
+    expect(wrapper.find(AssessmentRecordInfo).exists()).toBe(true)
   })
 
   it('renders assessment with no update info (create info only)', async () => {
@@ -109,15 +80,7 @@ describe('ClientAssessmentHistoryWithCaseNumber', () => {
     const wrapper = getShallowWrapper(assessmentWithNoUpdateInfoWithCaseNumber)
 
     // then
-    const timestamp = wrapper
-      .find('.history-item-info')
-      .get(0)
-      .props.children.filter(el => el.type !== 'br')
-    expect(timestamp).toEqual([
-      'Saved on 06/06/2018 by Name 3 LastName 3',
-      'Case Number: 4444-333-4444-88888888',
-      'County: Alameda',
-    ])
+    expect(wrapper.find(AssessmentRecordInfo).exists()).toBe(true)
   })
 })
 
@@ -180,21 +143,7 @@ describe('ClientAssessmentHistoryWithReferralNumber', () => {
     const wrapper = getShallowWrapper(assessmentInProgressWithReferralNumber)
 
     // then
-    expect(
-      wrapper
-        .find(Link)
-        .children()
-        .text()
-    ).toEqual('10/10/2015 CANS')
-    const assessmentInfo = wrapper
-      .find('.history-item-info')
-      .get(0)
-      .props.children.filter(el => el.type !== 'br')
-    expect(assessmentInfo).toEqual([
-      'Saved on 06/06/2015 by Name 1 LastName 1',
-      'Referral Number: 4444-333-4444-88888888',
-      'County: Alameda',
-    ])
+    expect(wrapper.find(AssessmentRecordInfo).exists()).toBe(true)
   })
 
   it('renders COMPLETED assessment with all fields', async () => {
@@ -202,21 +151,7 @@ describe('ClientAssessmentHistoryWithReferralNumber', () => {
     const wrapper = getShallowWrapper(assessmentCompletedWithReferralNumber)
 
     // then
-    expect(
-      wrapper
-        .find(Link)
-        .children()
-        .text()
-    ).toEqual('01/05/2018 CANS')
-    const timestamp = wrapper
-      .find('.history-item-info')
-      .get(0)
-      .props.children.filter(el => el.type !== 'br')
-    expect(timestamp).toEqual([
-      'Completed on 06/06/2018 by Name 2 LastName 2',
-      'Referral Number: 4444-333-4444-88888888',
-      'County: Alameda',
-    ])
+    expect(wrapper.find(AssessmentRecordInfo).exists()).toBe(true)
   })
 
   it('renders assessment with no update info (create info only)', async () => {
@@ -224,15 +159,7 @@ describe('ClientAssessmentHistoryWithReferralNumber', () => {
     const wrapper = getShallowWrapper(assessmentWithNoUpdateInfoWithReferralNumber)
 
     // then
-    const timestamp = wrapper
-      .find('.history-item-info')
-      .get(0)
-      .props.children.filter(el => el.type !== 'br')
-    expect(timestamp).toEqual([
-      'Saved on 06/06/2018 by Name 3 LastName 3',
-      'Referral Number: 4444-333-4444-88888888',
-      'County: Alameda',
-    ])
+    expect(wrapper.find(AssessmentRecordInfo).exists()).toBe(true)
   })
 })
 
@@ -295,21 +222,7 @@ describe('ClientAssessmentHistoryWithNoClientorReferralNumber', () => {
     const wrapper = getShallowWrapper(assessmentInProgressWithNoClientandReferralNumber)
 
     // then
-    expect(
-      wrapper
-        .find(Link)
-        .children()
-        .text()
-    ).toEqual('10/10/2015 CANS')
-    const assessmentInfo = wrapper
-      .find('.history-item-info')
-      .get(0)
-      .props.children.filter(el => el.type !== 'br')
-    expect(assessmentInfo).toEqual([
-      'Saved on 06/06/2015 by Name 1 LastName 1',
-      'Case/Referral Number: ',
-      'County: Alameda',
-    ])
+    expect(wrapper.find(AssessmentRecordInfo).exists()).toBe(true)
   })
 
   it('renders COMPLETED assessment with all fields', async () => {
@@ -317,21 +230,7 @@ describe('ClientAssessmentHistoryWithNoClientorReferralNumber', () => {
     const wrapper = getShallowWrapper(assessmentCompletedWithNoClientandReferralNumber)
 
     // then
-    expect(
-      wrapper
-        .find(Link)
-        .children()
-        .text()
-    ).toEqual('01/05/2018 CANS')
-    const timestamp = wrapper
-      .find('.history-item-info')
-      .get(0)
-      .props.children.filter(el => el.type !== 'br')
-    expect(timestamp).toEqual([
-      'Completed on 06/06/2018 by Name 2 LastName 2',
-      'Case/Referral Number: ',
-      'County: Alameda',
-    ])
+    expect(wrapper.find(AssessmentRecordInfo).exists()).toBe(true)
   })
 
   it('renders assessment with no update info (create info only)', async () => {
@@ -339,10 +238,6 @@ describe('ClientAssessmentHistoryWithNoClientorReferralNumber', () => {
     const wrapper = getShallowWrapper(assessmentWithNoUpdateInfoWithNoClientandReferralNumber)
 
     // then
-    const timestamp = wrapper
-      .find('.history-item-info')
-      .get(0)
-      .props.children.filter(el => el.type !== 'br')
-    expect(timestamp).toEqual(['Saved on 06/06/2018 by Name 3 LastName 3', 'Case/Referral Number: ', 'County: Alameda'])
+    expect(wrapper.find(AssessmentRecordInfo).exists()).toBe(true)
   })
 })

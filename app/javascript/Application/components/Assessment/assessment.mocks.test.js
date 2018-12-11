@@ -804,7 +804,13 @@ export const printFixture =
 
 export const assessmentInProgress = {
   id: 97500,
-  person: { id: 1 },
+  person: {
+    id: 1,
+    first_name: 'Casey',
+    middle_name: 'Middle',
+    last_name: 'Test',
+    suffix: 'Jr',
+  },
   status: 'IN_PROGRESS',
   the_case: {
     external_id: '4444-333-4444-88888888',
@@ -842,7 +848,13 @@ export const assessmentCompleted = {
 
 export const assessmentWithNoUpdateInfo = {
   id: 97502,
-  person: { id: 1 },
+  person: {
+    id: 1,
+    first_name: 'Casey',
+    middle_name: 'Middle',
+    last_name: 'Test',
+    suffix: 'Jr',
+  },
   status: 'IN_PROGRESS',
   event_date: '2018-01-05',
   created_timestamp: '2018-06-06T15:37:32.000Z',

@@ -17,6 +17,11 @@ describe('<AddCansLink/>', () => {
     expect(link.prop('to')).toBe('/clients/aaa/assessments')
   })
 
+  it('renders a span with the correct text', () => {
+    const span = shallow(<AddCansLink clientIdentifier={'bbb'} />).find('span')
+    expect(span.text()).toBe('add cans')
+  })
+
   it('renders a span only when disabled', () => {
     const wrapper = shallow(<AddCansLink clientIdentifier={'aaa'} disabled={true} />)
     const link = wrapper.find(Link)
