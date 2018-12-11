@@ -3,42 +3,48 @@ import { mount, shallow } from 'enzyme'
 import { i18n } from './DomainHelper.test'
 import { DataGrid } from '@cwds/components'
 import SummaryGrid from './SummaryGrid'
+import SummaryHeader from './SummaryHeader'
 
 describe('<SummaryGrid />', () => {
-  const render = (header = 'My Summary') => shallow(<SummaryGrid header={header} i18n={i18n} />)
+  describe('Overall', () => {
+    const render = (header = <SummaryHeader title="Trauma" tooltip={'tooltip'} />) =>
+      shallow(<SummaryGrid header={header} i18n={i18n} getSummaryCode={() => {}} />)
 
-  it('renders a data grid', () => {
-    expect(
-      render()
-        .find(DataGrid)
-        .exists()
-    ).toBe(true)
-  })
+    it('renders a data grid', () => {
+      expect(
+        render()
+          .find(DataGrid)
+          .exists()
+      ).toBe(true)
+    })
 
-  it('is striped', () => {
-    expect(render().props().className).toContain('-striped')
-  })
+    it('is striped', () => {
+      expect(render().props().className).toContain('-striped')
+    })
 
-  it('has a single column', () => {
-    expect(render().props().columns.length).toBe(1)
-  })
+    it('has a single column', () => {
+      expect(render().props().columns.length).toBe(1)
+    })
 
-  it('has a header', () => {
-    expect(render('Hello Summary').props().columns[0].Header).toBe('Hello Summary')
-  })
+    it('has a header', () => {
+      expect(
+        render(<SummaryHeader title="Hello Summary" tooltip={'tooltip'} />).props().columns[0].Header.props.title
+      ).toBe('Hello Summary')
+    })
 
-  it('has no No Data prompt', () => {
-    const NoData = render().props().NoDataComponent
+    it('has no No Data prompt', () => {
+      const NoData = render().props().NoDataComponent
 
-    expect(shallow(<NoData />).type()).toBe(null)
-  })
+      expect(shallow(<NoData />).type()).toBe(null)
+    })
 
-  it('has no minimum rows', () => {
-    expect(render().props().minRows).toBe(0)
-  })
+    it('has no minimum rows', () => {
+      expect(render().props().minRows).toBe(0)
+    })
 
-  it('has no pagination', () => {
-    expect(render().props().showPagination).toBe(false)
+    it('has no pagination', () => {
+      expect(render().props().showPagination).toBe(false)
+    })
   })
 
   describe('with some items', () => {
@@ -50,7 +56,15 @@ describe('<SummaryGrid />', () => {
     ]
     const domains = [{ code: 'first', items }]
     const render = itemFilter =>
-      mount(<SummaryGrid header="My Summary" domains={domains} i18n={i18n} itemFilter={itemFilter} />)
+      mount(
+        <SummaryGrid
+          domains={domains}
+          header={<SummaryHeader title="Trauma" tooltip={'tooltip'} />}
+          itemFilter={itemFilter}
+          i18n={i18n}
+          getSummaryCode={() => {}}
+        />
+      )
 
     it('renders all of the items', () => {
       const text = render().text()
@@ -74,7 +88,14 @@ describe('<SummaryGrid />', () => {
 
   it('skips items when it does not know how to internationalize them', () => {
     const domains = [{ code: 'first', items: [{ code: 'SURPRISE', rating: -1 }] }]
-    const text = mount(<SummaryGrid header="My Summary" domains={domains} i18n={{}} />).text()
+    const text = mount(
+      <SummaryGrid
+        header={<SummaryHeader title="Trauma" tooltip={'tooltip'} />}
+        domains={domains}
+        i18n={{}}
+        getSummaryCode={() => {}}
+      />
+    ).text()
 
     expect(text).not.toContain('Surprise')
     expect(text).not.toContain('SURPRISE')
@@ -90,7 +111,15 @@ describe('<SummaryGrid />', () => {
     const moreItems = [{ code: 'FANATICAL_DEVOTION', rating: -1 }, { code: 'COMFY_CHAIRS', rating: -1 }]
     const domains = [{ code: 'first', items }, { code: 'last', items: moreItems }]
     const render = domainFilter =>
-      mount(<SummaryGrid header="My Summary" domains={domains} domainFilter={domainFilter} i18n={i18n} />)
+      mount(
+        <SummaryGrid
+          domains={domains}
+          header={<SummaryHeader title="Trauma" tooltip={'tooltip'} />}
+          domainFilter={domainFilter}
+          i18n={i18n}
+          getSummaryCode={() => {}}
+        />
+      )
 
     it('renders all of the items', () => {
       const text = render().text()
@@ -105,14 +134,15 @@ describe('<SummaryGrid />', () => {
 
     it('skips domains that do not pass filter', () => {
       const onlyLast = ({ code }) => code === 'last'
-      const text = render(onlyLast).text()
-
+      const wrapper = render(onlyLast)
+      const text = wrapper.text()
       expect(text).not.toContain('Surprise')
       expect(text).not.toContain('Fear')
       expect(text).not.toContain('Ruthless Efficiency')
       expect(text).not.toContain('Nice Red Uniforms')
       expect(text).toContain('Fanatical Devotion')
       expect(text).toContain('Comfy Chairs')
+      wrapper.unmount()
     })
   })
 
@@ -120,7 +150,15 @@ describe('<SummaryGrid />', () => {
     const N = 500
     const items = new Array(N).fill().map((_, i) => ({ code: `${i}`, rating: -1 }))
     const domains = [{ code: 'first', items }]
-    const render = () => mount(<SummaryGrid header="My Summary" domains={domains} i18n={i18n} />)
+    const render = () =>
+      mount(
+        <SummaryGrid
+          header={<SummaryHeader title="Trauma" tooltip={'tooltip'} />}
+          domains={domains}
+          i18n={i18n}
+          getSummaryCode={() => {}}
+        />
+      )
 
     it('renders all of the data', () => {
       const text = render().text()

@@ -8,14 +8,14 @@ import StrengthsSummary from './StrengthsSummary'
 describe('<StrengthsSummary />', () => {
   it('renders a data grid', () => {
     expect(
-      shallow(<StrengthsSummary i18n={i18n} />)
+      shallow(<StrengthsSummary i18n={i18n} getSummaryCode={() => {}} />)
         .find(SummaryGrid)
         .exists()
     ).toBe(true)
   })
 
   it('has a Strengths header', () => {
-    expect(shallow(<StrengthsSummary i18n={i18n} />).props().header).toEqual(
+    expect(shallow(<StrengthsSummary i18n={i18n} getSummaryCode={() => {}} />).props().header).toEqual(
       <SummaryHeader
         title="Strengths"
         tooltip={'Ratings of 0 or 1 in the Strengths Domain. These are central or useful in planning.'}
@@ -25,7 +25,7 @@ describe('<StrengthsSummary />', () => {
 
   it('passes i18n info to the summary grid', () => {
     expect(
-      shallow(<StrengthsSummary i18n={i18n} />)
+      shallow(<StrengthsSummary i18n={i18n} getSummaryCode={() => {}} />)
         .find(SummaryGrid)
         .props().i18n
     ).toBe(i18n)
@@ -44,7 +44,7 @@ describe('<StrengthsSummary />', () => {
         ],
       },
     ]
-    const render = () => mount(<StrengthsSummary domains={domains} i18n={i18n} />)
+    const render = () => mount(<StrengthsSummary domains={domains} i18n={i18n} getSummaryCode={() => {}} />)
 
     it('renders items with a rating of 0 or 1', () => {
       const text = render().text()
@@ -69,7 +69,7 @@ describe('<StrengthsSummary />', () => {
       { code: 'TRM', items: moreItems },
       { code: 'EST', items: childStrengthItems },
     ]
-    const render = () => mount(<StrengthsSummary domains={domains} i18n={i18n} />)
+    const render = () => mount(<StrengthsSummary domains={domains} i18n={i18n} getSummaryCode={() => {}} />)
 
     it('renders all of the Strength data', () => {
       const text = render().text()
@@ -87,7 +87,7 @@ describe('<StrengthsSummary />', () => {
     const N = 500
     const items = new Array(N).fill().map((_, i) => ({ code: `${i}`, rating: 0 }))
     const domains = [{ code: 'STR', items }]
-    const render = () => mount(<StrengthsSummary domains={domains} i18n={i18n} />)
+    const render = () => mount(<StrengthsSummary domains={domains} i18n={i18n} getSummaryCode={() => {}} />)
 
     it('renders all of the data', () => {
       const text = render().text()

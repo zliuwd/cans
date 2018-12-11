@@ -8,23 +8,23 @@ import TraumaSummary from './TraumaSummary'
 
 const ROW_SIZE = 12
 
-const AssessmentSummary = ({ domains, i18n, isUnderSix }) => {
+const AssessmentSummary = ({ domains, i18n, isUnderSix, getSummaryCode }) => {
   const numSummaries = 4
   const size = ROW_SIZE / numSummaries
   const filteredDomains = domains.filter(domain => (isUnderSix ? domain.under_six : domain.above_six))
   return (
     <Row>
       <Col xs={ROW_SIZE} xl={size}>
-        <StrengthsSummary domains={filteredDomains} i18n={i18n} />
+        <StrengthsSummary domains={filteredDomains} i18n={i18n} getSummaryCode={getSummaryCode} />
       </Col>
       <Col xs={ROW_SIZE} xl={size}>
-        <ActionRequiredSummary domains={filteredDomains} i18n={i18n} />
+        <ActionRequiredSummary domains={filteredDomains} i18n={i18n} getSummaryCode={getSummaryCode} />
       </Col>
       <Col xs={ROW_SIZE} xl={size}>
-        <ImmediateActionRequiredSummary domains={filteredDomains} i18n={i18n} />
+        <ImmediateActionRequiredSummary domains={filteredDomains} i18n={i18n} getSummaryCode={getSummaryCode} />
       </Col>
       <Col xs={ROW_SIZE} xl={size}>
-        <TraumaSummary domains={filteredDomains} i18n={i18n} />
+        <TraumaSummary domains={filteredDomains} i18n={i18n} getSummaryCode={getSummaryCode} />
       </Col>
     </Row>
   )
@@ -32,6 +32,7 @@ const AssessmentSummary = ({ domains, i18n, isUnderSix }) => {
 
 AssessmentSummary.propTypes = {
   domains: PropTypes.array.isRequired,
+  getSummaryCode: PropTypes.func.isRequired,
   i18n: PropTypes.object.isRequired,
   isUnderSix: PropTypes.bool.isRequired,
 }

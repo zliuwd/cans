@@ -8,14 +8,14 @@ import ActionRequiredSummary from './ActionRequiredSummary'
 describe('<ActionRequiredSummary />', () => {
   it('renders a data grid', () => {
     expect(
-      shallow(<ActionRequiredSummary i18n={i18n} />)
+      shallow(<ActionRequiredSummary i18n={i18n} getSummaryCode={() => {}} />)
         .find(SummaryGrid)
         .exists()
     ).toBe(true)
   })
 
   it('has an Action Required header', () => {
-    expect(shallow(<ActionRequiredSummary i18n={i18n} />).props().header).toEqual(
+    expect(shallow(<ActionRequiredSummary i18n={i18n} getSummaryCode={() => {}} />).props().header).toEqual(
       <SummaryHeader
         title="Action Required"
         tooltip={
@@ -27,7 +27,7 @@ describe('<ActionRequiredSummary />', () => {
 
   it('passes i18n info to the summary grid', () => {
     expect(
-      shallow(<ActionRequiredSummary i18n={i18n} />)
+      shallow(<ActionRequiredSummary i18n={i18n} getSummaryCode={() => {}} />)
         .find(SummaryGrid)
         .props().i18n
     ).toBe(i18n)
@@ -46,7 +46,7 @@ describe('<ActionRequiredSummary />', () => {
         ],
       },
     ]
-    const render = () => mount(<ActionRequiredSummary domains={domains} i18n={i18n} />)
+    const render = () => mount(<ActionRequiredSummary domains={domains} i18n={i18n} getSummaryCode={() => {}} />)
 
     it('renders all of the data with rating 2', () => {
       const text = render().text()
@@ -77,7 +77,7 @@ describe('<ActionRequiredSummary />', () => {
       { code: 'EST', items: childStrengthItems },
       { code: 'OTHER', items: otherItems },
     ]
-    const render = () => mount(<ActionRequiredSummary domains={domains} i18n={i18n} />)
+    const render = () => mount(<ActionRequiredSummary domains={domains} i18n={i18n} getSummaryCode={() => {}} />)
 
     it('lists non-strength, non-trauma domains', () => {
       const text = render().text()
@@ -100,7 +100,7 @@ describe('<ActionRequiredSummary />', () => {
     const N = 500
     const items = new Array(N).fill().map((_, i) => ({ code: `${i}`, rating: 2 }))
     const domains = [{ code: 'WAM', items }]
-    const render = () => mount(<ActionRequiredSummary domains={domains} i18n={i18n} />)
+    const render = () => mount(<ActionRequiredSummary domains={domains} i18n={i18n} getSummaryCode={() => {}} />)
 
     it('renders all of the data', () => {
       const text = render().text()

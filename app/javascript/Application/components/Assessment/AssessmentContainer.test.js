@@ -199,6 +199,25 @@ describe('<AssessmentContainer />', () => {
       })
     })
 
+    describe('with name and value of Assessment Summary items', () => {
+      const props = { ...defaultProps }
+      it('extracts domain name and values and sets the state', () => {
+        const wrapper = shallow(<AssessmentContainer {...props} />)
+        wrapper.instance().getSummaryCode('someName', 'someValue')
+
+        expect(wrapper.state().summaryCodes).toEqual({ someName: 'someValue' })
+      })
+
+      it('extracts domain name and values compare the array and update state accordingly', () => {
+        const wrapper = shallow(<AssessmentContainer {...props} />)
+        wrapper.state().summaryCodes = { someName: ['someValue'] }
+
+        wrapper.instance().getSummaryCode('someName', ['someValue', 'anotherValue'])
+
+        expect(wrapper.state().summaryCodes).toEqual({ someName: ['someValue', 'anotherValue'] })
+      })
+    })
+
     describe('renders a component which shows warning and sets the state', () => {
       const props = { ...defaultProps }
       it('verify the state is updated and removed domains ', () => {

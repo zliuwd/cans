@@ -3,9 +3,6 @@ import PropTypes from 'prop-types'
 import { getI18nByCode } from '../Assessment/I18nHelper'
 import {
   alertSignBox,
-  alertSvgStyle,
-  exclamationTriangle,
-  exclamationTriangleViewPort,
   headerBlock,
   headerNameRow,
   headerRecord,
@@ -24,10 +21,11 @@ import {
   flex,
   redactedRating,
   textAlignCenter,
+  textAlignLeft,
   timeStampStyle,
   thinGrayBorder,
 } from './PrintAssessmentStyle'
-import { formatClientName } from '../Client/Client.helper'
+import { formatClientName, clientCaseReferralNumber } from '../Client/Client.helper'
 import { isoToLocalDate } from '../../util/dateHelper'
 import { shouldDomainBeRendered, shouldItemBeRendered } from '../Assessment/AssessmentHelper'
 import { totalScoreCalculation } from '../Assessment/DomainScoreHelper.js'
@@ -133,12 +131,9 @@ class PrintAssessment extends PureComponent {
   renderConfidentialWarningAlert = () => {
     return (
       <div style={alertSignBox}>
-        <svg viewBox={exclamationTriangleViewPort} style={alertSvgStyle}>
-          <path d={exclamationTriangle} />
-        </svg>
         <strong>
-          Since there is no Authorization for Release of Information on file, prior to sharing this CANS assessment
-          redact the following domain item numbers: 7, 48, and EC.41.
+          By selecting NO, Items 7, 48, and EC 41 (Substance Use Disorder Items) from this CANS assessment will be
+          redacted when printed.
         </strong>
       </div>
     )
@@ -148,6 +143,12 @@ class PrintAssessment extends PureComponent {
     <div style={headerRecord}>
       <strong>{title}</strong>
       <span>{value}</span>
+    </div>
+  )
+
+  renderSummaryRecord = (title, value) => (
+    <div style={headerRecord}>
+      <strong>{title}</strong> <br /> {value && value.map(val => <div>{val}</div>)}
     </div>
   )
 
@@ -169,7 +170,7 @@ class PrintAssessment extends PureComponent {
     const countyName = assessment.county && assessment.county.name ? `${assessment.county.name} County` : ''
     const eventDate = isoToLocalDate(assessment.event_date)
     const conductedBy = assessment.conducted_by || ''
-    const caseNumber = (assessment.the_case || {}).external_id
+    const caseReferralNumber = clientCaseReferralNumber(assessment.service_source)
     const hasCaregiver = assessment.has_caregiver
     const canReleaseInfo = assessment.can_release_confidential_info
     const isUnderSix = this.props.assessment.state.under_six
@@ -183,18 +184,38 @@ class PrintAssessment extends PureComponent {
         <div style={headerRow}>
           {this.renderHeaderRecord('Date', eventDate)}
           {this.renderHeaderRecord('Conducted by', conductedBy)}
-          {this.renderHeaderRecord('Case Number', caseNumber)}
+          {this.renderHeaderRecord(caseReferralNumber, assessment.service_source_ui_id)}
           {this.renderHeaderRecord('Complete as', assessment.completed_as)}
         </div>
         <div style={headerRow}>
           {this.renderHeaderRadioGroupRecord('Child/Youth has Caregiver?', hasCaregiver)}
           {this.renderHeaderRadioGroupRecord('Authorization for release of information on file?', canReleaseInfo)}
-          {this.renderHeaderRadioGroupRecord('Age', isUnderSix, '0-5', '6-21')}
+          {this.renderHeaderRadioGroupRecord('Age Template', isUnderSix, '0-5', '6-21')}
         </div>
         {!canReleaseInfo && this.renderConfidentialWarningAlert()}
         <span style={timeStampStyle}>{moment().format('MMMM D YYYY, h:mm:ss a')}</span>
       </div>
     )
+  }
+
+  renderSummary() {
+    const summaryCodes = this.props.summaryCodes()
+    console.log(summaryCodes)
+    if (Object.keys(summaryCodes).length < 1) {
+      return null
+    } else {
+      return (
+        <div style={headerBlock}>
+          <h1 style={textAlignLeft}>CANS Summary</h1>
+          <div style={headerRow}>
+            {this.renderSummaryRecord('Strengths', summaryCodes.Strengths)}
+            {this.renderSummaryRecord('Action Required', summaryCodes['Action Required'])}
+            {this.renderSummaryRecord('Immediate Action Required', summaryCodes['Immediate Action Required'])}
+            {this.renderSummaryRecord('Trauma', summaryCodes.Trauma)}
+          </div>
+        </div>
+      )
+    }
   }
 
   render() {
@@ -204,6 +225,7 @@ class PrintAssessment extends PureComponent {
     return (
       <div>
         {this.renderHeader()}
+        {this.renderSummary()}
         {domains.map(domain => {
           if (!shouldDomainBeRendered(isAssessmentUnderSix, domain)) return null
           const domainI18n = getI18nByCode(i18n, domain.code)
@@ -217,6 +239,7 @@ class PrintAssessment extends PureComponent {
 PrintAssessment.propTypes = {
   assessment: PropTypes.object.isRequired,
   i18n: PropTypes.object.isRequired,
+  summaryCodes: PropTypes.func.isRequired,
 }
 
 export default PrintAssessment

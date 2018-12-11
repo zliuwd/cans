@@ -4,7 +4,7 @@ import { DomainsPropType } from './DomainHelper'
 import { getI18nByCode } from '../I18nHelper'
 import { DataGrid } from '@cwds/components'
 
-const SummaryGrid = ({ domainFilter, domains, header, i18n, itemFilter }) => {
+const SummaryGrid = ({ domainFilter, domains, header, i18n, itemFilter, getSummaryCode }) => {
   const columns = [
     {
       id: 'items',
@@ -24,6 +24,8 @@ const SummaryGrid = ({ domainFilter, domains, header, i18n, itemFilter }) => {
     return (code && code._title_) || ''
   })
 
+  getSummaryCode(header.props.title, codes)
+
   return (
     <DataGrid
       className="-striped"
@@ -40,6 +42,7 @@ const SummaryGrid = ({ domainFilter, domains, header, i18n, itemFilter }) => {
 SummaryGrid.propTypes = {
   domainFilter: PropTypes.func,
   domains: DomainsPropType,
+  getSummaryCode: PropTypes.func.isRequired,
   header: PropTypes.node.isRequired,
   i18n: PropTypes.object.isRequired,
   itemFilter: PropTypes.func,
