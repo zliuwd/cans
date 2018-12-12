@@ -15,7 +15,11 @@ class AssessmentFormFooter extends PureComponent {
         <Button id={'cancel-assessment'} color={'link'} className={'button-fix-link'} onClick={onCancelClick}>
           Cancel
         </Button>
-        <AuthBoundary permission={buildCompleteAssessmentPermission(assessment)} andCondition={isSubmitButtonEnabled}>
+        <AuthBoundary
+          permission={buildCompleteAssessmentPermission(assessment)}
+          andCondition={isSubmitButtonEnabled}
+          eagerRefreshFlagObject={{ status: assessment.status }}
+        >
           <CompleteAssessmentButton onSubmitAssessment={onSubmitAssessment} />
         </AuthBoundary>
       </div>

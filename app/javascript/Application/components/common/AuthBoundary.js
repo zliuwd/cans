@@ -15,8 +15,17 @@ class AuthBoundary extends React.PureComponent {
     await this.authorize()
   }
 
+  async componentDidUpdate(prevProps) {
+    if (JSON.stringify(prevProps.eagerRefreshFlagObject) !== JSON.stringify(this.props.eagerRefreshFlagObject)) {
+      await this.authorize()
+    }
+  }
+
   authorize = async () => {
     const { permission } = this.props
+    this.setState({
+      loadingState: LoadingState.waiting,
+    })
     try {
       await SecurityService.checkPermission(permission).then(isAuthorized => {
         this.setState({
@@ -47,13 +56,17 @@ class AuthBoundary extends React.PureComponent {
 }
 
 AuthBoundary.propTypes = {
-  andCondition: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+  /* eslint-disable react/boolean-prop-naming */
+  andCondition: PropTypes.bool,
   children: PropTypes.node.isRequired,
-  orCondition: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+  eagerRefreshFlagObject: PropTypes.object,
+  orCondition: PropTypes.bool,
   permission: PropTypes.string.isRequired,
+  /* eslint-enable react/boolean-prop-naming */
 }
 
 AuthBoundary.defaultProps = {
+  eagerRefreshFlagObject: {},
   andCondition: true,
   orCondition: false,
 }
