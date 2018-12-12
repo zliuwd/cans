@@ -110,7 +110,6 @@ export const alertSignBox = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  border: 'thin solid gray',
   marginBottom: '0.5rem',
   marginLeft: '18rem',
 }
