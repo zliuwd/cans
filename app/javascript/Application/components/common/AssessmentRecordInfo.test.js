@@ -39,8 +39,8 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).exists()).toBe(true)
     })
 
-    it('renders an assessment-record-info div', () => {
-      expect(wrapper.find('div.assessment-record-info').exists()).toBe(true)
+    it('renders an assessment-info div', () => {
+      expect(wrapper.find('div.assessment-info').exists()).toBe(true)
     })
 
     describe('assessment record info headers', () => {
@@ -69,14 +69,14 @@ describe('AssessmentRecordInfo', () => {
       const { id } = assessmentInProgressWithCaseNumber
       const wrapper = prepareWrapper(assessmentInProgressWithCaseNumber, 'assessment-client-name')
       const assessmentInfo = wrapper
-        .find('div.assessment-record-info')
+        .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97501)
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentInProgressWithCaseNumber} key={id} />,
+        <AssessmentLink assessment={assessmentInProgressWithCaseNumber} key={id} linkText=" CANS" />,
         'Saved on 06/06/2015 by',
         'Name 1 LastName 1',
         'Case: 4444-333-4444-88888888',
@@ -88,14 +88,14 @@ describe('AssessmentRecordInfo', () => {
       const { id } = assessmentCompletedWithCaseNumber
       const wrapper = prepareWrapper(assessmentCompletedWithCaseNumber, 'assessment-client-name')
       const assessmentInfo = wrapper
-        .find('div.assessment-record-info')
+        .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97502)
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentCompletedWithCaseNumber} key={id} />,
+        <AssessmentLink assessment={assessmentCompletedWithCaseNumber} key={id} linkText=" CANS" />,
         'Completed on 06/06/2018 by',
         'Name 2 LastName 2',
         'Case: 4444-333-4444-88888888',
@@ -107,14 +107,14 @@ describe('AssessmentRecordInfo', () => {
       const { id } = assessmentWithNoUpdateInfoWithCaseNumber
       const wrapper = prepareWrapper(assessmentWithNoUpdateInfoWithCaseNumber, 'assessment-client-name')
       const assessmentInfo = wrapper
-        .find('div.assessment-record-info')
+        .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97503)
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentWithNoUpdateInfoWithCaseNumber} key={id} />,
+        <AssessmentLink assessment={assessmentWithNoUpdateInfoWithCaseNumber} key={id} linkText=" CANS" />,
         'Saved on 06/06/2018 by',
         'Name 3 LastName 3',
         'Case: 4444-333-4444-88888888',
@@ -128,14 +128,14 @@ describe('AssessmentRecordInfo', () => {
       const { id } = assessmentInProgressWithReferralNumber
       const wrapper = prepareWrapper(assessmentInProgressWithReferralNumber, 'assessment-client-name')
       const assessmentInfo = wrapper
-        .find('div.assessment-record-info')
+        .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97501)
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentInProgressWithReferralNumber} key={id} />,
+        <AssessmentLink assessment={assessmentInProgressWithReferralNumber} key={id} linkText=" CANS" />,
         'Saved on 06/06/2015 by',
         'Name 1 LastName 1',
         'Case: 4444-333-4444-88888888',
@@ -147,14 +147,14 @@ describe('AssessmentRecordInfo', () => {
       const { id } = assessmentCompletedWithReferralNumber
       const wrapper = prepareWrapper(assessmentCompletedWithReferralNumber, 'assessment-client-name')
       const assessmentInfo = wrapper
-        .find('div.assessment-record-info')
+        .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97502)
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentCompletedWithReferralNumber} key={id} />,
+        <AssessmentLink assessment={assessmentCompletedWithReferralNumber} key={id} linkText=" CANS" />,
         'Completed on 06/06/2018 by',
         'Name 2 LastName 2',
         'Case: 4444-333-4444-88888888',
@@ -166,14 +166,14 @@ describe('AssessmentRecordInfo', () => {
       const { id } = assessmentWithNoUpdateInfoWithReferralNumber
       const wrapper = prepareWrapper(assessmentWithNoUpdateInfoWithReferralNumber, 'assessment-client-name')
       const assessmentInfo = wrapper
-        .find('div.assessment-record-info')
+        .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97503)
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentWithNoUpdateInfoWithReferralNumber} key={id} />,
+        <AssessmentLink assessment={assessmentWithNoUpdateInfoWithReferralNumber} key={id} linkText=" CANS" />,
         'Saved on 06/06/2018 by',
         'Name 3 LastName 3',
         'Case: 4444-333-4444-88888888',
@@ -187,14 +187,14 @@ describe('AssessmentRecordInfo', () => {
       const { id } = assessmentInProgressWithNoClientandReferralNumber
       const wrapper = prepareWrapper(assessmentInProgressWithNoClientandReferralNumber, 'assessment-client-name')
       const assessmentInfo = wrapper
-        .find('div.assessment-record-info')
+        .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97501)
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentInProgressWithNoClientandReferralNumber} key={id} />,
+        <AssessmentLink assessment={assessmentInProgressWithNoClientandReferralNumber} key={id} linkText=" CANS" />,
         'Saved on 06/06/2015 by',
         'Name 1 LastName 1',
         'Case: ',
@@ -206,14 +206,14 @@ describe('AssessmentRecordInfo', () => {
       const { id } = assessmentCompletedWithNoClientandReferralNumber
       const wrapper = prepareWrapper(assessmentCompletedWithNoClientandReferralNumber, 'assessment-client-name')
       const assessmentInfo = wrapper
-        .find('div.assessment-record-info')
+        .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97502)
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentCompletedWithNoClientandReferralNumber} key={id} />,
+        <AssessmentLink assessment={assessmentCompletedWithNoClientandReferralNumber} key={id} linkText=" CANS" />,
         'Completed on 06/06/2018 by',
         'Name 2 LastName 2',
         'Case: ',
@@ -225,14 +225,18 @@ describe('AssessmentRecordInfo', () => {
       const { id } = assessmentWithNoUpdateInfoWithNoClientandReferralNumber
       const wrapper = prepareWrapper(assessmentWithNoUpdateInfoWithNoClientandReferralNumber, 'assessment-client-name')
       const assessmentInfo = wrapper
-        .find('div.assessment-record-info')
+        .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97503)
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentWithNoUpdateInfoWithNoClientandReferralNumber} key={id} />,
+        <AssessmentLink
+          assessment={assessmentWithNoUpdateInfoWithNoClientandReferralNumber}
+          key={id}
+          linkText=" CANS"
+        />,
         'Saved on 06/06/2018 by',
         'Name 3 LastName 3',
         'Case: ',

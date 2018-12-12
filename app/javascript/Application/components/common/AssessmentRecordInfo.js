@@ -18,13 +18,13 @@ class AssessmentRecordInfo extends Component {
     const recordHeader = header === 'assessment-status' ? statusHeader : clientNameHeader
 
     return (
-      <Card>
+      <Card className="card-assessment-record-info">
         <CardBody>
           <Ellipsis id={id} />
-          <div className={'assessment-record-info'}>
+          <div className={'assessment-info'}>
             {recordHeader}
             <p>
-              <AssessmentLink assessment={assessment} key={id} />
+              <AssessmentLink assessment={assessment} key={id} linkText={' CANS'} />
             </p>
             <p>{`${actionVerb} on ${formattedTimestamp} by`}</p>
             <p>{updatedByName}</p>

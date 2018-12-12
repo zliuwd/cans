@@ -7,7 +7,7 @@ import { isoToLocalDate } from '../../util/dateHelper'
 
 describe('AssessmentLink', () => {
   const prepareWrapper = assessment => {
-    return shallow(<AssessmentLink assessment={assessment} />)
+    return shallow(<AssessmentLink assessment={assessment} key={assessment.id} linkText={' CANS'} />)
   }
 
   it('renders a Link component', () => {

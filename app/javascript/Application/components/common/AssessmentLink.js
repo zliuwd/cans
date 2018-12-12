@@ -5,12 +5,13 @@ import { isoToLocalDate } from '../../util/dateHelper'
 
 class AssessmentLink extends PureComponent {
   render() {
+    const { linkText } = this.props
     const { id, event_date: eventDate, person } = this.props.assessment
     const formattedEventDate = isoToLocalDate(eventDate)
 
     return (
       <Link to={`/clients/${person.identifier}/assessments/${id}`} className={'underlined'}>
-        {`${formattedEventDate} CANS`}
+        {`${formattedEventDate}${linkText}`}
       </Link>
     )
   }
@@ -18,6 +19,7 @@ class AssessmentLink extends PureComponent {
 
 AssessmentLink.propTypes = {
   assessment: PropTypes.object.isRequired,
+  linkText: PropTypes.string.isRequired,
 }
 
 export default AssessmentLink
