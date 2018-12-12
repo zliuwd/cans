@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Popover, PopoverBody } from '@cwds/reactstrap'
 import Icon from '@cwds/icons'
 import { Link } from 'react-router-dom'
+import { Button } from '@cwds/components'
 
 export default class Ellipsis extends React.Component {
   constructor(props) {
@@ -24,7 +25,9 @@ export default class Ellipsis extends React.Component {
     const { id, clientId } = this.props
     return (
       <div>
-        <Icon id={`icon-${id}`} icon="ellipsis-v" className="icon-ellipsis" onClick={this.toggle} />
+        <Button id={`icon-${id}`} onClick={this.toggle} className="icon-ellipsis">
+          <Icon icon="ellipsis-v" />
+        </Button>
         <Popover placement="bottom-start" isOpen={this.state.popoverOpen} target={`icon-${id}`} toggle={this.toggle}>
           <PopoverBody className="popoverbody">
             <Link to={`/clients/${clientId}/assessments/${id}/changelog`}>View CANS Change Log</Link>
