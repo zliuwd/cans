@@ -25,3 +25,10 @@ export const changeHistoryPropType = PropTypes.shape({
   id: PropTypes.number,
   user_id: PropTypes.string,
 })
+
+export const changeLogPagePropType = PropTypes.shape({
+  params: PropTypes.shape({
+    clientId: PropTypes.string,
+    id: PropTypes.string,
+  }).isRequired,
+})

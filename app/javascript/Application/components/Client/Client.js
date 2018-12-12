@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import ClientAssessmentHistory from './ClientAssessmentHistory'
 import { CloseableAlert, alertType } from '../common/CloseableAlert'
 import { isoToLocalDate } from '../../util/dateHelper'
-
+import NavFromProducer from '../../util/NavFromProducer'
 import './style.sass'
 
 class Client extends Component {
@@ -95,7 +95,11 @@ class Client extends Component {
               </div>
             </Card>
           </Grid>
-          <ClientAssessmentHistory clientIdentifier={client.identifier} />
+          <ClientAssessmentHistory
+            clientIdentifier={client.identifier}
+            navFrom={NavFromProducer(this.props.navigateTo)}
+            userId={this.props.match.params.staffId}
+          />
         </Grid>
       </Fragment>
     )
@@ -106,6 +110,11 @@ Client.propTypes = {
   client: PropTypes.object,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
+
+  match: PropTypes.shape({
+    params: PropTypes.shape({ staffId: PropTypes.string }),
+  }).isRequired,
+  navigateTo: PropTypes.string.isRequired,
 }
 
 Client.defaultProps = {

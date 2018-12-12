@@ -1,16 +1,17 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { Container, Row, Col } from 'reactstrap'
-import { Client, ClientAddEditForm, ClientService } from '../Client'
+import { Container } from 'reactstrap'
+import { ClientService } from '../Client'
+import { StaffService } from '../Staff'
 import BreadCrumbsBuilder from './BreadCrumb/BreadCrumbsBuilder'
 import { navigation, dashboards } from '../../util/constants'
-import { AssessmentContainer, ChangeLogPage } from '../Assessment'
-import { SearchContainer } from '../Search'
-import { SupervisorDashboard, CaseLoadPage, CurrentUserCaseLoadPage } from '../Staff'
 import UserAccountService from '../common/UserAccountService'
 import { logPageAction } from '../../util/analytics'
 import { PageHeader } from '../Header'
 import { buildSearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
+import PageContentSwitcher from './PageContentSwitcher'
+import Sticker from 'react-stickyfill'
+import './style.sass'
 
 const defaultHeaderButtons = {
   leftButton: null,
@@ -23,22 +24,37 @@ class Page extends Component {
     this.state = {
       isLoaded: false,
       client: undefined,
+      subordinate: undefined,
       header: defaultHeaderButtons,
     }
   }
 
   async componentDidMount() {
-    const client = await this.fetchClientIfNeeded()
-    const currentUser = await UserAccountService.fetchCurrent()
-    await this.setState({ client, isLoaded: true, currentUser: currentUser })
+    await this.fetchBoth()
+    await this.fetchuser()
     this.logDashboardVisitToNewRelic()
   }
 
   async componentDidUpdate(prevProps) {
     if (prevProps === this.props) return
-    const client = await this.fetchClientIfNeeded()
-    await this.setState({ client })
+    await this.fetchBoth()
     this.logDashboardVisitToNewRelic()
+  }
+
+  async fetchuser() {
+    const user = await UserAccountService.fetchCurrent()
+    this.setState({ isLoaded: true, currentUser: user })
+  }
+
+  async fetchBoth() {
+    const clientPromise = this.fetchClientIfNeeded()
+    const subordinatePromise = this.fetchSubordinateIfNeeded()
+    Promise.all([clientPromise, subordinatePromise]).then(([client, subordinate]) =>
+      this.setState({
+        client,
+        subordinate,
+      })
+    )
   }
 
   async fetchClientIfNeeded() {
@@ -48,6 +64,15 @@ class Page extends Component {
       client = await ClientService.fetch(clientId).catch(() => {})
     }
     return client
+  }
+
+  async fetchSubordinateIfNeeded() {
+    let subordinate
+    const { staffId } = this.props.match.params
+    if (staffId) {
+      subordinate = await StaffService.fetch(staffId).catch(() => {})
+    }
+    return subordinate
   }
 
   logDashboardVisitToNewRelic = () => {
@@ -68,7 +93,7 @@ class Page extends Component {
     this.setState({ header: defaultHeaderButtons })
   }
 
-  renderContent() {
+  render() {
     const params = {
       ...this.props,
       ...this.state,
@@ -77,33 +102,6 @@ class Page extends Component {
         updateHeaderButtonsToDefault: this.updateHeaderButtonsToDefault,
       },
     }
-    switch (this.props.navigateTo) {
-      case navigation.CHILD_LIST:
-        return <CurrentUserCaseLoadPage />
-      case navigation.CHILD_PROFILE:
-        return this.state.client && <Client {...params} />
-      case navigation.CHILD_PROFILE_ADD:
-        return <ClientAddEditForm isNewForm={true} {...params} />
-      case navigation.CHILD_PROFILE_EDIT:
-        return this.state.client && <ClientAddEditForm isNewForm={false} {...params} />
-      case navigation.ASSESSMENT_ADD:
-        return this.state.client && <AssessmentContainer {...params} />
-      case navigation.ASSESSMENT_EDIT:
-        return this.state.client && <AssessmentContainer {...params} />
-      case navigation.ASSESSMENT_CHANGELOG:
-        return this.state.client && <ChangeLogPage {...params} />
-      case navigation.CLIENT_SEARCH:
-        return <SearchContainer />
-      case navigation.STAFF_LIST:
-        return <SupervisorDashboard />
-      case navigation.STAFF_READ:
-        return <CaseLoadPage staffId={this.props.match.params.staffId} />
-      default:
-        return null
-    }
-  }
-
-  render() {
     const { isLoaded, header } = this.state
     if (!isLoaded) return null
     return (
@@ -113,17 +111,27 @@ class Page extends Component {
           leftButton={header.leftButton}
           rightButton={header.rightButton}
         />
+
         <Container>
-          <BreadCrumbsBuilder
+          <Sticker>
+            <div className="breadcrumb-container">
+              <BreadCrumbsBuilder
+                navigateTo={this.props.navigateTo}
+                client={this.state.client}
+                url={this.props.match.url}
+                assessmentId={this.props.match.params.id}
+                user={this.state.currentUser}
+                subordinate={this.state.subordinate}
+              />
+            </div>
+          </Sticker>
+
+          <PageContentSwitcher
+            params={params}
             navigateTo={this.props.navigateTo}
             client={this.state.client}
-            url={this.props.match.url}
+            staffId={this.props.match.params.staffId}
           />
-          <Row>
-            <Col xs="12" role={'main'} id={'main-content'}>
-              {this.renderContent()}
-            </Col>
-          </Row>
         </Container>
       </Fragment>
     )
@@ -131,19 +139,15 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  history: PropTypes.object,
-  location: PropTypes.object.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       clientId: PropTypes.string,
+      id: PropTypes.string,
       staffId: PropTypes.string,
     }).isRequired,
+    url: PropTypes.string,
   }).isRequired,
   navigateTo: PropTypes.oneOf(Object.values(navigation)).isRequired,
-}
-
-Page.defaultProps = {
-  history: {},
 }
 
 export default Page

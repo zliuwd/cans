@@ -1,24 +1,23 @@
 import React from 'react'
 import { Redirect } from 'react-router'
-import { permissions } from '../util/constants'
+import { dashboards } from '../util/constants'
+import { userDashboardChecker } from '../util/userDashboardChecker'
 import PropTypes from 'prop-types'
 
 class PermissionRedirect extends React.PureComponent {
-  userPermissionChk = permission => {
-    const user = this.props.user
-    return user && user.privileges && user.privileges.includes(permission)
-  }
-
   render() {
-    if (!this.props.user) {
+    const user = this.props.user
+    if (!user) {
       return null
     }
-    if (this.userPermissionChk(permissions.SUBORDINATES_READ)) {
-      return <Redirect to={'/staff'} />
-    } else if (this.userPermissionChk(permissions.CLIENTS_READ)) {
-      return <Redirect to={'/clients'} />
+    switch (userDashboardChecker(user)) {
+      case dashboards.STAFF_LIST:
+        return <Redirect to={'/staff'} />
+      case dashboards.CHILD_LIST:
+        return <Redirect to={'/clients'} />
+      default:
+        return <Redirect to={'/search'} />
     }
-    return <Redirect to={'/search'} />
   }
 }
 

@@ -1,99 +1,88 @@
 import React from 'react'
-import BreadCrumbsBuilder from './BreadCrumbsBuilder'
 import BreadCrumb from './BreadCrumb'
-import { Link } from 'react-router-dom'
-import { childInfoJson } from '../../Client/Client.helper.test'
-import { shallow } from 'enzyme'
-import { navigation } from '../../../util/constants'
+import { mount } from 'enzyme'
+import BreadCrumbsBuilder from './BreadCrumbsBuilder'
+import { BrowserRouter } from 'react-router-dom'
+import { clone } from '../../../util/common'
 
-const shallowBreadCrumbsBuilder = (navigateTo, url = '') =>
-  shallow(<BreadCrumbsBuilder navigateTo={navigateTo} client={childInfoJson} url={url} />)
+const supervisorMainFlow = {
+  assessmentId: '2640037',
+  client: { first_name: 'name', last_name: 'client', identifier: 'AdE0PWu0X5' },
+  subordinate: { staff_person: { identifier: '0X5', first_name: 'name', last_name: 'staff' } },
+  url: 'some/url/',
+  user: {
+    first_name: 'Anna',
+    last_name: 'Smith',
+    county_name: 'Ventura',
+    staff_id: '0X5',
+    privileges: 'CANS-staff-person-subordinates-read',
+  },
+}
 
-const diveToBreadCrumb = component => component.find(BreadCrumb).dive()
+const wrapper = (props, navigateTo) =>
+  mount(
+    <BrowserRouter>
+      <BreadCrumbsBuilder {...props} navigateTo={navigateTo} />
+    </BrowserRouter>
+  )
 
-const assertDashboardCrumbIsPresent = component =>
-  expect(diveToBreadCrumb(component).text()).toMatch(/Back to: DASHBOARD/)
+const textOfBreadCrumb = component =>
+  component
+    .find(BreadCrumb)
+    .props()
+    .navigationElements.map(ele => {
+      if (ele.props) {
+        return ele.props.children
+      }
+      return ele
+    })
 
-const assertHasLinks = (component, linksCount) => expect(diveToBreadCrumb(component).find(Link).length).toBe(linksCount)
+describe('<BreadCrumbsBuilder />', () => {
+  describe('supervisor', () => {
+    it('will render the correct BreadCrumbs for supervisor Main Flow', () => {
+      const component = wrapper(supervisorMainFlow, 'STAFF_ASSESSMENT_EDIT')
+      expect(textOfBreadCrumb(component)).toEqual(['Staff List', 'Staff, Name', 'Client, Name', 'CANS Assessment Form'])
+    })
 
-const assertLinkNumberMatches = (component, linkNumber, matcher) =>
-  expect(
-    diveToBreadCrumb(component)
-      .find(Link)
-      .at(linkNumber)
-      .prop('children')
-  ).toMatch(matcher)
-
-const assertChildYouthListCrumbIsPresent = component => assertLinkNumberMatches(component, 0, /COUNTY CLIENT LIST/)
-const assertClientSearchCrumbIsPresent = component => assertLinkNumberMatches(component, 0, /CLIENT SEARCH/)
-const assertChildInfoCrumbIsPresent = component => assertLinkNumberMatches(component, 1, /CHILD, TEST/)
-const assertAssessmentChangeLogCrumbIsPresent = component => assertLinkNumberMatches(component, 1, /CANS Change Log/)
-
-describe('bread crumb builder', () => {
-  it('builds bread crumbs for CHILD_LIST navigation', () => {
-    const component = shallowBreadCrumbsBuilder(navigation.CHILD_LIST)
-    assertDashboardCrumbIsPresent(component)
-    assertHasLinks(component, 0)
-  })
-
-  it('builds bread crumbs for CHILD_PROFILE navigation', () => {
-    const component = shallowBreadCrumbsBuilder(navigation.CHILD_PROFILE)
-    assertDashboardCrumbIsPresent(component)
-    assertHasLinks(component, 1)
-    assertChildYouthListCrumbIsPresent(component)
-  })
-
-  it('builds bread crumbs for CHILD_PROFILE_ADD navigation', () => {
-    const component = shallowBreadCrumbsBuilder(navigation.CHILD_PROFILE_ADD)
-    assertDashboardCrumbIsPresent(component)
-    assertHasLinks(component, 1)
-    assertChildYouthListCrumbIsPresent(component)
-  })
-
-  it('builds bread crumbs for CHILD_PROFILE_EDIT navigation', () => {
-    const component = shallowBreadCrumbsBuilder(navigation.CHILD_PROFILE_EDIT)
-    assertDashboardCrumbIsPresent(component)
-    assertHasLinks(component, 2)
-    assertChildYouthListCrumbIsPresent(component)
-    assertChildInfoCrumbIsPresent(component)
-  })
-
-  it('builds bread crumbs for ASSESSMENT_ADD navigation', () => {
-    const component = shallowBreadCrumbsBuilder(navigation.ASSESSMENT_ADD)
-    assertDashboardCrumbIsPresent(component)
-    assertHasLinks(component, 2)
-    assertChildYouthListCrumbIsPresent(component)
-    assertChildInfoCrumbIsPresent(component)
-  })
-
-  it('builds bread crumbs for ASSESSMENT_EDIT navigation', () => {
-    const component = shallowBreadCrumbsBuilder(navigation.ASSESSMENT_EDIT)
-    assertDashboardCrumbIsPresent(component)
-    assertHasLinks(component, 2)
-    assertChildYouthListCrumbIsPresent(component)
-    assertChildInfoCrumbIsPresent(component)
-  })
-
-  describe('when navigate to Assessment and no client info', () => {
-    const breadCrumbsBuilder = shallow(<BreadCrumbsBuilder navigateTo={navigation.ASSESSMENT_ADD} client={null} />)
-    it('should build bread crumbs without client', () => {
-      assertHasLinks(breadCrumbsBuilder, 1)
-      assertChildYouthListCrumbIsPresent(breadCrumbsBuilder)
+    it('will render the BreadCrumbs for supervisor Search Flow', () => {
+      const component = wrapper(supervisorMainFlow, 'SEARCH_ASSESSMENT_EDIT')
+      expect(textOfBreadCrumb(component)).toEqual([
+        'Staff List',
+        'Client Search',
+        'Client, Name',
+        'CANS Assessment Form',
+      ])
     })
   })
 
-  it('builds bread crumbs for CLIENT_SEARCH navigation', () => {
-    const component = shallowBreadCrumbsBuilder(navigation.CLIENT_SEARCH)
-    assertDashboardCrumbIsPresent(component)
-    assertHasLinks(component, 1)
-    assertClientSearchCrumbIsPresent(component)
+  describe('caseWorker', () => {
+    const clientFlow = clone(supervisorMainFlow)
+    clientFlow.subordinate = {}
+    clientFlow.user.privileges = 'CANS-staff-person-clients-read'
+    it('will render the correct BreadCrumbs for caseWorker Main Flow', () => {
+      const component = wrapper(clientFlow, 'ASSESSMENT_EDIT')
+      expect(textOfBreadCrumb(component)).toEqual(['Client List', 'Client, Name', 'CANS Assessment Form'])
+    })
+
+    it('will render the correct BreadCrumbs for caseWorker Search Flow', () => {
+      const component = wrapper(clientFlow, 'SEARCH_ASSESSMENT_EDIT')
+      expect(textOfBreadCrumb(component)).toEqual([
+        'Client List',
+        'Client Search',
+        'Client, Name',
+        'CANS Assessment Form',
+      ])
+    })
   })
 
-  it('builds bread crumbs for ASSESSMENT_CHANGELOG navigation', () => {
-    const url = '/clients/123/assessments/999/changelog'
-    const component = shallowBreadCrumbsBuilder(navigation.ASSESSMENT_CHANGELOG, url)
-    assertDashboardCrumbIsPresent(component)
-    assertHasLinks(component, 2)
-    assertAssessmentChangeLogCrumbIsPresent(component)
+  describe('none case worker', () => {
+    const searchFlow = clone(supervisorMainFlow)
+    searchFlow.subordinate = {}
+    searchFlow.user.privileges = 'other-permissions'
+
+    it('will render Search Flow', () => {
+      const component = wrapper(searchFlow, 'SEARCH_ASSESSMENT_EDIT')
+      expect(textOfBreadCrumb(component)).toEqual(['Client Search', 'Client, Name', 'CANS Assessment Form'])
+    })
   })
 })

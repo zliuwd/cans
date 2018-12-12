@@ -4,12 +4,12 @@ import { shallow } from 'enzyme'
 
 describe('bread crumb rendering', () => {
   let breadCrumbComponent
-  it('should render "Back to: DASHBOARD" by default', () => {
+  it('should render "Back to: Dashboard" by default', () => {
     const crumbs = shallow(<BreadCrumb navigationElements={[]} />)
-    expect(crumbs.text()).toMatch(/Back to: DASHBOARD/)
+    expect(crumbs.text()).toMatch('Dashboard ')
     const dashboardAnchor = crumbs.find('a')
     expect(dashboardAnchor.length).toEqual(1)
-    expect(dashboardAnchor.text()).toEqual('DASHBOARD')
+    expect(dashboardAnchor.text()).toEqual('Dashboard')
   })
 
   it('verify breadCrumb rendering with a single node', () => {

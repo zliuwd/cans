@@ -7,7 +7,7 @@ import { getActionVerbByStatus } from '../Assessment/AssessmentHelper'
 import { isoToLocalDate } from '../../util/dateHelper'
 import AssessmentLink from '../common/AssessmentLink'
 
-const prepareWrapper = assessment => shallow(<AssessmentRecordInfo assessment={assessment} />)
+const prepareWrapper = assessment => shallow(<AssessmentRecordInfo assessment={assessment} navFrom="SEARCH" />)
 
 describe('AssessmentRecordInfo', () => {
   it('renders a Card component with assessment info', () => {
@@ -41,7 +41,7 @@ describe('AssessmentRecordInfo', () => {
     expect(wrapper.type()).toEqual(Card)
     expect(assessmentInfo).toEqual([
       `Client name: ${clientName}`,
-      <AssessmentLink assessment={assessmentInProgress} key={createdTimestamp} />,
+      <AssessmentLink assessment={assessmentInProgress} key={createdTimestamp} navFrom="SEARCH" />,
       `${actionVerb} on ${formattedTimestamp} by`,
       `${updatedByName}`,
       `Case: ${caseNumber}`,
@@ -80,7 +80,7 @@ describe('AssessmentRecordInfo', () => {
     expect(wrapper.type()).toEqual(Card)
     expect(assessmentInfo).toEqual([
       `Client name: ${clientName}`,
-      <AssessmentLink assessment={assessmentWithNoUpdateInfo} key={updatedTimestamp} />,
+      <AssessmentLink assessment={assessmentWithNoUpdateInfo} key={updatedTimestamp} navFrom="SEARCH" />,
       `${actionVerb} on ${formattedTimestamp} by`,
       `${updatedByName}`,
       `Case: ${caseNumber}`,
@@ -119,7 +119,7 @@ describe('AssessmentRecordInfo', () => {
     expect(wrapper.type()).toEqual(Card)
     expect(assessmentInfo).toEqual([
       `Client name: ${clientName}`,
-      <AssessmentLink assessment={noCountyAssessment} key={updatedTimestamp} />,
+      <AssessmentLink assessment={noCountyAssessment} key={updatedTimestamp} navFrom="SEARCH" />,
       `${actionVerb} on ${formattedTimestamp} by`,
       `${updatedByName}`,
       `Case: ${caseNumber}`,

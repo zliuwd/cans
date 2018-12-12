@@ -4,7 +4,7 @@ import ClientsLoadingBoundary from './ClientsLoadingBoundary'
 import { ClientListCard } from '../../Client'
 import StaffLoadingBoundary from './SubordinateInfoCard/StaffLoadingBoundary'
 import SubordinateInfoCard from './SubordinateInfoCard/SubordinateInfoCard'
-
+import { navigation } from '../../../util/constants'
 const CaseLoadPage = ({ staffId }) => (
   <Fragment>
     <StaffLoadingBoundary staffId={staffId}>
@@ -12,7 +12,7 @@ const CaseLoadPage = ({ staffId }) => (
     </StaffLoadingBoundary>
 
     <ClientsLoadingBoundary staffId={staffId}>
-      <ClientListCard />
+      <ClientListCard staffId={staffId} navFrom={navigation.STAFF_LIST} />
     </ClientsLoadingBoundary>
   </Fragment>
 )
