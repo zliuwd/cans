@@ -53,12 +53,19 @@ class ClientAssessmentHistory extends Component {
     ) : (
       assessments
         .slice(startPos, endPos)
-        .map(assessment => <ClientAssessmentHistoryRecord assessment={assessment} key={assessment.id} />)
+        .map(assessment => (
+          <ClientAssessmentHistoryRecord
+            assessment={assessment}
+            key={assessment.id}
+            navFrom={this.props.navFrom}
+            userId={this.props.userId}
+          />
+        ))
     )
   }
 
   renderAssessmentsTable(assessments) {
-    return <ClientAssessmentHistoryTable assessments={assessments} />
+    return <ClientAssessmentHistoryTable assessments={assessments} navFrom={this.props.navFrom} />
   }
 
   render() {
@@ -85,10 +92,14 @@ class ClientAssessmentHistory extends Component {
 
 ClientAssessmentHistory.propTypes = {
   clientIdentifier: PropTypes.string,
+  navFrom: PropTypes.string,
+  userId: PropTypes.string,
 }
 
 ClientAssessmentHistory.defaultProps = {
   clientIdentifier: null,
+  navFrom: null,
+  userId: null,
 }
 
 export default ClientAssessmentHistory

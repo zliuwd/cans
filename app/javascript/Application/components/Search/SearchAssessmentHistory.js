@@ -39,7 +39,9 @@ class SearchAssessmentHistory extends Component {
     return fetchStatus === LoadingState.ready && assessments.length === 0 ? (
       <div id="no-data">No assessments currently exist for the clients.</div>
     ) : (
-      assessments.map(assessment => <SearchAssessmentHistoryRecord assessment={assessment} key={assessment.id} />)
+      assessments.map(assessment => (
+        <SearchAssessmentHistoryRecord navFrom={this.props.navFrom} assessment={assessment} key={assessment.id} />
+      ))
     )
   }
 
@@ -50,6 +52,7 @@ class SearchAssessmentHistory extends Component {
 }
 
 SearchAssessmentHistory.propTypes = {
+  navFrom: PropTypes.string.isRequired,
   numAssessments: PropTypes.number.isRequired,
 }
 

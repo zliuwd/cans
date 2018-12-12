@@ -9,6 +9,7 @@ import ClientAssessmentHistoryTableDate from './ClientAssessmentHistoryTableDate
 import ClientAssessmentHistoryTableUpdatedBy from './ClientAssessmentHistoryTableUpdatedBy'
 import ClientAssessmentHistoryTableEllipsis from './ClientAssessmentHistoryTableEllipsis'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
+import { navigation } from '../../../util/constants'
 
 const columnWidths = [190, 250, 140, 170, 270, 25]
 const columnConfig = [
@@ -76,7 +77,8 @@ const mockedAssessmentsWithCreatedTimestamp = [
     created_timestamp: '2018-12-07T15:35:35.707Z',
   },
 ]
-const shallowWrapper = assessments => shallow(<ClientAssessmentHistoryTable assessments={assessments} />)
+const shallowWrapper = assessments =>
+  shallow(<ClientAssessmentHistoryTable assessments={assessments} navFrom={navigation.CHILD_PROFILE} />)
 
 describe('<ClientAssessmentHistoryTable />', () => {
   describe('layout', () => {

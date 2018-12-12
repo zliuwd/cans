@@ -17,7 +17,8 @@ import {
   assessmentWithNoUpdateInfoWithNoClientandReferralNumber,
 } from '../Assessment/assessment.mocks.test'
 
-const prepareWrapper = (assessment, header) => shallow(<AssessmentRecordInfo assessment={assessment} header={header} />)
+const prepareWrapper = (assessment, header) =>
+  shallow(<AssessmentRecordInfo assessment={assessment} header={header} navFrom={'SEARCH'} />)
 
 describe('AssessmentRecordInfo', () => {
   describe('component layout', () => {
@@ -77,7 +78,12 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentInProgressWithCaseNumber} key={id} linkText=" CANS" />,
+        <AssessmentLink
+          assessment={assessmentInProgressWithCaseNumber}
+          key={id}
+          linkText={' CANS'}
+          navFrom={'SEARCH'}
+        />,
         'Saved on 06/06/2015 by',
         'Name 1 LastName 1',
         'Case: 4444-333-4444-88888888',
@@ -97,7 +103,12 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentCompletedWithCaseNumber} key={id} linkText=" CANS" />,
+        <AssessmentLink
+          assessment={assessmentCompletedWithCaseNumber}
+          key={id}
+          linkText={' CANS'}
+          navFrom={'SEARCH'}
+        />,
         'Completed on 06/06/2018 by',
         'Name 2 LastName 2',
         'Case: 4444-333-4444-88888888',
@@ -117,7 +128,12 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentWithNoUpdateInfoWithCaseNumber} key={id} linkText=" CANS" />,
+        <AssessmentLink
+          assessment={assessmentWithNoUpdateInfoWithCaseNumber}
+          key={id}
+          linkText={' CANS'}
+          navFrom={'SEARCH'}
+        />,
         'Saved on 06/06/2018 by',
         'Name 3 LastName 3',
         'Case: 4444-333-4444-88888888',
@@ -139,7 +155,12 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentInProgressWithReferralNumber} key={id} linkText=" CANS" />,
+        <AssessmentLink
+          assessment={assessmentInProgressWithReferralNumber}
+          key={id}
+          linkText={' CANS'}
+          navFrom={'SEARCH'}
+        />,
         'Saved on 06/06/2015 by',
         'Name 1 LastName 1',
         'Case: 4444-333-4444-88888888',
@@ -159,7 +180,12 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentCompletedWithReferralNumber} key={id} linkText=" CANS" />,
+        <AssessmentLink
+          assessment={assessmentCompletedWithReferralNumber}
+          key={id}
+          linkText={' CANS'}
+          navFrom={'SEARCH'}
+        />,
         'Completed on 06/06/2018 by',
         'Name 2 LastName 2',
         'Case: 4444-333-4444-88888888',
@@ -179,7 +205,12 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentWithNoUpdateInfoWithReferralNumber} key={id} linkText=" CANS" />,
+        <AssessmentLink
+          assessment={assessmentWithNoUpdateInfoWithReferralNumber}
+          key={id}
+          linkText={' CANS'}
+          navFrom={'SEARCH'}
+        />,
         'Saved on 06/06/2018 by',
         'Name 3 LastName 3',
         'Case: 4444-333-4444-88888888',
@@ -201,7 +232,12 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentInProgressWithNoClientandReferralNumber} key={id} linkText=" CANS" />,
+        <AssessmentLink
+          assessment={assessmentInProgressWithNoClientandReferralNumber}
+          key={id}
+          linkText={' CANS'}
+          navFrom={'SEARCH'}
+        />,
         'Saved on 06/06/2015 by',
         'Name 1 LastName 1',
         'Case: ',
@@ -221,7 +257,12 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentCompletedWithNoClientandReferralNumber} key={id} linkText=" CANS" />,
+        <AssessmentLink
+          assessment={assessmentCompletedWithNoClientandReferralNumber}
+          key={id}
+          linkText={' CANS'}
+          navFrom={'SEARCH'}
+        />,
         'Completed on 06/06/2018 by',
         'Name 2 LastName 2',
         'Case: ',
@@ -244,7 +285,8 @@ describe('AssessmentRecordInfo', () => {
         <AssessmentLink
           assessment={assessmentWithNoUpdateInfoWithNoClientandReferralNumber}
           key={id}
-          linkText=" CANS"
+          linkText={' CANS'}
+          navFrom={'SEARCH'}
         />,
         'Saved on 06/06/2018 by',
         'Name 3 LastName 3',

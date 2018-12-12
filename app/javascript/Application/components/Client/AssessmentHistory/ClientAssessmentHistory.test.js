@@ -7,11 +7,13 @@ import AssessmentService from '../../Assessment/Assessment.service'
 import ClientAssessmentHistoryRecord from './ClientAssessmentHistoryRecord'
 import AddCansLink from '../AddCansLink'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
+import { navigation } from '../../../util/constants'
 
 jest.mock('../../Assessment/Assessment.service')
 
 const params = {
   clientIdentifier: 'aaaaaaaaaa',
+  navFrom: navigation.CHILD_PROFILE,
 }
 
 const mockedAssessmentsWithCreatedTimestamp = [

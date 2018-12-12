@@ -13,7 +13,7 @@ describe('<SubordinateCard />', () => {
     it('renders a loading card', () => {
       const card = render().find(Card)
       expect(card.exists()).toBe(true)
-      expect(card.props().loading).toBe(true)
+      expect(card.props().loading).toBe('true')
     })
   })
 

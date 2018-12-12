@@ -13,8 +13,10 @@ import {
   assessmentCompletedWithNoClientandReferralNumber,
   assessmentWithNoUpdateInfoWithNoClientandReferralNumber,
 } from '../../Assessment/assessment.mocks.test'
+import { navigation } from '../../../util/constants'
 
-const getShallowWrapper = assessment => shallow(<ClientAssessmentHistoryRecord assessment={assessment} />)
+const getShallowWrapper = assessment =>
+  shallow(<ClientAssessmentHistoryRecord assessment={assessment} navFrom={navigation.CHILD_PROFILE} />)
 
 describe('ClientAssessmentHistoryWithCaseNumber', () => {
   it('renders IN_PROGRESS assessment with all fields', () => {

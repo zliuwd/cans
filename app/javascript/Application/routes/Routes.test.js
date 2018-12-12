@@ -71,12 +71,32 @@ describe('<Router />', () => {
       testRoute('/search', navigation.CLIENT_SEARCH)
     })
 
+    it('renders route when use search to access assessment edit', () => {
+      testRoute('/search/clients/:clientId/assessments/:id', navigation.SEARCH_ASSESSMENT_EDIT)
+    })
+
+    it('renders route when use search to access client list', () => {
+      testRoute('/search/clients/:clientId', navigation.SEARCH_CHILD_PROFILE)
+    })
+
     it('renders a supervisor dashboard route', () => {
       testRoute('/staff', navigation.STAFF_LIST)
     })
 
     it('renders a route for staff case load pages', () => {
       testRoute('/staff/:staffId', navigation.STAFF_READ)
+    })
+
+    it('renders a route for staff access client list', () => {
+      testRoute('/staff/:staffId/clients/:clientId', navigation.STAFF_CHILD_PROFILE)
+    })
+
+    it('renders a route for staff access assessment edit', () => {
+      testRoute('/staff/:staffId/clients/:clientId/assessments/:id', navigation.STAFF_ASSESSMENT_EDIT)
+    })
+
+    it('renders a route for access changelog', () => {
+      testRoute('/clients/:clientId/assessments/:id/changelog', navigation.ASSESSMENT_CHANGELOG)
     })
   })
 })

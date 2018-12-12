@@ -1,8 +1,8 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+
 import ChangeLogLoadingBoundary from './ChangeLogLoadingBoundary'
 import AssessmentChangeLog from './AssessmentChangeLog'
-import { clientPropTypes } from './ChangeLogHelper'
+import { clientPropTypes, changeLogPagePropType } from './ChangeLogHelper'
 
 const ChangeLogPage = params => {
   return (
@@ -14,12 +14,7 @@ const ChangeLogPage = params => {
 
 ChangeLogPage.propTypes = {
   client: clientPropTypes.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      clientId: PropTypes.string,
-      id: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
+  match: changeLogPagePropType.isRequired,
 }
 
 export default ChangeLogPage

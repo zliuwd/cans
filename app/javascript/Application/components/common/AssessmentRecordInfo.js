@@ -24,7 +24,7 @@ class AssessmentRecordInfo extends Component {
           <div className={'assessment-info'}>
             {recordHeader}
             <p>
-              <AssessmentLink assessment={assessment} key={id} linkText={' CANS'} />
+              <AssessmentLink assessment={assessment} navFrom={this.props.navFrom} key={id} linkText={' CANS'} />
             </p>
             <p>{`${actionVerb} on ${formattedTimestamp} by`}</p>
             <p>{updatedByName}</p>
@@ -79,6 +79,7 @@ class AssessmentRecordInfo extends Component {
 AssessmentRecordInfo.propTypes = {
   assessment: PropTypes.object.isRequired,
   header: PropTypes.string.isRequired,
+  navFrom: PropTypes.string.isRequired,
 }
 
 export default AssessmentRecordInfo

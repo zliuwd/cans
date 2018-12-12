@@ -43,7 +43,8 @@ const columnConfig = [
   },
 ]
 
-const ClientAssessmentHistoryTable = ({ assessments }) => {
+const ClientAssessmentHistoryTable = props => {
+  const { assessments, navFrom } = props
   const assessmentsLength = assessments.length
   const minRows = 0
   const defaultPageSize = 10
@@ -53,11 +54,14 @@ const ClientAssessmentHistoryTable = ({ assessments }) => {
   const showDataGrid = assessmentsLength > displayDataGridAfterNumAssessments
   const startPos = 3
   const assessmentsSubset = assessments.slice(startPos)
+  const assessmentsSubsetWithNavFrom = assessmentsSubset.map(assessment => {
+    return { navFrom, ...assessment }
+  })
 
   return showDataGrid ? (
     <Row>
       <DataGrid
-        data={assessmentsSubset}
+        data={assessmentsSubsetWithNavFrom}
         showPagination={showPagination}
         minRows={minRows}
         defaultPageSize={defaultPageSize}
@@ -70,6 +74,7 @@ const ClientAssessmentHistoryTable = ({ assessments }) => {
 
 ClientAssessmentHistoryTable.propTypes = {
   assessments: PropTypes.array.isRequired,
+  navFrom: PropTypes.string.isRequired,
 }
 
 export default ClientAssessmentHistoryTable
