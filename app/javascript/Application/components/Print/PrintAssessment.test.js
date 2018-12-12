@@ -14,7 +14,7 @@ describe('<PrintAssessment />', () => {
       <PrintAssessment
         assessment={assessmentPrint}
         i18n={i18nPrint}
-        summaryCodes={() => {
+        isUnderSix={() => {
           return { key: 'value' }
         }}
       />
@@ -32,7 +32,7 @@ describe('<PrintAssessment />', () => {
       <PrintAssessment
         assessment={assessmentWithConfidentialItem}
         i18n={i18nPrint}
-        summaryCodes={() => {
+        isUnderSix={() => {
           return { key: 'value' }
         }}
       />
@@ -48,7 +48,7 @@ describe('<PrintAssessment />', () => {
       <PrintAssessment
         assessment={assessmentWithConfidentialItem}
         i18n={i18nPrint}
-        summaryCodes={() => {
+        isUnderSix={() => {
           return { key: 'value' }
         }}
       />
@@ -64,7 +64,7 @@ describe('<PrintAssessment />', () => {
         <PrintAssessment
           assessment={assessment}
           i18n={i18nPrint}
-          summaryCodes={() => {
+          isUnderSix={() => {
             return { key: 'value' }
           }}
         />

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { getI18nByCode } from '../Assessment/I18nHelper'
+import PrintSummary from './PrintSummary'
 import {
   alertSignBox,
   headerBlock,
@@ -21,7 +22,6 @@ import {
   flex,
   redactedRating,
   textAlignCenter,
-  textAlignLeft,
   timeStampStyle,
   thinGrayBorder,
 } from './PrintAssessmentStyle'
@@ -29,12 +29,7 @@ import { formatClientName, clientCaseReferralNumber } from '../Client/Client.hel
 import { isoToLocalDate } from '../../util/dateHelper'
 import { shouldDomainBeRendered, shouldItemBeRendered } from '../Assessment/AssessmentHelper'
 import { totalScoreCalculation } from '../Assessment/DomainScoreHelper.js'
-import {
-  DomainsPropType,
-  isStrengthsDomain,
-  isNeedsDomain,
-  isTraumaDomain,
-} from '../Assessment/AssessmentSummary/DomainHelper'
+import { isStrengthsDomain, isNeedsDomain, isTraumaDomain } from '../Assessment/AssessmentSummary/DomainHelper'
 import moment from 'moment'
 
 const isItemHidden = item => item.confidential_by_default && item.confidential
@@ -219,51 +214,28 @@ class PrintAssessment extends PureComponent {
     return codes
   }
 
-  renderSummary() {
-    const imaRating = 3
-    const arRating = 2
-    const strRating = 1
-    const rating = 0
-    const domains = this.props.assessment.state.domains
-    const isUnderSix = this.props.assessment.state.under_six
-    const filteredDomains = domains.filter(domain => (isUnderSix ? domain.under_six : domain.above_six))
-    const summaryCodes = {
-      Strengths: this.getCodes(
-        filteredDomains,
-        isStrengthsDomain,
-        item => item.rating === rating || item.rating === strRating
-      ),
-      'Action Required': this.getCodes(filteredDomains, isNeedsDomain, item => item.rating === arRating),
-      'Immediate Action Required': this.getCodes(filteredDomains, isNeedsDomain, item => item.rating === imaRating),
-      Trauma: this.getCodes(domains, isTraumaDomain, item => item.rating === strRating),
-    }
-
-    const maxObjectSize = 1
-    if (Object.keys(summaryCodes).length < maxObjectSize) {
-      return null
-    } else {
-      return (
-        <div style={headerBlock}>
-          <h1 style={textAlignLeft}>CANS Summary</h1>
-          <div style={headerRow}>
-            {this.renderSummaryRecord('Strengths', summaryCodes.Strengths)}
-            {this.renderSummaryRecord('Action Required', summaryCodes['Action Required'])}
-            {this.renderSummaryRecord('Immediate Action Required', summaryCodes['Immediate Action Required'])}
-            {this.renderSummaryRecord('Trauma', summaryCodes.Trauma)}
-          </div>
-        </div>
-      )
-    }
-  }
-
   render() {
     const { isAssessmentUnderSix } = this.state
     const { i18n } = this.props
+    const imaRating = 3
     const domains = this.props.assessment.state.domains
+    const filteredDomains = domains.filter(
+      domain => (this.state.isAssessmentUnderSix ? domain.under_six : domain.above_six)
+    )
+    const summaryCodes = {
+      Strengths: this.getCodes(filteredDomains, isStrengthsDomain, item => item.rating === 0 || item.rating === 1),
+      'Action Required': this.getCodes(filteredDomains, isNeedsDomain, item => item.rating === 2),
+      'Immediate Action Required': this.getCodes(filteredDomains, isNeedsDomain, item => item.rating === imaRating),
+      Trauma: this.getCodes(domains, isTraumaDomain, item => item.rating === 1),
+    }
+    const maxObjectSize = 1
+
     return (
       <div>
         {this.renderHeader()}
-        {this.renderSummary()}
+        {Object.keys(summaryCodes).length < maxObjectSize ? null : (
+          <PrintSummary renderSummaryRecord={this.renderSummaryRecord} summaryCodes={summaryCodes} />
+        )}
         {domains.map(domain => {
           if (!shouldDomainBeRendered(isAssessmentUnderSix, domain)) return null
           const domainI18n = getI18nByCode(i18n, domain.code)
