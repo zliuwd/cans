@@ -1,4 +1,4 @@
-FROM cwds/cans_base_image:3
+FROM cwds/cans_base_image:4
 WORKDIR /app
 ADD . /app
 RUN bundle install --jobs 20 --retry 5

@@ -51,19 +51,6 @@ class Item extends Component {
     }
   }
 
-  getRadioValueForLabel = (isBooleanRating, index) => {
-    if (!isBooleanRating) {
-      return index
-    }
-    if (index === 0) {
-      return 'No'
-    }
-    if (index === 1) {
-      return 'Yes'
-    }
-    return index
-  }
-
   handleRatingChange = onChangeEvent => {
     const code = this.props.item.code
     const caregiverIndex = this.props.caregiverIndex
@@ -217,9 +204,8 @@ class Item extends Component {
                 ratingDescriptions={ratingDescriptions}
                 isBooleanRating={isBooleanRating}
                 rating={rating}
-                isNaOption={has_na_option}
+                hasNaOption={has_na_option}
                 handleRatingChange={this.handleRatingChange}
-                getRadioValueForLabel={this.getRadioValueForLabel}
               />
             ) : null}
             <Comment

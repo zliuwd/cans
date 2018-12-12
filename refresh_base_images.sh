@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Change the tag
-TAG=2
+TAG=4
 docker build -f docker/base_images/Dockerfile.cans -t cwds/cans_base_image:$TAG -t cwds/cans_base_image:latest .
 docker build -f docker/base_images/Dockerfile.cans_testing -t cwds/cans_testing_base_image:$TAG -t cwds/cans_testing_base_image:latest .
 docker login
