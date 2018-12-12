@@ -9,7 +9,11 @@ class AddCansLink extends Component {
   }
 
   renderLinkText() {
-    return <span className={'add-cans-span'}>add cans</span>
+    return (
+      <span id={'add-new-cans'} className={'add-cans-span'}>
+        add cans
+      </span>
+    )
   }
 
   render() {
@@ -17,7 +21,10 @@ class AddCansLink extends Component {
     return this.isDisabled() ? (
       this.renderLinkText()
     ) : (
-      <Link className={'add-cans-link'} to={`/clients/${clientIdentifier}/assessments`}>
+      <Link
+        id={'add-cans-link'}
+        to={`/clients/${clientIdentifier}/assessments`}
+      >
         {this.renderLinkText()}
       </Link>
     )
