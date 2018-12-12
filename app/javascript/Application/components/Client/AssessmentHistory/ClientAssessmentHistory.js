@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 import Grid from '@material-ui/core/Grid'
 import { Row } from 'reactstrap'
 import { Card, CardHeader, CardTitle, CardBody } from '@cwds/components'
@@ -11,6 +10,7 @@ import AuthBoundary from '../../common/AuthBoundary'
 import { buildCreateAssessmentPermission } from '../../common/AuthHelper'
 import AddCansLink from '../AddCansLink'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
+import { sortAssessmentsByDate } from '../../Assessment/'
 
 class ClientAssessmentHistory extends Component {
   constructor(context) {
@@ -27,7 +27,7 @@ class ClientAssessmentHistory extends Component {
       const assessments = await AssessmentService.search({
         client_identifier: clientIdentifier,
       })
-      const sortAssessments = this.sortAssessmentsByDate(assessments, 'desc')
+      const sortAssessments = sortAssessmentsByDate(assessments, true, 'desc')
       this.setState({
         assessments: sortAssessments,
         fetchStatus: LoadingState.ready,
@@ -55,17 +55,6 @@ class ClientAssessmentHistory extends Component {
         .slice(startPos, endPos)
         .map(assessment => <ClientAssessmentHistoryRecord assessment={assessment} key={assessment.id} />)
     )
-  }
-
-  sortAssessmentsByDate(assessments, direction = 'asc') {
-    const newAssessmentList = assessments.map(assessment => {
-      const timestamp = moment(assessment.created_timestamp)
-      return { ...assessment, timestamp }
-    })
-    newAssessmentList.sort((left, right) => {
-      return direction === 'asc' ? left.timestamp.diff(right.timestamp) : right.timestamp.diff(left.timestamp)
-    })
-    return newAssessmentList
   }
 
   renderAssessmentsTable(assessments) {
