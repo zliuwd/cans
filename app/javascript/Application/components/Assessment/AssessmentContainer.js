@@ -178,6 +178,7 @@ class AssessmentContainer extends Component {
 
   updateAssessment = assessment => {
     const isValidForSubmit = validateAssessmentForSubmit(assessment)
+    assessment.person = this.props.client
     this.setState({
       assessment,
       assessmentServiceStatus: LoadingState.ready,
@@ -273,7 +274,6 @@ class AssessmentContainer extends Component {
     if (assessment.id) {
       try {
         const submittedAssessment = await AssessmentService.update(assessment.id, assessment)
-        await AssessmentService.update(assessment.id, assessment)
         this.setState({
           assessmentServiceStatus: LoadingState.ready,
           assessment: submittedAssessment,
@@ -351,7 +351,6 @@ class AssessmentContainer extends Component {
     }
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus)
     const isUnderSix = assessment && assessment.state && assessment.state.under_six
-
     return (
       <Fragment>
         {this.renderWarning()}
@@ -406,6 +405,7 @@ class AssessmentContainer extends Component {
           )}
         {isUnderSix !== undefined && (
           <AssessmentFormFooter
+            assessment={assessment}
             onCancelClick={this.handleCancelClick}
             isSubmitButtonEnabled={isEditable && canPerformUpdates && isValidForSubmit}
             onSubmitAssessment={

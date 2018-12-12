@@ -829,7 +829,7 @@ export const assessmentInProgress = {
 
 export const assessmentCompleted = {
   id: 97500,
-  person: { id: 1 },
+  person: { id: 1, identifier: 'B2yE2Ao0X6' },
   status: 'COMPLETED',
   the_case: {
     external_id: '4444-333-4444-88888888',

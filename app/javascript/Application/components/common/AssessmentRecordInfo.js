@@ -20,7 +20,7 @@ class AssessmentRecordInfo extends Component {
     return (
       <Card className="card-assessment-record-info">
         <CardBody>
-          <Ellipsis id={id} />
+          <Ellipsis id={id} clientId={assessment.person.identifier} />
           <div className={'assessment-info'}>
             {recordHeader}
             <p>

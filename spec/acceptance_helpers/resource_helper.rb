@@ -11,7 +11,7 @@ module ResourceHelper
   private
 
   def fill_and_save_assessment_form
-    click_button 'New CANS'
+    find('#new-cans-button').click
     expect(page).to have_content 'CANS Communimetric Assessment Form'
     find('#age-6-21-button').click
     find('#age-6-21-button').click # doing it twice since sometimes it fails on the first attempt
@@ -73,6 +73,7 @@ module ResourceHelper
     click_button 'I Agree'
     find('#cancel-assessment').click
     expect(page).to have_content 'Complete'
+    expect(page).to have_content('NEW CANS', wait: 30)
     save_assessment_form_age_0_5
   end
 
@@ -331,7 +332,7 @@ module ResourceHelper
   end
 
   def save_assessment_form_age_0_5
-    click_button 'New CANS'
+    find('#new-cans-button').click
     expect(page).to have_content 'CANS Communimetric Assessment Form'
     find('#age-0-5-button').click
     find('#age-0-5-button').click # doing it twice since sometimes it fails on the first attempt
