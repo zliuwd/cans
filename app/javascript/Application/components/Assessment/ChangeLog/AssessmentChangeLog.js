@@ -7,7 +7,7 @@ import ChangeLogStatus from './ChangeLogStatus'
 import ChangeLogName from './ChangeLogName'
 import PrintChangeLog from './PrintChangeLog'
 import { formatClientName } from '../../Client'
-import { clientPropTypes, changeHistoryPropType } from './ChangeLogHelper'
+import { changeLogPagePropType, clientPropTypes, changeHistoryPropType } from './ChangeLogHelper'
 import { trimSafely } from '../../../util/formatters'
 import { isoToLocalDate } from '../../../util/dateHelper'
 import { buildSearchClientsButton } from '../../Header/PageHeaderButtonsBuilder'
@@ -109,12 +109,7 @@ class AssessmentChangeLog extends Component {
 AssessmentChangeLog.propTypes = {
   changeHistory: PropTypes.arrayOf(changeHistoryPropType),
   client: clientPropTypes.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      clientId: PropTypes.string,
-      id: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
+  match: changeLogPagePropType.isRequired,
   pageHeaderButtonsController: PropTypes.shape({
     updateHeaderButtons: PropTypes.func.isRequired,
     updateHeaderButtonsToDefault: PropTypes.func.isRequired,

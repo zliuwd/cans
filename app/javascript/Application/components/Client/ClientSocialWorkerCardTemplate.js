@@ -1,12 +1,8 @@
 import { formatClientName, formatClientStatus } from './Client.helper'
-import { isoToLocalDate } from '../../util/dateHelper'
-import ClientCardTemplateNameCell from './ClientCardTemplateNameCell'
+import { renderDate, cellTempSwitcher } from './ClientSocialWorkerCardTemplateHelper'
 import './style.sass'
 
-export function SocialWorkerCardTemplate(client) {
-  function renderDate(datetime) {
-    return !datetime || datetime === null ? null : isoToLocalDate(datetime)
-  }
+export function SocialWorkerCardTemplate(navFrom, staffId) {
   const template = [
     {
       id: 'fullName',
@@ -14,8 +10,11 @@ export function SocialWorkerCardTemplate(client) {
       accessor: client => {
         return formatClientName(client)
       },
-      Cell: ClientCardTemplateNameCell,
+      Cell: cellTempSwitcher(navFrom),
+      rol: staffId,
     },
+    /* rol just an attribute which used for pass the staffId
+and meet the setting rules of reactTable at same time */
     {
       id: 'dob',
       Header: 'DOB',

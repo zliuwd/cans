@@ -7,7 +7,7 @@ import { staffPropType } from '../StaffHelper'
 import './style.sass'
 
 const SubordinateCard = ({ loadingState, staff }) => {
-  const loadingProp = loadingState === LoadingState.updating ? true : undefined
+  const loadingProp = loadingState === LoadingState.updating ? 'true' : undefined
   return (
     <Card className={'card supervisor-card'} loading={loadingProp}>
       <CardHeader>

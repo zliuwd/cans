@@ -26,6 +26,7 @@ const params = {
   location: { pathname: 'client' },
   history: { location: '/client' },
   client,
+  navigateTo: 'CLIENT_LIST',
 }
 
 describe('<Client />', () => {
@@ -51,6 +52,7 @@ describe('<Client />', () => {
       match: { params: { id: '1' } },
       location: { pathname: 'client' },
       history: { location: '/client' },
+      navigateTo: 'CLIENT_LIST',
     }
 
     const getWrapper = () => shallow(<Client {...params} />)

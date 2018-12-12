@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'reactstrap'
 import Typography from '@material-ui/core/Typography'
 import { isoToLocalDate } from '../../util/dateHelper'
+import { historyRecordUrlSwitcher } from '../../util/historyRecordUrlSwitcher'
 import { StatusIcon } from '../common/StatusIcon'
 import { clientCaseReferralNumber } from './Client.helper'
-
 import './style.sass'
 
 const getActionVerbByStatus = status => {
@@ -50,6 +50,12 @@ class ClientAssessmentHistoryRecord extends Component {
 
   render() {
     const { id, event_date: eventDate, status, person } = this.props.assessment
+    const navFrom = this.props.navFrom
+    const userId = this.props.userId
+    const clientId = person.identifier
+    const assessmentId = id
+    const url = historyRecordUrlSwitcher(navFrom, userId, clientId, assessmentId)
+
     const formattedEventDate = isoToLocalDate(eventDate)
     return (
       <Container className={'history-item'}>
@@ -64,7 +70,7 @@ class ClientAssessmentHistoryRecord extends Component {
           <Col xs="12">
             <Row>
               <Col xs="12">
-                <Link to={`/clients/${person.identifier}/assessments/${id}`} className={'underlined'}>
+                <Link to={url} className={'underlined'}>
                   {`${formattedEventDate} CANS`}
                 </Link>
               </Col>
@@ -81,6 +87,13 @@ class ClientAssessmentHistoryRecord extends Component {
 
 ClientAssessmentHistoryRecord.propTypes = {
   assessment: PropTypes.object.isRequired,
+  navFrom: PropTypes.string,
+  userId: PropTypes.string,
+}
+
+ClientAssessmentHistoryRecord.defaultProps = {
+  navFrom: null,
+  userId: null,
 }
 
 export default ClientAssessmentHistoryRecord

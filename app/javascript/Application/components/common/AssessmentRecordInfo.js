@@ -34,7 +34,7 @@ class AssessmentRecordInfo extends Component {
           <div>
             <p className="assessment-client-name no-margin">{`Client name: ${clientName}`}</p>
             <p className="no-margin">
-              <AssessmentLink assessment={this.props.assessment} />
+              <AssessmentLink assessment={this.props.assessment} navFrom={this.props.navFrom} />
             </p>
             <p className="no-margin mid-gray">{`${actionVerb} on ${formattedTimestamp} by`}</p>
             <p className="no-margin mid-gray">{updatedByName}</p>
@@ -53,6 +53,7 @@ class AssessmentRecordInfo extends Component {
 
 AssessmentRecordInfo.propTypes = {
   assessment: PropTypes.object.isRequired,
+  navFrom: PropTypes.string.isRequired,
 }
 
 export default AssessmentRecordInfo

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { LoadingState } from '../../util/loadingHelper'
 
 class LoadingBoundary extends React.PureComponent {
-  constructor() {
+  constructor(props) {
     super()
     this.state = {
       loadingState: LoadingState.waiting,

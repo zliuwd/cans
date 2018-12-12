@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import Card from '@material-ui/core/Card/Card'
 import CardHeader from '@material-ui/core/CardHeader/index'
 import CardContent from '@material-ui/core/CardContent/index'
@@ -8,7 +8,6 @@ import { ClientAssessmentHistory } from './index'
 import AssessmentService from '../Assessment/Assessment.service'
 import ClientAssessmentHistoryRecord from './ClientAssessmentHistoryRecord'
 import SecurityService from '../common/Security.service'
-import AddCansButton from './AddCansButton'
 
 jest.mock('../Assessment/Assessment.service')
 jest.mock('../common/Security.service')
@@ -64,12 +63,11 @@ describe('<ClientAssessmentHistory', () => {
       jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
       const wrapper = await prepareWrapper([{ id: 1 }, { id: 2 }])
       const cardHeader = wrapper.find(CardHeader)
-      const actionWrapper = shallow(cardHeader.dive().props().action)
-      const button = actionWrapper.find(AddCansButton)
+      const actionWrapper = await mount(cardHeader.dive().props().action)
+      const button = shallow(actionWrapper.prop('children'))
       expect(button.exists()).toBe(true)
       expect(
         button
-          .dive()
           .find('#new-cans-button')
           .dive()
           .text()

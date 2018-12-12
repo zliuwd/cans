@@ -6,7 +6,7 @@ class SearchAssessmentHistoryRecord extends PureComponent {
   render() {
     return (
       <div className="col-md-4">
-        <AssessmentRecordInfo assessment={this.props.assessment} />
+        <AssessmentRecordInfo assessment={this.props.assessment} navFrom={this.props.navFrom} />
       </div>
     )
   }
@@ -14,6 +14,7 @@ class SearchAssessmentHistoryRecord extends PureComponent {
 
 SearchAssessmentHistoryRecord.propTypes = {
   assessment: PropTypes.object.isRequired,
+  navFrom: PropTypes.string.isRequired,
 }
 
 export default SearchAssessmentHistoryRecord

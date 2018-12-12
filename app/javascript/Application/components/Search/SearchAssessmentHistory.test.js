@@ -10,6 +10,7 @@ jest.mock('../Assessment/Assessment.service')
 
 const params = {
   numAssessments: 3,
+  navFrom: 'SEARCH',
 }
 
 const getShallowWrapper = () => {

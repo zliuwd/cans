@@ -429,8 +429,7 @@ describe('<AssessmentContainer />', () => {
         expect(wrapper.find(CloseableAlert).length).toBe(1)
         const warning = wrapper.find(CloseableAlert).first()
         expect(warning.props().message).toBe(
-          'This assessment was initiated in a county that is different than the User’s ' +
-            'County. Saving and Submitting are disabled'
+          'Saving and completing are disabled due to assessment status or county of jurisdiction.'
         )
         expect(wrapper.find(Typography).length).toBe(0)
       })
@@ -773,7 +772,7 @@ describe('<AssessmentContainer />', () => {
           isEditable: true,
           assessment,
         })
-        expect(wrapper.find('Button#submit-assessment').props().disabled).toBe(true)
+        expect(wrapper.find('AuthBoundary').props().andCondition).toBe(false)
 
         wrapper.setState({
           isValidForSubmit: true,
@@ -781,7 +780,7 @@ describe('<AssessmentContainer />', () => {
           isEditable: true,
           assessment,
         })
-        expect(wrapper.find('Button#submit-assessment').props().disabled).toBe(false)
+        expect(wrapper.find('AuthBoundary').props().andCondition).toBe(true)
       })
     })
 
@@ -827,7 +826,7 @@ describe('<AssessmentContainer />', () => {
         })
 
         // then
-        expect(wrapper.find('Button#submit-assessment').props().disabled).toBeTruthy()
+        expect(wrapper.find('AuthBoundary').props().andCondition).toBeFalsy()
       })
 
       it('should be enabled when assessment service is done loading', () => {
@@ -842,7 +841,7 @@ describe('<AssessmentContainer />', () => {
         })
 
         // then
-        expect(wrapper.find('Button#submit-assessment').instance().props.disabled).toBeFalsy()
+        expect(wrapper.find('AuthBoundary').instance().props.andCondition).toBeTruthy()
       })
 
       it('should be disabled when assessment is not editable', () => {
@@ -857,7 +856,7 @@ describe('<AssessmentContainer />', () => {
         })
 
         // then
-        expect(wrapper.find('Button#submit-assessment').instance().props.disabled).toBeTruthy()
+        expect(wrapper.find('AuthBoundary').instance().props.andCondition).toBeFalsy()
       })
     })
   })

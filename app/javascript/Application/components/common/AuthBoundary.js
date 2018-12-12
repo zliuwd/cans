@@ -1,35 +1,74 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import LoadingBoundary from './LoadingBoundary'
 import SecurityService from './Security.service'
+import { LoadingState } from '../../util/loadingHelper'
 
 class AuthBoundary extends React.PureComponent {
-  disabled = permission => {
-    return SecurityService.checkPermission(permission).then(isAuthorized => !isAuthorized)
+  constructor(props) {
+    super()
+    this.state = {
+      loadingState: LoadingState.waiting,
+    }
+  }
+
+  async componentDidMount() {
+    await this.authorize()
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (JSON.stringify(prevProps.eagerRefreshFlagObject) !== JSON.stringify(this.props.eagerRefreshFlagObject)) {
+      await this.authorize()
+    }
+  }
+
+  authorize = async () => {
+    const { permission } = this.props
+    this.setState({
+      loadingState: LoadingState.waiting,
+    })
+    try {
+      await SecurityService.checkPermission(permission).then(isAuthorized => {
+        this.setState({
+          loadingState: LoadingState.ready,
+          isAuthorized: isAuthorized,
+        })
+      })
+    } catch (e) {
+      this.setState({ loadingState: LoadingState.error })
+    }
+  }
+
+  isDisabled = permission => {
+    if (!this.props.andCondition) {
+      return true
+    }
+    if (this.props.orCondition) {
+      return false
+    }
+    return !this.state.isAuthorized
   }
 
   render() {
-    const { children, permission } = this.props
-    return (
-      <LoadingBoundary
-        childNodeFetchedPropName={'disabled'}
-        fetch={() => this.disabled(permission)}
-        isHiddenWhileLoading={true}
-      >
-        {children}
-      </LoadingBoundary>
-    )
+    const { children } = this.props
+    const { loadingState } = this.state
+    return LoadingState.waiting === loadingState ? null : React.cloneElement(children, { disabled: this.isDisabled() })
   }
 }
 
 AuthBoundary.propTypes = {
+  /* eslint-disable react/boolean-prop-naming */
+  andCondition: PropTypes.bool,
   children: PropTypes.node.isRequired,
+  eagerRefreshFlagObject: PropTypes.object,
+  orCondition: PropTypes.bool,
   permission: PropTypes.string.isRequired,
+  /* eslint-enable react/boolean-prop-naming */
 }
 
-const buildCreateAssessmentPermission = clientIdentifier => {
-  return `client:createAssessment:${clientIdentifier}`
+AuthBoundary.defaultProps = {
+  eagerRefreshFlagObject: {},
+  andCondition: true,
+  orCondition: false,
 }
 
 export default AuthBoundary
-export { buildCreateAssessmentPermission }

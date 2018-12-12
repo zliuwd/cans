@@ -90,6 +90,7 @@ class AssessmentContainer extends Component {
     return (
       isValidDate &&
       isEditable &&
+      assessment.status !== 'COMPLETED' &&
       assessment.state.under_six !== undefined &&
       Boolean(assessment.event_date) &&
       isReadyForAction(assessmentServiceStatus)
@@ -178,6 +179,7 @@ class AssessmentContainer extends Component {
 
   updateAssessment = assessment => {
     const isValidForSubmit = validateAssessmentForSubmit(assessment)
+    assessment.person = this.props.client
     this.setState({
       assessment,
       assessmentServiceStatus: LoadingState.ready,
@@ -273,7 +275,6 @@ class AssessmentContainer extends Component {
     if (assessment.id) {
       try {
         const submittedAssessment = await AssessmentService.update(assessment.id, assessment)
-        await AssessmentService.update(assessment.id, assessment)
         this.setState({
           assessmentServiceStatus: LoadingState.ready,
           assessment: submittedAssessment,
@@ -351,7 +352,6 @@ class AssessmentContainer extends Component {
     }
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus)
     const isUnderSix = assessment && assessment.state && assessment.state.under_six
-
     return (
       <Fragment>
         {this.renderWarning()}
@@ -399,8 +399,7 @@ class AssessmentContainer extends Component {
             <div className={'permission-warning-alert'}>
               <CloseableAlert
                 type={alertType.WARNING}
-                message="This assessment was initiated in a county that is different than the User’s County. Saving and
-              Submitting are disabled"
+                message="Saving and completing are disabled due to assessment status or county of jurisdiction."
                 isCloseable={false}
                 isAutoCloseable={false}
               />
@@ -408,6 +407,7 @@ class AssessmentContainer extends Component {
           )}
         {isUnderSix !== undefined && (
           <AssessmentFormFooter
+            assessment={assessment}
             onCancelClick={this.handleCancelClick}
             isSubmitButtonEnabled={isEditable && canPerformUpdates && isValidForSubmit}
             onSubmitAssessment={

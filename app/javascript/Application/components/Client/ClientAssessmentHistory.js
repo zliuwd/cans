@@ -7,7 +7,8 @@ import CardContent from '@material-ui/core/CardContent'
 import { ClientAssessmentHistoryRecord } from './'
 import { AssessmentService } from '../Assessment/Assessment.service'
 import { LoadingState } from '../../util/loadingHelper'
-import AuthBoundary, { buildCreateAssessmentPermission } from '../common/AuthBoundary'
+import AuthBoundary from '../common/AuthBoundary'
+import { buildCreateAssessmentPermission } from '../common/AuthHelper'
 import AddCansButton from './AddCansButton'
 
 import './style.sass'
@@ -47,7 +48,14 @@ class ClientAssessmentHistory extends Component {
     return fetchStatus === LoadingState.ready && assessments.length === 0 ? (
       <div id="no-data">No assessments currently exist for this child/youth.</div>
     ) : (
-      assessments.map(assessment => <ClientAssessmentHistoryRecord assessment={assessment} key={assessment.id} />)
+      assessments.map(assessment => (
+        <ClientAssessmentHistoryRecord
+          assessment={assessment}
+          key={assessment.id}
+          navFrom={this.props.navFrom}
+          userId={this.props.userId}
+        />
+      ))
     )
   }
 
@@ -72,10 +80,14 @@ class ClientAssessmentHistory extends Component {
 
 ClientAssessmentHistory.propTypes = {
   clientIdentifier: PropTypes.string,
+  navFrom: PropTypes.string,
+  userId: PropTypes.string,
 }
 
 ClientAssessmentHistory.defaultProps = {
   clientIdentifier: null,
+  navFrom: null,
+  userId: null,
 }
 
 export default ClientAssessmentHistory

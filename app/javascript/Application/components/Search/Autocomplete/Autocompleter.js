@@ -213,7 +213,7 @@ export default class Autocompleter extends Component {
         <Redirect
           push
           to={{
-            pathname: `clients/${legacyId}`,
+            pathname: `search/clients/${legacyId}`,
             state: { isNewForm: true, legacyId },
           }}
         />
