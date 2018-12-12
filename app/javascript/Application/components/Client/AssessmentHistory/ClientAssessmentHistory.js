@@ -38,9 +38,7 @@ class ClientAssessmentHistory extends Component {
   renderAddCansLink() {
     const { clientIdentifier } = this.props
     return (
-      <AuthBoundary
-        permission={buildCreateAssessmentPermission(clientIdentifier)}
-      >
+      <AuthBoundary permission={buildCreateAssessmentPermission(clientIdentifier)}>
         <AddCansLink clientIdentifier={clientIdentifier} />
       </AuthBoundary>
     )
@@ -51,18 +49,11 @@ class ClientAssessmentHistory extends Component {
     const endPos = 3
 
     return fetchStatus === LoadingState.ready && assessments.length === 0 ? (
-      <div id="no-data">
-        No assessments currently exist for this child/youth.
-      </div>
+      <div id="no-data">No assessments currently exist for this child/youth.</div>
     ) : (
       assessments
         .slice(startPos, endPos)
-        .map(assessment => (
-          <ClientAssessmentHistoryRecord
-            assessment={assessment}
-            key={assessment.id}
-          />
-        ))
+        .map(assessment => <ClientAssessmentHistoryRecord assessment={assessment} key={assessment.id} />)
     )
   }
 
@@ -72,9 +63,7 @@ class ClientAssessmentHistory extends Component {
       return { ...assessment, timestamp }
     })
     newAssessmentList.sort((left, right) => {
-      return direction === 'asc'
-        ? left.timestamp.diff(right.timestamp)
-        : right.timestamp.diff(left.timestamp)
+      return direction === 'asc' ? left.timestamp.diff(right.timestamp) : right.timestamp.diff(left.timestamp)
     })
     return newAssessmentList
   }
@@ -89,11 +78,7 @@ class ClientAssessmentHistory extends Component {
     return (
       <Grid item xs={12}>
         <Card>
-          <CardHeader
-            className={
-              'card-header-cans card-header-client card-header-client-assessment-history'
-            }
-          >
+          <CardHeader className={'card-header-cans card-header-client card-header-client-assessment-history'}>
             <CardTitle>
               <span>Assessment History</span>
               {this.renderAddCansLink()}

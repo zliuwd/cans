@@ -74,6 +74,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97501)
+      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
         <AssessmentLink assessment={assessmentInProgressWithCaseNumber} key={id} linkText=" CANS" />,
@@ -93,6 +94,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97502)
+      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
         <AssessmentLink assessment={assessmentCompletedWithCaseNumber} key={id} linkText=" CANS" />,
@@ -112,6 +114,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97503)
+      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
         <AssessmentLink assessment={assessmentWithNoUpdateInfoWithCaseNumber} key={id} linkText=" CANS" />,
@@ -133,6 +136,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97501)
+      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
         <AssessmentLink assessment={assessmentInProgressWithReferralNumber} key={id} linkText=" CANS" />,
@@ -152,6 +156,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97502)
+      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
         <AssessmentLink assessment={assessmentCompletedWithReferralNumber} key={id} linkText=" CANS" />,
@@ -171,6 +176,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97503)
+      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
         <AssessmentLink assessment={assessmentWithNoUpdateInfoWithReferralNumber} key={id} linkText=" CANS" />,
@@ -192,6 +198,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97501)
+      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
         <AssessmentLink assessment={assessmentInProgressWithNoClientandReferralNumber} key={id} linkText=" CANS" />,
@@ -211,6 +218,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97502)
+      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
         <AssessmentLink assessment={assessmentCompletedWithNoClientandReferralNumber} key={id} linkText=" CANS" />,
@@ -230,6 +238,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(wrapper.find(Ellipsis).props().id).toBe(97503)
+      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
         <AssessmentLink

@@ -9,7 +9,7 @@ import AssessmentRecordStatus from '../common/AssessmentRecordStatus'
 
 class AssessmentRecordInfo extends Component {
   renderInfo = (header, assessment, assessmentInfo) => {
-    const { id, status } = assessment
+    const { id, status, person } = assessment
 
     const { clientName, actionVerb, formattedTimestamp, updatedByName, countyName, serviceSourceUiId } = assessmentInfo
 
@@ -20,7 +20,7 @@ class AssessmentRecordInfo extends Component {
     return (
       <Card className="card-assessment-record-info">
         <CardBody>
-          <Ellipsis id={id} clientId={assessment.person.identifier} />
+          <Ellipsis id={id} clientId={person.identifier} />
           <div className={'assessment-info'}>
             {recordHeader}
             <p>

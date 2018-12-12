@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import Ellipsis from '../../common/Ellipsis'
 
 const ClientAssessmentHistoryTableEllipsis = ({ original }) => {
-  const { id } = original
-  return id ? <Ellipsis id={id} /> : null
+  const { id, person } = original
+  return id && person ? <Ellipsis id={id} clientId={person.identifier} /> : null
 }
 
 ClientAssessmentHistoryTableEllipsis.propTypes = {

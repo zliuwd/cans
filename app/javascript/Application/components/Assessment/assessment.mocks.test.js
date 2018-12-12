@@ -873,6 +873,7 @@ export const assessmentInProgressWithCaseNumber = {
   id: 97501,
   person: {
     id: 1,
+    identifier: '123',
     first_name: 'Casey',
     middle_name: 'Middle',
     last_name: 'Test',
@@ -897,6 +898,7 @@ export const assessmentCompletedWithCaseNumber = {
   id: 97502,
   person: {
     id: 1,
+    identifier: '123',
     first_name: 'Casey',
     middle_name: 'Middle',
     last_name: 'Test',
@@ -920,6 +922,7 @@ export const assessmentWithNoUpdateInfoWithCaseNumber = {
   id: 97503,
   person: {
     id: 1,
+    identifier: '123',
     first_name: 'Casey',
     middle_name: 'Middle',
     last_name: 'Test',
@@ -944,6 +947,7 @@ export const assessmentInProgressWithReferralNumber = {
   id: 97501,
   person: {
     id: 1,
+    identifier: '123',
     first_name: 'Casey',
     middle_name: 'Middle',
     last_name: 'Test',
@@ -968,6 +972,7 @@ export const assessmentCompletedWithReferralNumber = {
   id: 97502,
   person: {
     id: 1,
+    identifier: '123',
     first_name: 'Casey',
     middle_name: 'Middle',
     last_name: 'Test',
@@ -991,6 +996,7 @@ export const assessmentWithNoUpdateInfoWithReferralNumber = {
   id: 97503,
   person: {
     id: 1,
+    identifier: '123',
     first_name: 'Casey',
     middle_name: 'Middle',
     last_name: 'Test',
@@ -1015,6 +1021,7 @@ export const assessmentInProgressWithNoClientandReferralNumber = {
   id: 97501,
   person: {
     id: 1,
+    identifier: '123',
     first_name: 'Casey',
     middle_name: 'Middle',
     last_name: 'Test',
@@ -1038,6 +1045,7 @@ export const assessmentCompletedWithNoClientandReferralNumber = {
   id: 97502,
   person: {
     id: 1,
+    identifier: '123',
     first_name: 'Casey',
     middle_name: 'Middle',
     last_name: 'Test',
@@ -1061,6 +1069,7 @@ export const assessmentWithNoUpdateInfoWithNoClientandReferralNumber = {
   id: 97503,
   person: {
     id: 1,
+    identifier: '123',
     first_name: 'Casey',
     middle_name: 'Middle',
     last_name: 'Test',
