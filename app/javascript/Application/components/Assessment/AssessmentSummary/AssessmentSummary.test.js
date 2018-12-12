@@ -10,7 +10,7 @@ import AssessmentSummary from './AssessmentSummary'
 describe('<AssessmentSummary />', () => {
   const i18n = { code: 'value' }
   const render = ({ domains = [], isUnderSix = false } = {}) =>
-    shallow(<AssessmentSummary domains={domains} i18n={i18n} isUnderSix={isUnderSix} getSummaryCode={() => {}} />)
+    shallow(<AssessmentSummary domains={domains} i18n={i18n} isUnderSix={isUnderSix} />)
 
   it('renders a StrengthsSummary', () => {
     expect(

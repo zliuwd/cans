@@ -7,9 +7,8 @@ import SummaryHeader from './SummaryHeader'
 const hasTargetRating = item => item.rating === 0 || item.rating === 1
 const tooltip = 'Ratings of 0 or 1 in the Strengths Domain. These are central or useful in planning.'
 
-const StrengthsSummary = ({ domains, i18n, getSummaryCode }) => (
+const StrengthsSummary = ({ domains, i18n }) => (
   <SummaryGrid
-    getSummaryCode={getSummaryCode}
     domainFilter={isStrengthsDomain}
     domains={domains}
     header={<SummaryHeader title="Strengths" tooltip={tooltip} />}
@@ -20,7 +19,6 @@ const StrengthsSummary = ({ domains, i18n, getSummaryCode }) => (
 
 StrengthsSummary.propTypes = {
   domains: DomainsPropType,
-  getSummaryCode: PropTypes.func.isRequired,
   i18n: PropTypes.object.isRequired,
 }
 

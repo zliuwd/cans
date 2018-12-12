@@ -29,6 +29,12 @@ import { formatClientName, clientCaseReferralNumber } from '../Client/Client.hel
 import { isoToLocalDate } from '../../util/dateHelper'
 import { shouldDomainBeRendered, shouldItemBeRendered } from '../Assessment/AssessmentHelper'
 import { totalScoreCalculation } from '../Assessment/DomainScoreHelper.js'
+import {
+  DomainsPropType,
+  isStrengthsDomain,
+  isNeedsDomain,
+  isTraumaDomain,
+} from '../Assessment/AssessmentSummary/DomainHelper'
 import moment from 'moment'
 
 const isItemHidden = item => item.confidential_by_default && item.confidential
@@ -198,8 +204,40 @@ class PrintAssessment extends PureComponent {
     )
   }
 
+  getCodes(domains, domainFilter, itemFilter) {
+    const items = domains
+      .filter(domainFilter)
+      .map(domain => domain.items)
+      .reduce((allItems, items) => allItems.concat(items), [])
+      .filter(itemFilter)
+
+    const codes = items.map(item => {
+      const code = getI18nByCode(this.props.i18n, item.code)
+      return (code && code._title_) || ''
+    })
+
+    return codes
+  }
+
   renderSummary() {
-    const summaryCodes = this.props.summaryCodes()
+    const imaRating = 3
+    const arRating = 2
+    const strRating = 1
+    const rating = 0
+    const domains = this.props.assessment.state.domains
+    const isUnderSix = this.props.assessment.state.under_six
+    const filteredDomains = domains.filter(domain => (isUnderSix ? domain.under_six : domain.above_six))
+    const summaryCodes = {
+      Strengths: this.getCodes(
+        filteredDomains,
+        isStrengthsDomain,
+        item => item.rating === rating || item.rating === strRating
+      ),
+      'Action Required': this.getCodes(filteredDomains, isNeedsDomain, item => item.rating === arRating),
+      'Immediate Action Required': this.getCodes(filteredDomains, isNeedsDomain, item => item.rating === imaRating),
+      Trauma: this.getCodes(domains, isTraumaDomain, item => item.rating === strRating),
+    }
+
     const maxObjectSize = 1
     if (Object.keys(summaryCodes).length < maxObjectSize) {
       return null
@@ -239,7 +277,6 @@ class PrintAssessment extends PureComponent {
 PrintAssessment.propTypes = {
   assessment: PropTypes.object.isRequired,
   i18n: PropTypes.object.isRequired,
-  summaryCodes: PropTypes.func.isRequired,
 }
 
 export default PrintAssessment

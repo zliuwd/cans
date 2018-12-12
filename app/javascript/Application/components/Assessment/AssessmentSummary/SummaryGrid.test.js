@@ -3,12 +3,10 @@ import { mount, shallow } from 'enzyme'
 import { i18n } from './DomainHelper.test'
 import { DataGrid } from '@cwds/components'
 import SummaryGrid from './SummaryGrid'
-import SummaryHeader from './SummaryHeader'
 
 describe('<SummaryGrid />', () => {
   describe('Overall', () => {
-    const render = (header = <SummaryHeader title="Trauma" tooltip={'tooltip'} />) =>
-      shallow(<SummaryGrid header={header} i18n={i18n} getSummaryCode={() => {}} />)
+    const render = (header = 'My Summary') => shallow(<SummaryGrid header={header} i18n={i18n} />)
 
     it('renders a data grid', () => {
       expect(
@@ -27,9 +25,7 @@ describe('<SummaryGrid />', () => {
     })
 
     it('has a header', () => {
-      expect(
-        render(<SummaryHeader title="Hello Summary" tooltip={'tooltip'} />).props().columns[0].Header.props.title
-      ).toBe('Hello Summary')
+      expect(render('Hello Summary').props().columns[0].Header).toBe('Hello Summary')
     })
 
     it('has no No Data prompt', () => {
@@ -56,15 +52,7 @@ describe('<SummaryGrid />', () => {
     ]
     const domains = [{ code: 'first', items }]
     const render = itemFilter =>
-      mount(
-        <SummaryGrid
-          domains={domains}
-          header={<SummaryHeader title="Trauma" tooltip={'tooltip'} />}
-          itemFilter={itemFilter}
-          i18n={i18n}
-          getSummaryCode={() => {}}
-        />
-      )
+      mount(<SummaryGrid header="My Summary" domains={domains} i18n={i18n} itemFilter={itemFilter} />)
 
     it('renders all of the items', () => {
       const text = render().text()
@@ -88,14 +76,7 @@ describe('<SummaryGrid />', () => {
 
   it('skips items when it does not know how to internationalize them', () => {
     const domains = [{ code: 'first', items: [{ code: 'SURPRISE', rating: -1 }] }]
-    const text = mount(
-      <SummaryGrid
-        header={<SummaryHeader title="Trauma" tooltip={'tooltip'} />}
-        domains={domains}
-        i18n={{}}
-        getSummaryCode={() => {}}
-      />
-    ).text()
+    const text = mount(<SummaryGrid header="My Summary" domains={domains} i18n={{}} />).text()
 
     expect(text).not.toContain('Surprise')
     expect(text).not.toContain('SURPRISE')
@@ -111,15 +92,7 @@ describe('<SummaryGrid />', () => {
     const moreItems = [{ code: 'FANATICAL_DEVOTION', rating: -1 }, { code: 'COMFY_CHAIRS', rating: -1 }]
     const domains = [{ code: 'first', items }, { code: 'last', items: moreItems }]
     const render = domainFilter =>
-      mount(
-        <SummaryGrid
-          domains={domains}
-          header={<SummaryHeader title="Trauma" tooltip={'tooltip'} />}
-          domainFilter={domainFilter}
-          i18n={i18n}
-          getSummaryCode={() => {}}
-        />
-      )
+      mount(<SummaryGrid header="My Summary" domains={domains} domainFilter={domainFilter} i18n={i18n} />)
 
     it('renders all of the items', () => {
       const text = render().text()
@@ -150,15 +123,7 @@ describe('<SummaryGrid />', () => {
     const N = 500
     const items = new Array(N).fill().map((_, i) => ({ code: `${i}`, rating: -1 }))
     const domains = [{ code: 'first', items }]
-    const render = () =>
-      mount(
-        <SummaryGrid
-          header={<SummaryHeader title="Trauma" tooltip={'tooltip'} />}
-          domains={domains}
-          i18n={i18n}
-          getSummaryCode={() => {}}
-        />
-      )
+    const render = () => mount(<SummaryGrid header="My Summary" domains={domains} i18n={i18n} />)
 
     it('renders all of the data', () => {
       const text = render().text()

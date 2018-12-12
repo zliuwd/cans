@@ -7,9 +7,8 @@ import SummaryHeader from './SummaryHeader'
 const hasTargetRating = item => item.rating === 1
 const tooltip = 'Includes all "Yes" ratings from the Potentially Traumatic/Adverse Childhood Experiences module.'
 
-const TraumaSummary = ({ domains, i18n, getSummaryCode }) => (
+const TraumaSummary = ({ domains, i18n }) => (
   <SummaryGrid
-    getSummaryCode={getSummaryCode}
     domainFilter={isTraumaDomain}
     domains={domains}
     header={<SummaryHeader title="Trauma" tooltip={tooltip} />}
@@ -20,7 +19,6 @@ const TraumaSummary = ({ domains, i18n, getSummaryCode }) => (
 
 TraumaSummary.propTypes = {
   domains: DomainsPropType,
-  getSummaryCode: PropTypes.func.isRequired,
   i18n: PropTypes.object.isRequired,
 }
 

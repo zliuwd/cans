@@ -15,7 +15,6 @@ describe('AssessmentSummaryCard', () => {
         domains={domains}
         i18n={i18n}
         isUnderSix={isUnderSix}
-        getSummaryCode={() => {}}
       />
     )
 

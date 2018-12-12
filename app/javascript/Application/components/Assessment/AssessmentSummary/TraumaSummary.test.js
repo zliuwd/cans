@@ -8,14 +8,14 @@ import TraumaSummary from './TraumaSummary'
 describe('<TraumaSummary />', () => {
   it('renders a summary grid', () => {
     expect(
-      shallow(<TraumaSummary i18n={i18n} getSummaryCode={() => {}} />)
+      shallow(<TraumaSummary i18n={i18n} />)
         .find(SummaryGrid)
         .exists()
     ).toBe(true)
   })
 
   it('has a Trauma header', () => {
-    expect(shallow(<TraumaSummary i18n={i18n} getSummaryCode={() => {}} />).props().header).toEqual(
+    expect(shallow(<TraumaSummary i18n={i18n} />).props().header).toEqual(
       <SummaryHeader
         title="Trauma"
         tooltip={'Includes all "Yes" ratings from the Potentially Traumatic/Adverse Childhood Experiences module.'}
@@ -25,7 +25,7 @@ describe('<TraumaSummary />', () => {
 
   it('passes i18n info to the summary grid', () => {
     expect(
-      shallow(<TraumaSummary i18n={i18n} getSummaryCode={() => {}} />)
+      shallow(<TraumaSummary i18n={i18n} />)
         .find(SummaryGrid)
         .props().i18n
     ).toBe(i18n)
@@ -44,7 +44,7 @@ describe('<TraumaSummary />', () => {
         ],
       },
     ]
-    const render = () => mount(<TraumaSummary domains={domains} i18n={i18n} getSummaryCode={() => {}} />)
+    const render = () => mount(<TraumaSummary domains={domains} i18n={i18n} />)
 
     it('renders items with a rating of Yes/1', () => {
       const text = render().text()
@@ -64,7 +64,7 @@ describe('<TraumaSummary />', () => {
     const items = [{ code: 'SURPRISE', rating: 1 }, { code: 'FEAR', rating: 1 }]
     const moreItems = [{ code: 'RUTHLESS_EFFICIENCY', rating: 1 }, { code: 'NICE_RED_UNIFORMS', rating: 1 }]
     const domains = [{ code: 'TRM', items }, { code: 'OTHER', items: moreItems }]
-    const render = () => mount(<TraumaSummary domains={domains} i18n={i18n} getSummaryCode={() => {}} />)
+    const render = () => mount(<TraumaSummary domains={domains} i18n={i18n} />)
 
     it('renders all of the Trauma data', () => {
       const text = render().text()
@@ -80,7 +80,7 @@ describe('<TraumaSummary />', () => {
     const N = 500
     const items = new Array(N).fill().map((_, i) => ({ code: `${i}`, rating: 1 }))
     const domains = [{ code: 'TRM', items }]
-    const render = () => mount(<TraumaSummary domains={domains} i18n={i18n} getSummaryCode={() => {}} />)
+    const render = () => mount(<TraumaSummary domains={domains} i18n={i18n} />)
 
     it('renders all of the data', () => {
       const text = render().text()

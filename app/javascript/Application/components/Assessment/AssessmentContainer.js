@@ -46,7 +46,6 @@ class AssessmentContainer extends Component {
       isSubmitWarningShown: false,
       isSaveButtonEnabled: false,
       focusedCaregiverId: '',
-      summaryCodes: {},
     }
   }
 
@@ -70,37 +69,9 @@ class AssessmentContainer extends Component {
     this.setState({ isEditable })
   }
 
-  isSameArray = (a, b) => {
-    return a.join() === b.join()
-  }
-
-  getSummaryCode = (name, value) => {
-    const temp = {}
-    temp[name] = value
-    if (!this.state.summaryCodes[name]) {
-      this.setState({
-        summaryCodes: {
-          ...this.state.summaryCodes,
-          ...temp,
-        },
-      })
-    } else if (!this.isSameArray(this.state.summaryCodes[name], value)) {
-      this.setState({
-        summaryCodes: {
-          ...this.state.summaryCodes,
-          ...temp,
-        },
-      })
-    }
-  }
-
-  handleSummaryCode = () => {
-    return this.state.summaryCodes
-  }
-
   initHeaderButtons(isSaveButtonEnabled) {
     const { assessment, i18n } = this.state
-    const node = <PrintAssessment assessment={assessment} i18n={i18n} summaryCodes={this.handleSummaryCode} />
+    const node = <PrintAssessment assessment={assessment} i18n={i18n} />
     const leftButton = buildSaveAssessmentButton(this.handleSaveAssessment, isSaveButtonEnabled)
     const rightButton = <PrintButton node={node} isEnabled={true} />
     this.props.pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
@@ -403,7 +374,6 @@ class AssessmentContainer extends Component {
         />
 
         <AssessmentSummaryCard
-          getSummaryCode={this.getSummaryCode}
           assessmentStatus={assessment.status}
           domains={assessment && assessment.state && assessment.state.domains}
           i18n={i18n}

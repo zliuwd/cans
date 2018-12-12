@@ -9,9 +9,8 @@ const hasTargetRating = item => item.rating === target
 const tooltip =
   'Ratings of 3 from all domains except Strengths. This rating indicates that the need is dangerous or disabling.'
 
-const ImmediateActionRequiredSummary = ({ domains, i18n, getSummaryCode }) => (
+const ImmediateActionRequiredSummary = ({ domains, i18n }) => (
   <SummaryGrid
-    getSummaryCode={getSummaryCode}
     domainFilter={isNeedsDomain}
     domains={domains}
     header={<SummaryHeader title="Immediate Action Required" tooltip={tooltip} />}
@@ -22,7 +21,6 @@ const ImmediateActionRequiredSummary = ({ domains, i18n, getSummaryCode }) => (
 
 ImmediateActionRequiredSummary.propTypes = {
   domains: DomainsPropType,
-  getSummaryCode: PropTypes.func.isRequired,
   i18n: PropTypes.object.isRequired,
 }
 
