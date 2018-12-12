@@ -89,8 +89,8 @@ export const addClientSearchCrumbIfNeeded = (elements, navigateTo) => {
 
 export const addChangeLogCrumbIfNeeded = (elements, navigateTo, url) => {
   if (navigateTo === navigation.ASSESSMENT_CHANGELOG) {
-    elements.push(<Link to={'#'}>CHANGE LOG</Link>)
+    elements.push('Change Log')
   } else if (crumbsGroup.changelog.includes(navigateTo)) {
-    elements.push(<Link to={`${url}/changelog`}>CHANGE LOG</Link>)
+    elements.push(<Link to={`${url}/changelog`}>Change Log</Link>)
   }
 }
