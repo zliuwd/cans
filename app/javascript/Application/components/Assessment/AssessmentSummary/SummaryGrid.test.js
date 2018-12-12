@@ -5,42 +5,40 @@ import { DataGrid } from '@cwds/components'
 import SummaryGrid from './SummaryGrid'
 
 describe('<SummaryGrid />', () => {
-  describe('Overall', () => {
-    const render = (header = 'My Summary') => shallow(<SummaryGrid header={header} i18n={i18n} />)
+  const render = (header = 'My Summary') => shallow(<SummaryGrid header={header} i18n={i18n} />)
 
-    it('renders a data grid', () => {
-      expect(
-        render()
-          .find(DataGrid)
-          .exists()
-      ).toBe(true)
-    })
+  it('renders a data grid', () => {
+    expect(
+      render()
+        .find(DataGrid)
+        .exists()
+    ).toBe(true)
+  })
 
-    it('is striped', () => {
-      expect(render().props().className).toContain('-striped')
-    })
+  it('is striped', () => {
+    expect(render().props().className).toContain('-striped')
+  })
 
-    it('has a single column', () => {
-      expect(render().props().columns.length).toBe(1)
-    })
+  it('has a single column', () => {
+    expect(render().props().columns.length).toBe(1)
+  })
 
-    it('has a header', () => {
-      expect(render('Hello Summary').props().columns[0].Header).toBe('Hello Summary')
-    })
+  it('has a header', () => {
+    expect(render('Hello Summary').props().columns[0].Header).toBe('Hello Summary')
+  })
 
-    it('has no No Data prompt', () => {
-      const NoData = render().props().NoDataComponent
+  it('has no No Data prompt', () => {
+    const NoData = render().props().NoDataComponent
 
-      expect(shallow(<NoData />).type()).toBe(null)
-    })
+    expect(shallow(<NoData />).type()).toBe(null)
+  })
 
-    it('has no minimum rows', () => {
-      expect(render().props().minRows).toBe(0)
-    })
+  it('has no minimum rows', () => {
+    expect(render().props().minRows).toBe(0)
+  })
 
-    it('has no pagination', () => {
-      expect(render().props().showPagination).toBe(false)
-    })
+  it('has no pagination', () => {
+    expect(render().props().showPagination).toBe(false)
   })
 
   describe('with some items', () => {
@@ -107,15 +105,14 @@ describe('<SummaryGrid />', () => {
 
     it('skips domains that do not pass filter', () => {
       const onlyLast = ({ code }) => code === 'last'
-      const wrapper = render(onlyLast)
-      const text = wrapper.text()
+      const text = render(onlyLast).text()
+
       expect(text).not.toContain('Surprise')
       expect(text).not.toContain('Fear')
       expect(text).not.toContain('Ruthless Efficiency')
       expect(text).not.toContain('Nice Red Uniforms')
       expect(text).toContain('Fanatical Devotion')
       expect(text).toContain('Comfy Chairs')
-      wrapper.unmount()
     })
   })
 
