@@ -73,7 +73,7 @@ module ResourceHelper
     click_button 'I Agree'
     find('#cancel-assessment').click
     expect(page).to have_content 'Complete'
-    expect(page).to have_content('ADD CANS', wait: 30)
+    expect(page).to have_content('ADD CANS', wait: 45)
     save_assessment_form_age_0_5
   end
 
