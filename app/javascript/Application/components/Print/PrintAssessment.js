@@ -217,6 +217,8 @@ class PrintAssessment extends PureComponent {
 
   render() {
     const { isAssessmentUnderSix } = this.state
+    const handleStatus = this.props.assessment.status
+    const status = 'COMPLETED'
     const { i18n } = this.props
     const imaRating = 3
     const domains = this.props.assessment.state.domains
@@ -234,7 +236,7 @@ class PrintAssessment extends PureComponent {
     return (
       <div>
         {this.renderHeader()}
-        {Object.keys(summaryCodes).length < maxObjectSize ? null : (
+        {handleStatus !== status ? null : (
           <PrintSummary renderSummaryRecord={this.renderSummaryRecord} summaryCodes={summaryCodes} />
         )}
         {domains.map(domain => {
