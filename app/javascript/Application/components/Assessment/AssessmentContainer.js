@@ -90,6 +90,7 @@ class AssessmentContainer extends Component {
     return (
       isValidDate &&
       isEditable &&
+      assessment.status !== 'COMPLETED' &&
       assessment.state.under_six !== undefined &&
       Boolean(assessment.event_date) &&
       isReadyForAction(assessmentServiceStatus)
@@ -371,12 +372,14 @@ class AssessmentContainer extends Component {
           handleWarningShow={this.handleWarningShow}
           isCaregiverWarningShown={this.state.isCaregiverWarningShown}
         />
+
         <AssessmentSummaryCard
           assessmentStatus={assessment.status}
           domains={assessment && assessment.state && assessment.state.domains}
           i18n={i18n}
           isUnderSix={Boolean(isUnderSix)}
         />
+
         <Assessment
           assessment={assessment}
           i18n={i18n}
@@ -396,8 +399,7 @@ class AssessmentContainer extends Component {
             <div className={'permission-warning-alert'}>
               <CloseableAlert
                 type={alertType.WARNING}
-                message="This assessment was initiated in a county that is different than the User’s County. Saving and
-              Submitting are disabled"
+                message="Saving and completing are disabled due to assessment status or county of jurisdiction."
                 isCloseable={false}
                 isAutoCloseable={false}
               />

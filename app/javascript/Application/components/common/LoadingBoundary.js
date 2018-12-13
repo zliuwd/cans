@@ -49,7 +49,6 @@ LoadingBoundary.propTypes = {
 
 LoadingBoundary.defaultProps = {
   isHiddenWhileLoading: true,
-  eagerRefreshFlagObject: null,
 }
 
 export default LoadingBoundary

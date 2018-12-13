@@ -429,8 +429,7 @@ describe('<AssessmentContainer />', () => {
         expect(wrapper.find(CloseableAlert).length).toBe(1)
         const warning = wrapper.find(CloseableAlert).first()
         expect(warning.props().message).toBe(
-          'This assessment was initiated in a county that is different than the User’s ' +
-            'County. Saving and Submitting are disabled'
+          'Saving and completing are disabled due to assessment status or county of jurisdiction.'
         )
         expect(wrapper.find(Typography).length).toBe(0)
       })

@@ -9,6 +9,7 @@ export const headerRow = {
   display: 'flex',
   flexDirection: 'row',
   margin: '0.5rem 0 0.5rem 0',
+  width: '107%',
 }
 
 export const headerRecord = {
@@ -110,26 +111,9 @@ export const alertSignBox = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  border: 'thin solid gray',
   marginBottom: '0.5rem',
+  marginLeft: '18rem',
 }
-
-export const alertSvgStyle = {
-  color: 'black',
-  width: '2rem',
-  height: '2rem',
-}
-
-export const exclamationTriangleViewPort = '0 0 576 512'
-
-export const exclamationTriangle =
-  'M569.517 440.013C587.975 472.007 564.806 ' +
-  '512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985' +
-  'c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 ' +
-  '20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.' +
-  '346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-' +
-  '4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.38' +
-  '3c-6.884 0-12.356 5.78-11.981 12.654z'
 
 export const timeStampStyle = {
   textAlign: 'right',
@@ -147,4 +131,9 @@ export const thinGrayBorder = {
 
 export const textAlignCenter = {
   textAlign: 'center',
+}
+
+export const textAlignLeft = {
+  textAlign: 'left',
+  border: 'thin solid gray',
 }

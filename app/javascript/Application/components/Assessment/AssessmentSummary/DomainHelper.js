@@ -20,3 +20,10 @@ export const isStrengthsDomain = ({ code }) => STRENGTH_DOMAINS.includes(code)
 export const isTraumaDomain = ({ code }) => code === TRAUMA_DOMAIN
 
 export const isNeedsDomain = domain => !isStrengthsDomain(domain) && !isTraumaDomain(domain)
+
+export const itemsValue = (domains, domainFilter, itemFilter) =>
+  domains
+    .filter(domainFilter)
+    .map(domain => domain.items)
+    .reduce((allItems, items) => allItems.concat(items), [])
+    .filter(itemFilter)

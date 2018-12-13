@@ -15,7 +15,9 @@ const CompleteAssessmentButton = ({ onSubmitAssessment, disabled }) => (
 )
 
 CompleteAssessmentButton.propTypes = {
-  disabled: PropTypes.oneOfType([PropTypes.bool]),
+  /* eslint-disable react/boolean-prop-naming */
+  disabled: PropTypes.bool,
+  /* eslint-enable react/boolean-prop-naming */
   onSubmitAssessment: PropTypes.func.isRequired,
 }
 
