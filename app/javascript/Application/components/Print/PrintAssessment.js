@@ -231,7 +231,6 @@ class PrintAssessment extends PureComponent {
       'Immediate Action Required': this.getCodes(filteredDomains, isNeedsDomain, item => item.rating === imaRating),
       Trauma: this.getCodes(domains, isTraumaDomain, item => item.rating === 1),
     }
-    const maxObjectSize = 1
 
     return (
       <div>
