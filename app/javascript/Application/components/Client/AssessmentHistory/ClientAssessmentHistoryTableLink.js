@@ -14,7 +14,8 @@ const ClientAssessmentHistoryLink = ({ original }) => {
 
 ClientAssessmentHistoryLink.propTypes = {
   original: PropTypes.shape({
-    number: PropTypes.number,
+    id: PropTypes.number,
+    navFrom: PropTypes.string,
   }).isRequired,
 }
 

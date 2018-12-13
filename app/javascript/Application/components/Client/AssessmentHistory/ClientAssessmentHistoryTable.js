@@ -66,7 +66,7 @@ const ClientAssessmentHistoryTable = props => {
         minRows={minRows}
         defaultPageSize={defaultPageSize}
         columns={columnConfig}
-        className={'data-grid-client-asssessment-history'}
+        className={'data-grid-client-assessment-history'}
       />
     </Row>
   ) : null

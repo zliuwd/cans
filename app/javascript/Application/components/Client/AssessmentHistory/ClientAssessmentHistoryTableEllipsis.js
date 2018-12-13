@@ -9,7 +9,8 @@ const ClientAssessmentHistoryTableEllipsis = ({ original }) => {
 
 ClientAssessmentHistoryTableEllipsis.propTypes = {
   original: PropTypes.shape({
-    number: PropTypes.number,
+    id: PropTypes.number,
+    person: PropTypes.object,
   }).isRequired,
 }
 
