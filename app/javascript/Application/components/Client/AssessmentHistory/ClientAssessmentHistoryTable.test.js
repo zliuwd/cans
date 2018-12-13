@@ -11,7 +11,7 @@ import ClientAssessmentHistoryTableEllipsis from './ClientAssessmentHistoryTable
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
 import { navigation } from '../../../util/constants'
 
-const columnWidths = [190, 250, 140, 170, 270, 25]
+const columnWidths = [190, 250, 140, 170, 260, 35]
 const columnConfig = [
   {
     Header: 'Assessment Date',
