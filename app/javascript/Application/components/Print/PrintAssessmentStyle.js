@@ -8,7 +8,8 @@ export const headerBlock = {
 export const headerRow = {
   display: 'flex',
   flexDirection: 'row',
-  margin: '1rem 0 1rem 0',
+  margin: '0.5rem 0 0.5rem 0',
+  width: '107%',
 }
 
 export const headerRecord = {
