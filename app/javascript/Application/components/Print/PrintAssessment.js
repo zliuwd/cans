@@ -1,11 +1,9 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { getI18nByCode } from '../Assessment/I18nHelper'
+import PrintSummary from './PrintSummary'
 import {
   alertSignBox,
-  alertSvgStyle,
-  exclamationTriangle,
-  exclamationTriangleViewPort,
   headerBlock,
   headerNameRow,
   headerRecord,
@@ -27,10 +25,16 @@ import {
   timeStampStyle,
   thinGrayBorder,
 } from './PrintAssessmentStyle'
-import { formatClientName } from '../Client/Client.helper'
+import { formatClientName, clientCaseReferralNumber } from '../Client/Client.helper'
 import { isoToLocalDate } from '../../util/dateHelper'
 import { shouldDomainBeRendered, shouldItemBeRendered } from '../Assessment/AssessmentHelper'
 import { totalScoreCalculation } from '../Assessment/DomainScoreHelper.js'
+import {
+  isStrengthsDomain,
+  isNeedsDomain,
+  isTraumaDomain,
+  itemsValue,
+} from '../Assessment/AssessmentSummary/DomainHelper'
 import moment from 'moment'
 
 const isItemHidden = item => item.confidential_by_default && item.confidential
@@ -133,12 +137,9 @@ class PrintAssessment extends PureComponent {
   renderConfidentialWarningAlert = () => {
     return (
       <div style={alertSignBox}>
-        <svg viewBox={exclamationTriangleViewPort} style={alertSvgStyle}>
-          <path d={exclamationTriangle} />
-        </svg>
         <strong>
-          Since there is no Authorization for Release of Information on file, prior to sharing this CANS assessment
-          redact the following domain item numbers: 7, 48, and EC.41.
+          By selecting NO, Items 7, 48, and EC 41 (Substance Use Disorder Items) from this CANS assessment will be
+          redacted when printed.
         </strong>
       </div>
     )
@@ -148,6 +149,12 @@ class PrintAssessment extends PureComponent {
     <div style={headerRecord}>
       <strong>{title}</strong>
       <span>{value}</span>
+    </div>
+  )
+
+  renderSummaryRecord = (title, value) => (
+    <div style={headerRecord}>
+      <strong>{title}</strong> <br /> {value && value.map(val => <div key={val}>{val}</div>)}
     </div>
   )
 
@@ -169,7 +176,7 @@ class PrintAssessment extends PureComponent {
     const countyName = assessment.county && assessment.county.name ? `${assessment.county.name} County` : ''
     const eventDate = isoToLocalDate(assessment.event_date)
     const conductedBy = assessment.conducted_by || ''
-    const caseNumber = (assessment.the_case || {}).external_id
+    const caseReferralNumber = clientCaseReferralNumber(assessment.service_source)
     const hasCaregiver = assessment.has_caregiver
     const canReleaseInfo = assessment.can_release_confidential_info
     const isUnderSix = this.props.assessment.state.under_six
@@ -183,13 +190,13 @@ class PrintAssessment extends PureComponent {
         <div style={headerRow}>
           {this.renderHeaderRecord('Date', eventDate)}
           {this.renderHeaderRecord('Conducted by', conductedBy)}
-          {this.renderHeaderRecord('Case Number', caseNumber)}
+          {this.renderHeaderRecord(caseReferralNumber, assessment.service_source_ui_id)}
           {this.renderHeaderRecord('Complete as', assessment.completed_as)}
         </div>
         <div style={headerRow}>
           {this.renderHeaderRadioGroupRecord('Child/Youth has Caregiver?', hasCaregiver)}
           {this.renderHeaderRadioGroupRecord('Authorization for release of information on file?', canReleaseInfo)}
-          {this.renderHeaderRadioGroupRecord('Age', isUnderSix, '0-5', '6-21')}
+          {this.renderHeaderRadioGroupRecord('Age Template', isUnderSix, '0-5', '6-21')}
         </div>
         {!canReleaseInfo && this.renderConfidentialWarningAlert()}
         <span style={timeStampStyle}>{moment().format('MMMM D YYYY, h:mm:ss a')}</span>
@@ -197,13 +204,39 @@ class PrintAssessment extends PureComponent {
     )
   }
 
+  getCodes(domains, domainFilter, itemFilter) {
+    const items = itemsValue(domains, domainFilter, itemFilter)
+
+    const codes = items.map(item => {
+      const code = getI18nByCode(this.props.i18n, item.code)
+      return (code && code._title_) || ''
+    })
+
+    return codes
+  }
+
   render() {
     const { isAssessmentUnderSix } = this.state
     const { i18n } = this.props
+    const imaRating = 3
     const domains = this.props.assessment.state.domains
+    const filteredDomains = domains.filter(
+      domain => (this.state.isAssessmentUnderSix ? domain.under_six : domain.above_six)
+    )
+    const summaryCodes = {
+      Strengths: this.getCodes(filteredDomains, isStrengthsDomain, item => item.rating === 0 || item.rating === 1),
+      'Action Required': this.getCodes(filteredDomains, isNeedsDomain, item => item.rating === 2),
+      'Immediate Action Required': this.getCodes(filteredDomains, isNeedsDomain, item => item.rating === imaRating),
+      Trauma: this.getCodes(domains, isTraumaDomain, item => item.rating === 1),
+    }
+    const maxObjectSize = 1
+
     return (
       <div>
         {this.renderHeader()}
+        {Object.keys(summaryCodes).length < maxObjectSize ? null : (
+          <PrintSummary renderSummaryRecord={this.renderSummaryRecord} summaryCodes={summaryCodes} />
+        )}
         {domains.map(domain => {
           if (!shouldDomainBeRendered(isAssessmentUnderSix, domain)) return null
           const domainI18n = getI18nByCode(i18n, domain.code)
