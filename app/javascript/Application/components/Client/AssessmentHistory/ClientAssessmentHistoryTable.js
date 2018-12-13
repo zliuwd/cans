@@ -9,7 +9,7 @@ import ClientAssessmentHistoryTableDate from './ClientAssessmentHistoryTableDate
 import ClientAssessmentHistoryTableUpdatedBy from './ClientAssessmentHistoryTableUpdatedBy'
 import ClientAssessmentHistoryTableEllipsis from './ClientAssessmentHistoryTableEllipsis'
 
-const columnWidths = [190, 250, 140, 170, 270, 25]
+const columnWidths = [190, 250, 140, 170, 260, 35]
 const columnConfig = [
   {
     Header: 'Assessment Date',
