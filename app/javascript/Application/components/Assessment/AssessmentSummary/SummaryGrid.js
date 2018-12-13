@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { DomainsPropType } from './DomainHelper'
+import { DomainsPropType, itemsValue } from './DomainHelper'
 import { getI18nByCode } from '../I18nHelper'
 import { DataGrid } from '@cwds/components'
 
@@ -13,11 +13,7 @@ const SummaryGrid = ({ domainFilter, domains, header, i18n, itemFilter }) => {
     },
   ]
 
-  const items = domains
-    .filter(domainFilter)
-    .map(domain => domain.items)
-    .reduce((allItems, items) => allItems.concat(items), [])
-    .filter(itemFilter)
+  const items = itemsValue(domains, domainFilter, itemFilter)
 
   const codes = items.map(item => {
     const code = getI18nByCode(i18n, item.code)

@@ -29,7 +29,12 @@ import { formatClientName, clientCaseReferralNumber } from '../Client/Client.hel
 import { isoToLocalDate } from '../../util/dateHelper'
 import { shouldDomainBeRendered, shouldItemBeRendered } from '../Assessment/AssessmentHelper'
 import { totalScoreCalculation } from '../Assessment/DomainScoreHelper.js'
-import { isStrengthsDomain, isNeedsDomain, isTraumaDomain } from '../Assessment/AssessmentSummary/DomainHelper'
+import {
+  isStrengthsDomain,
+  isNeedsDomain,
+  isTraumaDomain,
+  itemsValue,
+} from '../Assessment/AssessmentSummary/DomainHelper'
 import moment from 'moment'
 
 const isItemHidden = item => item.confidential_by_default && item.confidential
@@ -200,11 +205,7 @@ class PrintAssessment extends PureComponent {
   }
 
   getCodes(domains, domainFilter, itemFilter) {
-    const items = domains
-      .filter(domainFilter)
-      .map(domain => domain.items)
-      .reduce((allItems, items) => allItems.concat(items), [])
-      .filter(itemFilter)
+    const items = itemsValue(domains, domainFilter, itemFilter)
 
     const codes = items.map(item => {
       const code = getI18nByCode(this.props.i18n, item.code)
