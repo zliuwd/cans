@@ -13,6 +13,8 @@ describe('<Ellipsis />', () => {
       const wrapper = shallow(<Ellipsis {...defaultProps} />)
       expect(wrapper.find('Button').length).toBe(1)
       expect(wrapper.find('Button').props().id).toBe('icon-1234')
+      expect(wrapper.find('Button').props().type).toBe('button')
+      expect(wrapper.find('Button').props()['aria-label']).toBe('Ellipsis Menu Button')
     })
 
     it('Icon', () => {

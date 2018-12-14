@@ -34,10 +34,14 @@ export function removeDuplicateBreadCrumb(elements) {
 }
 
 export const crumbsGroup = Object.freeze({
-  staffProfile: [navigation.STAFF_LIST, navigation.STAFF_CHILD_PROFILE, navigation.STAFF_ASSESSMENT_EDIT],
+  staffProfile: [
+    navigation.STAFF_LIST,
+    navigation.STAFF_CHILD_PROFILE,
+    navigation.STAFF_ASSESSMENT_EDIT,
+    navigation.STAFF_ASSESSMENT_ADD,
+  ],
   clientList: [
     navigation.CHILD_LIST,
-    navigation.ASSESSMENT_ADD,
     navigation.ASSESSMENT_EDIT,
     navigation.CHILD_PROFILE,
     navigation.CHILD_PROFILE_ADD,
@@ -51,6 +55,7 @@ export const crumbsGroup = Object.freeze({
     navigation.ASSESSMENT_ADD,
     navigation.ASSESSMENT_EDIT,
     navigation.SEARCH_ASSESSMENT_EDIT,
+    navigation.SEARCH_ASSESSMENT_ADD,
     navigation.SEARCH_CHILD_PROFILE,
     navigation.ASSESSMENT_CHANGELOG,
   ],
@@ -60,7 +65,12 @@ export const crumbsGroup = Object.freeze({
     navigation.SEARCH_ASSESSMENT_EDIT,
     navigation.ASSESSMENT_CHANGELOG,
   ],
-  search: [navigation.CLIENT_SEARCH, navigation.SEARCH_ASSESSMENT_EDIT, navigation.SEARCH_CHILD_PROFILE],
+  search: [
+    navigation.CLIENT_SEARCH,
+    navigation.SEARCH_ASSESSMENT_EDIT,
+    navigation.SEARCH_CHILD_PROFILE,
+    navigation.SEARCH_ASSESSMENT_ADD,
+  ],
   changelog: [navigation.ASSESSMENT_CHANGELOG],
 })
 

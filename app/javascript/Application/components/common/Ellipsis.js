@@ -25,7 +25,13 @@ export default class Ellipsis extends React.Component {
     const { id, clientId } = this.props
     return (
       <div>
-        <Button id={`icon-${id}`} onClick={this.toggle} className="icon-ellipsis">
+        <Button
+          id={`icon-${id}`}
+          className="icon-ellipsis"
+          type="button"
+          aria-label="Ellipsis Menu Button"
+          onClick={this.toggle}
+        >
           <Icon icon="ellipsis-v" />
         </Button>
         <Popover placement="bottom-start" isOpen={this.state.popoverOpen} target={`icon-${id}`} toggle={this.toggle}>
