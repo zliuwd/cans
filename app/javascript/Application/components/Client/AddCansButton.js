@@ -27,7 +27,7 @@ class AddCansButton extends Component {
     return this.isDisabled() ? (
       this.renderButton()
     ) : (
-      <Link to={`/clients/${clientIdentifier}/assessments`}>{this.renderButton()}</Link>
+      <Link to={`./${clientIdentifier}/assessments`}>{this.renderButton()}</Link>
     )
   }
 }

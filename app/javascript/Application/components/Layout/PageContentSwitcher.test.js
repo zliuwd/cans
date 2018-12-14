@@ -77,6 +77,11 @@ describe('PageContentSwitcher', () => {
     expect(wrapper.find(AssessmentContainer).length).toBe(1)
   })
 
+  it('will switch to AssessmentContainer when nav to navigation.SEARCH_ASSESSMENT_ADD/>', () => {
+    const wrapper = getWrapper(navigation.SEARCH_ASSESSMENT_ADD)
+    expect(wrapper.find(AssessmentContainer).length).toBe(1)
+  })
+
   it('will switch to SupervisorDashboard when nav to navigation.STAFF_LIST/>', () => {
     const wrapper = getWrapper(navigation.STAFF_LIST)
     expect(wrapper.find(SupervisorDashboard).length).toBe(1)
@@ -94,6 +99,11 @@ describe('PageContentSwitcher', () => {
 
   it('will switch to AssessmentContainer when nav to navigation.STAFF_ASSESSMENT_EDIT/>', () => {
     const wrapper = getWrapper(navigation.STAFF_ASSESSMENT_EDIT)
+    expect(wrapper.find(AssessmentContainer).length).toBe(1)
+  })
+
+  it('will switch to AssessmentContainer when nav to navigation.STAFF_ASSESSMENT_ADD/>', () => {
+    const wrapper = getWrapper(navigation.STAFF_ASSESSMENT_ADD)
     expect(wrapper.find(AssessmentContainer).length).toBe(1)
   })
 

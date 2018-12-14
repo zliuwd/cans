@@ -4,6 +4,7 @@ import { Routes } from './'
 import { Route, Switch } from 'react-router-dom'
 import { navigation } from '../util/constants'
 import PermissionRedirect from './PermissionRedirect'
+import SearchRoutes from './SearchRoutes'
 
 describe('<Router />', () => {
   describe('#render', () => {
@@ -43,6 +44,10 @@ describe('<Router />', () => {
       expect(route.find(PermissionRedirect).exists()).toBe(true)
     })
 
+    it('renders with 1 <SearchRoutes /> component', () => {
+      expect(getLength(SearchRoutes)).toBe(1)
+    })
+
     it('renders a client list route', () => {
       testRoute('/clients', navigation.CHILD_LIST)
     })
@@ -67,18 +72,6 @@ describe('<Router />', () => {
       testRoute('/clients/:clientId/assessments/:id', navigation.ASSESSMENT_EDIT)
     })
 
-    it('renders a search route', () => {
-      testRoute('/search', navigation.CLIENT_SEARCH)
-    })
-
-    it('renders route when use search to access assessment edit', () => {
-      testRoute('/search/clients/:clientId/assessments/:id', navigation.SEARCH_ASSESSMENT_EDIT)
-    })
-
-    it('renders route when use search to access client list', () => {
-      testRoute('/search/clients/:clientId', navigation.SEARCH_CHILD_PROFILE)
-    })
-
     it('renders a supervisor dashboard route', () => {
       testRoute('/staff', navigation.STAFF_LIST)
     })
@@ -93,6 +86,10 @@ describe('<Router />', () => {
 
     it('renders a route for staff access assessment edit', () => {
       testRoute('/staff/:staffId/clients/:clientId/assessments/:id', navigation.STAFF_ASSESSMENT_EDIT)
+    })
+
+    it('renders a route for staff access assessment add', () => {
+      testRoute('/staff/:staffId/clients/:clientId/assessments/', navigation.STAFF_ASSESSMENT_ADD)
     })
 
     it('renders a route for access changelog', () => {

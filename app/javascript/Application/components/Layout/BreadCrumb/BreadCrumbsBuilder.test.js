@@ -64,7 +64,7 @@ describe('<BreadCrumbsBuilder />', () => {
       expect(textOfBreadCrumb(component)).toEqual(['Client List', 'Client, Name', 'CANS Assessment Form'])
     })
 
-    it('will render the correct BreadCrumbs for caseWorker Search Flow', () => {
+    it('will render the BreadCrumbs for caseWorker Search Flow', () => {
       const component = wrapper(clientFlow, 'SEARCH_ASSESSMENT_EDIT')
       expect(textOfBreadCrumb(component)).toEqual([
         'Client List',

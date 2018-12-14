@@ -48,7 +48,7 @@ export const addChildYouthListCrumbIfNeeded = (elements, navigateTo) => {
 }
 
 export const addStaffChildProfileCrumbIfNeeded = (elements, navigateTo, client, staffPerson) => {
-  if (navigateTo === navigation.STAFF_ASSESSMENT_EDIT) {
+  if (navigateTo === navigation.STAFF_ASSESSMENT_EDIT || navigateTo === navigation.STAFF_ASSESSMENT_ADD) {
     elements.push(
       <Link to={`/staff/${staffPerson.identifier}/clients/${client.identifier}`}>{formatName(client)}</Link>
     )
@@ -59,6 +59,8 @@ export const addChildProfileCrumbIfNeeded = (elements, navigateTo, client, staff
   if (selfChecker(navigateTo, selfCheckerKeyWords.PROFILE_OVERALL)) {
     elements.push(formatName(client))
   } else if (navigateTo === navigation.SEARCH_ASSESSMENT_EDIT) {
+    elements.push(<Link to={`/search/clients/${client.identifier}`}>{formatName(client)}</Link>)
+  } else if (navigateTo === navigation.SEARCH_ASSESSMENT_ADD) {
     elements.push(<Link to={`/search/clients/${client.identifier}`}>{formatName(client)}</Link>)
   } else if (crumbsGroup.clientProfile.includes(navigateTo)) {
     elements.push(<Link to={`/clients/${client.identifier}`}>{formatName(client)}</Link>)
