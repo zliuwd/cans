@@ -1,24 +1,49 @@
-import React from 'react'
-import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { CardHeader, CardBody, CardTitle } from '@cwds/components'
 import SubordinateInfoTable from './SubordinateInfoTable'
-import { staffInfoDefaultProps, staffInfoPropTypes } from '../../StaffHelper'
+import { staffInfoDefaultProps, staffInfoShape } from '../../StaffHelper'
 import { formatClientName } from '../../../Client/Client.helper'
+import { LoadingState, loadingStatePropType, isInProgress } from '../../../../util/loadingHelper'
+import LoadableCard from '../../../common/loading/LoadableCard'
 
-const SubordinateInfoCard = ({ staffInfo }) => {
-  return (
-    <Card className={'card supervisor-card'}>
-      <CardHeader>
-        <CardTitle className={'card-title-fix'}>{formatClientName(staffInfo.staff_person)}</CardTitle>
-      </CardHeader>
-      <CardBody>
-        <SubordinateInfoTable staffInfo={staffInfo} />
-      </CardBody>
-    </Card>
+class SubordinateInfoCard extends PureComponent {
+  renderCardHeader = () => (
+    <CardHeader>
+      <CardTitle className={'card-title-fix'}>{formatClientName(this.props.staffInfo.staff_person)}</CardTitle>
+    </CardHeader>
   )
+
+  renderCardBody = () => (
+    <CardBody>
+      <SubordinateInfoTable staffInfo={this.props.staffInfo} />
+    </CardBody>
+  )
+
+  render() {
+    const isLoading = isInProgress(this.props.loadingState)
+    return (
+      <LoadableCard
+        isLoading={isLoading}
+        renderCardHeader={this.renderCardHeader}
+        renderCardBody={this.renderCardBody}
+        className={'card supervisor-card'}
+        isHeaderLoadable={true}
+        loadingGridRows={3}
+        loadingGridColumns={3}
+      />
+    )
+  }
 }
 
-SubordinateInfoCard.propTypes = staffInfoPropTypes
+SubordinateInfoCard.propTypes = {
+  loadingState: loadingStatePropType,
+  staffInfo: PropTypes.shape(staffInfoShape),
+}
 
-SubordinateInfoCard.defaultProps = staffInfoDefaultProps
+SubordinateInfoCard.defaultProps = {
+  loadingState: LoadingState.waiting,
+  staffInfo: staffInfoDefaultProps,
+}
 
 export default SubordinateInfoCard

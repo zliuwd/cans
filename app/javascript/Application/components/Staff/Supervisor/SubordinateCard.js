@@ -1,23 +1,46 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
-import StaffTable from '../StaffTable'
-import { LoadingState } from '../../../util/loadingHelper'
-import { staffPropType } from '../StaffHelper'
 import './style.sass'
+import { CardHeader, CardBody, CardTitle } from '@cwds/components'
+import StaffTable from '../StaffTable'
+import { isInProgress, LoadingState } from '../../../util/loadingHelper'
+import { staffPropType } from '../StaffHelper'
+import LoadableCard from '../../common/loading/LoadableCard'
+import LoadableButton from '../../common/loading/LoadableButton'
+import SubordinateLoadingBoundary from './SubordinateLoadingBoundary'
 
-const SubordinateCard = ({ loadingState, staff }) => {
-  const loadingProp = loadingState === LoadingState.updating ? 'true' : undefined
-  return (
-    <Card className={'card supervisor-card'} loading={loadingProp}>
-      <CardHeader>
+class SubordinateCard extends PureComponent {
+  renderCardHeader = () => {
+    const isLoading = isInProgress(this.props.loadingState)
+    return (
+      <CardHeader className={'card-header-fix'}>
         <CardTitle className={'card-title-fix'}>Assigned Staff</CardTitle>
+        <SubordinateLoadingBoundary>
+          <LoadableButton color={'primary'} caption={'Hello'} isLoading={isLoading} />
+        </SubordinateLoadingBoundary>
       </CardHeader>
-      <CardBody>
-        <StaffTable staff={staff} />
-      </CardBody>
-    </Card>
+    )
+  }
+
+  renderCardBody = () => (
+    <CardBody>
+      <StaffTable staff={this.props.staff} />
+    </CardBody>
   )
+
+  render() {
+    const isLoading = this.props.loadingState === LoadingState.updating
+    return (
+      <LoadableCard
+        isLoading={isLoading}
+        renderCardHeader={this.renderCardHeader}
+        renderCardBody={this.renderCardBody}
+        className={'card supervisor-card'}
+        isHeaderLoadable={false}
+        loadingGridColumns={5}
+      />
+    )
+  }
 }
 
 SubordinateCard.propTypes = {

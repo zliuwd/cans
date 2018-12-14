@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import SubordinateCard from './SubordinateCard'
 import SubordinateLoadingBoundary from './SubordinateLoadingBoundary'
+import LoadableButton from '../../common/loading/LoadableButton'
 
 const SupervisorDashboard = () => (
-  <SubordinateLoadingBoundary>
-    <SubordinateCard />
-  </SubordinateLoadingBoundary>
+  <Fragment>
+    <SubordinateLoadingBoundary>
+      <SubordinateCard />
+    </SubordinateLoadingBoundary>
+  </Fragment>
 )
 
 export default SupervisorDashboard

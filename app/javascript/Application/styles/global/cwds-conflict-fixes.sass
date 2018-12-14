@@ -34,6 +34,22 @@ button
   &:hover
     color: $pine-green
 
+.button-loading
+  animation-duration: 1s
+  animation-fill-mode: forwards
+  animation-iteration-count: infinite
+  animation-name: loadingButtonAnimation
+  animation-timing-function: linear
+  background: linear-gradient(to right, $zumthor 8%, #dddddd 18%, $zumthor 33%)
+  background-size: 700px 104px
+  position: relative
+
+@keyframes loadingButtonAnimation
+  0%
+    background-position: -200px 0
+  100%
+    background-position: 200px 0
+
 //***************************************
 //  @cwds/components DataGrid overrides
 //***************************************

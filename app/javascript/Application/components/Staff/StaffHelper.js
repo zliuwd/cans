@@ -11,22 +11,26 @@ export const staffPropType = PropTypes.shape({
   completed_count: PropTypes.number.isRequired,
 })
 
-export const staffInfoPropTypes = PropTypes.shape({
-  staff_person: PropTypes.shape({
-    first_name: PropTypes.string.isRequired,
-    last_name: PropTypes.string.isRequired,
-    phone: PropTypes.string,
-    phoneExtCode: PropTypes.string,
-    email: PropTypes.string,
-    county: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
+const countyShape = {
+  name: PropTypes.string.isRequired,
+}
+
+const staffPersonShape = {
+  first_name: PropTypes.string.isRequired,
+  last_name: PropTypes.string.isRequired,
+  phone: PropTypes.string,
+  phoneExtCode: PropTypes.string,
+  email: PropTypes.string,
+  county: PropTypes.shape(countyShape).isRequired,
+}
+
+export const staffInfoShape = {
+  staff_person: PropTypes.shape(staffPersonShape).isRequired,
   clients_count: PropTypes.number.isRequired,
   no_prior_cans_count: PropTypes.number.isRequired,
   in_progress_count: PropTypes.number.isRequired,
   completed_count: PropTypes.number.isRequired,
-}).isRequired
+}
 
 export const staffInfoDefaultProps = {
   staff_person: {

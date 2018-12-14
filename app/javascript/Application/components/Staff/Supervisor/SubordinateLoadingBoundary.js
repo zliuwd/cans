@@ -12,19 +12,18 @@ class SubordinateLoadingBoundary extends React.PureComponent {
     }
   }
   async componentDidMount() {
-    this.setState({ loadingState: LoadingState.updating })
+    await this.setState({ loadingState: LoadingState.updating })
     const subordinates = await SubordinateService.fetch()
-    this.setState({
+    await this.setState({
       loadingState: LoadingState.ready,
       subordinates,
     })
   }
+
   render() {
     const children = this.props.children
     const { loadingState, subordinates } = this.state
-    return loadingState === LoadingState.ready
-      ? React.cloneElement(children, { loadingState, staff: subordinates })
-      : React.cloneElement(children, { loadingState })
+    return React.cloneElement(children, { loadingState, staff: subordinates })
   }
 }
 

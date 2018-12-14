@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import ClientsLoadingBoundary from './ClientsLoadingBoundary'
-import { ClientListCard } from '../../Client'
 import UserAccountService from '../../common/UserAccountService'
 import { LoadingState } from '../../../util/loadingHelper'
+import ClientSocialWorkerCard from '../../Client/ClientSocialWorkerCard'
 
 const initialState = {
   staffId: null,
@@ -32,7 +32,7 @@ class CurrentUserCaseLoadPage extends Component {
   render = () => {
     return this.state.dataStatus === LoadingState.ready ? (
       <ClientsLoadingBoundary staffId={this.state.staffId}>
-        <ClientListCard />
+        <ClientSocialWorkerCard />
       </ClientsLoadingBoundary>
     ) : null
   }

@@ -1,0 +1,29 @@
+@import "./../../../styles/global/colors.sass"
+
+//********************
+// ContentLoading
+//********************
+.content-loading-grid
+  padding: 0 !important
+
+.content-loader-placeholder
+  display: block
+  height: 2.4rem
+  border-color: #e5e6e9 #dfe0e4 #d0d1d5
+  border-radius: 3px
+  margin-top: 0.3rem
+  margin-bottom: 0.3rem
+  animation-duration: 1s
+  animation-fill-mode: forwards
+  animation-iteration-count: infinite
+  animation-name: loadingAnimation
+  animation-timing-function: linear
+  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%)
+  background-size: 1600px 104px
+  position: relative
+
+@keyframes loadingAnimation
+  0%
+    background-position: -500px 0
+  100%
+    background-position: 500px 0

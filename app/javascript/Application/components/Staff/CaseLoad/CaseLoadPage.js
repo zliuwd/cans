@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import ClientsLoadingBoundary from './ClientsLoadingBoundary'
-import { ClientListCard } from '../../Client'
 import StaffLoadingBoundary from './SubordinateInfoCard/StaffLoadingBoundary'
 import SubordinateInfoCard from './SubordinateInfoCard/SubordinateInfoCard'
 import { navigation } from '../../../util/constants'
+import ClientSocialWorkerCard from '../../Client/ClientSocialWorkerCard'
 const CaseLoadPage = ({ staffId }) => (
   <Fragment>
     <StaffLoadingBoundary staffId={staffId}>
@@ -12,7 +12,7 @@ const CaseLoadPage = ({ staffId }) => (
     </StaffLoadingBoundary>
 
     <ClientsLoadingBoundary staffId={staffId}>
-      <ClientListCard staffId={staffId} navFrom={navigation.STAFF_LIST} />
+      <ClientSocialWorkerCard navFrom={navigation.STAFF_LIST} staffId={staffId} />
     </ClientsLoadingBoundary>
   </Fragment>
 )

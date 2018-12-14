@@ -3,7 +3,7 @@ import { renderDate, cellTempSwitcher } from './ClientSocialWorkerCardTemplateHe
 import './style.sass'
 
 export function SocialWorkerCardTemplate(navFrom, staffId) {
-  const template = [
+  return [
     {
       id: 'fullName',
       Header: 'Client Name',
@@ -50,5 +50,4 @@ and meet the setting rules of reactTable at same time */
       sortable: true,
     },
   ]
-  return template
 }

@@ -1,9 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Container, Row, Col } from '@cwds/components'
 import SubordinateInfoTotalRecord from './SubordinateInfoTotalRecord'
 import SubordinateInfoCountRecord from './SubordinateInfoCountRecord'
 import SubordinateInfoRecord from './SubordinateInfoRecord'
-import { staffInfoDefaultProps, staffInfoPropTypes } from '../../StaffHelper'
+import { staffInfoDefaultProps, staffInfoShape } from '../../StaffHelper'
 import { formatPhoneWithExtCode } from '../../../../util/formatters'
 
 const SubordinateInfoTable = ({ staffInfo }) => {
@@ -32,7 +33,7 @@ const SubordinateInfoTable = ({ staffInfo }) => {
   )
 }
 
-SubordinateInfoTable.propTypes = staffInfoPropTypes
+SubordinateInfoTable.propTypes = PropTypes.shape(staffInfoShape).isRequired
 
 SubordinateInfoTable.defaultProps = staffInfoDefaultProps
 
