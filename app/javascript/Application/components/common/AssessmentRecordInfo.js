@@ -24,7 +24,7 @@ class AssessmentRecordInfo extends Component {
           <div className={'assessment-info'}>
             {recordHeader}
             <p>
-              <AssessmentLink assessment={assessment} navFrom={this.props.navFrom} key={id} linkText={' CANS'} />
+              <AssessmentLink assessment={assessment} navFrom={this.props.navFrom} key={id} linkText={'CANS'} />
             </p>
             <p>{`${actionVerb} on ${formattedTimestamp} by`}</p>
             <p>{updatedByName}</p>

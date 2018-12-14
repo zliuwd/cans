@@ -2,10 +2,23 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import Comment from '../common/Comment'
 import CommentIcon from '../common/CommentIcon'
+import * as Common from '../../util/common'
+
+jest.mock('../../util/common')
 
 describe('<Comment />', () => {
+  const maxCommentLength = 250
+
   const getWrapper = (comment, onChange = () => {}) =>
-    shallow(<Comment comment={comment} id={'ele-id'} prefix={'ele-comment'} onChange={onChange} />)
+    shallow(
+      <Comment
+        comment={comment}
+        id={'ele-id'}
+        prefix={'ele-comment'}
+        onChange={onChange}
+        maxCommentLength={maxCommentLength}
+      />
+    )
 
   describe('initialization', () => {
     it('should propagate comment prop to state`s value', () => {
@@ -13,6 +26,7 @@ describe('<Comment />', () => {
       expect(instance.state).toEqual({
         value: 'a comment',
         isFocused: false,
+        safariMaxLengthCompensation: 0,
       })
     })
   })
@@ -158,6 +172,27 @@ describe('<Comment />', () => {
         wrapper.setState({ value: 'same value' })
         wrapper.instance().handleOnBlur()
         expect(onChangeMock).toHaveBeenCalledTimes(0)
+      })
+    })
+  })
+
+  describe('Safari textarea length workaround', () => {
+    describe('on init', () => {
+      it('should compensate textarea maxlength when textarea value contains `newline` symbols', () => {
+        Common.isSafari = true
+        const wrapper = getWrapper('\n\n')
+        expect(wrapper.find('textarea').props().maxLength).toBe(maxCommentLength + 2)
+      })
+    })
+
+    describe('on textarea value change', () => {
+      it('should compensate textarea maxlength when textarea value contains `newline` symbols', () => {
+        Common.isSafari = true
+        const wrapper = getWrapper('Hello')
+        const textArea = wrapper.find('textarea')
+        expect(textArea.props().maxLength).toBe(maxCommentLength)
+        textArea.simulate('change', { target: { value: '\nWorld' } })
+        expect(wrapper.find('textarea').props().maxLength).toBe(maxCommentLength + 1)
       })
     })
   })

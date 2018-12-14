@@ -15,7 +15,7 @@ describe('<AddCansButton/>', () => {
 
   it('renders with <Link /> that navigates to /assessments', () => {
     const link = shallow(<AddCansButton clientIdentifier={'aaa'} />).find(Link)
-    expect(link.prop('to')).toBe('/clients/aaa/assessments')
+    expect(link.prop('to')).toBe('./aaa/assessments')
   })
 
   it('renders disabled #new-cans-button when disabled', () => {

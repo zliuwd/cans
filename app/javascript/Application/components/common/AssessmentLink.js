@@ -15,7 +15,7 @@ class AssessmentLink extends PureComponent {
 
     return (
       <Link to={linkUrl} className={'underlined'}>
-        {`${formattedEventDate}${linkText}`}
+        {`${formattedEventDate}${linkText === '' ? '' : ` ${linkText}`}`}
       </Link>
     )
   }

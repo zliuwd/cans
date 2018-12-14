@@ -12,7 +12,7 @@ import { navigation } from '../../../util/constants'
 jest.mock('../../Assessment/Assessment.service')
 
 const params = {
-  clientIdentifier: 'aaaaaaaaaa',
+  clientIdentifier: '0PcpFQu0QM',
   navFrom: navigation.CHILD_PROFILE,
 }
 

@@ -5,6 +5,7 @@ import { Page } from '../components/Layout'
 import { navigation } from '../util/constants'
 import PermissionRedirect from './PermissionRedirect'
 import PermissionRedirectBoundary from './PermissionRedirectBoundary'
+import SearchRoutes from './SearchRoutes'
 
 const page = (route, navigateTo) => <Page navigateTo={navigateTo} {...route} />
 
@@ -27,14 +28,6 @@ const Routes = () => {
         children={route => page(route, navigation.ASSESSMENT_EDIT)}
       />
 
-      <Route exact path="/search" children={route => page(route, navigation.CLIENT_SEARCH)} />
-      <Route
-        exact
-        path="/search/clients/:clientId/assessments/:id"
-        children={route => page(route, navigation.SEARCH_ASSESSMENT_EDIT)}
-      />
-      <Route exact path="/search/clients/:clientId" children={route => page(route, navigation.SEARCH_CHILD_PROFILE)} />
-
       <Route exact path="/staff" children={route => page(route, navigation.STAFF_LIST)} />
       <Route exact path="/staff/:staffId" children={route => page(route, navigation.STAFF_READ)} />
       <Route
@@ -47,12 +40,19 @@ const Routes = () => {
         path="/staff/:staffId/clients/:clientId/assessments/:id"
         children={route => page(route, navigation.STAFF_ASSESSMENT_EDIT)}
       />
+      <Route
+        exact
+        path="/staff/:staffId/clients/:clientId/assessments/"
+        children={route => page(route, navigation.STAFF_ASSESSMENT_ADD)}
+      />
 
       <Route
         exact
         path="/clients/:clientId/assessments/:id/changelog"
         children={route => page(route, navigation.ASSESSMENT_CHANGELOG)}
       />
+
+      <SearchRoutes />
     </Switch>
   )
 }

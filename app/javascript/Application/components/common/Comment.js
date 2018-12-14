@@ -2,18 +2,30 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Label } from '@cwds/components'
 import CommentIcon from './CommentIcon'
+import { isSafari } from '../../util/common'
+
+/* Safari browser calculates the length of textarea input in a different way than other browsers.
+This function calculates how many additional symbols should be added to textarea.maxlength
+to compensate this irregular Safari behavior */
+const calculateSafariMaxLengthAddition = value => (isSafari ? (value.match(/(\r\n|\n|\r)/g) || []).length : 0)
 
 class Comment extends Component {
   constructor(props) {
     super(props)
+    const value = props.comment
     this.state = {
       isFocused: false,
-      value: props.comment,
+      value,
+      safariMaxLengthCompensation: calculateSafariMaxLengthAddition(value),
     }
   }
 
   handleInternalValueUpdate = event => {
-    this.setState({ value: event.target.value })
+    const value = event.target.value
+    this.setState({
+      value,
+      safariMaxLengthCompensation: calculateSafariMaxLengthAddition(value),
+    })
   }
 
   handleOnFocus = () => {
@@ -30,7 +42,7 @@ class Comment extends Component {
   }
 
   render() {
-    const { isFocused, value } = this.state
+    const { isFocused, value, safariMaxLengthCompensation } = this.state
     const { prefix, maxCommentLength, id } = this.props
     const isFolded = !isFocused && !value
     const inputClassSuffix = isFolded ? '-empty' : ''
@@ -50,7 +62,7 @@ class Comment extends Component {
             onChange={this.handleInternalValueUpdate}
             onFocus={this.handleOnFocus}
             onBlur={this.handleOnBlur}
-            maxLength={maxCommentLength}
+            maxLength={maxCommentLength + safariMaxLengthCompensation}
           />
           <span className={`${prefix}-text-length${lengthClassSuffix}`}>{`${value.length}/${maxCommentLength}`}</span>
         </div>

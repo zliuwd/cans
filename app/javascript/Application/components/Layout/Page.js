@@ -111,21 +111,19 @@ class Page extends Component {
           leftButton={header.leftButton}
           rightButton={header.rightButton}
         />
-
+        <Sticker>
+          <div className="breadcrumb-container">
+            <BreadCrumbsBuilder
+              navigateTo={this.props.navigateTo}
+              client={this.state.client}
+              url={this.props.match.url}
+              assessmentId={this.props.match.params.id}
+              user={this.state.currentUser}
+              subordinate={this.state.subordinate}
+            />
+          </div>
+        </Sticker>
         <Container>
-          <Sticker>
-            <div className="breadcrumb-container">
-              <BreadCrumbsBuilder
-                navigateTo={this.props.navigateTo}
-                client={this.state.client}
-                url={this.props.match.url}
-                assessmentId={this.props.match.params.id}
-                user={this.state.currentUser}
-                subordinate={this.state.subordinate}
-              />
-            </div>
-          </Sticker>
-
           <PageContentSwitcher
             params={params}
             navigateTo={this.props.navigateTo}

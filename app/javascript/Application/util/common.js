@@ -28,3 +28,13 @@ export function isEmpty(value) {
 // and prints iframe, so we are detecting if user is in Firefox with this workaround
 // https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
 export const isFirefox = typeof InstallTrigger !== 'undefined'
+
+// Safari browser calculates the length of textarea input in a different way than other browsers,
+// so we are detecting if user is in Safari with this workaround
+// https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
+/* eslint-disable no-undef */
+export const isSafari =
+  /constructor/i.test(window.HTMLElement) ||
+  (!window.safari || (typeof safari !== 'undefined' && safari.pushNotification)).toString() ===
+    '[object SafariRemoteNotification]'
+/* eslint-enable no-undef */

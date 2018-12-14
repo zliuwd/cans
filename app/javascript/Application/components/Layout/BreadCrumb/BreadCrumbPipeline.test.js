@@ -4,6 +4,7 @@ import {
   addAssessmentFormCrumbIfNeeded,
   addClientSearchCrumbIfNeeded,
   addStaffProfileIfNeeded,
+  addStaffChildProfileCrumbIfNeeded,
   addChildYouthListCrumbIfNeeded,
   addChildProfileCrumbIfNeeded,
 } from './BreadCrumbPipeline'
@@ -43,12 +44,46 @@ describe('BreadCrumbPipeline: the part which was not covered by Component test',
     expect(linkText).toEqual(BreadCrumbLinks.CLIENT_LIST)
   })
 
-  it('addChildProfileCrumbIfNeeded', () => {
-    const testData = clone(fakedata)
-    testData.navigateTo = navigation.CHILD_PROFILE
-    addChildProfileCrumbIfNeeded(testData.elements, testData.navigateTo, testData.client)
-    const linkText = testData.elements[0]
-    expect(linkText).toEqual('Client, Name')
+  describe('addChildProfileCrumbIfNeeded', () => {
+    it('will add CLIENT_PROFILE plian text when nav to a page which navigateTo contains PROFILE_OVERALL', () => {
+      const testData = clone(fakedata)
+      testData.navigateTo = navigation.CHILD_PROFILE
+      addChildProfileCrumbIfNeeded(testData.elements, testData.navigateTo, testData.client)
+      const linkText = testData.elements[0]
+      expect(linkText).toEqual(BreadCrumbLinks.CLIENT_PROFILE)
+    })
+
+    it('will add CLIENT_PROFILE link when nav to SEARCH_ASSESSMENT_ADD', () => {
+      const testData = clone(fakedata)
+      testData.navigateTo = navigation.SEARCH_ASSESSMENT_ADD
+      addChildProfileCrumbIfNeeded(testData.elements, testData.navigateTo, testData.client)
+      const linkUrl = testData.elements[0].props.to
+      const linkText = testData.elements[0].props.children
+      expect(linkUrl).toEqual('/search/clients/AdE0PWu0X5')
+      expect(linkText).toEqual(BreadCrumbLinks.CLIENT_PROFILE)
+    })
+  })
+
+  describe('addStaffChildProfileCrumbIfNeeded', () => {
+    it('will add CLIENT_PROFILE link when nav to STAFF_ASSESSMENT_EDIT', () => {
+      const testData = clone(fakedata)
+      testData.navigateTo = navigation.STAFF_ASSESSMENT_EDIT
+      addStaffChildProfileCrumbIfNeeded(testData.elements, testData.navigateTo, testData.client, testData.staffPerson)
+      const linkUrl = testData.elements[0].props.to
+      const linkText = testData.elements[0].props.children
+      expect(linkUrl).toEqual('/staff/0X5/clients/AdE0PWu0X5')
+      expect(linkText).toEqual(BreadCrumbLinks.CLIENT_PROFILE)
+    })
+
+    it('will add CLIENT_PROFILE link when nav to STAFF_ASSESSMENT_ADD', () => {
+      const testData = clone(fakedata)
+      testData.navigateTo = navigation.STAFF_ASSESSMENT_ADD
+      addStaffChildProfileCrumbIfNeeded(testData.elements, testData.navigateTo, testData.client, testData.staffPerson)
+      const linkUrl = testData.elements[0].props.to
+      const linkText = testData.elements[0].props.children
+      expect(linkUrl).toEqual('/staff/0X5/clients/AdE0PWu0X5')
+      expect(linkText).toEqual(BreadCrumbLinks.CLIENT_PROFILE)
+    })
   })
 
   describe('addAssessmentFormCrumbIfNeeded', () => {
