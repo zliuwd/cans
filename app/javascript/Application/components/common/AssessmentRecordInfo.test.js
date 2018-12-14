@@ -81,7 +81,7 @@ describe('AssessmentRecordInfo', () => {
         <AssessmentLink
           assessment={assessmentInProgressWithCaseNumber}
           key={id}
-          linkText={' CANS'}
+          linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
         'Saved on 06/06/2015 by',
@@ -103,12 +103,7 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
-        <AssessmentLink
-          assessment={assessmentCompletedWithCaseNumber}
-          key={id}
-          linkText={' CANS'}
-          navFrom={'SEARCH'}
-        />,
+        <AssessmentLink assessment={assessmentCompletedWithCaseNumber} key={id} linkText={'CANS'} navFrom={'SEARCH'} />,
         'Completed on 06/06/2018 by',
         'Name 2 LastName 2',
         'Case: 4444-333-4444-88888888',
@@ -131,7 +126,7 @@ describe('AssessmentRecordInfo', () => {
         <AssessmentLink
           assessment={assessmentWithNoUpdateInfoWithCaseNumber}
           key={id}
-          linkText={' CANS'}
+          linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
         'Saved on 06/06/2018 by',
@@ -158,7 +153,7 @@ describe('AssessmentRecordInfo', () => {
         <AssessmentLink
           assessment={assessmentInProgressWithReferralNumber}
           key={id}
-          linkText={' CANS'}
+          linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
         'Saved on 06/06/2015 by',
@@ -183,7 +178,7 @@ describe('AssessmentRecordInfo', () => {
         <AssessmentLink
           assessment={assessmentCompletedWithReferralNumber}
           key={id}
-          linkText={' CANS'}
+          linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
         'Completed on 06/06/2018 by',
@@ -208,7 +203,7 @@ describe('AssessmentRecordInfo', () => {
         <AssessmentLink
           assessment={assessmentWithNoUpdateInfoWithReferralNumber}
           key={id}
-          linkText={' CANS'}
+          linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
         'Saved on 06/06/2018 by',
@@ -235,7 +230,7 @@ describe('AssessmentRecordInfo', () => {
         <AssessmentLink
           assessment={assessmentInProgressWithNoClientandReferralNumber}
           key={id}
-          linkText={' CANS'}
+          linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
         'Saved on 06/06/2015 by',
@@ -260,7 +255,7 @@ describe('AssessmentRecordInfo', () => {
         <AssessmentLink
           assessment={assessmentCompletedWithNoClientandReferralNumber}
           key={id}
-          linkText={' CANS'}
+          linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
         'Completed on 06/06/2018 by',
@@ -285,7 +280,7 @@ describe('AssessmentRecordInfo', () => {
         <AssessmentLink
           assessment={assessmentWithNoUpdateInfoWithNoClientandReferralNumber}
           key={id}
-          linkText={' CANS'}
+          linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
         'Saved on 06/06/2018 by',

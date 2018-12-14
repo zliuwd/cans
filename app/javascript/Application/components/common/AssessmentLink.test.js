@@ -8,7 +8,7 @@ import { navigation } from '../../util/constants'
 
 describe('AssessmentLink', () => {
   const prepareWrapper = (assessment, navFrom) => {
-    return shallow(<AssessmentLink assessment={assessment} navFrom={navFrom} key={assessment.id} linkText={' CANS'} />)
+    return shallow(<AssessmentLink assessment={assessment} navFrom={navFrom} key={assessment.id} linkText={'CANS'} />)
   }
 
   it('renders a Link component', () => {

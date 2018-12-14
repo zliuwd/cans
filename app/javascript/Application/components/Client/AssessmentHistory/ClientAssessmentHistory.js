@@ -45,14 +45,13 @@ class ClientAssessmentHistory extends Component {
   }
 
   renderAssessments = (assessments, fetchStatus) => {
-    const startPos = 0
-    const endPos = 3
+    const assessmentsToDisplay = 3
 
     return fetchStatus === LoadingState.ready && assessments.length === 0 ? (
       <div id="no-data">No assessments currently exist for this child/youth.</div>
     ) : (
       assessments
-        .slice(startPos, endPos)
+        .slice(0, assessmentsToDisplay)
         .map(assessment => (
           <ClientAssessmentHistoryRecord
             assessment={assessment}
