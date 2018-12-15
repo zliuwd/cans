@@ -1,5 +1,8 @@
+@Library('jenkins-pipeline-utils') _
+
 def app
 DOCKER_REGISTRY_CREDENTIALS_ID = '6ba8d05c-ca13-4818-8329-15d41a089ec0'
+GITHUB_CREDENTIALS_ID = '433ac100-b3c2-4519-b4d6-207c029a103b'
 JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID = '3ce810c0-b697-4ad1-a1b7-ad656b99686e'
 
 switch(env.BUILD_JOB_TYPE) {
@@ -12,6 +15,7 @@ def buildPullRequest() {
   node('linux') {
     try {
       checkoutStage()
+      checkForLabel() // shared library
       buildDockerImageStage()
       lintAndUnitTestStages()
       acceptanceTestStage()
@@ -29,12 +33,15 @@ def buildMaster() {
   node('linux') {
     try {
       checkoutStage()
+      incrementTag() // shared library
       buildDockerImageStage()
       lintAndUnitTestStages()
       acceptanceTestStage()
       a11yLintStage()
+      tagRepo() // shared library
       publishImageStage()
       deployToPreintStage()
+      updatePreintManifest() // shared library
     } catch(Exception exception) {
       currentBuild.result = "FAILURE"
       throw exception
@@ -50,6 +57,7 @@ def buildAcceptance() {
       checkoutStage()
       acceptanceTestPreintStage()
       deployToIntegrationStage()
+      updateIntegrationManifest() // shared library
     } catch(Exception exception) {
       currentBuild.result = "FAILURE"
       throw exception
@@ -63,6 +71,18 @@ def checkoutStage() {
   stage('Checkout') {
     deleteDir()
     checkout scm
+  }
+}
+
+def checkForLabel() {
+  stage('Verify SemVer Label') {
+    checkForLabel('cans')
+   } 
+}
+
+def incrementTag() {
+  stage('Increment Tag') {
+    newTag = newSemVer()
   }
 }
 
@@ -117,6 +137,12 @@ def a11yLintStage() {
   }
 }
 
+def tagRepo() {
+  stage('Tag Repo'){
+    tagGithubRepo(newTag, GITHUB_CREDENTIALS_ID)
+  }
+}
+
 def acceptanceTestPreintStage() {
   stage('Acceptance Test Preint') {
     withDockerRegistry([credentialsId: JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID]) {
@@ -129,23 +155,29 @@ def acceptanceTestPreintStage() {
 def publishImageStage() {
   stage('Publish to Dockerhub') {
     withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
-      app.push()
+      app.push(newTag)
       app.push('latest')
     }
   }
   stage('Trigger Security scan') {
     build job: 'tenable-scan', parameters: [
         [$class: 'StringParameterValue', name: 'CONTAINER_NAME', value: 'cans'],
-        [$class: 'StringParameterValue', name: 'CONTAINER_VERSION', value: "${env.BUILD_ID}"]
+        [$class: 'StringParameterValue', name: 'CONTAINER_VERSION', value: newTag]
     ]
   }
 }
 
 def deployToPreintStage() {
   stage('Deploy to Preint') {
-      withCredentials([usernameColonPassword(credentialsId: 'fa186416-faac-44c0-a2fa-089aed50ca17', variable: 'jenkinsauth')]) {
-        sh "curl -u $jenkinsauth 'http://jenkins.mgmt.cwds.io:8080/job/preint/job/deploy-cans/buildWithParameters?token=deployPreint&version=${env.BUILD_ID}'"
+    withCredentials([usernameColonPassword(credentialsId: 'fa186416-faac-44c0-a2fa-089aed50ca17', variable: 'jenkinsauth')]) {
+      sh "curl -u $jenkinsauth 'http://jenkins.mgmt.cwds.io:8080/job/preint/job/deploy-cans/buildWithParameters?token=deployPreint&version=${newTag}'"
     }
+  }
+}
+
+def updatePreintManifest() {
+  stage('Update Pre-int manifest') {
+    updateManifest("cans", "preint", GITHUB_CREDENTIALS_ID, newTag)
   }
 }
 
@@ -157,6 +189,12 @@ def deployToIntegrationStage() {
             string(name: 'inventory', value: 'inventories/integration/hosts.yml')
           ],
           wait: false
+  }
+}
+
+def updateIntegrationManifest() {
+  stage('Update Integration manifest') {
+    updateManifest("cans", "integration", GITHUB_CREDENTIALS_ID, newTag)
   }
 }
 
