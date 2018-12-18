@@ -39,4 +39,10 @@ describe('<PrintAssessment />', () => {
       shallow(<PrintAssessment assessment={assessment} i18n={i18nPrint} />)
     }).not.toThrow()
   })
+
+  it("renders 'Confidential' for domain total score if atleast one item with confidential by default or confidential is true", () => {
+    const printConfidential = shallow(<PrintAssessment assessment={assessmentWithConfidentialItem} i18n={i18nPrint} />)
+    const printConfidentialHtml = printConfidential.html()
+    expect(printConfidentialHtml).toContain('(Domain Total Score: Confidential)')
+  })
 })

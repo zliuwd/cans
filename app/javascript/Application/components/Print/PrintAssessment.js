@@ -112,7 +112,7 @@ class PrintAssessment extends PureComponent {
     const { code, caregiver_index: caregiverIndex, items, comment } = domain
     const title = (domainI18n._title_ || '').toUpperCase()
     const caregiverName = domain.caregiver_name || ''
-    const totalScore = totalScoreCalculation(items)
+    const totalScore = hasConfidentialItems(domain) ? 'Confidential' : totalScoreCalculation(items)
     return (
       <div key={code + caregiverIndex}>
         <div style={domainHeaderStyle}>
