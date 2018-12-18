@@ -121,7 +121,9 @@ class Domain extends Component {
                 </Typography>
               </Grid>
               <Grid item xs={4} className={'domain-metric'}>
-                <CommentIcon isSolid={Boolean(domain.comment)} className={'domain-toolbar-comment-icon'} />
+                <div className="domain-toolbar-comment-icon-block">
+                  <CommentIcon isSolid={Boolean(domain.comment)} className={'domain-toolbar-comment-icon'} />
+                </div>
                 <DomainProgressBar isAssessmentUnderSix={isAssessmentUnderSix} domain={domain} />
                 <DomainScore totalScore={totalScore} key={index} />
               </Grid>

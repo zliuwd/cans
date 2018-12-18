@@ -1,5 +1,6 @@
 @import '../../styles/global/colors.sass'
 $toolbar-comment-icon-right-margin: 2rem
+$item-confidential-label-height: 6.05rem
 //********************
 //AssessmentForm
 //********************
@@ -347,9 +348,14 @@ $toolbar-comment-icon-right-margin: 2rem
 //********************
 // DomainCommentIcon
 //********************
-.domain-toolbar-comment-icon
-  margin-right: $toolbar-comment-icon-right-margin
+.domain-toolbar-comment-icon-block
+  display: flex
+  width: 9rem
   margin-top: auto
+
+.domain-comment-accordion-comment-icon
+  height: $item-confidential-label-height
+
 //********************
 // Date picker
 //********************

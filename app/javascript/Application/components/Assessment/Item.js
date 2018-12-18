@@ -89,7 +89,7 @@ class Item extends Component {
   renderConfidentialCheckbox = (isConfidential, confidential_by_default) => {
     const code = this.props.item.code
     return (
-      <div>
+      <div className={'item-confidential-block'}>
         <form autoComplete="off">
           <FormControl>
             <FormControlLabel

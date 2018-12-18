@@ -143,6 +143,12 @@ describe('<Domain />', () => {
       const wrapper = shallow(domainComponentDefault)
       expect(wrapper.find(CommentIcon).length).toBe(1)
     })
+
+    it('renders comment icon with domain-toolbar-comment-icon-block styles', () => {
+      const wrapper = shallow(domainComponentDefault)
+      const blockDiv = wrapper.find('div.domain-toolbar-comment-icon-block')
+      expect(blockDiv.find(CommentIcon).length).toBe(1)
+    })
   })
 
   describe('caregiver domain', () => {
