@@ -6,7 +6,7 @@ require 'feature/testing'
 module Infrastructure
   describe TimeoutMiddleware do
     describe '#call' do
-      let(:timeout) { 1.hour }
+      let(:timeout) { 4.hours }
       let(:application) { instance_double('ActionDispatch::Routing::RouteSet') }
       let(:timeout_middleware) { TimeoutMiddleware.new(application) }
       let(:environment) { Rack::MockRequest.env_for('http://example.com/api/test', {}) }
@@ -19,7 +19,6 @@ module Infrastructure
       end
 
       it 'generates timeout cookies' do
-        Rails.application.config.session_options[:expire_after] = timeout
         response = [200, {}, {}]
         allow(application).to receive(:call).with(environment).and_return(response)
         min_expiration_time = (Time.now + timeout).to_i * 1000

@@ -20,6 +20,7 @@ module Infrastructure
 
         it 'stores a valid token in session' do
           request = Rack::Request.new(environment)
+          request.session['privileges'] = ''
           allow(security_gateway).to receive(:fetch_new_token)
             .with('good_code').and_return('some_token')
           allow(security_gateway).to receive(:validate_token)
@@ -36,6 +37,7 @@ module Infrastructure
 
         it 'returns false' do
           request = Rack::Request.new(environment)
+          request.session['privileges'] = ''
           allow(security_gateway).to receive(:fetch_new_token)
             .with('with_bad_accessCode').and_return(nil)
           expect(security_policy.validate_access(request)).to eq nil
@@ -46,14 +48,40 @@ module Infrastructure
         let(:environment) do
           Rack::MockRequest.env_for('http://example.com', {})
         end
+        let(:privileges) { ['CANS-rollout'] }
+        let(:account_json) do
+          { 'privileges': privileges }.to_json
+        end
 
         it 'returns validated token from session' do
           request = Rack::Request.new(environment)
+          request.session['privileges'] = ''
+          request.session['token'] = 'good_token'
+          allow(security_gateway).to receive(:validate_token)
+            .with('good_token').and_return(account_json)
+          security_policy.validate_access(request)
+          expect(request.session['token']).to eq 'good_token'
+        end
+
+        it 'skips privileges save if they exist' do
+          request = Rack::Request.new(environment)
+          request.session['privileges'] = privileges
           request.session['token'] = 'good_token'
           allow(security_gateway).to receive(:validate_token)
             .with('good_token').and_return('good_token')
           security_policy.validate_access(request)
-          expect(request.session['token']).to eq 'good_token'
+
+          expect(security_policy).not_to receive(:set_privileges)
+        end
+
+        it 'saves privileges if they do not exist' do
+          request = Rack::Request.new(environment)
+          request.session['token'] = 'good_token'
+          allow(security_gateway).to receive(:validate_token)
+            .with('good_token').and_return(account_json)
+          security_policy.validate_access(request)
+
+          expect(request.session['privileges']).to eq privileges
         end
       end
 
@@ -70,6 +98,7 @@ module Infrastructure
 
         before do
           request.session['token'] = 'invalid_token'
+          request.session['privileges'] = ''
           allow(security_gateway).to receive(:validate_token)
             .with('invalid_token').and_return(nil)
           allow(security_gateway).to receive(:fetch_new_token)
