@@ -628,6 +628,23 @@ describe('<AssessmentContainer />', () => {
         // then
         expect(postSuccessSpy).toHaveBeenCalledTimes(1)
       })
+
+      it('should post success message on submit', async () => {
+        // given
+        const postSuccessSpy = jest.spyOn(globalAlertService, 'postSuccess')
+        jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
+        jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment))
+        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
+        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
+        const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
+        wrapper.setState({ assessment: { ...assessment, id: 1 } })
+        // when
+        await wrapper.instance().handleSubmitAssessment()
+        wrapper.update()
+
+        // then
+        expect(postSuccessSpy).toHaveBeenCalledTimes(1)
+      })
     })
 
     it('should log analytics to New Relic when assessment is saved', async () => {

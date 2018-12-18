@@ -71,8 +71,8 @@ module ResourceHelper
     fetch_traumatic_domain
     find('#submit-assessment').click
     click_button 'I Agree'
+    expect(page).to have_content 'Success! CANS assessment has been completed.'
     find('#cancel-assessment').click
-    expect(page).to have_content 'Complete'
     expect(page).to have_content('ADD CANS', wait: 45)
     save_assessment_form_age_0_5
   end

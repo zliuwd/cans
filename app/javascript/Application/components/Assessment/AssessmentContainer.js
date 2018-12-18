@@ -267,6 +267,17 @@ class AssessmentContainer extends Component {
     }
   }
 
+  postSubmitMessage() {
+    const { client } = this.props
+    const message = (
+      <Fragment>
+        Success! CANS assessment has been completed. <Link to={`/clients/${client.identifier}`}>Click here</Link> to
+        return to Child/Youth profile.
+      </Fragment>
+    )
+    globalAlertService.postSuccess({ message })
+  }
+
   handleSubmitAssessment = async () => {
     this.setState({ assessmentServiceStatus: LoadingState.updating })
     const assessment = Object.assign({}, this.state.assessment)
@@ -275,6 +286,7 @@ class AssessmentContainer extends Component {
     if (assessment.id) {
       try {
         const submittedAssessment = await AssessmentService.update(assessment.id, assessment)
+        this.postSubmitMessage()
         this.setState({
           assessmentServiceStatus: LoadingState.ready,
           assessment: submittedAssessment,
