@@ -3,8 +3,14 @@ import PropTypes from 'prop-types'
 import LoadingBoundary from '../../common/LoadingBoundary'
 import { AssessmentService } from '../index'
 
+const fetchBoth = id => {
+  const changeHistoryPromise = AssessmentService.getAllChanges(id)
+  const assessmentPromise = AssessmentService.fetch(id)
+  return Promise.all([changeHistoryPromise, assessmentPromise])
+}
+
 const ChangeLogLoadingBoundary = ({ id, children }) => (
-  <LoadingBoundary childNodeFetchedPropName={'changeHistory'} fetch={() => AssessmentService.getAllChanges(id)}>
+  <LoadingBoundary childNodeFetchedPropName={'assessmentWithHistory'} fetch={() => fetchBoth(id)}>
     {children}
   </LoadingBoundary>
 )

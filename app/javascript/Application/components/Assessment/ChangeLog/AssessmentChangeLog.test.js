@@ -3,6 +3,7 @@ import { shallow } from 'enzyme'
 import { Card, CardHeader, CardTitle, CardBody, DataGrid } from '@cwds/components'
 import { Row } from 'reactstrap'
 import AssessmentChangeLog from './AssessmentChangeLog'
+import { assessmentCompletedWithReferralNumber } from '../assessment.mocks.test'
 
 describe('<AssessmentChangeLog />', () => {
   const defaultProps = {
@@ -15,18 +16,18 @@ describe('<AssessmentChangeLog />', () => {
       external_id: '0603-9385-0313-2002051',
       dob: '2005-08-14',
     },
-    match: { params: { id: '1' } },
   }
 
   const defaultChangeHistory = [{ changed_at: '2018-11-01T17:07:10.043Z' }]
 
   const render = (
     changeHistory = defaultChangeHistory,
+    assessment = assessmentCompletedWithReferralNumber,
     updateHeaderButtons = () => {},
     updateHeaderButtonsToDefault = () => {}
   ) => {
     const props = {
-      changeHistory,
+      assessmentWithHistory: [changeHistory, assessment],
       pageHeaderButtonsController: {
         updateHeaderButtons,
         updateHeaderButtonsToDefault,
@@ -42,7 +43,8 @@ describe('<AssessmentChangeLog />', () => {
 
     it('renders nothing when there is no change log data', () => {
       const changeHistory = []
-      wrapper = render(changeHistory)
+      const assessment = {}
+      wrapper = render(changeHistory, assessment)
       expect(wrapper.type()).toBe(null)
     })
 
@@ -82,13 +84,15 @@ describe('<AssessmentChangeLog />', () => {
       wrapper = render()
     })
 
-    it('renders the card title with client name and dob', () => {
+    it('renders the card title with client name and assessment date', () => {
       expect(
         wrapper
           .find(CardTitle)
           .dive()
-          .text()
-      ).toBe('CANS Change Log: Abbott, See K 08/14/2005')
+          .html()
+      ).toBe(
+        '<div class="change-log-title card-title"><div><span>CANS Change Log: Abbott, See K</span><span>Assessment Date: 06/06/2018</span></div></div>'
+      )
     })
 
     it('passes change history data to DataGrid', () => {
@@ -102,7 +106,7 @@ describe('<AssessmentChangeLog />', () => {
 
     describe('componentDidMount', () => {
       it('should update page header buttons', () => {
-        render(defaultChangeHistory, updateHeaderButtonsMock)
+        render(defaultChangeHistory, assessmentCompletedWithReferralNumber, updateHeaderButtonsMock)
         expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
         updateHeaderButtonsMock.mockClear()
       })
@@ -111,10 +115,13 @@ describe('<AssessmentChangeLog />', () => {
     describe('componentDidUpdate', () => {
       describe('changeHistory prop was updated', () => {
         it('should update page header buttons', () => {
-          wrapper = render(defaultChangeHistory, updateHeaderButtonsMock)
+          wrapper = render(defaultChangeHistory, assessmentCompletedWithReferralNumber, updateHeaderButtonsMock)
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
           wrapper.setProps({
-            changeHistory: [defaultChangeHistory[0], { changed_at: '2018-12-01T17:07:10.043Z' }],
+            assessmentWithHistory: [
+              [defaultChangeHistory[0], { changed_at: '2018-12-01T17:07:10.043Z' }],
+              assessmentCompletedWithReferralNumber,
+            ],
           })
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(2)
           updateHeaderButtonsMock.mockClear()
@@ -123,9 +130,11 @@ describe('<AssessmentChangeLog />', () => {
 
       describe('changeHistory prop was not updated', () => {
         it('should not update page header buttons', () => {
-          const wrapper = render(defaultChangeHistory, updateHeaderButtonsMock)
+          const wrapper = render(defaultChangeHistory, assessmentCompletedWithReferralNumber, updateHeaderButtonsMock)
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
-          wrapper.setProps({ changeHistory: defaultChangeHistory })
+          wrapper.setProps({
+            assessmentWithHistory: [defaultChangeHistory, assessmentCompletedWithReferralNumber],
+          })
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
           updateHeaderButtonsMock.mockClear()
         })
@@ -135,7 +144,12 @@ describe('<AssessmentChangeLog />', () => {
     describe('componentWillUnmount', () => {
       it('should reset page header buttons to default values', () => {
         const updateToDefaultMock = jest.fn()
-        const wrapper = render(defaultChangeHistory, () => {}, updateToDefaultMock)
+        const wrapper = render(
+          defaultChangeHistory,
+          assessmentCompletedWithReferralNumber,
+          () => {},
+          updateToDefaultMock
+        )
         wrapper.unmount()
         expect(updateToDefaultMock).toHaveBeenCalledTimes(1)
       })

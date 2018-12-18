@@ -10,7 +10,7 @@ import { clientCaseReferralNumber } from '../Client/Client.helper'
 
 class AssessmentRecordInfo extends Component {
   renderInfo = (header, assessment, assessmentInfo) => {
-    const { id, status, person } = assessment
+    const { status, person, id } = assessment
 
     const {
       clientName,
@@ -29,7 +29,7 @@ class AssessmentRecordInfo extends Component {
     return (
       <Card className="card-assessment-record-info">
         <CardBody>
-          <Ellipsis id={id} clientId={person.identifier} />
+          <Ellipsis clientId={person.identifier} assessmentId={id} />
           <div className={'assessment-info'}>
             {recordHeader}
             <p>

@@ -6,9 +6,6 @@ import AssessmentChangeLog from './AssessmentChangeLog'
 
 const props = {
   match: {
-    path: '/clients/:clientId/assessments/:id/changelog',
-    url: '/clients/AdE0PWu0X5/assessments/582529/changelog',
-    isExact: true,
     params: { clientId: 'AdE0PWu0X5', id: '582529' },
   },
   client: {

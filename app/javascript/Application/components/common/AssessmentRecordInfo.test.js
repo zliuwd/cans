@@ -74,7 +74,7 @@ describe('AssessmentRecordInfo', () => {
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().id).toBe(97501)
+      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97501)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
@@ -99,7 +99,7 @@ describe('AssessmentRecordInfo', () => {
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().id).toBe(97502)
+      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
@@ -119,7 +119,7 @@ describe('AssessmentRecordInfo', () => {
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().id).toBe(97503)
+      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97503)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
@@ -146,7 +146,7 @@ describe('AssessmentRecordInfo', () => {
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().id).toBe(97501)
+      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97501)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
@@ -171,7 +171,7 @@ describe('AssessmentRecordInfo', () => {
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().id).toBe(97502)
+      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
@@ -196,7 +196,7 @@ describe('AssessmentRecordInfo', () => {
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().id).toBe(97503)
+      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97503)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
@@ -223,7 +223,7 @@ describe('AssessmentRecordInfo', () => {
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().id).toBe(97501)
+      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97501)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
@@ -248,7 +248,7 @@ describe('AssessmentRecordInfo', () => {
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().id).toBe(97502)
+      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',
@@ -273,7 +273,7 @@ describe('AssessmentRecordInfo', () => {
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().id).toBe(97503)
+      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97503)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Client name: Casey Middle Test, Jr',

@@ -882,7 +882,7 @@ export const assessmentInProgressWithCaseNumber = {
   status: 'IN_PROGRESS',
   service_source_ui_id: '4444-333-4444-88888888',
   service_source: 'CASE',
-
+  created_timestamp: '2018-12-10T15:31:01.584Z',
   event_date: '2015-10-10',
   updated_timestamp: '2015-06-06T15:37:32.000Z',
   updated_by: {
@@ -907,6 +907,7 @@ export const assessmentCompletedWithCaseNumber = {
   status: 'COMPLETED',
   service_source_ui_id: '4444-333-4444-88888888',
   service_source: 'CASE',
+  created_timestamp: '2018-06-06T15:37:32.000Z',
   event_date: '2018-01-05',
   updated_timestamp: '2018-06-06T15:37:32.000Z',
   updated_by: {
@@ -931,8 +932,8 @@ export const assessmentWithNoUpdateInfoWithCaseNumber = {
   status: 'IN_PROGRESS',
   service_source_ui_id: '4444-333-4444-88888888',
   service_source: 'CASE',
-  event_date: '2018-01-05',
   created_timestamp: '2018-06-06T15:37:32.000Z',
+  event_date: '2018-01-05',
   created_by: {
     first_name: 'Name 3',
     last_name: 'LastName 3',
@@ -956,7 +957,7 @@ export const assessmentInProgressWithReferralNumber = {
   status: 'IN_PROGRESS',
   service_source_ui_id: '4444-333-4444-88888888',
   service_source: 'REFERRAL',
-
+  created_timestamp: '2018-06-06T15:37:32.000Z',
   event_date: '2015-10-10',
   updated_timestamp: '2015-06-06T15:37:32.000Z',
   updated_by: {
@@ -981,6 +982,7 @@ export const assessmentCompletedWithReferralNumber = {
   status: 'COMPLETED',
   service_source_ui_id: '4444-333-4444-88888888',
   service_source: 'REFERRAL',
+  created_timestamp: '2018-06-06T15:37:32.000Z',
   event_date: '2018-01-05',
   updated_timestamp: '2018-06-06T15:37:32.000Z',
   updated_by: {
@@ -1005,8 +1007,8 @@ export const assessmentWithNoUpdateInfoWithReferralNumber = {
   status: 'IN_PROGRESS',
   service_source_ui_id: '4444-333-4444-88888888',
   service_source: 'REFERRAL',
-  event_date: '2018-01-05',
   created_timestamp: '2018-06-06T15:37:32.000Z',
+  event_date: '2018-01-05',
   created_by: {
     first_name: 'Name 3',
     last_name: 'LastName 3',
@@ -1030,6 +1032,7 @@ export const assessmentInProgressWithNoClientandReferralNumber = {
   status: 'IN_PROGRESS',
   service_source_ui_id: '',
   service_source: '',
+  created_timestamp: '2018-06-06T15:37:32.000Z',
   event_date: '2015-10-10',
   updated_timestamp: '2015-06-06T15:37:32.000Z',
   updated_by: {
@@ -1054,6 +1057,7 @@ export const assessmentCompletedWithNoClientandReferralNumber = {
   status: 'COMPLETED',
   service_source_ui_id: '',
   service_source: '',
+  created_timestamp: '2018-06-06T15:37:32.000Z',
   event_date: '2018-01-05',
   updated_timestamp: '2018-06-06T15:37:32.000Z',
   updated_by: {

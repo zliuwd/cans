@@ -7,7 +7,7 @@ import ChangeLogStatus from './ChangeLogStatus'
 import ChangeLogName from './ChangeLogName'
 import PrintChangeLog from './PrintChangeLog'
 import { formatClientName } from '../../Client'
-import { changeLogPagePropType, clientPropTypes, changeHistoryPropType } from './ChangeLogHelper'
+import { clientPropTypes, changeHistoryPropTypes } from './ChangeLogHelper'
 import { trimSafely } from '../../../util/formatters'
 import { isoToLocalDate } from '../../../util/dateHelper'
 import { buildSearchClientsButton } from '../../Header/PageHeaderButtonsBuilder'
@@ -38,25 +38,32 @@ class AssessmentChangeLog extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { changeHistory: prevChangeHistory } = prevProps
+    const { assessmentWithHistory } = prevProps
+    const prevChangeHistory = assessmentWithHistory[0]
     this.updatePrintButtonIfNeeded(prevChangeHistory)
   }
 
   componentWillUnmount() {
-    this.props.pageHeaderButtonsController.updateHeaderButtonsToDefault()
+    const { pageHeaderButtonsController } = this.props
+    pageHeaderButtonsController.updateHeaderButtonsToDefault()
   }
 
   initHeaderButtons(enablePrintButton) {
-    const { changeHistory, client, match } = this.props
-    const node = <PrintChangeLog history={changeHistory} client={client} assessmentId={match.params.id} />
+    const { assessmentWithHistory, client, pageHeaderButtonsController } = this.props
+
+    const changeHistory = assessmentWithHistory[0]
+    const { id: assessmentId } = assessmentWithHistory[1]
+
+    const node = <PrintChangeLog history={changeHistory} client={client} assessmentId={assessmentId} />
     const leftButton = buildSearchClientsButton()
     const rightButton = <PrintButton node={node} isEnabled={enablePrintButton} />
 
-    this.props.pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
+    pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
   }
 
   updatePrintButtonIfNeeded(prevChangeHistory) {
-    const { changeHistory } = this.props
+    const { assessmentWithHistory } = this.props
+    const changeHistory = assessmentWithHistory[0]
     const changeHistoryUpdated = prevChangeHistory !== changeHistory
     if (changeHistoryUpdated) {
       const enablePrintButton = this.shouldPrintButtonBeEnabled()
@@ -65,21 +72,39 @@ class AssessmentChangeLog extends Component {
   }
 
   shouldPrintButtonBeEnabled() {
-    const { changeHistory } = this.props
+    const { assessmentWithHistory } = this.props
+    const changeHistory = assessmentWithHistory[0]
     const changeHistoryLength = changeHistory.length
     const enablePrintButton = changeHistoryLength > 0
 
     return enablePrintButton
   }
 
+  buildChangeLogTitle(client, assessment) {
+    const clientName = formatClientName(client)
+    const titleClientName = trimSafely(`CANS Change Log: ${clientName}`)
+    const assessmentDate = assessment.created_timestamp
+    const formattedDate = assessmentDate ? isoToLocalDate(assessmentDate) : ''
+    const titleAssessmentDate = trimSafely(`Assessment Date: ${formattedDate}`)
+
+    const changeLogTitle = (
+      <div>
+        <span>{titleClientName}</span>
+        <span>{titleAssessmentDate}</span>
+      </div>
+    )
+
+    return changeLogTitle
+  }
+
   render() {
-    const { client, changeHistory } = this.props
+    const { client, assessmentWithHistory } = this.props
+    const changeHistory = assessmentWithHistory[0]
     const changeHistoryLength = changeHistory.length
+    const assessment = assessmentWithHistory[1]
     const minRows = 0
     const defaultPageSize = 10
 
-    const clientDob = client.dob ? isoToLocalDate(client.dob) : ''
-    const title = `CANS Change Log: ${formatClientName(client)} ${clientDob}`
     const showPagination = changeHistoryLength > defaultPageSize
 
     return changeHistoryLength > 0 ? (
@@ -87,7 +112,7 @@ class AssessmentChangeLog extends Component {
         <Col xs="12">
           <Card className="change-log-card">
             <CardHeader className="change-log-header">
-              <CardTitle className="change-log-title">{trimSafely(title)}</CardTitle>
+              <CardTitle className="change-log-title">{this.buildChangeLogTitle(client, assessment)}</CardTitle>
             </CardHeader>
             <CardBody className="pt-0 change-log-body">
               <DataGrid
@@ -107,9 +132,10 @@ class AssessmentChangeLog extends Component {
 }
 
 AssessmentChangeLog.propTypes = {
-  changeHistory: PropTypes.arrayOf(changeHistoryPropType),
+  assessmentWithHistory: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.arrayOf(changeHistoryPropTypes), PropTypes.object])
+  ),
   client: clientPropTypes.isRequired,
-  match: changeLogPagePropType.isRequired,
   pageHeaderButtonsController: PropTypes.shape({
     updateHeaderButtons: PropTypes.func.isRequired,
     updateHeaderButtonsToDefault: PropTypes.func.isRequired,
@@ -117,7 +143,7 @@ AssessmentChangeLog.propTypes = {
 }
 
 AssessmentChangeLog.defaultProps = {
-  changeHistory: [],
+  assessmentWithHistory: [],
 }
 
 export default AssessmentChangeLog

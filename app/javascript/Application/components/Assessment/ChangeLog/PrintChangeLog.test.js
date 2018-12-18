@@ -7,7 +7,7 @@ import ChangeLogName from './ChangeLogName'
 
 describe('<PrintChangeLog />', () => {
   const defaultProps = {
-    assessmentId: '1',
+    assessmentId: 1,
     client: {
       first_name: 'Annie',
       middle_name: 'B',

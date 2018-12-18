@@ -9,34 +9,45 @@ export default class Ellipsis extends React.Component {
   constructor(props) {
     super(props)
 
-    this.toggle = this.toggle.bind(this)
     this.state = {
-      popoverOpen: false,
+      isPopOverOpen: false,
     }
+
+    this.toggleOpen = this.toggleOpen.bind(this)
   }
 
-  toggle() {
+  toggleOpen() {
+    const { isPopOverOpen } = this.state
     this.setState({
-      popoverOpen: !this.state.popoverOpen,
+      isPopOverOpen: !isPopOverOpen,
     })
   }
 
   render() {
-    const { id, clientId } = this.props
+    const { clientId, assessmentId } = this.props
+    const linkProps = {
+      pathname: `/clients/${clientId}/assessments/${assessmentId}/changelog`,
+    }
+
     return (
       <div>
         <Button
-          id={`icon-${id}`}
+          id={`icon-${assessmentId}`}
           className="icon-ellipsis"
           type="button"
           aria-label="Ellipsis Menu Button"
-          onClick={this.toggle}
+          onClick={this.toggleOpen}
         >
           <Icon icon="ellipsis-v" />
         </Button>
-        <Popover placement="bottom-start" isOpen={this.state.popoverOpen} target={`icon-${id}`} toggle={this.toggle}>
+        <Popover
+          placement="bottom-start"
+          isOpen={this.state.isPopOverOpen}
+          target={`icon-${assessmentId}`}
+          toggle={this.toggleOpen}
+        >
           <PopoverBody className="popoverbody">
-            <Link to={`/clients/${clientId}/assessments/${id}/changelog`}>View CANS Change Log</Link>
+            <Link to={linkProps}>View CANS Change Log</Link>
           </PopoverBody>
         </Popover>
       </div>
@@ -45,6 +56,6 @@ export default class Ellipsis extends React.Component {
 }
 
 Ellipsis.propTypes = {
+  assessmentId: PropTypes.number.isRequired,
   clientId: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
 }

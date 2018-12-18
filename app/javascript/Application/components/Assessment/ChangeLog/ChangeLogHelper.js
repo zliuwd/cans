@@ -16,7 +16,7 @@ export const clientPropTypes = PropTypes.shape({
   }),
 })
 
-export const changeHistoryPropType = PropTypes.shape({
+export const changeHistoryPropTypes = PropTypes.shape({
   assessment_change_type: PropTypes.string,
   change_type: PropTypes.string,
   changed_at: PropTypes.string,
@@ -26,7 +26,7 @@ export const changeHistoryPropType = PropTypes.shape({
   user_id: PropTypes.string,
 })
 
-export const changeLogPagePropType = PropTypes.shape({
+export const changeLogMatchPropTypes = PropTypes.shape({
   params: PropTypes.shape({
     clientId: PropTypes.string,
     id: PropTypes.string,

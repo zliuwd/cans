@@ -1,6 +1,6 @@
 import { checkPropTypes } from 'prop-types'
 import { client } from '../assessment.mocks.test'
-import { clientPropTypes, changeHistoryPropType } from './ChangeLogHelper'
+import { clientPropTypes, changeHistoryPropTypes, changeLogMatchPropTypes } from './ChangeLogHelper'
 
 describe('ChangeLogHelper', () => {
   describe('clientPropTypes', () => {
@@ -72,7 +72,7 @@ describe('ChangeLogHelper', () => {
     })
   })
 
-  describe('changeHistoryPropType', () => {
+  describe('changeHistoryPropTypes', () => {
     const changeRecord = {
       id: 710031,
       user_id: 'RACFID',
@@ -84,7 +84,7 @@ describe('ChangeLogHelper', () => {
     }
 
     const checkChangeHistoryPropType = change =>
-      checkPropTypes({ change: changeHistoryPropType }, { change }, 'change', 'MyComponent')
+      checkPropTypes({ change: changeHistoryPropTypes }, { change }, 'change', 'MyComponent')
 
     it('returns no error for valid history record', () => {
       expect(checkChangeHistoryPropType(changeRecord)).toBeUndefined()
@@ -123,6 +123,47 @@ describe('ChangeLogHelper', () => {
     it('returns an error if user_id is not a string', () => {
       const change = { user_id: 1 }
       expect(() => checkChangeHistoryPropType(change)).toThrow()
+    })
+  })
+
+  describe('changeLogMatchPropTypes', () => {
+    const defaultMatch = {
+      params: {
+        clientId: '123',
+        id: '1',
+      },
+    }
+
+    const checkChangeLogMatchPropType = match =>
+      checkPropTypes({ match: changeLogMatchPropTypes }, { match }, 'match', 'MyComponent')
+
+    it('returns no error for valid match object', () => {
+      expect(checkChangeLogMatchPropType(defaultMatch)).toBeUndefined()
+    })
+
+    it('returns an error is params is not an object', () => {
+      const match = []
+      expect(() => checkChangeLogMatchPropType(match)).toThrow()
+    })
+
+    it('returns an error if params.clientId is not a string', () => {
+      const match = {
+        params: {
+          clientId: 123,
+          id: '1',
+        },
+      }
+      expect(() => checkChangeLogMatchPropType(match)).toThrow()
+    })
+
+    it('returns an error if params.id is not a string', () => {
+      const match = {
+        params: {
+          clientId: '123',
+          id: 1,
+        },
+      }
+      expect(() => checkChangeLogMatchPropType(match)).toThrow()
     })
   })
 })

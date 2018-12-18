@@ -6,7 +6,7 @@ feature 'Assessment Page' do
   scenario 'can fill and complete assessment' do
     login
     visit '/clients/0PcpFQu0QM'
-    expect(page).to have_content('ADD CANS', wait: 45)
+    expect(page).to have_content('ADD CANS', wait: 60)
     post_new_assessment
     expect(page).to have_content 'Complete'
   end

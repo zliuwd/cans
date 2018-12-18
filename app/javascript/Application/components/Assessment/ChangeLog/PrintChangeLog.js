@@ -77,9 +77,13 @@ class PrintChangeLog extends Component {
 }
 
 PrintChangeLog.propTypes = {
-  assessmentId: PropTypes.string.isRequired,
+  assessmentId: PropTypes.number,
   client: clientPropTypes.isRequired,
   history: PropTypes.array.isRequired,
+}
+
+PrintChangeLog.defaultProps = {
+  assessmentId: 0,
 }
 
 export default PrintChangeLog
