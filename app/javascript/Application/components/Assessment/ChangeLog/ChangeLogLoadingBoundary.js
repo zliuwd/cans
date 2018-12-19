@@ -6,7 +6,10 @@ import { AssessmentService } from '../index'
 const fetchBoth = id => {
   const changeHistoryPromise = AssessmentService.getAllChanges(id)
   const assessmentPromise = AssessmentService.fetch(id)
-  return Promise.all([changeHistoryPromise, assessmentPromise])
+  return Promise.all([changeHistoryPromise, assessmentPromise]).then(([changeHistory, assessment]) => ({
+    changeHistory,
+    assessment,
+  }))
 }
 
 const ChangeLogLoadingBoundary = ({ id, children }) => (

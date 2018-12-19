@@ -33,6 +33,15 @@ describe('<PrintChangeLog />', () => {
   describe('print layout', () => {
     let wrapper
 
+    it('renders null if there is no change history', () => {
+      const props = {
+        history: [],
+        ...defaultProps,
+      }
+      wrapper = shallow(<PrintChangeLog {...props} />)
+      expect(wrapper.type()).toBe(null)
+    })
+
     beforeEach(() => {
       const props = {
         ...defaultHistory,

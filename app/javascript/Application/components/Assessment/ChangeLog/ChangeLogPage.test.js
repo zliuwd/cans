@@ -22,6 +22,7 @@ const props = {
     updateHeaderButtons: () => {},
     updateHeaderButtonsToDefault: () => {},
   },
+  assessmentWithHistory: {},
 }
 
 describe('<ChangeLogPage />', () => {

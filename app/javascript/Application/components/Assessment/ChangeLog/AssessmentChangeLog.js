@@ -38,21 +38,19 @@ class AssessmentChangeLog extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { assessmentWithHistory } = prevProps
-    const prevChangeHistory = assessmentWithHistory[0]
-    this.updatePrintButtonIfNeeded(prevChangeHistory)
+    this.updatePrintButtonIfNeeded(prevProps.assessmentWithHistory.changeHistory)
   }
 
   componentWillUnmount() {
-    const { pageHeaderButtonsController } = this.props
-    pageHeaderButtonsController.updateHeaderButtonsToDefault()
+    this.props.pageHeaderButtonsController.updateHeaderButtonsToDefault()
   }
 
   initHeaderButtons(enablePrintButton) {
     const { assessmentWithHistory, client, pageHeaderButtonsController } = this.props
 
-    const changeHistory = assessmentWithHistory[0]
-    const { id: assessmentId } = assessmentWithHistory[1]
+    const assessment = assessmentWithHistory.assessment ? assessmentWithHistory.assessment : {}
+    const assessmentId = assessment.id ? assessment.id : 0
+    const changeHistory = assessmentWithHistory.changeHistory ? assessmentWithHistory.changeHistory : []
 
     const node = <PrintChangeLog history={changeHistory} client={client} assessmentId={assessmentId} />
     const leftButton = buildSearchClientsButton()
@@ -63,8 +61,9 @@ class AssessmentChangeLog extends Component {
 
   updatePrintButtonIfNeeded(prevChangeHistory) {
     const { assessmentWithHistory } = this.props
-    const changeHistory = assessmentWithHistory[0]
+    const changeHistory = assessmentWithHistory.changeHistory ? assessmentWithHistory.changeHistory : []
     const changeHistoryUpdated = prevChangeHistory !== changeHistory
+
     if (changeHistoryUpdated) {
       const enablePrintButton = this.shouldPrintButtonBeEnabled()
       this.initHeaderButtons(enablePrintButton)
@@ -73,7 +72,7 @@ class AssessmentChangeLog extends Component {
 
   shouldPrintButtonBeEnabled() {
     const { assessmentWithHistory } = this.props
-    const changeHistory = assessmentWithHistory[0]
+    const changeHistory = assessmentWithHistory.changeHistory ? assessmentWithHistory.changeHistory : []
     const changeHistoryLength = changeHistory.length
     const enablePrintButton = changeHistoryLength > 0
 
@@ -99,15 +98,16 @@ class AssessmentChangeLog extends Component {
 
   render() {
     const { client, assessmentWithHistory } = this.props
-    const changeHistory = assessmentWithHistory[0]
+    const assessment = assessmentWithHistory.assessment ? assessmentWithHistory.assessment : null
+    const changeHistory = assessmentWithHistory.changeHistory ? assessmentWithHistory.changeHistory : []
     const changeHistoryLength = changeHistory.length
-    const assessment = assessmentWithHistory[1]
+
     const minRows = 0
     const defaultPageSize = 10
 
     const showPagination = changeHistoryLength > defaultPageSize
 
-    return changeHistoryLength > 0 ? (
+    return assessment && changeHistoryLength > 0 ? (
       <Row>
         <Col xs="12">
           <Card className="change-log-card">
@@ -132,18 +132,15 @@ class AssessmentChangeLog extends Component {
 }
 
 AssessmentChangeLog.propTypes = {
-  assessmentWithHistory: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.arrayOf(changeHistoryPropTypes), PropTypes.object])
-  ),
+  assessmentWithHistory: PropTypes.shape({
+    changeHistory: PropTypes.arrayOf(changeHistoryPropTypes),
+    assessment: PropTypes.object,
+  }).isRequired,
   client: clientPropTypes.isRequired,
   pageHeaderButtonsController: PropTypes.shape({
     updateHeaderButtons: PropTypes.func.isRequired,
     updateHeaderButtonsToDefault: PropTypes.func.isRequired,
   }).isRequired,
-}
-
-AssessmentChangeLog.defaultProps = {
-  assessmentWithHistory: [],
 }
 
 export default AssessmentChangeLog

@@ -27,26 +27,30 @@ describe('<AssessmentChangeLog />', () => {
     updateHeaderButtonsToDefault = () => {}
   ) => {
     const props = {
-      assessmentWithHistory: [changeHistory, assessment],
+      assessmentWithHistory: { changeHistory, assessment },
       pageHeaderButtonsController: {
         updateHeaderButtons,
         updateHeaderButtonsToDefault,
       },
       ...defaultProps,
     }
-
     return shallow(<AssessmentChangeLog {...props} />)
   }
 
   describe('page layout', () => {
-    let wrapper
-
-    it('renders nothing when there is no change log data', () => {
+    it('renders nothing when there is no change history', () => {
       const changeHistory = []
-      const assessment = {}
-      wrapper = render(changeHistory, assessment)
+      const wrapper = render(changeHistory)
       expect(wrapper.type()).toBe(null)
     })
+
+    it('renders nothing when the assessment is null', () => {
+      const assessment = null
+      const wrapper = render(defaultChangeHistory, assessment)
+      expect(wrapper.type()).toBe(null)
+    })
+
+    let wrapper
 
     beforeEach(() => {
       wrapper = render()
@@ -115,13 +119,13 @@ describe('<AssessmentChangeLog />', () => {
     describe('componentDidUpdate', () => {
       describe('changeHistory prop was updated', () => {
         it('should update page header buttons', () => {
-          wrapper = render(defaultChangeHistory, assessmentCompletedWithReferralNumber, updateHeaderButtonsMock)
+          wrapper = render([], assessmentCompletedWithReferralNumber, updateHeaderButtonsMock)
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
           wrapper.setProps({
-            assessmentWithHistory: [
-              [defaultChangeHistory[0], { changed_at: '2018-12-01T17:07:10.043Z' }],
-              assessmentCompletedWithReferralNumber,
-            ],
+            assessmentWithHistory: {
+              changeHistory: defaultChangeHistory,
+              assessment: assessmentCompletedWithReferralNumber,
+            },
           })
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(2)
           updateHeaderButtonsMock.mockClear()
@@ -133,7 +137,10 @@ describe('<AssessmentChangeLog />', () => {
           const wrapper = render(defaultChangeHistory, assessmentCompletedWithReferralNumber, updateHeaderButtonsMock)
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
           wrapper.setProps({
-            assessmentWithHistory: [defaultChangeHistory, assessmentCompletedWithReferralNumber],
+            assessmentWithHistory: {
+              changeHistory: defaultChangeHistory,
+              assessment: assessmentCompletedWithReferralNumber,
+            },
           })
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
           updateHeaderButtonsMock.mockClear()

@@ -67,23 +67,25 @@ class PrintChangeLog extends Component {
 
   render() {
     const { history, client, assessmentId } = this.props
-    return (
+
+    return history && history.length > 0 ? (
       <div className="print-change-log-table-wrapper">
         {this.renderHeader(client, assessmentId)}
         {this.renderChangeLogTable(history)}
       </div>
-    )
+    ) : null
   }
 }
 
 PrintChangeLog.propTypes = {
   assessmentId: PropTypes.number,
   client: clientPropTypes.isRequired,
-  history: PropTypes.array.isRequired,
+  history: PropTypes.array,
 }
 
 PrintChangeLog.defaultProps = {
   assessmentId: 0,
+  history: [],
 }
 
 export default PrintChangeLog
