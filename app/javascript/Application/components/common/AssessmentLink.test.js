@@ -45,11 +45,11 @@ describe('AssessmentLink', () => {
   })
 
   it('the Link text is the formatted date + " CANS ', () => {
-    const { event_date: eventDate } = assessmentInProgress
-    const formattedEventDate = isoToLocalDate(eventDate)
+    const { created_timestamp: createdTimestamp } = assessmentInProgress
+    const formattedDate = isoToLocalDate(createdTimestamp)
     const wrapper = prepareWrapper(assessmentInProgress, 'CHILD_LIST')
     const linkText = wrapper.props().children
 
-    expect(linkText).toEqual(`${formattedEventDate} CANS`)
+    expect(linkText).toEqual(`${formattedDate} CANS`)
   })
 })
