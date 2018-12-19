@@ -957,23 +957,49 @@ describe('<AssessmentContainer />', () => {
       wrapper.instance().setState({ isEditable: false })
       expect(wrapper.find('AssessmentFormFooter').exists()).toEqual(false)
     })
-  })
 
-  describe('when assessment status=COMPLETED', () => {
-    const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
-    wrapper.instance().setState({
-      assessment: {
-        event_date: '2010-10-13',
-        state: {
-          domains: [],
-          under_six: undefined,
+    describe('when assessment status=COMPLETED', () => {
+      const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+      wrapper.instance().setState({
+        assessment: {
+          event_date: '2010-10-13',
+          state: {
+            domains: [],
+            under_six: undefined,
+          },
+          status: AssessmentStatus.completed,
         },
-        status: AssessmentStatus.completed,
-      },
+        isEditable: false,
+      })
+
+      it('should display alert box', () => {
+        expect(wrapper.find('#top-alert-box').exists()).toBe(true)
+        expect(wrapper.find('#top-alert-box').prop('message')).toEqual(
+          'This assessment was completed and is available for view only.'
+        )
+      })
     })
 
-    it('should display alert box', () => {
-      expect(wrapper.find('#top-alert-box').exists()).toBe(true)
+    describe('when assessment status=IN_PROGRESS', () => {
+      const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+      wrapper.instance().setState({
+        assessment: {
+          event_date: '2010-10-13',
+          state: {
+            domains: [],
+            under_six: undefined,
+          },
+          status: AssessmentStatus.inProgress,
+        },
+        isEditable: false,
+      })
+
+      it('should display alert box', () => {
+        expect(wrapper.find('#top-alert-box').exists()).toBe(true)
+        expect(wrapper.find('#top-alert-box').prop('message')).toEqual(
+          'This CANS is under the jurisdiction of another county. Available for view only.'
+        )
+      })
     })
   })
 })

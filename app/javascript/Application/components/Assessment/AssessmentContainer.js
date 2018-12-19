@@ -377,13 +377,18 @@ class AssessmentContainer extends Component {
           />
         ) : null}
 
-        {!isEditable && assessment.status === AssessmentStatus.completed ? (
+        {!isEditable ? (
           <Sticker>
             <div className="top-alert-container">
               <CloseableAlert
                 id={'top-alert-box'}
-                message={'This assessment was completed, and is available for view only.'}
+                message={
+                  assessment.status === AssessmentStatus.completed
+                    ? 'This assessment was completed and is available for view only.'
+                    : 'This CANS is under the jurisdiction of another county. Available for view only.'
+                }
                 type={alertType.INFO}
+                isCloseable={true}
               />
             </div>
           </Sticker>
