@@ -68,4 +68,13 @@ describe('<DomainItemList/>', () => {
     const wrapper = shallow(<DomainItemList {...props} />)
     wrapper.find(Item).forEach(item => expect(item.props().onCommentUpdate).toBe(onItemCommentUpdateMock))
   })
+
+  it('should propagate disable prop to <Item/> ', () => {
+    const props = {
+      ...fakeItemListProps,
+      disabled: true,
+    }
+    const wrapper = shallow(<DomainItemList {...props} />)
+    wrapper.find(Item).forEach(item => expect(item.prop('disabled')).toBe(true))
+  })
 })

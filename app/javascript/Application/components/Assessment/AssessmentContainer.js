@@ -30,6 +30,7 @@ import './style.sass'
 import { getCurrentIsoDate } from '../../util/dateHelper'
 import moment from 'moment'
 import { logPageAction } from '../../util/analytics'
+import Sticker from 'react-stickyfill'
 
 class AssessmentContainer extends Component {
   constructor(props) {
@@ -40,7 +41,7 @@ class AssessmentContainer extends Component {
       i18n: {},
       isValidForSubmit: false,
       shouldRedirectToClientProfile: false,
-      isEditable: false,
+      isEditable: !props.disabled,
       isValidDate: true,
       isCaregiverWarningShown: false,
       isSubmitWarningShown: false,
@@ -65,14 +66,14 @@ class AssessmentContainer extends Component {
 
   async updateIsEditableState(assessmentId) {
     const isEditable =
-      assessmentId === undefined || (await SecurityService.checkPermission(`assessment:write:${assessmentId}`))
+      assessmentId === undefined || (await SecurityService.checkPermission(`assessment:update:${assessmentId}`))
     this.setState({ isEditable })
   }
 
   initHeaderButtons(isSaveButtonEnabled) {
-    const { assessment, i18n } = this.state
+    const { assessment, i18n, isEditable } = this.state
     const node = <PrintAssessment assessment={assessment} i18n={i18n} />
-    const leftButton = buildSaveAssessmentButton(this.handleSaveAssessment, isSaveButtonEnabled)
+    const leftButton = isEditable ? buildSaveAssessmentButton(this.handleSaveAssessment, isSaveButtonEnabled) : null
     const rightButton = <PrintButton node={node} isEnabled={true} />
     this.props.pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
   }
@@ -90,7 +91,6 @@ class AssessmentContainer extends Component {
     return (
       isValidDate &&
       isEditable &&
-      assessment.status !== 'COMPLETED' &&
       assessment.state.under_six !== undefined &&
       Boolean(assessment.event_date) &&
       isReadyForAction(assessmentServiceStatus)
@@ -376,6 +376,19 @@ class AssessmentContainer extends Component {
             }}
           />
         ) : null}
+
+        {!isEditable && assessment.status === AssessmentStatus.completed ? (
+          <Sticker>
+            <div className="top-alert-container">
+              <CloseableAlert
+                id={'top-alert-box'}
+                message={'This assessment was completed, and is available for view only.'}
+                type={alertType.INFO}
+              />
+            </div>
+          </Sticker>
+        ) : null}
+
         <AssessmentFormHeader
           client={client}
           assessment={assessment}
@@ -383,6 +396,7 @@ class AssessmentContainer extends Component {
           onKeyUp={this.handleKeyUp}
           handleWarningShow={this.handleWarningShow}
           isCaregiverWarningShown={this.state.isCaregiverWarningShown}
+          disabled={!isEditable}
         />
 
         <AssessmentSummaryCard
@@ -390,6 +404,7 @@ class AssessmentContainer extends Component {
           domains={assessment && assessment.state && assessment.state.domains}
           i18n={i18n}
           isUnderSix={Boolean(isUnderSix)}
+          disabled={!isEditable}
         />
 
         <Assessment
@@ -397,6 +412,7 @@ class AssessmentContainer extends Component {
           i18n={i18n}
           onAssessmentUpdate={this.updateAssessment}
           handleWarningShow={this.handleWarningShow}
+          disabled={!isEditable}
         />
         {LoadingState.ready === assessmentServiceStatus &&
           isEditable &&
@@ -406,18 +422,7 @@ class AssessmentContainer extends Component {
               active.
             </Typography>
           )}
-        {LoadingState.ready === assessmentServiceStatus &&
-          !isEditable && (
-            <div className={'permission-warning-alert'}>
-              <CloseableAlert
-                type={alertType.WARNING}
-                message="Saving and completing are disabled due to assessment status or county of jurisdiction."
-                isCloseable={false}
-                isAutoCloseable={false}
-              />
-            </div>
-          )}
-        {isUnderSix !== undefined && (
+        {isUnderSix !== undefined && isEditable ? (
           <AssessmentFormFooter
             assessment={assessment}
             onCancelClick={this.handleCancelClick}
@@ -428,7 +433,7 @@ class AssessmentContainer extends Component {
                 : this.handleSubmitWarning
             }
           />
-        )}
+        ) : null}
       </Fragment>
     )
   }
@@ -436,6 +441,7 @@ class AssessmentContainer extends Component {
 
 AssessmentContainer.propTypes = {
   client: PropTypes.object.isRequired,
+  disabled: PropTypes.bool,
   history: PropTypes.object,
   match: PropTypes.object,
   pageHeaderButtonsController: PropTypes.shape({
@@ -445,6 +451,7 @@ AssessmentContainer.propTypes = {
 }
 
 AssessmentContainer.defaultProps = {
+  disabled: true,
   match: {
     params: {},
   },

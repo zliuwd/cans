@@ -158,6 +158,7 @@ class Assessment extends Component {
               onCaregiverNameUpdate={this.updateCaregiverName}
               onDomainCommentUpdate={this.updateDomainComment}
               handleWarningShow={this.props.handleWarningShow}
+              disabled={this.props.disabled}
             />
           )
         })}
@@ -168,12 +169,14 @@ class Assessment extends Component {
 
 Assessment.propTypes = {
   assessment: PropTypes.object.isRequired,
+  disabled: PropTypes.bool,
   handleWarningShow: PropTypes.func,
   i18n: PropTypes.object.isRequired,
   onAssessmentUpdate: PropTypes.func.isRequired,
 }
 
 Assessment.defaultProps = {
+  disabled: false,
   handleWarningShow: () => {},
 }
 

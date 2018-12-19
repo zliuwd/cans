@@ -9,8 +9,9 @@ import UnderSixQuestion from './AssessmentFormHeader/UnderSixQuestion'
 import { Card, CardHeader, CardContent } from '@material-ui/core'
 
 describe('<AssessmentFormHeader />', () => {
+  const defaultProps = { assessment, client, onAssessmentUpdate: jest.fn() }
   it('renders with 1 <ConductedByField> component', () => {
-    const wrapper = shallow(<AssessmentFormHeader {...{ assessment, client, onAssessmentUpdate: jest.fn() }} />)
+    const wrapper = shallow(<AssessmentFormHeader {...defaultProps} />)
     expect(wrapper.find(ConductedByField).exists()).toBe(true)
   })
 
@@ -93,7 +94,7 @@ describe('<AssessmentFormHeader />', () => {
   describe('labels', () => {
     let wrapped
     beforeEach(() => {
-      wrapped = shallow(<AssessmentFormHeader {...{ assessment, client, onAssessmentUpdate: jest.fn() }} />)
+      wrapped = shallow(<AssessmentFormHeader {...defaultProps} />)
     })
 
     it('renderDateSelect() returns correct label text', () => {
@@ -211,8 +212,7 @@ describe('<AssessmentFormHeader />', () => {
 
   describe('with client', () => {
     it('displays correct client name', () => {
-      const props = { assessment, client, onAssessmentUpdate: jest.fn() }
-      const wrapper = shallow(<AssessmentFormHeader {...props} />)
+      const wrapper = shallow(<AssessmentFormHeader {...defaultProps} />)
       const headerTitle = shallow(wrapper.find(CardHeader).props().title)
       expect(headerTitle.find('#child-name').text()).toBe('Doe, John')
     })
@@ -229,8 +229,7 @@ describe('<AssessmentFormHeader />', () => {
 
   describe('with county', () => {
     it('displays correct county name', () => {
-      const props = { assessment, client, onAssessmentUpdate: jest.fn() }
-      const wrapper = shallow(<AssessmentFormHeader {...props} />)
+      const wrapper = shallow(<AssessmentFormHeader {...defaultProps} />)
       const headerAction = shallow(wrapper.find(CardHeader).props().action)
       expect(headerAction.find('#county-name').text()).toBe('Calaveras County')
     })
@@ -268,7 +267,7 @@ describe('<AssessmentFormHeader />', () => {
         onAssessmentUpdate: mockFn,
       }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
-      expect(wrapper.find('#conducted-by').prop('isDisabled')).toBeTruthy()
+      expect(wrapper.find('#conducted-by').prop('disabled')).toBeTruthy()
     })
 
     describe('#handleConductedByChange', () => {
@@ -292,8 +291,7 @@ describe('<AssessmentFormHeader />', () => {
 
   describe('AssessmentFormHeader Card', () => {
     describe('when loading', () => {
-      const props = { assessment, client, onAssessmentUpdate: jest.fn() }
-      const wrapper = shallow(<AssessmentFormHeader {...props} />)
+      const wrapper = shallow(<AssessmentFormHeader {...defaultProps} />)
 
       it('renders AssessmentFormHeader Card ', () => {
         const card = wrapper.find(Card)
@@ -307,6 +305,31 @@ describe('<AssessmentFormHeader />', () => {
       it('has a card content', () => {
         expect(wrapper.find(CardContent).exists()).toBe(true)
       })
+    })
+  })
+
+  describe('read only mode', () => {
+    const disabledProps = { ...defaultProps, disabled: true }
+    const wrapper = shallow(<AssessmentFormHeader {...disabledProps} />)
+
+    it('propagates disable props to <DateField> ', () => {
+      expect(wrapper.find('DateField').prop('disabled')).toEqual(true)
+    })
+
+    it('propagates disable props to <UnderSixQuestion> ', () => {
+      expect(wrapper.find('UnderSixQuestion').prop('disabled')).toEqual(true)
+    })
+
+    it('propagates disable props to <HasCaregiverQuestion> ', () => {
+      expect(wrapper.find('HasCaregiverQuestion').prop('disabled')).toEqual(true)
+    })
+
+    it('propagates disable props to #can-release-control ', () => {
+      expect(wrapper.find('#can-release-control').prop('disabled')).toEqual(true)
+    })
+
+    it('propagates disable props to <ConductedByField> ', () => {
+      expect(wrapper.find('ConductedByField').prop('disabled')).toEqual(true)
     })
   })
 })

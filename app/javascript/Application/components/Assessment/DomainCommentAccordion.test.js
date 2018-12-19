@@ -22,29 +22,27 @@ const domainDefault = {
     },
   ],
 }
-
 const domainWithComment = {
   ...domainDefault,
   comment: 'Domain test comment',
 }
 
-const domainCommentAccordionDefault = (
-  <DomainCommentAccordion
-    id={'commenta'}
-    title={'familiaDomain'}
-    domain={{ ...domainDefault }}
-    onDomainCommentUpdate={() => {}}
-  />
-)
+const defaultProps = {
+  id: 'commenta',
+  title: 'familiaDomain',
+  domain: { ...domainDefault },
+  onDomainCommentUpdate: () => {},
+}
 
-const domainCommentAccordionWithComment = (
-  <DomainCommentAccordion
-    id={'commenta'}
-    title={'familiaDomain'}
-    domain={{ ...domainWithComment }}
-    onDomainCommentUpdate={() => {}}
-  />
-)
+const propsWithComment = {
+  id: 'commenta',
+  title: 'familiaDomain',
+  domain: { ...domainWithComment },
+  onDomainCommentUpdate: () => {},
+}
+
+const domainCommentAccordionDefault = <DomainCommentAccordion {...defaultProps} />
+const domainCommentAccordionWithComment = <DomainCommentAccordion {...propsWithComment} />
 
 describe('<DomainCommentAccordion />', () => {
   describe('Expand/Collapse', () => {
@@ -143,6 +141,14 @@ describe('<DomainCommentAccordion />', () => {
       const wrapper = shallow(domainCommentAccordionWithComment)
       wrapper.setState({ isExpanded: true })
       expect(wrapper.find(Comment).props().comment).toBe('Domain test comment')
+    })
+  })
+
+  describe('Read only mode', () => {
+    it('propagates disabled prop to <Comment/>', () => {
+      const wrapper = shallow(<DomainCommentAccordion {...propsWithComment} disabled={true} />)
+      wrapper.setState({ isExpanded: true })
+      expect(wrapper.find('Comment').prop('disabled')).toBe(true)
     })
   })
 })

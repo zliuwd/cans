@@ -63,6 +63,7 @@ class Comment extends Component {
             onFocus={this.handleOnFocus}
             onBlur={this.handleOnBlur}
             maxLength={maxCommentLength + safariMaxLengthCompensation}
+            disabled={this.props.disabled}
           />
           <span className={`${prefix}-text-length${lengthClassSuffix}`}>{`${value.length}/${maxCommentLength}`}</span>
         </div>
@@ -73,6 +74,7 @@ class Comment extends Component {
 
 Comment.propTypes = {
   comment: PropTypes.string,
+  disabled: PropTypes.bool,
   id: PropTypes.string.isRequired,
   maxCommentLength: PropTypes.number,
   onChange: PropTypes.func.isRequired,
@@ -81,6 +83,7 @@ Comment.propTypes = {
 
 Comment.defaultProps = {
   comment: '',
+  disabled: false,
   maxCommentLength: 250,
 }
 

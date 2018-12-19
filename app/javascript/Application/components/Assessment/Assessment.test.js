@@ -13,6 +13,13 @@ describe('<Assessment />', () => {
       const wrapper = mount(<Assessment assessment={assessment} onAssessmentUpdate={jest.fn()} i18n={i18n} />)
       expect(wrapper.find(Domain).length).toBe(1)
     })
+
+    it('propagates disabled props to <Domain/> component', () => {
+      const wrapper = mount(
+        <Assessment assessment={assessment} onAssessmentUpdate={jest.fn()} i18n={i18n} disabled={true} />
+      )
+      expect(wrapper.find(Domain).prop('disabled')).toBe(true)
+    })
   })
 
   describe('componentDidUpdate', () => {

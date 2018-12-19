@@ -7,7 +7,7 @@ import Radio from '@material-ui/core/Radio'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { stringify } from '../../../util/common'
 
-const HasCaregiverQuestion = ({ hasCaregiver, onHasCaregiverChange, onHasCaregiverNoClicked }) => (
+const HasCaregiverQuestion = ({ hasCaregiver, onHasCaregiverChange, onHasCaregiverNoClicked, disabled }) => (
   <Fragment>
     <Typography id={'has-caregiver-label'} variant="headline" classes={{ root: 'assessment-form-header-label' }}>
       Child/Youth has Caregiver?
@@ -21,6 +21,7 @@ const HasCaregiverQuestion = ({ hasCaregiver, onHasCaregiverChange, onHasCaregiv
           value={stringify(hasCaregiver)}
           onChange={onHasCaregiverChange}
           className={'assessment-form-header-radio-group'}
+          disabled={disabled}
         >
           <FormControlLabel
             id={'has-caregiver-yes'}
@@ -32,6 +33,7 @@ const HasCaregiverQuestion = ({ hasCaregiver, onHasCaregiverChange, onHasCaregiv
                   id: 'input-has-caregiver-yes',
                   'aria-labelledby': 'has-caregiver-label',
                 }}
+                disabled={disabled}
               />
             }
             label={'Yes'}
@@ -48,6 +50,7 @@ const HasCaregiverQuestion = ({ hasCaregiver, onHasCaregiverChange, onHasCaregiv
                   id: 'input-has-caregiver-no',
                   'aria-labelledby': 'has-caregiver-label',
                 }}
+                disabled={disabled}
               />
             }
             label={'No'}
@@ -60,9 +63,14 @@ const HasCaregiverQuestion = ({ hasCaregiver, onHasCaregiverChange, onHasCaregiv
 )
 
 HasCaregiverQuestion.propTypes = {
+  disabled: PropTypes.bool,
   hasCaregiver: PropTypes.bool.isRequired,
   onHasCaregiverChange: PropTypes.func.isRequired,
   onHasCaregiverNoClicked: PropTypes.func.isRequired,
+}
+
+HasCaregiverQuestion.defaultProps = {
+  disabled: false,
 }
 
 export default HasCaregiverQuestion

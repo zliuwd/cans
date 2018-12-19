@@ -100,7 +100,7 @@ class Item extends Component {
               control={
                 <Checkbox
                   checked={isConfidential}
-                  disabled={confidential_by_default && !this.props.canReleaseConfidentialInfo}
+                  disabled={(confidential_by_default && !this.props.canReleaseConfidentialInfo) || this.props.disabled}
                   color={'default'}
                 />
               }
@@ -151,6 +151,7 @@ class Item extends Component {
       hasNaOption: has_na_option,
       rating,
       onRatingUpdate: this.handleRatingChange,
+      disabled: this.props.disabled,
     }
     return (
       <div>
@@ -180,6 +181,7 @@ class Item extends Component {
                 rating={rating}
                 handleRatingChange={this.handleRatingChange}
                 naValue={this.handleNaValueSetting(rating)}
+                disabled={this.props.disabled}
               />
             ) : null}
             <CommentIcon isSolid={Boolean(item.comment)} className={'item-toolbar-comment-icon'} />
@@ -206,6 +208,7 @@ class Item extends Component {
                 rating={rating}
                 hasNaOption={has_na_option}
                 handleRatingChange={this.handleRatingChange}
+                disabled={this.props.disabled}
               />
             ) : null}
             <Comment
@@ -214,6 +217,7 @@ class Item extends Component {
               onChange={this.handleCommentChange}
               prefix={'item-comment'}
               maxCommentLength={maxCommentLength}
+              disabled={this.props.disabled}
             />
           </Paper>
         ) : null}
@@ -226,6 +230,7 @@ class Item extends Component {
 Item.propTypes = {
   canReleaseConfidentialInfo: PropTypes.bool.isRequired,
   caregiverIndex: PropTypes.string,
+  disabled: PropTypes.bool,
   i18n: PropTypes.object.isRequired,
   isAssessmentUnderSix: PropTypes.bool.isRequired,
   item: PropTypes.object.isRequired,
@@ -236,5 +241,6 @@ Item.propTypes = {
 
 Item.defaultProps = {
   caregiverIndex: undefined,
+  disabled: false,
 }
 export default Item

@@ -13,6 +13,7 @@ const ieFixStyle = ieStyleFixer()
 const PrimRadio = withStyles({
   root: ieFixStyle.radio,
   checked: {},
+  disabled: {},
 })(Radio)
 
 const boolRating = ['No', 'Yes']
@@ -27,7 +28,6 @@ const ItemBooleanRating = props => {
         style={ieFixStyle.label}
         key={`bool-${i}`}
         value={stringify(i)}
-        disabled={props.rating === 8}
         control={
           <PrimRadio
             inputProps={{
@@ -51,6 +51,7 @@ const ItemBooleanRating = props => {
             flexDirection: 'row',
             height: '8px',
           }}
+          disabled={props.rating === 8 || props.disabled}
         >
           <RadioGroup
             id={`${code}-bool-rating`}
@@ -67,9 +68,14 @@ const ItemBooleanRating = props => {
 }
 
 ItemBooleanRating.propTypes = {
+  disabled: PropTypes.bool,
   itemCode: PropTypes.string.isRequired,
   onRatingUpdate: PropTypes.func.isRequired,
   rating: PropTypes.number.isRequired,
+}
+
+ItemBooleanRating.defaultProps = {
+  disabled: false,
 }
 
 export default ItemBooleanRating

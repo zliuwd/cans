@@ -15,7 +15,7 @@ class ConductedByField extends PureComponent {
           id={this.props.id}
           value={this.props.value}
           onChange={this.props.onChange}
-          disabled={this.props.isDisabled}
+          disabled={this.props.disabled}
           maxLength={100}
         />
       </Fragment>
@@ -27,12 +27,12 @@ ConductedByField.defaultProps = {
   id: 'conducted-by',
   value: '',
   onChange: () => {},
-  isDisabled: false,
+  disabled: false,
 }
 
 ConductedByField.propTypes = {
+  disabled: PropTypes.bool,
   id: PropTypes.string,
-  isDisabled: PropTypes.bool,
   onChange: PropTypes.func,
   value: PropTypes.string,
 }

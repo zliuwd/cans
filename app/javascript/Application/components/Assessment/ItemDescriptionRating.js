@@ -39,7 +39,7 @@ class ItemDescriptionRating extends PureComponent {
           Ratings:
         </Typography>
         <form autoComplete="off">
-          <FormControl className={'item-form-control'}>
+          <FormControl className={'item-form-control'} disabled={this.props.disabled}>
             <RadioGroup name="rating_desc" value={stringify(rating)} onChange={handleRatingChange}>
               {hasNaOption ? (
                 <FormControlLabel
@@ -84,11 +84,16 @@ class ItemDescriptionRating extends PureComponent {
 
 ItemDescriptionRating.propTypes = {
   code: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
   handleRatingChange: PropTypes.func.isRequired,
   hasNaOption: PropTypes.bool.isRequired,
   isBooleanRating: PropTypes.bool.isRequired,
   rating: PropTypes.number.isRequired,
   ratingDescriptions: PropTypes.array.isRequired,
+}
+
+ItemDescriptionRating.defaultProps = {
+  disabled: false,
 }
 
 export default ItemDescriptionRating

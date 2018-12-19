@@ -100,6 +100,7 @@ class AssessmentFormHeader extends PureComponent {
           onChange={value => this.changeFieldAndUpdateAssessment('event_date', value)}
           onRawValueUpdate={this.props.onKeyUp}
           ariaLabelledBy={'assessment-date-label'}
+          disabled={this.props.disabled}
         />
       </Fragment>
     )
@@ -130,6 +131,7 @@ class AssessmentFormHeader extends PureComponent {
         hasCaregiver={hasCaregiver}
         onHasCaregiverChange={this.handleHasCaregiverChange}
         onHasCaregiverNoClicked={this.handleHasCaregiverSwitcher}
+        disabled={this.props.disabled}
       />
     )
   }
@@ -141,7 +143,7 @@ class AssessmentFormHeader extends PureComponent {
         <Typography id={'can-release-label'} variant="headline" classes={{ root: 'assessment-form-header-label' }}>
           Authorization for release of information on file?
         </Typography>
-        <FormControl>
+        <FormControl id={'can-release-control'} disabled={this.props.disabled}>
           <fieldset>
             <legend />
             <RadioGroup
@@ -198,14 +200,18 @@ class AssessmentFormHeader extends PureComponent {
         <Row className={'assessment-form-header-inputs'}>
           <Col sm={3}>{this.renderDateSelect()}</Col>
           <Col xs={3}>
-            <UnderSixQuestion isUnderSix={this.props.assessment.state.under_six} onChange={this.updateUnderSix} />
+            <UnderSixQuestion
+              isUnderSix={this.props.assessment.state.under_six}
+              onChange={this.updateUnderSix}
+              disabled={this.props.disabled}
+            />
           </Col>
           <Col sm={3}>
             <ConductedByField
               id={'conducted-by'}
               value={this.props.assessment.conducted_by}
               onChange={this.handleConductedByChange}
-              isDisabled={this.props.assessment.status === AssessmentStatus.completed}
+              disabled={this.props.assessment.status === AssessmentStatus.completed || this.props.disabled}
             />
           </Col>
           <Col sm={3}>{this.renderCaseNumber()}</Col>
@@ -243,12 +249,14 @@ class AssessmentFormHeader extends PureComponent {
   }
 }
 AssessmentFormHeader.defaultProps = {
+  disabled: false,
   onKeyUp: () => {},
   handleWarningShow: () => {},
 }
 AssessmentFormHeader.propTypes = {
   assessment: PropTypes.object.isRequired,
   client: PropTypes.object.isRequired,
+  disabled: PropTypes.bool,
   handleWarningShow: PropTypes.func,
   onAssessmentUpdate: PropTypes.func.isRequired,
   onKeyUp: PropTypes.func,

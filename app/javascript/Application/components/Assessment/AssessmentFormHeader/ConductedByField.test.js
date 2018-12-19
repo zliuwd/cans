@@ -25,7 +25,7 @@ describe('<ConductedByField/>', () => {
   })
 
   it('disabled when props has disabled = true', () => {
-    const wrapper = shallow(<ConductedByField isDisabled={true} />)
+    const wrapper = shallow(<ConductedByField disabled={true} />)
     expect(wrapper.find('Input').prop('disabled')).toBeTruthy()
   })
 

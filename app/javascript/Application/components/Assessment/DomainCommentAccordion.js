@@ -73,6 +73,7 @@ class DomainCommentAccordion extends Component {
           onChange={this.handleDomainCommentChange}
           prefix={'domain-comment'}
           maxCommentLength={maxCommentLength}
+          disabled={this.props.disabled}
         />
       </Paper>
     )
@@ -99,10 +100,15 @@ class DomainCommentAccordion extends Component {
 }
 
 DomainCommentAccordion.propTypes = {
+  disabled: PropTypes.bool,
   domain: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
   onDomainCommentUpdate: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
+}
+
+DomainCommentAccordion.defaultProps = {
+  disabled: false,
 }
 
 export default DomainCommentAccordion

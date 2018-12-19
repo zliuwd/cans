@@ -115,6 +115,22 @@ const shallowItem = item => {
   )
 }
 
+const mountDisabledItem = item => {
+  return mount(
+    <Item
+      key={'1'}
+      canReleaseConfidentialInfo={true}
+      item={item}
+      isAssessmentUnderSix={false}
+      i18n={{ ...i18nDefault }}
+      onRatingUpdate={() => {}}
+      onConfidentialityUpdate={() => {}}
+      onCommentUpdate={() => {}}
+      disabled={true}
+    />
+  )
+}
+
 describe('<Item />', () => {
   it('can expand and fold', () => {
     const wrapper = mount({ ...itemComponentDefault })
@@ -239,6 +255,15 @@ describe('<Item />', () => {
       wrapper.find('#lf10family-item-expand').simulate('click')
       const naCheckbox = wrapper.find('FormControlLabel[label="N/A"]').find('Checkbox')
       expect(naCheckbox.length).toBe(0)
+    })
+
+    it('should propagate disabled props to ItemNaCheckbox', () => {
+      const item = { ...itemDefault }
+      item.has_na_option = true
+      const wrapper = mountDisabledItem(item)
+      wrapper.find('#lf10family-item-expand').simulate('click')
+      const naCheckbox = wrapper.find('ItemNaCheckbox')
+      expect(naCheckbox.prop('disabled')).toBe(true)
     })
   })
 
@@ -377,5 +402,94 @@ describe('<Item />', () => {
         .dive()
         .prop('label')
     ).toEqual('Discretion Needed')
+  })
+
+  it('should propagate disabled prop to Discretion Needed checkbox', () => {
+    const wrapper = shallow(
+      <Item
+        isAssessmentUnderSix={false}
+        item={{ ...nonSUDItem }}
+        i18n={{ ...i18nDefault }}
+        canReleaseConfidentialInfo={false}
+        onCommentUpdate={() => {}}
+        onRatingUpdate={() => {}}
+        onConfidentialityUpdate={() => {}}
+        disabled={true}
+      />
+    )
+    const checkboxWrapper = shallow(
+      wrapper
+        .find(FormControlLabel)
+        .dive()
+        .prop('control')
+    )
+    expect(checkboxWrapper.prop('disabled')).toBe(true)
+  })
+
+  it('should propagate disable prop to <ItemRegularRating />', () => {
+    const wrapper = shallow(
+      <Item
+        isAssessmentUnderSix={false}
+        item={{ ...nonSUDItem }}
+        i18n={{ ...i18nDefault }}
+        canReleaseConfidentialInfo={false}
+        onCommentUpdate={() => {}}
+        onRatingUpdate={() => {}}
+        onConfidentialityUpdate={() => {}}
+        disabled={true}
+      />
+    )
+    expect(wrapper.find('ItemRegularRating').prop('disabled')).toBe(true)
+  })
+
+  it('should propagate disable prop to <ItemBooleanRating />', () => {
+    const boolRatingItem = { ...nonSUDItem, rating_type: 'BOOLEAN' }
+    const wrapper = shallow(
+      <Item
+        isAssessmentUnderSix={false}
+        item={{ ...boolRatingItem }}
+        i18n={{ ...i18nDefault }}
+        canReleaseConfidentialInfo={false}
+        onCommentUpdate={() => {}}
+        onRatingUpdate={() => {}}
+        onConfidentialityUpdate={() => {}}
+        disabled={true}
+      />
+    )
+    expect(wrapper.find('ItemBooleanRating').prop('disabled')).toBe(true)
+  })
+
+  it('should propagate disable prop to <ItemDescriptionRating />', () => {
+    const wrapper = shallow(
+      <Item
+        isAssessmentUnderSix={false}
+        item={{ ...nonSUDItem }}
+        i18n={{ ...i18nDefault }}
+        canReleaseConfidentialInfo={false}
+        onCommentUpdate={() => {}}
+        onRatingUpdate={() => {}}
+        onConfidentialityUpdate={() => {}}
+        disabled={true}
+      />
+    )
+    wrapper.find('#lf10family-item-expand').simulate('click')
+    expect(wrapper.find('ItemDescriptionRating').prop('disabled')).toBe(true)
+  })
+
+  it('should propagate disable prop to <Comment />', () => {
+    const wrapper = shallow(
+      <Item
+        isAssessmentUnderSix={false}
+        item={{ ...nonSUDItem }}
+        i18n={{ ...i18nDefault }}
+        canReleaseConfidentialInfo={false}
+        onCommentUpdate={() => {}}
+        onRatingUpdate={() => {}}
+        onConfidentialityUpdate={() => {}}
+        disabled={true}
+      />
+    )
+    wrapper.find('#lf10family-item-expand').simulate('click')
+    expect(wrapper.find('Comment').prop('disabled')).toBe(true)
   })
 })

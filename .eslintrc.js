@@ -72,7 +72,7 @@ module.exports = {
     'react/boolean-prop-naming': [
       2,
       {
-        rule: '^(is|has|can)[A-Z]([A-Za-z0-9]?)+',
+        rule: '^((is|has|can)[A-Z]([A-Za-z0-9]?)+$)|^(disabled)$',
         message: `The prop ({{ propName }}) needs to start with 'is' or 'has'`,
       },
     ],

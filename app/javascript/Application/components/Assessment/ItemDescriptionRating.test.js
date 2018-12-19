@@ -116,4 +116,12 @@ describe('<ItemDescriptionRating />', () => {
       expect(findLabelText(wrapper, 2)).toBe('Yes = -YES- description')
     })
   })
+
+  describe('Disabled state', () => {
+    it('should propagate disabled prop to <FormControl/>', () => {
+      const disabledProps = { ...fakeRegularWithNa, disabled: true }
+      const wrapper = mount(<ItemDescriptionRating {...disabledProps} />)
+      expect(wrapper.find('FormControl').prop('disabled')).toBe(true)
+    })
+  })
 })

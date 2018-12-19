@@ -158,24 +158,23 @@ describe('<Domain />', () => {
       is_caregiver_domain: true,
       caregiver_index: 'a',
     }
-    const domainComponent = (
-      <Domain
-        key={'1'}
-        canReleaseConfidentialInfo={true}
-        domain={{ ...domain }}
-        isAssessmentUnderSix={true}
-        i18n={{ ...i18nDefault }}
-        i18nAll={{}}
-        index={1}
-        onItemCommentUpdate={() => {}}
-        onDomainCommentUpdate={() => {}}
-        onRatingUpdate={() => {}}
-        onConfidentialityUpdate={() => {}}
-        onAddCaregiverDomain={callbackMock}
-        handleWarningShow={() => {}}
-        onCaregiverNameUpdate={() => {}}
-      />
-    )
+    const defaultProps = {
+      key: '1',
+      canReleaseConfidentialInfo: true,
+      domain: { ...domain },
+      handleWarningShow: () => {},
+      i18n: { ...i18nDefault },
+      i18nAll: {},
+      index: 1,
+      isAssessmentUnderSix: true,
+      onAddCaregiverDomain: callbackMock,
+      onCaregiverNameUpdate: () => {},
+      onConfidentialityUpdate: () => {},
+      onDomainCommentUpdate: () => {},
+      onItemCommentUpdate: () => {},
+      onRatingUpdate: () => {},
+    }
+    const domainComponent = <Domain {...defaultProps} />
     let wrapper
     beforeEach(() => {
       wrapper = mount(domainComponent)
@@ -291,6 +290,52 @@ describe('<Domain />', () => {
           })
         })
       })
+    })
+  })
+
+  describe('read only mode', () => {
+    const callbackMock = jest.fn()
+    const domain = {
+      ...domainDefault,
+      is_caregiver_domain: true,
+      caregiver_index: 'a',
+    }
+    const defaultProps = {
+      key: '1',
+      canReleaseConfidentialInfo: true,
+      domain: { ...domain },
+      handleWarningShow: () => {},
+      i18n: { ...i18nDefault },
+      i18nAll: {},
+      index: 1,
+      isAssessmentUnderSix: true,
+      onAddCaregiverDomain: callbackMock,
+      onCaregiverNameUpdate: () => {},
+      onConfidentialityUpdate: () => {},
+      onDomainCommentUpdate: () => {},
+      onItemCommentUpdate: () => {},
+      onRatingUpdate: () => {},
+      disabled: true,
+    }
+    const domainWrapper = shallow(<Domain {...defaultProps} />)
+    domainWrapper.instance().handleExpandedChange()
+    domainWrapper.update()
+    domainWrapper.setState({ expanded: true })
+
+    it('should propagate disabled prop to caregiver-name input', () => {
+      expect(domainWrapper.find('.caregiver-name').prop('disabled')).toBe(true)
+    })
+
+    it('should propagate disabled prop to <DomainItemList/>', () => {
+      expect(domainWrapper.find(DomainItemList).prop('disabled')).toBe(true)
+    })
+
+    it('should propagate disabled prop to <DomainCommentAccordion/>', () => {
+      expect(domainWrapper.find('DomainCommentAccordion').prop('disabled')).toBe(true)
+    })
+
+    it('should hide <DomainCaregiverControls/> when disables=true ', () => {
+      expect(domainWrapper.find(DomainCaregiverControls).length).toBe(0)
     })
   })
 })

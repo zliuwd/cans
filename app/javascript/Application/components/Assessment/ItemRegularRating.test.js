@@ -57,4 +57,12 @@ describe('<ItemBooleanRating/>', () => {
     const wrapper = mount(<ItemRegularRating {...regularRatingWithNaProps} />)
     expect(wrapper.find('Radio[disabled=true]').length).toBe(4)
   })
+
+  it('should propagate disabled prop to <FormControl/>', () => {
+    const disabledProps = { ...regularRatingProps, disabled: true }
+    const wrapper = mount(<ItemRegularRating {...disabledProps} />)
+    wrapper.find('FormControl').forEach(control => {
+      expect(control.prop('disabled')).toBe(true)
+    })
+  })
 })

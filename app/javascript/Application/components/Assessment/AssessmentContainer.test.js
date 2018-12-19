@@ -24,10 +24,10 @@ import {
   domainWithTwoCaregiver,
 } from './assessment.mocks.test'
 import { LoadingState } from '../../util/loadingHelper'
-import { CloseableAlert } from '../common/CloseableAlert'
 import { getCurrentIsoDate } from '../../util/dateHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import * as Analytics from '../../util/analytics'
+import { AssessmentStatus } from './AssessmentHelper'
 
 jest.mock('../../util/analytics')
 
@@ -410,66 +410,6 @@ describe('<AssessmentContainer />', () => {
       })
     })
 
-    describe('warning message on absence of edit permission', () => {
-      it('should render warning message', async () => {
-        const props = {
-          location: { childId: 1 },
-          match: { params: { id: 1 } },
-          pageHeaderButtonsController: {
-            updateHeaderButtons: () => {},
-            updateHeaderButtonsToDefault: () => {},
-          },
-          client: {},
-        }
-        jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false))
-        jest.spyOn(AssessmentService, 'fetch').mockReturnValue(Promise.resolve(assessment))
-        const wrapper = await shallow(<AssessmentContainer {...props} />)
-        await wrapper.instance().componentDidMount()
-        expect(wrapper.find(CloseableAlert).length).toBe(1)
-        const warning = wrapper.find(CloseableAlert).first()
-        expect(warning.props().message).toBe(
-          'Saving and completing are disabled due to assessment status or county of jurisdiction.'
-        )
-        expect(wrapper.find(Typography).length).toBe(0)
-      })
-
-      it('should not render warning message', async () => {
-        const props = {
-          location: { childId: 10 },
-          match: { params: { id: '123' } },
-          pageHeaderButtonsController: {
-            updateHeaderButtons: () => {},
-            updateHeaderButtonsToDefault: () => {},
-          },
-          client: {},
-        }
-        jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
-        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(assessment))
-        const wrapper = await shallow(<AssessmentContainer {...props} />)
-        await wrapper.instance().componentDidMount()
-        expect(wrapper.find(CloseableAlert).length).toBe(0)
-      })
-
-      it('should not render warning message when assessment is new', async () => {
-        const props = {
-          location: { childId: 10 },
-          pageHeaderButtonsController: {
-            updateHeaderButtons: () => {},
-            updateHeaderButtonsToDefault: () => {},
-          },
-          client: {},
-          assessment: assessment,
-        }
-        jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
-        const wrapper = await shallow(<AssessmentContainer {...props} />)
-        await wrapper.instance().componentDidMount()
-        expect(wrapper.find(CloseableAlert).length).toBe(0)
-      })
-    })
-
     describe('assessment form with no existing assessment', () => {
       const props = {
         client: childInfoJson,
@@ -838,6 +778,7 @@ describe('<AssessmentContainer />', () => {
         // when
         wrapper.setState({
           isValidForSubmit: true,
+          isEditable: true,
           assessmentServiceStatus: LoadingState.waiting,
           assessment,
         })
@@ -861,7 +802,7 @@ describe('<AssessmentContainer />', () => {
         expect(wrapper.find('AuthBoundary').instance().props.andCondition).toBeTruthy()
       })
 
-      it('should be disabled when assessment is not editable', () => {
+      it('should not be rendered when assessment is not editable', () => {
         const wrapper = mount(<AssessmentContainer {...defaultProps} />)
 
         // when
@@ -873,7 +814,7 @@ describe('<AssessmentContainer />', () => {
         })
 
         // then
-        expect(wrapper.find('AuthBoundary').instance().props.andCondition).toBeFalsy()
+        expect(wrapper.find('AuthBoundary').exists()).toBeFalsy()
       })
     })
   })
@@ -981,6 +922,58 @@ describe('<AssessmentContainer />', () => {
         })
         expect(instance.shouldSaveButtonBeEnabled()).toBeFalsy()
       })
+    })
+  })
+
+  describe('isEditable', () => {
+    const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+    wrapper.instance().onFetchAssessmentSuccess(assessment)
+
+    it('should enable <AssessmentFormHeader/> when isEditable=true and disable when isEditable=false', () => {
+      wrapper.instance().setState({ isEditable: true })
+      expect(wrapper.find('AssessmentFormHeader').prop('disabled')).toEqual(false)
+
+      wrapper.instance().setState({ isEditable: false })
+      expect(wrapper.find('AssessmentFormHeader').prop('disabled')).toEqual(true)
+    })
+
+    it('should enable  <AssessmentSummaryCard/> when isEditable=true and disable when isEditable=false', () => {
+      wrapper.instance().setState({ isEditable: true })
+      expect(wrapper.find('AssessmentSummaryCard').prop('disabled')).toEqual(false)
+
+      wrapper.instance().setState({ isEditable: false })
+      expect(wrapper.find('AssessmentSummaryCard').prop('disabled')).toEqual(true)
+    })
+
+    it('should enable  <Assessment/> when isEditable=true and disable when isEditable=false', () => {
+      wrapper.instance().setState({ isEditable: true })
+      expect(wrapper.find('Assessment').prop('disabled')).toEqual(false)
+
+      wrapper.instance().setState({ isEditable: false })
+      expect(wrapper.find('Assessment').prop('disabled')).toEqual(true)
+    })
+
+    it('should enable  <AssessmentFormFooter/> when isEditable=true and should not be rendered when isEditable=false', () => {
+      wrapper.instance().setState({ isEditable: false })
+      expect(wrapper.find('AssessmentFormFooter').exists()).toEqual(false)
+    })
+  })
+
+  describe('when assessment status=COMPLETED', () => {
+    const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+    wrapper.instance().setState({
+      assessment: {
+        event_date: '2010-10-13',
+        state: {
+          domains: [],
+          under_six: undefined,
+        },
+        status: AssessmentStatus.completed,
+      },
+    })
+
+    it('should display alert box', () => {
+      expect(wrapper.find('#top-alert-box').exists()).toBe(true)
     })
   })
 })

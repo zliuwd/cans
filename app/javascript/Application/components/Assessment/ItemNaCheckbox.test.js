@@ -64,4 +64,12 @@ describe('<ItemNaCheckbox/>', () => {
       expect(wrapper.props().handleRatingChange).toBeCalledWith({ target: { value: 8 } })
     })
   })
+
+  describe('ItemNacheckbox is disabled', () => {
+    it('should propagate disabled props to checkbox', () => {
+      const props = { ...fakeUnChecked, disabled: true }
+      const wrapper = mount(<ItemNaCheckbox {...props} />)
+      expect(wrapper.find('Checkbox').prop('disabled')).toBe(true)
+    })
+  })
 })

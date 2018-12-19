@@ -113,10 +113,16 @@ $item-confidential-label-height: 6.05rem
   background: #0e6f89
   color: #fff
 
-.age-button:hover
+.age-button:hover:enabled
   @extend .age-button-selected
 
-.age-button-selected:hover
+.age-button-selected:hover:enabled
+  @extend .age-button-selected
+
+.age-button:disabled
+  @extend .age-button
+
+.age-button-selected:disabled
   @extend .age-button-selected
 
 //********************
@@ -395,3 +401,10 @@ button.change-log-print-button
             float: right
   .change-log-body
     padding: 2rem 1.5rem
+
+.top-alert-container
+  position: sticky
+  top: 12rem
+  min-height: 4rem
+  background-color: $bg-gray
+  z-index: 1000

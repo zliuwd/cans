@@ -27,7 +27,7 @@ const ItemNaCheckbox = props => {
             onChange={props.handleRatingChange}
             label={'N/A'}
             value={props.naValue}
-            control={<PrimCheckbox checked={isNachecked} />}
+            control={<PrimCheckbox checked={isNachecked} disabled={props.disabled} />}
           />
         </FormControl>
       </form>
@@ -36,9 +36,14 @@ const ItemNaCheckbox = props => {
 }
 
 ItemNaCheckbox.propTypes = {
+  disabled: PropTypes.bool,
   handleRatingChange: PropTypes.func.isRequired,
   naValue: PropTypes.string.isRequired,
   rating: PropTypes.number.isRequired,
+}
+
+ItemNaCheckbox.defaultProps = {
+  disabled: false,
 }
 
 export default ItemNaCheckbox

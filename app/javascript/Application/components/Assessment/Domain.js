@@ -72,6 +72,7 @@ class Domain extends Component {
           maxLength={50}
           onChange={this.handleInternalCaregiverNameUpdate}
           onBlur={this.handleCaregiverNameUpdate}
+          disabled={this.props.disabled}
         />
       </div>
     )
@@ -87,6 +88,7 @@ class Domain extends Component {
       onConfidentialityUpdate,
       canReleaseConfidentialInfo,
       index,
+      disabled,
     } = this.props
     const { items, is_caregiver_domain } = domain
     const { title, description, caregiverName, expanded } = this.state
@@ -99,6 +101,7 @@ class Domain extends Component {
       onConfidentialityUpdate,
       isAssessmentUnderSix,
       canReleaseConfidentialInfo,
+      disabled,
     }
     const totalScore = totalScoreCalculation(items)
     return shouldDomainBeRendered(isAssessmentUnderSix, domain) ? (
@@ -145,13 +148,15 @@ class Domain extends Component {
                   title={title}
                   domain={domain}
                   onDomainCommentUpdate={this.props.onDomainCommentUpdate}
+                  disabled={this.props.disabled}
                 />
-                {is_caregiver_domain && (
-                  <DomainCaregiverControls
-                    onRemoveCaregiverDomain={this.handleRemoveCaregiverDomain}
-                    onAddCaregiverDomain={this.handleAddCaregiverDomain}
-                  />
-                )}
+                {is_caregiver_domain &&
+                  !this.props.disabled && (
+                    <DomainCaregiverControls
+                      onRemoveCaregiverDomain={this.handleRemoveCaregiverDomain}
+                      onAddCaregiverDomain={this.handleAddCaregiverDomain}
+                    />
+                  )}
               </ExpansionPanelDetails>
             </div>
           )}
@@ -165,6 +170,7 @@ class Domain extends Component {
 /* eslint-disable react/no-unused-prop-types */
 Domain.propTypes = {
   canReleaseConfidentialInfo: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
   domain: PropTypes.object.isRequired,
   handleWarningShow: PropTypes.func,
   i18n: PropTypes.object.isRequired,
@@ -180,6 +186,7 @@ Domain.propTypes = {
 }
 
 Domain.defaultProps = {
+  disabled: false,
   handleWarningShow: () => {},
   isAssessmentUnderSix: null,
 }

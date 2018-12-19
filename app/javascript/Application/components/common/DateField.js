@@ -70,12 +70,14 @@ class DateField extends Component {
         aria-required={isRequired}
         aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}
+        disabled={this.props.disabled}
       />
     )
   }
 }
 
 DateField.defaultProps = {
+  disabled: false,
   isRequired: false,
   ariaLabelledBy: null,
   ariaDescribedBy: null,
@@ -86,6 +88,7 @@ DateField.defaultProps = {
 DateField.propTypes = {
   ariaDescribedBy: PropTypes.string,
   ariaLabelledBy: PropTypes.string,
+  disabled: PropTypes.bool,
   id: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
   onChange: PropTypes.func.isRequired,

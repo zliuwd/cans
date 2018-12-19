@@ -9,7 +9,7 @@ jest.mock('../../util/common')
 describe('<Comment />', () => {
   const maxCommentLength = 250
 
-  const getWrapper = (comment, onChange = () => {}) =>
+  const getWrapper = (comment, onChange = () => {}, disabled = false) =>
     shallow(
       <Comment
         comment={comment}
@@ -17,6 +17,7 @@ describe('<Comment />', () => {
         prefix={'ele-comment'}
         onChange={onChange}
         maxCommentLength={maxCommentLength}
+        disabled={disabled}
       />
     )
 
@@ -173,6 +174,14 @@ describe('<Comment />', () => {
         wrapper.instance().handleOnBlur()
         expect(onChangeMock).toHaveBeenCalledTimes(0)
       })
+    })
+  })
+
+  describe('Read only mode', () => {
+    it('propagate disabled prop to <textarea/>', () => {
+      const onChangeMock = jest.fn()
+      const wrapper = getWrapper('Some text', onChangeMock, true)
+      expect(wrapper.find('textarea').prop('disabled')).toBe(true)
     })
   })
 

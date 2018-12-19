@@ -22,6 +22,7 @@ const DomainItemList = props => {
           onConfidentialityUpdate={props.onConfidentialityUpdate}
           isAssessmentUnderSix={isAssessmentUnderSix}
           canReleaseConfidentialInfo={props.canReleaseConfidentialInfo}
+          disabled={props.disabled}
         />
         <Divider />
       </div>
@@ -32,6 +33,7 @@ const DomainItemList = props => {
 DomainItemList.propTypes = {
   canReleaseConfidentialInfo: PropTypes.bool.isRequired,
   caregiverIndex: PropTypes.string,
+  disabled: PropTypes.bool,
   i18nAll: PropTypes.object.isRequired,
   isAssessmentUnderSix: PropTypes.bool.isRequired,
   items: PropTypes.array.isRequired,
@@ -42,6 +44,7 @@ DomainItemList.propTypes = {
 
 DomainItemList.defaultProps = {
   caregiverIndex: undefined,
+  disabled: false,
 }
 
 export default DomainItemList

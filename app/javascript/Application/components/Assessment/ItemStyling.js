@@ -6,6 +6,10 @@ export const ieFixedStyle = {
     '&$checked': {
       color: '#09798E',
     },
+    '&$disabled': {
+      color: '#000000',
+      opacity: 0.26,
+    },
   },
   label: { marginRight: '0' },
 }
@@ -14,7 +18,12 @@ export const noneIeFixedStyle = {
   radio: {
     width: '0.7rem',
     '&$checked': {
+      disabled: { color: '000000' },
       color: '#09798E',
+    },
+    '&$disabled': {
+      color: '#000000',
+      opacity: 0.26,
     },
   },
   label: null,
