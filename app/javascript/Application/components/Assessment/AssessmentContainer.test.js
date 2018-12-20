@@ -636,7 +636,7 @@ describe('<AssessmentContainer />', () => {
 
       it('should call completeAutoScroll with right parameters', async () => {
         const completeAutoScrollSpy = jest.spyOn(AssessmentAutoScroll, 'completeAutoScroll')
-        const tuner = 20
+        const tuner = -25
         await wrapper.instance().handleSubmitAssessment()
         expect(completeAutoScrollSpy).toHaveBeenCalledWith(0, tuner)
       })

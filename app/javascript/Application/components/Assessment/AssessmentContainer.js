@@ -305,7 +305,7 @@ class AssessmentContainer extends Component {
         this.setState({ assessmentServiceStatus: LoadingState.error })
       }
     }
-    const positionAdjust = 20
+    const positionAdjust = -25 // for manually adjust scroll destination -25 means go up 25px more
     completeAutoScroll(this.state.completeScrollTarget, positionAdjust)
     if (this.state.assessment.id) {
       // Capture New Relic data after the assessment has been successfully submitted
