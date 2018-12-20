@@ -1,5 +1,9 @@
 import { getCurrentIsoDate } from '../../util/dateHelper'
 import moment from 'moment'
+import { globalAlertService } from '../../util/GlobalAlertService'
+import React, { Fragment } from 'react'
+import { Link } from 'react-router-dom'
+import Typography from '@material-ui/core/Typography'
 
 export const AssessmentType = Object.freeze({
   initial: 'INITIAL',
@@ -110,3 +114,64 @@ export function sortAssessmentsByDate(assessments, sortCreatedTimestampOnly, dir
   })
   return newAssessmentList
 }
+
+export function urlTrimmer(url, start, deleteCount) {
+  if (!url) {
+    return null
+  }
+  if (url.includes('/')) {
+    const urlArray = url.split('/')
+    urlArray.splice(start, deleteCount)
+    return urlArray.join('/')
+  } else {
+    return url
+  }
+}
+
+export function trimUrlForClientProfile(url) {
+  const urlArray = url.split('/')
+  const targetIndex = urlArray.indexOf('assessments') // start
+  const compare = urlArray.length - targetIndex // check if assessments is the ending or not
+  const deleteCount = compare + 1
+  const linkUrl = urlTrimmer(url, targetIndex, deleteCount)
+  return linkUrl
+}
+
+export const successMsgFrom = Object.freeze({
+  COMPLETE: 'COMPLETE',
+  SAVE: 'SAVE',
+})
+
+export function postSuccessMessage(url, msgfrom) {
+  const linkUrl = trimUrlForClientProfile(url)
+  let message
+  if (msgfrom === successMsgFrom.SAVE) {
+    message = (
+      <Fragment>
+        Success! CANS assessment has been saved. <Link to={linkUrl}>Click here</Link> to return to Child/Youth profile.
+      </Fragment>
+    )
+  } else if (msgfrom === successMsgFrom.COMPLETE) {
+    message = (
+      <Fragment>
+        Success! CANS assessment has been completed. <Link to={linkUrl}>Click here</Link> to return to Child/Youth
+        profile.
+      </Fragment>
+    )
+  } else {
+    message = 'error'
+  }
+  globalAlertService.postSuccess({ message })
+}
+
+export const caregiverWarning = (
+  <div>
+    You are about to remove the <strong className="cargiver-text-block">caregiver</strong> from this Assessment.
+  </div>
+)
+
+export const completeTip = (
+  <Typography variant="headline" className={'submit-validation-message'}>
+    The Assessment Date and all assessment ratings must be completed before the Complete button becomes active.
+  </Typography>
+)

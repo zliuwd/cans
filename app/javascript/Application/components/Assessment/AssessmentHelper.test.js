@@ -6,7 +6,12 @@ import {
   AssessmentStatus,
   getActionVerbByStatus,
   getDisplayAssessmentStatus,
+  urlTrimmer,
+  trimUrlForClientProfile,
+  postSuccessMessage,
+  successMsgFrom,
 } from './AssessmentHelper'
+import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
 
 const validAssessment = {
@@ -243,6 +248,42 @@ describe('AssessmentHelper', () => {
 
     it('should return "Updated" when the assessment status is not IN_PROGRESS or COMPLETED', () => {
       expect(getDisplayAssessmentStatus('updated')).toEqual('Updated')
+    })
+  })
+
+  describe('URL trimer serial function', () => {
+    const start = -2
+    const deleteCount = 2
+    const testUrls = ['endpoint1/clients/clientId/assessments/123456', '']
+    it('urlTrimmer', () => {
+      const actualValues = testUrls.map(url => {
+        return urlTrimmer(url, start, deleteCount)
+      })
+      const idealValue = ['endpoint1/clients/clientId', null]
+      expect(actualValues).toEqual(idealValue)
+    })
+
+    it('trimUrlForClientProfile', () => {
+      const actualValue = trimUrlForClientProfile(testUrls[0])
+      const idealValue = 'endpoint1/clients/clientId'
+      expect(actualValue).toEqual(idealValue)
+    })
+
+    it('postSuccessMessage', () => {
+      const actualLinkUrl = trimUrlForClientProfile(testUrls[0])
+      const postSuccessSpy = jest.spyOn(globalAlertService, 'postSuccess')
+      postSuccessMessage(actualLinkUrl, successMsgFrom.SAVE)
+      expect(postSuccessSpy).toHaveBeenCalledTimes(1)
+      expect(postSuccessSpy).toHaveBeenCalledWith({ message: expect.any(Object) })
+      postSuccessSpy.mockReset()
+      postSuccessMessage(actualLinkUrl, successMsgFrom.COMPLETE)
+      expect(postSuccessSpy).toHaveBeenCalledTimes(1)
+      expect(postSuccessSpy).toHaveBeenCalledWith({ message: expect.any(Object) })
+      postSuccessSpy.mockReset()
+      postSuccessMessage(actualLinkUrl, 'someOther')
+      expect(postSuccessSpy).toHaveBeenCalledTimes(1)
+      expect(postSuccessSpy).toHaveBeenCalledWith({ message: 'error' })
+      postSuccessSpy.mockReset()
     })
   })
 })

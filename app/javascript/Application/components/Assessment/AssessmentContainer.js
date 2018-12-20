@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react'
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { CloseableAlert, alertType } from '../common/CloseableAlert'
 import { clone } from '../../util/common'
+import { completeAutoScroll } from '../../util/assessmentAutoScroll'
 import PageModal from '../common/PageModal'
 import ConfidentialityWarning from '../common/ConfidentialityWarning'
 import {
@@ -14,7 +15,6 @@ import {
   SecurityService,
 } from './'
 import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
-import Typography from '@material-ui/core/Typography'
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper'
 import { PrintAssessment } from '../Print'
 import {
@@ -22,19 +22,23 @@ import {
   AssessmentType,
   validateAssessmentForSubmit,
   defaultEmptyAssessment,
+  postSuccessMessage,
+  trimUrlForClientProfile,
+  caregiverWarning,
+  completeTip,
+  successMsgFrom,
 } from './AssessmentHelper'
-import { globalAlertService } from '../../util/GlobalAlertService'
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
 import './style.sass'
-import { getCurrentIsoDate } from '../../util/dateHelper'
-import moment from 'moment'
+import { getCurrentIsoDate, isValidLocalDate } from '../../util/dateHelper'
 import { logPageAction } from '../../util/analytics'
 import Sticker from 'react-stickyfill'
 
 class AssessmentContainer extends Component {
   constructor(props) {
     super(props)
+    this.assessmentHeader = React.createRef()
     this.state = {
       assessment: defaultEmptyAssessment,
       assessmentServiceStatus: LoadingState.idle,
@@ -47,6 +51,7 @@ class AssessmentContainer extends Component {
       isSubmitWarningShown: false,
       isSaveButtonEnabled: false,
       focusedCaregiverId: '',
+      completeScrollTarget: 0,
     }
   }
 
@@ -54,6 +59,7 @@ class AssessmentContainer extends Component {
     const assessmentId = this.props.match.params.id
     await this.updateIsEditableState(assessmentId)
     assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment()
+    this.handleCompleteScrollTarget()
   }
 
   componentDidUpdate() {
@@ -211,19 +217,8 @@ class AssessmentContainer extends Component {
     }
   }
 
-  postSuccessMessage() {
-    const { client } = this.props
-    const message = (
-      <Fragment>
-        Success! CANS assessment has been saved. <Link to={`/clients/${client.identifier}`}>Click here</Link> to return
-        to Child/Youth profile.
-      </Fragment>
-    )
-    globalAlertService.postSuccess({ message })
-  }
-
   initialSave(assessment) {
-    this.postSuccessMessage()
+    postSuccessMessage(this.props.match.url, successMsgFrom.SAVE)
     this.setState({
       assessment,
       assessmentServiceStatus: LoadingState.ready,
@@ -232,7 +227,11 @@ class AssessmentContainer extends Component {
   }
 
   updateUrlWithAssessment(assessment) {
-    this.props.history.push(`/clients/${this.props.client.identifier}/assessments/${assessment.id}`)
+    this.props.history.push(`${this.props.match.url}/${assessment.id}`)
+  }
+
+  handleCountyName = () => {
+    return this.state.assessment.county ? this.state.assessment.county.name : null
   }
 
   handleSaveAssessment = async () => {
@@ -242,7 +241,7 @@ class AssessmentContainer extends Component {
     if (assessment.id) {
       try {
         const updatedAssessment = await AssessmentService.update(assessment.id, assessment)
-        this.postSuccessMessage()
+        postSuccessMessage(this.props.match.url, successMsgFrom.SAVE)
         this.setState({
           assessment: updatedAssessment,
           assessmentServiceStatus: LoadingState.ready,
@@ -260,22 +259,21 @@ class AssessmentContainer extends Component {
     }
     if (this.state.assessment.id) {
       // Capture New Relic data after the assessment has been successfully saved
+      const countyName = this.handleCountyName()
       logPageAction('assessmentSave', {
         assessment_id: this.state.assessment.id,
-        assessment_county: this.state.assessment.county.name,
+        assessment_county: countyName,
       })
     }
   }
 
-  postSubmitMessage() {
-    const { client } = this.props
-    const message = (
-      <Fragment>
-        Success! CANS assessment has been completed. <Link to={`/clients/${client.identifier}`}>Click here</Link> to
-        return to Child/Youth profile.
-      </Fragment>
-    )
-    globalAlertService.postSuccess({ message })
+  handleCompleteScrollTarget = () => {
+    const element = this.assessmentHeader
+    if (this.state.completeScrollTarget === 0 && element.current) {
+      this.setState({
+        completeScrollTarget: element.current.getBoundingClientRect().bottom,
+      })
+    }
   }
 
   handleSubmitAssessment = async () => {
@@ -286,7 +284,7 @@ class AssessmentContainer extends Component {
     if (assessment.id) {
       try {
         const submittedAssessment = await AssessmentService.update(assessment.id, assessment)
-        this.postSubmitMessage()
+        postSuccessMessage(this.props.match.url, successMsgFrom.COMPLETE)
         this.setState({
           assessmentServiceStatus: LoadingState.ready,
           assessment: submittedAssessment,
@@ -297,6 +295,7 @@ class AssessmentContainer extends Component {
     } else {
       try {
         const submittedAssessment = await AssessmentService.postAssessment(assessment)
+        postSuccessMessage(this.props.match.url, successMsgFrom.COMPLETE)
         this.updateUrlWithAssessment(submittedAssessment)
         this.setState({
           assessmentServiceStatus: LoadingState.ready,
@@ -306,32 +305,26 @@ class AssessmentContainer extends Component {
         this.setState({ assessmentServiceStatus: LoadingState.error })
       }
     }
+    const positionAdjust = 20
+    completeAutoScroll(this.state.completeScrollTarget, positionAdjust)
     if (this.state.assessment.id) {
       // Capture New Relic data after the assessment has been successfully submitted
+      const countyName = this.handleCountyName()
       logPageAction('assessmentSubmit', {
         assessment_id: this.state.assessment.id,
-        assessment_county: this.state.assessment.county.name,
+        assessment_county: countyName,
       })
     }
   }
 
   handleCancelClick = () => this.setState({ shouldRedirectToClientProfile: true })
 
-  validateDate(date) {
-    return moment(date, 'MM/DD/YYYY', true).isValid()
-  }
-
   handleKeyUp = date => {
     const dateValue = date.target.value
-    this.setState({ isValidDate: this.validateDate(dateValue) })
+    this.setState({ isValidDate: isValidLocalDate(dateValue, true) })
   }
 
   renderWarning = () => {
-    const caregiverWarning = (
-      <div>
-        You are about to remove the <strong className="cargiver-text-block">caregiver</strong> from this Assessment.
-      </div>
-    )
     return this.state.isCaregiverWarningShown ? (
       <PageModal
         isOpen={true}
@@ -360,7 +353,7 @@ class AssessmentContainer extends Component {
       isEditable,
     } = this.state
     if (shouldRedirectToClientProfile) {
-      return <Redirect push to={{ pathname: `/clients/${client.identifier}` }} />
+      return <Redirect push to={{ pathname: trimUrlForClientProfile(this.props.match.url) }} />
     }
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus)
     const isUnderSix = assessment && assessment.state && assessment.state.under_six
@@ -393,17 +386,17 @@ class AssessmentContainer extends Component {
             </div>
           </Sticker>
         ) : null}
-
-        <AssessmentFormHeader
-          client={client}
-          assessment={assessment}
-          onAssessmentUpdate={this.updateAssessment}
-          onKeyUp={this.handleKeyUp}
-          handleWarningShow={this.handleWarningShow}
-          isCaregiverWarningShown={this.state.isCaregiverWarningShown}
-          disabled={!isEditable}
-        />
-
+        <div rol="completeScrollLocator" ref={this.assessmentHeader}>
+          <AssessmentFormHeader
+            client={client}
+            assessment={assessment}
+            onAssessmentUpdate={this.updateAssessment}
+            onKeyUp={this.handleKeyUp}
+            handleWarningShow={this.handleWarningShow}
+            isCaregiverWarningShown={this.state.isCaregiverWarningShown}
+            disabled={!isEditable}
+          />
+        </div>
         <AssessmentSummaryCard
           assessmentStatus={assessment.status}
           domains={assessment && assessment.state && assessment.state.domains}
@@ -421,12 +414,8 @@ class AssessmentContainer extends Component {
         />
         {LoadingState.ready === assessmentServiceStatus &&
           isEditable &&
-          !(isUnderSix === null || isUnderSix === undefined) && (
-            <Typography variant="headline" className={'submit-validation-message'}>
-              The Assessment Date and all assessment ratings must be completed before the Complete button becomes
-              active.
-            </Typography>
-          )}
+          !(isUnderSix === null || isUnderSix === undefined) &&
+          completeTip}
         {isUnderSix !== undefined && isEditable ? (
           <AssessmentFormFooter
             assessment={assessment}

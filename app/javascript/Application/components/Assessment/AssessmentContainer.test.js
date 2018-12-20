@@ -1,3 +1,4 @@
+import { globalAlertService } from '../../util/GlobalAlertService'
 import React from 'react'
 import {
   Assessment,
@@ -7,12 +8,14 @@ import {
   I18nService,
   SecurityService,
 } from './index'
+import * as AHelper from './AssessmentHelper'
 import { childInfoJson } from '../Client/Client.helper.test'
 import ClientService from '../Client/Client.service'
 import { shallow, mount } from 'enzyme'
 import Typography from '@material-ui/core/Typography/Typography'
 import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
 import AssessmentFormFooter from './AssessmentFormFooter'
+import * as AssessmentAutoScroll from '../../util/assessmentAutoScroll'
 import PageModal from '../common/PageModal'
 import {
   assessment,
@@ -25,15 +28,13 @@ import {
 } from './assessment.mocks.test'
 import { LoadingState } from '../../util/loadingHelper'
 import { getCurrentIsoDate } from '../../util/dateHelper'
-import { globalAlertService } from '../../util/GlobalAlertService'
 import * as Analytics from '../../util/analytics'
-import { AssessmentStatus } from './AssessmentHelper'
 
 jest.mock('../../util/analytics')
 
 const defaultProps = {
   location: { childId: 1 },
-  match: { params: { id: 1 } },
+  match: { params: { id: 1 }, url: 'someurl/someid/someending' },
   pageHeaderButtonsController: {
     updateHeaderButtons: () => {},
     updateHeaderButtonsToDefault: () => {},
@@ -51,7 +52,7 @@ describe('<AssessmentContainer />', () => {
     describe('page layout', () => {
       const props = {
         location: { childId: 10 },
-        match: { params: { id: 1 } },
+        match: { params: { id: 1 }, url: 'someUrl' },
         pageHeaderButtonsController: {
           updateHeaderButtons: () => {},
           updateHeaderButtonsToDefault: () => {},
@@ -508,9 +509,9 @@ describe('<AssessmentContainer />', () => {
         expect(assessmentServicePostSpy).toHaveBeenCalledWith(assessment)
       })
 
-      it('should invoke globalAlertService with success message on initial save', async () => {
+      it('should show success message on initial save', async () => {
         // given
-        const postSuccessSpy = jest.spyOn(globalAlertService, 'postSuccess')
+        const postSuccessSpy = jest.spyOn(AHelper, 'postSuccessMessage')
         jest.spyOn(AssessmentService, 'postAssessment').mockReturnValue(Promise.resolve(assessment))
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
 
@@ -554,7 +555,7 @@ describe('<AssessmentContainer />', () => {
 
       it('should post success message on save', async () => {
         // given
-        const postSuccessSpy = jest.spyOn(globalAlertService, 'postSuccess')
+        const postSuccessSpy = jest.spyOn(AHelper, 'postSuccessMessage')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
         jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment))
         jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
@@ -602,21 +603,27 @@ describe('<AssessmentContainer />', () => {
 
   describe('submit assessment', () => {
     describe('when a new assessment', () => {
-      it('should call AssessmentService.postAssessment', () => {
-        const assessmentServicePostSpy = jest.spyOn(AssessmentService, 'postAssessment')
-        const props = {
-          match: { params: { id: 1 } },
-          client: childInfoJson,
-          pageHeaderButtonsController: {
-            updateHeaderButtons: () => {},
-            updateHeaderButtonsToDefault: () => {},
-          },
-        }
-
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().handleSubmitAssessment()
-
+      let wrapper
+      let assessmentServicePostSpy
+      let assessmentServiceUpdateSpy
+      beforeEach(() => {
+        wrapper = shallow(<AssessmentContainer {...props} />)
+        assessmentServicePostSpy = jest.spyOn(AssessmentService, 'postAssessment')
+        assessmentServiceUpdateSpy = jest.spyOn(AssessmentService, 'update')
         assessmentServicePostSpy.mockReturnValue(Promise.resolve(assessment))
+        assessmentServiceUpdateSpy.mockReturnValue(Promise.resolve(assessment))
+      })
+      const props = {
+        match: { params: { id: 1 }, url: 'someurl/someid/someending' },
+        client: childInfoJson,
+        pageHeaderButtonsController: {
+          updateHeaderButtons: () => {},
+          updateHeaderButtonsToDefault: () => {},
+        },
+      }
+
+      it('should call AssessmentService.postAssessment', () => {
+        wrapper.instance().handleSubmitAssessment()
         const expectedArgument = {
           event_date: getCurrentIsoDate(),
           has_caregiver: true,
@@ -625,6 +632,21 @@ describe('<AssessmentContainer />', () => {
           status: 'COMPLETED',
         }
         expect(assessmentServicePostSpy).toHaveBeenCalledWith(expectedArgument)
+      })
+
+      it('should call completeAutoScroll with right parameters', async () => {
+        const completeAutoScrollSpy = jest.spyOn(AssessmentAutoScroll, 'completeAutoScroll')
+        const tuner = 20
+        await wrapper.instance().handleSubmitAssessment()
+        expect(completeAutoScrollSpy).toHaveBeenCalledWith(0, tuner)
+      })
+
+      it('should call postSuccessMessage with right parameters', async () => {
+        const postSuccessSpy = jest.spyOn(AHelper, 'postSuccessMessage')
+        jest.spyOn(AssessmentService, 'postAssessment').mockReturnValue(Promise.resolve(assessment))
+        await wrapper.instance().handleSubmitAssessment()
+        expect(postSuccessSpy).toHaveBeenCalledTimes(1)
+        expect(postSuccessSpy).toHaveBeenCalledWith('someurl/someid/someending', 'COMPLETE')
       })
     })
 
@@ -681,7 +703,7 @@ describe('<AssessmentContainer />', () => {
     it('will update the assessment on the component state', () => {
       const props = {
         location: { childId: 1 },
-        match: { params: { id: 1 } },
+        match: { params: { id: 1 }, url: 'someUrl' },
         history: { push: jest.fn() },
         client: childInfoJson,
         pageHeaderButtonsController: {
@@ -704,19 +726,21 @@ describe('<AssessmentContainer />', () => {
       wrapper.setState({ child: childInfoJson })
       wrapper.instance().initialSave(updatedAssessment)
 
-      expect(historyPushMock.push).toHaveBeenCalledWith('/clients/aaaaaaaaaa/assessments/1')
+      expect(historyPushMock.push).toHaveBeenCalledWith('someurl/someid/someending/1')
     })
   })
 
   describe('buttons', () => {
     describe('Cancel button', () => {
       it('redirects to client page', async () => {
+        const trimUrlForClientProfileSpy = jest.spyOn(AHelper, 'trimUrlForClientProfile')
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />, {
           disableLifecycleMethods: true,
         })
         await wrapper.instance().handleCancelClick()
         expect(wrapper.state().shouldRedirectToClientProfile).toEqual(true)
         expect(wrapper.find('Redirect').exists()).toBe(true)
+        expect(trimUrlForClientProfileSpy).toHaveBeenCalledWith(defaultProps.match.url)
       })
     })
 
@@ -967,7 +991,7 @@ describe('<AssessmentContainer />', () => {
             domains: [],
             under_six: undefined,
           },
-          status: AssessmentStatus.completed,
+          status: AHelper.AssessmentStatus.completed,
         },
         isEditable: false,
       })
@@ -989,7 +1013,7 @@ describe('<AssessmentContainer />', () => {
             domains: [],
             under_six: undefined,
           },
-          status: AssessmentStatus.inProgress,
+          status: AHelper.AssessmentStatus.inProgress,
         },
         isEditable: false,
       })

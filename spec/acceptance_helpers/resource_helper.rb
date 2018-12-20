@@ -123,7 +123,8 @@ module ResourceHelper
       '#SLEEP-item-expand',
       '#label-SLEEP-0',
       '#SLEEPCheckbox',
-      '#SLEEP-item-expand'
+      '#SLEEP-item-expand',
+      '#domain1-expand'
     ]
     life_domain.each { |element| find(element).click }
   end
@@ -162,7 +163,8 @@ module ResourceHelper
       '#INTENTIONAL_MISBEHAVIOR-item-expand',
       '#label-INTENTIONAL_MISBEHAVIOR-0',
       '#INTENTIONAL_MISBEHAVIORCheckbox',
-      '#INTENTIONAL_MISBEHAVIOR-item-expand'
+      '#INTENTIONAL_MISBEHAVIOR-item-expand',
+      '#domain2-expand'
     ]
     risk_domain.each { |element| find(element).click }
   end
@@ -181,7 +183,8 @@ module ResourceHelper
       '#CULTURAL_STRESS-item-expand',
       '#label-CULTURAL_STRESS-0',
       '#CULTURAL_STRESSCheckbox',
-      '#CULTURAL_STRESS-item-expand'
+      '#CULTURAL_STRESS-item-expand',
+      '#domain3-expand'
     ]
     cultural_domain.each { |element| find(element).click }
   end
@@ -224,7 +227,8 @@ module ResourceHelper
       '#RESILIENCY-item-expand',
       '#label-RESILIENCY-0',
       '#RESILIENCYCheckbox',
-      '#RESILIENCY-item-expand'
+      '#RESILIENCY-item-expand',
+      '#domain4-expand'
     ]
     strengths_domain.each { |element| find(element).click }
   end
@@ -271,7 +275,8 @@ module ResourceHelper
       '#SAFETY-item-expand',
       '#label-SAFETY-0',
       '#SAFETYCheckbox',
-      '#SAFETY-item-expand'
+      '#SAFETY-item-expand',
+      '#domain11-expand'
     ]
     caregiver_domain.each { |element| find(element).click }
   end
@@ -326,7 +331,8 @@ module ResourceHelper
       '#CG_CRIMINAL_BEHAVIOR-item-expand',
       '#label-CG_CRIMINAL_BEHAVIOR-0',
       '#CG_CRIMINAL_BEHAVIORCheckbox',
-      '#CG_CRIMINAL_BEHAVIOR-item-expand'
+      '#CG_CRIMINAL_BEHAVIOR-item-expand',
+      '#domain12-expand'
     ]
     traumatic_domain.each { |element| find(element).click }
   end
@@ -392,7 +398,8 @@ module ResourceHelper
       '#SLEEP_CHILD-item-expand',
       '#label-SLEEP_CHILD-0',
       '#SLEEP_CHILDCheckbox',
-      '#SLEEP_CHILD-item-expand'
+      '#SLEEP_CHILD-item-expand',
+      '#domain5-expand'
     ]
     challenges_domain.each { |element| find(element).click }
   end
@@ -419,7 +426,8 @@ module ResourceHelper
       '#MEDICAL_PHYSICAL-item-expand',
       '#label-MEDICAL_PHYSICAL-0',
       '#MEDICAL_PHYSICALCheckbox',
-      '#MEDICAL_PHYSICAL-item-expand'
+      '#MEDICAL_PHYSICAL-item-expand',
+      '#domain6-expand'
     ]
     functioning_domain.each { |element| find(element).click }
   end
@@ -454,7 +462,8 @@ module ResourceHelper
       '#FAILURE_TO_THRIVE-item-expand',
       '#label-FAILURE_TO_THRIVE-0',
       '#FAILURE_TO_THRIVECheckbox',
-      '#FAILURE_TO_THRIVE-item-expand'
+      '#FAILURE_TO_THRIVE-item-expand',
+      '#domain7-expand'
     ]
     risk_behaviors_domain.each { |element| find(element).click }
   end
@@ -473,7 +482,8 @@ module ResourceHelper
       '#CULTURAL_STRESS-item-expand',
       '#label-CULTURAL_STRESS-0',
       '#CULTURAL_STRESSCheckbox',
-      '#CULTURAL_STRESS-item-expand'
+      '#CULTURAL_STRESS-item-expand',
+      '#domain8-expand'
     ]
     cultural_factors_domain.each { |element| find(element).click }
   end
@@ -508,7 +518,8 @@ module ResourceHelper
       '#FAMILY_SPRITUAL_RELIGIOUS-item-expand',
       '#label-FAMILY_SPRITUAL_RELIGIOUS-0',
       '#FAMILY_SPRITUAL_RELIGIOUSCheckbox',
-      '#FAMILY_SPRITUAL_RELIGIOUS-item-expand'
+      '#FAMILY_SPRITUAL_RELIGIOUS-item-expand',
+      '#domain9-expand'
     ]
     strengths_domain.each { |element| find(element).click }
   end
@@ -523,7 +534,8 @@ module ResourceHelper
       '#CAREGIVER_ADJ_TRAUMA_EXP-item-expand',
       '#label-CAREGIVER_ADJ_TRAUMA_EXP-0',
       '#CAREGIVER_ADJ_TRAUMA_EXPCheckbox',
-      '#CAREGIVER_ADJ_TRAUMA_EXP-item-expand'
+      '#CAREGIVER_ADJ_TRAUMA_EXP-item-expand',
+      '#domain10-expand'
     ]
     dyadic_domain.each { |element| find(element).click }
   end
@@ -582,7 +594,8 @@ module ResourceHelper
       '#ORGANIZATION-item-expand',
       '#label-ORGANIZATION-0',
       '#ORGANIZATIONCheckbox',
-      '#ORGANIZATION-item-expand'
+      '#ORGANIZATION-item-expand',
+      '#domain11-expand'
     ]
     caregiver_resources_domain.each { |element| find(element).click }
   end
@@ -637,7 +650,8 @@ module ResourceHelper
       '#CG_CRIMINAL_BEHAVIOR-item-expand',
       '#label-CG_CRIMINAL_BEHAVIOR-0',
       '#CG_CRIMINAL_BEHAVIORCheckbox',
-      '#CG_CRIMINAL_BEHAVIOR-item-expand'
+      '#CG_CRIMINAL_BEHAVIOR-item-expand',
+      '#domain12-expand'
     ]
     traumatic_domain.each { |element| find(element).click }
   end
