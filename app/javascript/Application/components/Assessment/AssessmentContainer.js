@@ -252,6 +252,7 @@ class AssessmentContainer extends Component {
       }
     }
     if (this.state.assessment.id) {
+      this.updateIsEditableState(this.state.assessment.id)
       // Capture New Relic data after the assessment has been successfully saved
       const countyName = this.handleCountyName()
       logPageAction('assessmentSave', {
@@ -302,6 +303,7 @@ class AssessmentContainer extends Component {
     const positionAdjust = -25 // for manually adjust scroll destination -25 means go up 25px more
     completeAutoScroll(this.state.completeScrollTarget, positionAdjust)
     if (this.state.assessment.id) {
+      this.updateIsEditableState(this.state.assessment.id)
       // Capture New Relic data after the assessment has been successfully submitted
       const countyName = this.handleCountyName()
       logPageAction('assessmentSubmit', {

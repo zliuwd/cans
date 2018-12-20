@@ -579,6 +579,23 @@ describe('<AssessmentContainer />', () => {
         // then
         expect(postSuccessSpy).toHaveBeenCalledTimes(1)
       })
+
+      it('should set isEditable to false after submit', async () => {
+        jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
+        jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment))
+        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
+        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
+        const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
+        wrapper.setState({ assessment: { ...assessment, id: 1 } })
+
+        expect(wrapper.instance().state.isEditable).toBe(true)
+
+        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false))
+        await wrapper.instance().handleSubmitAssessment()
+        wrapper.update()
+
+        expect(wrapper.instance().state.isEditable).toBe(false)
+      })
     })
 
     it('should log analytics to New Relic when assessment is saved', async () => {
