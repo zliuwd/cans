@@ -7,6 +7,14 @@ import SearchAssessmentHistory from './SearchAssessmentHistory'
 describe('<SearchContainer />', () => {
   describe('init SearchContainer', () => {
     describe('page layout', () => {
+      it('renders with a <CloseableAlert /> component', () => {
+        const wrapper = shallow(<SearchContainer navigateTo="SEARCH" />)
+        expect(wrapper.find('CloseableAlert').exists()).toBe(true)
+        expect(wrapper.find('CloseableAlert').prop('message')).toEqual(
+          'To Start a CANS Assessment, Search and Select the Child'
+        )
+      })
+
       it('renders with a <PersonSearchForm /> component', () => {
         const wrapper = shallow(<SearchContainer navigateTo="SEARCH" />)
         expect(wrapper.find(PersonSearchForm).exists()).toBe(true)
