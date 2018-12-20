@@ -1,13 +1,6 @@
 import { globalAlertService } from '../../util/GlobalAlertService'
 import React from 'react'
-import {
-  Assessment,
-  AssessmentContainer,
-  AssessmentFormHeader,
-  AssessmentService,
-  I18nService,
-  SecurityService,
-} from './index'
+import { AssessmentContainer, AssessmentFormHeader, AssessmentService, I18nService, SecurityService } from './index'
 import * as AHelper from './AssessmentHelper'
 import { childInfoJson } from '../Client/Client.helper.test'
 import ClientService from '../Client/Client.service'
@@ -447,7 +440,7 @@ describe('<AssessmentContainer />', () => {
       it('passes an unset age group to the assessment component', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         wrapper.instance().onFetchNewAssessmentSuccess(instrument)
-        const form = wrapper.find(Assessment)
+        const form = wrapper.find('AssessmentCard')
         expect(form.props().assessment.state.under_six).toBeUndefined()
       })
 
@@ -586,6 +579,23 @@ describe('<AssessmentContainer />', () => {
         // then
         expect(postSuccessSpy).toHaveBeenCalledTimes(1)
       })
+
+      it('should set isEditable to false after submit', async () => {
+        jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
+        jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment))
+        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
+        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
+        const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
+        wrapper.setState({ assessment: { ...assessment, id: 1 } })
+
+        expect(wrapper.instance().state.isEditable).toBe(true)
+
+        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false))
+        await wrapper.instance().handleSubmitAssessment()
+        wrapper.update()
+
+        expect(wrapper.instance().state.isEditable).toBe(false)
+      })
     })
 
     it('should log analytics to New Relic when assessment is saved', async () => {
@@ -636,7 +646,7 @@ describe('<AssessmentContainer />', () => {
 
       it('should call completeAutoScroll with right parameters', async () => {
         const completeAutoScrollSpy = jest.spyOn(AssessmentAutoScroll, 'completeAutoScroll')
-        const tuner = 20
+        const tuner = -25
         await wrapper.instance().handleSubmitAssessment()
         expect(completeAutoScrollSpy).toHaveBeenCalledWith(0, tuner)
       })
@@ -969,12 +979,12 @@ describe('<AssessmentContainer />', () => {
       expect(wrapper.find('AssessmentSummaryCard').prop('disabled')).toEqual(true)
     })
 
-    it('should enable  <Assessment/> when isEditable=true and disable when isEditable=false', () => {
+    it('should enable  <AssessmentCard/> when isEditable=true and disable when isEditable=false', () => {
       wrapper.instance().setState({ isEditable: true })
-      expect(wrapper.find('Assessment').prop('disabled')).toEqual(false)
+      expect(wrapper.find('AssessmentCard').prop('disabled')).toEqual(false)
 
       wrapper.instance().setState({ isEditable: false })
-      expect(wrapper.find('Assessment').prop('disabled')).toEqual(true)
+      expect(wrapper.find('AssessmentCard').prop('disabled')).toEqual(true)
     })
 
     it('should enable  <AssessmentFormFooter/> when isEditable=true and should not be rendered when isEditable=false', () => {

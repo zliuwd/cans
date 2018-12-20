@@ -6,15 +6,9 @@ import { clone } from '../../util/common'
 import { completeAutoScroll } from '../../util/assessmentAutoScroll'
 import PageModal from '../common/PageModal'
 import ConfidentialityWarning from '../common/ConfidentialityWarning'
-import {
-  Assessment,
-  AssessmentFormHeader,
-  AssessmentFormFooter,
-  AssessmentService,
-  I18nService,
-  SecurityService,
-} from './'
+import { AssessmentFormHeader, AssessmentFormFooter, AssessmentService, I18nService, SecurityService } from './'
 import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
+import AssessmentCard from './AssessmentCard'
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper'
 import { PrintAssessment } from '../Print'
 import {
@@ -258,6 +252,7 @@ class AssessmentContainer extends Component {
       }
     }
     if (this.state.assessment.id) {
+      this.updateIsEditableState(this.state.assessment.id)
       // Capture New Relic data after the assessment has been successfully saved
       const countyName = this.handleCountyName()
       logPageAction('assessmentSave', {
@@ -305,9 +300,10 @@ class AssessmentContainer extends Component {
         this.setState({ assessmentServiceStatus: LoadingState.error })
       }
     }
-    const positionAdjust = 20
+    const positionAdjust = -25 // for manually adjust scroll destination -25 means go up 25px more
     completeAutoScroll(this.state.completeScrollTarget, positionAdjust)
     if (this.state.assessment.id) {
+      this.updateIsEditableState(this.state.assessment.id)
       // Capture New Relic data after the assessment has been successfully submitted
       const countyName = this.handleCountyName()
       logPageAction('assessmentSubmit', {
@@ -405,7 +401,7 @@ class AssessmentContainer extends Component {
           disabled={!isEditable}
         />
 
-        <Assessment
+        <AssessmentCard
           assessment={assessment}
           i18n={i18n}
           onAssessmentUpdate={this.updateAssessment}
