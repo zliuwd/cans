@@ -6,15 +6,9 @@ import { clone } from '../../util/common'
 import { completeAutoScroll } from '../../util/assessmentAutoScroll'
 import PageModal from '../common/PageModal'
 import ConfidentialityWarning from '../common/ConfidentialityWarning'
-import {
-  Assessment,
-  AssessmentFormHeader,
-  AssessmentFormFooter,
-  AssessmentService,
-  I18nService,
-  SecurityService,
-} from './'
+import { AssessmentFormHeader, AssessmentFormFooter, AssessmentService, I18nService, SecurityService } from './'
 import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
+import AssessmentCard from './AssessmentCard'
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper'
 import { PrintAssessment } from '../Print'
 import {
@@ -405,7 +399,7 @@ class AssessmentContainer extends Component {
           disabled={!isEditable}
         />
 
-        <Assessment
+        <AssessmentCard
           assessment={assessment}
           i18n={i18n}
           onAssessmentUpdate={this.updateAssessment}
