@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Container, Row, Col } from 'reactstrap'
 import { CloseableAlert } from './CloseableAlert'
 import { globalAlertService } from '../../util/GlobalAlertService'
+import { isIE } from '../../util/common'
 
 let nextKey = 0
 
@@ -12,6 +13,13 @@ export class GlobalAlert extends Component {
       alerts: [],
     }
     globalAlertService.subscribe(this.onAlertEvent)
+  }
+
+  componentDidUpdate() {
+    if (isIE) {
+      // This is a bug fix for IE when alert is closed, but the empty space is still reserved for it
+      window.Stickyfill.rebuild()
+    }
   }
 
   onAlertEvent = ({ message, type, isAutoCloseable }) => {
