@@ -82,7 +82,7 @@ class AssessmentChangeLog extends Component {
   buildChangeLogTitle(client, assessment) {
     const clientName = formatClientName(client)
     const titleClientName = trimSafely(`CANS Change Log: ${clientName}`)
-    const assessmentDate = assessment.created_timestamp
+    const assessmentDate = assessment.event_date
     const formattedDate = assessmentDate ? isoToLocalDate(assessmentDate) : ''
     const titleAssessmentDate = trimSafely(`Assessment Date: ${formattedDate}`)
 

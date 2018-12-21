@@ -47,8 +47,14 @@ class ClientAssessmentHistory extends PureComponent {
 
   render() {
     const { assessments } = this.props
-    const sortedAssessments =
-      assessments && assessments.length > 0 ? sortAssessmentsByDate(assessments, true, 'desc') : []
+    const options = {
+      assessments,
+      sortEventDate: true,
+      sortCreatedTimestamp: false,
+      sortUpdatedTimestamp: false,
+      direction: 'desc',
+    }
+    const sortedAssessments = assessments && assessments.length > 0 ? sortAssessmentsByDate(options) : []
 
     return (
       <Grid item xs={12}>
