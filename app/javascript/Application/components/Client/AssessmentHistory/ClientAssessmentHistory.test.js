@@ -3,43 +3,40 @@ import { shallow } from 'enzyme'
 import { Card, CardHeader, CardTitle, CardBody } from '@cwds/components'
 import Grid from '@material-ui/core/Grid/Grid'
 import ClientAssessmentHistory from './ClientAssessmentHistory'
-// import AssessmentService from '../../Assessment/Assessment.service'
 import ClientAssessmentHistoryRecord from './ClientAssessmentHistoryRecord'
 import AddCansLink from '../AddCansLink'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
 import { navigation } from '../../../util/constants'
-
-// jest.mock('../../Assessment/Assessment.service')
 
 const defaultProps = {
   clientIdentifier: '0PcpFQu0QM',
   navFrom: navigation.CHILD_PROFILE,
 }
 
-const mockedAssessmentsWithCreatedTimestamp = [
+const mockedAssessmentsWithEventDate = [
   {
     id: 1,
     person: { id: 1, identifier: 'aaa' },
     county: { name: 'Yolo' },
-    created_timestamp: '2018-12-10T15:35:35.707Z',
+    event_date: '2018-12-10T15:35:35.707Z',
   },
   {
     id: 2,
     person: { id: 2, identifier: 'bbb' },
     county: { name: 'Yolo' },
-    created_timestamp: '2018-12-09T15:35:35.707Z',
+    event_date: '2018-12-09T15:35:35.707Z',
   },
   {
     id: 3,
     person: { id: 3, identifier: 'ccc' },
     county: { name: 'Yolo' },
-    created_timestamp: '2018-12-08T15:35:35.707Z',
+    event_date: '2018-12-08T15:35:35.707Z',
   },
   {
     id: 4,
     person: { id: 4, identifier: 'ddd' },
     county: { name: 'Yolo' },
-    created_timestamp: '2018-12-11T15:35:35.707Z',
+    event_date: '2018-12-11T15:35:35.707Z',
   },
 ]
 
@@ -53,7 +50,7 @@ const getWrapper = assessments => {
 
 describe('<ClientAssessmentHistory', () => {
   describe('components', () => {
-    const getLength = component => getWrapper(mockedAssessmentsWithCreatedTimestamp).find(component).length
+    const getLength = component => getWrapper(mockedAssessmentsWithEventDate).find(component).length
 
     it('renders a <Grid /> component', () => {
       expect(getLength(Grid)).toBe(1)
@@ -72,7 +69,7 @@ describe('<ClientAssessmentHistory', () => {
     })
 
     it('renders a <AddCansLink /> in the Card header', async () => {
-      const wrapper = getWrapper(mockedAssessmentsWithCreatedTimestamp)
+      const wrapper = getWrapper(mockedAssessmentsWithEventDate)
       expect(wrapper.find(AddCansLink).length).toBe(1)
     })
 
@@ -82,12 +79,12 @@ describe('<ClientAssessmentHistory', () => {
 
     describe('when there are more than 3 assessments', () => {
       it('renders 3 <ClientAssessmentHistoryRecord /> components', async () => {
-        const wrapper = getWrapper(mockedAssessmentsWithCreatedTimestamp)
+        const wrapper = getWrapper(mockedAssessmentsWithEventDate)
         expect(wrapper.find(ClientAssessmentHistoryRecord).length).toBe(3)
       })
 
       it('renders a <ClientAssessmentHistoryTable /> component', async () => {
-        const wrapper = getWrapper(mockedAssessmentsWithCreatedTimestamp)
+        const wrapper = getWrapper(mockedAssessmentsWithEventDate)
         expect(wrapper.find(ClientAssessmentHistoryTable).length).toBe(1)
       })
     })
@@ -109,10 +106,10 @@ describe('<ClientAssessmentHistory', () => {
     describe('when 4 assessments', () => {
       it('renders 3 assessments in the correct order', async () => {
         // given + when
-        const wrapper = getWrapper(mockedAssessmentsWithCreatedTimestamp)
+        const wrapper = getWrapper(mockedAssessmentsWithEventDate)
         const historyRecords = wrapper.find(ClientAssessmentHistoryRecord)
 
-        const assessmentTimestamps = historyRecords.map(record => record.props().assessment.created_timestamp)
+        const assessmentTimestamps = historyRecords.map(record => record.props().assessment.event_date)
 
         // then
         expect(assessmentTimestamps).toEqual([

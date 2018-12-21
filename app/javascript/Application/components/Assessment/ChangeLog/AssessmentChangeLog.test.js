@@ -95,7 +95,7 @@ describe('<AssessmentChangeLog />', () => {
           .dive()
           .html()
       ).toBe(
-        '<div class="change-log-title card-title"><div><span>CANS Change Log: Abbott, See K</span><span>Assessment Date: 06/06/2018</span></div></div>'
+        '<div class="change-log-title card-title"><div><span>CANS Change Log: Abbott, See K</span><span>Assessment Date: 01/05/2018</span></div></div>'
       )
     })
 

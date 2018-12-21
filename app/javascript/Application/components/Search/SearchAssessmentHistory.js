@@ -23,7 +23,14 @@ class SearchAssessmentHistory extends Component {
     AssessmentService.getAllAssessments()
       .then(assessments => {
         const filteredAssessments = assessments.filter(assessment => assessment.status === AssessmentStatus.inProgress)
-        const sortedAssessments = sortAssessmentsByDate(filteredAssessments, false, 'desc')
+        const options = {
+          assessments: filteredAssessments,
+          sortEventDate: false,
+          sortCreatedTimestamp: true,
+          sortUpdatedTimestamp: true,
+          direction: 'desc',
+        }
+        const sortedAssessments = sortAssessmentsByDate(options)
         this.setState({
           assessments: sortedAssessments.slice(0, this.props.numAssessments),
           fetchStatus: LoadingState.ready,

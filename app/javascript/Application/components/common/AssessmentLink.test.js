@@ -45,8 +45,8 @@ describe('AssessmentLink', () => {
   })
 
   it('the Link text is the formatted date + " CANS ', () => {
-    const { created_timestamp: createdTimestamp } = assessmentInProgress
-    const formattedDate = isoToLocalDate(createdTimestamp)
+    const { event_date: eventDate } = assessmentInProgress
+    const formattedDate = isoToLocalDate(eventDate)
     const wrapper = prepareWrapper(assessmentInProgress, 'CHILD_LIST')
     const linkText = wrapper.props().children
 

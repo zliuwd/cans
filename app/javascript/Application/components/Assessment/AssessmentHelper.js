@@ -102,11 +102,19 @@ export function getDisplayAssessmentStatus(status) {
   }
 }
 
-export function sortAssessmentsByDate(assessments, sortCreatedTimestampOnly, direction = 'asc') {
+export function sortAssessmentsByDate(options) {
+  const { assessments, sortEventDate, sortCreatedTimestamp, sortUpdatedTimestamp, direction } = options
   const newAssessmentList = assessments.map(assessment => {
-    const timestamp = sortCreatedTimestampOnly
-      ? moment(assessment.created_timestamp)
-      : moment(assessment.updated_timestamp || assessment.created_timestamp)
+    let timestamp
+
+    if (sortEventDate) {
+      timestamp = moment(assessment.event_date)
+    } else if (sortCreatedTimestamp && sortUpdatedTimestamp) {
+      timestamp = moment(assessment.updated_timestamp || assessment.created_timestamp)
+    } else if (sortCreatedTimestamp && !sortUpdatedTimestamp) {
+      timestamp = moment(assessment.created_timestamp)
+    }
+
     return { ...assessment, timestamp }
   })
   newAssessmentList.sort((left, right) => {
