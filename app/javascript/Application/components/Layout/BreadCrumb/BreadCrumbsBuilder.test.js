@@ -40,17 +40,24 @@ const textOfBreadCrumb = component =>
 describe('<BreadCrumbsBuilder />', () => {
   describe('supervisor', () => {
     it('will render the correct BreadCrumbs for supervisor Main Flow', () => {
-      const component = wrapper(supervisorMainFlow, 'STAFF_ASSESSMENT_EDIT')
-      expect(textOfBreadCrumb(component)).toEqual(['Staff List', 'Staff, Name', 'Client, Name', 'CANS Assessment Form'])
+      const component = wrapper(supervisorMainFlow, 'STAFF_CHANGELOG')
+      expect(textOfBreadCrumb(component)).toEqual([
+        'Staff List',
+        'Staff, Name',
+        'Client, Name',
+        'CANS Assessment Form',
+        'Change Log',
+      ])
     })
 
     it('will render the BreadCrumbs for supervisor Search Flow', () => {
-      const component = wrapper(supervisorMainFlow, 'SEARCH_ASSESSMENT_EDIT')
+      const component = wrapper(supervisorMainFlow, 'SEARCH_CHANGELOG')
       expect(textOfBreadCrumb(component)).toEqual([
         'Staff List',
         'Client Search',
         'Client, Name',
         'CANS Assessment Form',
+        'Change Log',
       ])
     })
   })
@@ -60,17 +67,18 @@ describe('<BreadCrumbsBuilder />', () => {
     clientFlow.subordinate = {}
     clientFlow.user.privileges = 'CANS-staff-person-clients-read'
     it('will render the correct BreadCrumbs for caseWorker Main Flow', () => {
-      const component = wrapper(clientFlow, 'ASSESSMENT_EDIT')
-      expect(textOfBreadCrumb(component)).toEqual(['Client List', 'Client, Name', 'CANS Assessment Form'])
+      const component = wrapper(clientFlow, 'ASSESSMENT_CHANGELOG')
+      expect(textOfBreadCrumb(component)).toEqual(['Client List', 'Client, Name', 'CANS Assessment Form', 'Change Log'])
     })
 
     it('will render the BreadCrumbs for caseWorker Search Flow', () => {
-      const component = wrapper(clientFlow, 'SEARCH_ASSESSMENT_EDIT')
+      const component = wrapper(clientFlow, 'SEARCH_CHANGELOG')
       expect(textOfBreadCrumb(component)).toEqual([
         'Client List',
         'Client Search',
         'Client, Name',
         'CANS Assessment Form',
+        'Change Log',
       ])
     })
   })
@@ -81,8 +89,13 @@ describe('<BreadCrumbsBuilder />', () => {
     searchFlow.user.privileges = 'other-permissions'
 
     it('will render Search Flow', () => {
-      const component = wrapper(searchFlow, 'SEARCH_ASSESSMENT_EDIT')
-      expect(textOfBreadCrumb(component)).toEqual(['Client Search', 'Client, Name', 'CANS Assessment Form'])
+      const component = wrapper(searchFlow, 'SEARCH_CHANGELOG')
+      expect(textOfBreadCrumb(component)).toEqual([
+        'Client Search',
+        'Client, Name',
+        'CANS Assessment Form',
+        'Change Log',
+      ])
     })
   })
 })

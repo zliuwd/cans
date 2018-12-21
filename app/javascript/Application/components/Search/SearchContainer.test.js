@@ -7,8 +7,12 @@ import SearchAssessmentHistory from './SearchAssessmentHistory'
 describe('<SearchContainer />', () => {
   describe('init SearchContainer', () => {
     describe('page layout', () => {
+      let wrapper
+      beforeEach(() => {
+        wrapper = shallow(<SearchContainer navigateTo="SEARCH" match={{ url: '/staff/0X5' }} />)
+      })
+
       it('renders with a <CloseableAlert /> component', () => {
-        const wrapper = shallow(<SearchContainer navigateTo="SEARCH" />)
         expect(wrapper.find('CloseableAlert').exists()).toBe(true)
         expect(wrapper.find('CloseableAlert').prop('message')).toEqual(
           'To Start a CANS Assessment, Search and Select the Child'
@@ -16,18 +20,15 @@ describe('<SearchContainer />', () => {
       })
 
       it('renders with a <PersonSearchForm /> component', () => {
-        const wrapper = shallow(<SearchContainer navigateTo="SEARCH" />)
         expect(wrapper.find(PersonSearchForm).exists()).toBe(true)
       })
 
       it('renders h4 with ASSESSMENTS_TITLE', () => {
-        const wrapper = shallow(<SearchContainer navigateTo="SEARCH" />)
         expect(wrapper.find('h4').exists()).toBe(true)
         expect(wrapper.find('h4').text()).toBe('Recently Updated CANS')
       })
 
       it('renders with a <SearchAssessmentHistory /> component', () => {
-        const wrapper = shallow(<SearchContainer navigateTo="SEARCH" />)
         expect(wrapper.find(SearchAssessmentHistory).exists()).toBe(true)
       })
     })

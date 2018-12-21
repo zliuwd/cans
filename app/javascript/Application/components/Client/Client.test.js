@@ -24,7 +24,7 @@ const client = {
 }
 
 const params = {
-  match: { params: { id: '1' } },
+  match: { params: { id: '1' }, url: '/staff/0X5/clients/AznnyCs0X5' },
   location: { pathname: 'client' },
   history: { location: '/client' },
   client,
@@ -55,11 +55,30 @@ describe('<Client />', () => {
     it('renders with 1 <ClientAssessmentHistory /> component', () => {
       expect(getLength(ClientAssessmentHistory)).toBe(1)
     })
+
+    it('sensitivityTypeLabel', () => {
+      const wrapper = getWrapper()
+      const testTypes = ['', 'SEALED', 'SENSITIVE', 'OTHER']
+      const result = testTypes.map(type => {
+        return wrapper.instance().sensitivityTypeLabel(type)
+      })
+      expect(result).toEqual(['Unrestricted', 'Sealed', 'Sensitive', 'OTHER'])
+    })
+
+    it('ClientAssessmentHistoryUrlTrimmer', () => {
+      const wrapper = getWrapper()
+      const testUrls = ['/staff/0X5/clients/AdE0PWu0X5', 'clients/AdE0PWu0X5']
+      const result = testUrls.map(url => {
+        return wrapper.instance().ClientAssessmentHistoryUrlTrimmer(url)
+      })
+
+      expect(result).toEqual(['/staff/0X5', ''])
+    })
   })
 
   describe('with no childData', () => {
     const params = {
-      match: { params: { id: '1' } },
+      match: { params: { id: '1' }, url: '/staff/0X5/clients/AznnyCs0X5' },
       location: { pathname: 'client' },
       history: { location: '/client' },
       navigateTo: 'CLIENT_LIST',

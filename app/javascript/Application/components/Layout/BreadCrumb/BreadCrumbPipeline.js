@@ -55,23 +55,42 @@ export const addStaffChildProfileCrumbIfNeeded = (elements, navigateTo, client, 
   }
 }
 
+export const addStaffAssessmentFormCrumbIfNeeded = (elements, navigateTo, client, staffPerson, assessmentId) => {
+  if (navigateTo === navigation.STAFF_CHANGELOG) {
+    elements.push(
+      <Link to={`/staff/${staffPerson.identifier}/clients/${client.identifier}/assessments/${assessmentId}`}>
+        {BreadCrumbLinks.CANS_ASSESSMENT_FORM}
+      </Link>
+    )
+  }
+}
+
 export const addChildProfileCrumbIfNeeded = (elements, navigateTo, client, staffPerson) => {
+  const searchProfile = [
+    navigation.SEARCH_ASSESSMENT_EDIT,
+    navigation.SEARCH_ASSESSMENT_ADD,
+    navigation.SEARCH_CHANGELOG,
+  ]
   if (selfChecker(navigateTo, selfCheckerKeyWords.PROFILE_OVERALL)) {
     elements.push(formatName(client))
-  } else if (navigateTo === navigation.SEARCH_ASSESSMENT_EDIT) {
-    elements.push(<Link to={`/search/clients/${client.identifier}`}>{formatName(client)}</Link>)
-  } else if (navigateTo === navigation.SEARCH_ASSESSMENT_ADD) {
+  } else if (searchProfile.includes(navigateTo)) {
     elements.push(<Link to={`/search/clients/${client.identifier}`}>{formatName(client)}</Link>)
   } else if (crumbsGroup.clientProfile.includes(navigateTo)) {
     elements.push(<Link to={`/clients/${client.identifier}`}>{formatName(client)}</Link>)
   }
 }
 
-export const addAssessmentFormCrumbIfNeeded = (elements, navigateTo, client, assessmentId) => {
+export const addAssessmentFormCrumbIfNeeded = (elements, navigateTo, client, assessmentId, staffPerson) => {
   if (selfChecker(navigateTo, selfCheckerKeyWords.ASSESSMENT_EDIT)) {
     elements.push(BreadCrumbLinks.CANS_ASSESSMENT_FORM)
   } else if (selfChecker(navigateTo, selfCheckerKeyWords.ASSESSMENT_ADD)) {
     elements.push(BreadCrumbLinks.CANS_ASSESSMENT_FORM)
+  } else if (navigateTo === navigation.SEARCH_CHANGELOG) {
+    elements.push(
+      <Link to={`/search/clients/${client.identifier}/assessments/${assessmentId}`}>
+        {BreadCrumbLinks.CANS_ASSESSMENT_FORM}
+      </Link>
+    )
   } else if (crumbsGroup.assessmentForm.includes(navigateTo)) {
     elements.push(
       <Link to={`/clients/${client.identifier}/assessments/${assessmentId}`}>
@@ -90,9 +109,7 @@ export const addClientSearchCrumbIfNeeded = (elements, navigateTo) => {
 }
 
 export const addChangeLogCrumbIfNeeded = (elements, navigateTo, url) => {
-  if (navigateTo === navigation.ASSESSMENT_CHANGELOG) {
+  if (selfChecker(navigateTo, selfCheckerKeyWords.CHANGELOG)) {
     elements.push('Change Log')
-  } else if (crumbsGroup.changelog.includes(navigateTo)) {
-    elements.push(<Link to={`${url}/changelog`}>Change Log</Link>)
   }
 }

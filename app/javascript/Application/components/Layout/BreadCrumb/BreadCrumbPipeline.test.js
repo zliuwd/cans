@@ -113,6 +113,16 @@ describe('BreadCrumbPipeline: the part which was not covered by Component test',
       expect(linkUrl).toEqual('/clients/AdE0PWu0X5/assessments/123456')
       expect(linkText).toEqual(BreadCrumbLinks.CANS_ASSESSMENT_FORM)
     })
+
+    it('will add /Cans assessment form/ Link when nav to SEARCH_CHANGELOG', () => {
+      const testData = clone(fakedata)
+      testData.navigateTo = navigation.SEARCH_CHANGELOG
+      addAssessmentFormCrumbIfNeeded(testData.elements, testData.navigateTo, testData.client, testData.assessmentId)
+      const linkUrl = testData.elements[0].props.to
+      const linkText = testData.elements[0].props.children
+      expect(linkUrl).toEqual('/search/clients/AdE0PWu0X5/assessments/123456')
+      expect(linkText).toEqual(BreadCrumbLinks.CANS_ASSESSMENT_FORM)
+    })
   })
 
   it('addClientSearchCrumbIfNeeded', () => {

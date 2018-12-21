@@ -18,7 +18,14 @@ import {
 } from '../Assessment/assessment.mocks.test'
 
 const prepareWrapper = (assessment, header) =>
-  shallow(<AssessmentRecordInfo assessment={assessment} header={header} navFrom={'SEARCH'} />)
+  shallow(
+    <AssessmentRecordInfo
+      assessment={assessment}
+      header={header}
+      navFrom={'SEARCH'}
+      inheritUrl={'/staff/0X5/clients/AznnyCs0X5/assessments/298750'}
+    />
+  )
 
 describe('AssessmentRecordInfo', () => {
   describe('component layout', () => {

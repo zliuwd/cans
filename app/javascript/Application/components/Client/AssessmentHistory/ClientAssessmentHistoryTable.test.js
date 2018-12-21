@@ -25,7 +25,14 @@ const defaultMockedAssessments = [
 ]
 
 const shallowWrapper = assessments =>
-  shallow(<ClientAssessmentHistoryTable assessments={assessments} navFrom={navigation.CHILD_PROFILE} userId={'1'} />)
+  shallow(
+    <ClientAssessmentHistoryTable
+      assessments={assessments}
+      navFrom={navigation.CHILD_PROFILE}
+      userId={'1'}
+      inheritUrl={'clients/AdE0PWu0X5'}
+    />
+  )
 
 describe('<ClientAssessmentHistoryTable />', () => {
   describe('layout', () => {
@@ -66,13 +73,13 @@ describe('<ClientAssessmentHistoryTable />', () => {
         const data = dataGrid.props().data
         expect(data.length).toBe(7)
         expect(data).toEqual([
-          { id: 4, navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
-          { id: 5, navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
-          { id: 6, navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
-          { id: 7, navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
-          { id: 8, navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
-          { id: 9, navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
-          { id: 10, navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
+          { id: 4, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
+          { id: 5, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
+          { id: 6, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
+          { id: 7, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
+          { id: 8, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
+          { id: 9, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
+          { id: 10, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
         ])
       })
     })

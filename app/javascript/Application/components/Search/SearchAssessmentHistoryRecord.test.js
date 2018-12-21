@@ -7,7 +7,13 @@ import { assessmentInProgress, assessmentWithNoUpdateInfo } from '../Assessment/
 jest.mock('../Assessment/Assessment.service')
 
 const getShallowWrapper = assessment =>
-  shallow(<SearchAssessmentHistoryRecord assessment={assessment} navFrom="SEARCH" />)
+  shallow(
+    <SearchAssessmentHistoryRecord
+      assessment={assessment}
+      navFrom="SEARCH"
+      inheritUrl={'/staff/0X5/clients/AznnyCs0X5/assessments/298750'}
+    />
+  )
 
 describe('<SearchAssessmentHistoryRecord', () => {
   describe('In Progress Assessment', () => {

@@ -62,6 +62,16 @@ describe('PageContentSwitcher', () => {
     expect(wrapper.find(ChangeLogPage).length).toBe(1)
   })
 
+  it('will switch to ChangeLogPage when nav to navigation.STAFF_CHANGELOG/>', () => {
+    const wrapper = getWrapper(navigation.STAFF_CHANGELOG)
+    expect(wrapper.find(ChangeLogPage).length).toBe(1)
+  })
+
+  it('will switch to ChangeLogPage when nav to navigation.SEARCH_CHANGELOG/>', () => {
+    const wrapper = getWrapper(navigation.SEARCH_CHANGELOG)
+    expect(wrapper.find(ChangeLogPage).length).toBe(1)
+  })
+
   it('will switch to SearchContainer when nav to navigation.CLIENT_SEARCH/>', () => {
     const wrapper = getWrapper(navigation.CLIENT_SEARCH)
     expect(wrapper.find(SearchContainer).length).toBe(1)

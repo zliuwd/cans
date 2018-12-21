@@ -26,7 +26,7 @@ export default class Ellipsis extends React.Component {
   render() {
     const { clientId, assessmentId } = this.props
     const linkProps = {
-      pathname: `/clients/${clientId}/assessments/${assessmentId}/changelog`,
+      pathname: `${this.props.inheritUrl}/clients/${clientId}/assessments/${assessmentId}/changelog`,
     }
 
     return (
@@ -58,4 +58,5 @@ export default class Ellipsis extends React.Component {
 Ellipsis.propTypes = {
   assessmentId: PropTypes.number.isRequired,
   clientId: PropTypes.string.isRequired,
+  inheritUrl: PropTypes.string.isRequired,
 }

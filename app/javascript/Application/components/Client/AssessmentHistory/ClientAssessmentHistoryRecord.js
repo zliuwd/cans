@@ -10,6 +10,7 @@ const ClientAssessmentHistoryRecord = props => {
         assessment={props.assessment}
         header={'assessment-status'}
         navFrom={props.navFrom}
+        inheritUrl={props.inheritUrl}
         userId={props.userId}
       />
     </Col>
@@ -18,6 +19,7 @@ const ClientAssessmentHistoryRecord = props => {
 
 ClientAssessmentHistoryRecord.propTypes = {
   assessment: PropTypes.object.isRequired,
+  inheritUrl: PropTypes.string.isRequired,
   navFrom: PropTypes.string,
   userId: PropTypes.string,
 }

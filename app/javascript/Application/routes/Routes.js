@@ -37,13 +37,18 @@ const Routes = () => {
       />
       <Route
         exact
+        path="/staff/:staffId/clients/:clientId/assessments/"
+        children={route => page(route, navigation.STAFF_ASSESSMENT_ADD)}
+      />
+      <Route
+        exact
         path="/staff/:staffId/clients/:clientId/assessments/:id"
         children={route => page(route, navigation.STAFF_ASSESSMENT_EDIT)}
       />
       <Route
         exact
-        path="/staff/:staffId/clients/:clientId/assessments/"
-        children={route => page(route, navigation.STAFF_ASSESSMENT_ADD)}
+        path="/staff/:staffId/clients/:clientId/assessments/:id/changelog"
+        children={route => page(route, navigation.STAFF_CHANGELOG)}
       />
 
       <Route

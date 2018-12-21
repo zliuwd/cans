@@ -39,6 +39,7 @@ export const crumbsGroup = Object.freeze({
     navigation.STAFF_CHILD_PROFILE,
     navigation.STAFF_ASSESSMENT_EDIT,
     navigation.STAFF_ASSESSMENT_ADD,
+    navigation.STAFF_CHANGELOG,
   ],
   clientList: [
     navigation.CHILD_LIST,
@@ -50,6 +51,7 @@ export const crumbsGroup = Object.freeze({
   ],
   clientProfile: [
     navigation.STAFF_CHILD_PROFILE,
+    navigation.STAFF_CHANGELOG,
     navigation.CHILD_PROFILE,
     navigation.CHILD_PROFILE_EDIT,
     navigation.ASSESSMENT_ADD,
@@ -58,6 +60,7 @@ export const crumbsGroup = Object.freeze({
     navigation.SEARCH_ASSESSMENT_ADD,
     navigation.SEARCH_CHILD_PROFILE,
     navigation.ASSESSMENT_CHANGELOG,
+    navigation.SEARCH_CHANGELOG,
   ],
   assessmentForm: [
     navigation.ASSESSMENT_ADD,
@@ -70,8 +73,9 @@ export const crumbsGroup = Object.freeze({
     navigation.SEARCH_ASSESSMENT_EDIT,
     navigation.SEARCH_CHILD_PROFILE,
     navigation.SEARCH_ASSESSMENT_ADD,
+    navigation.SEARCH_CHANGELOG,
   ],
-  changelog: [navigation.ASSESSMENT_CHANGELOG],
+  changelog: [navigation.ASSESSMENT_CHANGELOG, navigation.STAFF_CHANGELOG],
 })
 
 export const selfCheckerKeyWords = Object.freeze({
@@ -82,4 +86,5 @@ export const selfCheckerKeyWords = Object.freeze({
   ASSESSMENT_EDIT: 'ASSESSMENT_EDIT',
   ASSESSMENT_ADD: 'ASSESSMENT_ADD',
   CLIENT_SEARCH: 'CLIENT_SEARCH',
+  CHANGELOG: 'CHANGELOG',
 })

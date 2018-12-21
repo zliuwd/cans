@@ -29,7 +29,7 @@ class AssessmentRecordInfo extends Component {
     return (
       <Card className="card-assessment-record-info">
         <CardBody>
-          <Ellipsis clientId={person.identifier} assessmentId={id} />
+          <Ellipsis clientId={person.identifier} inheritUrl={this.props.inheritUrl} assessmentId={id} />
           <div className={'assessment-info'}>
             {recordHeader}
             <p>
@@ -97,6 +97,7 @@ class AssessmentRecordInfo extends Component {
 AssessmentRecordInfo.propTypes = {
   assessment: PropTypes.object.isRequired,
   header: PropTypes.string.isRequired,
+  inheritUrl: PropTypes.string.isRequired,
   navFrom: PropTypes.string.isRequired,
   userId: PropTypes.string,
 }

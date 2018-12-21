@@ -10,6 +10,7 @@ describe('ClientAssessmentHistoryTableEllipsis', () => {
       original: {
         id: 1,
         person: { identifier: '123' },
+        inheritUrl: '/staff/0X5',
       },
     }
     const wrapper = getWrapper(props)

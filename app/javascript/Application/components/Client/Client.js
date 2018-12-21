@@ -9,6 +9,7 @@ import { CloseableAlert, alertType } from '../common/CloseableAlert'
 import { isoToLocalDate } from '../../util/dateHelper'
 import NavFromProducer from '../../util/NavFromProducer'
 import ClientAssessmentHistoryLoadingBoundary from './AssessmentHistory/ClientAssessmentHistoryLoadingBoundary'
+import { urlTrimmer } from '../../util/urlTrimmer'
 
 class Client extends Component {
   constructor(props) {
@@ -52,6 +53,13 @@ class Client extends Component {
     } else {
       return ''
     }
+  }
+
+  ClientAssessmentHistoryUrlTrimmer = url => {
+    const urlArray = url.split('/')
+    const targetIndex = urlArray.indexOf('clients')
+    const linkUrl = urlTrimmer(url, targetIndex, 2)
+    return linkUrl
   }
 
   render() {
@@ -99,6 +107,7 @@ class Client extends Component {
             <ClientAssessmentHistory
               clientIdentifier={client.identifier ? client.identifier : ''}
               navFrom={NavFromProducer(this.props.navigateTo)}
+              inheritUrl={this.ClientAssessmentHistoryUrlTrimmer(this.props.match.url)}
               userId={this.props.match.params.staffId}
             />
           </ClientAssessmentHistoryLoadingBoundary>
@@ -114,6 +123,7 @@ Client.propTypes = {
   location: PropTypes.object.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({ staffId: PropTypes.string }),
+    url: PropTypes.string.isRequired,
   }).isRequired,
   navigateTo: PropTypes.string.isRequired,
 }

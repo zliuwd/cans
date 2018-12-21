@@ -47,7 +47,12 @@ class SearchAssessmentHistory extends Component {
       <div id="no-data">No assessments currently exist for the clients.</div>
     ) : (
       assessments.map(assessment => (
-        <SearchAssessmentHistoryRecord navFrom={this.props.navFrom} assessment={assessment} key={assessment.id} />
+        <SearchAssessmentHistoryRecord
+          navFrom={this.props.navFrom}
+          assessment={assessment}
+          key={assessment.id}
+          inheritUrl={this.props.inheritUrl}
+        />
       ))
     )
   }
@@ -59,6 +64,7 @@ class SearchAssessmentHistory extends Component {
 }
 
 SearchAssessmentHistory.propTypes = {
+  inheritUrl: PropTypes.string.isRequired,
   navFrom: PropTypes.string.isRequired,
   numAssessments: PropTypes.number.isRequired,
 }

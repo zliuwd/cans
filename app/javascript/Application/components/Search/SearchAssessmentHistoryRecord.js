@@ -7,6 +7,7 @@ class SearchAssessmentHistoryRecord extends PureComponent {
     return (
       <div className="col-md-4">
         <AssessmentRecordInfo
+          inheritUrl={this.props.inheritUrl}
           assessment={this.props.assessment}
           header={'assessment-client-name'}
           navFrom={this.props.navFrom}
@@ -18,6 +19,7 @@ class SearchAssessmentHistoryRecord extends PureComponent {
 
 SearchAssessmentHistoryRecord.propTypes = {
   assessment: PropTypes.object.isRequired,
+  inheritUrl: PropTypes.string.isRequired,
   navFrom: PropTypes.string.isRequired,
 }
 

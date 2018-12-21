@@ -11,6 +11,7 @@ import { navigation } from '../../../util/constants'
 const defaultProps = {
   clientIdentifier: '0PcpFQu0QM',
   navFrom: navigation.CHILD_PROFILE,
+  inheritUrl: '/staff/0X5/clients/AznnyCs0X5/assessments/2987507',
 }
 
 const mockedAssessmentsWithEventDate = [

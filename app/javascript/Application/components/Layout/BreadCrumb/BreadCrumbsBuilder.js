@@ -29,8 +29,19 @@ class BreadCrumbsBuilder extends React.Component {
     if (client) {
       Pipeline.addChildProfileCrumbIfNeeded(elements, navigateTo, client)
       Pipeline.addAssessmentFormCrumbIfNeeded(elements, navigateTo, client, assessmentId)
-      Pipeline.addChangeLogCrumbIfNeeded(elements, navigateTo, url)
     }
+
+    if (subordinate) {
+      Pipeline.addStaffAssessmentFormCrumbIfNeeded(
+        elements,
+        navigateTo,
+        client,
+        this.props.subordinate.staff_person,
+        assessmentId
+      )
+    }
+
+    Pipeline.addChangeLogCrumbIfNeeded(elements, navigateTo, url)
     return removeDuplicateBreadCrumb(elements)
   }
 

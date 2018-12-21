@@ -17,6 +17,11 @@ const SearchRoutes = () => {
       />
       <Route
         exact
+        path="/search/clients/:clientId/assessments/:id/changelog"
+        children={route => page(route, navigation.SEARCH_CHANGELOG)}
+      />
+      <Route
+        exact
         path="/search/clients/:clientId/assessments"
         children={route => page(route, navigation.SEARCH_ASSESSMENT_ADD)}
       />

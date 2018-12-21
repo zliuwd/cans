@@ -10,6 +10,7 @@ describe('<Ellipsis />', () => {
     const defaultProps = {
       clientId: 'C76Jg230X3',
       assessmentId: 1234,
+      inheritUrl: '/staff/0X5',
     }
 
     it('renders a Button component with the correct props', () => {
@@ -53,7 +54,7 @@ describe('<Ellipsis />', () => {
       it('renders a Link component and the correct props', () => {
         const wrapper = shallow(<Ellipsis {...defaultProps} />)
         expect(wrapper.find(Link).props().to).toEqual({
-          pathname: '/clients/C76Jg230X3/assessments/1234/changelog',
+          pathname: '/staff/0X5/clients/C76Jg230X3/assessments/1234/changelog',
         })
       })
 

@@ -34,6 +34,8 @@ const PageContentSwitcher = ({ params, navigateTo, client, staffId }) => {
         return client && <AssessmentContainer {...params} />
       case navigation.SEARCH_ASSESSMENT_ADD:
         return client && <AssessmentContainer {...params} />
+      case navigation.SEARCH_CHANGELOG:
+        return client && <ChangeLogPage {...params} />
 
       case navigation.STAFF_LIST:
         return <SupervisorDashboard />
@@ -45,6 +47,8 @@ const PageContentSwitcher = ({ params, navigateTo, client, staffId }) => {
         return client && <AssessmentContainer {...params} />
       case navigation.STAFF_ASSESSMENT_ADD:
         return client && <AssessmentContainer {...params} />
+      case navigation.STAFF_CHANGELOG:
+        return client && <ChangeLogPage {...params} />
 
       default:
         return null

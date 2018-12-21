@@ -11,6 +11,7 @@ jest.mock('../Assessment/Assessment.service')
 const params = {
   numAssessments: 3,
   navFrom: 'SEARCH',
+  inheritUrl: '/staff/0X5/clients/AznnyCs0X5/assessments/298750',
 }
 
 const getShallowWrapper = () => {

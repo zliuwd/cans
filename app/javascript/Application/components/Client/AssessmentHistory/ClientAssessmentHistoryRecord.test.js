@@ -16,7 +16,13 @@ import {
 import { navigation } from '../../../util/constants'
 
 const getShallowWrapper = assessment =>
-  shallow(<ClientAssessmentHistoryRecord assessment={assessment} navFrom={navigation.CHILD_PROFILE} />)
+  shallow(
+    <ClientAssessmentHistoryRecord
+      assessment={assessment}
+      navFrom={navigation.CHILD_PROFILE}
+      inheritUrl={'/staff/0X5/clients/AznnyCs0X5/assessments/298750'}
+    />
+  )
 
 describe('ClientAssessmentHistoryWithCaseNumber', () => {
   it('renders IN_PROGRESS assessment with all fields', () => {

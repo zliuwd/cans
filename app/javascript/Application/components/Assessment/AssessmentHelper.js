@@ -1,6 +1,7 @@
 import { getCurrentIsoDate } from '../../util/dateHelper'
 import moment from 'moment'
 import { globalAlertService } from '../../util/GlobalAlertService'
+import { urlTrimmer } from '../../util/urlTrimmer'
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
@@ -121,19 +122,6 @@ export function sortAssessmentsByDate(options) {
     return direction === 'asc' ? left.timestamp.diff(right.timestamp) : right.timestamp.diff(left.timestamp)
   })
   return newAssessmentList
-}
-
-export function urlTrimmer(url, start, deleteCount) {
-  if (!url) {
-    return null
-  }
-  if (url.includes('/')) {
-    const urlArray = url.split('/')
-    urlArray.splice(start, deleteCount)
-    return urlArray.join('/')
-  } else {
-    return url
-  }
 }
 
 export function trimUrlForClientProfile(url) {

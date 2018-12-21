@@ -5,6 +5,7 @@ import { Row } from 'reactstrap'
 import { Card, CardHeader, CardTitle, CardBody } from '@cwds/components'
 import ClientAssessmentHistoryRecord from './ClientAssessmentHistoryRecord'
 import AuthBoundary from '../../common/AuthBoundary'
+
 import { buildCreateAssessmentPermission } from '../../common/AuthHelper'
 import AddCansLink from '../AddCansLink'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
@@ -33,6 +34,7 @@ class ClientAssessmentHistory extends PureComponent {
             assessment={assessment}
             key={assessment.id}
             navFrom={this.props.navFrom}
+            inheritUrl={this.props.inheritUrl}
             userId={this.props.userId}
           />
         ))
@@ -41,7 +43,12 @@ class ClientAssessmentHistory extends PureComponent {
 
   renderAssessmentsTable(assessments) {
     return (
-      <ClientAssessmentHistoryTable assessments={assessments} navFrom={this.props.navFrom} userId={this.props.userId} />
+      <ClientAssessmentHistoryTable
+        assessments={assessments}
+        navFrom={this.props.navFrom}
+        inheritUrl={this.props.inheritUrl}
+        userId={this.props.userId}
+      />
     )
   }
 
@@ -78,6 +85,7 @@ class ClientAssessmentHistory extends PureComponent {
 ClientAssessmentHistory.propTypes = {
   assessments: PropTypes.arrayOf(PropTypes.object),
   clientIdentifier: PropTypes.string,
+  inheritUrl: PropTypes.string.isRequired,
   navFrom: PropTypes.string,
   userId: PropTypes.string,
 }
