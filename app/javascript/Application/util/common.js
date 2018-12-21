@@ -38,3 +38,7 @@ export const isSafari =
   (!window.safari || (typeof safari !== 'undefined' && safari.pushNotification)).toString() ===
     '[object SafariRemoteNotification]'
 /* eslint-enable no-undef */
+
+/* eslint-disable spaced-comment */
+export const isIE = /*@cc_on!@*/ false || Boolean(document.documentMode)
+/* eslint-enable spaced-comment */
