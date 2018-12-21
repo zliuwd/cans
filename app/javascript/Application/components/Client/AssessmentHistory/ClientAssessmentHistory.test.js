@@ -3,13 +3,10 @@ import { shallow } from 'enzyme'
 import { Card, CardHeader, CardTitle, CardBody } from '@cwds/components'
 import Grid from '@material-ui/core/Grid/Grid'
 import ClientAssessmentHistory from './ClientAssessmentHistory'
-// import AssessmentService from '../../Assessment/Assessment.service'
 import ClientAssessmentHistoryRecord from './ClientAssessmentHistoryRecord'
 import AddCansLink from '../AddCansLink'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
 import { navigation } from '../../../util/constants'
-
-// jest.mock('../../Assessment/Assessment.service')
 
 const defaultProps = {
   clientIdentifier: '0PcpFQu0QM',

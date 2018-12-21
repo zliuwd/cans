@@ -97,14 +97,14 @@ class AssessmentChangeLog extends Component {
   }
 
   render() {
-    const { client, assessmentWithHistory } = this.props
+    const { client } = this.props
+    const assessmentWithHistory = this.props.assessmentWithHistory ? this.props.assessmentWithHistory : {}
     const assessment = assessmentWithHistory.assessment ? assessmentWithHistory.assessment : null
     const changeHistory = assessmentWithHistory.changeHistory ? assessmentWithHistory.changeHistory : []
     const changeHistoryLength = changeHistory.length
 
     const minRows = 0
     const defaultPageSize = 10
-
     const showPagination = changeHistoryLength > defaultPageSize
 
     return assessment && changeHistoryLength > 0 ? (
@@ -135,12 +135,16 @@ AssessmentChangeLog.propTypes = {
   assessmentWithHistory: PropTypes.shape({
     changeHistory: PropTypes.arrayOf(changeHistoryPropTypes),
     assessment: PropTypes.object,
-  }).isRequired,
+  }),
   client: clientPropTypes.isRequired,
   pageHeaderButtonsController: PropTypes.shape({
     updateHeaderButtons: PropTypes.func.isRequired,
     updateHeaderButtonsToDefault: PropTypes.func.isRequired,
   }).isRequired,
+}
+
+AssessmentChangeLog.defaultProps = {
+  assessmentWithHistory: {},
 }
 
 export default AssessmentChangeLog
