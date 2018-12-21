@@ -82,6 +82,20 @@ describe('<AssessmentContainer />', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         expect(getLength(wrapper, AssessmentFormFooter)).toBe(0)
       })
+
+      it('call addEventListener in componentDidMount', () => {
+        const adder = jest.spyOn(window, 'addEventListener')
+        const wrapper = shallow(<AssessmentContainer {...props} />)
+        wrapper.update()
+        expect(adder).toHaveBeenCalledTimes(1)
+      })
+
+      it('call removeEventListener in componentWillUnmount', () => {
+        const remover = jest.spyOn(window, 'removeEventListener')
+        const wrapper = shallow(<AssessmentContainer {...props} />)
+        wrapper.instance().componentWillUnmount()
+        expect(remover).toHaveBeenCalledTimes(1)
+      })
     })
 
     describe('page header buttons', () => {
