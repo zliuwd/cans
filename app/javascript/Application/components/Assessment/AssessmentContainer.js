@@ -29,6 +29,11 @@ import { getCurrentIsoDate, isValidLocalDate } from '../../util/dateHelper'
 import { logPageAction } from '../../util/analytics'
 import Sticker from 'react-stickyfill'
 
+const alertMessage = e => {
+  e.preventDefault()
+  return (e.returnValue = '')
+}
+
 class AssessmentContainer extends Component {
   constructor(props) {
     super(props)
@@ -50,6 +55,7 @@ class AssessmentContainer extends Component {
   }
 
   async componentDidMount() {
+    window.addEventListener('beforeunload', alertMessage)
     const assessmentId = this.props.match.params.id
     await this.updateIsEditableState(assessmentId)
     assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment()
@@ -61,6 +67,7 @@ class AssessmentContainer extends Component {
   }
 
   componentWillUnmount() {
+    window.removeEventListener('beforeunload', alertMessage)
     this.props.pageHeaderButtonsController.updateHeaderButtonsToDefault()
   }
 
