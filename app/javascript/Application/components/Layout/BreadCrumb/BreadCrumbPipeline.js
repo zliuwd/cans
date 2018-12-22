@@ -48,12 +48,22 @@ export const addChildYouthListCrumbIfNeeded = (elements, navigateTo) => {
 }
 
 export const addStaffChildProfileCrumbIfNeeded = (elements, navigateTo, client, staffPerson) => {
-  if (navigateTo === navigation.STAFF_ASSESSMENT_EDIT || navigateTo === navigation.STAFF_ASSESSMENT_ADD) {
+  if (crumbsGroup.staffChildProfile.includes(navigateTo)) {
     elements.push(
       <Link to={`/staff/${staffPerson.identifier}/clients/${client.identifier}`}>{formatName(client)}</Link>
     )
   }
 }
+
+export const addChildProfileCrumbIfNeeded = (elements, navigateTo, client) => {
+  if (selfChecker(navigateTo, selfCheckerKeyWords.PROFILE_OVERALL)) {
+    elements.push(formatName(client))
+  } else if (crumbsGroup.searchChildProfile.includes(navigateTo)) {
+    elements.push(<Link to={`/search/clients/${client.identifier}`}>{formatName(client)}</Link>)
+  } else if (crumbsGroup.clientProfile.includes(navigateTo)) {
+    elements.push(<Link to={`/clients/${client.identifier}`}>{formatName(client)}</Link>)
+  }
+} // search and client dashboard could share this logic becasue they just need 3 parameters
 
 export const addStaffAssessmentFormCrumbIfNeeded = (elements, navigateTo, client, staffPerson, assessmentId) => {
   if (navigateTo === navigation.STAFF_CHANGELOG) {
@@ -63,22 +73,7 @@ export const addStaffAssessmentFormCrumbIfNeeded = (elements, navigateTo, client
       </Link>
     )
   }
-}
-
-export const addChildProfileCrumbIfNeeded = (elements, navigateTo, client, staffPerson) => {
-  const searchProfile = [
-    navigation.SEARCH_ASSESSMENT_EDIT,
-    navigation.SEARCH_ASSESSMENT_ADD,
-    navigation.SEARCH_CHANGELOG,
-  ]
-  if (selfChecker(navigateTo, selfCheckerKeyWords.PROFILE_OVERALL)) {
-    elements.push(formatName(client))
-  } else if (searchProfile.includes(navigateTo)) {
-    elements.push(<Link to={`/search/clients/${client.identifier}`}>{formatName(client)}</Link>)
-  } else if (crumbsGroup.clientProfile.includes(navigateTo)) {
-    elements.push(<Link to={`/clients/${client.identifier}`}>{formatName(client)}</Link>)
-  }
-}
+} // only when staff nav to changlog then show the link type asform
 
 export const addAssessmentFormCrumbIfNeeded = (elements, navigateTo, client, assessmentId, staffPerson) => {
   if (selfChecker(navigateTo, selfCheckerKeyWords.ASSESSMENT_EDIT)) {

@@ -51,7 +51,6 @@ export const crumbsGroup = Object.freeze({
   ],
   clientProfile: [
     navigation.STAFF_CHILD_PROFILE,
-    navigation.STAFF_CHANGELOG,
     navigation.CHILD_PROFILE,
     navigation.CHILD_PROFILE_EDIT,
     navigation.ASSESSMENT_ADD,
@@ -62,12 +61,13 @@ export const crumbsGroup = Object.freeze({
     navigation.ASSESSMENT_CHANGELOG,
     navigation.SEARCH_CHANGELOG,
   ],
-  assessmentForm: [
-    navigation.ASSESSMENT_ADD,
-    navigation.ASSESSMENT_EDIT,
+  staffChildProfile: [navigation.STAFF_ASSESSMENT_EDIT, navigation.STAFF_ASSESSMENT_ADD, navigation.STAFF_CHANGELOG],
+  searchChildProfile: [
     navigation.SEARCH_ASSESSMENT_EDIT,
-    navigation.ASSESSMENT_CHANGELOG,
+    navigation.SEARCH_ASSESSMENT_ADD,
+    navigation.SEARCH_CHANGELOG,
   ],
+  assessmentForm: [navigation.ASSESSMENT_ADD, navigation.ASSESSMENT_EDIT, navigation.ASSESSMENT_CHANGELOG],
   search: [
     navigation.CLIENT_SEARCH,
     navigation.SEARCH_ASSESSMENT_EDIT,

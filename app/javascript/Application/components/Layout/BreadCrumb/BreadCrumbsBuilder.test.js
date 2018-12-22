@@ -4,6 +4,7 @@ import { mount } from 'enzyme'
 import BreadCrumbsBuilder from './BreadCrumbsBuilder'
 import { BrowserRouter } from 'react-router-dom'
 import { clone } from '../../../util/common'
+import { navigation, BreadCrumbLinks } from '../../../util/constants'
 
 const supervisorMainFlow = {
   assessmentId: '2640037',
@@ -60,6 +61,11 @@ describe('<BreadCrumbsBuilder />', () => {
         'Change Log',
       ])
     })
+
+    it('will not render Client List BreadCrumb when a supervisor nav to client profile', () => {
+      const component = wrapper(supervisorMainFlow, navigation.STAFF_CHILD_PROFILE)
+      expect(textOfBreadCrumb(component).includes(BreadCrumbLinks.CLIENT_LIST)).toBe(false)
+    })
   })
 
   describe('caseWorker', () => {
@@ -96,6 +102,11 @@ describe('<BreadCrumbsBuilder />', () => {
         'CANS Assessment Form',
         'Change Log',
       ])
+    })
+
+    it('will not render Client List BreadCrumb when a noneCaseWorker nav to client profile', () => {
+      const component = wrapper(searchFlow, navigation.SEARCH_CHILD_PROFILE)
+      expect(textOfBreadCrumb(component).includes(BreadCrumbLinks.CLIENT_LIST)).toBe(false)
     })
   })
 })
