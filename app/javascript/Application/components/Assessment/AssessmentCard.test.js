@@ -22,4 +22,11 @@ describe('<AssessmentCard />', () => {
       expect(wrapper.find(assessmentCardTitleStyle).html()).toContain('Age Range 6-21')
     })
   })
+
+  describe('when isUnderSix is not set', () => {
+    it('Title is not present"', () => {
+      const wrapper = render(undefined)
+      expect(wrapper.find(assessmentCardTitleStyle).length).toBe(0)
+    })
+  })
 })
