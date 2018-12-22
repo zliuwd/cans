@@ -8,6 +8,7 @@ import {
   getDisplayAssessmentStatus,
   trimUrlForClientProfile,
   postSuccessMessage,
+  postInfoMessage,
   successMsgFrom,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
@@ -274,6 +275,17 @@ describe('AssessmentHelper', () => {
       expect(postSuccessSpy).toHaveBeenCalledTimes(1)
       expect(postSuccessSpy).toHaveBeenCalledWith({ message: 'error' })
       postSuccessSpy.mockReset()
+    })
+  })
+
+  it('postInfoMessage', () => {
+    const postInfoSpy = jest.spyOn(globalAlertService, 'postInfo')
+    postInfoMessage({ message: 'Info Message', isAutoCloseable: true, componentId: 'cId' })
+    expect(postInfoSpy).toHaveBeenCalledTimes(1)
+    expect(postInfoSpy).toHaveBeenCalledWith({
+      message: 'Info Message',
+      isAutoCloseable: true,
+      componentId: 'cId',
     })
   })
 })

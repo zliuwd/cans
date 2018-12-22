@@ -12,6 +12,7 @@ import { buildSearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
 import PageContentSwitcher from './PageContentSwitcher'
 import Sticker from 'react-stickyfill'
 import './style.sass'
+import { GlobalAlert } from '../common'
 
 const defaultHeaderButtons = {
   leftButton: null,
@@ -112,7 +113,7 @@ class Page extends Component {
           rightButton={header.rightButton}
         />
         <Sticker>
-          <div className="breadcrumb-container">
+          <div className="sticky breadcrumb-container">
             <BreadCrumbsBuilder
               navigateTo={this.props.navigateTo}
               client={this.state.client}
@@ -121,6 +122,8 @@ class Page extends Component {
               user={this.state.currentUser}
               subordinate={this.state.subordinate}
             />
+            <GlobalAlert />
+            <GlobalAlert id={'infoMessages'} />
           </div>
         </Sticker>
         <Container>

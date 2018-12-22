@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'reactstrap'
 import { CloseableAlert } from './CloseableAlert'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { isIE } from '../../util/common'
+import PropTypes from 'prop-types'
 
 let nextKey = 0
 
@@ -13,6 +14,7 @@ export class GlobalAlert extends Component {
       alerts: [],
     }
     globalAlertService.subscribe(this.onAlertEvent)
+    globalAlertService.subscribeCloseAlert(this.closeByMessageId)
   }
 
   componentDidUpdate() {
@@ -22,12 +24,22 @@ export class GlobalAlert extends Component {
     }
   }
 
-  onAlertEvent = ({ message, type, isAutoCloseable }) => {
+  onAlertEvent = ({ message, type, isAutoCloseable, componentId, messageId }) => {
     const alerts = this.state.alerts.slice()
-    alerts.push({ message, type, isAutoCloseable })
-    this.setState({
-      alerts: alerts,
-    })
+    if (
+      componentId === this.props.id &&
+      (undefined === messageId || !alerts.some(alert => alert.messageId === messageId))
+    ) {
+      alerts.push({ message, type, isAutoCloseable, messageId })
+      this.setState({
+        alerts: alerts,
+      })
+    }
+  }
+
+  closeByMessageId = messageId => {
+    const alerts = this.state.alerts.slice()
+    this.onAlertClose(alerts.indexOf(alerts.find(value => value.messageId === messageId)))
   }
 
   onAlertClose = index => {
@@ -47,7 +59,7 @@ export class GlobalAlert extends Component {
     return (
       <Container>
         {alerts.map((alert, index) => (
-          <Row key={`global-alert-${index}`}>
+          <Row key={`global-alert-${index}`} className={'row-padding'}>
             <Col>
               <CloseableAlert
                 key={nextKey++}
@@ -64,4 +76,12 @@ export class GlobalAlert extends Component {
       </Container>
     )
   }
+}
+
+GlobalAlert.propTypes = {
+  id: PropTypes.string,
+}
+
+GlobalAlert.defaultProps = {
+  id: undefined,
 }

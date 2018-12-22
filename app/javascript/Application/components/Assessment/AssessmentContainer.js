@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { CloseableAlert, alertType } from '../common/CloseableAlert'
 import { clone } from '../../util/common'
 import { completeAutoScroll } from '../../util/assessmentAutoScroll'
 import PageModal from '../common/PageModal'
@@ -21,14 +20,16 @@ import {
   caregiverWarning,
   completeTip,
   successMsgFrom,
+  postInfoMessage,
+  postCloseMessage,
 } from './AssessmentHelper'
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
 import './style.sass'
 import { getCurrentIsoDate, isValidLocalDate } from '../../util/dateHelper'
 import { logPageAction } from '../../util/analytics'
-import Sticker from 'react-stickyfill'
 
+const readOnlyMessageId = 'readonlyMessage'
 const alertMessage = e => {
   e.preventDefault()
   return (e.returnValue = '')
@@ -58,7 +59,9 @@ class AssessmentContainer extends Component {
     window.addEventListener('beforeunload', alertMessage)
     const assessmentId = this.props.match.params.id
     await this.updateIsEditableState(assessmentId)
-    assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment()
+    assessmentId
+      ? this.fetchAssessment(assessmentId).then(() => this.postReadOnlyMessageIfNeeded())
+      : this.fetchNewAssessment()
     this.handleCompleteScrollTarget()
   }
 
@@ -69,12 +72,32 @@ class AssessmentContainer extends Component {
   componentWillUnmount() {
     window.removeEventListener('beforeunload', alertMessage)
     this.props.pageHeaderButtonsController.updateHeaderButtonsToDefault()
+    postCloseMessage(readOnlyMessageId)
   }
 
   async updateIsEditableState(assessmentId) {
     const isEditable =
       assessmentId === undefined || (await SecurityService.checkPermission(`assessment:update:${assessmentId}`))
     this.setState({ isEditable })
+    this.postReadOnlyMessageIfNeeded()
+  }
+
+  postReadOnlyMessageIfNeeded() {
+    if (!this.state.isEditable) {
+      this.postReadOnlyMessage()
+    }
+  }
+
+  postReadOnlyMessage() {
+    const message = { messageId: readOnlyMessageId }
+    if (this.state.assessment.status === AssessmentStatus.completed) {
+      postInfoMessage({ ...message, message: 'This assessment was completed and is available for view only.' })
+    } else if (this.state.assessment.status === AssessmentStatus.inProgress) {
+      postInfoMessage({
+        ...message,
+        message: 'This CANS is under the jurisdiction of another county. Available for view only.',
+      })
+    }
   }
 
   initHeaderButtons(isSaveButtonEnabled) {
@@ -371,23 +394,6 @@ class AssessmentContainer extends Component {
               this.handleSubmitAssessment()
             }}
           />
-        ) : null}
-
-        {!isEditable ? (
-          <Sticker>
-            <div className="top-alert-container">
-              <CloseableAlert
-                id={'top-alert-box'}
-                message={
-                  assessment.status === AssessmentStatus.completed
-                    ? 'This assessment was completed and is available for view only.'
-                    : 'This CANS is under the jurisdiction of another county. Available for view only.'
-                }
-                type={alertType.INFO}
-                isCloseable={true}
-              />
-            </div>
-          </Sticker>
         ) : null}
         <div rol="completeScrollLocator" ref={this.assessmentHeader}>
           <AssessmentFormHeader

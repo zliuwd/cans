@@ -1,7 +1,7 @@
 import React from 'react'
 import { GlobalAlert } from './GlobalAlert'
 import { globalAlertService } from '../../util/GlobalAlertService'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 
 describe('<GlobalAlert>', () => {
   describe('render', () => {
@@ -63,6 +63,63 @@ describe('<GlobalAlert>', () => {
       // Close last alert
       closeTopAlert()
       expect(findAlerts().length).toBe(0)
+    })
+
+    it('should close alert by messageId', () => {
+      const instance = globalAlerts.instance()
+      instance.setState({ alerts: [] })
+      globalAlertService.postError({ message: 'Error message', messageId: 'mId1' })
+      globalAlertService.postError({ message: 'Other Error message', messageId: 'mId2' })
+      globalAlertService.postError({ message: 'One more Error message' })
+      expect(instance.state.alerts.length).toEqual(3)
+
+      globalAlertService.closeAlert('mId1')
+      expect(instance.state.alerts.length).toEqual(2)
+      globalAlertService.closeAlert('mId2')
+      expect(instance.state.alerts.length).toEqual(1)
+    })
+
+    it('should not show alerts with the same id', () => {
+      const instance = globalAlerts.instance()
+      instance.setState({ alerts: [] })
+
+      globalAlertService.postError({ message: 'Error message' })
+      globalAlertService.postError({ message: 'Error message' })
+      expect(instance.state.alerts.length).toEqual(2)
+
+      instance.setState({ alerts: [] })
+      globalAlertService.postError({ message: 'Error message', messageId: 'mId' })
+      globalAlertService.postError({ message: 'Error message', messageId: 'mId' })
+      expect(instance.state.alerts.length).toEqual(1)
+    })
+  })
+
+  describe('multiple globalAlerts', () => {
+    const wrapper = mount(
+      <div>
+        <GlobalAlert />
+        <GlobalAlert id={'second'} />
+      </div>
+    )
+
+    it('renders alerts according to componentId', () => {
+      wrapper.find('GlobalAlert').forEach(globalAlert => {
+        globalAlert.instance().setState({ alerts: [] })
+      })
+      globalAlertService.postError({ message: 'Error message #1' })
+      globalAlertService.postError({ message: 'Error message #2', componentId: 'second' })
+      globalAlertService.postError({ message: 'Error message #3' })
+      wrapper.find('GlobalAlert').forEach(globalAlert => {
+        const alerts = globalAlert.instance().state.alerts
+        if (globalAlert.prop('id') === 'second') {
+          expect(alerts.length).toEqual(1)
+          expect(alerts[0].message).toEqual('Error message #2')
+        } else {
+          expect(alerts.length).toEqual(2)
+          expect(alerts[0].message).toEqual('Error message #1')
+          expect(alerts[1].message).toEqual('Error message #3')
+        }
+      })
     })
   })
 })

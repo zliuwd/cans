@@ -160,6 +160,16 @@ export function postSuccessMessage(url, msgfrom) {
   globalAlertService.postSuccess({ message })
 }
 
+export const INFO_GLOBAL_ALERT_ID = 'infoMessages'
+
+export function postInfoMessage({ message, isAutoCloseable = false, componentId = INFO_GLOBAL_ALERT_ID, messageId }) {
+  globalAlertService.postInfo({ message, isAutoCloseable, componentId, messageId })
+}
+
+export function postCloseMessage(messageId = undefined) {
+  globalAlertService.closeAlert(messageId)
+}
+
 export const caregiverWarning = (
   <div>
     You are about to remove the <strong className="cargiver-text-block">caregiver</strong> from this Assessment.

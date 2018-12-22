@@ -1007,9 +1007,12 @@ describe('<AssessmentContainer />', () => {
     })
 
     describe('when assessment status=COMPLETED', () => {
+      jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false))
       const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+      const postInfoSpy = jest.spyOn(globalAlertService, 'postInfo')
       wrapper.instance().setState({
         assessment: {
+          id: 1,
           event_date: '2010-10-13',
           state: {
             domains: [],
@@ -1020,18 +1023,24 @@ describe('<AssessmentContainer />', () => {
         isEditable: false,
       })
 
-      it('should display alert box', () => {
-        expect(wrapper.find('#top-alert-box').exists()).toBe(true)
-        expect(wrapper.find('#top-alert-box').prop('message')).toEqual(
-          'This assessment was completed and is available for view only.'
-        )
+      it('should post Info', async () => {
+        wrapper.instance().postReadOnlyMessageIfNeeded()
+        expect(postInfoSpy).toHaveBeenCalledWith({
+          message: 'This CANS is under the jurisdiction of another county. Available for view only.',
+          isAutoCloseable: false,
+          componentId: 'infoMessages',
+          messageId: 'readonlyMessage',
+        })
       })
     })
 
     describe('when assessment status=IN_PROGRESS', () => {
+      jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false))
       const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+      const postInfoSpy = jest.spyOn(globalAlertService, 'postInfo')
       wrapper.instance().setState({
         assessment: {
+          id: 1,
           event_date: '2010-10-13',
           state: {
             domains: [],
@@ -1042,11 +1051,14 @@ describe('<AssessmentContainer />', () => {
         isEditable: false,
       })
 
-      it('should display alert box', () => {
-        expect(wrapper.find('#top-alert-box').exists()).toBe(true)
-        expect(wrapper.find('#top-alert-box').prop('message')).toEqual(
-          'This CANS is under the jurisdiction of another county. Available for view only.'
-        )
+      it('should display alert box', async () => {
+        wrapper.instance().postReadOnlyMessageIfNeeded()
+        expect(postInfoSpy).toHaveBeenCalledWith({
+          message: 'This CANS is under the jurisdiction of another county. Available for view only.',
+          isAutoCloseable: false,
+          componentId: 'infoMessages',
+          messageId: 'readonlyMessage',
+        })
       })
     })
   })

@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Sticker from 'react-stickyfill'
 import { PageHeader as WoodDuckHeader } from 'react-wood-duck'
-import { GlobalAlert } from '../common'
 import { navigation } from '../../util/constants'
 
 import './style.sass'
@@ -22,9 +21,7 @@ const PageHeader = ({ navigateTo, leftButton, rightButton }) => {
   return (
     <Sticker>
       <div role="contentinfo" className="sticky page-header-container">
-        <WoodDuckHeader pageTitle={determinePageTitle(navigateTo)} button={buttons}>
-          <GlobalAlert />
-        </WoodDuckHeader>
+        <WoodDuckHeader pageTitle={determinePageTitle(navigateTo)} button={buttons} />
       </div>
     </Sticker>
   )
