@@ -61,7 +61,27 @@ $item-confidential-label-height: 6.05rem
   color: $label-dark
 
 .assessment-header-card-header
-  border-bottom: #ccc 0.25rem solid !important
+  border-bottom: $gray80 0.25rem solid !important
+
+.domains-expand-collapse-header
+  display: inline-block; 
+  width: 100%;
+  border-bottom: $gray80 0.16rem solid !important
+  
+.domains-expand-collapse-button-right
+  font-size: 1.6rem
+  color: $deep-cyan
+  float: right
+  margin-right: 1.5rem
+  box-shadow: none
+
+.domains-expand-collapse-age-range
+  font-size: 2rem
+  color: $black
+  font-weight: 600
+  float: left
+  margin-left: 1.5rem
+  margin-top: 0.5rem
 
 .assessment-header-date
   overflow: visible
@@ -93,7 +113,7 @@ $item-confidential-label-height: 6.05rem
 
 %button-in-group
   background: #fff
-  color: #0e6f89
+  color: $deep-cyan
   height: 3.4rem
   width: 9.0rem
   padding: 0 30
@@ -104,7 +124,7 @@ $item-confidential-label-height: 6.05rem
   border-radius: 0
   border: 1.0rem
   outline-style: solid
-  outline-color: #0e6f89
+  outline-color: $deep-cyan
   outline-width: thin
 
 .age-button
@@ -112,7 +132,7 @@ $item-confidential-label-height: 6.05rem
 
 .age-button-selected
   @extend %button-in-group
-  background: #0e6f89
+  background: $deep-cyan
   color: #fff
 
 .age-button:hover:enabled
@@ -208,7 +228,7 @@ $item-confidential-label-height: 6.05rem
   height: 100%
   text-align: right
   line-height: 0.6rem
-  background: #0e6f89
+  background: $deep-cyan
 
 .progress-value
   color: #1A1A1A

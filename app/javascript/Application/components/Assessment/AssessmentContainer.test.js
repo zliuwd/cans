@@ -454,7 +454,7 @@ describe('<AssessmentContainer />', () => {
       it('passes an unset age group to the assessment component', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         wrapper.instance().onFetchNewAssessmentSuccess(instrument)
-        const form = wrapper.find('AssessmentCard')
+        const form = wrapper.find('Assessment')
         expect(form.props().assessment.state.under_six).toBeUndefined()
       })
 
@@ -993,12 +993,12 @@ describe('<AssessmentContainer />', () => {
       expect(wrapper.find('AssessmentSummaryCard').prop('disabled')).toEqual(true)
     })
 
-    it('should enable  <AssessmentCard/> when isEditable=true and disable when isEditable=false', () => {
+    it('should enable  <Assessment/> when isEditable=true and disable when isEditable=false', () => {
       wrapper.instance().setState({ isEditable: true })
-      expect(wrapper.find('AssessmentCard').prop('disabled')).toEqual(false)
+      expect(wrapper.find('Assessment').prop('disabled')).toEqual(false)
 
       wrapper.instance().setState({ isEditable: false })
-      expect(wrapper.find('AssessmentCard').prop('disabled')).toEqual(true)
+      expect(wrapper.find('Assessment').prop('disabled')).toEqual(true)
     })
 
     it('should enable  <AssessmentFormFooter/> when isEditable=true and should not be rendered when isEditable=false', () => {

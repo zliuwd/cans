@@ -3,10 +3,17 @@ import PropTypes from 'prop-types'
 import { getI18nByCode } from './I18nHelper'
 import Domain from './Domain'
 import { clone } from '../../util/common'
+import DomainsHeader from './DomainsHeader'
+import { Card, CardBody } from '@cwds/components'
 
 const INDICES = 'abcdefghijklmnopqrstuvwxyz'
-
 class Assessment extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      isDefaultExpanded: false,
+    }
+  }
   /* eslint-disable camelcase */
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.assessment.state.domains.length === 0 && nextProps.assessment.state.domains.length !== 0) {
@@ -129,6 +136,12 @@ class Assessment extends Component {
     this.props.onAssessmentUpdate(assessment)
   }
 
+  handleExpandAllDomains = () => {
+    this.setState({
+      isDefaultExpanded: !this.state.isDefaultExpanded,
+    })
+  }
+
   render() {
     const i18n = this.props.i18n
     const assessmentDto = this.props.assessment
@@ -136,32 +149,45 @@ class Assessment extends Component {
     const assessmentJson = assessmentDto.state
     const isUnderSix = assessmentJson.under_six
     const domains = assessmentJson.domains
+    const { isDefaultExpanded } = this.state
     return (
       <Fragment>
-        {domains.map((domain, index) => {
-          const { code, caregiver_index: caregiverIndex } = domain
-          const domainI18n = getI18nByCode(i18n, code)
-          return (
-            <Domain
-              index={index}
-              key={code + caregiverIndex}
-              domain={domain}
-              i18n={domainI18n}
-              i18nAll={i18n}
-              isAssessmentUnderSix={isUnderSix}
-              canReleaseConfidentialInfo={canReleaseConfidentialInfo}
-              onRatingUpdate={this.handleUpdateItemRating}
-              onItemCommentUpdate={this.handleUpdateItemComment}
-              onConfidentialityUpdate={this.handleUpdateItemConfidentiality}
-              onAddCaregiverDomain={this.addCaregiverDomainAfter}
-              onRemoveCaregiverDomain={this.removeCaregiverDomain}
-              onCaregiverNameUpdate={this.updateCaregiverName}
-              onDomainCommentUpdate={this.updateDomainComment}
-              handleWarningShow={this.props.handleWarningShow}
-              disabled={this.props.disabled}
+        {!(isUnderSix === null || isUnderSix === undefined) ? (
+          <Card className="card assessment-card">
+            <DomainsHeader
+              isUnderSix={isUnderSix}
+              isDefaultExpanded={isDefaultExpanded}
+              expandCollapse={this.handleExpandAllDomains}
             />
-          )
-        })}
+            <CardBody>
+              {domains.map((domain, index) => {
+                const { code, caregiver_index: caregiverIndex } = domain
+                const domainI18n = getI18nByCode(i18n, code)
+                return (
+                  <Domain
+                    index={index}
+                    key={code + caregiverIndex + isDefaultExpanded}
+                    domain={domain}
+                    i18n={domainI18n}
+                    i18nAll={i18n}
+                    isAssessmentUnderSix={isUnderSix}
+                    isDefaultExpanded={isDefaultExpanded}
+                    canReleaseConfidentialInfo={canReleaseConfidentialInfo}
+                    onRatingUpdate={this.handleUpdateItemRating}
+                    onItemCommentUpdate={this.handleUpdateItemComment}
+                    onConfidentialityUpdate={this.handleUpdateItemConfidentiality}
+                    onAddCaregiverDomain={this.addCaregiverDomainAfter}
+                    onRemoveCaregiverDomain={this.removeCaregiverDomain}
+                    onCaregiverNameUpdate={this.updateCaregiverName}
+                    onDomainCommentUpdate={this.updateDomainComment}
+                    handleWarningShow={this.props.handleWarningShow}
+                    disabled={this.props.disabled}
+                  />
+                )
+              })}
+            </CardBody>
+          </Card>
+        ) : null}
       </Fragment>
     )
   }

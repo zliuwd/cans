@@ -338,4 +338,56 @@ describe('<Domain />', () => {
       expect(domainWrapper.find(DomainCaregiverControls).length).toBe(0)
     })
   })
+
+  describe('#domain panels collapse when expanded is false for all domains ', () => {
+    it('should collapse all domains by default when isDefaultExpanded in the assessment is false ', () => {
+      const onItemCommentUpdateMock = jest.fn()
+      const domainWrapper = shallow(
+        <Domain
+          key={'1'}
+          canReleaseConfidentialInfo={true}
+          domain={{ ...domainDefault }}
+          isAssessmentUnderSix={true}
+          isDefaultExpanded={false}
+          i18n={{ ...i18nDefault }}
+          i18nAll={{}}
+          index={1}
+          onItemCommentUpdate={onItemCommentUpdateMock}
+          onDomainCommentUpdate={() => {}}
+          onRatingUpdate={() => {}}
+          onConfidentialityUpdate={() => {}}
+          onAddCaregiverDomain={() => {}}
+          handleWarningShow={() => {}}
+          onCaregiverNameUpdate={() => {}}
+        />
+      )
+      expect(domainWrapper.state().expanded).toBe(false)
+    })
+  })
+
+  describe('#domain panels expand when expanded is true for all domains ', () => {
+    it('should expand all domains by since isDefaultExpanded in the assessment is changed to true ', () => {
+      const onItemCommentUpdateMock = jest.fn()
+      const domainWrapper = shallow(
+        <Domain
+          key={'1'}
+          canReleaseConfidentialInfo={true}
+          domain={{ ...domainDefault }}
+          isAssessmentUnderSix={true}
+          isDefaultExpanded={true}
+          i18n={{ ...i18nDefault }}
+          i18nAll={{}}
+          index={1}
+          onItemCommentUpdate={onItemCommentUpdateMock}
+          onDomainCommentUpdate={() => {}}
+          onRatingUpdate={() => {}}
+          onConfidentialityUpdate={() => {}}
+          onAddCaregiverDomain={() => {}}
+          handleWarningShow={() => {}}
+          onCaregiverNameUpdate={() => {}}
+        />
+      )
+      expect(domainWrapper.instance().state.expanded).toBe(true)
+    })
+  })
 })

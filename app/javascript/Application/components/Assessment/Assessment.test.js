@@ -2,7 +2,6 @@ import React from 'react'
 import { Assessment, Domain } from './'
 import { mount, shallow } from 'enzyme'
 import { clone } from '../../util/common'
-
 import { assessment, i18n } from './assessment.mocks.test'
 
 const enhanceDomainToCaregiver = domain => ({ ...domain, is_caregiver_domain: true, caregiver_index: 'a' })
@@ -299,5 +298,52 @@ describe('<Assessment />', () => {
         expect(updatedAssessment.state.domains.length).toBe(0)
       })
     })
+  })
+
+  describe('#handleExpandAllDomains()', () => {
+    const mockFn = jest.fn()
+    const initialAssessment = clone(assessment)
+    const assessmentWrapper = shallow(
+      <Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />
+    )
+    it('updates isDefaultExpanded state to false when Collapse All Button is clicked ', () => {
+      assessmentWrapper.instance().setState({
+        isDefaultExpanded: false,
+      })
+      expect(assessmentWrapper.state().isDefaultExpanded).toEqual(false)
+    })
+
+    it('updates isDefaultExpanded state to true when Expand All Button is clicked ', () => {
+      assessmentWrapper.instance().setState({
+        isDefaultExpanded: true,
+      })
+      expect(assessmentWrapper.state().isDefaultExpanded).toEqual(true)
+    })
+  })
+})
+
+describe('Each Domain Key value matches isDefaultExpanded of the Assessment ', () => {
+  it('verfiyies the key value for each domain is false when the Assessment isDefaultExpanded state is false ', () => {
+    const mockFn = jest.fn()
+    const assessmentWrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={assessment} i18n={i18n} />)
+    assessmentWrapper.instance().setState({
+      isDefaultExpanded: false,
+    })
+
+    const domains = assessmentWrapper.find(Domain)
+
+    domains.forEach(domain => expect(domain.key()).toContain('false'))
+  })
+
+  it('verfiyies the key value for each domain is true when the Assessment isDefaultExpanded state is true ', () => {
+    const mockFn = jest.fn()
+    const assessmentWrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={assessment} i18n={i18n} />)
+    assessmentWrapper.instance().setState({
+      isDefaultExpanded: true,
+    })
+
+    const domains = assessmentWrapper.find(Domain)
+
+    domains.forEach(domain => expect(domain.key()).toContain('true'))
   })
 })

@@ -14,9 +14,10 @@ import { shouldDomainBeRendered } from './AssessmentHelper'
 import { isA11yAllowedInput } from '../../util/events'
 import Grid from '@material-ui/core/Grid'
 import { totalScoreCalculation } from './DomainScoreHelper.js'
+import { isEmpty } from '../../util/common'
 import './style.sass'
 
-const mapPropsToState = props => ({
+const mapI18nToState = props => ({
   title: props.i18n._title_ || '',
   description: props.i18n._description_ || 'No Description',
   caregiverName: props.domain.caregiver_name || '',
@@ -27,13 +28,15 @@ class Domain extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      ...mapPropsToState(props),
-      expanded: false,
+      expanded: props.isDefaultExpanded,
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState(mapPropsToState(nextProps))
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (!isEmpty(nextProps.i18n) && !prevState.description) {
+      return mapI18nToState(nextProps)
+    }
+    return null
   }
 
   handleExpandedChange = () => {
