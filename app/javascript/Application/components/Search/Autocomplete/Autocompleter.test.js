@@ -13,12 +13,21 @@ describe('<Autocompleter />', () => {
   describe('page layout', () => {
     it('renders an <Autocomplete /> component', () => {
       const wrapper = shallow(<Autocompleter {...defaultProps} />)
-
       expect(wrapper.find(Autocomplete).exists()).toBe(true)
     })
   })
 
   describe('<Autocomplete /> component', () => {
+    it('renders placeholder ex: Last Name, First Name ', () => {
+      const wrapper = mount(<Autocompleter {...defaultProps} />)
+      expect(
+        wrapper
+          .find(Autocomplete)
+          .find('#client-search-autocompleter')
+          .props().placeholder
+      ).toBe('ex: Last Name, First Name')
+    })
+
     describe('when the searchTerm is searchable', () => {
       it('calls onChangeInput', () => {
         const handleChangeSpy = jest.spyOn(Autocompleter.prototype, 'onChangeInput')

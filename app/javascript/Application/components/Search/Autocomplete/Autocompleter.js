@@ -186,11 +186,12 @@ export default class Autocompleter extends Component {
       },
     ]
     const newResults = suggestionHeader.concat(results).concat(suggestionFooter)
+    const placeholder = 'ex: Last Name, First Name'
     return (
       <Autocomplete
         ref={el => (this.element_ref = el)}
         wrapperStyle={{ display: 'block' }}
-        inputProps={{ id, onBlur: this.hideMenu, onFocus: this.onFocus }}
+        inputProps={{ id, onBlur: this.hideMenu, onFocus: this.onFocus, placeholder: placeholder }}
         renderInput={props => this.renderInput(props)}
         value={this.state.searchTerm}
         onChange={this.onChangeInput}
