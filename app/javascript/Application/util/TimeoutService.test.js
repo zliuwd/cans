@@ -19,11 +19,11 @@ describe('TimeoutService', () => {
     jest.useFakeTimers()
     global.location.reload = jest.fn()
     eventBus.post = jest.fn()
-    const interval = SESSION_EXPIRATION_WARNING_TIME * 2
+    const interval = SESSION_EXPIRATION_WARNING_TIME * 48
     const timeout = new Date().getTime() + interval
     global.document.cookie = `_ca_cans_timeout=${timeout}`
     timeoutService.run()
-    const minInterval = interval - timeout - new Date().getTime()
+    const minInterval = SESSION_EXPIRATION_WARNING_TIME
     expect(global.location.reload).not.toBeCalled()
     expect(global.setTimeout.mock.calls[0][1]).not.toBeLessThan(minInterval)
     expect(global.setTimeout.mock.calls[0][1]).not.toBeGreaterThan(interval)
@@ -39,7 +39,7 @@ describe('TimeoutService', () => {
     const timeout = new Date().getTime() + interval
     global.document.cookie = `_ca_cans_timeout=${timeout}`
     timeoutService.run()
-    const minInterval = interval - timeout - new Date().getTime()
+    const minInterval = 0
     expect(global.location.reload).not.toBeCalled()
     expect(global.setTimeout.mock.calls[0][1]).not.toBeLessThan(minInterval)
     expect(global.setTimeout.mock.calls[0][1]).not.toBeGreaterThan(interval)
