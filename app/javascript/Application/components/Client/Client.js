@@ -105,7 +105,7 @@ class Client extends Component {
           </Grid>
           <ClientAssessmentHistoryLoadingBoundary clientIdentifier={client.identifier ? client.identifier : ''}>
             <ClientAssessmentHistory
-              clientIdentifier={client.identifier ? client.identifier : ''}
+              client={client}
               navFrom={NavFromProducer(this.props.navigateTo)}
               inheritUrl={this.ClientAssessmentHistoryUrlTrimmer(this.props.match.url)}
               userId={this.props.match.params.staffId}

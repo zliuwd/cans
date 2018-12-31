@@ -28,6 +28,7 @@ import PrintButton from '../Header/PageHeaderButtons/PrintButton'
 import './style.sass'
 import { getCurrentIsoDate, isValidLocalDate } from '../../util/dateHelper'
 import { logPageAction } from '../../util/analytics'
+import { isCompleteAssessmentAuthorized } from '../common/AuthHelper'
 
 const readOnlyMessageId = 'readonlyMessage'
 const alertMessage = e => {
@@ -383,6 +384,8 @@ class AssessmentContainer extends Component {
     }
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus)
     const isUnderSix = assessment && assessment.state && assessment.state.under_six
+    const isCompleteButtonEnabled =
+      isEditable && canPerformUpdates && isValidForSubmit && isCompleteAssessmentAuthorized(assessment, client)
     return (
       <Fragment>
         {this.renderWarning()}
@@ -429,7 +432,7 @@ class AssessmentContainer extends Component {
           <AssessmentFormFooter
             assessment={assessment}
             onCancelClick={this.handleCancelClick}
-            isSubmitButtonEnabled={isEditable && canPerformUpdates && isValidForSubmit}
+            isSubmitButtonEnabled={isCompleteButtonEnabled}
             onSubmitAssessment={
               this.state.assessment.can_release_confidential_info === true
                 ? this.handleSubmitAssessment

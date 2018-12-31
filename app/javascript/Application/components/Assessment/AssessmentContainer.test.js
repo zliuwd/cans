@@ -777,7 +777,7 @@ describe('<AssessmentContainer />', () => {
           isEditable: true,
           assessment,
         })
-        expect(wrapper.find('AuthBoundary').props().andCondition).toBe(false)
+        expect(wrapper.find('AssessmentFormFooter').prop('isSubmitButtonEnabled')).toBe(false)
 
         wrapper.setState({
           isValidForSubmit: true,
@@ -785,7 +785,7 @@ describe('<AssessmentContainer />', () => {
           isEditable: true,
           assessment,
         })
-        expect(wrapper.find('AuthBoundary').props().andCondition).toBe(true)
+        expect(wrapper.find('AssessmentFormFooter').prop('isSubmitButtonEnabled')).toBe(true)
       })
     })
 
@@ -832,7 +832,7 @@ describe('<AssessmentContainer />', () => {
         })
 
         // then
-        expect(wrapper.find('AuthBoundary').props().andCondition).toBeFalsy()
+        expect(wrapper.find('AssessmentFormFooter').props().isSubmitButtonEnabled).toBeFalsy()
       })
 
       it('should be enabled when assessment service is done loading', () => {
@@ -847,7 +847,7 @@ describe('<AssessmentContainer />', () => {
         })
 
         // then
-        expect(wrapper.find('AuthBoundary').instance().props.andCondition).toBeTruthy()
+        expect(wrapper.find('AssessmentFormFooter').instance().props.isSubmitButtonEnabled).toBeTruthy()
       })
 
       it('should not be rendered when assessment is not editable', () => {
@@ -855,14 +855,14 @@ describe('<AssessmentContainer />', () => {
 
         // when
         wrapper.setState({
-          isValidForSubmit: true,
+          isValidForSubmit: false,
           assessmentServiceStatus: LoadingState.ready,
           isEditable: false,
           assessment,
         })
 
         // then
-        expect(wrapper.find('AuthBoundary').exists()).toBeFalsy()
+        expect(wrapper.find('CompleteAssessmentButton').exists()).toBeFalsy()
       })
     })
   })

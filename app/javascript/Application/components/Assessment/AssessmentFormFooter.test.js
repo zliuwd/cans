@@ -40,7 +40,7 @@ describe('AssessmentFormFooter', () => {
 
     it('can be disabled', () => {
       const footer = render({ isSubmitButtonEnabled: false })
-      expect(footer.find('AuthBoundary').props().andCondition).toBe(false)
+      expect(footer.find('CompleteAssessmentButton').props().disabled).toBe(true)
     })
   })
 })

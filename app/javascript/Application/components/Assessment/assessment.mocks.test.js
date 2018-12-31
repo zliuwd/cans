@@ -98,6 +98,9 @@ export const assessment = {
     ],
   },
   event_date: '2018-06-11',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write', 'delete'],
+  },
 }
 
 export const updatedAssessmentWithDomains = {
@@ -175,6 +178,9 @@ export const updatedAssessmentWithDomains = {
     ],
   },
   event_date: '2018-06-11',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write', 'delete'],
+  },
 }
 
 export const updatedAssessmentDomains = [
