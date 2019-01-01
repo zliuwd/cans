@@ -11,6 +11,7 @@ import {
   itemStyle,
   itemMainLine,
   itemComment,
+  domainScoreStyle,
   itemTitleWrapper,
   itemTitle,
   optionStyle,
@@ -117,8 +118,14 @@ class PrintAssessment extends PureComponent {
       <div key={code + caregiverIndex}>
         <div style={domainHeaderStyle}>
           <div style={domainTitleStyle}>
-            {title} {caregiverName && `- ${caregiverName}`}
-            {`- (Domain Total Score: ${totalScore})`}
+            <span>
+              <strong>
+                {title} {caregiverName && `- ${caregiverName}`}
+              </strong>
+            </span>
+            <span>
+              Domain Total Score: <strong style={domainScoreStyle}>{totalScore}</strong>
+            </span>
           </div>
           {comment && !hasConfidentialItems(domain) && <div style={domainComment}>Domain Comment: {comment}</div>}
         </div>
@@ -238,6 +245,7 @@ class PrintAssessment extends PureComponent {
         {handleStatus !== status ? null : (
           <PrintSummary renderSummaryRecord={this.renderSummaryRecord} summaryCodes={summaryCodes} />
         )}
+        <h1 style={textAlignCenter}>CANS Scores</h1>
         {domains.map(domain => {
           if (!shouldDomainBeRendered(isAssessmentUnderSix, domain)) return null
           const domainI18n = getI18nByCode(i18n, domain.code)

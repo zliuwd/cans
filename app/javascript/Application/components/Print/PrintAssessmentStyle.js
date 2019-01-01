@@ -1,7 +1,6 @@
 export const headerBlock = {
   display: 'flex',
   flexDirection: 'column',
-  border: 'thin solid gray',
   padding: '1rem',
 }
 
@@ -40,6 +39,14 @@ export const domainHeaderStyle = {
 export const domainTitleStyle = {
   fontSize: '1rem',
   fontWeight: 500,
+  display: 'flex',
+  justifyContent: 'space-between',
+  flexDirection: 'row',
+  margin: '0.5rem 0 0.5rem 0',
+}
+
+export const domainScoreStyle = {
+  fontSize: '1.2rem',
 }
 
 export const domainComment = {
@@ -131,6 +138,8 @@ export const thinGrayBorder = {
 
 export const textAlignCenter = {
   textAlign: 'center',
+  fontFamily: 'sans-serif',
+  margin: '0.5rem 0 0.5rem 0',
 }
 
 export const textAlignLeft = {
