@@ -4,23 +4,13 @@ import Grid from '@material-ui/core/Grid'
 import { Row } from 'reactstrap'
 import { Card, CardHeader, CardTitle, CardBody } from '@cwds/components'
 import ClientAssessmentHistoryRecord from './ClientAssessmentHistoryRecord'
-import AuthBoundary from '../../common/AuthBoundary'
 
-import { buildCreateAssessmentPermission } from '../../common/AuthHelper'
+import { isAuthorized } from '../../common/AuthHelper'
 import AddCansLink from '../AddCansLink'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
 import { sortAssessmentsByDate } from '../../Assessment/'
 
 class ClientAssessmentHistory extends PureComponent {
-  renderAddCansLink() {
-    const { clientIdentifier } = this.props
-    return (
-      <AuthBoundary permission={buildCreateAssessmentPermission(clientIdentifier)}>
-        <AddCansLink clientIdentifier={clientIdentifier} />
-      </AuthBoundary>
-    )
-  }
-
   renderAssessments = assessments => {
     const assessmentsToDisplay = 3
 
@@ -53,7 +43,7 @@ class ClientAssessmentHistory extends PureComponent {
   }
 
   render() {
-    const { assessments } = this.props
+    const { assessments, client } = this.props
     const options = {
       assessments,
       sortEventDate: true,
@@ -69,7 +59,7 @@ class ClientAssessmentHistory extends PureComponent {
           <CardHeader className={'card-header-cans card-header-client card-header-client-assessment-history'}>
             <CardTitle>
               <span>Assessment History</span>
-              {this.renderAddCansLink()}
+              <AddCansLink clientIdentifier={client.identifier} disabled={!isAuthorized(client, 'createAssessment')} />
             </CardTitle>
           </CardHeader>
           <CardBody className={'card-body-client-assessment-history'}>
@@ -84,7 +74,7 @@ class ClientAssessmentHistory extends PureComponent {
 
 ClientAssessmentHistory.propTypes = {
   assessments: PropTypes.arrayOf(PropTypes.object),
-  clientIdentifier: PropTypes.string,
+  client: PropTypes.object.isRequired,
   inheritUrl: PropTypes.string.isRequired,
   navFrom: PropTypes.string,
   userId: PropTypes.string,
@@ -92,7 +82,6 @@ ClientAssessmentHistory.propTypes = {
 
 ClientAssessmentHistory.defaultProps = {
   assessments: [],
-  clientIdentifier: null,
   navFrom: null,
   userId: null,
 }

@@ -1,9 +1,9 @@
 import { formatClientName, formatClientStatus } from './Client.helper'
-import { renderDate, cellTempSwitcher } from './ClientSocialWorkerCardTemplateHelper'
+import { renderDate, renderReminderDate, cellTempSwitcher } from './ClientSocialWorkerCardTemplateHelper'
 import './style.sass'
 
 export function SocialWorkerCardTemplate(navFrom, staffId) {
-  const template = [
+  return [
     {
       id: 'fullName',
       Header: 'Client Name',
@@ -43,12 +43,9 @@ and meet the setting rules of reactTable at same time */
       headerStyle: {
         textAlign: 'center',
       },
-      accessor: client => {
-        return renderDate(client.reminder_date)
-      },
+      accessor: client => renderReminderDate(client.reminder_date),
       className: 'client-list-table-cell-center',
       sortable: true,
     },
   ]
-  return template
 }

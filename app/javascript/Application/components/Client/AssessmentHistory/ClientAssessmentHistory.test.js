@@ -8,8 +8,12 @@ import AddCansLink from '../AddCansLink'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
 import { navigation } from '../../../util/constants'
 
+const client = {
+  identifier: '0PcpFQu0QM',
+}
+
 const defaultProps = {
-  clientIdentifier: '0PcpFQu0QM',
+  client: client,
   navFrom: navigation.CHILD_PROFILE,
   inheritUrl: '/staff/0X5/clients/AznnyCs0X5/assessments/2987507',
 }

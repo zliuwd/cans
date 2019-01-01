@@ -1,15 +1,16 @@
-const buildCreateAssessmentPermission = clientIdentifier => {
-  return `client:createAssessment:${clientIdentifier}`
-}
-
-const buildCompleteAssessmentPermission = assessment => {
-  let permission
+const isCompleteAssessmentAuthorized = (assessment, client) => {
+  let result = false
   if (assessment && assessment.id !== null && assessment.id !== undefined) {
-    permission = `assessment:complete:${assessment.id}`
-  } else if (assessment && assessment.person !== null && assessment.person !== undefined) {
-    permission = `client:completeAssessment:${assessment.person.identifier}`
+    result = isAuthorized(assessment, 'complete')
+  } else if (client) {
+    result = isAuthorized(client, 'completeAssessment')
   }
-  return permission
+  return result
 }
 
-export { buildCreateAssessmentPermission, buildCompleteAssessmentPermission }
+const isAuthorized = (entity, operation) =>
+  Boolean(
+    entity.metadata && entity.metadata.allowed_operations && entity.metadata.allowed_operations.includes(operation)
+  )
+
+export { isAuthorized, isCompleteAssessmentAuthorized }

@@ -1,43 +1,49 @@
-import { buildCompleteAssessmentPermission, buildCreateAssessmentPermission } from './AuthHelper'
+import { isAuthorized, isCompleteAssessmentAuthorized } from './AuthHelper'
 
 describe('AuthHelper', () => {
-  describe('buildCreateAssessmentPermission', () => {
-    it('returns correct value', () => {
-      const clientIdentifier = 'aaa'
-      expect(buildCreateAssessmentPermission(clientIdentifier)).toEqual('client:createAssessment:aaa')
+  describe('isAuthorized', () => {
+    const entity = {
+      metadata: { allowed_operations: ['operation1', 'operation2', 'operation3'] },
+    }
+
+    it('returns true when allowed_operations contains operation ', () => {
+      expect(isAuthorized(entity, 'operation1')).toBe(true)
+    })
+
+    it('returns false when allowed_operations does not contains operation', () => {
+      expect(isAuthorized(entity, 'operation4')).toBe(false)
+    })
+
+    it('returns false when no metadata ', () => {
+      expect(isAuthorized({}, 'operation4')).toBe(false)
     })
   })
 
-  describe('buildCompleteAssessmentPermission', () => {
-    it('returns client:completeAssessment when assessment.id = null', () => {
-      const assessment = {
-        id: null,
-        person: { identifier: 'aaa' },
-      }
-      expect(buildCompleteAssessmentPermission(assessment)).toEqual('client:completeAssessment:aaa')
+  describe('isCompleteAssessmentAuthorized', () => {
+    const assessment = {
+      id: 1,
+      metadata: { allowed_operations: ['complete'] },
+    }
+
+    const client = {
+      identifier: 'aaaaaaaaaa',
+      metadata: { allowed_operations: ['completeAssessment'] },
+    }
+
+    it('should return true when assessment has complete in allowed_operation', () => {
+      expect(isCompleteAssessmentAuthorized(assessment, client)).toBe(true)
     })
 
-    it('returns client:completeAssessment when assessment.id = undefined', () => {
-      const assessment = {
-        person: { identifier: 'aaa' },
-      }
-      expect(buildCompleteAssessmentPermission(assessment)).toEqual('client:completeAssessment:aaa')
+    it('should return true when client has completeAssessment in allowed_operation', () => {
+      const assessmentWithNoId = { ...assessment, id: null }
+      expect(isCompleteAssessmentAuthorized(null, client)).toBe(true)
+      expect(isCompleteAssessmentAuthorized(undefined, client)).toBe(true)
+      expect(isCompleteAssessmentAuthorized(assessmentWithNoId, client)).toBe(true)
     })
 
-    it('returns assessment:complete when assessment.id defined', () => {
-      const assessment = {
-        id: 1,
-        person: { identifier: 'aaa' },
-      }
-      expect(buildCompleteAssessmentPermission(assessment)).toEqual('assessment:complete:1')
-    })
-
-    it('returns undefined when assessment is undefined', () => {
-      expect(buildCompleteAssessmentPermission(undefined)).toEqual(undefined)
-    })
-
-    it('returns undefined when object is not an assessment object', () => {
-      expect(buildCompleteAssessmentPermission({})).toEqual(undefined)
+    it('should return false when assessment does not have complete in allowed_operation', () => {
+      const assessmentWithNoOperation = { ...assessment, metadata: null }
+      expect(isCompleteAssessmentAuthorized(assessmentWithNoOperation, client)).toBe(false)
     })
   })
 })
