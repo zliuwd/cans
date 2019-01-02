@@ -43,7 +43,7 @@ describe('<AgeInfo />', () => {
     it('renders 0 years when DOB is less than 1 year from today', () => {
       const formattedDob = moment()
         .subtract(1, 'months')
-        .format('MM/D/YYYY')
+        .format('M/D/YYYY')
       const props = {
         dateOfBirth: moment()
           .subtract(1, 'months')
@@ -58,7 +58,7 @@ describe('<AgeInfo />', () => {
     it('renders 1 year when DOB is 1 year in the past', () => {
       const formattedDob = moment()
         .subtract(1, 'years')
-        .format('MM/D/YYYY')
+        .format('M/D/YYYY')
       const props = {
         dateOfBirth: moment()
           .subtract(1, 'years')
