@@ -47,9 +47,9 @@ class Client extends Component {
     }
   }
 
-  formatCounties = counties => {
-    if (counties && counties.length > 0) {
-      return counties.map(county => county.name).join(', ')
+  formatCounty = county => {
+    if (county) {
+      return county.name
     } else {
       return ''
     }
@@ -93,7 +93,7 @@ class Client extends Component {
                       {this.renderClientData(<b>{client.last_name}</b>, 'Last Name')}
                       {this.renderClientData(<b>{client.suffix}</b>, 'Suffix')}
                       {this.renderClientData(isoToLocalDate(client.dob), 'Date of Birth')}
-                      {this.renderClientData(this.formatCounties(client.counties), 'County', 3, 'counties')}
+                      {this.renderClientData(this.formatCounty(client.county), 'County', 3, 'county')}
                       {this.renderClientData(client.external_id, 'Client Id', 6)}
                     </Grid>
                   ) : (
