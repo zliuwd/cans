@@ -1,12 +1,12 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import PersonSuggestion from './PersonSuggestion'
-import FullName from './SearchResults/FullName'
-import Gender from './SearchResults/Gender'
-import AgeInfo from './SearchResults/AgeInfo'
-import LanguageInfo from './SearchResults/LanguageInfo'
-import LegacyInfo from './SearchResults/LegacyInfo'
-import AddressInfo from './SearchResults/AddressInfo'
+import FullName from './FullName'
+import Gender from './Gender'
+import AgeInfo from './AgeInfo'
+import LanguageInfo from './LanguageInfo'
+import LegacyInfo from './LegacyInfo'
+import AddressInfo from './AddressInfo'
 
 describe('<PersonSuggestion />', () => {
   const defaultProps = {

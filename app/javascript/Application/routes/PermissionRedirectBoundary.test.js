@@ -33,4 +33,12 @@ describe('<PermissionRedirectBoundary />', () => {
     expect(userFetchSpy).toHaveBeenCalledTimes(1)
     wrapper.unmount()
   })
+
+  it('does not update the fetch when the children change', () => {
+    const wrapper = render()
+    const firstFetch = wrapper.find(LoadingBoundary).props().fetch
+    wrapper.setProps({ children: <span /> })
+    const secondFetch = wrapper.find(LoadingBoundary).props().fetch
+    expect(secondFetch).toBe(firstFetch)
+  })
 })

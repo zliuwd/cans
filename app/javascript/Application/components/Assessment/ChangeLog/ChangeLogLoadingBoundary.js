@@ -12,11 +12,27 @@ const fetchBoth = id => {
   }))
 }
 
-const ChangeLogLoadingBoundary = ({ id, children }) => (
-  <LoadingBoundary childNodeFetchedPropName={'assessmentWithHistory'} fetch={() => fetchBoth(id)}>
-    {children}
-  </LoadingBoundary>
-)
+class ChangeLogLoadingBoundary extends React.Component {
+  state = {}
+
+  static getDerivedStateFromProps({ id: propsId }, { id: stateId }) {
+    if (propsId !== stateId) {
+      return {
+        id: propsId,
+        fetch: () => fetchBoth(propsId),
+      }
+    }
+    return null
+  }
+
+  render() {
+    return (
+      <LoadingBoundary childNodeFetchedPropName={'assessmentWithHistory'} fetch={this.state.fetch}>
+        {this.props.children}
+      </LoadingBoundary>
+    )
+  }
+}
 
 ChangeLogLoadingBoundary.propTypes = {
   children: PropTypes.node.isRequired,

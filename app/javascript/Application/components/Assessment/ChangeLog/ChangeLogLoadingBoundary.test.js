@@ -19,4 +19,12 @@ describe('<ChangeLogLoadingBoundary />', () => {
     expect(loadingBoundary.props().fetch).toBeDefined()
     expect(loadingBoundary.props().children.type).toBe('div')
   })
+
+  it('does not update if the id does not change', () => {
+    const wrapper = render('XYZ')
+    const firstFetch = wrapper.find(LoadingBoundary).props().fetch
+    wrapper.setProps({ children: <span /> })
+    const secondFetch = wrapper.find(LoadingBoundary).props().fetch
+    expect(secondFetch).toBe(firstFetch)
+  })
 })
