@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme'
 import Domain from './Domain'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
 import DomainCommentAccordion from './DomainCommentAccordion'
-import CommentIcon from '../common/CommentIcon'
+import DomainCommentIcon from './DomainCommentIcon'
 
 const domainDefault = {
   id: '1',
@@ -138,17 +138,9 @@ describe('<Domain />', () => {
     })
   })
 
-  describe('CommentIcon', () => {
-    it('renders comment icon on the domain header', () => {
-      const wrapper = shallow(domainComponentDefault)
-      expect(wrapper.find(CommentIcon).length).toBe(1)
-    })
-
-    it('renders comment icon with domain-toolbar-comment-icon-block styles', () => {
-      const wrapper = shallow(domainComponentDefault)
-      const blockDiv = wrapper.find('div.domain-toolbar-comment-icon-block')
-      expect(blockDiv.find(CommentIcon).length).toBe(1)
-    })
+  it('renders comment icon on the domain header', () => {
+    const wrapper = shallow(domainComponentDefault)
+    expect(wrapper.find(DomainCommentIcon).exists()).toBe(true)
   })
 
   describe('caregiver domain', () => {

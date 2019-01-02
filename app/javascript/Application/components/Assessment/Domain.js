@@ -9,7 +9,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Input } from 'reactstrap'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
 import DomainCommentAccordion from './DomainCommentAccordion'
-import CommentIcon from '../common/CommentIcon'
+import DomainCommentIcon from './DomainCommentIcon'
 import { shouldDomainBeRendered } from './AssessmentHelper'
 import { isA11yAllowedInput } from '../../util/events'
 import Grid from '@material-ui/core/Grid'
@@ -23,7 +23,6 @@ const mapI18nToState = props => ({
   caregiverName: props.domain.caregiver_name || '',
 })
 
-/* eslint-disable camelcase */
 class Domain extends Component {
   constructor(props) {
     super(props)
@@ -93,7 +92,7 @@ class Domain extends Component {
       index,
       disabled,
     } = this.props
-    const { items, is_caregiver_domain } = domain
+    const { items, is_caregiver_domain: isCaregiverDomain } = domain
     const { title, description, caregiverName, expanded } = this.state
     const itemListProps = {
       items,
@@ -128,7 +127,7 @@ class Domain extends Component {
               </Grid>
               <Grid item xs={4} className={'domain-metric'}>
                 <div className="domain-toolbar-comment-icon-block">
-                  <CommentIcon isSolid={Boolean(domain.comment)} className={'domain-toolbar-comment-icon'} />
+                  <DomainCommentIcon domain={domain} />
                 </div>
                 <DomainProgressBar isAssessmentUnderSix={isAssessmentUnderSix} domain={domain} />
                 <DomainScore totalScore={totalScore} key={index} />
@@ -144,7 +143,7 @@ class Domain extends Component {
                   backgroundColor: 'white',
                 }}
               >
-                {is_caregiver_domain && this.renderCaregiverName()}
+                {isCaregiverDomain && this.renderCaregiverName()}
                 <DomainItemList {...itemListProps} />
                 <DomainCommentAccordion
                   id={`${domain.code}-${domain.caregiver_index}`}
@@ -153,7 +152,7 @@ class Domain extends Component {
                   onDomainCommentUpdate={this.props.onDomainCommentUpdate}
                   disabled={this.props.disabled}
                 />
-                {is_caregiver_domain &&
+                {isCaregiverDomain &&
                   !this.props.disabled && (
                     <DomainCaregiverControls
                       onRemoveCaregiverDomain={this.handleRemoveCaregiverDomain}
@@ -168,9 +167,7 @@ class Domain extends Component {
     ) : null
   }
 }
-/* eslint-enable camelcase */
 
-/* eslint-disable react/no-unused-prop-types */
 Domain.propTypes = {
   canReleaseConfidentialInfo: PropTypes.bool.isRequired,
   disabled: PropTypes.bool,
