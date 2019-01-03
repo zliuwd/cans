@@ -2,55 +2,6 @@ import { RESIDENCE_TYPES } from '../../enums/AddressType'
 
 export const sortAfterScore = 125.48025
 
-export const defaultProps = {
-  id: 'client-search-autocompleter',
-  onChange: () => {},
-  onClear: () => {},
-  results: [],
-  totalResults: 0,
-  totalPages: 0,
-}
-
-export const propsWithResults = {
-  id: 'client-search-autocompleter',
-  debounce: () => {},
-  onClear: () => {},
-  results: [
-    {
-      gender: 'female',
-      races: [],
-      isSealed: false,
-      isSensitive: false,
-      legacy_id: '9GE4pyI0N3',
-      clientCounties: ['Lake'],
-      address: {
-        city: 'Sacramento',
-        state: 'CA',
-        zip: null,
-        streetAddress: ' 2nd street',
-        type: 'Placement Home',
-      },
-      phoneNumber: null,
-      legacyDescriptor: {
-        legacy_last_updated: '2018-07-24T15:08:37.948-0700',
-        legacy_id: '9GE4pyI0N3',
-        legacy_ui_id: '0526-0682-6736-6001429',
-        legacy_table_name: 'CLIENT_T',
-        legacy_table_description: 'Client',
-      },
-      isCsec: false,
-      dateOfBirth: '2000-10-11',
-      fullName: 'Fronek, <em>Annie</em>',
-      languages: ['English'],
-      isProbationYouth: false,
-      sort: [sortAfterScore, 'person-summary#9GE4pyI0N3'],
-      isDeceased: false,
-    },
-  ],
-  totalResults: 1,
-  totalPages: 1,
-}
-
 export const resultWithPhoneNumbers = {
   addresses: [
     {

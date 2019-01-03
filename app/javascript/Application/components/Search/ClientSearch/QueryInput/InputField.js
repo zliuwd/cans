@@ -25,7 +25,16 @@ class InputField extends React.PureComponent {
 
   render() {
     const { onChange, openMenu, ...props } = this.props
-    return <input {...props} onChange={this.onChange} onFocus={this.onFocus} value={this.state.value} />
+    const placeholder = 'ex: Last Name, First Name'
+    return (
+      <input
+        {...props}
+        onChange={this.onChange}
+        onFocus={this.onFocus}
+        value={this.state.value}
+        placeholder={placeholder}
+      />
+    )
   }
 }
 
