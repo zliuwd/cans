@@ -8,7 +8,15 @@ module ResourceHelper
     fill_and_save_assessment_form
   end
 
+  def client_identifier
+    '0PcpFQu0QM'
+  end
+
   private
+
+  def go_to_client_profile
+    find(:xpath, "//a[@href='/cans/clients/#{client_identifier}']").click
+  end
 
   def fill_and_save_assessment_form
     find('#add-new-cans').click
@@ -72,7 +80,7 @@ module ResourceHelper
     find('#submit-assessment').click
     click_button 'I Agree'
     expect(page).to have_content 'Success! CANS assessment has been completed.'
-    find('#cancel-assessment').click
+    go_to_client_profile
     expect(page).to have_content('ADD CANS', wait: 60)
     save_assessment_form_age_0_5
   end
@@ -357,7 +365,7 @@ module ResourceHelper
     fetch_minor_traumatic_domain
     find('#submit-assessment').click
     click_button 'I Agree'
-    find('#cancel-assessment').click
+    go_to_client_profile
   end
 
   def fetch_challenges_domain
