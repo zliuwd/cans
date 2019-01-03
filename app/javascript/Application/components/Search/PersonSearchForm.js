@@ -1,12 +1,25 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
-import Debouncer from './Debouncer'
-import Autocompleter from './Autocomplete/Autocompleter'
+import { Redirect } from 'react-router-dom'
+import { ClientFetcher, ClientSearch } from './ClientSearch'
 
 class PersonSearchForm extends PureComponent {
+  constructor() {
+    super()
+    this.state = {
+      selectedClientId: null,
+    }
+  }
+
+  onSelect = client => this.setState({ selectedClientId: client.legacy_id })
+
   render() {
     const { searchTitle, searchPrompt } = this.props
+
+    if (this.state.selectedClientId) {
+      return <Redirect push to={`search/clients/${this.state.selectedClientId}`} />
+    }
 
     return (
       <Card className="card hidden-print client-search-card">
@@ -14,12 +27,9 @@ class PersonSearchForm extends PureComponent {
           <CardTitle className={'card-title-fix'}>{searchTitle}</CardTitle>
         </CardHeader>
         <CardBody className="card-body-search">
-          <label className="pull-left" htmlFor="client-search-autocompleter">
-            {searchPrompt}
-          </label>
-          <Debouncer>
-            <Autocompleter id="client-search-autocompleter" />
-          </Debouncer>
+          <ClientFetcher>
+            <ClientSearch labelText={searchPrompt} onSelect={this.onSelect} />
+          </ClientFetcher>
         </CardBody>
       </Card>
     )

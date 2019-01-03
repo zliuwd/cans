@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Genders from '../../../../enums/Genders'
-import { Maybe } from '../../../../util/maybe'
+import Genders from '../../../../../enums/Genders'
+import { Maybe } from '../../../../../util/maybe'
 
 const Gender = ({ gender }) => {
   return Maybe.of(Genders[gender])

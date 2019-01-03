@@ -10,6 +10,7 @@
 @babel/runtime,7.0.0,MIT,Unknown
 @babel/runtime,7.0.0-beta.42,MIT,Unknown
 @babel/runtime,7.0.0-rc.1,MIT,Unknown
+@babel/runtime,7.1.5,MIT,Unknown
 @babel/template,7.0.0-beta.44,MIT,https://babeljs.io/
 @babel/traverse,7.0.0-beta.44,MIT,https://babeljs.io/
 @babel/types,7.0.0-beta.44,MIT,https://babeljs.io/
@@ -254,7 +255,7 @@ buffer-xor,1.0.3,MIT,https://github.com/crypto-browserify/buffer-xor
 builder,3.2.3,MIT,http://onestepback.org
 builtin-modules,1.1.1,MIT,sindresorhus.com
 builtin-status-codes,3.0.0,MIT,bendrucker.me
-bundler,1.16.4,MIT,http://bundler.io
+bundler,1.17.1,MIT,http://bundler.io
 byebug,10.0.2,Simplified BSD,http://github.com/deivid-rodriguez/byebug
 bytes,3.0.0,MIT,http://tjholowaychuk.com
 cacache,10.0.4,ISC,Unknown
@@ -332,6 +333,7 @@ component-inherit,0.0.3,MIT*,Unknown
 compressible,2.0.14,MIT,Unknown
 compression,1.7.3,MIT,Unknown
 compression-webpack-plugin,1.1.11,MIT,https://webpack.js.org/plugins/compression-webpack-plugin/
+compute-scroll-into-view,1.0.11,MIT,https://scroll-into-view-if-needed.netlify.com/
 concat-map,0.0.1,MIT,http://substack.net
 concat-stream,1.6.2,MIT,Unknown
 concurrent-ruby,1.1.3,MIT,http://www.concurrent-ruby.com
@@ -437,6 +439,7 @@ domutils,1.7.0,Simplified BSD,Unknown
 dora,0.2.0,MIT,https://www.github.com/ca-cwds/dora
 dotenv,2.5.0,MIT,https://github.com/bkeepers/dotenv
 dotenv-rails,2.5.0,MIT,https://github.com/bkeepers/dotenv
+downshift,3.1.5,MIT,https://github.com/paypal/downshift#readme
 dumb_delegator,0.8.0,MIT,https://github.com/stevenharman/dumb_delegator
 duplexer,0.1.1,MIT,https://github.com/Raynos/duplexer
 duplexify,3.6.0,MIT,https://github.com/mafintosh/duplexify
@@ -1196,6 +1199,7 @@ react-event-listener,0.6.3,MIT,https://github.com/oliviertassinari/react-event-l
 react-input-autosize,2.2.1,MIT,Unknown
 react-input-mask,2.0.3,MIT,https://github.com/sanniassin/react-input-mask
 react-is,16.4.2,MIT,https://reactjs.org/
+react-is,16.6.3,MIT,https://reactjs.org/
 react-jss,8.6.1,MIT,https://github.com/cssinjs/react-jss
 react-lifecycles-compat,3.0.4,MIT,Unknown
 react-modal,3.5.1,MIT,https://github.com/reactjs/react-modal

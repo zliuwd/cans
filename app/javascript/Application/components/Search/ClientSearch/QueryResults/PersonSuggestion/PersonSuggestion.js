@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import FullName from './SearchResults/FullName'
-import Gender from './SearchResults/Gender'
-import AgeInfo from './SearchResults/AgeInfo'
-import LanguageInfo from './SearchResults/LanguageInfo'
-import AddressInfo from './SearchResults/AddressInfo'
-import LegacyInfo from './SearchResults/LegacyInfo'
+import FullName from './FullName'
+import Gender from './Gender'
+import AgeInfo from './AgeInfo'
+import LanguageInfo from './LanguageInfo'
+import AddressInfo from './AddressInfo'
+import LegacyInfo from './LegacyInfo'
 
 const PersonSuggestion = ({
   fullName,

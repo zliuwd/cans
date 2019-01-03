@@ -6,19 +6,37 @@ class LoadingBoundary extends React.PureComponent {
   constructor(props) {
     super()
     this.state = {
-      loadingState: LoadingState.waiting,
       data: null,
     }
+  }
+
+  static getDerivedStateFromProps = (props, state) => {
+    if (props.fetch !== state.fetch) {
+      return {
+        fetch: props.fetch,
+        loadingState: state.fetch === undefined ? LoadingState.waiting : LoadingState.updating,
+      }
+    }
+    return null
   }
 
   async componentDidMount() {
     await this.fetch()
   }
 
+  async componentDidUpdate(prevProps) {
+    if (prevProps.fetch !== this.props.fetch) {
+      await this.refetch()
+    }
+  }
+
   fetch = async () => {
     const { fetch } = this.props
     try {
       const data = await fetch()
+      if (fetch !== this.props.fetch) {
+        return
+      }
       this.setState({
         loadingState: LoadingState.ready,
         data,
@@ -26,6 +44,10 @@ class LoadingBoundary extends React.PureComponent {
     } catch (e) {
       this.setState({ loadingState: LoadingState.error })
     }
+  }
+
+  refetch = async () => {
+    await this.fetch()
   }
 
   render() {

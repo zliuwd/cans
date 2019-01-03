@@ -6,6 +6,12 @@ require 'capybara/rspec'
 require 'selenium/webdriver'
 require 'acceptance_helpers/resource_helper'
 require 'acceptance_helpers/login_helper'
+require 'acceptance_helpers/prod_login_helper'
+
+def acceptance_helper
+  return LoginHelper unless ENV.fetch('REGRESSION_TEST', false)
+  ProdLoginHelper
+end
 
 Capybara.register_driver :selenium do |app|
   options = ::Selenium::WebDriver::Chrome::Options.new
@@ -19,7 +25,7 @@ end
 Capybara.javascript_driver = :chrome_headless
 
 Capybara.configure do |config|
-  include LoginHelper
+  include acceptance_helper
   include ResourceHelper
   config.default_max_wait_time = 10
   config.default_driver = :selenium

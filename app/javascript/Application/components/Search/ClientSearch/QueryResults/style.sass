@@ -1,4 +1,4 @@
-@import "./../../../styles/global/colors.sass"
+@import "./../../../../styles/global/colors.sass"
 
 //********************
 //Suggestion Header
@@ -16,17 +16,16 @@
 //********************
 //Suggestion Item
 //********************
-.search-item:hover
-    border: .2rem solid $light-blue
-.search-item
+.search-list-box
     padding: 1rem
-    cursor: pointer
-    border-left: .1rem solid $medium-gray
-    border-right: .1rem solid $medium-gray
-    border-bottom: .1rem solid $medium-gray
+    border: .1rem solid $medium-gray
+    border-top: .1rem solid transparent
     border-radius: .2rem
     font-size: 1.55rem
-    .profile-picture 
+
+.search-item
+    cursor: pointer
+    .profile-picture
         padding-right: 0
         margin-right: 1.5rem
         i.fa-user
@@ -39,7 +38,7 @@
         left: 1.5rem
         position: absolute
         width: 11rem
-    .information-flag 
+    .information-flag
         background-color: $transparent-black
         color: $white
         padding: 0 .5rem
@@ -54,20 +53,26 @@
             text-decoration: underline
             em
                 font-style: normal
-                font-weight: bold            
+                font-weight: bold
     .gender-age-row
         margin-bottom: 1rem
         > div:first-child
             margin-right: 1rem
         .date-of-birth
             > div
-                display: inline-block     
+                display: inline-block
     .county-client-case-row
-        margin-bottom: 2.3rem 
+        margin-bottom: 2.3rem
     .client-search-matched-field
         color: $light-blue
         font-weight: bold
 
+.search-item.highlighted-search-item
+    border-color: $light-blue
+
+.show-more-results-button
+    &, &:hover
+        color: $white
 //********************
 //Suggestion Footer
 //********************
@@ -101,7 +106,7 @@
                 position: relative
                 top: .1rem
                 padding-top: .55rem
-                padding-bottom: .55rem            
+                padding-bottom: .55rem
                 font-size: 1.8rem
                 border-radius: 0 .4rem .4rem 0
                 margin-right: 0
@@ -123,4 +128,3 @@
                 span.total-pages
                     margin-left: .5rem
                     color: $light-blue
-    

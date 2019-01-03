@@ -1,6 +1,6 @@
 import { globalAlertService } from '../../util/GlobalAlertService'
 import React from 'react'
-import { AssessmentContainer, AssessmentFormHeader, AssessmentService, I18nService, SecurityService } from './index'
+import { AssessmentContainer, AssessmentFormHeader, AssessmentService, I18nService } from './index'
 import * as AHelper from './AssessmentHelper'
 import { childInfoJson } from '../Client/Client.helper.test'
 import ClientService from '../Client/Client.service'
@@ -55,7 +55,6 @@ describe('<AssessmentContainer />', () => {
 
       beforeEach(() => {
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
         jest.spyOn(AssessmentService, 'fetch').mockReturnValue(Promise.resolve(assessment))
       })
 
@@ -430,7 +429,6 @@ describe('<AssessmentContainer />', () => {
       it('calls fetchNewAssessment', async () => {
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
         const wrapper = shallow(<AssessmentContainer {...props} />)
         await wrapper.instance().componentDidMount()
         expect(assessmentServiceGetSpy).toHaveBeenCalledWith()
@@ -486,7 +484,6 @@ describe('<AssessmentContainer />', () => {
       it('calls fetchAssessment', async () => {
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
         const wrapper = shallow(<AssessmentContainer {...props} />)
         await wrapper.instance().componentDidMount()
         expect(assessmentServiceGetSpy).toHaveBeenCalledWith()
@@ -565,7 +562,6 @@ describe('<AssessmentContainer />', () => {
         const postSuccessSpy = jest.spyOn(AHelper, 'postSuccessMessage')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
         jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment))
-        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
         jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({ assessment: { ...assessment, id: 1 } })
@@ -582,7 +578,6 @@ describe('<AssessmentContainer />', () => {
         const postSuccessSpy = jest.spyOn(globalAlertService, 'postSuccess')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
         jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment))
-        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
         jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({ assessment: { ...assessment, id: 1 } })
@@ -596,15 +591,13 @@ describe('<AssessmentContainer />', () => {
 
       it('should set isEditable to false after submit', async () => {
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-        jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment))
-        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
         jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({ assessment: { ...assessment, id: 1 } })
 
         expect(wrapper.instance().state.isEditable).toBe(true)
-
-        jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false))
+        const assessmentAfterUpdate = { ...assessment, metadata: { allowed_operations: [] } }
+        jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessmentAfterUpdate))
         await wrapper.instance().handleSubmitAssessment()
         wrapper.update()
 
@@ -1007,9 +1000,7 @@ describe('<AssessmentContainer />', () => {
     })
 
     describe('when assessment status=COMPLETED', () => {
-      jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false))
       const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
-      const postInfoSpy = jest.spyOn(globalAlertService, 'postInfo')
       wrapper.instance().setState({
         assessment: {
           id: 1,
@@ -1024,9 +1015,10 @@ describe('<AssessmentContainer />', () => {
       })
 
       it('should post Info', async () => {
-        wrapper.instance().postReadOnlyMessageIfNeeded()
+        const postInfoSpy = jest.spyOn(globalAlertService, 'postInfo')
+        await wrapper.instance().postReadOnlyMessageIfNeeded()
         expect(postInfoSpy).toHaveBeenCalledWith({
-          message: 'This CANS is under the jurisdiction of another county. Available for view only.',
+          message: 'This assessment was completed and is available for view only.',
           isAutoCloseable: false,
           componentId: 'infoMessages',
           messageId: 'readonlyMessage',
@@ -1035,9 +1027,7 @@ describe('<AssessmentContainer />', () => {
     })
 
     describe('when assessment status=IN_PROGRESS', () => {
-      jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(false))
       const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
-      const postInfoSpy = jest.spyOn(globalAlertService, 'postInfo')
       wrapper.instance().setState({
         assessment: {
           id: 1,
@@ -1052,7 +1042,8 @@ describe('<AssessmentContainer />', () => {
       })
 
       it('should display alert box', async () => {
-        wrapper.instance().postReadOnlyMessageIfNeeded()
+        const postInfoSpy = jest.spyOn(globalAlertService, 'postInfo')
+        await wrapper.instance().postReadOnlyMessageIfNeeded()
         expect(postInfoSpy).toHaveBeenCalledWith({
           message: 'This CANS is under the jurisdiction of another county. Available for view only.',
           isAutoCloseable: false,

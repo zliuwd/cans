@@ -5,7 +5,7 @@ import { clone } from '../../util/common'
 import { completeAutoScroll } from '../../util/assessmentAutoScroll'
 import PageModal from '../common/PageModal'
 import ConfidentialityWarning from '../common/ConfidentialityWarning'
-import { AssessmentFormHeader, AssessmentFormFooter, AssessmentService, I18nService, SecurityService } from './'
+import { AssessmentFormHeader, AssessmentFormFooter, AssessmentService, I18nService } from './'
 import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
 import Assessment from './Assessment'
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper'
@@ -28,7 +28,7 @@ import PrintButton from '../Header/PageHeaderButtons/PrintButton'
 import './style.sass'
 import { getCurrentIsoDate, isValidLocalDate } from '../../util/dateHelper'
 import { logPageAction } from '../../util/analytics'
-import { isCompleteAssessmentAuthorized } from '../common/AuthHelper'
+import { isAuthorized, isCompleteAssessmentAuthorized } from '../common/AuthHelper'
 
 const readOnlyMessageId = 'readonlyMessage'
 const alertMessage = e => {
@@ -59,10 +59,9 @@ class AssessmentContainer extends Component {
   async componentDidMount() {
     window.addEventListener('beforeunload', alertMessage)
     const assessmentId = this.props.match.params.id
-    await this.updateIsEditableState(assessmentId)
     assessmentId
-      ? this.fetchAssessment(assessmentId).then(() => this.postReadOnlyMessageIfNeeded())
-      : this.fetchNewAssessment()
+      ? this.fetchAssessment(assessmentId).then(() => this.updateIsEditableState())
+      : this.fetchNewAssessment().then()
     this.handleCompleteScrollTarget()
   }
 
@@ -76,9 +75,9 @@ class AssessmentContainer extends Component {
     postCloseMessage(readOnlyMessageId)
   }
 
-  async updateIsEditableState(assessmentId) {
-    const isEditable =
-      assessmentId === undefined || (await SecurityService.checkPermission(`assessment:update:${assessmentId}`))
+  updateIsEditableState() {
+    const assessment = this.state.assessment
+    const isEditable = Boolean(!assessment || !assessment.id || isAuthorized(assessment, 'update'))
     this.setState({ isEditable })
     this.postReadOnlyMessageIfNeeded()
   }
@@ -283,7 +282,7 @@ class AssessmentContainer extends Component {
       }
     }
     if (this.state.assessment.id) {
-      this.updateIsEditableState(this.state.assessment.id)
+      this.updateIsEditableState()
       // Capture New Relic data after the assessment has been successfully saved
       const countyName = this.handleCountyName()
       logPageAction('assessmentSave', {
@@ -334,7 +333,7 @@ class AssessmentContainer extends Component {
     const positionAdjust = -25 // for manually adjust scroll destination -25 means go up 25px more
     completeAutoScroll(this.state.completeScrollTarget, positionAdjust)
     if (this.state.assessment.id) {
-      this.updateIsEditableState(this.state.assessment.id)
+      this.updateIsEditableState()
       // Capture New Relic data after the assessment has been successfully submitted
       const countyName = this.handleCountyName()
       logPageAction('assessmentSubmit', {
@@ -457,7 +456,7 @@ AssessmentContainer.propTypes = {
 }
 
 AssessmentContainer.defaultProps = {
-  disabled: true,
+  disabled: false,
   match: {
     params: {},
   },
