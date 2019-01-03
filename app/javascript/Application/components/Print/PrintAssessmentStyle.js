@@ -6,6 +6,7 @@ export const headerBlock = {
 
 export const headerRow = {
   display: 'flex',
+  fontFamily: 'sans-serif',
   flexDirection: 'row',
   margin: '0.5rem 0 0.5rem 0',
   width: '107%',
@@ -38,6 +39,7 @@ export const domainHeaderStyle = {
 
 export const domainTitleStyle = {
   fontSize: '1rem',
+  fontFamily: 'sans-serif',
   fontWeight: 500,
   display: 'flex',
   justifyContent: 'space-between',
