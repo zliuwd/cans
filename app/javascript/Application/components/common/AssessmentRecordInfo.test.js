@@ -84,15 +84,15 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97501)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
-        'Client name: Casey Middle Test, Jr',
+        'Casey Middle Test, Jr',
         <AssessmentLink
           assessment={assessmentInProgressWithCaseNumber}
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
-        'Saved on 06/06/2015 by',
-        'Name 1 LastName 1',
+        'Saved on 06/06/2015',
+        'by Name 1 LastName 1',
         'Case #: 4444-333-4444-88888888',
         'County: Alameda',
       ])
@@ -109,10 +109,10 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
-        'Client name: Casey Middle Test, Jr',
+        'Casey Middle Test, Jr',
         <AssessmentLink assessment={assessmentCompletedWithCaseNumber} key={id} linkText={'CANS'} navFrom={'SEARCH'} />,
-        'Completed on 06/06/2018 by',
-        'Name 2 LastName 2',
+        'Completed on 06/06/2018',
+        'by Name 2 LastName 2',
         'Case #: 4444-333-4444-88888888',
         'County: Alameda',
       ])
@@ -129,15 +129,15 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97503)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
-        'Client name: Casey Middle Test, Jr',
+        'Casey Middle Test, Jr',
         <AssessmentLink
           assessment={assessmentWithNoUpdateInfoWithCaseNumber}
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
-        'Saved on 06/06/2018 by',
-        'Name 3 LastName 3',
+        'Saved on 06/06/2018',
+        'by Name 3 LastName 3',
         'Case #: 4444-333-4444-88888888',
         'County: Alameda',
       ])
@@ -156,15 +156,15 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97501)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
-        'Client name: Casey Middle Test, Jr',
+        'Casey Middle Test, Jr',
         <AssessmentLink
           assessment={assessmentInProgressWithReferralNumber}
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
-        'Saved on 06/06/2015 by',
-        'Name 1 LastName 1',
+        'Saved on 06/06/2015',
+        'by Name 1 LastName 1',
         'Referral #: 4444-333-4444-88888888',
         'County: Alameda',
       ])
@@ -181,15 +181,15 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
-        'Client name: Casey Middle Test, Jr',
+        'Casey Middle Test, Jr',
         <AssessmentLink
           assessment={assessmentCompletedWithReferralNumber}
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
-        'Completed on 06/06/2018 by',
-        'Name 2 LastName 2',
+        'Completed on 06/06/2018',
+        'by Name 2 LastName 2',
         'Referral #: 4444-333-4444-88888888',
         'County: Alameda',
       ])
@@ -206,15 +206,15 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97503)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
-        'Client name: Casey Middle Test, Jr',
+        'Casey Middle Test, Jr',
         <AssessmentLink
           assessment={assessmentWithNoUpdateInfoWithReferralNumber}
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
-        'Saved on 06/06/2018 by',
-        'Name 3 LastName 3',
+        'Saved on 06/06/2018',
+        'by Name 3 LastName 3',
         'Referral #: 4444-333-4444-88888888',
         'County: Alameda',
       ])
@@ -233,15 +233,15 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97501)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
-        'Client name: Casey Middle Test, Jr',
+        'Casey Middle Test, Jr',
         <AssessmentLink
           assessment={assessmentInProgressWithNoClientandReferralNumber}
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
-        'Saved on 06/06/2015 by',
-        'Name 1 LastName 1',
+        'Saved on 06/06/2015',
+        'by Name 1 LastName 1',
         'Case/Referral #: ',
         'County: Alameda',
       ])
@@ -258,15 +258,15 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
-        'Client name: Casey Middle Test, Jr',
+        'Casey Middle Test, Jr',
         <AssessmentLink
           assessment={assessmentCompletedWithNoClientandReferralNumber}
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
-        'Completed on 06/06/2018 by',
-        'Name 2 LastName 2',
+        'Completed on 06/06/2018',
+        'by Name 2 LastName 2',
         'Case/Referral #: ',
         'County: Alameda',
       ])
@@ -283,15 +283,15 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97503)
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
-        'Client name: Casey Middle Test, Jr',
+        'Casey Middle Test, Jr',
         <AssessmentLink
           assessment={assessmentWithNoUpdateInfoWithNoClientandReferralNumber}
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
         />,
-        'Saved on 06/06/2018 by',
-        'Name 3 LastName 3',
+        'Saved on 06/06/2018',
+        'by Name 3 LastName 3',
         'Case/Referral #: ',
         'County: Alameda',
       ])

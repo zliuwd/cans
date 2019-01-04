@@ -132,15 +132,15 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@cwds/components@^0.5.9":
-  version "0.5.9"
-  resolved "https://registry.yarnpkg.com/@cwds/components/-/components-0.5.9.tgz#b7d42c091c6471cd8210324c8df7da0d3d138dcb"
-  integrity sha512-QDJCT1tirv11XrKE0IUQ2XtWsJVJIsuIDLJDmWW+n/XGfW1SWUnVL9g4xI9YX0tSzZxEhoDfz9yZDxT4soVC5g==
+"@cwds/components@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@cwds/components/-/components-0.6.0.tgz#7877c70317280699c631fb828fca95e31a1d11d6"
+  integrity sha512-dE/cNtJ9bMvTnQ09pCN1u9bAXnmIjQeO0PrOvEQF+SC9h3558eaM9VQiOvx156G1wYBZh+20ozBv61iCm+jw9Q==
   dependencies:
-    "@cwds/core" "^0.5.9"
-    "@cwds/datagrid" "^0.5.9"
-    "@cwds/icons" "^0.5.9"
-    "@cwds/reactstrap" "^0.5.9"
+    "@cwds/core" "^0.6.0"
+    "@cwds/datagrid" "^0.6.0"
+    "@cwds/icons" "^0.6.0"
+    "@cwds/reactstrap" "^0.6.0"
     bootstrap "^4.1.3"
     classnames "^2.2.6"
     lodash.omit "^4.5.0"
@@ -154,19 +154,19 @@
   resolved "https://registry.yarnpkg.com/@cwds/core/-/core-0.5.6.tgz#9061e4c26b06b099d58399a67a54d65ef1ec5e35"
   integrity sha512-GynEUV1NKFrJVdJt6GnWyhAw0S1BtwyId1a2kU4ex3n9J+EG2j501VyO1kAUvA5hFjUHyLSUlFWdwAVLfi4ryg==
 
-"@cwds/core@^0.5.9":
-  version "0.5.9"
-  resolved "https://registry.yarnpkg.com/@cwds/core/-/core-0.5.9.tgz#fb971eb6cefb610530c3a714da35bf74035a5c65"
-  integrity sha512-5Z8pCf5OiPdkj69FQuiE48euSNATlFtwWkGiHGOoEwuZN6GhYuMP75gCiltcQptjaEC4FYf8XxXmZNhBNpVkfg==
+"@cwds/core@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@cwds/core/-/core-0.6.0.tgz#1c0a376dd10db6b1f0394a999569f6b4fa0c4bf8"
+  integrity sha512-NVFkjGgcwLpcuBcjIm7r40P2D5adcRmFqbx7BKC6wUzHOSS06zRNTon3UmDiY840+8OaIvQKcV2E4FsElX8S3A==
 
-"@cwds/datagrid@^0.5.9":
-  version "0.5.9"
-  resolved "https://registry.yarnpkg.com/@cwds/datagrid/-/datagrid-0.5.9.tgz#8b2e9d0b55d2b68d9d51a0d805dc086ed5fbaf0f"
-  integrity sha512-O1F0xF2hVLyP0UttdLmrTw8iKbFix7OhQwi1FLmynA3ssfn+h+QzaxVmI6laAsl03lQeHiGFDWCwXybhidIkYA==
+"@cwds/datagrid@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@cwds/datagrid/-/datagrid-0.6.0.tgz#6c07f37d5106abcff5f6eb23b820287a18b786f8"
+  integrity sha512-Ju2kSPPINJ0i5hHdiD10+X5EoUWR2x1cnaYgJ9BHr4Z8QKeCOVdsSEACANBJi40MbdeOkm+pQEIHuVs5e6UJGA==
   dependencies:
-    "@cwds/core" "^0.5.9"
-    "@cwds/icons" "^0.5.9"
-    "@cwds/reactstrap" "^0.5.9"
+    "@cwds/core" "^0.6.0"
+    "@cwds/icons" "^0.6.0"
+    "@cwds/reactstrap" "^0.6.0"
     bootstrap "^4.1.3"
     classnames "^2.2.6"
     lodash.omit "^4.5.0"
@@ -174,21 +174,21 @@
     react-select "^2.1.1"
     react-table "^6.8.6"
 
-"@cwds/icons@^0.5.9":
-  version "0.5.9"
-  resolved "https://registry.yarnpkg.com/@cwds/icons/-/icons-0.5.9.tgz#a5a61442bc5732b304961b15bd9b08b3ca7be277"
-  integrity sha512-KonZ7AFz5kmso1DilIFvIRZ5ph32i6YusOM8p+rrX0BxQ4cItyS/5ZRRFC57luemSBEa0isgNotLMqrfhwZ0UQ==
+"@cwds/icons@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@cwds/icons/-/icons-0.6.0.tgz#4d9b27efc7256c426199457f141693b705da34b2"
+  integrity sha512-Qn+7+Lzay4AjjgWoYELtHamcFIHxMGvA09NJny2+WuAHml3O1IWCFnSa2QA0+v1xu+4o6nWoZ6HgXtAQUNb42w==
   dependencies:
-    "@cwds/core" "^0.5.9"
+    "@cwds/core" "^0.6.0"
     "@fortawesome/fontawesome-svg-core" "^1.2.5"
     "@fortawesome/free-regular-svg-icons" "^5.5.0"
     "@fortawesome/free-solid-svg-icons" "^5.5.0"
     "@fortawesome/react-fontawesome" "^0.1.3"
 
-"@cwds/reactstrap@^0.5.9":
-  version "0.5.9"
-  resolved "https://registry.yarnpkg.com/@cwds/reactstrap/-/reactstrap-0.5.9.tgz#9a110ae280f4a61f78d6edd6c1a133d7a678d325"
-  integrity sha512-JWfzgOIOhrSY4m3hB+buCR2BJu46NQZnRsj6CFg9+54dscKyX/cdxadkTH/9Y/G/zbeIJiTS+tvH0IHgQcIe0w==
+"@cwds/reactstrap@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@cwds/reactstrap/-/reactstrap-0.6.0.tgz#2a41358a58406258415ba4eabe6629700599f64e"
+  integrity sha512-BSrrSt7IdMpvmALnssGmG0j8m8YJqDGhsVMv2uKhPuMMg/MVS4xKLN9SOAXub9qDCFJ8DsdKYvk0Y2Cw8hsTog==
   dependencies:
     reactstrap "^6.5.0"
 

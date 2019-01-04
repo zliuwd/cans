@@ -4,7 +4,7 @@ import { Button } from '@cwds/components'
 
 const UnderSixQuestion = ({ isUnderSix, onChange, disabled }) => (
   <Fragment>
-    <div className={'assessment-form-header-select-template'}>Select CANS Template</div>
+    <div className={'assessment-form-header-select-template'}>Select CANS Template *</div>
     <Button
       id={'age-0-5-button'}
       onClick={() => onChange(true)}

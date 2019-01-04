@@ -23,7 +23,7 @@ class AssessmentRecordInfo extends Component {
     } = assessmentInfo
 
     const statusHeader = <AssessmentRecordStatus status={status} />
-    const clientNameHeader = <div className="assessment-record-client-name">{`Client name: ${clientName}`}</div>
+    const clientNameHeader = <div className="assessment-record-client-name">{`${clientName}`}</div>
     const recordHeader = header === 'assessment-status' ? statusHeader : clientNameHeader
 
     return (
@@ -41,8 +41,8 @@ class AssessmentRecordInfo extends Component {
                 userId={this.props.userId}
               />
             </p>
-            <p>{`${actionVerb} on ${formattedTimestamp} by`}</p>
-            <p>{updatedByName}</p>
+            <p>{`${actionVerb} on ${formattedTimestamp}`}</p>
+            <p>{`by ${updatedByName}`}</p>
             <p>{`${caseReferralNumber}: ${serviceSourceUiId || ''}`}</p>
             <p>{`County: ${countyName}`}</p>
           </div>
