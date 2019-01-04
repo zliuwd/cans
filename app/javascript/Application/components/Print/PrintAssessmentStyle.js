@@ -9,7 +9,7 @@ export const headerRow = {
   fontFamily: 'sans-serif',
   flexDirection: 'row',
   margin: '0.5rem 0 0.5rem 0',
-  width: '107%',
+  width: '111%',
 }
 
 export const headerRecord = {
