@@ -16,14 +16,22 @@ module ProdLoginHelper
   private
 
   def default_json
-    worker_json
+    caseworker_json
   end
 
-  def worker_json
+  def caseworker_json
     credentials = {}
-    credentials[:user] = ENV.fetch('WORKER_USERNAME')
-    credentials[:password] = ENV.fetch('WORKER_PASSWORD')
-    credentials[:verification_code] = ENV.fetch('WORKER_VERIFICATION_CODE')
+    credentials[:user] = ENV.fetch('CASEWORKER_USERNAME')
+    credentials[:password] = ENV.fetch('CASEWORKER_PASSWORD')
+    credentials[:verification_code] = ENV.fetch('CASEWORKER_VERIFICATION_CODE')
+    credentials
+  end
+
+  def non_caseworker_json
+    credentials = {}
+    credentials[:user] = ENV.fetch('NON_CASEWORKER_USERNAME')
+    credentials[:password] = ENV.fetch('NON_CASEWORKER_PASSWORD')
+    credentials[:verification_code] = ENV.fetch('NON_CASEWORKER_VERIFICATION_CODE')
     credentials
   end
 
