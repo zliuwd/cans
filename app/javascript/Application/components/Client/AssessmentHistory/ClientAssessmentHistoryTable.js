@@ -9,21 +9,38 @@ import ClientAssessmentHistoryTableDate from './ClientAssessmentHistoryTableDate
 import ClientAssessmentHistoryTableUpdatedBy from './ClientAssessmentHistoryTableUpdatedBy'
 import ClientAssessmentHistoryTableEllipsis from './ClientAssessmentHistoryTableEllipsis'
 
-const columnWidths = [190, 250, 140, 170, 260, 35]
+const columnWidths = [0, 190, 250, 140, 170, 260, 35]
 const columnConfig = [
   {
-    Header: 'Assessment Date',
-    id: 'assessmentTableDate',
-    Cell: ClientAssessmentHistoryTableLink,
+    Header: '',
+    id: 'assessmentTableCreatedDate',
     width: columnWidths[0],
+    accessor: 'created_timestamp',
+    show: false,
+  },
+  {
+    Header: 'Assessment Date',
+    id: 'assessmentTableEventDate',
+    Cell: ClientAssessmentHistoryTableLink,
+    width: columnWidths[1],
     className: 'text-center',
     headerClassName: 'text-center',
-    accessor: 'event_date',
+    accessor: assessment => assessment,
+    sortMethod: (a, b) => {
+      const eventDateA = new Date(a.event_date).getTime()
+      const eventDateB = new Date(b.event_date).getTime()
+      if (eventDateA - eventDateB === 0) {
+        const createdDateA = new Date(a.created_timestamp).getTime()
+        const createdDateB = new Date(b.created_timestamp).getTime()
+        return createdDateA > createdDateB ? 1 : -1
+      }
+      return eventDateA > eventDateB ? 1 : -1
+    },
   },
   {
     Header: 'Case/Referral Number',
     Cell: ClientAssessmentHistoryTableCaseNumber,
-    width: columnWidths[1],
+    width: columnWidths[2],
     className: 'text-center',
     headerClassName: 'text-center',
     accessor: 'service_source_ui_id',
@@ -32,16 +49,18 @@ const columnConfig = [
     Header: 'County',
     id: 'assessmentTableCounty',
     Cell: ClientAssessmentHistoryTableCountyName,
-    width: columnWidths[2],
+    width: columnWidths[3],
     className: 'text-center',
     headerClassName: 'text-center',
-    accessor: assessment => `${assessment.county.name}`,
+    accessor: assessment => {
+      return assessment.county ? `${assessment.county.name}` : ''
+    },
   },
   {
     Header: 'Last Updated',
     id: 'assessmentTableLastUpdated',
     Cell: ClientAssessmentHistoryTableDate,
-    width: columnWidths[3],
+    width: columnWidths[4],
     className: 'text-center',
     headerClassName: 'text-center',
     accessor: assessment => {
@@ -49,12 +68,17 @@ const columnConfig = [
       const timestamp = updatedTimestamp || createdTimestamp
       return timestamp
     },
+    sortMethod: (a, b) => {
+      const dateA = new Date(a).getTime()
+      const dateB = new Date(b).getTime()
+      return dateA > dateB ? 1 : -1
+    },
   },
   {
     Header: 'Updated By',
     id: 'assessmentTableUpdatedBy',
     Cell: ClientAssessmentHistoryTableUpdatedBy,
-    width: columnWidths[4],
+    width: columnWidths[5],
     className: 'text-center',
     headerClassName: 'text-center',
     accessor: assessment => {
@@ -66,7 +90,7 @@ const columnConfig = [
   {
     Header: '',
     Cell: ClientAssessmentHistoryTableEllipsis,
-    width: columnWidths[5],
+    width: columnWidths[6],
     className: 'text-center',
     headerClassName: 'text-center',
     sortable: false,
@@ -74,7 +98,8 @@ const columnConfig = [
 ]
 
 const ClientAssessmentHistoryTable = props => {
-  const { assessments, navFrom, inheritUrl, userId } = props
+  const { assessments, navFrom, inheritUrl, userId, updateAssessmentHistoryCallback } = props
+  const columnSort = [{ id: 'assessmentTableEventDate', desc: true }, { id: 'assessmentTableCreatedDate', desc: true }]
   const assessmentsLength = assessments.length
   const minRows = 0
   const defaultPageSize = 10
@@ -83,20 +108,26 @@ const ClientAssessmentHistoryTable = props => {
   const showPagination = numAssessmentsToRenderInDataGrid > defaultPageSize
   const showDataGrid = assessmentsLength > displayDataGridAfterNumAssessments
   const assessmentsSubset = assessments.slice(displayDataGridAfterNumAssessments)
-  const assessmentsSubsetWithNavFrom = assessmentsSubset.map(assessment => {
-    return { navFrom, inheritUrl, userId, ...assessment }
+  const assessmentsSubsetWithNavFromAndCallback = assessmentsSubset.map(assessment => {
+    return {
+      navFrom,
+      inheritUrl,
+      userId,
+      updateAssessmentHistoryCallback,
+      ...assessment,
+    }
   })
 
   return showDataGrid ? (
     <Row>
       <DataGrid
-        data={assessmentsSubsetWithNavFrom}
+        data={assessmentsSubsetWithNavFromAndCallback}
         showPagination={showPagination}
         minRows={minRows}
         defaultPageSize={defaultPageSize}
         columns={columnConfig}
         className={'data-grid-client-assessment-history'}
-        defaultSorted={[{ id: 'assessmentTableDate', desc: true }]}
+        defaultSorted={columnSort}
       />
     </Row>
   ) : null
@@ -106,11 +137,8 @@ ClientAssessmentHistoryTable.propTypes = {
   assessments: PropTypes.array.isRequired,
   inheritUrl: PropTypes.string.isRequired,
   navFrom: PropTypes.string.isRequired,
-  userId: PropTypes.string,
-}
-
-ClientAssessmentHistoryTable.defaultProps = {
-  userId: null,
+  updateAssessmentHistoryCallback: PropTypes.func.isRequired,
+  userId: PropTypes.string.isRequired,
 }
 
 export default ClientAssessmentHistoryTable

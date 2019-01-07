@@ -1,4 +1,4 @@
-import { apiGet, apiPost, apiPut } from '../../App.api'
+import { apiGet, apiPost, apiPut, apiDelete } from '../../App.api'
 
 export class AssessmentService {
   static fetch(id) {
@@ -21,6 +21,10 @@ export class AssessmentService {
   }
   static getAllChanges(id) {
     return apiGet(`/assessments/${id}/changes`)
+  }
+
+  static delete(id) {
+    return apiDelete(`/assessments/${id}`)
   }
 }
 

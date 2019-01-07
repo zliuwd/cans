@@ -4,13 +4,11 @@ import ChangeLogLoadingBoundary from './ChangeLogLoadingBoundary'
 import AssessmentChangeLog from './AssessmentChangeLog'
 import { changeLogMatchPropTypes } from './ChangeLogHelper'
 
-const ChangeLogPage = params => {
-  return (
-    <ChangeLogLoadingBoundary id={params.match.params.id}>
-      <AssessmentChangeLog {...params} />
-    </ChangeLogLoadingBoundary>
-  )
-}
+const ChangeLogPage = params => (
+  <ChangeLogLoadingBoundary id={params.match.params.id}>
+    <AssessmentChangeLog {...params} />
+  </ChangeLogLoadingBoundary>
+)
 
 ChangeLogPage.propTypes = {
   match: changeLogMatchPropTypes.isRequired,

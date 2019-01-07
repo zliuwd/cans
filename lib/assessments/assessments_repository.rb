@@ -26,5 +26,9 @@ module Assessments
     def changes(id)
       @http_service.call("/assessments/#{id}/changelog", :get, @token)
     end
+
+    def delete(id)
+      @http_service.call("/assessments/#{id}", :delete, @token)
+    end
   end
 end

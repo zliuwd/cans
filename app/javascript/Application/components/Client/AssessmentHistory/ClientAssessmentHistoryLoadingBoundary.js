@@ -10,7 +10,11 @@ class ClientAssessmentHistoryLoadingBoundary extends React.Component {
     if (propsId !== stateId) {
       return {
         id: propsId,
-        fetch: () => AssessmentService.search({ client_identifier: propsId }),
+        fetch: () =>
+          AssessmentService.search({
+            client_identifier: propsId,
+            include_deleted: true,
+          }),
       }
     }
     return null
@@ -18,7 +22,7 @@ class ClientAssessmentHistoryLoadingBoundary extends React.Component {
 
   render() {
     return (
-      <LoadingBoundary childNodeFetchedPropName={'assessments'} fetch={this.state.fetch}>
+      <LoadingBoundary childNodeFetchedPropName={'assessments'} fetch={this.state.fetch} isHiddenWhileLoading={false}>
         {this.props.children}
       </LoadingBoundary>
     )

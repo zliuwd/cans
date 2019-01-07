@@ -80,5 +80,37 @@ module Api
         expect(response.body).to eq assessment.to_json
       end
     end
+
+    describe '#changes' do
+      let(:assessmentHistory) { { id: 11 } }
+      let(:assessment_response) do
+        instance_double('Faraday::Response', body: assessmentHistory, status: 200)
+      end
+
+      it 'returns a successful assessment history response' do
+        allow(assessments_repository).to receive(:changes)
+          .with('11')
+          .and_return(assessment_response)
+        get :changes, params: { id: 11 }
+        expect(response.body).to eq assessmentHistory.to_json
+        expect(response.status).to eq 200
+      end
+    end
+
+    describe '#delete' do
+      let(:assessment) { { id: 11 } }
+      let(:assessment_response) do
+        instance_double('Faraday::Response', body: assessment, status: 200)
+      end
+
+      it 'returns a successful response with a deleted record' do
+        allow(assessments_repository).to receive(:delete)
+          .with('11')
+          .and_return(assessment_response)
+        delete :delete, params: { id: 11 }
+        expect(response.body).to eq assessment.to_json
+        expect(response.status).to eq 200
+      end
+    end
   end
 end

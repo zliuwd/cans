@@ -8,12 +8,15 @@ import AssessmentRecordStatus from '../common/AssessmentRecordStatus'
 import {
   assessmentInProgressWithCaseNumber,
   assessmentCompletedWithCaseNumber,
+  assessmentDeletedWithCaseNumber,
   assessmentWithNoUpdateInfoWithCaseNumber,
   assessmentInProgressWithReferralNumber,
   assessmentCompletedWithReferralNumber,
+  assessmentDeletedWithReferralNumber,
   assessmentWithNoUpdateInfoWithReferralNumber,
   assessmentInProgressWithNoClientandReferralNumber,
   assessmentCompletedWithNoClientandReferralNumber,
+  assessmentDeletedWithNoClientandReferralNumber,
   assessmentWithNoUpdateInfoWithNoClientandReferralNumber,
 } from '../Assessment/assessment.mocks.test'
 
@@ -24,6 +27,8 @@ const prepareWrapper = (assessment, header) =>
       header={header}
       navFrom={'SEARCH'}
       inheritUrl={'/staff/0X5/clients/AznnyCs0X5/assessments/298750'}
+      updateAssessmentHistoryCallback={() => {}}
+      userId={'1'}
     />
   )
 
@@ -90,6 +95,7 @@ describe('AssessmentRecordInfo', () => {
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
+          userId={'1'}
         />,
         'Saved on 06/06/2015',
         'by Name 1 LastName 1',
@@ -110,8 +116,40 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
-        <AssessmentLink assessment={assessmentCompletedWithCaseNumber} key={id} linkText={'CANS'} navFrom={'SEARCH'} />,
+        <AssessmentLink
+          assessment={assessmentCompletedWithCaseNumber}
+          key={id}
+          linkText={'CANS'}
+          navFrom={'SEARCH'}
+          userId={'1'}
+        />,
         'Completed on 06/06/2018',
+        'by Name 2 LastName 2',
+        'Case #: 4444-333-4444-88888888',
+        'County: Alameda',
+      ])
+    })
+
+    it('renders DELETED assessment with all fields', () => {
+      const { id } = assessmentDeletedWithCaseNumber
+      const wrapper = prepareWrapper(assessmentDeletedWithCaseNumber, 'assessment-client-name')
+      const assessmentInfo = wrapper
+        .find('div.assessment-info')
+        .children()
+        .map(child => child.props().children)
+
+      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
+      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(assessmentInfo).toEqual([
+        'Casey Middle Test, Jr',
+        <AssessmentLink
+          assessment={assessmentDeletedWithCaseNumber}
+          key={id}
+          linkText={'CANS'}
+          navFrom={'SEARCH'}
+          userId={'1'}
+        />,
+        'Deleted on 06/06/2018',
         'by Name 2 LastName 2',
         'Case #: 4444-333-4444-88888888',
         'County: Alameda',
@@ -135,6 +173,7 @@ describe('AssessmentRecordInfo', () => {
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
+          userId={'1'}
         />,
         'Saved on 06/06/2018',
         'by Name 3 LastName 3',
@@ -162,6 +201,7 @@ describe('AssessmentRecordInfo', () => {
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
+          userId={'1'}
         />,
         'Saved on 06/06/2015',
         'by Name 1 LastName 1',
@@ -187,8 +227,35 @@ describe('AssessmentRecordInfo', () => {
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
+          userId={'1'}
         />,
         'Completed on 06/06/2018',
+        'by Name 2 LastName 2',
+        'Referral #: 4444-333-4444-88888888',
+        'County: Alameda',
+      ])
+    })
+
+    it('renders DELETED assessment with all fields', () => {
+      const { id } = assessmentDeletedWithReferralNumber
+      const wrapper = prepareWrapper(assessmentDeletedWithReferralNumber, 'assessment-client-name')
+      const assessmentInfo = wrapper
+        .find('div.assessment-info')
+        .children()
+        .map(child => child.props().children)
+
+      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
+      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(assessmentInfo).toEqual([
+        'Casey Middle Test, Jr',
+        <AssessmentLink
+          assessment={assessmentDeletedWithReferralNumber}
+          key={id}
+          linkText={'CANS'}
+          navFrom={'SEARCH'}
+          userId={'1'}
+        />,
+        'Deleted on 06/06/2018',
         'by Name 2 LastName 2',
         'Referral #: 4444-333-4444-88888888',
         'County: Alameda',
@@ -212,6 +279,7 @@ describe('AssessmentRecordInfo', () => {
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
+          userId={'1'}
         />,
         'Saved on 06/06/2018',
         'by Name 3 LastName 3',
@@ -239,6 +307,7 @@ describe('AssessmentRecordInfo', () => {
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
+          userId={'1'}
         />,
         'Saved on 06/06/2015',
         'by Name 1 LastName 1',
@@ -264,8 +333,35 @@ describe('AssessmentRecordInfo', () => {
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
+          userId={'1'}
         />,
         'Completed on 06/06/2018',
+        'by Name 2 LastName 2',
+        'Case/Referral #: ',
+        'County: Alameda',
+      ])
+    })
+
+    it('renders DELETED assessment with all fields', () => {
+      const { id } = assessmentDeletedWithNoClientandReferralNumber
+      const wrapper = prepareWrapper(assessmentDeletedWithNoClientandReferralNumber, 'assessment-client-name')
+      const assessmentInfo = wrapper
+        .find('div.assessment-info')
+        .children()
+        .map(child => child.props().children)
+
+      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
+      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(assessmentInfo).toEqual([
+        'Casey Middle Test, Jr',
+        <AssessmentLink
+          assessment={assessmentDeletedWithNoClientandReferralNumber}
+          key={id}
+          linkText={'CANS'}
+          navFrom={'SEARCH'}
+          userId={'1'}
+        />,
+        'Deleted on 06/06/2018',
         'by Name 2 LastName 2',
         'Case/Referral #: ',
         'County: Alameda',
@@ -289,6 +385,7 @@ describe('AssessmentRecordInfo', () => {
           key={id}
           linkText={'CANS'}
           navFrom={'SEARCH'}
+          userId={'1'}
         />,
         'Saved on 06/06/2018',
         'by Name 3 LastName 3',

@@ -1,16 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import LoadingBoundary from '../../common/LoadingBoundary'
-import { AssessmentService } from '../index'
-
-const fetchBoth = id => {
-  const changeHistoryPromise = AssessmentService.getAllChanges(id)
-  const assessmentPromise = AssessmentService.fetch(id)
-  return Promise.all([changeHistoryPromise, assessmentPromise]).then(([changeHistory, assessment]) => ({
-    changeHistory,
-    assessment,
-  }))
-}
+import AssessmentService from '../Assessment.service'
 
 class ChangeLogLoadingBoundary extends React.Component {
   state = {}
@@ -19,7 +10,7 @@ class ChangeLogLoadingBoundary extends React.Component {
     if (propsId !== stateId) {
       return {
         id: propsId,
-        fetch: () => fetchBoth(propsId),
+        fetch: () => AssessmentService.getAllChanges(propsId),
       }
     }
     return null
@@ -27,7 +18,7 @@ class ChangeLogLoadingBoundary extends React.Component {
 
   render() {
     return (
-      <LoadingBoundary childNodeFetchedPropName={'assessmentWithHistory'} fetch={this.state.fetch}>
+      <LoadingBoundary childNodeFetchedPropName={'assessmentHistory'} fetch={this.state.fetch}>
         {this.props.children}
       </LoadingBoundary>
     )

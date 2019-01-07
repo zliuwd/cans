@@ -10,9 +10,9 @@ describe('AssessmentRecordStatus', () => {
         status: AssessmentStatus.inProgress,
       })
       expect(expectedResult).toEqual(
-        <div className="status-icon-wrapper">
-          <Icon name="circle-notch" set={'fa'} className={`fa-2x`} />
-          <span className="assessment-in-progress">In Progress</span>
+        <div className={'status-icon-wrapper'}>
+          <Icon name={'circle-notch'} set={'fa'} className={'fa-2x'} />
+          <span className={'assessment-in-progress'}>In Progress</span>
         </div>
       )
     })
@@ -24,9 +24,23 @@ describe('AssessmentRecordStatus', () => {
         status: AssessmentStatus.completed,
       })
       expect(expectedResult).toEqual(
-        <div className="status-icon-wrapper">
-          <Icon name="check-circle" set={'fa'} className={`fa-2x`} />
-          <span className="assessment-completed">Complete</span>
+        <div className={'status-icon-wrapper'}>
+          <Icon name={'check-circle'} set={'fa'} className={'fa-2x'} />
+          <span className={'assessment-completed'}>Complete</span>
+        </div>
+      )
+    })
+  })
+
+  describe('when the status is DELETED', () => {
+    it('renders a trash-alt icon and the correct status', () => {
+      const expectedResult = AssessmentRecordStatus({
+        status: AssessmentStatus.deleted,
+      })
+      expect(expectedResult).toEqual(
+        <div className={'status-icon-wrapper'}>
+          <Icon name={'trash-alt'} set={'fa'} className={'fa-2x'} />
+          <span className={'assessment-deleted'}>Deleted</span>
         </div>
       )
     })

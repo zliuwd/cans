@@ -232,7 +232,11 @@ describe('AssessmentHelper', () => {
       expect(getActionVerbByStatus(AssessmentStatus.completed)).toEqual('Completed')
     })
 
-    it('should return "Updated" when the assessment status is not IN_PROGRESS or COMPLETED', () => {
+    it('should return "Deleted" when the assessment status is DELETED', () => {
+      expect(getActionVerbByStatus(AssessmentStatus.deleted)).toEqual('Deleted')
+    })
+
+    it('should return "Updated" when the assessment status is not IN_PROGRESS or COMPLETED or DELETED', () => {
       expect(getActionVerbByStatus('updated')).toEqual('Updated')
     })
   })
@@ -244,6 +248,10 @@ describe('AssessmentHelper', () => {
 
     it('should return "Completed" when the assessment status is COMPLETED', () => {
       expect(getDisplayAssessmentStatus(AssessmentStatus.completed)).toEqual('Completed')
+    })
+
+    it('should return "Deleted" when the assessment status is DELETED', () => {
+      expect(getDisplayAssessmentStatus(AssessmentStatus.deleted)).toEqual('Deleted')
     })
 
     it('should return "Updated" when the assessment status is not IN_PROGRESS or COMPLETED', () => {
@@ -265,11 +273,15 @@ describe('AssessmentHelper', () => {
       const postSuccessSpy = jest.spyOn(globalAlertService, 'postSuccess')
       postSuccessMessage(actualLinkUrl, successMsgFrom.SAVE)
       expect(postSuccessSpy).toHaveBeenCalledTimes(1)
-      expect(postSuccessSpy).toHaveBeenCalledWith({ message: expect.any(Object) })
+      expect(postSuccessSpy).toHaveBeenCalledWith({
+        message: expect.any(Object),
+      })
       postSuccessSpy.mockReset()
       postSuccessMessage(actualLinkUrl, successMsgFrom.COMPLETE)
       expect(postSuccessSpy).toHaveBeenCalledTimes(1)
-      expect(postSuccessSpy).toHaveBeenCalledWith({ message: expect.any(Object) })
+      expect(postSuccessSpy).toHaveBeenCalledWith({
+        message: expect.any(Object),
+      })
       postSuccessSpy.mockReset()
       postSuccessMessage(actualLinkUrl, 'someOther')
       expect(postSuccessSpy).toHaveBeenCalledTimes(1)

@@ -21,6 +21,7 @@ class Client extends Component {
     this.state = {
       isNewForm,
       shouldRenderClientMessage: Boolean(successClientId),
+      loadingBoundaryKey: Math.random(),
     }
   }
 
@@ -31,6 +32,10 @@ class Client extends Component {
         {data}
       </Grid>
     )
+  }
+
+  updateClientAssessmentHistory = () => {
+    this.setState({ loadingBoundaryKey: Math.random() })
   }
 
   sensitivityTypeLabel(type) {
@@ -62,9 +67,27 @@ class Client extends Component {
     return linkUrl
   }
 
+  renderClientAssessmentHistory(client) {
+    return (
+      <ClientAssessmentHistoryLoadingBoundary
+        clientIdentifier={client.identifier ? client.identifier : ''}
+        key={this.state.loadingBoundaryKey}
+      >
+        <ClientAssessmentHistory
+          client={client}
+          navFrom={NavFromProducer(this.props.navigateTo)}
+          inheritUrl={this.ClientAssessmentHistoryUrlTrimmer(this.props.match.url)}
+          userId={this.props.match.params.staffId}
+          updateAssessmentHistoryCallback={this.updateClientAssessmentHistory}
+        />
+      </ClientAssessmentHistoryLoadingBoundary>
+    )
+  }
+
   render() {
     const { client } = this.props
     const { isNewForm, shouldRenderClientMessage } = this.state
+
     return (
       <Fragment>
         <Grid container spacing={24}>
@@ -103,14 +126,7 @@ class Client extends Component {
               </div>
             </Card>
           </Grid>
-          <ClientAssessmentHistoryLoadingBoundary clientIdentifier={client.identifier ? client.identifier : ''}>
-            <ClientAssessmentHistory
-              client={client}
-              navFrom={NavFromProducer(this.props.navigateTo)}
-              inheritUrl={this.ClientAssessmentHistoryUrlTrimmer(this.props.match.url)}
-              userId={this.props.match.params.staffId}
-            />
-          </ClientAssessmentHistoryLoadingBoundary>
+          {this.renderClientAssessmentHistory(client)}
         </Grid>
       </Fragment>
     )

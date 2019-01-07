@@ -2,13 +2,13 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { Row } from 'reactstrap'
 import { DataGrid } from '@cwds/components'
+import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
 import ClientAssessmentHistoryTableLink from './ClientAssessmentHistoryTableLink'
 import ClientAssessmentHistoryTableCaseNumber from './ClientAssessmentHistoryTableCaseNumber'
 import ClientAssessmentHistoryTableCountyName from './ClientAssessmentHistoryTableCountyName'
 import ClientAssessmentHistoryTableDate from './ClientAssessmentHistoryTableDate'
 import ClientAssessmentHistoryTableUpdatedBy from './ClientAssessmentHistoryTableUpdatedBy'
 import ClientAssessmentHistoryTableEllipsis from './ClientAssessmentHistoryTableEllipsis'
-import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
 import { navigation } from '../../../util/constants'
 
 const defaultMockedAssessments = [
@@ -24,6 +24,8 @@ const defaultMockedAssessments = [
   { id: 10 },
 ]
 
+const updateAssessmentHistoryCallback = () => {}
+
 const shallowWrapper = assessments =>
   shallow(
     <ClientAssessmentHistoryTable
@@ -31,6 +33,7 @@ const shallowWrapper = assessments =>
       navFrom={navigation.CHILD_PROFILE}
       userId={'1'}
       inheritUrl={'clients/AdE0PWu0X5'}
+      updateAssessmentHistoryCallback={updateAssessmentHistoryCallback}
     />
   )
 
@@ -69,17 +72,59 @@ describe('<ClientAssessmentHistoryTable />', () => {
     })
 
     describe('Data', () => {
-      it('sets data to the correct number of assessments', () => {
+      it('sets data prop to the correct number of assessments', () => {
         const data = dataGrid.props().data
         expect(data.length).toBe(7)
         expect(data).toEqual([
-          { id: 4, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
-          { id: 5, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
-          { id: 6, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
-          { id: 7, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
-          { id: 8, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
-          { id: 9, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
-          { id: 10, inheritUrl: 'clients/AdE0PWu0X5', navFrom: 'CHILD_PROFILE_OVERALL', userId: '1' },
+          {
+            id: 4,
+            inheritUrl: 'clients/AdE0PWu0X5',
+            navFrom: 'CHILD_PROFILE_OVERALL',
+            userId: '1',
+            updateAssessmentHistoryCallback,
+          },
+          {
+            id: 5,
+            inheritUrl: 'clients/AdE0PWu0X5',
+            navFrom: 'CHILD_PROFILE_OVERALL',
+            userId: '1',
+            updateAssessmentHistoryCallback,
+          },
+          {
+            id: 6,
+            inheritUrl: 'clients/AdE0PWu0X5',
+            navFrom: 'CHILD_PROFILE_OVERALL',
+            userId: '1',
+            updateAssessmentHistoryCallback,
+          },
+          {
+            id: 7,
+            inheritUrl: 'clients/AdE0PWu0X5',
+            navFrom: 'CHILD_PROFILE_OVERALL',
+            userId: '1',
+            updateAssessmentHistoryCallback,
+          },
+          {
+            id: 8,
+            inheritUrl: 'clients/AdE0PWu0X5',
+            navFrom: 'CHILD_PROFILE_OVERALL',
+            userId: '1',
+            updateAssessmentHistoryCallback,
+          },
+          {
+            id: 9,
+            inheritUrl: 'clients/AdE0PWu0X5',
+            navFrom: 'CHILD_PROFILE_OVERALL',
+            userId: '1',
+            updateAssessmentHistoryCallback,
+          },
+          {
+            id: 10,
+            inheritUrl: 'clients/AdE0PWu0X5',
+            navFrom: 'CHILD_PROFILE_OVERALL',
+            userId: '1',
+            updateAssessmentHistoryCallback,
+          },
         ])
       })
     })
@@ -104,7 +149,10 @@ describe('<ClientAssessmentHistoryTable />', () => {
 
     describe('Default Sorted', () => {
       it('sets the default sorted column to the assessment date', () => {
-        expect(dataGrid.props().defaultSorted).toEqual([{ id: 'assessmentTableDate', desc: true }])
+        expect(dataGrid.props().defaultSorted).toEqual([
+          { id: 'assessmentTableEventDate', desc: true },
+          { id: 'assessmentTableCreatedDate', desc: true },
+        ])
       })
     })
 
@@ -126,84 +174,182 @@ describe('<ClientAssessmentHistoryTable />', () => {
     })
 
     describe('Column Config', () => {
+      describe('Assessment Creation Date', () => {
+        it('passes the correct column  config', () => {
+          const assessmentTableColumnConfig = dataGrid.props().columns[0]
+          expect(assessmentTableColumnConfig.Header).toBe('')
+          expect(assessmentTableColumnConfig.id).toBe('assessmentTableCreatedDate')
+          expect(assessmentTableColumnConfig.width).toBe(0)
+          expect(assessmentTableColumnConfig.accessor).toBe('created_timestamp')
+          expect(assessmentTableColumnConfig.show).toBe(false)
+        })
+      })
+
       describe('Assessment Date', () => {
         it('passes the correct column config', () => {
-          const assessmentDateColumnConfig = dataGrid.props().columns[0]
-          expect(assessmentDateColumnConfig.Header).toBe('Assessment Date')
-          expect(assessmentDateColumnConfig.id).toBe('assessmentTableDate')
-          expect(assessmentDateColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableLink)
-          expect(assessmentDateColumnConfig.width).toEqual(190)
-          expect(assessmentDateColumnConfig.className).toBe('text-center')
-          expect(assessmentDateColumnConfig.headerClassName).toBe('text-center')
-          expect(assessmentDateColumnConfig.accessor).toBe('event_date')
+          const assessmentA = { id: 1, event_date: '2019-01-06' }
+
+          const assessmentTableColumnConfig = dataGrid.props().columns[1]
+          expect(assessmentTableColumnConfig.Header).toBe('Assessment Date')
+          expect(assessmentTableColumnConfig.id).toBe('assessmentTableEventDate')
+          expect(assessmentTableColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableLink)
+          expect(assessmentTableColumnConfig.width).toEqual(190)
+          expect(assessmentTableColumnConfig.className).toBe('text-center')
+          expect(assessmentTableColumnConfig.headerClassName).toBe('text-center')
+          expect(assessmentTableColumnConfig.accessor(assessmentA)).toBe(assessmentA)
+        })
+
+        describe('sort method', () => {
+          describe('events dates are different', () => {
+            describe('assessment date A is more recent than assessment date B', () => {
+              it('sorts assessment A before assessment B', () => {
+                const assessmentA = { id: 1, event_date: '2019-01-06' }
+                const assessmentB = { id: 2, event_date: '2019-01-05' }
+                const assessmentTableColumnConfig = dataGrid.props().columns[1]
+                expect(assessmentTableColumnConfig.sortMethod(assessmentA, assessmentB)).toBe(1)
+              })
+            })
+
+            describe('assessment date A is less recent than assessment date B', () => {
+              it('sorts assessment B before assessment A', () => {
+                const assessmentA = { id: 1, event_date: '2019-01-06' }
+                const assessmentB = { id: 2, event_date: '2019-01-07' }
+                const assessmentTableColumnConfig = dataGrid.props().columns[1]
+                expect(assessmentTableColumnConfig.sortMethod(assessmentA, assessmentB)).toBe(-1)
+              })
+            })
+          })
+
+          describe('events dates are equal', () => {
+            describe('created date A is more recent than created date B', () => {
+              it('sorts assessment A before assessment B', () => {
+                const assessmentA = {
+                  id: 1,
+                  event_date: '2019-01-06',
+                  created_timestamp: '2019-01-06T03:36:37.552Z',
+                }
+                const assessmentB = {
+                  id: 2,
+                  event_date: '2019-01-06',
+                  created_timestamp: '2019-01-05T03:36:37.552Z',
+                }
+                const assessmentTableColumnConfig = dataGrid.props().columns[1]
+                expect(assessmentTableColumnConfig.sortMethod(assessmentA, assessmentB)).toBe(1)
+              })
+            })
+
+            describe('created date A is less recent than created date B', () => {
+              it('sorts assessment B before assessment A', () => {
+                const assessmentA = {
+                  id: 1,
+                  event_date: '2019-01-06',
+                  created_timestamp: '2019-01-06T03:36:37.552Z',
+                }
+                const assessmentB = {
+                  id: 2,
+                  event_date: '2019-01-06',
+                  created_timestamp: '2019-01-07T03:36:37.552Z',
+                }
+                const assessmentTableColumnConfig = dataGrid.props().columns[1]
+                expect(assessmentTableColumnConfig.sortMethod(assessmentA, assessmentB)).toBe(-1)
+              })
+            })
+          })
         })
       })
 
       describe('Case/Referral Number', () => {
         it('passes the correct column config', () => {
-          const assessmentDateColumnConfig = dataGrid.props().columns[1]
-          expect(assessmentDateColumnConfig.Header).toBe('Case/Referral Number')
-          expect(assessmentDateColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableCaseNumber)
-          expect(assessmentDateColumnConfig.width).toEqual(250)
-          expect(assessmentDateColumnConfig.className).toBe('text-center')
-          expect(assessmentDateColumnConfig.headerClassName).toBe('text-center')
-          expect(assessmentDateColumnConfig.accessor).toBe('service_source_ui_id')
+          const assessmentTableColumnConfig = dataGrid.props().columns[2]
+          expect(assessmentTableColumnConfig.Header).toBe('Case/Referral Number')
+          expect(assessmentTableColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableCaseNumber)
+          expect(assessmentTableColumnConfig.width).toEqual(250)
+          expect(assessmentTableColumnConfig.className).toBe('text-center')
+          expect(assessmentTableColumnConfig.headerClassName).toBe('text-center')
+          expect(assessmentTableColumnConfig.accessor).toBe('service_source_ui_id')
         })
       })
 
       describe('County', () => {
         it('passes the correct column config', () => {
-          const assessmentDateColumnConfig = dataGrid.props().columns[2]
-          expect(assessmentDateColumnConfig.Header).toBe('County')
-          expect(assessmentDateColumnConfig.id).toBe('assessmentTableCounty')
-          expect(assessmentDateColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableCountyName)
-          expect(assessmentDateColumnConfig.width).toEqual(140)
-          expect(assessmentDateColumnConfig.className).toBe('text-center')
-          expect(assessmentDateColumnConfig.headerClassName).toBe('text-center')
-          expect(assessmentDateColumnConfig.accessor({ county: { name: 'Yolo' } })).toBe('Yolo')
+          const assessmentTableColumnConfig = dataGrid.props().columns[3]
+          expect(assessmentTableColumnConfig.Header).toBe('County')
+          expect(assessmentTableColumnConfig.id).toBe('assessmentTableCounty')
+          expect(assessmentTableColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableCountyName)
+          expect(assessmentTableColumnConfig.width).toEqual(140)
+          expect(assessmentTableColumnConfig.className).toBe('text-center')
+          expect(assessmentTableColumnConfig.headerClassName).toBe('text-center')
+          expect(assessmentTableColumnConfig.accessor({ county: { name: 'Yolo' } })).toBe('Yolo')
         })
       })
 
       describe('Last Updated', () => {
         it('passes the correct column config', () => {
-          const assessmentDateColumnConfig = dataGrid.props().columns[3]
-          expect(assessmentDateColumnConfig.Header).toBe('Last Updated')
-          expect(assessmentDateColumnConfig.id).toBe('assessmentTableLastUpdated')
-          expect(assessmentDateColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableDate)
-          expect(assessmentDateColumnConfig.width).toEqual(170)
-          expect(assessmentDateColumnConfig.className).toBe('text-center')
-          expect(assessmentDateColumnConfig.headerClassName).toBe('text-center')
+          const assessmentTableColumnConfig = dataGrid.props().columns[4]
+          expect(assessmentTableColumnConfig.Header).toBe('Last Updated')
+          expect(assessmentTableColumnConfig.id).toBe('assessmentTableLastUpdated')
+          expect(assessmentTableColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableDate)
+          expect(assessmentTableColumnConfig.width).toEqual(170)
+          expect(assessmentTableColumnConfig.className).toBe('text-center')
+          expect(assessmentTableColumnConfig.headerClassName).toBe('text-center')
           expect(
-            assessmentDateColumnConfig.accessor({
+            assessmentTableColumnConfig.accessor({
               updated_timestamp: '2018-12-17T23:27:44.616Z',
               created_timestamp: '2018-05-10T23:27:44.616Z',
             })
           ).toBe('2018-12-17T23:27:44.616Z')
           expect(
-            assessmentDateColumnConfig.accessor({
+            assessmentTableColumnConfig.accessor({
+              updated_timestamp: '2018-05-09T23:27:44.616Z',
+            })
+          ).toBe('2018-05-09T23:27:44.616Z')
+          expect(
+            assessmentTableColumnConfig.accessor({
               created_timestamp: '2018-05-10T23:27:44.616Z',
             })
           ).toBe('2018-05-10T23:27:44.616Z')
+        })
+
+        describe('sort method', () => {
+          describe('date A is more recent than date B', () => {
+            it('sorts date A before date B', () => {
+              const dateA = '2018-12-17T23:27:44.616Z'
+              const dateB = '2018-12-16T23:27:44.616Z'
+              const assessmentTableColumnConfig = dataGrid.props().columns[4]
+
+              expect(assessmentTableColumnConfig.sortMethod(dateA, dateB)).toBe(1)
+            })
+          })
+
+          describe('date A is less recent than date B', () => {
+            it('sorts date B before date A', () => {
+              const dateA = '2018-12-15T23:27:44.616Z'
+              const dateB = '2018-12-16T23:27:44.616Z'
+              const assessmentTableColumnConfig = dataGrid.props().columns[4]
+
+              expect(assessmentTableColumnConfig.sortMethod(dateA, dateB)).toBe(-1)
+            })
+          })
         })
       })
 
       describe('Updated By', () => {
         it('passes the correct column config', () => {
-          const assessmentDateColumnConfig = dataGrid.props().columns[4]
-          expect(assessmentDateColumnConfig.Header).toBe('Updated By')
-          expect(assessmentDateColumnConfig.id).toBe('assessmentTableUpdatedBy')
-          expect(assessmentDateColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableUpdatedBy)
-          expect(assessmentDateColumnConfig.width).toEqual(260)
-          expect(assessmentDateColumnConfig.className).toBe('text-center')
-          expect(assessmentDateColumnConfig.headerClassName).toBe('text-center')
+          const assessmentTableColumnConfig = dataGrid.props().columns[5]
+          expect(assessmentTableColumnConfig.Header).toBe('Updated By')
+          expect(assessmentTableColumnConfig.id).toBe('assessmentTableUpdatedBy')
+          expect(assessmentTableColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableUpdatedBy)
+          expect(assessmentTableColumnConfig.width).toEqual(260)
+          expect(assessmentTableColumnConfig.className).toBe('text-center')
+          expect(assessmentTableColumnConfig.headerClassName).toBe('text-center')
           expect(
-            assessmentDateColumnConfig.accessor({
+            assessmentTableColumnConfig.accessor({
               updated_by: { first_name: 'Casey', last_name: 'Test' },
               created_by: { first_name: 'Annie', last_name: 'Doe' },
             })
           ).toBe('Casey Test')
           expect(
-            assessmentDateColumnConfig.accessor({
+            assessmentTableColumnConfig.accessor({
               created_by: { first_name: 'Annie', last_name: 'Doe' },
             })
           ).toBe('Annie Doe')
@@ -212,13 +358,13 @@ describe('<ClientAssessmentHistoryTable />', () => {
 
       describe('Ellipsis', () => {
         it('passes the correct column config', () => {
-          const assessmentDateColumnConfig = dataGrid.props().columns[5]
-          expect(assessmentDateColumnConfig.Header).toBe('')
-          expect(assessmentDateColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableEllipsis)
-          expect(assessmentDateColumnConfig.width).toEqual(35)
-          expect(assessmentDateColumnConfig.className).toBe('text-center')
-          expect(assessmentDateColumnConfig.headerClassName).toBe('text-center')
-          expect(assessmentDateColumnConfig.sortable).toBe(false)
+          const assessmentTableColumnConfig = dataGrid.props().columns[6]
+          expect(assessmentTableColumnConfig.Header).toBe('')
+          expect(assessmentTableColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableEllipsis)
+          expect(assessmentTableColumnConfig.width).toEqual(35)
+          expect(assessmentTableColumnConfig.className).toBe('text-center')
+          expect(assessmentTableColumnConfig.headerClassName).toBe('text-center')
+          expect(assessmentTableColumnConfig.sortable).toBe(false)
         })
       })
     })

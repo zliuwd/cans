@@ -3,7 +3,6 @@ import { shallow } from 'enzyme'
 import { Card, CardHeader, CardTitle, CardBody, DataGrid } from '@cwds/components'
 import { Row } from 'reactstrap'
 import AssessmentChangeLog from './AssessmentChangeLog'
-import { assessmentCompletedWithReferralNumber } from '../assessment.mocks.test'
 
 describe('<AssessmentChangeLog />', () => {
   const defaultProps = {
@@ -18,16 +17,23 @@ describe('<AssessmentChangeLog />', () => {
     },
   }
 
-  const defaultChangeHistory = [{ changed_at: '2018-11-01T17:07:10.043Z' }]
+  const defaultAssessmentHistory = [
+    {
+      changed_at: '2018-11-01T17:07:10.043Z',
+      user_id: 'RACFID',
+      assessment_change_type: 'COMPLETED',
+      entity_id: 1,
+      event_date: '2018-01-05',
+    },
+  ]
 
-  const render = (
-    changeHistory = defaultChangeHistory,
-    assessment = assessmentCompletedWithReferralNumber,
+  const getWrapper = (
+    assessmentHistory = defaultAssessmentHistory,
     updateHeaderButtons = () => {},
     updateHeaderButtonsToDefault = () => {}
   ) => {
     const props = {
-      assessmentWithHistory: { changeHistory, assessment },
+      assessmentHistory,
       pageHeaderButtonsController: {
         updateHeaderButtons,
         updateHeaderButtonsToDefault,
@@ -40,20 +46,14 @@ describe('<AssessmentChangeLog />', () => {
   describe('page layout', () => {
     it('renders nothing when there is no change history', () => {
       const changeHistory = []
-      const wrapper = render(changeHistory)
-      expect(wrapper.type()).toBe(null)
-    })
-
-    it('renders nothing when the assessment is null', () => {
-      const assessment = null
-      const wrapper = render(defaultChangeHistory, assessment)
+      const wrapper = getWrapper(changeHistory)
       expect(wrapper.type()).toBe(null)
     })
 
     let wrapper
 
     beforeEach(() => {
-      wrapper = render()
+      wrapper = getWrapper()
     })
 
     it('renders a Row', () => {
@@ -85,7 +85,7 @@ describe('<AssessmentChangeLog />', () => {
     let wrapper
 
     beforeEach(() => {
-      wrapper = render()
+      wrapper = getWrapper()
     })
 
     it('renders the card title with client name and assessment date', () => {
@@ -100,7 +100,7 @@ describe('<AssessmentChangeLog />', () => {
     })
 
     it('passes change history data to DataGrid', () => {
-      expect(wrapper.find(DataGrid).props().data).toEqual(defaultChangeHistory)
+      expect(wrapper.find(DataGrid).props().data).toEqual(defaultAssessmentHistory)
     })
   })
 
@@ -110,7 +110,7 @@ describe('<AssessmentChangeLog />', () => {
 
     describe('componentDidMount', () => {
       it('should update page header buttons', () => {
-        render(defaultChangeHistory, assessmentCompletedWithReferralNumber, updateHeaderButtonsMock)
+        getWrapper(defaultAssessmentHistory, updateHeaderButtonsMock)
         expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
         updateHeaderButtonsMock.mockClear()
       })
@@ -119,13 +119,10 @@ describe('<AssessmentChangeLog />', () => {
     describe('componentDidUpdate', () => {
       describe('changeHistory prop was updated', () => {
         it('should update page header buttons', () => {
-          wrapper = render([], assessmentCompletedWithReferralNumber, updateHeaderButtonsMock)
+          wrapper = getWrapper([], updateHeaderButtonsMock)
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
           wrapper.setProps({
-            assessmentWithHistory: {
-              changeHistory: defaultChangeHistory,
-              assessment: assessmentCompletedWithReferralNumber,
-            },
+            assessmentHistory: defaultAssessmentHistory,
           })
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(2)
           updateHeaderButtonsMock.mockClear()
@@ -134,13 +131,10 @@ describe('<AssessmentChangeLog />', () => {
 
       describe('changeHistory prop was not updated', () => {
         it('should not update page header buttons', () => {
-          const wrapper = render(defaultChangeHistory, assessmentCompletedWithReferralNumber, updateHeaderButtonsMock)
+          const wrapper = getWrapper(defaultAssessmentHistory, updateHeaderButtonsMock)
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
           wrapper.setProps({
-            assessmentWithHistory: {
-              changeHistory: defaultChangeHistory,
-              assessment: assessmentCompletedWithReferralNumber,
-            },
+            assessmentWithHistory: defaultAssessmentHistory,
           })
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
           updateHeaderButtonsMock.mockClear()
@@ -151,12 +145,7 @@ describe('<AssessmentChangeLog />', () => {
     describe('componentWillUnmount', () => {
       it('should reset page header buttons to default values', () => {
         const updateToDefaultMock = jest.fn()
-        const wrapper = render(
-          defaultChangeHistory,
-          assessmentCompletedWithReferralNumber,
-          () => {},
-          updateToDefaultMock
-        )
+        const wrapper = getWrapper(defaultAssessmentHistory, () => {}, updateToDefaultMock)
         wrapper.unmount()
         expect(updateToDefaultMock).toHaveBeenCalledTimes(1)
       })
@@ -165,7 +154,7 @@ describe('<AssessmentChangeLog />', () => {
     describe('print button status', () => {
       describe('change log data exists', () => {
         it('print button should be enabled', () => {
-          const wrapper = render()
+          const wrapper = getWrapper()
           const spy = jest.spyOn(wrapper.instance(), 'initHeaderButtons')
           wrapper.instance().componentDidMount()
           expect(spy).toHaveBeenCalledWith(true)
@@ -175,7 +164,7 @@ describe('<AssessmentChangeLog />', () => {
       describe('change log data does not exist', () => {
         it('print button should be disabled', () => {
           const changeHistory = []
-          const wrapper = render(changeHistory)
+          const wrapper = getWrapper(changeHistory)
           const spy = jest.spyOn(wrapper.instance(), 'initHeaderButtons')
           wrapper.instance().componentDidMount()
           expect(spy).toHaveBeenCalledWith(false)

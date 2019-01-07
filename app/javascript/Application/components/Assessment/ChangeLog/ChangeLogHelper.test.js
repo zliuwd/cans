@@ -1,6 +1,6 @@
 import { checkPropTypes } from 'prop-types'
 import { client } from '../assessment.mocks.test'
-import { clientPropTypes, changeHistoryPropTypes, changeLogMatchPropTypes } from './ChangeLogHelper'
+import { clientPropTypes, assessmentHistoryPropTypes, changeLogMatchPropTypes } from './ChangeLogHelper'
 
 describe('ChangeLogHelper', () => {
   describe('clientPropTypes', () => {
@@ -72,7 +72,7 @@ describe('ChangeLogHelper', () => {
     })
   })
 
-  describe('changeHistoryPropTypes', () => {
+  describe('assessmentHistoryPropTypes', () => {
     const changeRecord = {
       id: 710031,
       user_id: 'RACFID',
@@ -84,7 +84,7 @@ describe('ChangeLogHelper', () => {
     }
 
     const checkChangeHistoryPropType = change =>
-      checkPropTypes({ change: changeHistoryPropTypes }, { change }, 'change', 'MyComponent')
+      checkPropTypes({ change: assessmentHistoryPropTypes }, { change }, 'change', 'MyComponent')
 
     it('returns no error for valid history record', () => {
       expect(checkChangeHistoryPropType(changeRecord)).toBeUndefined()

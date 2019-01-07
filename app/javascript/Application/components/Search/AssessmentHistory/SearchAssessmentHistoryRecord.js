@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import AssessmentRecordInfo from '../common/AssessmentRecordInfo'
+import AssessmentRecordInfo from '../../common/AssessmentRecordInfo'
 
 class SearchAssessmentHistoryRecord extends PureComponent {
   render() {
@@ -11,6 +11,7 @@ class SearchAssessmentHistoryRecord extends PureComponent {
           assessment={this.props.assessment}
           header={'assessment-client-name'}
           navFrom={this.props.navFrom}
+          updateAssessmentHistoryCallback={this.props.updateAssessmentHistoryCallback}
         />
       </div>
     )
@@ -21,6 +22,7 @@ SearchAssessmentHistoryRecord.propTypes = {
   assessment: PropTypes.object.isRequired,
   inheritUrl: PropTypes.string.isRequired,
   navFrom: PropTypes.string.isRequired,
+  updateAssessmentHistoryCallback: PropTypes.func.isRequired,
 }
 
 export default SearchAssessmentHistoryRecord

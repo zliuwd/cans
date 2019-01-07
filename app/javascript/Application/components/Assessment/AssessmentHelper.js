@@ -18,6 +18,7 @@ export const AssessmentStatus = Object.freeze({
   inProgress: 'IN_PROGRESS',
   completed: 'COMPLETED',
   approved: 'APPROVED',
+  deleted: 'DELETED',
 })
 
 export const defaultEmptyAssessment = {
@@ -87,6 +88,8 @@ export function getActionVerbByStatus(status) {
       return 'Saved'
     case AssessmentStatus.completed:
       return 'Completed'
+    case AssessmentStatus.deleted:
+      return 'Deleted'
     default:
       return 'Updated'
   }
@@ -98,14 +101,19 @@ export function getDisplayAssessmentStatus(status) {
       return 'In Progress'
     case AssessmentStatus.completed:
       return 'Completed'
+    case AssessmentStatus.deleted:
+      return 'Deleted'
     default:
       return 'Updated'
   }
 }
 
-export function sortAssessmentsByDate(options) {
-  const { assessments, sortEventDate, sortCreatedTimestamp, sortUpdatedTimestamp, direction } = options
-  const newAssessmentList = assessments.map(assessment => {
+export function sortAssessments(options) {
+  const { assessments, sortEventDate, sortUpdatedTimestamp, sortCreatedTimestamp, backupSort, direction } = options
+
+  const assessmentsWithMoment = assessments.map(assessment => {
+    const createdTimestampMoment = moment(assessment.created_timestamp)
+
     let timestamp
 
     if (sortEventDate) {
@@ -113,15 +121,28 @@ export function sortAssessmentsByDate(options) {
     } else if (sortCreatedTimestamp && sortUpdatedTimestamp) {
       timestamp = moment(assessment.updated_timestamp || assessment.created_timestamp)
     } else if (sortCreatedTimestamp && !sortUpdatedTimestamp) {
-      timestamp = moment(assessment.created_timestamp)
+      timestamp = createdTimestampMoment
     }
 
-    return { ...assessment, timestamp }
+    return { ...assessment, timestamp, createdTimestampMoment }
   })
-  newAssessmentList.sort((left, right) => {
-    return direction === 'asc' ? left.timestamp.diff(right.timestamp) : right.timestamp.diff(left.timestamp)
+
+  assessmentsWithMoment.sort((left, right) => {
+    let compare
+
+    if (direction === 'asc') {
+      compare = backupSort
+        ? left.timestamp.diff(right.timestamp) || left.createdTimestampMoment - right.createdTimestampMoment
+        : left.timestamp.diff(right.timestamp)
+    } else {
+      compare = backupSort
+        ? right.timestamp.diff(left.timestamp) || right.createdTimestampMoment - left.createdTimestampMoment
+        : right.timestamp.diff(left.timestamp)
+    }
+
+    return compare
   })
-  return newAssessmentList
+  return assessmentsWithMoment
 }
 
 export function trimUrlForClientProfile(url) {
@@ -163,7 +184,12 @@ export function postSuccessMessage(url, msgfrom) {
 export const INFO_GLOBAL_ALERT_ID = 'infoMessages'
 
 export function postInfoMessage({ message, isAutoCloseable = false, componentId = INFO_GLOBAL_ALERT_ID, messageId }) {
-  globalAlertService.postInfo({ message, isAutoCloseable, componentId, messageId })
+  globalAlertService.postInfo({
+    message,
+    isAutoCloseable,
+    componentId,
+    messageId,
+  })
 }
 
 export function postCloseMessage(messageId = undefined) {

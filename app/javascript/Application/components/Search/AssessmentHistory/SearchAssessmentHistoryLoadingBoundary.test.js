@@ -1,27 +1,29 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import ChangeLogLoadingBoundary from './ChangeLogLoadingBoundary'
+import SearchAssessmentHistoryLoadingBoundary from './SearchAssessmentHistoryLoadingBoundary'
 import LoadingBoundary from '../../common/LoadingBoundary'
 
-describe('<ChangeLogLoadingBoundary />', () => {
-  const render = id =>
+describe('<SearchAssessmentHistoryLoadingBoundary />', () => {
+  const render = key =>
     shallow(
-      <ChangeLogLoadingBoundary id={id}>
+      <SearchAssessmentHistoryLoadingBoundary loadingBoundaryKey={key}>
         <div />
-      </ChangeLogLoadingBoundary>
+      </SearchAssessmentHistoryLoadingBoundary>
     )
 
   it('renders LoadingBoundary and sets props', () => {
-    const wrapper = render('XYZ')
+    const key = Math.random()
+    const wrapper = render(key)
     const loadingBoundary = wrapper.find(LoadingBoundary)
     expect(loadingBoundary.exists()).toBeTruthy()
-    expect(loadingBoundary.props().childNodeFetchedPropName).toBe('assessmentHistory')
+    expect(loadingBoundary.props().childNodeFetchedPropName).toBe('assessments')
     expect(loadingBoundary.props().fetch).toBeDefined()
     expect(loadingBoundary.props().children.type).toBe('div')
   })
 
   it('does not update if the id does not change', () => {
-    const wrapper = render('XYZ')
+    const key = Math.random()
+    const wrapper = render(key)
     const firstFetch = wrapper.find(LoadingBoundary).props().fetch
     wrapper.setProps({ children: <span /> })
     const secondFetch = wrapper.find(LoadingBoundary).props().fetch

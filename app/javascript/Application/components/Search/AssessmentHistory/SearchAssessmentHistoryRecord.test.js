@@ -1,23 +1,23 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import SearchAssessmentHistoryRecord from './SearchAssessmentHistoryRecord'
-import AssessmentRecordInfo from '../common/AssessmentRecordInfo'
-import { assessmentInProgress, assessmentWithNoUpdateInfo } from '../Assessment/assessment.mocks.test'
-
-jest.mock('../Assessment/Assessment.service')
+import AssessmentRecordInfo from '../../common/AssessmentRecordInfo'
+import { assessmentInProgress, assessmentWithNoUpdateInfo } from '../../Assessment/assessment.mocks.test'
 
 const getShallowWrapper = assessment =>
   shallow(
     <SearchAssessmentHistoryRecord
       assessment={assessment}
-      navFrom="SEARCH"
+      navFrom={'SEARCH'}
+      key={1}
       inheritUrl={'/staff/0X5/clients/AznnyCs0X5/assessments/298750'}
+      updateAssessmentHistoryCallback={() => {}}
     />
   )
 
 describe('<SearchAssessmentHistoryRecord', () => {
   describe('In Progress Assessment', () => {
-    it('renders a AssessmentRecordInfo component', () => {
+    it('renders an AssessmentRecordInfo component', () => {
       // given + when
       const wrapper = getShallowWrapper(assessmentInProgress)
 
@@ -27,7 +27,7 @@ describe('<SearchAssessmentHistoryRecord', () => {
   })
 
   describe('Assessment with no updated_by info (create info only)', () => {
-    it('renders a AssessmentRecordInfo component', () => {
+    it('renders an AssessmentRecordInfo component', () => {
       // given + when
       const wrapper = getShallowWrapper(assessmentWithNoUpdateInfo)
 

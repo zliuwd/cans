@@ -95,7 +95,22 @@ div.warning-modal-footer.modal-footer
 .assessment-client-name
   font-weight: 600
 .popoverbody
-  font-size: 1.4rem
+  width: 18rem
+  padding: 0
+  > button
+    width: inherit
+    padding: .75rem 2rem
+    font-size: 1.3rem
+    font-weight: 600
+    text-align: left
+    cursor: pointer
+    color: $black
+    border: none
+    border-bottom: 1px solid $transparent-light-black
+  > button:last-child
+    border-bottom: none
+  > button:hover
+    background-color: $light-seafoam
 
 //********************
 // AssessmentRecordInfo

@@ -2,7 +2,8 @@ import React from 'react'
 import { SearchContainer } from './index'
 import { shallow } from 'enzyme'
 import PersonSearchForm from './PersonSearchForm'
-import SearchAssessmentHistory from './SearchAssessmentHistory'
+import SearchAssessmentHistoryLoadingBoundary from './AssessmentHistory/SearchAssessmentHistoryLoadingBoundary'
+import SearchAssessmentHistory from './AssessmentHistory/SearchAssessmentHistory'
 
 describe('<SearchContainer />', () => {
   describe('init SearchContainer', () => {
@@ -28,7 +29,11 @@ describe('<SearchContainer />', () => {
         expect(wrapper.find('h4').text()).toBe('Recently Updated CANS')
       })
 
-      it('renders with a <SearchAssessmentHistory /> component', () => {
+      it('renders a <SearchAssessmentHistoryLoadingBoundary /> component', () => {
+        expect(wrapper.find(SearchAssessmentHistoryLoadingBoundary).exists()).toBe(true)
+      })
+
+      it('renders a <SearchAssessmentHistory /> component', () => {
         expect(wrapper.find(SearchAssessmentHistory).exists()).toBe(true)
       })
     })

@@ -9,16 +9,23 @@ function AssessmentRecordStatus({ status }) {
   switch (status) {
     case AssessmentStatus.inProgress:
       return (
-        <div className="status-icon-wrapper">
+        <div className={'status-icon-wrapper'}>
           {statusIcon('circle-notch')}
           <span className={'assessment-in-progress'}>In Progress</span>
         </div>
       )
     case AssessmentStatus.completed:
       return (
-        <div className="status-icon-wrapper">
+        <div className={'status-icon-wrapper'}>
           {statusIcon('check-circle')}
           <span className={'assessment-completed'}>Complete</span>
+        </div>
+      )
+    case AssessmentStatus.deleted:
+      return (
+        <div className={'status-icon-wrapper'}>
+          {statusIcon('trash-alt')}
+          <span className={'assessment-deleted'}>Deleted</span>
         </div>
       )
     default:

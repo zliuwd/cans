@@ -44,5 +44,23 @@ module Assessments
         expect(assessments_repository.update(44, status: 'IN_PROGRESS')).to eq(response)
       end
     end
+
+    describe '#changes' do
+      it 'returns assessment history' do
+        allow(http_service).to receive(:call)
+          .with('/assessments/33/changelog', :get, token)
+          .and_return(response)
+        expect(assessments_repository.changes(33)).to eq(response)
+      end
+    end
+
+    describe '#delete' do
+      it 'returns an assessment' do
+        allow(http_service).to receive(:call)
+          .with('/assessments/33', :delete, token)
+          .and_return(response)
+        expect(assessments_repository.delete(33)).to eq(response)
+      end
+    end
   end
 end

@@ -7,6 +7,7 @@ import ClientAssessmentHistoryRecord from './ClientAssessmentHistoryRecord'
 import AddCansLink from '../AddCansLink'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
 import { navigation } from '../../../util/constants'
+import { LoadingState } from '../../../util/loadingHelper'
 
 const client = {
   identifier: '0PcpFQu0QM',
@@ -16,6 +17,8 @@ const defaultProps = {
   client: client,
   navFrom: navigation.CHILD_PROFILE,
   inheritUrl: '/staff/0X5/clients/AznnyCs0X5/assessments/2987507',
+  updateAssessmentHistoryCallback: () => {},
+  userId: '1',
 }
 
 const mockedAssessmentsWithEventDate = [
@@ -45,9 +48,10 @@ const mockedAssessmentsWithEventDate = [
   },
 ]
 
-const getWrapper = assessments => {
+const getWrapper = (assessments, loadingState = LoadingState.ready) => {
   const props = {
     assessments,
+    loadingState,
     ...defaultProps,
   }
   return shallow(<ClientAssessmentHistory {...props} />)
@@ -73,7 +77,7 @@ describe('<ClientAssessmentHistory', () => {
       expect(getLength(CardTitle)).toBe(1)
     })
 
-    it('renders a <AddCansLink /> in the Card header', async () => {
+    it('renders a <AddCansLink /> in the Card header', () => {
       const wrapper = getWrapper(mockedAssessmentsWithEventDate)
       expect(wrapper.find(AddCansLink).length).toBe(1)
     })
@@ -83,24 +87,24 @@ describe('<ClientAssessmentHistory', () => {
     })
 
     describe('when there are more than 3 assessments', () => {
-      it('renders 3 <ClientAssessmentHistoryRecord /> components', async () => {
+      it('renders 3 <ClientAssessmentHistoryRecord /> components', () => {
         const wrapper = getWrapper(mockedAssessmentsWithEventDate)
         expect(wrapper.find(ClientAssessmentHistoryRecord).length).toBe(3)
       })
 
-      it('renders a <ClientAssessmentHistoryTable /> component', async () => {
+      it('renders a <ClientAssessmentHistoryTable /> component', () => {
         const wrapper = getWrapper(mockedAssessmentsWithEventDate)
         expect(wrapper.find(ClientAssessmentHistoryTable).length).toBe(1)
       })
     })
 
     describe('when there are 0 assessments', () => {
-      it('renders 0 <ClientAssessmentHistoryRecord /> components', async () => {
+      it('renders 0 <ClientAssessmentHistoryRecord /> components', () => {
         const wrapper = getWrapper([])
         expect(wrapper.find(ClientAssessmentHistoryRecord).length).toBe(0)
       })
 
-      it('renders a <ClientAssessmentHistoryTable /> component', async () => {
+      it('renders a <ClientAssessmentHistoryTable /> component', () => {
         const wrapper = getWrapper([])
         expect(wrapper.find(ClientAssessmentHistoryTable).length).toBe(1)
       })
@@ -109,7 +113,7 @@ describe('<ClientAssessmentHistory', () => {
 
   describe('assessment history', () => {
     describe('when 4 assessments', () => {
-      it('renders 3 assessments in the correct order', async () => {
+      it('renders 3 assessments in the correct order', () => {
         // given + when
         const wrapper = getWrapper(mockedAssessmentsWithEventDate)
         const historyRecords = wrapper.find(ClientAssessmentHistoryRecord)
@@ -126,13 +130,24 @@ describe('<ClientAssessmentHistory', () => {
     })
 
     describe('when 0 assessments', () => {
-      it('renders the empty message', async () => {
+      it('renders the empty message', () => {
         // given + when
         const wrapper = getWrapper([])
 
         // then
         const message = wrapper.find('#no-data').text()
         expect(message).toBe('No assessments currently exist for this child/youth.')
+      })
+    })
+
+    describe('when assessments are loading', () => {
+      it('renders the loading message', () => {
+        // given + when
+        const wrapper = getWrapper([], LoadingState.waiting)
+
+        // then
+        const message = wrapper.find('#no-data').text()
+        expect(message).toBe('Loading assessments...')
       })
     })
   })

@@ -10,8 +10,7 @@ import { clientCaseReferralNumber } from '../Client/Client.helper'
 
 class AssessmentRecordInfo extends Component {
   renderInfo = (header, assessment, assessmentInfo) => {
-    const { status, person, id } = assessment
-
+    const { status, person, id, metadata } = assessment
     const {
       clientName,
       actionVerb,
@@ -21,15 +20,22 @@ class AssessmentRecordInfo extends Component {
       caseReferralNumber,
       serviceSourceUiId,
     } = assessmentInfo
-
     const statusHeader = <AssessmentRecordStatus status={status} />
     const clientNameHeader = <div className="assessment-record-client-name">{`${clientName}`}</div>
     const recordHeader = header === 'assessment-status' ? statusHeader : clientNameHeader
+    const { updateAssessmentHistoryCallback } = this.props
 
     return (
       <Card className="card-assessment-record-info">
         <CardBody>
-          <Ellipsis clientId={person.identifier} inheritUrl={this.props.inheritUrl} assessmentId={id} />
+          <Ellipsis
+            clientId={person.identifier}
+            assessmentId={id}
+            assessmentMetaData={metadata}
+            assessmentStatus={status}
+            updateAssessmentHistoryCallback={updateAssessmentHistoryCallback}
+            inheritUrl={this.props.inheritUrl}
+          />
           <div className={'assessment-info'}>
             {recordHeader}
             <p>
@@ -99,6 +105,7 @@ AssessmentRecordInfo.propTypes = {
   header: PropTypes.string.isRequired,
   inheritUrl: PropTypes.string.isRequired,
   navFrom: PropTypes.string.isRequired,
+  updateAssessmentHistoryCallback: PropTypes.func.isRequired,
   userId: PropTypes.string,
 }
 

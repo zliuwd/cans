@@ -7,7 +7,7 @@ import ChangeLogStatus from './ChangeLogStatus'
 import ChangeLogName from './ChangeLogName'
 import PrintChangeLog from './PrintChangeLog'
 import { formatClientName } from '../../Client'
-import { clientPropTypes, changeHistoryPropTypes } from './ChangeLogHelper'
+import { clientPropTypes, assessmentHistoryPropTypes } from './ChangeLogHelper'
 import { trimSafely } from '../../../util/formatters'
 import { isoToLocalDate } from '../../../util/dateHelper'
 import { buildSearchClientsButton } from '../../Header/PageHeaderButtonsBuilder'
@@ -38,7 +38,7 @@ class AssessmentChangeLog extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    this.updatePrintButtonIfNeeded(prevProps.assessmentWithHistory.changeHistory)
+    this.updatePrintButtonIfNeeded(prevProps.assessmentHistory)
   }
 
   componentWillUnmount() {
@@ -46,46 +46,37 @@ class AssessmentChangeLog extends Component {
   }
 
   initHeaderButtons(enablePrintButton) {
-    const { assessmentWithHistory, client, pageHeaderButtonsController } = this.props
-
-    const assessment = assessmentWithHistory.assessment ? assessmentWithHistory.assessment : {}
-    const assessmentId = assessment.id ? assessment.id : 0
-    const changeHistory = assessmentWithHistory.changeHistory ? assessmentWithHistory.changeHistory : []
-
-    const node = <PrintChangeLog history={changeHistory} client={client} assessmentId={assessmentId} />
+    const { assessmentHistory, client, pageHeaderButtonsController } = this.props
+    const assessmentId = assessmentHistory.length > 0 ? assessmentHistory[0].entity_id : 0
+    const node = <PrintChangeLog history={assessmentHistory} client={client} assessmentId={assessmentId} />
     const leftButton = buildSearchClientsButton()
     const rightButton = <PrintButton node={node} isEnabled={enablePrintButton} />
 
     pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
   }
 
-  updatePrintButtonIfNeeded(prevChangeHistory) {
-    const { assessmentWithHistory } = this.props
-    const changeHistory = assessmentWithHistory.changeHistory ? assessmentWithHistory.changeHistory : []
-    const changeHistoryUpdated = prevChangeHistory !== changeHistory
+  updatePrintButtonIfNeeded(prevAssessmentHistory) {
+    const { assessmentHistory } = this.props
 
-    if (changeHistoryUpdated) {
+    if (prevAssessmentHistory !== assessmentHistory) {
       const enablePrintButton = this.shouldPrintButtonBeEnabled()
       this.initHeaderButtons(enablePrintButton)
     }
   }
 
   shouldPrintButtonBeEnabled() {
-    const { assessmentWithHistory } = this.props
-    const changeHistory = assessmentWithHistory.changeHistory ? assessmentWithHistory.changeHistory : []
-    const changeHistoryLength = changeHistory.length
-    const enablePrintButton = changeHistoryLength > 0
+    const { assessmentHistory } = this.props
+    const assessmentHistoryLength = assessmentHistory.length
 
-    return enablePrintButton
+    return assessmentHistoryLength > 0
   }
 
-  buildChangeLogTitle(client, assessment) {
+  buildChangeLogTitle(client, assessmentHistory) {
     const clientName = formatClientName(client)
     const titleClientName = trimSafely(`CANS Change Log: ${clientName}`)
-    const assessmentDate = assessment.event_date
+    const assessmentDate = assessmentHistory.length > 0 ? assessmentHistory[0].event_date : ''
     const formattedDate = assessmentDate ? isoToLocalDate(assessmentDate) : ''
     const titleAssessmentDate = trimSafely(`Assessment Date: ${formattedDate}`)
-
     const changeLogTitle = (
       <div>
         <span>{titleClientName}</span>
@@ -97,26 +88,22 @@ class AssessmentChangeLog extends Component {
   }
 
   render() {
-    const { client } = this.props
-    const assessmentWithHistory = this.props.assessmentWithHistory ? this.props.assessmentWithHistory : {}
-    const assessment = assessmentWithHistory.assessment ? assessmentWithHistory.assessment : null
-    const changeHistory = assessmentWithHistory.changeHistory ? assessmentWithHistory.changeHistory : []
-    const changeHistoryLength = changeHistory.length
-
+    const { client, assessmentHistory } = this.props
+    const assessmentHistoryLength = assessmentHistory.length
     const minRows = 0
     const defaultPageSize = 10
-    const showPagination = changeHistoryLength > defaultPageSize
+    const showPagination = assessmentHistoryLength > defaultPageSize
 
-    return assessment && changeHistoryLength > 0 ? (
+    return assessmentHistoryLength > 0 ? (
       <Row>
         <Col xs="12">
           <Card className="change-log-card">
             <CardHeader className="change-log-header">
-              <CardTitle className="change-log-title">{this.buildChangeLogTitle(client, assessment)}</CardTitle>
+              <CardTitle className="change-log-title">{this.buildChangeLogTitle(client, assessmentHistory)}</CardTitle>
             </CardHeader>
             <CardBody className="pt-0 change-log-body">
               <DataGrid
-                data={changeHistory}
+                data={assessmentHistory}
                 showPagination={showPagination}
                 minRows={minRows}
                 defaultPageSize={defaultPageSize}
@@ -132,10 +119,7 @@ class AssessmentChangeLog extends Component {
 }
 
 AssessmentChangeLog.propTypes = {
-  assessmentWithHistory: PropTypes.shape({
-    changeHistory: PropTypes.arrayOf(changeHistoryPropTypes),
-    assessment: PropTypes.object,
-  }),
+  assessmentHistory: PropTypes.arrayOf(assessmentHistoryPropTypes),
   client: clientPropTypes.isRequired,
   pageHeaderButtonsController: PropTypes.shape({
     updateHeaderButtons: PropTypes.func.isRequired,
@@ -144,7 +128,7 @@ AssessmentChangeLog.propTypes = {
 }
 
 AssessmentChangeLog.defaultProps = {
-  assessmentWithHistory: {},
+  assessmentHistory: [],
 }
 
 export default AssessmentChangeLog

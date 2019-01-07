@@ -98,4 +98,17 @@ describe('AssessmentService', () => {
       apiPostSpy.mockReset()
     })
   })
+
+  describe('#delete', () => {
+    const apiDeleteSpy = jest.spyOn(apiEndpoints, 'apiDelete')
+
+    it('deletes an assessment', async () => {
+      const assessmentId = 50000
+      await AssessmentService.delete(assessmentId)
+      expect(apiDeleteSpy).toHaveBeenCalledTimes(1)
+      expect(apiDeleteSpy).toHaveBeenCalledWith(`/assessments/${assessmentId}`)
+
+      apiDeleteSpy.mockReset()
+    })
+  })
 })

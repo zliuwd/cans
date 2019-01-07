@@ -20,10 +20,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :assessments, only: [:show, :create, :update] do
+    resources :assessments, only: [:show, :create, :update, :delete] do
       collection do
         post '_search', to: 'assessments#search'
         get ':id/changes', to: 'assessments#changes'
+        delete ':id', to: 'assessments#delete'
       end
     end
 

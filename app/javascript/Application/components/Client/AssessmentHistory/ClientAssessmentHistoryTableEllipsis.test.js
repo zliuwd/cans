@@ -2,28 +2,21 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import ClientAssessmentHistoryTableEllipsis from './ClientAssessmentHistoryTableEllipsis'
 
-const getWrapper = props => shallow(<ClientAssessmentHistoryTableEllipsis {...props} />)
-
 describe('ClientAssessmentHistoryTableEllipsis', () => {
-  it('renders an Ellipsis when passed a valid assessment id', () => {
+  it('renders an Ellipsis when passed valid props', () => {
     const props = {
       original: {
         id: 1,
         person: { identifier: '123' },
+        metadata: {
+          allowed_operations: ['read', 'update', 'create', 'complete', 'write', 'delete'],
+        },
+        status: 'IN_PROGRESS',
         inheritUrl: '/staff/0X5',
+        updateAssessmentHistoryCallback: () => {},
       },
     }
-    const wrapper = getWrapper(props)
-
+    const wrapper = shallow(<ClientAssessmentHistoryTableEllipsis {...props} />)
     expect(wrapper.find('Ellipsis').exists()).toBe(true)
-  })
-
-  it('renders null if props are null ', () => {
-    const props = {
-      original: { id: null, person: null },
-    }
-    const wrapper = getWrapper(props)
-
-    expect(wrapper.find('Ellipsis').exists()).toBe(false)
   })
 })

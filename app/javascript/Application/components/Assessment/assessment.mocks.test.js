@@ -852,6 +852,25 @@ export const assessmentCompleted = {
   conducted_by: 'John Dow',
 }
 
+export const assessmentDeleted = {
+  id: 97500,
+  person: { id: 1, identifier: 'B2yE2Ao0X6' },
+  status: 'DELETED',
+  the_case: {
+    external_id: '4444-333-4444-88888888',
+  },
+  event_date: '2015-10-10',
+  updated_timestamp: '2015-06-06T15:37:32.000Z',
+  updated_by: {
+    first_name: 'Name 1',
+    last_name: 'Last_Name 1',
+  },
+  county: {
+    name: 'Alameda',
+  },
+  conducted_by: 'John Dow',
+}
+
 export const assessmentWithNoUpdateInfo = {
   id: 97502,
   person: {
@@ -886,6 +905,9 @@ export const assessmentInProgressWithCaseNumber = {
     suffix: 'Jr',
   },
   status: 'IN_PROGRESS',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write', 'delete'],
+  },
   service_source_ui_id: '4444-333-4444-88888888',
   service_source: 'CASE',
   created_timestamp: '2018-12-10T15:31:01.584Z',
@@ -911,6 +933,37 @@ export const assessmentCompletedWithCaseNumber = {
     suffix: 'Jr',
   },
   status: 'COMPLETED',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write', 'delete'],
+  },
+  service_source_ui_id: '4444-333-4444-88888888',
+  service_source: 'CASE',
+  created_timestamp: '2018-06-06T15:37:32.000Z',
+  event_date: '2018-01-05',
+  updated_timestamp: '2018-06-06T15:37:32.000Z',
+  updated_by: {
+    first_name: 'Name 2',
+    last_name: 'LastName 2',
+  },
+  county: {
+    name: 'Alameda',
+  },
+}
+
+export const assessmentDeletedWithCaseNumber = {
+  id: 97502,
+  person: {
+    id: 1,
+    identifier: '123',
+    first_name: 'Casey',
+    middle_name: 'Middle',
+    last_name: 'Test',
+    suffix: 'Jr',
+  },
+  status: 'DELETED',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write'],
+  },
   service_source_ui_id: '4444-333-4444-88888888',
   service_source: 'CASE',
   created_timestamp: '2018-06-06T15:37:32.000Z',
@@ -936,6 +989,9 @@ export const assessmentWithNoUpdateInfoWithCaseNumber = {
     suffix: 'Jr',
   },
   status: 'IN_PROGRESS',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write', 'delete'],
+  },
   service_source_ui_id: '4444-333-4444-88888888',
   service_source: 'CASE',
   created_timestamp: '2018-06-06T15:37:32.000Z',
@@ -961,6 +1017,9 @@ export const assessmentInProgressWithReferralNumber = {
     suffix: 'Jr',
   },
   status: 'IN_PROGRESS',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write', 'delete'],
+  },
   service_source_ui_id: '4444-333-4444-88888888',
   service_source: 'REFERRAL',
   created_timestamp: '2018-06-06T15:37:32.000Z',
@@ -986,6 +1045,37 @@ export const assessmentCompletedWithReferralNumber = {
     suffix: 'Jr',
   },
   status: 'COMPLETED',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write', 'delete'],
+  },
+  service_source_ui_id: '4444-333-4444-88888888',
+  service_source: 'REFERRAL',
+  created_timestamp: '2018-06-06T15:37:32.000Z',
+  event_date: '2018-01-05',
+  updated_timestamp: '2018-06-06T15:37:32.000Z',
+  updated_by: {
+    first_name: 'Name 2',
+    last_name: 'LastName 2',
+  },
+  county: {
+    name: 'Alameda',
+  },
+}
+
+export const assessmentDeletedWithReferralNumber = {
+  id: 97502,
+  person: {
+    id: 1,
+    identifier: '123',
+    first_name: 'Casey',
+    middle_name: 'Middle',
+    last_name: 'Test',
+    suffix: 'Jr',
+  },
+  status: 'DELETED',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write'],
+  },
   service_source_ui_id: '4444-333-4444-88888888',
   service_source: 'REFERRAL',
   created_timestamp: '2018-06-06T15:37:32.000Z',
@@ -1011,6 +1101,9 @@ export const assessmentWithNoUpdateInfoWithReferralNumber = {
     suffix: 'Jr',
   },
   status: 'IN_PROGRESS',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write', 'delete'],
+  },
   service_source_ui_id: '4444-333-4444-88888888',
   service_source: 'REFERRAL',
   created_timestamp: '2018-06-06T15:37:32.000Z',
@@ -1036,6 +1129,9 @@ export const assessmentInProgressWithNoClientandReferralNumber = {
     suffix: 'Jr',
   },
   status: 'IN_PROGRESS',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write', 'delete'],
+  },
   service_source_ui_id: '',
   service_source: '',
   created_timestamp: '2018-06-06T15:37:32.000Z',
@@ -1061,6 +1157,37 @@ export const assessmentCompletedWithNoClientandReferralNumber = {
     suffix: 'Jr',
   },
   status: 'COMPLETED',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write', 'delete'],
+  },
+  service_source_ui_id: '',
+  service_source: '',
+  created_timestamp: '2018-06-06T15:37:32.000Z',
+  event_date: '2018-01-05',
+  updated_timestamp: '2018-06-06T15:37:32.000Z',
+  updated_by: {
+    first_name: 'Name 2',
+    last_name: 'LastName 2',
+  },
+  county: {
+    name: 'Alameda',
+  },
+}
+
+export const assessmentDeletedWithNoClientandReferralNumber = {
+  id: 97502,
+  person: {
+    id: 1,
+    identifier: '123',
+    first_name: 'Casey',
+    middle_name: 'Middle',
+    last_name: 'Test',
+    suffix: 'Jr',
+  },
+  status: 'DELETED',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write'],
+  },
   service_source_ui_id: '',
   service_source: '',
   created_timestamp: '2018-06-06T15:37:32.000Z',
@@ -1086,6 +1213,9 @@ export const assessmentWithNoUpdateInfoWithNoClientandReferralNumber = {
     suffix: 'Jr',
   },
   status: 'IN_PROGRESS',
+  metadata: {
+    allowed_operations: ['read', 'update', 'create', 'complete', 'write', 'delete'],
+  },
   service_source_ui_id: '',
   service_source: '',
   event_date: '2018-01-05',
