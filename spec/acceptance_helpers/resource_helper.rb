@@ -12,6 +12,10 @@ module ResourceHelper
     '0PcpFQu0QM'
   end
 
+  def caseworker_client_identifier
+    find(:link, 'Case, Child 01 Test, Suff', wait: 15).click
+  end
+
   private
 
   def go_to_client_profile
@@ -343,6 +347,20 @@ module ResourceHelper
       '#domain12-expand'
     ]
     traumatic_domain.each { |element| find(element).click }
+  end
+
+  def verify_radio_buttons_on_assessment_header
+    find('#add-new-cans').click
+    expect(page).to have_content 'CANS Communimetric Assessment Form'
+    find('#age-0-5-button', wait: 15).click
+    find('#has-caregiver-yes').click
+    find('#can-release-control').click
+    substance_use_disorder_text = [
+      'By selecting NO, Items 7, 48, and EC 41',
+      '(Substance Use Disorder Items) from this CANS assessment',
+      'will be redacted when printed.'
+    ].join(' ')
+    expect(page).to have_content(substance_use_disorder_text, wait: 45)
   end
 
   def save_assessment_form_age_0_5
