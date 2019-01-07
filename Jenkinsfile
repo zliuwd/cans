@@ -8,7 +8,8 @@ JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID = '3ce810c0-b697-4ad1-a1b7-ad6
 switch(env.BUILD_JOB_TYPE) {
   case "master": buildMaster(); break;
   case "acceptance": buildAcceptance(); break;
-  case "regression": buildRegression(); break;
+  case "regression": buildRegression('integration', 'https://web.integration.cwds.io/cans'); break;
+  case "regressionStaging": buildRegression('staging','https://staging.cwds.ca.gov/cans'); break;
   default: buildPullRequest();
 }
 
@@ -68,11 +69,11 @@ def buildAcceptance() {
   }
 }
 
-def buildRegression() {
-  node('integration') {
+def buildRegression(nodeName, url) {
+  node(nodeName) {
     try {
       checkoutStage()
-      regressionTestIntStage()
+      regressionTestStage(url)
     } catch(Exception exception) {
       currentBuild.result = "FAILURE"
       throw exception
@@ -167,8 +168,8 @@ def acceptanceTestPreintStage() {
   }
 }
 
-def regressionTestIntStage() {
-  stage('Regression Test Int') {
+def regressionTestStage(url) {
+  stage('Regression Test') {
     withDockerRegistry([credentialsId: JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID]) {
       withCredentials([
         string(credentialsId: 'cans-supervisor-username', variable: 'SUPERVISOR_USERNAME'),
@@ -182,7 +183,7 @@ def regressionTestIntStage() {
         string(credentialsId: 'cans-non-caseworker-verification-code', variable: 'NON_CASEWORKER_VERIFICATION_CODE'),
         ]) {
         sh "docker-compose -f docker-compose.ci.yml up -d --build cans-test"
-        sh "docker-compose -f docker-compose.ci.yml exec -T --env NON_CASEWORKER_USERNAME=$NON_CASEWORKER_USERNAME --env NON_CASEWORKER_PASSWORD=$NON_CASEWORKER_PASSWORD --env NON_CASEWORKER_VERIFICATION_CODE=$NON_CASEWORKER_VERIFICATION_CODE --env SUPERVISOR_USERNAME=$SUPERVISOR_USERNAME --env SUPERVISOR_PASSWORD=$SUPERVISOR_PASSWORD --env SUPERVISOR_VERIFICATION_CODE=$SUPERVISOR_VERIFICATION_CODE --env CASEWORKER_USERNAME=$CASEWORKER_USERNAME --env CASEWORKER_PASSWORD=$CASEWORKER_PASSWORD --env CASEWORKER_VERIFICATION_CODE=$CASEWORKER_VERIFICATION_CODE --env REGRESSION_TEST=true --env CANS_WEB_BASE_URL=https://web.integration.cwds.io/cans cans-test bundle exec rspec spec/regression"
+        sh "docker-compose -f docker-compose.ci.yml exec -T --env NON_CASEWORKER_USERNAME=$NON_CASEWORKER_USERNAME --env NON_CASEWORKER_PASSWORD=$NON_CASEWORKER_PASSWORD --env NON_CASEWORKER_VERIFICATION_CODE=$NON_CASEWORKER_VERIFICATION_CODE --env SUPERVISOR_USERNAME=$SUPERVISOR_USERNAME --env SUPERVISOR_PASSWORD=$SUPERVISOR_PASSWORD --env SUPERVISOR_VERIFICATION_CODE=$SUPERVISOR_VERIFICATION_CODE --env CASEWORKER_USERNAME=$CASEWORKER_USERNAME --env CASEWORKER_PASSWORD=$CASEWORKER_PASSWORD --env CASEWORKER_VERIFICATION_CODE=$CASEWORKER_VERIFICATION_CODE --env REGRESSION_TEST=true --env CANS_WEB_BASE_URL=${url} cans-test bundle exec rspec spec/regression"
       }
     }
   }
