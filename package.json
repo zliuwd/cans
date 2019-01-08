@@ -38,7 +38,7 @@
     "react-input-mask": "^2.0.2",
     "react-router-dom": "^4.2.2",
     "react-stickyfill": "^0.2.3",
-    "react-widgets": "ca-cwds/react-widgets#react-widgets-v4.4.8-gitpkg-1",
+    "react-widgets": "ca-cwds/react-widgets#react-widgets-v4.4.8-gitpkg-2",
     "react-widgets-moment": "^4.0.20",
     "react-wood-duck": "^0.1.57",
     "reactstrap": "^6.0.1",

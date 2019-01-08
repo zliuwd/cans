@@ -7413,9 +7413,9 @@ react-widgets-moment@^4.0.20:
   version "4.0.20"
   resolved "https://registry.yarnpkg.com/react-widgets-moment/-/react-widgets-moment-4.0.20.tgz#0f51c15fd9395d21d7427ebf78324c6ba4851c0a"
 
-react-widgets@ca-cwds/react-widgets#react-widgets-v4.4.8-gitpkg-1:
+react-widgets@ca-cwds/react-widgets#react-widgets-v4.4.8-gitpkg-2:
   version "4.4.8"
-  resolved "https://codeload.github.com/ca-cwds/react-widgets/tar.gz/97ca1e17f97998f5be3526705825e9cdf8273b7a"
+  resolved "https://codeload.github.com/ca-cwds/react-widgets/tar.gz/c13925d168ce125bd4188224abeec227ab7a322d"
   dependencies:
     classnames "^2.2.6"
     date-arithmetic "^3.1.0"
