@@ -25,5 +25,6 @@ feature 'Index Page' do
     expect(page).not_to have_content('CANS')
     enter_credentials
     expect(page).not_to have_content('Assigned Staff', wait: 100)
+    logout
   end
 end

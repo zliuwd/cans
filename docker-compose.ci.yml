@@ -39,6 +39,40 @@ services:
       - 6379
     networks:
       - cans
+  dora:
+    image: cwds/dora:latest
+    hostname: dora
+    depends_on:
+      - perry
+      - elasticsearch
+    expose:
+      - 8080
+    environment:
+      SHIRO_CONFIG_PATH: /opt/cwds-dora/config/shiro.ini
+      ES_HOST: elasticsearch
+      ES_PORT: 9200
+      ES_NODES: elasticsearch:9200
+      PERRY_URL: http://perry:8080/perry/authn/login
+      LOGOUT_URL: http://perry:8080/perry/authn/logout
+      XPACK_ENABLED: 'true'
+      XPACK_USER: elastic
+      XPACK_PASSWORD: changeme
+      PERRY_VALIDATION_URL: http://perry:8080/perry/authn/validate
+    networks:
+      - cans
+
+  elasticsearch:
+    image: cwds/elasticsearch_xpack_data:latest
+    hostname: elasticsearch
+    depends_on:
+      - perry
+    expose:
+      - 9200
+      - 9300
+    networks:
+      - cans
+    environment:
+      TOKEN_VALIDATION_URL: http://perry:8080/perry/authn/validate?token=
 
   cans-api:
     image: cwds/cans-api:0.11.2_392-RC
@@ -87,10 +121,12 @@ services:
       CANS_AUTHORIZATION_ENABLED: ${CANS_AUTHORIZATION_ENABLED}
       REDIS_HOST: 'redis'
       REDIS_PORT: 6379
+      DORA_API_URL: 'http://dora:8080'
     depends_on:
       - redis
       - cans-api
       - perry
+      - dora
     tty: true
     stdin_open: true
     networks:

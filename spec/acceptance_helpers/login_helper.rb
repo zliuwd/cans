@@ -99,4 +99,35 @@ module LoginHelper
       ]
     }
   end
+
+  def non_caseworker_json
+    {
+      'user': 'RACFID',
+      'staffId': '0X5',
+      'roles': ['CWS-admin', 'Supervisor', 'CANS-worker'],
+      'county_code': '56',
+      'county_cws_code': '1123',
+      'county_name': 'Ventura',
+      'privileges': [
+        'CWS Case Management System',
+        'Resource Management',
+        'Resource Mgmt Placement Facility Maint',
+        'Sealed',
+        'Sensitive Persons',
+        'Snapshot-rollout',
+        'Hotline-rollout',
+        'Facility-search-rollout',
+        'CANS-rollout',
+        'CANS-client-read',
+        'CANS-client-search',
+        'CANS-assessment-read',
+        'CANS-assessment-create',
+        'CANS-assessment-in-progress-update',
+        'CANS-assessment-in-progress-delete',
+        'CANS-assessment-completed-delete',
+        'CANS-assessment-complete',
+        'development-not-in-use'
+      ]
+    }
+  end
 end
