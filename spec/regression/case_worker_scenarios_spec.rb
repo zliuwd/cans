@@ -3,32 +3,47 @@
 require 'acceptance_helper'
 require 'feature'
 
-feature 'Assessment Form completion 0 to 5' do
+CLIENT_NAME = 'Case, Child 01 Test, Suff'
+
+feature 'Case Worker Functionality' do
   before(:all) do
     @domain_total_count = []
-    login
   end
 
   after(:all) do
-    @domain_total_count = []
     logout
   end
 
   scenario 'Fill out and complete assessment from 0 to 5' do
+    login
     fill_out_form_then_check_domain_total
     warning_and_summary_card_shown_after_complete_button_clicked
     verify_the_tool_tip_of_summary_card
     verify_the_content_of_summary_card
   end
 
+  scenario 'Case worker login, creates assessment and logs out' do
+    login
+    expect(page).to have_content('CANS')
+    expect(page).to have_content('Client List')
+    visit_client_profile(CLIENT_NAME)
+    expect(page).to have_content('ADD CANS')
+    verify_radio_buttons_on_assessment_header
+    fetch_challenges_domain
+    click_button 'Save'
+    visit_client_profile(CLIENT_NAME)
+    visit_client_profile(CLIENT_NAME)
+    expect(page).to have_content('In Progress')
+  end
+
   def fill_out_form_then_check_domain_total
-    visit_client_profile('Case, Child 01 Test, Suff')
-    expect(page).to have_content('ADD CANS', wait: 10)
+    visit_client_profile(CLIENT_NAME)
+    expect(page).to have_content('ADD CANS')
     create_assessment_form
     find('#age-0-5-button').click # avoid stuck
-    find('#age-0-5-button', wait: 30).click
+    find('#age-0-5-button').click
     expect(page.find('#age-0-5-button')[:class].include?('age-button-selected')).to be(true)
-    expect(page).to have_content('Age Range 0-5', wait: 10)
+    expect(page).to have_content('Age Range 0-5')
     fill_assessment_form_age_0_5
     domain_totals = page.all('span.domain-score-badge').map(&:text)
     expect(domain_totals).to eq(@domain_total_count)
@@ -44,7 +59,7 @@ feature 'Assessment Form completion 0 to 5' do
     expect(page).to have_content 'COMPLETE'
     find('#submit-assessment').click
     click_button 'I Agree'
-    expect(page).to have_content('CANS Summary', wait: 10)
+    expect(page).to have_content('CANS Summary')
   end
 
   def verify_the_tool_tip_of_summary_card
@@ -52,7 +67,7 @@ feature 'Assessment Form completion 0 to 5' do
     tip_text = 'Ratings of 0 or 1 in the Strengths Domain. These are central or useful in planning.'
     find('span', text: 'Strengths').click # avoid stuck
     first_tip.hover
-    expect(page).to have_content(tip_text, wait: 10)
+    expect(page).to have_content(tip_text)
   end
 
   def verify_the_content_of_summary_card

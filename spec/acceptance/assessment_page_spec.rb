@@ -2,20 +2,22 @@
 
 require 'acceptance_helper'
 
+CLIENT_IDENTIFIER = '0PcpFQu0QM'
+
 feature 'Assessment Page' do
   before(:all) do
     login
   end
 
   scenario 'can fill and complete assessment' do
-    visit "/clients/#{client_identifier}"
-    expect(page).to have_content('ADD CANS', wait: 60)
-    post_new_assessment
+    visit "/clients/#{CLIENT_IDENTIFIER}"
+    expect(page).to have_content('ADD CANS')
+    post_new_assessment(CLIENT_IDENTIFIER)
     expect(page).to have_content 'Complete'
   end
 
   scenario 'Assessment Form page render alert message when page is refreshed' do
-    visit "/clients/#{client_identifier}/assessments"
+    visit "/clients/#{CLIENT_IDENTIFIER}/assessments"
     click_button 'Select date'
     page.driver.browser.navigate.refresh
     alert = page.driver.browser.switch_to.alert

@@ -4,25 +4,17 @@ require 'faker'
 require 'active_support/time'
 
 module ResourceHelper
-  def post_new_assessment
-    fill_and_save_assessment_form
-  end
-
-  def client_identifier
-    '0PcpFQu0QM'
-  end
-
-  def caseworker_client_identifier
-    find(:link, 'Case, Child 01 Test, Suff', wait: 15).click
+  def post_new_assessment(client_identifier)
+    fill_and_save_assessment_form(client_identifier)
   end
 
   private
 
-  def go_to_client_profile
+  def go_to_client_profile(client_identifier)
     find(:xpath, "//a[@href='/cans/clients/#{client_identifier}']").click
   end
 
-  def fill_and_save_assessment_form
+  def fill_and_save_assessment_form(client_identifier)
     find('#add-new-cans').click
     expect(page).to have_content 'CANS Communimetric Assessment Form'
     find('#age-6-21-button').click
@@ -68,13 +60,13 @@ module ResourceHelper
       '#ADJUSTMENT_TO_TRAUMA-item-expand',
       '#domain0-expand'
     ]
-    behavioral_domain.each { |element| find(element, wait: 15).click }
+    behavioral_domain.each { |element| find(element).click }
     click_button 'Save'
     expect(page).to have_content 'Success! CANS assessment has been saved'
-    fill_and_submit_assessment_form_6_21
+    fill_and_submit_assessment_form_6_21(client_identifier)
   end
 
-  def fill_and_submit_assessment_form_6_21
+  def fill_and_submit_assessment_form_6_21(client_identifier)
     fetch_life_domain
     fetch_risk_domain
     fetch_cultural_domain
@@ -84,9 +76,9 @@ module ResourceHelper
     find('#submit-assessment').click
     click_button 'I Agree'
     expect(page).to have_content 'Success! CANS assessment has been completed.'
-    go_to_client_profile
-    expect(page).to have_content('ADD CANS', wait: 60)
-    save_assessment_form_age_0_5
+    go_to_client_profile(client_identifier)
+    expect(page).to have_content('ADD CANS')
+    save_assessment_form_age_0_5(client_identifier)
   end
 
   def fetch_life_domain
@@ -363,16 +355,16 @@ module ResourceHelper
     expect(page).to have_content(substance_use_disorder_text, wait: 45)
   end
 
-  def save_assessment_form_age_0_5
+  def save_assessment_form_age_0_5(client_identifier)
     find('#add-new-cans').click
     expect(page).to have_content 'CANS Communimetric Assessment Form'
     find('#age-0-5-button').click
     find('#age-0-5-button').click # doing it twice since sometimes it fails on the first attempt
     find('#has-caregiver-yes').click
-    fill_and_complete_assessment_form_age_0_5
+    fill_and_complete_assessment_form_age_0_5(client_identifier)
   end
 
-  def fill_and_complete_assessment_form_age_0_5
+  def fill_and_complete_assessment_form_age_0_5(client_identifier)
     fetch_challenges_domain
     fetch_functioning_domain
     fetch_risk_behaviors_domain
@@ -383,7 +375,7 @@ module ResourceHelper
     fetch_minor_traumatic_domain
     find('#submit-assessment').click
     click_button 'I Agree'
-    go_to_client_profile
+    go_to_client_profile(client_identifier)
   end
 
   def fetch_challenges_domain

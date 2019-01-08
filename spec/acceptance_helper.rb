@@ -31,7 +31,7 @@ Capybara.configure do |config|
   include ResourceHelper
   include CreateInProcessFormHelper
   include CompletionResourceHelper
-  config.default_max_wait_time = 10
+  config.default_max_wait_time = 30
   config.default_driver = :selenium
   config.app_host = ENV.fetch('CANS_WEB_BASE_URL', 'http://localhost:3000')
 end
