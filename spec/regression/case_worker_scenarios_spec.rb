@@ -3,8 +3,6 @@
 require 'acceptance_helper'
 require 'feature'
 
-CLIENT_NAME = 'Case, Child 01 Test, Suff'
-
 feature 'Case Worker Functionality' do
   before(:all) do
     @domain_total_count = []

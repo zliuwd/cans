@@ -8,6 +8,10 @@ module ResourceHelper
     fill_and_save_assessment_form(client_identifier)
   end
 
+  def visit_staff_member_dashboard(staff_member_name)
+    find(:link, staff_member_name, wait: 15).click
+  end
+
   private
 
   def go_to_client_profile(client_identifier)

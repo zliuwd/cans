@@ -10,6 +10,9 @@ require 'acceptance_helpers/form_completion_helper'
 require 'acceptance_helpers/login_helper'
 require 'acceptance_helpers/prod_login_helper'
 
+CLIENT_NAME = 'Case, Child 01 Test, Suff'
+STAFF_NAME = 'Regression, QA02'
+
 def acceptance_helper
   return LoginHelper unless ENV.fetch('REGRESSION_TEST', false)
   ProdLoginHelper
