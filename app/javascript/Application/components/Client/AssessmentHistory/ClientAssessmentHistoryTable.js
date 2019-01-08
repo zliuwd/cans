@@ -9,20 +9,13 @@ import ClientAssessmentHistoryTableDate from './ClientAssessmentHistoryTableDate
 import ClientAssessmentHistoryTableUpdatedBy from './ClientAssessmentHistoryTableUpdatedBy'
 import ClientAssessmentHistoryTableEllipsis from './ClientAssessmentHistoryTableEllipsis'
 
-const columnWidths = [0, 190, 250, 140, 170, 260, 35]
+const columnWidths = [190, 250, 140, 170, 260, 35]
 const columnConfig = [
-  {
-    Header: '',
-    id: 'assessmentTableCreatedDate',
-    width: columnWidths[0],
-    accessor: 'created_timestamp',
-    show: false,
-  },
   {
     Header: 'Assessment Date',
     id: 'assessmentTableEventDate',
     Cell: ClientAssessmentHistoryTableLink,
-    width: columnWidths[1],
+    width: columnWidths[0],
     className: 'text-center',
     headerClassName: 'text-center',
     accessor: assessment => assessment,
@@ -40,7 +33,7 @@ const columnConfig = [
   {
     Header: 'Case/Referral Number',
     Cell: ClientAssessmentHistoryTableCaseNumber,
-    width: columnWidths[2],
+    width: columnWidths[1],
     className: 'text-center',
     headerClassName: 'text-center',
     accessor: 'service_source_ui_id',
@@ -49,7 +42,7 @@ const columnConfig = [
     Header: 'County',
     id: 'assessmentTableCounty',
     Cell: ClientAssessmentHistoryTableCountyName,
-    width: columnWidths[3],
+    width: columnWidths[2],
     className: 'text-center',
     headerClassName: 'text-center',
     accessor: assessment => {
@@ -60,7 +53,7 @@ const columnConfig = [
     Header: 'Last Updated',
     id: 'assessmentTableLastUpdated',
     Cell: ClientAssessmentHistoryTableDate,
-    width: columnWidths[4],
+    width: columnWidths[3],
     className: 'text-center',
     headerClassName: 'text-center',
     accessor: assessment => {
@@ -78,7 +71,7 @@ const columnConfig = [
     Header: 'Updated By',
     id: 'assessmentTableUpdatedBy',
     Cell: ClientAssessmentHistoryTableUpdatedBy,
-    width: columnWidths[5],
+    width: columnWidths[4],
     className: 'text-center',
     headerClassName: 'text-center',
     accessor: assessment => {
@@ -90,7 +83,7 @@ const columnConfig = [
   {
     Header: '',
     Cell: ClientAssessmentHistoryTableEllipsis,
-    width: columnWidths[6],
+    width: columnWidths[5],
     className: 'text-center',
     headerClassName: 'text-center',
     sortable: false,
@@ -99,7 +92,7 @@ const columnConfig = [
 
 const ClientAssessmentHistoryTable = props => {
   const { assessments, navFrom, inheritUrl, userId, updateAssessmentHistoryCallback } = props
-  const columnSort = [{ id: 'assessmentTableEventDate', desc: true }, { id: 'assessmentTableCreatedDate', desc: true }]
+  const columnSort = [{ id: 'assessmentTableEventDate', desc: true }]
   const assessmentsLength = assessments.length
   const minRows = 0
   const defaultPageSize = 10

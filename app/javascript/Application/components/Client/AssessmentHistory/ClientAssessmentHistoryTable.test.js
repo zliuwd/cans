@@ -149,10 +149,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
 
     describe('Default Sorted', () => {
       it('sets the default sorted column to the assessment date', () => {
-        expect(dataGrid.props().defaultSorted).toEqual([
-          { id: 'assessmentTableEventDate', desc: true },
-          { id: 'assessmentTableCreatedDate', desc: true },
-        ])
+        expect(dataGrid.props().defaultSorted).toEqual([{ id: 'assessmentTableEventDate', desc: true }])
       })
     })
 
@@ -174,22 +171,11 @@ describe('<ClientAssessmentHistoryTable />', () => {
     })
 
     describe('Column Config', () => {
-      describe('Assessment Creation Date', () => {
-        it('passes the correct column  config', () => {
-          const assessmentTableColumnConfig = dataGrid.props().columns[0]
-          expect(assessmentTableColumnConfig.Header).toBe('')
-          expect(assessmentTableColumnConfig.id).toBe('assessmentTableCreatedDate')
-          expect(assessmentTableColumnConfig.width).toBe(0)
-          expect(assessmentTableColumnConfig.accessor).toBe('created_timestamp')
-          expect(assessmentTableColumnConfig.show).toBe(false)
-        })
-      })
-
       describe('Assessment Date', () => {
         it('passes the correct column config', () => {
           const assessmentA = { id: 1, event_date: '2019-01-06' }
 
-          const assessmentTableColumnConfig = dataGrid.props().columns[1]
+          const assessmentTableColumnConfig = dataGrid.props().columns[0]
           expect(assessmentTableColumnConfig.Header).toBe('Assessment Date')
           expect(assessmentTableColumnConfig.id).toBe('assessmentTableEventDate')
           expect(assessmentTableColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableLink)
@@ -205,7 +191,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
               it('sorts assessment A before assessment B', () => {
                 const assessmentA = { id: 1, event_date: '2019-01-06' }
                 const assessmentB = { id: 2, event_date: '2019-01-05' }
-                const assessmentTableColumnConfig = dataGrid.props().columns[1]
+                const assessmentTableColumnConfig = dataGrid.props().columns[0]
                 expect(assessmentTableColumnConfig.sortMethod(assessmentA, assessmentB)).toBe(1)
               })
             })
@@ -214,7 +200,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
               it('sorts assessment B before assessment A', () => {
                 const assessmentA = { id: 1, event_date: '2019-01-06' }
                 const assessmentB = { id: 2, event_date: '2019-01-07' }
-                const assessmentTableColumnConfig = dataGrid.props().columns[1]
+                const assessmentTableColumnConfig = dataGrid.props().columns[0]
                 expect(assessmentTableColumnConfig.sortMethod(assessmentA, assessmentB)).toBe(-1)
               })
             })
@@ -233,7 +219,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
                   event_date: '2019-01-06',
                   created_timestamp: '2019-01-05T03:36:37.552Z',
                 }
-                const assessmentTableColumnConfig = dataGrid.props().columns[1]
+                const assessmentTableColumnConfig = dataGrid.props().columns[0]
                 expect(assessmentTableColumnConfig.sortMethod(assessmentA, assessmentB)).toBe(1)
               })
             })
@@ -250,7 +236,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
                   event_date: '2019-01-06',
                   created_timestamp: '2019-01-07T03:36:37.552Z',
                 }
-                const assessmentTableColumnConfig = dataGrid.props().columns[1]
+                const assessmentTableColumnConfig = dataGrid.props().columns[0]
                 expect(assessmentTableColumnConfig.sortMethod(assessmentA, assessmentB)).toBe(-1)
               })
             })
@@ -260,7 +246,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
 
       describe('Case/Referral Number', () => {
         it('passes the correct column config', () => {
-          const assessmentTableColumnConfig = dataGrid.props().columns[2]
+          const assessmentTableColumnConfig = dataGrid.props().columns[1]
           expect(assessmentTableColumnConfig.Header).toBe('Case/Referral Number')
           expect(assessmentTableColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableCaseNumber)
           expect(assessmentTableColumnConfig.width).toEqual(250)
@@ -272,7 +258,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
 
       describe('County', () => {
         it('passes the correct column config', () => {
-          const assessmentTableColumnConfig = dataGrid.props().columns[3]
+          const assessmentTableColumnConfig = dataGrid.props().columns[2]
           expect(assessmentTableColumnConfig.Header).toBe('County')
           expect(assessmentTableColumnConfig.id).toBe('assessmentTableCounty')
           expect(assessmentTableColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableCountyName)
@@ -285,7 +271,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
 
       describe('Last Updated', () => {
         it('passes the correct column config', () => {
-          const assessmentTableColumnConfig = dataGrid.props().columns[4]
+          const assessmentTableColumnConfig = dataGrid.props().columns[3]
           expect(assessmentTableColumnConfig.Header).toBe('Last Updated')
           expect(assessmentTableColumnConfig.id).toBe('assessmentTableLastUpdated')
           expect(assessmentTableColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableDate)
@@ -315,7 +301,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
             it('sorts date A before date B', () => {
               const dateA = '2018-12-17T23:27:44.616Z'
               const dateB = '2018-12-16T23:27:44.616Z'
-              const assessmentTableColumnConfig = dataGrid.props().columns[4]
+              const assessmentTableColumnConfig = dataGrid.props().columns[3]
 
               expect(assessmentTableColumnConfig.sortMethod(dateA, dateB)).toBe(1)
             })
@@ -325,7 +311,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
             it('sorts date B before date A', () => {
               const dateA = '2018-12-15T23:27:44.616Z'
               const dateB = '2018-12-16T23:27:44.616Z'
-              const assessmentTableColumnConfig = dataGrid.props().columns[4]
+              const assessmentTableColumnConfig = dataGrid.props().columns[3]
 
               expect(assessmentTableColumnConfig.sortMethod(dateA, dateB)).toBe(-1)
             })
@@ -335,7 +321,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
 
       describe('Updated By', () => {
         it('passes the correct column config', () => {
-          const assessmentTableColumnConfig = dataGrid.props().columns[5]
+          const assessmentTableColumnConfig = dataGrid.props().columns[4]
           expect(assessmentTableColumnConfig.Header).toBe('Updated By')
           expect(assessmentTableColumnConfig.id).toBe('assessmentTableUpdatedBy')
           expect(assessmentTableColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableUpdatedBy)
@@ -358,7 +344,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
 
       describe('Ellipsis', () => {
         it('passes the correct column config', () => {
-          const assessmentTableColumnConfig = dataGrid.props().columns[6]
+          const assessmentTableColumnConfig = dataGrid.props().columns[5]
           expect(assessmentTableColumnConfig.Header).toBe('')
           expect(assessmentTableColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableEllipsis)
           expect(assessmentTableColumnConfig.width).toEqual(35)
