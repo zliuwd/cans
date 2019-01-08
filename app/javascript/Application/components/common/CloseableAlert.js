@@ -51,6 +51,7 @@ export class CloseableAlert extends Component {
         {isCloseable && (
           <div className="float-right">
             <i
+              aria-label="Close Alert"
               className="fa fa-times close-icon"
               onClick={this.handleCloseAlert}
               onKeyPress={this.handleCloseAlert}

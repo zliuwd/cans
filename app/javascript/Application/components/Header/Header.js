@@ -4,13 +4,14 @@ import { GlobalHeader } from 'react-wood-duck'
 import { trimSafely } from '../../util/formatters'
 import { logoutUrl } from '../../util/navigationUtil'
 import UserAccountService from '../common/UserAccountService'
+import { Icon } from '@cwds/components'
 
 class Header extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       userName: '',
-      userInitials: '..',
+      staffId: '',
     }
   }
 
@@ -25,16 +26,15 @@ class Header extends React.Component {
   }
 
   onFetchSuccess = staffPerson => {
-    this.updateNameAndInitials(staffPerson)
+    this.updateName(staffPerson)
     this.invokeCallback(staffPerson.staff_id)
   }
 
-  updateNameAndInitials = staffPerson => {
+  updateName = staffPerson => {
     const userName = this.parseUserName(staffPerson)
-    const userInitials = this.parseUserInitials(staffPerson)
     this.setState({
       userName,
-      userInitials,
+      staffId: staffPerson.staff_id,
     })
   }
 
@@ -42,14 +42,6 @@ class Header extends React.Component {
     const firstName = trimSafely(staffPerson.first_name)
     const lastName = trimSafely(staffPerson.last_name)
     return `${firstName} ${lastName}`
-  }
-
-  parseUserInitials = staffPerson => {
-    const firstName = trimSafely(staffPerson.first_name)
-    const firstLetter = firstName.length > 0 ? firstName[0] : ''
-    const lastName = trimSafely(staffPerson.last_name)
-    const secondLetter = lastName.length > 0 ? lastName[0] : ''
-    return String(firstLetter) + secondLetter
   }
 
   invokeCallback = staffId => {
@@ -64,12 +56,12 @@ class Header extends React.Component {
   }
 
   render = () => {
-    const { userName, userInitials } = this.state
+    const { userName, staffId } = this.state
     return (
       <GlobalHeader
         profileName={userName}
-        profileId={userInitials}
-        profileAvatar={userInitials}
+        profileId={staffId}
+        profileAvatar={<Icon name="user" color="white" />}
         logoutCallback={this.logout}
       />
     )

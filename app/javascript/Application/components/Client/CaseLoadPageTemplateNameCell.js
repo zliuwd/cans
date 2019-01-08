@@ -4,11 +4,7 @@ import { Link } from 'react-router-dom'
 
 const CaseLoadPageTemplateNameCell = props => {
   return (
-    <Link
-      id="clientName"
-      key={props.original.identifier}
-      to={`/staff/${props.column.rol}/clients/${props.original.identifier}`}
-    >
+    <Link key={props.original.identifier} to={`/staff/${props.column.rol}/clients/${props.original.identifier}`}>
       {props.value}
     </Link>
   )

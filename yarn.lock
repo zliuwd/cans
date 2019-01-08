@@ -132,15 +132,15 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@cwds/components@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@cwds/components/-/components-0.6.0.tgz#7877c70317280699c631fb828fca95e31a1d11d6"
-  integrity sha512-dE/cNtJ9bMvTnQ09pCN1u9bAXnmIjQeO0PrOvEQF+SC9h3558eaM9VQiOvx156G1wYBZh+20ozBv61iCm+jw9Q==
+"@cwds/components@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@cwds/components/-/components-0.6.1.tgz#d4687b8166454cfc1860b75b24f074f101356cdf"
+  integrity sha512-k3O4juQo54sK2zURwMVmt6c9MqSzG7IuwycoutIvmXaqmKFKH8IgESpBqmUyMiJ+gTvkho1n0k6E0NgRCCLwOw==
   dependencies:
-    "@cwds/core" "^0.6.0"
-    "@cwds/datagrid" "^0.6.0"
-    "@cwds/icons" "^0.6.0"
-    "@cwds/reactstrap" "^0.6.0"
+    "@cwds/core" "^0.6.1"
+    "@cwds/datagrid" "^0.6.1"
+    "@cwds/icons" "^0.6.1"
+    "@cwds/reactstrap" "^0.6.1"
     bootstrap "^4.1.3"
     classnames "^2.2.6"
     lodash.omit "^4.5.0"
@@ -154,19 +154,19 @@
   resolved "https://registry.yarnpkg.com/@cwds/core/-/core-0.5.6.tgz#9061e4c26b06b099d58399a67a54d65ef1ec5e35"
   integrity sha512-GynEUV1NKFrJVdJt6GnWyhAw0S1BtwyId1a2kU4ex3n9J+EG2j501VyO1kAUvA5hFjUHyLSUlFWdwAVLfi4ryg==
 
-"@cwds/core@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@cwds/core/-/core-0.6.0.tgz#1c0a376dd10db6b1f0394a999569f6b4fa0c4bf8"
-  integrity sha512-NVFkjGgcwLpcuBcjIm7r40P2D5adcRmFqbx7BKC6wUzHOSS06zRNTon3UmDiY840+8OaIvQKcV2E4FsElX8S3A==
+"@cwds/core@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@cwds/core/-/core-0.6.1.tgz#8ca35c56dd9d9cdc8af4a315aef8b03f6cd843a4"
+  integrity sha512-13eUD7GXmGk1iK/PB0LhI14M6389HgnEOjNsVoK1c/UqWKpdfA0Z9YAgUuIApVZzBwC5BSaZWGSvTiAmD8E9KQ==
 
-"@cwds/datagrid@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@cwds/datagrid/-/datagrid-0.6.0.tgz#6c07f37d5106abcff5f6eb23b820287a18b786f8"
-  integrity sha512-Ju2kSPPINJ0i5hHdiD10+X5EoUWR2x1cnaYgJ9BHr4Z8QKeCOVdsSEACANBJi40MbdeOkm+pQEIHuVs5e6UJGA==
+"@cwds/datagrid@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@cwds/datagrid/-/datagrid-0.6.1.tgz#208e50fc69b62ba85e0323c4eca4aa381da661c7"
+  integrity sha512-8G2AFBd3iy+wIo1uxSFCg5Z+nHHHOw7esfAtDOLgIcdehiGy/9mZTRvZWGnSo55yZdUi1ORkodjb0pZ2vmODBQ==
   dependencies:
-    "@cwds/core" "^0.6.0"
-    "@cwds/icons" "^0.6.0"
-    "@cwds/reactstrap" "^0.6.0"
+    "@cwds/core" "^0.6.1"
+    "@cwds/icons" "^0.6.1"
+    "@cwds/reactstrap" "^0.6.1"
     bootstrap "^4.1.3"
     classnames "^2.2.6"
     lodash.omit "^4.5.0"
@@ -174,21 +174,21 @@
     react-select "^2.1.1"
     react-table "^6.8.6"
 
-"@cwds/icons@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@cwds/icons/-/icons-0.6.0.tgz#4d9b27efc7256c426199457f141693b705da34b2"
-  integrity sha512-Qn+7+Lzay4AjjgWoYELtHamcFIHxMGvA09NJny2+WuAHml3O1IWCFnSa2QA0+v1xu+4o6nWoZ6HgXtAQUNb42w==
+"@cwds/icons@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@cwds/icons/-/icons-0.6.1.tgz#84acdd0c7edda7f31d725f2d5fdf76f0907a8532"
+  integrity sha512-ULUPAYUQpFLFCfbGSxKtJkKxEEPHuBAEyBdTrwQvQwhaehXK5825gI4ovNoNLZt6m/7+05qDdGIY7oGrLwbQnQ==
   dependencies:
-    "@cwds/core" "^0.6.0"
+    "@cwds/core" "^0.6.1"
     "@fortawesome/fontawesome-svg-core" "^1.2.5"
     "@fortawesome/free-regular-svg-icons" "^5.5.0"
     "@fortawesome/free-solid-svg-icons" "^5.5.0"
     "@fortawesome/react-fontawesome" "^0.1.3"
 
-"@cwds/reactstrap@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@cwds/reactstrap/-/reactstrap-0.6.0.tgz#2a41358a58406258415ba4eabe6629700599f64e"
-  integrity sha512-BSrrSt7IdMpvmALnssGmG0j8m8YJqDGhsVMv2uKhPuMMg/MVS4xKLN9SOAXub9qDCFJ8DsdKYvk0Y2Cw8hsTog==
+"@cwds/reactstrap@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@cwds/reactstrap/-/reactstrap-0.6.1.tgz#c1c287cc2e4cba05f68dfa5e5a5ba9e2bb45cd7a"
+  integrity sha512-k5V8eHwXizbVxmqaOlbLy6kV58ghgGpQ71AwVumuGaeZ3aWEGvx7FVIPFw1+Q4P0ccd7DuVpxCPVN7BFBJwR2A==
   dependencies:
     reactstrap "^6.5.0"
 
@@ -7413,9 +7413,9 @@ react-widgets-moment@^4.0.20:
   version "4.0.20"
   resolved "https://registry.yarnpkg.com/react-widgets-moment/-/react-widgets-moment-4.0.20.tgz#0f51c15fd9395d21d7427ebf78324c6ba4851c0a"
 
-react-widgets@^4.4.4:
-  version "4.4.4"
-  resolved "https://registry.yarnpkg.com/react-widgets/-/react-widgets-4.4.4.tgz#0d6905e9971e4117e8082479f72ac5a08d756cf5"
+react-widgets@ca-cwds/react-widgets#react-widgets-v4.4.8-gitpkg-1:
+  version "4.4.8"
+  resolved "https://codeload.github.com/ca-cwds/react-widgets/tar.gz/97ca1e17f97998f5be3526705825e9cdf8273b7a"
   dependencies:
     classnames "^2.2.6"
     date-arithmetic "^3.1.0"

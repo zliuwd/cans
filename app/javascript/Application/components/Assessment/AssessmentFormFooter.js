@@ -10,7 +10,7 @@ class AssessmentFormFooter extends PureComponent {
     const { isSubmitButtonEnabled, onCancelClick, onSubmitAssessment } = this.props
     return (
       <div className={'form-footer'}>
-        <Button id={'cancel-assessment'} color={'link'} className={'button-fix-link'} onClick={onCancelClick}>
+        <Button id="cancel-assessment" color="secondary" className="button-fix-secondary" onClick={onCancelClick}>
           Cancel
         </Button>
         <CompleteAssessmentButton onSubmitAssessment={onSubmitAssessment} disabled={!isSubmitButtonEnabled} />

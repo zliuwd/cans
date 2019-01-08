@@ -1,6 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import Header from './Header'
+import { Icon } from '@cwds/components'
 
 jest.mock('../common/UserAccountService')
 const UserAccountService = require('../common/UserAccountService').default
@@ -22,20 +23,17 @@ describe('Header', () => {
       expect(displayedUserName).toBe('John Doe')
     })
 
-    it('shows user initials', async () => {
+    it('shows avatar icon', async () => {
       UserAccountService.fetchCurrent.mockReturnValue(
         Promise.resolve({
           first_name: 'Joanna',
           last_name: 'Doe',
           any_field: 'Any value',
+          staff_id: 'ABC',
         })
       )
       const wrapper = await mount(<Header onUserFetchedCallback={jest.fn()} />)
-      const displayedUserInitials = wrapper
-        .find('.profile-avatar')
-        .text()
-        .trim()
-      expect(displayedUserInitials).toBe('JD')
+      expect(wrapper.find(Icon).props().name).toBe('user')
     })
 
     it('invokes callback', async () => {
