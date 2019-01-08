@@ -5,6 +5,8 @@ require 'capybara'
 require 'capybara/rspec'
 require 'selenium/webdriver'
 require 'acceptance_helpers/resource_helper'
+require 'acceptance_helpers/create_in_process_form_helper'
+require 'acceptance_helpers/form_completion_helper'
 require 'acceptance_helpers/login_helper'
 require 'acceptance_helpers/prod_login_helper'
 
@@ -27,6 +29,8 @@ Capybara.javascript_driver = :chrome_headless
 Capybara.configure do |config|
   include acceptance_helper
   include ResourceHelper
+  include CreateInProcessFormHelper
+  include CompletionResourceHelper
   config.default_max_wait_time = 10
   config.default_driver = :selenium
   config.app_host = ENV.fetch('CANS_WEB_BASE_URL', 'http://localhost:3000')
