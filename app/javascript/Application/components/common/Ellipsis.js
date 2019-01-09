@@ -85,12 +85,7 @@ class Ellipsis extends PureComponent {
 
   viewChangeLogButton() {
     return (
-      <button
-        className={'view-change-log-button'}
-        onClick={this.changeLogSelect}
-        role={'menuitem'}
-        aria-label="View Change Log Button"
-      >
+      <button className={'view-change-log-button'} onClick={this.changeLogSelect} role={'menuitem'}>
         View CANS Change Log
       </button>
     )
@@ -98,12 +93,7 @@ class Ellipsis extends PureComponent {
 
   deleteAssessmentButton() {
     return this.canDeleteAssessment() ? (
-      <button
-        className={'delete-assessment-button'}
-        onClick={this.deleteItem}
-        role={'menuitem'}
-        aria-label="Delete Assessment Button"
-      >
+      <button className={'delete-assessment-button'} onClick={this.deleteItem} role={'menuitem'}>
         Delete CANS
       </button>
     ) : null
