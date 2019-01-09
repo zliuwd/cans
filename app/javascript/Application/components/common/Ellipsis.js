@@ -112,11 +112,11 @@ class Ellipsis extends PureComponent {
   render() {
     const { isPopOverOpen, redirection } = this.state
     const { shouldRedirect } = redirection
-    const { clientId, assessmentId } = this.props
+    const { clientId, assessmentId, assessmentStatus } = this.props
 
     if (shouldRedirect) {
       const { inheritUrl } = this.props
-      const pathname = `${inheritUrl}/clients/${clientId}/assessments/${assessmentId}/changelog`
+      const pathname = `${inheritUrl}/clients/${clientId}/assessments/${assessmentId}/changelog/${assessmentStatus}`
       const redirectProps = { pathname }
 
       return <Redirect push to={redirectProps} />

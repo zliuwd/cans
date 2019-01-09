@@ -170,7 +170,7 @@ describe('<Ellipsis />', () => {
           })
           expect(wrapper.find(Redirect).exists()).toBe(true)
           expect(wrapper.find(Redirect).props().to).toEqual({
-            pathname: '/staff/0X5/clients/C76Jg230X3/assessments/1234/changelog',
+            pathname: '/staff/0X5/clients/C76Jg230X3/assessments/1234/changelog/IN_PROGRESS',
           })
         })
       })
