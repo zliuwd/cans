@@ -41,7 +41,7 @@ class SearchContainer extends React.Component {
         </Sticker>
         <PersonSearchForm searchTitle={SEARCH_TITLE} searchPrompt={SEARCH_PROMPT} />
         <h4 className="client-assessments-title">{ASSESSMENTS_TITLE}</h4>
-        <SearchAssessmentHistoryLoadingBoundary loadingBoundaryKey={loadingBoundaryKey} key={loadingBoundaryKey}>
+        <SearchAssessmentHistoryLoadingBoundary key={loadingBoundaryKey}>
           <SearchAssessmentHistory
             numAssessments={NUM_ASSESSMENTS}
             navFrom={NavFromProducer(this.props.navigateTo)}
