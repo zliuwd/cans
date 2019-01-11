@@ -22,6 +22,9 @@
     "@material-ui/core": "^3.1.1",
     "@material-ui/icons": "^3.0.1",
     "@rails/webpacker": "3.5",
+    "@types/jest": "^23.3.12",
+    "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11",
     "axios": "^0.18.0",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "4.1.3",
@@ -44,6 +47,9 @@
     "reactstrap": "^6.0.1",
     "sanitize-html": "^1.19.1",
     "smoothscroll-polyfill": "^0.4.3",
+    "ts-jest": "^23.10.5",
+    "ts-loader": "3.5.0",
+    "typescript": "^3.2.2",
     "universal-cookie": "^3.0.4"
   },
   "devDependencies": {

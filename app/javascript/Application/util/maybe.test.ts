@@ -1,10 +1,8 @@
 import { Maybe } from './maybe'
 
 // Helper Functions - These are just a couple helper functions to test with
-// Number -> Number
-const add1 = x => x + 1
-// Number -> Maybe(Number)
-const sqrt = x => Maybe.of(x < 0 ? null : Math.sqrt(x))
+const add1 = (x: number) => x + 1
+const sqrt = (x: number) => Maybe.of(x < 0 ? null : Math.sqrt(x))
 
 describe('Maybe', () => {
   describe('isSomething and isNothing', () => {
@@ -62,7 +60,7 @@ describe('Maybe', () => {
 
     it('preserves nothings when mapped', () => {
       expect(
-        Maybe.of(null)
+        Maybe.of<number>(null)
           .map(add1)
           .map(add1)
           .isNothing()
@@ -72,7 +70,7 @@ describe('Maybe', () => {
 
   describe('valueOrElse', () => {
     it('provides the underlying value', () => {
-      expect(Maybe.of('Hello').valueOrElse()).toEqual('Hello')
+      expect(Maybe.of('Hello').valueOrElse('Fallback')).toEqual('Hello')
       expect(
         Maybe.of(10)
           .map(add1)
@@ -81,9 +79,9 @@ describe('Maybe', () => {
     })
 
     it('provides the default value when isNothing', () => {
-      expect(Maybe.of(null).valueOrElse('Hello')).toEqual('Hello')
+      expect(Maybe.of<string>(null).valueOrElse('Hello')).toEqual('Hello')
       expect(
-        Maybe.of(undefined)
+        Maybe.of<number>(null)
           .map(add1)
           .map(add1)
           .valueOrElse(0)
@@ -94,12 +92,12 @@ describe('Maybe', () => {
   describe('join', () => {
     it('flattens nested Maybes', () => {
       const nested = Maybe.of(Maybe.of(10))
-      expect(nested.valueOrElse()).not.toEqual(10)
+      expect(nested.valueOrElse(null)).not.toEqual(10)
       expect(nested.join()._value).toEqual(10)
     })
 
     it('preserves Nothings when joining', () => {
-      const nested = Maybe.of(null)
+      const nested = Maybe.of<Maybe<string>>(null)
       expect(nested.join().isNothing()).toEqual(true)
     })
 
@@ -114,7 +112,7 @@ describe('Maybe', () => {
     it('maps and joins', () => {
       expect(Maybe.of(9).chain(sqrt)._value).toEqual(3)
       expect(
-        Maybe.of(null)
+        Maybe.of<number>(null)
           .chain(sqrt)
           .isNothing()
       ).toEqual(true)
@@ -127,8 +125,8 @@ describe('Maybe', () => {
   })
 
   describe('filter', () => {
-    const isPositive = x => x > 0
-    const isEven = x => x % 2 === 0
+    const isPositive = (x: number) => x > 0
+    const isEven = (x: number) => x % 2 === 0
 
     it('removes values if the predicate is false', () => {
       const maybe = Maybe.of(-10)

@@ -11,7 +11,7 @@ module.exports = {
       '<rootDir>/__mocks__/fileMock.js',
     '\\.(css|scss|sass)$': 'identity-obj-proxy',
   },
-  collectCoverageFrom: ['**/*.js', '!**/index.js', '!**/packs/**'],
+  collectCoverageFrom: ['**/*.js', '!**/index.js', '**/*.ts', '!**/index.ts', '!**/packs/**'],
   coverageThreshold: {
     global: {
       branches: 70,
@@ -26,4 +26,10 @@ module.exports = {
       statements: 90,
     },
   },
+  transform: {
+    "^.+.tsx?$": "ts-jest",
+    ".*": 'babel-jest'
+  },
+  moduleFileExtensions: [ 'ts', 'tsx', 'js', 'jsx', 'json', 'node' ],
+  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(t|j)sx?$'
 }
