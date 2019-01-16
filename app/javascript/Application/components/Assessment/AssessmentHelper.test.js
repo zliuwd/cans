@@ -10,9 +10,33 @@ import {
   postSuccessMessage,
   postInfoMessage,
   successMsgFrom,
+  sortAssessments,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
+
+export const assessmentsToSort = [
+  {
+    id: 1,
+    event_date: '2018-10-26',
+    created_timestamp: '2018-10-27T15:59:46.930Z',
+  },
+  {
+    id: 2,
+    event_date: '2018-10-26',
+    created_timestamp: '2018-10-28T15:59:46.930Z',
+  },
+  {
+    id: 3,
+    event_date: '2018-10-20',
+    created_timestamp: '2018-10-20T15:59:46.930Z',
+  },
+  {
+    id: 4,
+    event_date: '2018-10-23',
+    created_timestamp: '2018-10-23T20:56:19.684Z',
+  },
+]
 
 const validAssessment = {
   instrument_id: 1,
@@ -298,6 +322,19 @@ describe('AssessmentHelper', () => {
       message: 'Info Message',
       isAutoCloseable: true,
       componentId: 'cId',
+    })
+  })
+
+  describe('#sortAssessments()', () => {
+    it('sorts assessments by eventDate and createTimestamp descendingly', () => {
+      const actual = sortAssessments(assessmentsToSort)
+      expect(actual.map(i => i.id)).toEqual([2, 1, 4, 3])
+    })
+
+    it('returns empty array for empty input', () => {
+      expect(sortAssessments(null)).toEqual([])
+      expect(sortAssessments(undefined)).toEqual([])
+      expect(sortAssessments([])).toEqual([])
     })
   })
 })

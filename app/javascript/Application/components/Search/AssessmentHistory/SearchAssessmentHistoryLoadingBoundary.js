@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import LoadingBoundary from '../../common/LoadingBoundary'
 import { AssessmentService } from '../../Assessment/'
 
-const fetch = () => AssessmentService.getAllAssessments()
+const fetch = () => AssessmentService.getLatestInProgress()
 
 const SearchAssessmentHistoryLoadingBoundary = props => (
   <LoadingBoundary childNodeFetchedPropName={'assessments'} fetch={fetch} isHiddenWhileLoading={false}>

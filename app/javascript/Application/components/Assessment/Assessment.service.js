@@ -13,8 +13,8 @@ export class AssessmentService {
   static search(searchRequest) {
     return apiPost('/assessments/_search', searchRequest)
   }
-  static getAllAssessments() {
-    return apiGet('/staff/assessments')
+  static getLatestInProgress() {
+    return apiGet('/staff/assessments/latest')
   }
   static postAssessment(assessment) {
     return apiPost('/assessments', assessment)

@@ -20,7 +20,7 @@ module Staff
     end
 
     def assessments
-      @http_service.call('/staff/assessments', :get, @token)
+      @http_service.call('/staff/assessments/latest', :get, @token)
     end
   end
 end

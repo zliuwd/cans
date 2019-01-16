@@ -64,17 +64,17 @@ describe('AssessmentService', () => {
     })
   })
 
-  describe('#getAllAssessments', () => {
+  describe('#getLatestInProgress', () => {
     const apiGetSpy = jest.spyOn(apiEndpoints, 'apiGet')
 
     it('returns assessment', async () => {
       const assessmentId = 50000
       const expectedAssessment = { id: assessmentId }
       apiGetSpy.mockReturnValue(expectedAssessment)
-      const actualAssessment = await AssessmentService.getAllAssessments()
+      const actualAssessment = await AssessmentService.getLatestInProgress()
       expect(actualAssessment).toBe(expectedAssessment)
       expect(apiGetSpy).toHaveBeenCalledTimes(1)
-      expect(apiGetSpy).toHaveBeenCalledWith('/staff/assessments')
+      expect(apiGetSpy).toHaveBeenCalledWith('/staff/assessments/latest')
 
       apiGetSpy.mockReset()
     })

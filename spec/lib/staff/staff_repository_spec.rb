@@ -39,7 +39,7 @@ module Staff
     describe '#assessments' do
       it 'returns assessments' do
         allow(http_service).to receive(:call)
-          .with('/staff/assessments', :get, token)
+          .with('/staff/assessments/latest', :get, token)
           .and_return(response)
         expect(staff_repository.assessments).to eq(response)
       end

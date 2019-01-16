@@ -108,41 +108,18 @@ export function getDisplayAssessmentStatus(status) {
   }
 }
 
-export function sortAssessments(options) {
-  const { assessments, sortEventDate, sortUpdatedTimestamp, sortCreatedTimestamp, backupSort, direction } = options
-
-  const assessmentsWithMoment = assessments.map(assessment => {
-    const createdTimestampMoment = moment(assessment.created_timestamp)
-
-    let timestamp
-
-    if (sortEventDate) {
-      timestamp = moment(assessment.event_date)
-    } else if (sortCreatedTimestamp && sortUpdatedTimestamp) {
-      timestamp = moment(assessment.updated_timestamp || assessment.created_timestamp)
-    } else if (sortCreatedTimestamp && !sortUpdatedTimestamp) {
-      timestamp = createdTimestampMoment
-    }
-
-    return { ...assessment, timestamp, createdTimestampMoment }
-  })
-
-  assessmentsWithMoment.sort((left, right) => {
-    let compare
-
-    if (direction === 'asc') {
-      compare = backupSort
-        ? left.timestamp.diff(right.timestamp) || left.createdTimestampMoment - right.createdTimestampMoment
-        : left.timestamp.diff(right.timestamp)
-    } else {
-      compare = backupSort
-        ? right.timestamp.diff(left.timestamp) || right.createdTimestampMoment - left.createdTimestampMoment
-        : right.timestamp.diff(left.timestamp)
-    }
-
-    return compare
-  })
-  return assessmentsWithMoment
+export function sortAssessments(assessments) {
+  if (!assessments || assessments.length === 0) return []
+  return assessments
+    .map(assessment => ({
+      ...assessment,
+      eventDateMoment: moment(assessment.event_date),
+      createdTimestampMoment: moment(assessment.created_timestamp),
+    }))
+    .sort(
+      (left, right) =>
+        right.eventDateMoment.diff(left.eventDateMoment) || right.createdTimestampMoment - left.createdTimestampMoment
+    )
 }
 
 export function trimUrlForClientProfile(url) {

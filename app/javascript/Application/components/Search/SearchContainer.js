@@ -11,7 +11,6 @@ import Sticker from 'react-stickyfill'
 const SEARCH_TITLE = 'Search Clients Only'
 const SEARCH_PROMPT = 'Search CWS-CMS for clients only'
 const ASSESSMENTS_TITLE = 'Recently Updated CANS'
-const NUM_ASSESSMENTS = 3
 
 class SearchContainer extends React.Component {
   constructor(props) {
@@ -43,7 +42,6 @@ class SearchContainer extends React.Component {
         <h4 className="client-assessments-title">{ASSESSMENTS_TITLE}</h4>
         <SearchAssessmentHistoryLoadingBoundary key={loadingBoundaryKey}>
           <SearchAssessmentHistory
-            numAssessments={NUM_ASSESSMENTS}
             navFrom={NavFromProducer(this.props.navigateTo)}
             inheritUrl={this.props.match.url}
             updateAssessmentHistoryCallback={this.updateSearchAssessmentHistory}
