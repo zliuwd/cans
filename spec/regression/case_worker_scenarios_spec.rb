@@ -3,10 +3,16 @@
 require 'acceptance_helper'
 require 'feature'
 require 'page_objects/assessment_form'
+require 'page_objects/client_list'
+require 'page_objects/client_profile'
 
 feature 'Case Worker Functionality' do
   before(:all) do
     @form = AssessmentForm.new
+    @client_list = ClientList.new
+    @client_profile = ClientProfile.new
+  end
+  before(:each) do
     @domain_total_count = []
     @total_radio_selected = []
   end
@@ -32,24 +38,40 @@ feature 'Case Worker Functionality' do
 
   scenario 'Fill out and complete assessment from 0 to 5' do
     login
-    fill_out_form_then_check_domain_total
+    fill_form_header_0_to_5
+    expand_all_domains
+    check_redacted_checkbox_0_to_5
+    fill_out_assessment_form_and_check_domain_total
+    check_all_progress_are_fully_filled
     warning_and_summary_card_shown_after_complete_button_clicked
     verify_the_tool_tip_of_summary_card
-    verify_the_content_of_summary_card
+    verify_the_content_of_summary_card('0to5')
+  end
+
+  scenario 'Fill out and complete assessment from 6 to 21' do
+    login
+    fill_form_header_6_to_21
+    expand_all_domains
+    check_redacted_checkbox_6_to_21
+    fill_out_assessment_form_and_check_domain_total
+    check_all_progress_are_fully_filled
+    click_complete_button_then_summary_card_shown
+    verify_the_tool_tip_of_summary_card
+    verify_the_content_of_summary_card('6to21')
   end
 
   scenario 'Case worker login, creates assessment and logs out' do
     login
     expect(page).to have_content('CANS')
     expect(page).to have_content('Client List')
-    visit_client_profile(CLIENT_NAME_2)
+    @client_list.visit_client_profile(CLIENT_NAME_2)
     expect(page).to have_content('ADD CANS')
     verify_radio_buttons_on_assessment_header
     validate_domain_radio_and_chevron
     click_button 'Save'
-    visit_client_profile(CLIENT_NAME_2)
-    visit_client_profile(CLIENT_NAME_2)
-    expect(page).to have_content('In Progress')
+    @form.global.wait_until_global_save_success_message_box_visible
+    @form.breadcrumbs.route_from_breadcrumbs(CLIENT_NAME_2)
+    expect(@client_profile).to have_in_progress_record
     current_date = Time.now.strftime('%m/%d/%Y')
     find(:link, current_date + ' CANS', match: :first).click
     expect(page).to have_content 'CANS Communimetric Assessment Form'
@@ -66,21 +88,23 @@ feature 'Case Worker Functionality' do
   end
 
   def create_new_assessment
-    visit_client_profile(CLIENT_NAME)
+    @client_list.visit_client_profile(CLIENT_NAME)
     create_assessment_form
   end
 
   def input_date_and_calendar_icon_test
-    @form.date_field.click
-    @form.date_field.native.clear # avoid stuck
-    @form.date_field.native.clear
+    @form.header.date_field.click
+    @form.header.date_field.native.clear # avoid stuck
+    @form.header.date_field.native.clear
     current_date = Time.now.strftime('%m/%d/%Y')
     new_date = Time.now.strftime('%m/11/%Y')
-    @form.date_field.set current_date
-    expect(@form.date_field.value).to eq(current_date)
-    @form.calendar_icon.click
-    @form.calendar_cell_11.click
-    expect(@form.date_field.value).to eq(new_date)
+    @form.header.date_field.set current_date
+    expect(@form.header.date_field.value).to eq(current_date)
+    @form.header.calendar_icon.click
+    @form.header.calendar_cell_11.click
+    expect(@form.header.date_field.value).to eq(new_date)
+    @form.header.date_field.native.clear
+    @form.header.date_field.set current_date
   end
 
   def domain_and_item_rating_test
@@ -146,6 +170,151 @@ feature 'Case Worker Functionality' do
     end
   end
 
+  def fill_form_header_0_to_5
+    create_new_assessment
+    fill_conducted_by_field('')
+    expect(@form.header).to have_redaction_message
+    click_0_to_5_button
+    expect(@form.header.age_0_to_5_button[:class].include?('age-button-selected')).to be(true)
+    expect(@form).to have_assessment_card_title_0_5
+  end
+
+  def fill_form_header_6_to_21
+    create_new_assessment
+    fill_conducted_by_field('')
+    @form.header.authorization_label_yes.click
+    expect(@form.header).to have_no_redaction_message
+    @form.header.age_6_to_21_button.click
+    expect(@form.header.age_6_to_21_button[:class].include?('age-button-selected')).to be(true)
+    expect(@form).to have_assessment_card_title_6_21
+  end
+
+  def check_redacted_checkbox_0_to_5
+    within @form.ec41_title.sibling('h2.item-confidential-checkbox') do
+      ec41_checkbox = find('input[type = "checkbox"]', visible: false)
+      expect(ec41_checkbox.checked?).to be(true)
+      expect(ec41_checkbox.disabled?).to be(true)
+    end
+    @form.header.authorization_label_yes.click
+    within @form.ec41_title.sibling('h2.item-confidential-checkbox') do
+      ec41_checkbox = find('input[type = "checkbox"]', visible: false)
+      expect(ec41_checkbox.checked?).to be(true)
+      expect(ec41_checkbox.disabled?).to be(false)
+    end
+    @form.header.authorization_label_no.click
+  end
+
+  def check_redacted_checkbox_6_to_21
+    within @form.sub7_title.sibling('h2.item-confidential-checkbox') do
+      sub7_checkbox = find('input[type = "checkbox"]', visible: false)
+      expect(sub7_checkbox.checked?).to be(true)
+      expect(sub7_checkbox.disabled?).to be(false)
+    end
+    within @form.sub48a_title.sibling('h2.item-confidential-checkbox') do
+      sub48a_checkbox = find('input[type = "checkbox"]', visible: false)
+      expect(sub48a_checkbox.checked?).to be(true)
+      expect(sub48a_checkbox.disabled?).to be(false)
+    end
+    @form.header.authorization_label_no.click
+    within @form.sub7_title.sibling('h2.item-confidential-checkbox') do
+      sub7_checkbox = find('input[type = "checkbox"]', visible: false)
+      expect(sub7_checkbox.checked?).to be(true)
+      expect(sub7_checkbox.disabled?).to be(true)
+    end
+    within @form.sub48a_title.sibling('h2.item-confidential-checkbox') do
+      sub48a_checkbox = find('input[type = "checkbox"]', visible: false)
+      expect(sub48a_checkbox.checked?).to be(true)
+      expect(sub48a_checkbox.disabled?).to be(true)
+    end
+    @form.header.authorization_label_yes.click
+  end
+
+  def fill_out_assessment_form_and_check_domain_total
+    fill_out_assessment_form_with_rating_1
+    all_items_amount = @form.process_counts.map(&:text)
+    all_items_amount.each { |element| @domain_total_count.push(element.split('/')[1]) }
+    change_some_rating_to_mixed_value
+    adjust_domain_total_count
+    collapse_all_domains
+    domain_totals = @form.domain_score_badges.map(&:text)
+    expect(domain_totals).to eq(@domain_total_count)
+  end
+
+  def check_all_progress_are_fully_filled
+    domain_amount = @form.collapsed_domain_headers.length
+    expect(@form.fully_filled_progress_bars.length).to eq(domain_amount)
+  end
+
+  def change_some_rating_to_mixed_value
+    targets = [
+      '#label-IMPULSIVITY_HYPERACTIVITY-0',
+      '#label-ANXIETY-2',
+      '#label-OPPOSITIONAL-3',
+      '#label-SEXUAL_ABUSE-0'
+    ]
+    targets.each { |element| find(element).click }
+  end
+
+  def adjust_domain_total_count
+    @domain_total_count[0] = (@domain_total_count[0].to_i + 2).to_s
+    @domain_total_count[-1] = (@domain_total_count[-1].to_i - 1).to_s
+  end
+
+  def warning_and_summary_card_shown_after_complete_button_clicked
+    expect(@form.header.authorization_radio_no.checked?).to be(true)
+    @form.footer.complete_button.click
+    expect(@form.global.complete_warning_modal['style']).to eq('display: block;')
+    @form.global.cancel_button_of_warning.click
+    expect(page).to have_content 'CANS Communimetric Assessment Form'
+    expect(page).to have_content 'COMPLETE'
+    @form.footer.complete_button.click
+    @form.global.agree_button_of_warning.click
+    expect(@form.global).to have_global_complete_message_box
+    expect(@form).to have_summary
+  end
+
+  def click_complete_button_then_summary_card_shown
+    expect(@form.header.authorization_radio_yes.checked?).to be(true)
+    @form.footer.complete_button.click
+    expect(@form.global).to have_global_complete_message_box
+    expect(@form.global).to have_no_complete_warning_modal
+    expect(@form).to have_summary
+  end
+
+  def verify_the_tool_tip_of_summary_card
+    first_tip = @form.summary.summary_card_tips[0]
+    tip_text = 'Ratings of 0 or 1 in the Strengths Domain. These are central or useful in planning.'
+    @form.summary.summary_header_strengths.click # avoid stuck
+    first_tip.hover
+    expect(page).to have_content(tip_text)
+  end
+
+  def verify_the_content_of_summary_card(age_range)
+    summary_cols_content = @form.summary.summary_columns.map(&:text)
+    @strengths_column_text =
+      if age_range == '0to5'
+        ['Family Spiritual/Religious', 'Family Strengths', 'Interpersonal', 'Natural Supports',
+         'Playfulness', 'Relationship Permanence', 'Resiliency']
+      else
+        ['Community Life', 'Cultural Identity', 'Educational Setting', 'Family Strengths',
+         'Interpersonal', 'Natural Supports', 'Resiliency', 'Spiritual/Religious',
+         'Talents and Interests']
+      end
+    action_required_column_text = ['Anxiety']
+    immediate_action_required_column_text = ['Oppositional (Non-compliance with Authority)']
+    trauma_column_text = ['Physical Abuse', 'Emotional Abuse', 'Neglect', 'Medical Trauma',
+                          'Witness to Family Violence', 'Witness to Community/School Violence',
+                          'Natural or Manmade Disaster', 'War/Terrorism Affected',
+                          'Victim/Witness to Criminal Activity',
+                          'Disruptions in Caregiving/Attachment Losses',
+                          'Parental Criminal Behaviors']
+    expect(summary_cols_content.length).to be(4)
+    expect(summary_cols_content[0].split(/\r\n|\n|\r/)).to eq(@strengths_column_text)
+    expect(summary_cols_content[1].split(/\r\n|\n|\r/)).to eq(action_required_column_text)
+    expect(summary_cols_content[2].split(/\r\n|\n|\r/)).to eq(immediate_action_required_column_text)
+    expect(summary_cols_content[3].split(/\r\n|\n|\r/)).to eq(trauma_column_text)
+  end
+
   def caregiver_domain_name_and_item_rating_test
     @form.add_caregiver_button.click
     expect(@form.caregiver_name_fields.length).to eq(2)
@@ -185,79 +354,5 @@ feature 'Case Worker Functionality' do
     within(@form.has_caregiver_no_label) do
       expect(find('input', visible: false).checked?).to be(true)
     end
-  end
-
-  def change_some_rating_to_mixed_value
-    targets = [
-      '#label-IMPULSIVITY_HYPERACTIVITY-0',
-      '#label-ANXIETY-2',
-      '#label-OPPOSITIONAL-3',
-      '#label-SEXUAL_ABUSE-0'
-    ]
-    targets.each { |element| find(element).click }
-  end
-
-  def adjust_domain_total_count
-    @domain_total_count[0] = (@domain_total_count[0].to_i + 2).to_s
-    @domain_total_count[-1] = (@domain_total_count[-1].to_i - 1).to_s
-  end
-
-  def fill_out_form_then_check_domain_total
-    visit_client_profile(CLIENT_NAME)
-    expect(page).to have_content('ADD CANS')
-    create_assessment_form
-    fill_conducted_by_field('Mike Seaver')
-    click_0_to_5_button
-    expect(page.find('#age-0-5-button')[:class].include?('age-button-selected')).to be(true)
-    expect(page).to have_content('Age Range 0-5')
-    fill_out_assessment_form_with_rating_1
-    all_items_amount = page.all('span.progress-value').map(&:text)
-    all_items_amount.each { |element| @domain_total_count.push(element.split('/')[1]) }
-    change_some_rating_to_mixed_value
-    adjust_domain_total_count
-    collapse_all_domains
-    domain_totals = page.all('span.domain-score-badge').map(&:text)
-    expect(domain_totals).to eq(@domain_total_count)
-  end
-
-  def warning_and_summary_card_shown_after_complete_button_clicked
-    expect(find('#input-can-release-no', visible: false).checked?).to be(true)
-    find('#submit-assessment').click
-    expect(page.find('div.modal')['style']).to eq('display: block;')
-    cancel_modal = page.find('button.warning-modal-logout')
-    cancel_modal.click
-    expect(page).to have_content 'CANS Communimetric Assessment Form'
-    expect(page).to have_content 'COMPLETE'
-    find('#submit-assessment').click
-    click_button 'I Agree'
-    expect(page).to have_content('CANS Summary')
-  end
-
-  def verify_the_tool_tip_of_summary_card
-    first_tip = page.all('i.assessment-summary-help-icon')[0]
-    tip_text = 'Ratings of 0 or 1 in the Strengths Domain. These are central or useful in planning.'
-    find('span', text: 'Strengths').click # avoid stuck
-    first_tip.hover
-    expect(page).to have_content(tip_text)
-  end
-
-  def verify_the_content_of_summary_card
-    summary_columns = page.all('div.rt-tbody').map(&:text)
-    strengths_column_text = ['Family Spiritual/Religious', 'Family Strengths', 'Interpersonal',
-                             'Natural Supports', 'Playfulness', 'Relationship Permanence',
-                             'Resiliency']
-    action_required_column_text = ['Anxiety']
-    immediate_action_required_column_text = ['Oppositional (Non-compliance with Authority)']
-    trauma_column_text = ['Physical Abuse', 'Emotional Abuse', 'Neglect', 'Medical Trauma',
-                          'Witness to Family Violence', 'Witness to Community/School Violence',
-                          'Natural or Manmade Disaster', 'War/Terrorism Affected',
-                          'Victim/Witness to Criminal Activity',
-                          'Disruptions in Caregiving/Attachment Losses',
-                          'Parental Criminal Behaviors']
-    expect(summary_columns.length).to be(4)
-    expect(summary_columns[0].split(/\r\n|\n|\r/)).to eq(strengths_column_text)
-    expect(summary_columns[1].split(/\r\n|\n|\r/)).to eq(action_required_column_text)
-    expect(summary_columns[2].split(/\r\n|\n|\r/)).to eq(immediate_action_required_column_text)
-    expect(summary_columns[3].split(/\r\n|\n|\r/)).to eq(trauma_column_text)
   end
 end

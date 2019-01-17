@@ -7,7 +7,6 @@ require 'capybara-screenshot/rspec'
 require 'selenium/webdriver'
 require 'site_prism'
 require 'acceptance_helpers/resource_helper'
-require 'acceptance_helpers/create_in_process_form_helper'
 require 'acceptance_helpers/login_helper'
 require 'acceptance_helpers/prod_login_helper'
 
@@ -41,7 +40,6 @@ Capybara.javascript_driver = :chrome_headless
 Capybara.configure do |config|
   include acceptance_helper
   include ResourceHelper
-  include CreateInProcessFormHelper
   setup_output_format
   config.default_max_wait_time = 30
   config.default_driver = :selenium
