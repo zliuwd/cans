@@ -6,7 +6,7 @@ require 'feature'
 # retrive the last name from client full name string
 CLIENT_LAST_NAME = CLIENT_NAME.split(',').first
 
-feature 'Index Page' do
+feature 'Supervisor functionality' do
   scenario 'Supervisor lands on staff list, visits one of staff member clients and logs out' do
     login supervisor_json
     expect(page).to have_content('CANS')
