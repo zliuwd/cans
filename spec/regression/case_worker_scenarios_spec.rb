@@ -55,6 +55,16 @@ feature 'Case Worker Functionality' do
     expect(page).to have_content 'CANS Communimetric Assessment Form'
   end
 
+  scenario 'Case worker login, tests caregiver domain with new assessment and logs out' do
+    login
+    create_new_assessment
+    click_0_to_5_button
+    expand_all_domains
+    caregiver_domain_name_and_item_rating_test
+    has_caregiver_domain_option_yes_to_no_test
+    save_and_check_the_success_message
+  end
+
   def create_new_assessment
     visit_client_profile(CLIENT_NAME)
     create_assessment_form
@@ -133,6 +143,47 @@ feature 'Case Worker Functionality' do
     end
     within @form.domain_toolbar_comment_icon_block[0] do
       expect(find('svg')[:class].include?('comment-icon-solid')).to be(true)
+    end
+  end
+
+  def caregiver_domain_name_and_item_rating_test
+    @form.add_caregiver_button.click
+    expect(@form.caregiver_name_fields.length).to eq(2)
+    @form.caregiver_name_fields[0].set 'Caregiver One'
+    @form.caregiver_name_fields[0].set 'Awesome Caregiver'
+    expect(@form.caregiver_name_fields[0].value).to eq('Awesome Caregiver')
+    expect(@form.caregiver_domain_headers[0].text).to include('Awesome Caregiver')
+    @form.caregiver_domains_first_item_labels[1].click
+    expect(@form.caregiver_domains_first_item_radios[1].checked?).to be(true)
+    @form.caregiver_name_fields[0].set ''
+    expect(@form.caregiver_name_fields[0].value).to eq('')
+    @form.remove_first_caregiver_domain_button.click
+    expect(@form.has_caregiver_domain_warning_popup?).to be(true)
+    expect(@form.caregiver_domain_warning_message.text).to eq(CAREGIVER_DOMAIN_WARNING_MESSAGE)
+    @form.has_caregiver_domain_warning_popup_buttons?
+    caregiver_domain_warning_remove_button.click
+    expect(@form.caregiver_name_fields.length).to eq(1)
+  end
+
+  def has_caregiver_domain_option_yes_to_no_test
+    expect(@form.caregiver_name_fields.length).to eq(1)
+    @form.has_caregiver_no_label.click
+    expect(@form.has_caregiver_domain_warning_popup?).to be(true)
+    expect(@form.caregiver_domain_warning_message.text).to eq(CAREGIVER_DOMAIN_WARNING_MESSAGE)
+    @form.has_caregiver_domain_warning_popup_buttons?
+    caregiver_domain_warning_cancel_button.click
+    expect(@form.caregiver_name_fields.length).to eq(1)
+    within(@form.has_caregiver_yes_label) do
+      expect(find('input', visible: false).checked?).to be(true)
+    end
+    @form.has_caregiver_no_label.click
+    expect(@form.has_caregiver_domain_warning_popup?).to be(true)
+    expect(@form.caregiver_domain_warning_message.text).to eq(CAREGIVER_DOMAIN_WARNING_MESSAGE)
+    @form.has_caregiver_domain_warning_popup_buttons?
+    caregiver_domain_warning_remove_button.click
+    expect(@form.caregiver_name_fields.length).to eq(0)
+    within(@form.has_caregiver_no_label) do
+      expect(find('input', visible: false).checked?).to be(true)
     end
   end
 

@@ -1,12 +1,16 @@
 # frozen_string_literal: true
 
 class AssessmentForm < SitePrism::Page
+  # Assessment header specific elements
   element :date_field, 'input#assessment-date_input'
   element :calendar_icon, 'span.rw-i-calendar'
   element :calendar_cell_11, 'td.rw-cell', text: '11'
   element :conducted_by, 'input#conducted-by'
   element :case_or_referral, 'div#case-or-referral-number'
   element :age_0_to_5_button, 'button#age-0-5-button'
+  element :has_caregiver_no_label, '#has-caregiver-no'
+  element :has_caregiver_yes_label, '#has-caregiver-yes'
+  # Assessment elements
   elements :collapsed_domain_headers, 'div[aria-expanded="false"] h2'
   elements :inner_items, 'i.item-expand-icon'
   element :expand_all_button, 'button', text: 'EXPAND ALL'
@@ -28,9 +32,19 @@ class AssessmentForm < SitePrism::Page
   elements :domain_toolbar_comment_icon_block, 'div.domain-toolbar-comment-icon-block'
   element :save_button, 'div.header-buttons-block i.fa-save'
   element :global_message_box, 'div.global-alert'
+  # Caregiver domain specific elements
+  elements :caregiver_domain_headers, 'h2', text: 'Caregiver Resources And Needs Domain'
+  element :add_caregiver_button, 'div[aria-label="add caregiver button"]'
+  elements :caregiver_name_fields, 'input.caregiver-name'
+  elements :caregiver_domains_first_item_labels, '#SUPERVISION-regular-rating label'
+  elements :caregiver_domains_first_item_radios, '#SUPERVISION-regular-rating input', visible: false
+  element :remove_first_caregiver_domain_button,
+          'div[aria-label="remove caregiver button"]',
+          match: :first
+  element :caregiver_domain_warning_popup, 'div.warning-modal-body'
+  element :caregiver_domain_warning_message, 'div.warning-modal-body div div'
+  elements :caregiver_domain_warning_popup_buttons, 'button.btn-secondary'
 end
-
-@form = AssessmentForm.new
 
 def fill_conducted_by_field(text)
   @form.conducted_by.set text
@@ -67,4 +81,12 @@ def save_and_check_the_success_message
   @form.save_button.click
   success_message = 'Success! CANS assessment has been saved'
   expect(@form.global_message_box.text).to include(success_message)
+end
+
+def caregiver_domain_warning_remove_button
+  @form.caregiver_domain_warning_popup_buttons[1]
+end
+
+def caregiver_domain_warning_cancel_button
+  @form.caregiver_domain_warning_popup_buttons[0]
 end

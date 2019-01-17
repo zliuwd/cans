@@ -14,6 +14,7 @@ require 'acceptance_helpers/prod_login_helper'
 CLIENT_NAME = 'Case, Child 01 Test, Suff'
 CLIENT_NAME_2 = 'Case, Child 02 Test, Suff'
 STAFF_NAME = 'Regression, QA02'
+CAREGIVER_DOMAIN_WARNING_MESSAGE = 'You are about to remove the CAREGIVER from this Assessment.'
 
 def acceptance_helper
   return LoginHelper unless ENV.fetch('REGRESSION_TEST', false)
