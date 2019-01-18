@@ -45,6 +45,7 @@ def buildMaster() {
       incrementTag() // shared library
       buildDockerImageStage()
       lintAndUnitTestStages()
+      acceptanceTestStage()
       a11yLintStage()
       tagRepo() // shared library
       publishImageStage()
