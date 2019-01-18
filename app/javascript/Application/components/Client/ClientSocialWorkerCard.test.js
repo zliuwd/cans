@@ -4,6 +4,7 @@ import { Card, CardHeader, CardBody, CardTitle, DataGrid } from '@cwds/component
 import ClientSocialWorkerCard from './ClientSocialWorkerCard'
 import { SocialWorkerCardTemplate } from './ClientSocialWorkerCardTemplate'
 import { socialWorkerClientsJson } from './Client.helper.test'
+import { clone } from '../../util/common'
 
 describe('<ClientSocialWorkerCard />', () => {
   const fakProps = {
@@ -42,5 +43,22 @@ describe('<ClientSocialWorkerCard />', () => {
     expect(table.props().columns.length).toBe(4)
     expect(table.props().data.length).toBe(5)
     expect(table.props().defaultSorted[0].asc).toBe(true)
+  })
+
+  it('DataGrid will set minRows to 1 when have only one client', () => {
+    const propsCopy = clone(fakProps)
+    propsCopy.data = [socialWorkerClientsJson[0]]
+    const onlyOneClientCase = shallow(<ClientSocialWorkerCard {...propsCopy} />)
+    const table = onlyOneClientCase.find(DataGrid)
+    expect(table.props().minRows).toBe(1)
+  })
+
+  it('DataGrid will set minRows to 3 when have no client', () => {
+    const propsCopy = clone(fakProps)
+    propsCopy.data = []
+    const threeRows = 3
+    const onlyOneClientCase = shallow(<ClientSocialWorkerCard {...propsCopy} />)
+    const table = onlyOneClientCase.find(DataGrid)
+    expect(table.props().minRows).toBe(threeRows)
   })
 })

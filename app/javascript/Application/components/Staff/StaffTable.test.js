@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import { DataGrid } from '@cwds/components'
 import StaffTable from './StaffTable'
 import StaffNameLink from './StaffNameLink'
-import { staff as mockStaff } from './staff.mocks.test'
+import { staff as mockStaff, onlyOneStaffCase } from './staff.mocks.test'
 
 describe('<StaffTable />', () => {
   const render = staff => shallow(<StaffTable staff={staff} />)
@@ -25,6 +25,27 @@ describe('<StaffTable />', () => {
         .find(DataGrid)
         .exists()
     ).toBe(true)
+  })
+
+  it('staff name column accessor is working', () => {
+    const testStaffName = `${mockStaff[0].staff_person.last_name}, ${mockStaff[0].staff_person.first_name}`
+    const grid = render(mockStaff)
+    const target = grid.props().columns[0].accessor
+    const result = target(mockStaff[0])
+    expect(result).toBe(testStaffName)
+  })
+
+  it('will set minRows to 1 when have only one staff', () => {
+    const grid = render(onlyOneStaffCase)
+    const minRows = grid.props().minRows
+    expect(minRows).toBe(1)
+  })
+
+  it('will set minRows to 3 when have no staff', () => {
+    const threeRows = 3
+    const grid = render([])
+    const minRows = grid.props().minRows
+    expect(minRows).toBe(threeRows)
   })
 
   it('shows all rows with pagination', () => {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { DataGrid } from '@cwds/components'
 import StaffNameLink from './StaffNameLink'
 import { staffPropType } from './StaffHelper'
-import { PAGE_SIZES } from '../../util/DataGridHelper'
+import { PAGE_SIZES, gridMinRows } from '../../util/DataGridHelper'
 
 const columns = [
   {
@@ -38,15 +38,13 @@ const columns = [
   },
 ]
 
-const MIN_ROWS = 3
-
 const StaffTable = ({ staff }) => (
   <DataGrid
     data={staff}
     columns={columns}
     pageSizeOptions={PAGE_SIZES}
     showPagination={true}
-    minRows={MIN_ROWS}
+    minRows={gridMinRows(staff)}
     defaultSorted={[{ id: 'staffName' }]}
   />
 )

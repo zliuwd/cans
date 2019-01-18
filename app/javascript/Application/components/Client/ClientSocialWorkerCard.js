@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Card, CardHeader, CardBody, CardTitle, DataGrid } from '@cwds/components'
-import { PAGE_SIZES } from '../../util/DataGridHelper'
+import { PAGE_SIZES, gridMinRows } from '../../util/DataGridHelper'
 import './style.sass'
 
 const ClientSocialWorkerCard = props => {
@@ -17,7 +17,7 @@ const ClientSocialWorkerCard = props => {
           {...props}
           sortable={true}
           className="client-grid"
-          minRows={2}
+          minRows={gridMinRows(props.data)}
           noDataText={'No records found'}
           pageSizeOptions={PAGE_SIZES}
           showPaginationBottom={true}
