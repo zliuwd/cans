@@ -3,14 +3,21 @@
 def app
 DOCKER_REGISTRY_CREDENTIALS_ID = '6ba8d05c-ca13-4818-8329-15d41a089ec0'
 GITHUB_CREDENTIALS_ID = '433ac100-b3c2-4519-b4d6-207c029a103b'
+DE_ANSIBLE_GITHUB_URL = 'git@github.com:ca-cwds/de-ansible.git'
 JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID = '3ce810c0-b697-4ad1-a1b7-ad656b99686e'
 
 switch(env.BUILD_JOB_TYPE) {
   case "master": buildMaster(); break;
-  case "acceptance": buildAcceptance(); break;
-  case "regression": buildRegression('integration', 'https://web.integration.cwds.io/cans'); break;
+  case "acceptance": jobTypeHandledByMasterBuild(); break;
+  case "regression": jobTypeHandledByMasterBuild(); break;
   case "regressionStaging": buildRegression('staging','https://staging.cwds.ca.gov/cans'); break;
+  case "release": releasePipeline(); break;
   default: buildPullRequest();
+}
+
+def jobTypeHandledByMasterBuild() {
+  currentBuild.result = "FAILURE"
+  throw new Exception("BUILD_JOB_TYPE=${env.BUILD_JOB_TYPE} no longer used, triggered from master build now, please delete this job")
 }
 
 def buildPullRequest() {
@@ -38,28 +45,10 @@ def buildMaster() {
       incrementTag() // shared library
       buildDockerImageStage()
       lintAndUnitTestStages()
-      acceptanceTestStage()
       a11yLintStage()
       tagRepo() // shared library
       publishImageStage()
-      deployToPreintStage()
-      updatePreintManifest() // shared library
-    } catch(Exception exception) {
-      currentBuild.result = "FAILURE"
-      throw exception
-    } finally {
-      cleanupStage()
-    }
-  }
-}
-
-def buildAcceptance() {
-  node('preint') {
-    try {
-      checkoutStage()
-      acceptanceTestPreintStage()
-      deployToIntegrationStage()
-      updateIntegrationManifest() // shared library
+      triggerReleasePipeline()  
     } catch(Exception exception) {
       currentBuild.result = "FAILURE"
       throw exception
@@ -214,7 +203,6 @@ def regressionTestStage(url) {
         }
       }
     }
-    
   }
 }
 
@@ -233,34 +221,11 @@ def publishImageStage() {
   }
 }
 
-def deployToPreintStage() {
-  stage('Deploy to Preint') {
+def triggerReleasePipeline() {
+  stage('Trigger Release Pipeline') {
     withCredentials([usernameColonPassword(credentialsId: 'fa186416-faac-44c0-a2fa-089aed50ca17', variable: 'jenkinsauth')]) {
-      sh "curl -u $jenkinsauth 'http://jenkins.mgmt.cwds.io:8080/job/preint/job/deploy-cans/buildWithParameters?token=deployPreint&version=${newTag}'"
+      sh "curl -u $jenkinsauth 'http://jenkins.mgmt.cwds.io:8080/job/PreInt-Integration/job/deploy-cans/buildWithParameters?token=trigger-cans-deploy&APP_VERSION=${newTag}'"
     }
-  }
-}
-
-def updatePreintManifest() {
-  stage('Update Pre-int manifest') {
-    updateManifest("cans", "preint", GITHUB_CREDENTIALS_ID, newTag)
-  }
-}
-
-def deployToIntegrationStage() {
-  stage('Deploy Integration') {
-    build job: '/Integration Environment/deploy-cans/',
-          parameters: [
-            string(name: 'APP_VERSION', value : "${APP_VERSION}"),
-            string(name: 'inventory', value: 'inventories/integration/hosts.yml')
-          ],
-          wait: false
-  }
-}
-
-def updateIntegrationManifest() {
-  stage('Update Integration manifest') {
-    updateManifest("cans", "integration", GITHUB_CREDENTIALS_ID, env.APP_VERSION)
   }
 }
 
@@ -269,5 +234,47 @@ def cleanupStage() {
     sh "ls -la"
     sh "docker-compose -f docker-compose.ci.yml down"
     cleanWs()
+  }
+}
+
+def releasePipeline() {
+  parameters([
+    string(name: 'APP_VERSION', defaultValue: '', description: 'App version to deploy')
+  ])
+  
+  try {
+    releaseToEnvironment('preint')
+    releaseToEnvironment('integration')
+  } catch(Exception exception) {
+    currentBuild.result = "FAILURE"
+    throw exception
+  }
+}
+
+def releaseToEnvironment(environment) {
+  node(environment) {
+    checkoutStage()
+    deployToStage(environment, env.APP_VERSION)
+    updateManifestStage(environment, env.APP_VERSION)
+    switch(environment) {
+      case "preint": acceptanceTestPreintStage(); break;
+      case "integration": regressionTestStage('https://web.integration.cwds.io/cans'); break;
+      default: echo "No tests for run for $environment"
+    }
+  }
+}
+
+def deployToStage(environment, version) {
+  stage("Deploy to $environment") {
+    ws {
+      git branch: "master", credentialsId: GITHUB_CREDENTIALS_ID, url: DE_ANSIBLE_GITHUB_URL
+      sh "ansible-playbook -e NEW_RELIC_AGENT=true -e APP_VERSION=$version -i inventories/$environment/hosts.yml deploy-cans.yml --vault-password-file ~/.ssh/vault.txt "
+    }
+  }
+}
+
+def updateManifestStage(environment, version) {
+  stage("Update $environment Manifest Version") {
+    updateManifest("cans", environment, GITHUB_CREDENTIALS_ID, version)
   }
 }
