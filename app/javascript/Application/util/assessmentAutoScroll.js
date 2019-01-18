@@ -1,4 +1,7 @@
 import { smoothScroll } from './invokeSmoothScroll'
+
+const STEP_MS = 50
+
 export const completeAutoScroll = (target, tuner) => {
   smoothScroll()
   // <<<<<< The whole logic is designed for calibrating and slowing down the window scroll process >>>>>>
@@ -32,7 +35,7 @@ export const completeAutoScroll = (target, tuner) => {
       }
     }
 
-    const repeat = setInterval(stepMoving, 50)
+    const repeat = setInterval(stepMoving, STEP_MS)
 
     // just use setInterval to individually fire the scrollTo so just need a minor delay like '1'
   }

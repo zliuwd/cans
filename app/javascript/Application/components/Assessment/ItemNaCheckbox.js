@@ -15,10 +15,10 @@ const PrimCheckbox = withStyles({
   checked: {},
 })(Checkbox)
 
-const naRating = 8
+const naRatingValue = 8
 
 const ItemNaCheckbox = props => {
-  const isNachecked = props.rating === naRating // bind to rating, because value is oppsite
+  const isNachecked = props.rating === naRatingValue // bind to rating, because value is oppsite
   return (
     <Typography variant="title" style={{ marginRight: 15 }}>
       <form autoComplete="off">

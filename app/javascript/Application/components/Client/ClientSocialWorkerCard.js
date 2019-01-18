@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Card, CardHeader, CardBody, CardTitle, DataGrid } from '@cwds/components'
+import { PAGE_SIZES } from '../../util/DataGridHelper'
 import './style.sass'
 
 const ClientSocialWorkerCard = props => {
@@ -18,7 +19,7 @@ const ClientSocialWorkerCard = props => {
           className="client-grid"
           minRows={2}
           noDataText={'No records found'}
-          pageSizeOptions={[10, 25, 50]}
+          pageSizeOptions={PAGE_SIZES}
           showPaginationBottom={true}
         />
       </CardBody>

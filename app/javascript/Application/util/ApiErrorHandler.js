@@ -17,17 +17,23 @@ function postErrors(issueDetails) {
   })
 }
 
+export const RESPONSE_CODES = {
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  CONFLICT: 409,
+}
+
 function isResponseHandled(response) {
   const responseStatus = response && response.status
 
   switch (responseStatus) {
-    case 401:
+    case RESPONSE_CODES.UNAUTHORIZED:
       window.location.reload()
       break
-    case 403:
+    case RESPONSE_CODES.FORBIDDEN:
       window.location.assign(createUrl('error_page'))
       break
-    case 409:
+    case RESPONSE_CODES.CONFLICT:
       break
     default:
       const details = response.data && response.data.issue_details

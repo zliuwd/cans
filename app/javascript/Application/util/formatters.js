@@ -51,7 +51,8 @@ export function formatPhoneNumber(phoneNumber) {
   if (!phoneNumber) return phoneNumber
   const match = phoneNumber.match(/^(\d{3})(\d{3})(\d{4})$/)
   if (match) {
-    return `${match[1]}-${match[2]}-${match[3]}`
+    const [, npa, nxx, xxxx] = match
+    return `${npa}-${nxx}-${xxxx}`
   }
   return phoneNumber
 }

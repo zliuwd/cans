@@ -1,11 +1,6 @@
-import { RESIDENCE_TYPES } from './AddressType'
+import { RESIDENCE_CODES } from './AddressType'
 
-export const addressTypes = [
-  { code: RESIDENCE_TYPES[0], value: 'Home' },
-  { code: RESIDENCE_TYPES[1], value: 'Homeless' },
-  { code: RESIDENCE_TYPES[2], value: 'Placement Home' },
-  { code: RESIDENCE_TYPES[3], value: 'Common' },
-]
+export const addressTypes = RESIDENCE_CODES
 
 export const unableToDetermineCodes = [
   { code: 'A', value: 'Abandoned' },

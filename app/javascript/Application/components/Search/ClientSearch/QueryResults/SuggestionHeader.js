@@ -2,14 +2,18 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import './style.sass'
 
+const PAGE_SIZE = 10
+
 const SuggestionHeader = ({ page, currentNumberOfResults, totalResults, searchTerm }) => {
-  const oneResult = 1
-  const noResults = totalResults < oneResult
-  const startPos = (page - 1) * 10 + 1
-  const endPos = currentNumberOfResults === 10 ? page * 10 : page * 10 - (10 - currentNumberOfResults)
+  const noResults = totalResults < 1
+  const unshownPreviousResults = (page - 1) * PAGE_SIZE
+  const startPos = unshownPreviousResults + 1
+  const endPos = unshownPreviousResults + currentNumberOfResults
+
   if (totalResults === null) {
     return null
   }
+
   return (
     <div className="autocompleter-suggestion-header">
       <strong>

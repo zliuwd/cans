@@ -104,6 +104,12 @@ module.exports = {
     'react/sort-comp': [2],
     'require-yield': [2],
   },
+  overrides: {
+    files: ['**/*.test.js', '**/*.mocks.js'],
+    rules: {
+      'no-magic-numbers': [0],
+    }
+  },
   parser: 'babel-eslint',
   parserOptions: {
     ecmaVersion: 6,
@@ -114,4 +120,9 @@ module.exports = {
     },
     sourceType: 'module',
   },
+  settings: {
+    react: {
+      version: require('./package.json').dependencies.react.slice(1),
+    }
+  }
 };

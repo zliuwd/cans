@@ -9,13 +9,22 @@ import ClientAssessmentHistoryTableDate from './ClientAssessmentHistoryTableDate
 import ClientAssessmentHistoryTableUpdatedBy from './ClientAssessmentHistoryTableUpdatedBy'
 import ClientAssessmentHistoryTableEllipsis from './ClientAssessmentHistoryTableEllipsis'
 
-const columnWidths = [190, 250, 140, 170, 260, 35]
+// These column widths are finely tuned for a ~1200px screen
+const COLUMN_WIDTHS = {
+  DATE: 190,
+  SOURCE_NUMBER: 250,
+  COUNTY: 140,
+  UPDATED: 170,
+  UPDATED_BY: 260,
+  ELLIPSIS: 35,
+}
+
 const columnConfig = [
   {
     Header: 'Assessment Date',
     id: 'assessmentTableEventDate',
     Cell: ClientAssessmentHistoryTableLink,
-    width: columnWidths[0],
+    width: COLUMN_WIDTHS.DATE,
     className: 'text-center',
     headerClassName: 'text-center',
     accessor: assessment => assessment,
@@ -33,7 +42,7 @@ const columnConfig = [
   {
     Header: 'Case/Referral Number',
     Cell: ClientAssessmentHistoryTableCaseNumber,
-    width: columnWidths[1],
+    width: COLUMN_WIDTHS.SOURCE_NUMBER,
     className: 'text-center',
     headerClassName: 'text-center',
     accessor: 'service_source_ui_id',
@@ -42,7 +51,7 @@ const columnConfig = [
     Header: 'County',
     id: 'assessmentTableCounty',
     Cell: ClientAssessmentHistoryTableCountyName,
-    width: columnWidths[2],
+    width: COLUMN_WIDTHS.COUNTY,
     className: 'text-center',
     headerClassName: 'text-center',
     accessor: assessment => {
@@ -53,7 +62,7 @@ const columnConfig = [
     Header: 'Last Updated',
     id: 'assessmentTableLastUpdated',
     Cell: ClientAssessmentHistoryTableDate,
-    width: columnWidths[3],
+    width: COLUMN_WIDTHS.UPDATED,
     className: 'text-center',
     headerClassName: 'text-center',
     accessor: assessment => {
@@ -71,7 +80,7 @@ const columnConfig = [
     Header: 'Updated By',
     id: 'assessmentTableUpdatedBy',
     Cell: ClientAssessmentHistoryTableUpdatedBy,
-    width: columnWidths[4],
+    width: COLUMN_WIDTHS.UPDATED_BY,
     className: 'text-center',
     headerClassName: 'text-center',
     accessor: assessment => {
@@ -83,7 +92,7 @@ const columnConfig = [
   {
     Header: '',
     Cell: ClientAssessmentHistoryTableEllipsis,
-    width: columnWidths[5],
+    width: COLUMN_WIDTHS.ELLIPSIS,
     className: 'text-center',
     headerClassName: 'text-center',
     sortable: false,

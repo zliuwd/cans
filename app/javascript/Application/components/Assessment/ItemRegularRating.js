@@ -16,12 +16,13 @@ const PrimRadio = withStyles({
   disabled: {},
 })(Radio)
 
-const regularRating = 4
+const numRegularRatings = 4
+const naRatingValue = 8
 
 const ItemRegularRating = props => {
   const code = props.itemCode
   const labelId = `${code}-outer-controls-label`
-  const radioButtons = Array.from({ length: regularRating }).map((n, i) => {
+  const radioButtons = Array.from({ length: numRegularRatings }).map((n, i) => {
     return (
       <FormControlLabel
         id={`label-${code}-${i}`}
@@ -51,7 +52,7 @@ const ItemRegularRating = props => {
             flexDirection: 'row',
             height: '8px',
           }}
-          disabled={props.rating === 8 || props.disabled}
+          disabled={props.rating === naRatingValue || props.disabled}
         >
           <RadioGroup
             id={`${code}-regular-rating`}

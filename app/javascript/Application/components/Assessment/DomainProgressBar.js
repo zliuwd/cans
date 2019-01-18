@@ -5,13 +5,15 @@ import Grid from '@material-ui/core/Grid'
 
 import './style.sass'
 
+const PERCENT = 100
+
 const buildState = (isAssessmentUnderSix, domain) => {
   const total = domain.items.filter(item => shouldItemBeRendered(isAssessmentUnderSix, item) && item.required)
   const filled = total.filter(item => item.rating !== -1)
   return {
     total: total.length,
     filled: filled.length,
-    progress: Math.round((filled.length / total.length) * 100),
+    progress: Math.round((filled.length / total.length) * PERCENT),
   }
 }
 

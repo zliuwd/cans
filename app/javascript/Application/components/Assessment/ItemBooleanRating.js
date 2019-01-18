@@ -17,6 +17,7 @@ const PrimRadio = withStyles({
 })(Radio)
 
 const boolRating = ['No', 'Yes']
+const naRatingValue = 8
 
 const ItemBooleanRating = props => {
   const code = props.itemCode
@@ -51,7 +52,7 @@ const ItemBooleanRating = props => {
             flexDirection: 'row',
             height: '8px',
           }}
-          disabled={props.rating === 8 || props.disabled}
+          disabled={props.rating === naRatingValue || props.disabled}
         >
           <RadioGroup
             id={`${code}-bool-rating`}

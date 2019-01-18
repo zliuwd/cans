@@ -12,9 +12,10 @@ class BreadCrumbsBuilder extends React.Component {
   }
 
   getAssessmentStatusWhenNavToChangeLog = url => {
+    const changelogIndex = -2
     const urlArray = url.split('/')
-    const lastTwoKeyWords = urlArray.slice(-2)
-    return lastTwoKeyWords[0] === selfCheckerKeyWords.CHANGELOG.toLowerCase() ? lastTwoKeyWords[1] : null
+    const [page, status] = urlArray.slice(changelogIndex)
+    return page === selfCheckerKeyWords.CHANGELOG.toLowerCase() ? status : null
   }
 
   prepareNavigationElements() {

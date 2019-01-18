@@ -11,6 +11,9 @@ import NavFromProducer from '../../util/NavFromProducer'
 import ClientAssessmentHistoryLoadingBoundary from './AssessmentHistory/ClientAssessmentHistoryLoadingBoundary'
 import { urlTrimmer } from '../../util/urlTrimmer'
 
+const SINGLE_WIDTH = 3
+const DOUBLE_WIDTH = 6
+
 class Client extends Component {
   constructor(props) {
     super(props)
@@ -25,7 +28,7 @@ class Client extends Component {
     }
   }
 
-  renderClientData(data, label, gridSize = 3, itemId = label) {
+  renderClientData(data, label, gridSize = SINGLE_WIDTH, itemId = label) {
     return (
       <Grid item xs={gridSize} id={`client-data-${itemId.replace(/ /g, '_')}`}>
         <div className={'label-text'}>{label}</div>
@@ -116,8 +119,8 @@ class Client extends Component {
                       {this.renderClientData(<b>{client.last_name}</b>, 'Last Name')}
                       {this.renderClientData(<b>{client.suffix}</b>, 'Suffix')}
                       {this.renderClientData(isoToLocalDate(client.dob), 'Date of Birth')}
-                      {this.renderClientData(this.formatCounty(client.county), 'County', 3, 'county')}
-                      {this.renderClientData(client.external_id, 'Client Id', 6)}
+                      {this.renderClientData(this.formatCounty(client.county), 'County', SINGLE_WIDTH, 'county')}
+                      {this.renderClientData(client.external_id, 'Client Id', DOUBLE_WIDTH)}
                     </Grid>
                   ) : (
                     <span id={'no-data'}>No Child Data Found</span>

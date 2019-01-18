@@ -13,6 +13,7 @@ import { validate, validateCase, validateCaseNumbersAreUnique, isFormValid } fro
 import { PageInfo } from '../Layout'
 import { isA11yAllowedInput } from '../../util/events'
 import { clone, stringify } from '../../util/common'
+import { RESPONSE_CODES } from '../../util/ApiErrorHandler'
 import Select from '@material-ui/core/Select'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
@@ -299,7 +300,7 @@ class ClientAddEditForm extends Component {
 
   handleError = error => {
     const errorResponse = error.response
-    if (errorResponse && errorResponse.status === 409) {
+    if (errorResponse && errorResponse.status === RESPONSE_CODES.CONFLICT) {
       const errorMessage =
         errorResponse.data &&
         errorResponse.data.issue_details &&

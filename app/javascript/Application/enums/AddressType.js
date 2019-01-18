@@ -10,11 +10,13 @@ const ADDRESS_TYPE = Object.freeze([
   'Work',
 ])
 
-export const RESIDENCE_TYPES = [
-  '32', // Home
-  '29', // Homeless
-  '112', // Placement Home
-  '6273', // Common
+export const RESIDENCE_CODES = [
+  { code: '32', value: 'Home' },
+  { code: '29', value: 'Homeless' },
+  { code: '112', value: 'Placement Home' },
+  { code: '6273', value: 'Common' },
 ]
+
+export const RESIDENCE_TYPES = RESIDENCE_CODES.map(syscode => syscode.code)
 
 export default ADDRESS_TYPE
