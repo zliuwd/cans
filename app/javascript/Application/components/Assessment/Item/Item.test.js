@@ -3,8 +3,8 @@ import { mount, shallow } from 'enzyme'
 import Item from './Item'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import CommentIcon from '../common/CommentIcon'
-import Comment from '../common/Comment'
+import CommentIcon from '../../common/CommentIcon'
+import Comment from '../../common/Comment'
 
 const itemDefault = {
   code: 'lf10family',

@@ -11,13 +11,12 @@ import ItemNaCheckbox from './ItemNaCheckbox'
 import ItemBooleanRating from './ItemBooleanRating'
 import ItemRegularRating from './ItemRegularRating'
 import ItemDescriptionRating from './ItemDescriptionRating'
-import { getI18nValuesByPrefix } from './I18nHelper'
-import { stringify } from '../../util/common'
-import Comment from '../common/Comment'
-import CommentIcon from '../common/CommentIcon'
+import { UNSET_RATING, NA_RATING, isNARating } from './RatingHelper'
+import { getI18nValuesByPrefix } from '../I18nHelper'
+import { stringify } from '../../../util/common'
+import Comment from '../../common/Comment'
+import CommentIcon from '../../common/CommentIcon'
 
-const noRating = -1
-const naRating = 8
 const maxCommentLength = 250
 
 const initI18nValue = i18n => ({
@@ -64,13 +63,13 @@ class Item extends Component {
     this.props.onCommentUpdate(code, comment, caregiverIndex)
   }
 
-  // once NaCheckboxk be checked the value will be change back to noRating
+  // once NaCheckbox is checked, the value will be change back to noRating
   handleNaValueSetting = rating => {
     let naValue
-    if (rating === naRating) {
-      naValue = noRating
+    if (isNARating(rating)) {
+      naValue = UNSET_RATING
     } else {
-      naValue = naRating
+      naValue = NA_RATING
     }
     return stringify(naValue)
   }

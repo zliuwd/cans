@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Typography from '@material-ui/core/Typography'
+import { isNARating } from './RatingHelper'
 
 const PrimCheckbox = withStyles({
   root: {
@@ -15,10 +16,8 @@ const PrimCheckbox = withStyles({
   checked: {},
 })(Checkbox)
 
-const naRatingValue = 8
-
 const ItemNaCheckbox = props => {
-  const isNachecked = props.rating === naRatingValue // bind to rating, because value is oppsite
+  const isNAChecked = isNARating(props.rating)
   return (
     <Typography variant="title" style={{ marginRight: 15 }}>
       <form autoComplete="off">
@@ -27,7 +26,7 @@ const ItemNaCheckbox = props => {
             onChange={props.handleRatingChange}
             label={'N/A'}
             value={props.naValue}
-            control={<PrimCheckbox checked={isNachecked} disabled={props.disabled} />}
+            control={<PrimCheckbox checked={isNAChecked} disabled={props.disabled} />}
           />
         </FormControl>
       </form>

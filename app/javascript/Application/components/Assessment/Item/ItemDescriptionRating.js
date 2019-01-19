@@ -5,9 +5,8 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import { stringify } from '../../util/common'
-
-const naRating = 8
+import { NA_RATING } from './RatingHelper'
+import { stringify } from '../../../util/common'
 
 const getTextPresentationForRating = (isBooleanRating, index) => {
   if (!isBooleanRating) return index
@@ -43,8 +42,8 @@ class ItemDescriptionRating extends PureComponent {
             <RadioGroup name="rating_desc" value={stringify(rating)} onChange={handleRatingChange}>
               {hasNaOption ? (
                 <FormControlLabel
-                  value={stringify(naRating)}
-                  control={<Radio value={stringify(naRating)} color={'default'} />}
+                  value={stringify(NA_RATING)}
+                  control={<Radio value={stringify(NA_RATING)} color={'default'} />}
                   label={<Typography variant="headline">N/A = {naRatingDescription}</Typography>}
                   style={{ fontSize: '1.3rem' }}
                 />
