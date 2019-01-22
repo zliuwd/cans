@@ -30,4 +30,24 @@ SELECT uniqueCount(assessment_id) as 'number of assessments' FROM PageAction FAC
 Number of Users Accessing CANS:
 SELECT uniqueCount(staff_id) as '#Users' FROM PageAction FACET staff_county, dashboard where appName = 'cans.integration.cwds.io' SINCE 1 month ago limit 200
 
+More NRQL queries. Time duration can be changed like 'SINCE 7 days ago', 'SINCE 1 hour ago' and so on. 
+Number of Users Accessing CANS Since 1 day ago:
+SELECT uniqueCount(staff_id) as '#Users' FROM PageAction FACET staff_county, dashboard where appName = 'cans.staging.cwds.io' SINCE 1 day ago limit 200
+
+Assessments Pending Since 1 day ago:
+SELECT uniqueCount(assessment_id) as 'number of assessments' FROM PageAction FACET assessment_county WHERE actionName = 'assessmentSave' and appName = 'cans.staging.cwds.io' SINCE 1 day ago LIMIT 60
+
+Assessments Completed Since 1 day ago: 
+SELECT uniqueCount(assessment_id) as 'number of assessments' FROM PageAction FACET assessment_county WHERE actionName = 'assessmentSubmit' and appName = 'cans.staging.cwds.io' SINCE 1 day ago LIMIT 60
+
+Users Accessing CANS Dashboard Since 1 day ago:
+SELECT staff_county, dashboard, staff_id as 'UserID' FROM PageAction where appName = 'cans.staging.cwds.io' SINCE 1 day ago limit 200
+
+Frequency of Counties Accessing CANS Since 1 day ago:
+SELECT count(*) as 'Frequency' FROM PageAction FACET staff_county where appName = 'cans.staging.cwds.io' SINCE 1 days ago limit 200
+
+Frequency of Users Accessing CANS Since 1 day ago:
+SELECT count(*) as 'Frequency' FROM PageAction FACET staff_id, staff_county where appName = 'cans.staging.cwds.io' SINCE 1 day ago limit 200
+
+
 Friendly Reminder - The above metrics queries delivers us our base metrics which we have built upon the respective environments. Since these are prone to end user manipulation, we revert 'em metrics to the above, in case the metrics charts/tables gets messed up.
