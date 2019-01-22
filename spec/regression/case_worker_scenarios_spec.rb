@@ -7,6 +7,7 @@ require 'page_objects/client_list'
 require 'page_objects/client_profile'
 
 feature 'Case Worker Functionality' do
+  current_date = Time.now.strftime('%m/%d/%Y')
   before(:all) do
     @form = AssessmentForm.new
     @client_list = ClientList.new
@@ -23,8 +24,8 @@ feature 'Case Worker Functionality' do
 
   scenario 'Form Header, Domain, and Item common functionalities test' do
     login
-    create_new_assessment
-    input_date_and_calendar_icon_test
+    create_new_assessment(CLIENT_NAME)
+    input_date_and_calendar_icon_test(current_date)
     fill_conducted_by_field('Mike Seaver')
     check_case_or_referral_number
     click_0_to_5_button
@@ -60,26 +61,23 @@ feature 'Case Worker Functionality' do
     verify_the_content_of_summary_card('6to21')
   end
 
-  scenario 'Case worker login, creates assessment and logs out' do
+  scenario 'Case worker creates and deletes assessment' do
     login
-    expect(page).to have_content('CANS')
-    expect(page).to have_content('Client List')
-    @client_list.visit_client_profile(CLIENT_NAME_2)
-    expect(page).to have_content('ADD CANS')
-    verify_radio_buttons_on_assessment_header
+    create_new_assessment(CLIENT_NAME_2)
+    verify_radio_buttons_on_assessment_header(current_date)
     validate_domain_radio_and_chevron
-    click_button 'Save'
-    @form.global.wait_until_global_save_success_message_box_visible
-    @form.breadcrumbs.route_from_breadcrumbs(CLIENT_NAME_2)
-    expect(@client_profile).to have_in_progress_record
-    current_date = Time.now.strftime('%m/%d/%Y')
-    find(:link, current_date + ' CANS', match: :first).click
-    expect(page).to have_content 'CANS Communimetric Assessment Form'
+    save_and_check_the_success_message
+    navigate_to_client_profile(CLIENT_NAME_2)
+    validate_new_assessment(current_date)
+    navigate_to_client_profile(CLIENT_NAME_2)
+    view_cans_change_log_test(current_date, CLIENT_NAME_2)
+    navigate_to_client_profile(CLIENT_NAME_2)
+    delete_assessment_test(current_date)
   end
 
   scenario 'Case worker login, tests caregiver domain with new assessment and logs out' do
     login
-    create_new_assessment
+    create_new_assessment(CLIENT_NAME)
     click_0_to_5_button
     expand_all_domains
     caregiver_domain_name_and_item_rating_test
@@ -87,16 +85,71 @@ feature 'Case Worker Functionality' do
     save_and_check_the_success_message
   end
 
-  def create_new_assessment
-    @client_list.visit_client_profile(CLIENT_NAME)
+  def validate_new_assessment(current_date)
+    find(:link, current_date + ' CANS', match: :first).click
+    expect(page).to have_content 'CANS Communimetric Assessment Form'
+  end
+
+  def navigate_to_client_profile(client_name)
+    @form.breadcrumbs.route_from_breadcrumbs(client_name)
+    expect(@client_profile).to have_in_progress_record
+  end
+
+  def delete_assessment_test(current_date)
+    @client_profile.ellipsis_icon.click
+    @client_profile.delete_cans_button.click
+    expect(@form.global.delete_warning_modal['style']).to eq('display: block;')
+    @form.global.cancel_button_of_warning.click
+    expect(page).not_to have_css('warning-modal-heading')
+    @client_profile.ellipsis_icon.click
+    @client_profile.delete_cans_button.click
+    @form.global.agree_button_of_warning.click
+    expect(page).to have_content('Deleted on ' + current_date)
+  end
+
+  def view_cans_change_log_test(current_date, client_name)
+    @client_profile.ellipsis_icon.click
+    @client_profile.cans_change_log_button.click
+    expect(page).to have_content(client_name)
+    expect(page).to have_content('Assessment Date: ' + current_date)
+  end
+
+  def verify_radio_buttons_on_assessment_header(current_date)
+    click_0_to_5_button
+    expect(@form.header).to have_redaction_message
+    expect(find('#assessment-date_input').value).to eq(current_date)
+    expect(page).to have_content('Assessment Conducted by', wait: 10)
+    check_case_or_referral_number
+    expect(@form).to have_assessment_card_title_0_5
+    expect(@form).to have_caregiver_resource_domain_title
+    @form.caregiver_domain.click
+    expect(find('#input-can-release-no', visible: false).checked?).to be(true)
+    expect(find('#input-has-caregiver-yes', visible: false).checked?).to be(true)
+    expect(find('#SUBSTANCE_USE_CAREGIVERCheckbox')\
+      .find('input', visible: false).checked?).to be(true)
+  end
+
+  def validate_domain_radio_and_chevron
+    @form.challenges_domain.click
+    @form.impulse_hyper_activity.click
+    @form.impulse_hyper_activity_input.click
+    expect(page).to have_content('Item Description', wait: 10)
+    @form.impulse_hyper_activity.click
+    expect(page).not_to have_content('Item Description', wait: 10)
+    progress_bar_value = page.all('span.progress-value', match: :first).map(&:text)
+    progress_bar_value.each { |element| @total_radio_selected.push(element) }
+    expect(progress_bar_value).to eq(@total_radio_selected)
+  end
+
+  def create_new_assessment(client_name)
+    @client_list.visit_client_profile(client_name)
     create_assessment_form
   end
 
-  def input_date_and_calendar_icon_test
+  def input_date_and_calendar_icon_test(current_date)
     @form.header.date_field.click
     @form.header.date_field.native.clear # avoid stuck
     @form.header.date_field.native.clear
-    current_date = Time.now.strftime('%m/%d/%Y')
     new_date = Time.now.strftime('%m/11/%Y')
     @form.header.date_field.set current_date
     expect(@form.header.date_field.value).to eq(current_date)
@@ -171,7 +224,7 @@ feature 'Case Worker Functionality' do
   end
 
   def fill_form_header_0_to_5
-    create_new_assessment
+    create_new_assessment(CLIENT_NAME)
     fill_conducted_by_field('')
     expect(@form.header).to have_redaction_message
     click_0_to_5_button
@@ -180,7 +233,7 @@ feature 'Case Worker Functionality' do
   end
 
   def fill_form_header_6_to_21
-    create_new_assessment
+    create_new_assessment(CLIENT_NAME)
     fill_conducted_by_field('')
     @form.header.authorization_label_yes.click
     expect(@form.header).to have_no_redaction_message
