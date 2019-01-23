@@ -75,7 +75,7 @@ def buildRegression(nodeName, url) {
 
 def checkoutStage() {
   stage('Checkout') {
-    deleteDir()
+    sh "sudo rm -rf *"
     checkout scm
   }
 }
