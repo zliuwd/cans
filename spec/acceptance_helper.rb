@@ -21,7 +21,6 @@ def acceptance_helper
 end
 
 def setup_output_format
-  return unless ENV.fetch('REGRESSION_TEST', false)
   Capybara::Screenshot::RSpec::REPORTERS['RSpec::Core::Formatters::HtmlFormatter'] =
     Capybara::Screenshot::RSpec::HtmlEmbedReporter
 end

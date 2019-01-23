@@ -31,93 +31,144 @@ module LoginHelper
 
   def default_json
     {
-      'user': 'RACFID',
-      'staffId': '0X5',
-      'roles': ['CWS-admin', 'Supervisor', 'CANS-worker'],
-      'county_code': '56',
-      'county_cws_code': '1123',
-      'county_name': 'Ventura',
+      'user': 'REGREQD',
+      'first_name': 'QA02',
+      'last_name': 'Regression',
+      'email': 'regressioncares+qa02@gmail.com',
+      'roles': [
+        'CWS-worker',
+        'SocialWorker'
+      ],
+      'staffId': 'agn',
+      'county_name': 'Sacramento',
+      'county_code': '34',
+      'county_cws_code': 1101,
       'privileges': [
-        'CANS-staff-person-clients-read',
-        'CWS Case Management System',
-        'Resource Management',
         'Resource Mgmt Placement Facility Maint',
+        'Countywide Read/Write',
+        'Officewide Read',
+        'Program Management Reports',
+        'County License Case Management',
+        'LIS',
+        'Non-CWD',
+        'CWS Case Management System',
+        'Merge Client',
+        'Create Service Provider',
         'Sealed',
+        'Statewide Read',
+        'Resource Management',
+        'System Administration',
+        'Closed Case/Referral Update',
         'Sensitive Persons',
-        'Snapshot-rollout',
-        'Hotline-rollout',
-        'Facility-search-rollout',
-        'RFA-rollout',
-        'CANS-rollout',
+        'Countywide Read',
+        'Adoptions',
+        'Officewide Read/Write',
+        'CANS-staff-person-clients-read',
+        'CANS-client-read',
+        'CANS-client-search',
         'CANS-assessment-read',
         'CANS-assessment-create',
         'CANS-assessment-in-progress-update',
-        'CANS-assessment-completed-update',
-        'CANS-assessment-completed-delete',
         'CANS-assessment-in-progress-delete',
+        'CANS-assessment-completed-delete',
         'CANS-assessment-complete',
-        'CANS-client-read',
-        'CANS-client-search',
-        'development-not-in-use'
-      ]
+        'CANS-rollout'
+      ],
+      'authorityCodes': [
+        'B'
+      ],
+      'userName': 'd0108753-54cf-4e28-9d3f-1817903f24ad'
     }
   end
 
   def supervisor_json
     {
-      'user': 'RACFID',
-      'staffId': '0X5',
-      'roles': ['CWS-admin', 'Supervisor', 'CANS-worker'],
-      'county_code': '56',
-      'county_cws_code': '1123',
-      'county_name': 'Ventura',
+      'user': 'REGREQC',
+      'first_name': 'QA01',
+      'last_name': 'Regression',
+      'email': 'regressioncares+qa01@gmail.com',
+      'roles': [
+        'Supervisor',
+        'CWS-worker'
+      ],
+      'staffId': 'agm',
+      'county_name': 'Sacramento',
+      'county_code': '34',
+      'county_cws_code': 1101,
       'privileges': [
-        'CANS-staff-person-subordinates-read',
-        'CWS Case Management System',
-        'Resource Management',
         'Resource Mgmt Placement Facility Maint',
+        'Countywide Read/Write',
+        'Officewide Read',
+        'Program Management Reports',
+        'County License Case Management',
+        'LIS',
+        'Non-CWD',
+        'CWS Case Management System',
+        'Create Service Provider',
+        'Merge Client',
+        'Statewide Read',
         'Sealed',
+        'Resource Management',
+        'System Administration',
+        'Closed Case/Referral Update',
         'Sensitive Persons',
-        'Snapshot-rollout',
-        'Hotline-rollout',
-        'Facility-search-rollout',
-        'RFA-rollout',
-        'CANS-rollout',
+        'Countywide Read',
+        'Adoptions',
+        'Officewide Read/Write',
+        'CANS-staff-person-clients-read',
+        'CANS-client-read',
+        'CANS-client-search',
         'CANS-assessment-read',
         'CANS-assessment-create',
         'CANS-assessment-in-progress-update',
-        'CANS-assessment-completed-update',
-        'CANS-assessment-completed-delete',
         'CANS-assessment-in-progress-delete',
+        'CANS-assessment-completed-delete',
         'CANS-assessment-complete',
-        'CANS-client-read',
-        'CANS-client-search',
         'CANS-staff-person-subordinates-read',
         'CANS-staff-person-read',
-        'CANS-staff-person-clients-read',
-        'development-not-in-use'
-      ]
+        'CANS-rollout'
+      ],
+      'authorityCodes': [
+        'S'
+      ],
+      'userName': 'a1d7c9af-20ab-4cc3-82fd-aaf6f1cf9d5e'
     }
   end
 
   def non_caseworker_json
     {
-      'user': 'RACFID',
-      'staffId': '0X5',
-      'roles': ['CWS-admin', 'Supervisor', 'CANS-worker'],
-      'county_code': '56',
-      'county_cws_code': '1123',
-      'county_name': 'Ventura',
+      'user': 'REGREQE',
+      'first_name': 'QA03',
+      'last_name': 'Regression',
+      'email': 'regressioncares+qa03@gmail.com',
+      'roles': [
+        'CWS-worker',
+        'SocialWorker'
+      ],
+      'staffId': 'agp',
+      'county_name': 'Sacramento',
+      'county_code': '34',
+      'county_cws_code': 1101,
       'privileges': [
-        'CWS Case Management System',
-        'Resource Management',
         'Resource Mgmt Placement Facility Maint',
+        'Countywide Read/Write',
+        'Officewide Read',
+        'Program Management Reports',
+        'County License Case Management',
+        'LIS',
+        'Non-CWD',
+        'CWS Case Management System',
+        'Create Service Provider',
+        'Merge Client',
+        'Statewide Read',
         'Sealed',
+        'Resource Management',
+        'System Administration',
+        'Closed Case/Referral Update',
         'Sensitive Persons',
-        'Snapshot-rollout',
-        'Hotline-rollout',
-        'Facility-search-rollout',
-        'CANS-rollout',
+        'Adoptions',
+        'Countywide Read',
+        'Officewide Read/Write',
         'CANS-client-read',
         'CANS-client-search',
         'CANS-assessment-read',
@@ -126,8 +177,12 @@ module LoginHelper
         'CANS-assessment-in-progress-delete',
         'CANS-assessment-completed-delete',
         'CANS-assessment-complete',
-        'development-not-in-use'
-      ]
+        'CANS-rollout'
+      ],
+      'authorityCodes': [
+        'N'
+      ],
+      'userName': 'a05d1517-dafb-4122-9716-d3a0ebac251f'
     }
   end
 end
