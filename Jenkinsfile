@@ -126,15 +126,15 @@ def acceptanceTestStage() {
       withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
         sh "docker-compose -f docker-compose.ci.yml build"
         sh "docker-compose -f docker-compose.ci.yml run cans-test-all"
-        runAcceptanceTests()
+        runAcceptanceTests('')
       }
     }
   }
 }
 
-def runAcceptanceTests() {
+def runAcceptanceTests(environmentVariables) {
   try {
-    sh "docker-compose -f docker-compose.ci.yml exec -T cans-test bundle exec rspec spec/acceptance --format html --out regression-report/acceptance_index.html"
+    sh "docker-compose -f docker-compose.ci.yml exec -T ${environmentVariables} cans-test bundle exec rspec spec/acceptance --format html --out regression-report/acceptance_index.html"
   } finally {
     publishHTML([
               allowMissing         : true,
@@ -169,7 +169,7 @@ def acceptanceTestPreintStage() {
   stage('Acceptance Test Preint') {
     withDockerRegistry([credentialsId: JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID]) {
       sh "docker-compose -f docker-compose.ci.yml up -d --build cans-test"
-      runAcceptanceTests()
+      runAcceptanceTests('--env CANS_WEB_BASE_URL=https://cans.preint.cwds.io/cans')
     }
   }
 }
