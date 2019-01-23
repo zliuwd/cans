@@ -61,4 +61,10 @@ describe('<ClientSocialWorkerCard />', () => {
     const table = onlyOneClientCase.find(DataGrid)
     expect(table.props().minRows).toBe(threeRows)
   })
+
+  it('DataGrid will set minRows to 1 when have more than 3 clients', () => {
+    const table = wrapper.find(DataGrid)
+    expect(fakProps.data.length).toBeGreaterThan(3)
+    expect(table.props().minRows).toBe(1)
+  })
 })

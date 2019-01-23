@@ -27,10 +27,15 @@ describe('gridMinRows', () => {
     expect(minRows2).toEqual(2)
   })
 
-  it('will set to the 3 when data length more than or equal to 3', () => {
+  it('will set to 3 when data length equal to 0', () => {
+    const minRows = gridMinRows([])
+    expect(minRows).toEqual(threeLines)
+  })
+
+  it('will set to the 1 when data length more than or equal to 3', () => {
     const minRows10 = gridMinRows(tenLinesData)
     const minRows3 = gridMinRows(threeLinesData)
-    expect(minRows10).toEqual(threeLines)
-    expect(minRows3).toEqual(threeLines)
+    expect(minRows10).toEqual(1)
+    expect(minRows3).toEqual(1)
   })
 })
