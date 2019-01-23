@@ -12,6 +12,7 @@ import * as AssessmentAutoScroll from '../../util/assessmentAutoScroll'
 import PageModal from '../common/PageModal'
 import {
   assessment,
+  readOnlyAssessment,
   updatedAssessment,
   initialAssessment,
   instrument,
@@ -82,11 +83,20 @@ describe('<AssessmentContainer />', () => {
         expect(getLength(wrapper, AssessmentFormFooter)).toBe(0)
       })
 
-      it('call addEventListener in componentDidMount', () => {
+      it('add "beforeunload" event listener when assessment is read-write', async () => {
         const adder = jest.spyOn(window, 'addEventListener')
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.update()
+        shallow(<AssessmentContainer {...props} />)
         expect(adder).toHaveBeenCalledTimes(1)
+      })
+
+      it('remove "beforeunload" event listener when assessment is read-only', async () => {
+        const remover = jest.spyOn(window, 'removeEventListener')
+        const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+        wrapper.instance().setState({
+          assessment: readOnlyAssessment,
+        })
+        await wrapper.instance().updateIsEditableState()
+        expect(remover).toHaveBeenCalledTimes(1)
       })
 
       it('call removeEventListener in componentWillUnmount', () => {
