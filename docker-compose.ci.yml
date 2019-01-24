@@ -142,6 +142,7 @@ services:
       - ./regression-report/.:/app/regression-report
     environment:
       CANS_WEB_BASE_URL: 'cans-web:3000/cans'
+      TZ: US/Pacific
     tty: true
     stdin_open: true
     networks:
