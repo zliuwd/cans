@@ -7,7 +7,7 @@ require 'page_objects/client_list'
 require 'page_objects/client_profile'
 
 feature 'Case Worker Functionality' do
-  current_date = Time.now.strftime('%m/%d/%Y', '-08:00')
+  current_date = Time.now.in_time_zone("Pacific Time (US & Canada)").strftime('%m/%d/%Y')
   before(:all) do
     @form = AssessmentForm.new
     @client_list = ClientList.new
