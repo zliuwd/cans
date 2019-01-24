@@ -2,25 +2,28 @@
 
 require 'acceptance_helper'
 require 'feature'
-require 'page_objects/client_list'
-
-# retrive the last name from client full name string
-CLIENT_LAST_NAME = CLIENT_NAME.split(',').first
+require 'page_objects/staff_dashboard'
+require 'page_objects/supervisor_dashboard'
+require 'page_objects/client_profile'
 
 feature 'Supervisor functionality' do
+  before(:all) do
+    @supervisor_dash = SupervisorDashboard.new
+    @staff_dash = StaffDashboard.new
+    @client_profile = ClientProfile.new
+  end
+
   scenario 'Supervisor lands on staff list, visits one of staff member clients and logs out' do
-    @client_list = ClientList.new
     login supervisor_json
-    expect(page).to have_content('CANS')
-    expect(page).to have_content('Assigned Staff', wait: 10)
-    visit_staff_member_dashboard(STAFF_NAME)
-    expect(page).to have_content(STAFF_NAME)
-    expect(page).to have_content('Client List', wait: 10)
-    expect(page).to have_content(CLIENT_NAME)
-    @client_list.visit_client_profile(CLIENT_NAME)
-    expect(page).to have_content('Client Information')
-    expect(page).to have_content(CLIENT_LAST_NAME)
-    expect(page).to have_content('Assessment History')
+    expect(@supervisor_dash).to have_supervisor_card_title
+    @supervisor_dash.visit_staff_member_dashboard(STAFF_NAME)
+    @staff_dash.staff_card_title.text eq(STAFF_NAME)
+    expect(@staff_dash).to have_client_list_card_title
+    @staff_dash.client_link(CLIENT_NAME).text eq(CLIENT_NAME)
+    @staff_dash.visit_client_profile(CLIENT_NAME)
+    expect(@client_profile).to have_client_information_title
+    @client_profile.last_name.text eq(CLIENT_LAST_NAME)
+    expect(@client_profile).to have_assessment_history_title
     logout
   end
 end
