@@ -1,9 +1,12 @@
 development:
   features:
     authentication: <%= ENV.fetch('AUTHENTICATION_ENABLED', true) %>
+    cans2: <%= ENV.fetch('CANS2', false) %>
 test:
   features:
     authentication: <%= ENV.fetch('AUTHENTICATION_ENABLED', true) %>
+    cans2: <%= ENV.fetch('CANS2', false) %>
 production:
   features:
     authentication: <%= ENV.fetch('AUTHENTICATION_ENABLED', true) %>
+    cans2: <%= ENV.fetch('CANS2', false) %>
