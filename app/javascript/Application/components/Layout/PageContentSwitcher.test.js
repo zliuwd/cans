@@ -1,7 +1,7 @@
 import React from 'react'
 import { navigation } from '../../util/constants'
 import { SupervisorDashboard, CaseLoadPage, CurrentUserCaseLoadPage } from '../Staff'
-import { Client, ClientAddEditForm } from '../Client'
+import { Client } from '../Client'
 import { AssessmentContainer, ChangeLogPage } from '../Assessment'
 import { SearchContainer } from '../Search'
 import PageContentSwitcher from './PageContentSwitcher'
@@ -35,16 +35,6 @@ describe('PageContentSwitcher', () => {
   it('will switch to Client when nav to navigation.CHILD_PROFILE/>', () => {
     const wrapper = getWrapper(navigation.CHILD_PROFILE)
     expect(wrapper.find(Client).length).toBe(1)
-  })
-
-  it('will switch to ClientAddEditForm when nav to navigation.CHILD_PROFILE_ADD/>', () => {
-    const wrapper = getWrapper(navigation.CHILD_PROFILE_ADD)
-    expect(wrapper.find(ClientAddEditForm).length).toBe(1)
-  })
-
-  it('will switch to ClientAddEditForm  when nav to navigation.CHILD_PROFILE_EDIT/>', () => {
-    const wrapper = getWrapper(navigation.CHILD_PROFILE_EDIT)
-    expect(wrapper.find(ClientAddEditForm).length).toBe(1)
   })
 
   it('will switch to AssessmentContainer  when nav to navigation.ASSESSMENT_ADD/>', () => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { navigation } from '../../util/constants'
 import { SupervisorDashboard, CaseLoadPage, CurrentUserCaseLoadPage } from '../Staff'
-import { Client, ClientAddEditForm } from '../Client'
+import { Client } from '../Client'
 import { AssessmentContainer, ChangeLogPage } from '../Assessment'
 import { SearchContainer } from '../Search'
 import { Row, Col } from 'reactstrap'
@@ -13,10 +13,6 @@ const PageContentSwitcher = ({ params, navigateTo, client, staffId }) => {
         return <CurrentUserCaseLoadPage />
       case navigation.CHILD_PROFILE:
         return client && <Client {...params} />
-      case navigation.CHILD_PROFILE_ADD:
-        return <ClientAddEditForm isNewForm={true} {...params} />
-      case navigation.CHILD_PROFILE_EDIT:
-        return client && <ClientAddEditForm isNewForm={false} {...params} />
 
       case navigation.ASSESSMENT_ADD:
         return client && <AssessmentContainer {...params} />

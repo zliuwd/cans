@@ -3,25 +3,25 @@
 require 'acceptance_helper'
 require 'feature'
 require 'page_objects/client_search'
+require 'page_objects/client_profile'
 
 feature 'Non Case Worker Functionality' do
   before(:all) do
-    @form = ClientSearch.new
-  end
-
-  after(:all) do
-    logout
+    @client_search = ClientSearch.new
+    @client_profile = ClientProfile.new
   end
 
   scenario 'Non Case worker login, search client, select it and logs out' do
     login non_caseworker_json
-    expect(page).to have_content('To Start a CANS Assessment, Search and Select the Child')
-    @form.close_top_alert.click
-    expect(page).not_to have_content('To Start a CANS Assessment, Search and Select the Child')
-    @form.search_input.click
-    @form.search_input.set CLIENT_NAME
-    select_client
-    expect(page).to have_content 'Case, Child 01 Test, Suff'
-    expect(page).to have_content 'Assessment History'
+    expect(@client_search).to have_top_alert
+    @client_search.close_top_alert.click
+    expect(@client_search).to have_no_top_alert
+    @client_search.search_input.click
+    @client_search.search_input.set SEARCH_CLIENT_NAME
+    expect(@client_search).to have_search_client_link
+    @client_search.search_client_link.click
+    @client_profile.last_name.text eq(SEARCH_CLIENT_LAST_NAME)
+    expect(@client_profile).to have_assessment_history_title
+    logout
   end
 end

@@ -11,8 +11,12 @@ require 'acceptance_helpers/login_helper'
 require 'acceptance_helpers/prod_login_helper'
 
 CLIENT_NAME = 'Case, Child 01 Test, Suff'
+CLIENT_LAST_NAME = CLIENT_NAME.split(',').first
 CLIENT_NAME_2 = 'Case, Child 02 Test, Suff'
+SEARCH_CLIENT_NAME = 'Case, Child 01 Test'
+SEARCH_CLIENT_LAST_NAME = SEARCH_CLIENT_NAME.split(',').first
 STAFF_NAME = 'Regression, QA02'
+CLIENT_LIST_TITLE = 'Client List'
 CAREGIVER_DOMAIN_WARNING_MESSAGE = 'You are about to remove the CAREGIVER from this Assessment.'
 
 def acceptance_helper

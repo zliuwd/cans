@@ -3,14 +3,15 @@
 require 'acceptance_helper'
 require 'feature'
 require 'page_objects/assessment_form'
-require 'page_objects/client_list'
 require 'page_objects/client_profile'
+require 'page_objects/staff_dashboard'
+require 'page_objects/assessment_changelog'
 
 feature 'Case Worker Functionality' do
   current_date = Time.now.strftime('%m/%d/%Y')
   before(:all) do
     @form = AssessmentForm.new
-    @client_list = ClientList.new
+    @staff_dash = StaffDashboard.new
     @client_profile = ClientProfile.new
   end
   before(:each) do
@@ -63,6 +64,7 @@ feature 'Case Worker Functionality' do
 
   scenario 'Case worker creates and deletes assessment' do
     login
+    @assessment_changelog = AssessmentChangeLog.new
     create_new_assessment(CLIENT_NAME_2)
     verify_radio_buttons_on_assessment_header(current_date)
     validate_domain_radio_and_chevron
@@ -86,8 +88,8 @@ feature 'Case Worker Functionality' do
   end
 
   def validate_new_assessment(current_date)
-    find(:link, current_date + ' CANS', match: :first).click
-    expect(page).to have_content 'CANS Communimetric Assessment Form'
+    @client_profile.go_to_recently_updated_assessment(current_date)
+    expect(@form.global).to have_assessment_page_header
   end
 
   def navigate_to_client_profile(client_name)
@@ -96,54 +98,56 @@ feature 'Case Worker Functionality' do
   end
 
   def delete_assessment_test(current_date)
-    @client_profile.ellipsis_icon.click
+    @client_profile.recent_assessment_ellipsis_icon.click
     @client_profile.delete_cans_button.click
-    expect(@form.global.delete_warning_modal['style']).to eq('display: block;')
-    @form.global.cancel_button_of_warning.click
-    expect(page).not_to have_css('warning-modal-heading')
-    @client_profile.ellipsis_icon.click
+    expect(@client_profile.app_globals.delete_warning_modal['style']).to eq('display: block;')
+    @form.app_globals.cancel_button_of_warning.click
+    expect(@client_profile.app_globals).to have_no_warning_modal_heading
+    @client_profile.recent_assessment_ellipsis_icon.click
     @client_profile.delete_cans_button.click
-    @form.global.agree_button_of_warning.click
-    expect(page).to have_content('Deleted on ' + current_date)
+    @form.app_globals.agree_button_of_warning.click
+    expect(@client_profile.is_assessment_deleted?(current_date)).to be(true)
   end
 
   def view_cans_change_log_test(current_date, client_name)
-    @client_profile.ellipsis_icon.click
+    @client_profile.recent_assessment_ellipsis_icon.click
     @client_profile.cans_change_log_button.click
-    expect(page).to have_content(client_name)
-    expect(page).to have_content('Assessment Date: ' + current_date)
+    expect(@assessment_changelog.is_client_name?(client_name)).to be(true)
+    expect(@assessment_changelog.is_assessment?(current_date)).to be(true)
   end
 
   def verify_radio_buttons_on_assessment_header(current_date)
     click_0_to_5_button
     expect(@form.header).to have_redaction_message
-    expect(find('#assessment-date_input').value).to eq(current_date)
-    expect(page).to have_content('Assessment Conducted by', wait: 10)
+    expect(@form.header.date_field.value).to eq(current_date)
+    expect(@form.header).to have_conducted_by
     check_case_or_referral_number
     expect(@form).to have_assessment_card_title_0_5
-    expect(@form).to have_caregiver_resource_domain_title
+    expect(@form).to have_caregiver_domain_headers
     @form.caregiver_domain.click
-    expect(find('#input-can-release-no', visible: false).checked?).to be(true)
-    expect(find('#input-has-caregiver-yes', visible: false).checked?).to be(true)
-    expect(find('#SUBSTANCE_USE_CAREGIVERCheckbox')\
-      .find('input', visible: false).checked?).to be(true)
+    expect(@form.header.authorization_radio_no.checked?).to be(true)
+    expect(@form.header.has_caregiver_yes_radio.checked?).to be(true)
+    expect(@form.caregiver_domain_substance_use_confidential_checkbox.checked?).to be(true)
   end
 
   def validate_domain_radio_and_chevron
     @form.challenges_domain.click
     @form.impulse_hyper_activity.click
     @form.impulse_hyper_activity_input.click
-    expect(page).to have_content('Item Description', wait: 10)
+    expect(@form).to have_item_description_header
     @form.impulse_hyper_activity.click
-    expect(page).not_to have_content('Item Description', wait: 10)
+    expect(@form).to have_no_item_description_header
     progress_bar_value = page.all('span.progress-value', match: :first).map(&:text)
     progress_bar_value.each { |element| @total_radio_selected.push(element) }
     expect(progress_bar_value).to eq(@total_radio_selected)
   end
 
   def create_new_assessment(client_name)
-    @client_list.visit_client_profile(client_name)
-    create_assessment_form
+    @staff_dash.client_link(client_name).text eq(client_name)
+    @staff_dash.visit_client_profile(client_name)
+    expect(@client_profile).to have_add_cans_link
+    @client_profile.add_cans_link.click
+    expect(@form.global).to have_assessment_page_header
   end
 
   def input_date_and_calendar_icon_test(current_date)
@@ -316,12 +320,12 @@ feature 'Case Worker Functionality' do
   def warning_and_summary_card_shown_after_complete_button_clicked
     expect(@form.header.authorization_radio_no.checked?).to be(true)
     @form.footer.complete_button.click
-    expect(@form.global.complete_warning_modal['style']).to eq('display: block;')
-    @form.global.cancel_button_of_warning.click
-    expect(page).to have_content 'CANS Communimetric Assessment Form'
-    expect(page).to have_content 'COMPLETE'
+    expect(@form.app_globals.complete_warning_modal['style']).to eq('display: block;')
+    @form.app_globals.cancel_button_of_warning.click
+    expect(@form.global).to have_assessment_page_header
+    expect(@form.footer).to have_complete_button
     @form.footer.complete_button.click
-    @form.global.agree_button_of_warning.click
+    @form.app_globals.agree_button_of_warning.click
     expect(@form.global).to have_global_complete_message_box
     expect(@form).to have_summary
   end
@@ -330,7 +334,7 @@ feature 'Case Worker Functionality' do
     expect(@form.header.authorization_radio_yes.checked?).to be(true)
     @form.footer.complete_button.click
     expect(@form.global).to have_global_complete_message_box
-    expect(@form.global).to have_no_complete_warning_modal
+    expect(@form.app_globals).to have_no_complete_warning_modal
     expect(@form).to have_summary
   end
 
@@ -380,32 +384,28 @@ feature 'Case Worker Functionality' do
     @form.caregiver_name_fields[0].set ''
     expect(@form.caregiver_name_fields[0].value).to eq('')
     @form.remove_first_caregiver_domain_button.click
-    expect(@form.has_caregiver_domain_warning_popup?).to be(true)
+    expect(@form).to have_caregiver_domain_warning_popup
     expect(@form.caregiver_domain_warning_message.text).to eq(CAREGIVER_DOMAIN_WARNING_MESSAGE)
-    @form.has_caregiver_domain_warning_popup_buttons?
-    caregiver_domain_warning_remove_button.click
+    expect(@form.app_globals).to have_agree_button_of_warning
+    @form.app_globals.agree_button_of_warning.click
     expect(@form.caregiver_name_fields.length).to eq(1)
   end
 
   def has_caregiver_domain_option_yes_to_no_test
     expect(@form.caregiver_name_fields.length).to eq(1)
-    @form.has_caregiver_no_label.click
-    expect(@form.has_caregiver_domain_warning_popup?).to be(true)
+    @form.header.has_caregiver_no_label.click
+    expect(@form).to have_caregiver_domain_warning_popup
     expect(@form.caregiver_domain_warning_message.text).to eq(CAREGIVER_DOMAIN_WARNING_MESSAGE)
-    @form.has_caregiver_domain_warning_popup_buttons?
-    caregiver_domain_warning_cancel_button.click
+    expect(@form.app_globals).to have_cancel_button_of_warning
+    @form.app_globals.cancel_button_of_warning.click
     expect(@form.caregiver_name_fields.length).to eq(1)
-    within(@form.has_caregiver_yes_label) do
-      expect(find('input', visible: false).checked?).to be(true)
-    end
-    @form.has_caregiver_no_label.click
-    expect(@form.has_caregiver_domain_warning_popup?).to be(true)
+    expect(@form.header.has_caregiver_yes_radio.checked?).to be(true)
+    @form.header.has_caregiver_no_label.click
+    expect(@form).to have_caregiver_domain_warning_popup
     expect(@form.caregiver_domain_warning_message.text).to eq(CAREGIVER_DOMAIN_WARNING_MESSAGE)
-    @form.has_caregiver_domain_warning_popup_buttons?
-    caregiver_domain_warning_remove_button.click
+    expect(@form.app_globals).to have_agree_button_of_warning
+    @form.app_globals.agree_button_of_warning.click
     expect(@form.caregiver_name_fields.length).to eq(0)
-    within(@form.has_caregiver_no_label) do
-      expect(find('input', visible: false).checked?).to be(true)
-    end
+    expect(@form.header.has_caregiver_no_radio.checked?).to be(true)
   end
 end
