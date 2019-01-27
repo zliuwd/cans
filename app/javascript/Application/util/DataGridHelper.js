@@ -15,8 +15,10 @@ export const gridMinRows = data => {
   const len = data.length
   if (len > 0 && len < emptyGridMinRows) {
     minRows = len
-  } else {
+  } else if (len === 0) {
     minRows = emptyGridMinRows
+  } else {
+    minRows = 1
   }
   return minRows
 }

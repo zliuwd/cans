@@ -48,6 +48,14 @@ describe('<StaffTable />', () => {
     expect(minRows).toBe(threeRows)
   })
 
+  it('will set minRows to 1 when have more than 3 staffs', () => {
+    const moreThanThreeStaffs = [...mockStaff, ...mockStaff]
+    const grid = render(moreThanThreeStaffs)
+    const minRows = grid.props().minRows
+    expect(moreThanThreeStaffs.length).toBeGreaterThan(3)
+    expect(minRows).toBe(1)
+  })
+
   it('shows all rows with pagination', () => {
     const grid = render([]).find(DataGrid)
     expect(grid.props().showPagination).toBe(true)

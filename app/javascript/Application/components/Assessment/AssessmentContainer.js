@@ -57,11 +57,7 @@ class AssessmentContainer extends Component {
   }
 
   async componentDidMount() {
-    window.addEventListener('beforeunload', alertMessage)
-    const assessmentId = this.props.match.params.id
-    assessmentId
-      ? this.fetchAssessment(assessmentId).then(() => this.updateIsEditableState())
-      : this.fetchNewAssessment().then()
+    this.initAssessment().then(() => this.updateIsEditableState())
     this.handleCompleteScrollTarget()
   }
 
@@ -75,10 +71,18 @@ class AssessmentContainer extends Component {
     postCloseMessage(readOnlyMessageId)
   }
 
+  initAssessment() {
+    const assessmentId = this.props.match.params.id
+    return assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment()
+  }
+
   updateIsEditableState() {
     const assessment = this.state.assessment
     const isEditable = Boolean(!assessment || !assessment.id || isAuthorized(assessment, 'update'))
     this.setState({ isEditable })
+    isEditable
+      ? window.addEventListener('beforeunload', alertMessage)
+      : window.removeEventListener('beforeunload', alertMessage)
     this.postReadOnlyMessageIfNeeded()
   }
 
