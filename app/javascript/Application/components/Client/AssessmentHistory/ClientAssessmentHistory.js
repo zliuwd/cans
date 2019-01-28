@@ -26,12 +26,12 @@ class ClientAssessmentHistory extends PureComponent {
         .slice(0, assessmentsToDisplay)
         .map(assessment => (
           <ClientAssessmentHistoryRecord
-            assessment={assessment}
             key={assessment.id}
-            navFrom={this.props.navFrom}
+            assessment={assessment}
             inheritUrl={this.props.inheritUrl}
-            userId={this.props.userId}
+            navFrom={this.props.navFrom}
             updateAssessmentHistoryCallback={updateAssessmentHistoryCallback}
+            userId={this.props.userId}
           />
         ))
     )

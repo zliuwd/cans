@@ -2,9 +2,9 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { Card, CardBody } from '@cwds/components'
 import AssessmentRecordInfo from './AssessmentRecordInfo'
-import AssessmentLink from '../common/AssessmentLink'
-import Ellipsis from '../common/Ellipsis'
-import AssessmentRecordStatus from '../common/AssessmentRecordStatus'
+import AssessmentLink from './AssessmentLink'
+import AssessmentActionsEllipsis from './AssessmentActionsEllipsis'
+import AssessmentRecordStatus from './AssessmentRecordStatus'
 import {
   assessmentInProgressWithCaseNumber,
   assessmentCompletedWithCaseNumber,
@@ -20,14 +20,14 @@ import {
   assessmentWithNoUpdateInfoWithNoClientandReferralNumber,
 } from '../Assessment/assessment.mocks.test'
 
-const prepareWrapper = (assessment, header) =>
+const prepareWrapper = (assessment, header, callback = () => {}) =>
   shallow(
     <AssessmentRecordInfo
       assessment={assessment}
       header={header}
       navFrom={'SEARCH'}
       inheritUrl={'/staff/0X5/clients/AznnyCs0X5/assessments/298750'}
-      updateAssessmentHistoryCallback={() => {}}
+      updateAssessmentHistoryCallback={callback}
       userId={'1'}
     />
   )
@@ -35,7 +35,6 @@ const prepareWrapper = (assessment, header) =>
 describe('AssessmentRecordInfo', () => {
   describe('component layout', () => {
     let wrapper
-
     beforeEach(() => {
       wrapper = prepareWrapper(assessmentInProgressWithCaseNumber, 'client-profile')
     })
@@ -48,8 +47,8 @@ describe('AssessmentRecordInfo', () => {
       expect(wrapper.find(CardBody).exists()).toBe(true)
     })
 
-    it('renders an Ellipsis component', () => {
-      expect(wrapper.find(Ellipsis).exists()).toBe(true)
+    it('renders an AssessmentActionsEllipsis component', () => {
+      expect(wrapper.find(AssessmentActionsEllipsis).exists()).toBe(true)
     })
 
     it('renders an assessment-info div', () => {
@@ -59,15 +58,15 @@ describe('AssessmentRecordInfo', () => {
     describe('assessment record info headers', () => {
       describe('header prop equals assessment-status', () => {
         it('renders a status icon header', () => {
-          const wrapper = prepareWrapper(assessmentInProgressWithCaseNumber, 'assessment-status')
-          expect(wrapper.find(AssessmentRecordStatus).exists()).toBe(true)
+          const statusWrapper = prepareWrapper(assessmentInProgressWithCaseNumber, 'assessment-status')
+          expect(statusWrapper.find(AssessmentRecordStatus).exists()).toBe(true)
         })
       })
 
       describe('header prop equals assessment-client-name', () => {
         it('renders a client name header', () => {
-          const wrapper = prepareWrapper(assessmentInProgressWithCaseNumber, 'assessment-client-name')
-          expect(wrapper.find('div.assessment-record-client-name').exists()).toBe(true)
+          const clientNameWrapper = prepareWrapper(assessmentInProgressWithCaseNumber, 'assessment-client-name')
+          expect(clientNameWrapper.find('div.assessment-record-client-name').exists()).toBe(true)
         })
       })
     })
@@ -75,19 +74,23 @@ describe('AssessmentRecordInfo', () => {
     it('renders 5 paragraphs', () => {
       expect(wrapper.find('p').length).toBe(5)
     })
+
+    it('renders an AssessmentLink', () => {
+      expect(wrapper.find(AssessmentLink).exists()).toBe(true)
+    })
   })
 
   describe('ClientAssessmentHistoryWithCaseNumber', () => {
     it('renders IN_PROGRESS assessment with all fields', () => {
       const { id } = assessmentInProgressWithCaseNumber
-      const wrapper = prepareWrapper(assessmentInProgressWithCaseNumber, 'assessment-client-name')
-      const assessmentInfo = wrapper
+      const inProgressWrapper = prepareWrapper(assessmentInProgressWithCaseNumber, 'assessment-client-name')
+      const assessmentInfo = inProgressWrapper
         .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97501)
-      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97501)
+      expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
         <AssessmentLink
@@ -106,14 +109,14 @@ describe('AssessmentRecordInfo', () => {
 
     it('renders COMPLETED assessment with all fields', () => {
       const { id } = assessmentCompletedWithCaseNumber
-      const wrapper = prepareWrapper(assessmentCompletedWithCaseNumber, 'assessment-client-name')
-      const assessmentInfo = wrapper
+      const completedWrapper = prepareWrapper(assessmentCompletedWithCaseNumber, 'assessment-client-name')
+      const assessmentInfo = completedWrapper
         .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
-      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(completedWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97502)
+      expect(completedWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
         <AssessmentLink
@@ -132,14 +135,14 @@ describe('AssessmentRecordInfo', () => {
 
     it('renders DELETED assessment with all fields', () => {
       const { id } = assessmentDeletedWithCaseNumber
-      const wrapper = prepareWrapper(assessmentDeletedWithCaseNumber, 'assessment-client-name')
-      const assessmentInfo = wrapper
+      const deletedWrapper = prepareWrapper(assessmentDeletedWithCaseNumber, 'assessment-client-name')
+      const assessmentInfo = deletedWrapper
         .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
-      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(deletedWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97502)
+      expect(deletedWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
         <AssessmentLink
@@ -158,14 +161,14 @@ describe('AssessmentRecordInfo', () => {
 
     it('renders assessment with no update info (create info only)', () => {
       const { id } = assessmentWithNoUpdateInfoWithCaseNumber
-      const wrapper = prepareWrapper(assessmentWithNoUpdateInfoWithCaseNumber, 'assessment-client-name')
-      const assessmentInfo = wrapper
+      const noUpdateInfoWrapper = prepareWrapper(assessmentWithNoUpdateInfoWithCaseNumber, 'assessment-client-name')
+      const assessmentInfo = noUpdateInfoWrapper
         .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97503)
-      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97503)
+      expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
         <AssessmentLink
@@ -186,14 +189,14 @@ describe('AssessmentRecordInfo', () => {
   describe('ClientAssessmentHistoryWithReferralNumber', () => {
     it('renders IN_PROGRESS assessment with all fields', () => {
       const { id } = assessmentInProgressWithReferralNumber
-      const wrapper = prepareWrapper(assessmentInProgressWithReferralNumber, 'assessment-client-name')
-      const assessmentInfo = wrapper
+      const inProgressWrapper = prepareWrapper(assessmentInProgressWithReferralNumber, 'assessment-client-name')
+      const assessmentInfo = inProgressWrapper
         .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97501)
-      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97501)
+      expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
         <AssessmentLink
@@ -212,14 +215,14 @@ describe('AssessmentRecordInfo', () => {
 
     it('renders COMPLETED assessment with all fields', () => {
       const { id } = assessmentCompletedWithReferralNumber
-      const wrapper = prepareWrapper(assessmentCompletedWithReferralNumber, 'assessment-client-name')
-      const assessmentInfo = wrapper
+      const completedWrapper = prepareWrapper(assessmentCompletedWithReferralNumber, 'assessment-client-name')
+      const assessmentInfo = completedWrapper
         .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
-      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(completedWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97502)
+      expect(completedWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
         <AssessmentLink
@@ -238,14 +241,14 @@ describe('AssessmentRecordInfo', () => {
 
     it('renders DELETED assessment with all fields', () => {
       const { id } = assessmentDeletedWithReferralNumber
-      const wrapper = prepareWrapper(assessmentDeletedWithReferralNumber, 'assessment-client-name')
-      const assessmentInfo = wrapper
+      const deletedWrapper = prepareWrapper(assessmentDeletedWithReferralNumber, 'assessment-client-name')
+      const assessmentInfo = deletedWrapper
         .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
-      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(deletedWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97502)
+      expect(deletedWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
         <AssessmentLink
@@ -264,14 +267,14 @@ describe('AssessmentRecordInfo', () => {
 
     it('renders assessment with no update info (create info only)', () => {
       const { id } = assessmentWithNoUpdateInfoWithReferralNumber
-      const wrapper = prepareWrapper(assessmentWithNoUpdateInfoWithReferralNumber, 'assessment-client-name')
-      const assessmentInfo = wrapper
+      const noUpdateInfoWrapper = prepareWrapper(assessmentWithNoUpdateInfoWithReferralNumber, 'assessment-client-name')
+      const assessmentInfo = noUpdateInfoWrapper
         .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97503)
-      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97503)
+      expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
         <AssessmentLink
@@ -292,14 +295,17 @@ describe('AssessmentRecordInfo', () => {
   describe('ClientAssessmentHistoryWithNoClientorReferralNumber', () => {
     it('renders IN_PROGRESS assessment with all fields', () => {
       const { id } = assessmentInProgressWithNoClientandReferralNumber
-      const wrapper = prepareWrapper(assessmentInProgressWithNoClientandReferralNumber, 'assessment-client-name')
-      const assessmentInfo = wrapper
+      const inProgressWrapper = prepareWrapper(
+        assessmentInProgressWithNoClientandReferralNumber,
+        'assessment-client-name'
+      )
+      const assessmentInfo = inProgressWrapper
         .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97501)
-      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97501)
+      expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
         <AssessmentLink
@@ -318,14 +324,17 @@ describe('AssessmentRecordInfo', () => {
 
     it('renders COMPLETED assessment with all fields', () => {
       const { id } = assessmentCompletedWithNoClientandReferralNumber
-      const wrapper = prepareWrapper(assessmentCompletedWithNoClientandReferralNumber, 'assessment-client-name')
-      const assessmentInfo = wrapper
+      const completedWrapper = prepareWrapper(
+        assessmentCompletedWithNoClientandReferralNumber,
+        'assessment-client-name'
+      )
+      const assessmentInfo = completedWrapper
         .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
-      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(completedWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97502)
+      expect(completedWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
         <AssessmentLink
@@ -344,14 +353,14 @@ describe('AssessmentRecordInfo', () => {
 
     it('renders DELETED assessment with all fields', () => {
       const { id } = assessmentDeletedWithNoClientandReferralNumber
-      const wrapper = prepareWrapper(assessmentDeletedWithNoClientandReferralNumber, 'assessment-client-name')
-      const assessmentInfo = wrapper
+      const deletedWrapper = prepareWrapper(assessmentDeletedWithNoClientandReferralNumber, 'assessment-client-name')
+      const assessmentInfo = deletedWrapper
         .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97502)
-      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(deletedWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97502)
+      expect(deletedWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
         <AssessmentLink
@@ -370,14 +379,17 @@ describe('AssessmentRecordInfo', () => {
 
     it('renders assessment with no update info (create info only)', () => {
       const { id } = assessmentWithNoUpdateInfoWithNoClientandReferralNumber
-      const wrapper = prepareWrapper(assessmentWithNoUpdateInfoWithNoClientandReferralNumber, 'assessment-client-name')
-      const assessmentInfo = wrapper
+      const noUpdateInfoWrapper = prepareWrapper(
+        assessmentWithNoUpdateInfoWithNoClientandReferralNumber,
+        'assessment-client-name'
+      )
+      const assessmentInfo = noUpdateInfoWrapper
         .find('div.assessment-info')
         .children()
         .map(child => child.props().children)
 
-      expect(wrapper.find(Ellipsis).props().assessmentId).toBe(97503)
-      expect(wrapper.find(Ellipsis).props().clientId).toBe('123')
+      expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97503)
+      expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
         <AssessmentLink

@@ -1,20 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Col } from 'reactstrap'
-import AssessmentRecordInfo from '../../common/AssessmentRecordInfo'
+import { AssessmentRecordInfo } from '../../Assessment/'
 
 const ClientAssessmentHistoryRecord = props => {
-  const { updateAssessmentHistoryCallback } = props
+  const { assessment, navFrom, inheritUrl, userId, updateAssessmentHistoryCallback } = props
 
   return (
     <Col xs={'4'}>
       <AssessmentRecordInfo
-        assessment={props.assessment}
+        assessment={assessment}
         header={'assessment-status'}
-        navFrom={props.navFrom}
-        inheritUrl={props.inheritUrl}
-        userId={props.userId}
+        navFrom={navFrom}
+        inheritUrl={inheritUrl}
         updateAssessmentHistoryCallback={updateAssessmentHistoryCallback}
+        userId={userId}
       />
     </Col>
   )
@@ -23,14 +23,9 @@ const ClientAssessmentHistoryRecord = props => {
 ClientAssessmentHistoryRecord.propTypes = {
   assessment: PropTypes.object.isRequired,
   inheritUrl: PropTypes.string.isRequired,
-  navFrom: PropTypes.string,
+  navFrom: PropTypes.string.isRequired,
   updateAssessmentHistoryCallback: PropTypes.func.isRequired,
-  userId: PropTypes.string,
-}
-
-ClientAssessmentHistoryRecord.defaultProps = {
-  navFrom: null,
-  userId: null,
+  userId: PropTypes.string.isRequired,
 }
 
 export default ClientAssessmentHistoryRecord

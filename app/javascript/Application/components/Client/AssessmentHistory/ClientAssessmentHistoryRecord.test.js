@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import ClientAssessmentHistoryRecord from './ClientAssessmentHistoryRecord'
-import AssessmentRecordInfo from '../../common/AssessmentRecordInfo'
+import { AssessmentRecordInfo } from '../../Assessment/'
 import {
   assessmentInProgressWithCaseNumber,
   assessmentCompletedWithCaseNumber,

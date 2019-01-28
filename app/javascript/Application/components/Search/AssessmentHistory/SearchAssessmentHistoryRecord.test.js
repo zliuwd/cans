@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import SearchAssessmentHistoryRecord from './SearchAssessmentHistoryRecord'
-import AssessmentRecordInfo from '../../common/AssessmentRecordInfo'
+import { AssessmentRecordInfo } from '../../Assessment/'
 import { assessmentInProgress, assessmentWithNoUpdateInfo } from '../../Assessment/assessment.mocks.test'
 
 const getShallowWrapper = assessment =>

@@ -14,10 +14,10 @@ const SearchAssessmentHistory = props => (
     ) : (
       props.assessments.map(assessment => (
         <SearchAssessmentHistoryRecord
-          navFrom={props.navFrom}
-          assessment={assessment}
           key={assessment.id}
+          assessment={assessment}
           inheritUrl={props.inheritUrl}
+          navFrom={props.navFrom}
           updateAssessmentHistoryCallback={props.updateAssessmentHistoryCallback}
         />
       ))

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import AssessmentLink from '../../common/AssessmentLink'
+import AssessmentLink from '../../Assessment/AssessmentLink'
 
 const ClientAssessmentHistoryLink = ({ original }) => {
   const props = {
