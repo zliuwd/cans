@@ -20,7 +20,7 @@ CLIENT_LIST_TITLE = 'Client List'
 CAREGIVER_DOMAIN_WARNING_MESSAGE = 'You are about to remove the CAREGIVER from this Assessment.'
 
 def acceptance_helper
-  return LoginHelper unless ENV.fetch('REGRESSION_TEST', false)
+  return LoginHelper unless ENV.fetch('PROD_LOGIN', false)
   ProdLoginHelper
 end
 

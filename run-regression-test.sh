@@ -2,7 +2,7 @@
 
 # REGRESSION TEST MODE
 
-export set REGRESSION_TEST=true
+export set PROD_LOGIN=true
 
 # ENV URL
 
