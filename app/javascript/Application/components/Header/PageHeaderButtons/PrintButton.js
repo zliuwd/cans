@@ -35,7 +35,7 @@ class PrintButton extends Component {
   }
 
   togglePrintNow = () => {
-    this.setState({ shouldPrintNow: !this.state.shouldPrintNow })
+    window.open('/api/assessments/52500/pdf')
   }
 
   renderPrintButton = () => {

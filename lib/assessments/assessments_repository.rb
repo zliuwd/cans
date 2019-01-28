@@ -11,6 +11,10 @@ module Assessments
       @http_service.call("/assessments/#{id}", :get, @token)
     end
 
+    def pdf(id)
+      @http_service.call("/assessments/#{id}/pdf", :get, @token)
+    end
+
     def search(payload)
       @http_service.call('/assessments/_search', :post, @token, payload)
     end

@@ -25,6 +25,7 @@ Rails.application.routes.draw do
         post '_search', to: 'assessments#search'
         get ':id/changes', to: 'assessments#changes'
         delete ':id', to: 'assessments#delete'
+        get ':id/pdf', to: 'assessments#pdf'
       end
     end
 

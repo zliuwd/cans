@@ -7,6 +7,11 @@ module Api
       render json: response.body, status: response.status
     end
 
+    def pdf
+      response = Assessments::AssessmentsRepository.new(session[:token]).pdf(params[:id])
+      send_data response.body, content_type: "application/pdf", status: response.status, filename: 'assessment',  disposition: 'inline'
+    end
+
     def search
       response = Assessments::AssessmentsRepository.new(session[:token]).search(params[:assessment])
       render json: response.body, status: response.status
