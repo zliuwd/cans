@@ -8,8 +8,8 @@ import ClientAssessmentHistoryTableCaseNumber from './ClientAssessmentHistoryTab
 import ClientAssessmentHistoryTableCountyName from './ClientAssessmentHistoryTableCountyName'
 import ClientAssessmentHistoryTableDate from './ClientAssessmentHistoryTableDate'
 import ClientAssessmentHistoryTableUpdatedBy from './ClientAssessmentHistoryTableUpdatedBy'
-import ClientAssessmentHistoryTableEllipsis from './ClientAssessmentHistoryTableEllipsis'
 import { navigation } from '../../../util/constants'
+import { AssessmentStatus, AssessmentActionsEllipsis } from '../../Assessment'
 
 const defaultMockedAssessments = [
   { id: 1 },
@@ -342,11 +342,34 @@ describe('<ClientAssessmentHistoryTable />', () => {
         })
       })
 
-      describe('Ellipsis', () => {
+      describe('AssessmentActionsEllipsis', () => {
         it('passes the correct column config', () => {
+          const row = {
+            original: {
+              inheritUrl: '/staff/0X5',
+              person: { identifier: '0PcpFQu0QM' },
+              id: 12345,
+              status: AssessmentStatus.completed,
+              metadata: {
+                allowed_operations: ['read', 'update', 'create', 'write', 'delete'],
+              },
+              updateAssessmentHistoryCallback,
+            },
+          }
           const assessmentTableColumnConfig = dataGrid.props().columns[5]
           expect(assessmentTableColumnConfig.Header).toBe('')
-          expect(assessmentTableColumnConfig.Cell).toEqual(ClientAssessmentHistoryTableEllipsis)
+          expect(assessmentTableColumnConfig.Cell(row)).toEqual(
+            <AssessmentActionsEllipsis
+              inheritUrl="/staff/0X5"
+              clientId="0PcpFQu0QM"
+              assessmentId={12345}
+              assessmentStatus="COMPLETED"
+              assessmentMetaData={{
+                allowed_operations: ['read', 'update', 'create', 'write', 'delete'],
+              }}
+              updateAssessmentHistoryCallback={updateAssessmentHistoryCallback}
+            />
+          )
           expect(assessmentTableColumnConfig.width).toEqual(35)
           expect(assessmentTableColumnConfig.className).toBe('text-center')
           expect(assessmentTableColumnConfig.headerClassName).toBe('text-center')

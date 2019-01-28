@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import AssessmentRecordInfo from '../../common/AssessmentRecordInfo'
+import AssessmentRecordInfo from '../../Assessment/AssessmentRecordInfo'
 
 class SearchAssessmentHistoryRecord extends PureComponent {
   render() {

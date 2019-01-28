@@ -316,7 +316,11 @@ describe('AssessmentHelper', () => {
 
   it('postInfoMessage', () => {
     const postInfoSpy = jest.spyOn(globalAlertService, 'postInfo')
-    postInfoMessage({ message: 'Info Message', isAutoCloseable: true, componentId: 'cId' })
+    postInfoMessage({
+      message: 'Info Message',
+      isAutoCloseable: true,
+      componentId: 'cId',
+    })
     expect(postInfoSpy).toHaveBeenCalledTimes(1)
     expect(postInfoSpy).toHaveBeenCalledWith({
       message: 'Info Message',

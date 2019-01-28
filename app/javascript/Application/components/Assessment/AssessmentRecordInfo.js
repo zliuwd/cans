@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Card, CardBody } from '@cwds/components'
 import { isoToLocalDate } from '../../util/dateHelper'
-import { getActionVerbByStatus } from '../Assessment/AssessmentHelper'
-import AssessmentLink from '../common/AssessmentLink'
-import Ellipsis from '../common/Ellipsis'
-import AssessmentRecordStatus from '../common/AssessmentRecordStatus'
+import { getActionVerbByStatus } from './AssessmentHelper'
+import AssessmentLink from './AssessmentLink'
+import AssessmentRecordStatus from './AssessmentRecordStatus'
 import { clientCaseReferralNumber } from '../Client/Client.helper'
+import AssessmentActionsEllipsis from './AssessmentActionsEllipsis'
 
 class AssessmentRecordInfo extends Component {
-  renderInfo = (header, assessment, assessmentInfo) => {
+  renderAssessmentInfo = (header, assessment) => {
     const { status, person, id, metadata } = assessment
     const {
       clientName,
@@ -19,22 +19,22 @@ class AssessmentRecordInfo extends Component {
       countyName,
       caseReferralNumber,
       serviceSourceUiId,
-    } = assessmentInfo
+    } = this.processAssessmentInfo(assessment)
     const statusHeader = <AssessmentRecordStatus status={status} />
     const clientNameHeader = <div className="assessment-record-client-name">{`${clientName}`}</div>
     const recordHeader = header === 'assessment-status' ? statusHeader : clientNameHeader
-    const { updateAssessmentHistoryCallback } = this.props
+    const { updateAssessmentHistoryCallback, inheritUrl } = this.props
 
     return (
       <Card className="card-assessment-record-info">
         <CardBody>
-          <Ellipsis
+          <AssessmentActionsEllipsis
+            inheritUrl={inheritUrl}
             clientId={person.identifier}
             assessmentId={id}
-            assessmentMetaData={metadata}
             assessmentStatus={status}
+            assessmentMetaData={metadata}
             updateAssessmentHistoryCallback={updateAssessmentHistoryCallback}
-            inheritUrl={this.props.inheritUrl}
           />
           <div className={'assessment-info'}>
             {recordHeader}
@@ -57,7 +57,7 @@ class AssessmentRecordInfo extends Component {
     )
   }
 
-  renderAssessmentInfo = (assessment, header) => {
+  processAssessmentInfo = assessment => {
     const {
       updated_timestamp: updatedTimestamp,
       updated_by: updatedBy,
@@ -69,9 +69,7 @@ class AssessmentRecordInfo extends Component {
       county,
       person,
     } = assessment
-
     const { first_name: firstName, middle_name: middleName, last_name: lastName } = person
-
     const suffix = person.suffix ? `, ${person.suffix}` : ''
     const clientName = `${firstName} ${middleName} ${lastName}${suffix}`
     const actionVerb = getActionVerbByStatus(status)
@@ -80,7 +78,6 @@ class AssessmentRecordInfo extends Component {
     const updatedByName = `${user.first_name} ${user.last_name}`
     const countyName = county ? county.name : ''
     const caseReferralNumber = clientCaseReferralNumber(serviceSource).replace('Number', '#')
-
     const assessmentInfo = {
       clientName,
       actionVerb,
@@ -91,12 +88,13 @@ class AssessmentRecordInfo extends Component {
       serviceSourceUiId,
     }
 
-    return this.renderInfo(header, assessment, assessmentInfo)
+    return assessmentInfo
   }
 
   render() {
     const { assessment, header } = this.props
-    return this.renderAssessmentInfo(assessment, header)
+
+    return this.renderAssessmentInfo(header, assessment)
   }
 }
 
