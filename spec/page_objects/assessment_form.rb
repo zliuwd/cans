@@ -1,17 +1,15 @@
 # frozen_string_literal: true
 
-require 'page_objects/breadcrumbs'
+require 'page_objects/sections/app_globals'
+require 'page_objects/sections/breadcrumbs'
 
 class AssessmentGlobal < SitePrism::Section
+  element :assessment_page_header, 'h1', text: 'CANS Communimetric Assessment Form'
   element :save_button, 'div.header-buttons-block i.fa-save'
   element :global_save_success_message_box, 'div.global-alert', text: 'Success! '\
                                             'CANS assessment has been saved'
   element :global_complete_message_box, 'div.global-alert', text: 'This assessment was completed '\
                                         'and is available for view only.'
-  element :delete_warning_modal, 'div.modal', text: 'Deleting CANS Warning'
-  element :complete_warning_modal, 'div.modal', text: 'Reminder'
-  element :cancel_button_of_warning, 'button.warning-modal-logout'
-  element :agree_button_of_warning, 'button.warning-modal-stay-logged-in'
 end
 
 class AssessmentFormHeader < SitePrism::Section
@@ -20,6 +18,10 @@ class AssessmentFormHeader < SitePrism::Section
   element :calendar_cell_11, 'td.rw-cell', text: '11'
   element :conducted_by, 'input#conducted-by'
   element :case_or_referral, 'div#case-or-referral-number'
+  element :has_caregiver_no_label, '#has-caregiver-no'
+  element :has_caregiver_yes_label, '#has-caregiver-yes'
+  element :has_caregiver_no_radio, '#input-has-caregiver-no', visible: false
+  element :has_caregiver_yes_radio, '#input-has-caregiver-yes', visible: false
   element :authorization_label_yes, 'div#can-release-control label', text: 'Yes'
   element :authorization_label_no, 'div#can-release-control label', text: 'No'
   element :authorization_radio_yes, 'input#input-can-release-yes', visible: false
@@ -40,20 +42,18 @@ class AssessmentFormFooter < SitePrism::Section
 end
 
 class AssessmentForm < SitePrism::Page
+  section :app_globals, AppGlobals, 'body'
   section :global, AssessmentGlobal, 'body'
   section :breadcrumbs, Breadcrumbs, 'div.breadcrumb-container'
   section :header, AssessmentFormHeader, 'div.assessment-header-date'
   section :summary, AssessmentSummary, 'div.assessment-summary-card'
   section :footer, AssessmentFormFooter, 'div.form-footer'
   element :assessment_card_title_0_5, 'div.assessment-card-title', text: 'Age Range 0-5'
-  element :caregiver_resource_domain_title, 'h2', text: 'Caregiver Resources And Needs Domain'
   element :assessment_card_title_6_21, 'div.assessment-card-title', text: 'Age Range 6-21'
   element :ec41_title, 'h2', text: 'EC41'
   element :sub7_title, 'h2', text: '7. SUBSTANCE USE'
   element :sub48a_title, 'h2', text: '48a. SUBSTANCE USE'
   elements :collapsed_domain_headers, 'div[aria-expanded="false"] h2'
-  element :has_caregiver_no_label, '#has-caregiver-no'
-  element :has_caregiver_yes_label, '#has-caregiver-yes'
   elements :inner_items, 'i.item-expand-icon'
   elements :process_counts, 'span.progress-value'
   elements :fully_filled_progress_bars, 'div[aria-valuenow="100"][role="progressbar"]'
@@ -79,8 +79,12 @@ class AssessmentForm < SitePrism::Page
   element :item_level_comment, 'div.item-comment-block textarea'
   element :domain_level_comment, 'div.domain-comment-block textarea'
   elements :domain_toolbar_comment_icon_block, 'div.domain-toolbar-comment-icon-block'
+  element :item_description_header, 'h1', text: 'Item Description:'
   # Caregiver domain specific elements
   elements :caregiver_domain_headers, 'h2', text: 'Caregiver Resources And Needs Domain'
+  element :caregiver_domain_substance_use_confidential_checkbox,
+          '#SUBSTANCE_USE_CAREGIVERCheckbox input',
+          visible: false
   element :add_caregiver_button, 'div[aria-label="add caregiver button"]'
   elements :caregiver_name_fields, 'input.caregiver-name'
   elements :caregiver_domains_first_item_labels, '#SUPERVISION-regular-rating label'
@@ -90,7 +94,6 @@ class AssessmentForm < SitePrism::Page
           match: :first
   element :caregiver_domain_warning_popup, 'div.warning-modal-body'
   element :caregiver_domain_warning_message, 'div.warning-modal-body div div'
-  elements :caregiver_domain_warning_popup_buttons, 'button.btn-secondary'
 end
 
 def fill_conducted_by_field(text)
@@ -126,12 +129,4 @@ end
 def save_and_check_the_success_message
   @form.global.save_button.click
   expect(@form.global).to have_global_save_success_message_box
-end
-
-def caregiver_domain_warning_remove_button
-  @form.caregiver_domain_warning_popup_buttons[1]
-end
-
-def caregiver_domain_warning_cancel_button
-  @form.caregiver_domain_warning_popup_buttons[0]
 end

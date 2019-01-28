@@ -4,6 +4,15 @@
     <title>Cans</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <script>
+      window.org = {
+        cans: {
+          active_features: <%= Feature.active_features.to_json.html_safe %>,
+        }
+      }
+
+      Object.freeze(window.org.cans)
+    </script>
   </head>
 
   <body>

@@ -27,4 +27,14 @@ feature 'Index Page' do
     expect(page).not_to have_content('Assigned Staff', wait: 100)
     logout
   end
+
+  scenario 'CANS pages have active feature information' do
+    login
+    active_features = page.evaluate_script(
+      'JSON.stringify(window.org.cans.active_features)'
+    )
+    expect(active_features).to start_with('[')
+    expect(active_features).to end_with(']')
+    logout
+  end
 end

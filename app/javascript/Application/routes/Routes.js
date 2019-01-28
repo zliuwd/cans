@@ -18,9 +18,7 @@ const Routes = () => {
         </PermissionRedirectBoundary>
       </Route>
       <Route exact path="/clients" children={route => page(route, navigation.CHILD_LIST)} />
-      <Route exact path="/clients/new" children={route => page(route, navigation.CHILD_PROFILE_ADD)} />
       <Route exact path="/clients/:clientId" children={route => page(route, navigation.CHILD_PROFILE)} />
-      <Route exact path="/clients/:clientId/edit" children={route => page(route, navigation.CHILD_PROFILE_EDIT)} />
       <Route exact path="/clients/:clientId/assessments" children={route => page(route, navigation.ASSESSMENT_ADD)} />
       <Route
         exact

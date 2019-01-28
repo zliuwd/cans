@@ -18,7 +18,7 @@ module.exports = {
   },
   rules: {
     'array-bracket-spacing': [2, 'never'],
-    'babel/no-invalid-this': 1,
+    'babel/no-invalid-this': 2,
     'consistent-return': [2],
     'computed-property-spacing': [2, 'never'],
     'dot-notation': [2],
@@ -48,7 +48,7 @@ module.exports = {
     'no-lonely-if': [2],
     'no-loop-func': [2],
     //This following rule will be turned to error in future once all warnigns are taken care in tech debt
-    'no-magic-numbers': [1, {ignore: [-1,0,1,2]}],
+    'no-magic-numbers': [2, {ignore: [-1,0,1,2]}],
     'no-native-reassign': [2],
     'no-spaced-func': [2],
     'no-useless-concat': [2],
@@ -80,8 +80,8 @@ module.exports = {
     'react/jsx-curly-spacing': [2, 'never'],
     'react/jsx-indent-props': [2, 2],
     'react/no-danger': [2],
-    'react/no-did-mount-set-state': [1],
-    'react/no-did-update-set-state': [1],
+    'react/no-did-mount-set-state': [2],
+    'react/no-did-update-set-state': [2],
     'react/no-unused-state': 2,
     'react/no-multi-comp': 2,
     'react/no-typos': 2,

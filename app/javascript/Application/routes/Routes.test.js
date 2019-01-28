@@ -52,16 +52,8 @@ describe('<Router />', () => {
       testRoute('/clients', navigation.CHILD_LIST)
     })
 
-    it('renders a new client route', () => {
-      testRoute('/clients/new', navigation.CHILD_PROFILE_ADD)
-    })
-
     it('renders a child profile route', () => {
       testRoute('/clients/:clientId', navigation.CHILD_PROFILE)
-    })
-
-    it('renders a child profile edit route', () => {
-      testRoute('/clients/:clientId/edit', navigation.CHILD_PROFILE_EDIT)
     })
 
     it('renders a child assessments route', () => {
