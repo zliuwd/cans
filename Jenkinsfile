@@ -27,7 +27,7 @@ def buildPullRequest() {
       checkForLabel() // shared library
       buildDockerImageStage()
       lintAndUnitTestStages()
-      regressionTestStage('')
+      regressionDevTestStage()
       a11yLintStage()
     } catch(Exception exception) {
       currentBuild.result = "FAILURE"
@@ -45,7 +45,7 @@ def buildMaster() {
       incrementTag() // shared library
       buildDockerImageStage()
       lintAndUnitTestStages()
-      acceptanceTestStage()
+      regressionDevTestStage()
       a11yLintStage()
       tagRepo() // shared library
       publishImageStage()
@@ -119,31 +119,31 @@ def unitTestStage(container) {
   }
 }
 
-def acceptanceTestStage() {
-  stage('Acceptance Test') {
+def regressionDevTestStage() {
+  stage('Regression Test') {
     hostname = sh(returnStdout: true, script: '/sbin/ifconfig eth0 | grep "inet addr:" | cut -d: -f2 | cut -d " " -f1').trim()
     withEnv(["HOST=${hostname}"]) {
       withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
         sh "docker-compose -f docker-compose.ci.yml build"
         sh "docker-compose -f docker-compose.ci.yml run cans-test-all"
-        runAcceptanceTests('')
+        runRegressionDevTests('')
       }
     }
   }
 }
 
-def runAcceptanceTests(environmentVariables) {
+def runRegressionDevTests(environmentVariables) {
   try {
-    sh "docker-compose -f docker-compose.ci.yml exec -T ${environmentVariables} cans-test bundle exec rspec spec/acceptance --format html --out regression-report/acceptance_index.html"
+    sh "docker-compose -f docker-compose.ci.yml exec -T ${environmentVariables} cans-test bundle exec rspec spec/regression --format html --out regression-report/index.html"
   } finally {
     publishHTML([
               allowMissing         : true,
               alwaysLinkToLastBuild: true,
               keepAll              : true,
               reportDir            : 'regression-report',
-              reportFiles          : 'acceptance_index.html',
-              reportName           : 'Acceptance Tests Report',
-              reportTitles         : 'Acceptance Tests Report'
+              reportFiles          : 'index.html',
+              reportName           : 'Regression Tests Dev',
+              reportTitles         : 'Regression Tests Dev'
     ])
   }
 }
@@ -198,8 +198,8 @@ def regressionTestStage(environmentVariables) {
                    keepAll              : true,
                    reportDir            : 'regression-report',
                    reportFiles          : 'index.html',
-                   reportName           : 'Regression Tests Report',
-                   reportTitles         : 'Regression Tests Report'
+                   reportName           : 'Regression Tests Prod',
+                   reportTitles         : 'Regression Tests Prod'
           ])
         }
       }
