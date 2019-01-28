@@ -62,7 +62,7 @@ services:
       - cans
 
   elasticsearch:
-    image: cwds/elasticsearch_xpack_data:latest
+    image: cwds/elasticsearch_xpack_data:1.7.13-SNAPSHOT
     hostname: elasticsearch
     depends_on:
       - perry
