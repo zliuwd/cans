@@ -11,6 +11,10 @@ feature 'Non Case Worker Functionality' do
     @client_profile = ClientProfile.new
   end
 
+  after(:all) do
+    logout
+  end
+
   scenario 'Non Case worker login, search client, select it and logs out' do
     login non_caseworker_json
     expect(@client_search).to have_top_alert
@@ -22,6 +26,5 @@ feature 'Non Case Worker Functionality' do
     @client_search.search_client_link.click
     @client_profile.last_name.text eq(SEARCH_CLIENT_LAST_NAME)
     expect(@client_profile).to have_assessment_history_title
-    logout
   end
 end

@@ -13,6 +13,10 @@ feature 'Supervisor functionality' do
     @client_profile = ClientProfile.new
   end
 
+  after(:all) do
+    logout
+  end
+
   scenario 'Supervisor lands on staff list, visits one of staff member clients and logs out' do
     login supervisor_json
     expect(@supervisor_dash).to have_supervisor_card_title
@@ -24,6 +28,5 @@ feature 'Supervisor functionality' do
     expect(@client_profile).to have_client_information_title
     @client_profile.last_name.text eq(CLIENT_LAST_NAME)
     expect(@client_profile).to have_assessment_history_title
-    logout
   end
 end
