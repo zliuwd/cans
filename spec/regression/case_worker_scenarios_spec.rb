@@ -8,7 +8,7 @@ require 'page_objects/staff_dashboard'
 require 'page_objects/assessment_changelog'
 
 feature 'Case Worker Functionality' do
-  current_date = Time.now.strftime('%m/%d/%Y')
+  current_date = Time.now.getlocal.strftime('%m/%d/%Y')
   before(:all) do
     @form = AssessmentForm.new
     @staff_dash = StaffDashboard.new

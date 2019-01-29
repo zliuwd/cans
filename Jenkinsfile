@@ -134,7 +134,7 @@ def regressionDevTestStage() {
 
 def runRegressionDevTests(environmentVariables) {
   try {
-    sh "docker-compose -f docker-compose.ci.yml exec -T ${environmentVariables} cans-test bundle exec rspec spec/regression --format html --out regression-report/index.html"
+    sh "docker-compose -f docker-compose.ci.yml exec -T ${environmentVariables} --env TZ=US/Pacific cans-test bundle exec rspec spec/regression --format html --out regression-report/index.html"
   } finally {
     publishHTML([
               allowMissing         : true,
