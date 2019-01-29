@@ -85,12 +85,12 @@ class AssessmentForm < SitePrism::Page
   element :caregiver_domain_substance_use_confidential_checkbox,
           '#SUBSTANCE_USE_CAREGIVERCheckbox input',
           visible: false
-  element :add_caregiver_button, 'div[aria-label="add caregiver button"]'
+  element :add_caregiver_button, 'button[aria-label="add caregiver button"]'
   elements :caregiver_name_fields, 'input.caregiver-name'
   elements :caregiver_domains_first_item_labels, '#SUPERVISION-regular-rating label'
   elements :caregiver_domains_first_item_radios, '#SUPERVISION-regular-rating input', visible: false
   element :remove_first_caregiver_domain_button,
-          'div[aria-label="remove caregiver button"]',
+          'button[aria-label="remove caregiver button"]',
           match: :first
   element :caregiver_domain_warning_popup, 'div.warning-modal-body'
   element :caregiver_domain_warning_message, 'div.warning-modal-body div div'

@@ -17,61 +17,65 @@ describe('<DomainCaregiverControls/>', () => {
     wrapper.unmount()
   })
 
-  it('will render 2 li', () => {
-    expect(wrapper.find('li').length).toBe(2)
+  it('will render 2 Buttons', () => {
+    expect(wrapper.find('Button').length).toBe(2)
   })
 
-  it('first li have text # - REMOVE CAREGIVER #', () => {
+  it('first Button have text # - REMOVE CAREGIVER #', () => {
     expect(
       wrapper
-        .find('li')
+        .find('Button')
         .at(0)
         .text()
     ).toBe('- REMOVE CAREGIVER')
   })
 
-  it('second li have text # + ADD CAREGIVER #', () => {
+  it('second Button have text # + ADD CAREGIVER #', () => {
     expect(
       wrapper
-        .find('li')
+        .find('Button')
         .at(1)
         .text()
     ).toBe('+ ADD CAREGIVER')
   })
 
-  it('will invoke onRemoveCaregiverDomain when first li be clicked', () => {
+  it('will invoke onRemoveCaregiverDomain when first button is clicked', () => {
     wrapper
-      .find('li')
+      .find('Button')
       .at(0)
-      .find('div')
       .simulate('click')
     expect(wrapper.props().onRemoveCaregiverDomain).toHaveBeenCalledTimes(1)
   })
 
-  it('will invoke onRemoveCaregiverDomain when first li have key pressed', () => {
+  it('will invoke onRemoveCaregiverDomain when first Button have key pressed', () => {
     wrapper
-      .find('li')
+      .find('Button')
       .at(0)
-      .find('div')
       .simulate('keyPress')
     expect(wrapper.props().onRemoveCaregiverDomain).toHaveBeenCalledTimes(2)
   })
 
-  it('will invoke onAddCaregiverDomain when second li be clicked', () => {
+  it('will invoke onAddCaregiverDomain when second Button is clicked', () => {
     wrapper
-      .find('li')
+      .find('Button')
       .at(1)
-      .find('div')
       .simulate('click')
     expect(wrapper.props().onAddCaregiverDomain).toHaveBeenCalledTimes(1)
   })
 
-  it('will invoke onAddCaregiverDomain when second li have key pressed', () => {
+  it('will invoke onAddCaregiverDomain when second Button have key pressed', () => {
     wrapper
-      .find('li')
+      .find('Button')
       .at(1)
-      .find('div')
       .simulate('keyPress')
     expect(wrapper.props().onAddCaregiverDomain).toHaveBeenCalledTimes(2)
+  })
+
+  it('will invoke onAddCaregiverDomain when second Button have key pressed for second time', () => {
+    wrapper
+      .find('Button')
+      .at(1)
+      .simulate('keyPress')
+    expect(wrapper.props().onAddCaregiverDomain).toHaveBeenCalledTimes(3)
   })
 })

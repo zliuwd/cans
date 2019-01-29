@@ -178,20 +178,20 @@ describe('<Domain />', () => {
       expect(wrapper.find(DomainCaregiverControls).length).toBe(1)
     })
 
+    it('invokes onRemoveCaregiverDomain() callback', () => {
+      const removeCaregiverButton = wrapper.find('Button').at(1)
+      removeCaregiverButton.simulate('click')
+      removeCaregiverButton.simulate('keypress', { key: 'Enter' })
+      removeCaregiverButton.simulate('keypress', { key: 'Space' })
+      expect(callbackMock.mock.calls.length).toBe(2)
+    })
+
     it('will invoke onAddCaregiverDomain() callback', () => {
-      const addCaregiverButton = wrapper.find('.caregiver-control').at(1)
+      const addCaregiverButton = wrapper.find('div').at(1)
       expect(wrapper.find(DomainCaregiverControls).length).toBe(1)
       addCaregiverButton.simulate('click')
       addCaregiverButton.simulate('keypress', { key: 'Enter' })
       addCaregiverButton.simulate('keypress', { key: 'Space' })
-      expect(callbackMock.mock.calls.length).toBe(2)
-    })
-
-    it('invokes onRemoveCaregiverDomain() callback', () => {
-      const removeCaregiverButton = wrapper.find('.caregiver-control').at(0)
-      removeCaregiverButton.simulate('click')
-      removeCaregiverButton.simulate('keypress', { key: 'Enter' })
-      removeCaregiverButton.simulate('keypress', { key: 'Space' })
       expect(callbackMock.mock.calls.length).toBe(2)
     })
 
