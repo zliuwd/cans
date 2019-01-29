@@ -406,7 +406,7 @@ describe('<AssessmentContainer />', () => {
           assessment: assessment,
           isCaregiverWarningShown: true,
         })
-        expect(wrapper.find(PageModal).props().description).toContain('This may effect some of your entries.')
+        expect(wrapper.find(PageModal).props().description).toContain('This may affect some of your entries.')
       })
 
       it('should render title when warningShow is true', () => {

@@ -360,7 +360,7 @@ class AssessmentContainer extends Component {
         isOpen={true}
         title={'Warning'}
         warningDescription={caregiverWarning}
-        description={'This may effect some of your entries.'}
+        description={'This may affect some of your entries.'}
         removeButtonLabel={'Remove'}
         cancelButtonLabel={'Cancel'}
         onCancel={() => this.handleWarningShow(false)}
