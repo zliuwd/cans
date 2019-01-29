@@ -41,7 +41,6 @@ Capybara.javascript_driver = :chrome_headless
 
 Capybara.configure do |config|
   include acceptance_helper
-  include ResourceHelper
   setup_output_format
   config.default_max_wait_time = 30
   config.default_driver = :selenium
