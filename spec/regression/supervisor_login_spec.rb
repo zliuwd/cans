@@ -29,4 +29,14 @@ feature 'Supervisor functionality' do
     @client_profile.last_name.text eq(CLIENT_LAST_NAME)
     expect(@client_profile).to have_assessment_history_title
   end
+
+  scenario 'Logging out clears your last visited page' do
+    login supervisor_json
+    expect(page).to have_content('Assigned Staff', wait: 100)
+    click_logout
+    expect(page).not_to have_content('CANS')
+    enter_credentials
+    expect(page).not_to have_content('Assigned Staff', wait: 100)
+  end
+
 end
