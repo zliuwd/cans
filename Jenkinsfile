@@ -10,7 +10,7 @@ switch(env.BUILD_JOB_TYPE) {
   case "master": buildMaster(); break;
   case "acceptance": jobTypeHandledByMasterBuild(); break;
   case "regression": jobTypeHandledByMasterBuild(); break;
-  case "regressionStaging": buildRegression('staging','https://staging.cwds.ca.gov/cans'); break;
+  case "regressionStaging": buildRegression('staging','--env CANS_WEB_BASE_URL=https://staging.cwds.ca.gov/cans'); break;
   case "release": releasePipeline(); break;
   default: buildPullRequest();
 }
@@ -27,7 +27,7 @@ def buildPullRequest() {
       checkForLabel() // shared library
       buildDockerImageStage()
       lintAndUnitTestStages()
-      acceptanceTestStage()
+      regressionDevTestStage()
       a11yLintStage()
     } catch(Exception exception) {
       currentBuild.result = "FAILURE"
@@ -45,7 +45,7 @@ def buildMaster() {
       incrementTag() // shared library
       buildDockerImageStage()
       lintAndUnitTestStages()
-      acceptanceTestStage()
+      regressionDevTestStage()
       a11yLintStage()
       tagRepo() // shared library
       publishImageStage()
@@ -119,31 +119,31 @@ def unitTestStage(container) {
   }
 }
 
-def acceptanceTestStage() {
-  stage('Acceptance Test') {
+def regressionDevTestStage() {
+  stage('Regression Test') {
     hostname = sh(returnStdout: true, script: '/sbin/ifconfig eth0 | grep "inet addr:" | cut -d: -f2 | cut -d " " -f1').trim()
     withEnv(["HOST=${hostname}"]) {
       withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
         sh "docker-compose -f docker-compose.ci.yml build"
         sh "docker-compose -f docker-compose.ci.yml run cans-test-all"
-        runAcceptanceTests('')
+        runRegressionDevTests('')
       }
     }
   }
 }
 
-def runAcceptanceTests(environmentVariables) {
+def runRegressionDevTests(environmentVariables) {
   try {
-    sh "docker-compose -f docker-compose.ci.yml exec -T ${environmentVariables} cans-test bundle exec rspec spec/acceptance --format html --out regression-report/acceptance_index.html"
+    sh "docker-compose -f docker-compose.ci.yml exec -T ${environmentVariables} --env TZ=US/Pacific cans-test bundle exec rspec spec/regression --format html --out regression-report/index.html"
   } finally {
     publishHTML([
               allowMissing         : true,
               alwaysLinkToLastBuild: true,
               keepAll              : true,
               reportDir            : 'regression-report',
-              reportFiles          : 'acceptance_index.html',
-              reportName           : 'Acceptance Tests Report',
-              reportTitles         : 'Acceptance Tests Report'
+              reportFiles          : 'index.html',
+              reportName           : 'Regression Tests Dev',
+              reportTitles         : 'Regression Tests Dev'
     ])
   }
 }
@@ -169,12 +169,12 @@ def acceptanceTestPreintStage() {
   stage('Acceptance Test Preint') {
     withDockerRegistry([credentialsId: JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID]) {
       sh "docker-compose -f docker-compose.ci.yml up -d --build cans-test"
-      runAcceptanceTests('--env CANS_WEB_BASE_URL=https://cans.preint.cwds.io/cans')
+      runRegressionDevTests('--env CANS_WEB_BASE_URL=https://cans.preint.cwds.io/cans')
     }
   }
 }
 
-def regressionTestStage(url) {
+def regressionTestStage(environmentVariables) {
   stage('Regression Test') {
     withDockerRegistry([credentialsId: JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID]) {
       withCredentials([
@@ -190,7 +190,7 @@ def regressionTestStage(url) {
         ]) {        
         sh "docker-compose -f docker-compose.ci.yml up -d --build cans-test"
         try {
-          sh "docker-compose -f docker-compose.ci.yml exec -T --env NON_CASEWORKER_USERNAME=$NON_CASEWORKER_USERNAME --env NON_CASEWORKER_PASSWORD=$NON_CASEWORKER_PASSWORD --env NON_CASEWORKER_VERIFICATION_CODE=$NON_CASEWORKER_VERIFICATION_CODE --env SUPERVISOR_USERNAME=$SUPERVISOR_USERNAME --env SUPERVISOR_PASSWORD=$SUPERVISOR_PASSWORD --env SUPERVISOR_VERIFICATION_CODE=$SUPERVISOR_VERIFICATION_CODE --env CASEWORKER_USERNAME=$CASEWORKER_USERNAME --env CASEWORKER_PASSWORD=$CASEWORKER_PASSWORD --env CASEWORKER_VERIFICATION_CODE=$CASEWORKER_VERIFICATION_CODE --env REGRESSION_TEST=true --env CANS_WEB_BASE_URL=${url} cans-test bundle exec rspec spec/regression --format html --out regression-report/index.html"
+          sh "docker-compose -f docker-compose.ci.yml exec -T --env NON_CASEWORKER_USERNAME=$NON_CASEWORKER_USERNAME --env NON_CASEWORKER_PASSWORD=$NON_CASEWORKER_PASSWORD --env NON_CASEWORKER_VERIFICATION_CODE=$NON_CASEWORKER_VERIFICATION_CODE --env SUPERVISOR_USERNAME=$SUPERVISOR_USERNAME --env SUPERVISOR_PASSWORD=$SUPERVISOR_PASSWORD --env SUPERVISOR_VERIFICATION_CODE=$SUPERVISOR_VERIFICATION_CODE --env CASEWORKER_USERNAME=$CASEWORKER_USERNAME --env CASEWORKER_PASSWORD=$CASEWORKER_PASSWORD --env CASEWORKER_VERIFICATION_CODE=$CASEWORKER_VERIFICATION_CODE --env PROD_LOGIN=true ${environmentVariables} cans-test bundle exec rspec spec/regression --format html --out regression-report/index.html"
         } finally {
           publishHTML([
                    allowMissing         : true,
@@ -198,8 +198,8 @@ def regressionTestStage(url) {
                    keepAll              : true,
                    reportDir            : 'regression-report',
                    reportFiles          : 'index.html',
-                   reportName           : 'Regression Tests Report',
-                   reportTitles         : 'Regression Tests Report'
+                   reportName           : 'Regression Tests Prod',
+                   reportTitles         : 'Regression Tests Prod'
           ])
         }
       }
@@ -259,7 +259,7 @@ def releaseToEnvironment(environment) {
     updateManifestStage(environment, env.APP_VERSION)
     switch(environment) {
       case "preint": acceptanceTestPreintStage(); break;
-      case "integration": regressionTestStage('https://web.integration.cwds.io/cans'); break;
+      case "integration": regressionTestStage('--env CANS_WEB_BASE_URL=https://web.integration.cwds.io/cans'); break;
       default: echo "No tests for run for $environment"
     }
   }
