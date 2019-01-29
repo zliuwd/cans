@@ -38,5 +38,4 @@ feature 'Supervisor functionality' do
     enter_credentials
     expect(page).not_to have_content('Assigned Staff', wait: 100)
   end
-
 end
