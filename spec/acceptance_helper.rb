@@ -6,7 +6,6 @@ require 'capybara/rspec'
 require 'capybara-screenshot/rspec'
 require 'selenium/webdriver'
 require 'site_prism'
-require 'acceptance_helpers/resource_helper'
 require 'acceptance_helpers/login_helper'
 require 'acceptance_helpers/prod_login_helper'
 
