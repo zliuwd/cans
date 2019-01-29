@@ -28,6 +28,6 @@ class ClientProfile < SitePrism::Page
   end
 
   def recent_assessment_ellipsis_icon
-    ellipsis_icons[2]
+    ellipsis_icons
   end
 end
