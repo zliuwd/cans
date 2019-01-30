@@ -32,8 +32,9 @@ class AssessmentRecordInfo extends Component {
             inheritUrl={inheritUrl}
             clientId={person.identifier}
             assessmentId={id}
-            assessmentStatus={status}
             assessmentMetaData={metadata}
+            date={formattedTimestamp}
+            assessmentStatus={status}
             updateAssessmentHistoryCallback={updateAssessmentHistoryCallback}
           />
           <div className={'assessment-info'}>

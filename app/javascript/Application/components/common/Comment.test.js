@@ -9,7 +9,7 @@ jest.mock('../../util/common')
 describe('<Comment />', () => {
   const maxCommentLength = 250
 
-  const getWrapper = (comment, onChange = () => {}, disabled = false) =>
+  const getWrapper = (comment, onChange = () => {}, disabled = false, onKeyUp) =>
     shallow(
       <Comment
         comment={comment}
@@ -18,6 +18,7 @@ describe('<Comment />', () => {
         onChange={onChange}
         maxCommentLength={maxCommentLength}
         disabled={disabled}
+        onKeyUp={onKeyUp}
       />
     )
 
@@ -144,6 +145,31 @@ describe('<Comment />', () => {
         .props()
         .onFocus()
       expect(wrapper.state().isFocused).toBeTruthy()
+    })
+  })
+
+  describe('#handleOnKeyUp()', () => {
+    it('should be invoked when keyUp', () => {
+      const wrapper = getWrapper()
+      wrapper.instance().handleOnKeyUp = jest.fn()
+      wrapper
+        .find('textarea')
+        .props()
+        .onFocus()
+      wrapper
+        .find('textarea')
+        .props()
+        .onKeyUp()
+      expect(wrapper.instance().handleOnKeyUp).toHaveBeenCalledTimes(1)
+    })
+
+    it('handleOnKeyUp method works well', () => {
+      const onKeyUp = jest.fn()
+      const wrapper = getWrapper('some comments', () => {}, false, onKeyUp)
+      wrapper.setState({ value: 'different comments' })
+      wrapper.instance().handleOnKeyUp()
+      expect(onKeyUp).toHaveBeenCalledTimes(1)
+      expect(onKeyUp).toHaveBeenCalledWith('different comments')
     })
   })
 

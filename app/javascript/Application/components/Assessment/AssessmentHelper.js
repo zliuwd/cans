@@ -184,3 +184,27 @@ export const completeTip = (
     The Assessment Date and all assessment ratings must be completed before the Complete button becomes active.
   </Typography>
 )
+
+export const selectOptions = [
+  { value: 'Entered in error', label: 'Entered in error' },
+  { value: 'Referal/Case closed', label: 'Referal/Case closed' },
+  { value: 'Family refused', label: 'Family refused' },
+  { value: 'Other', label: 'Other' },
+]
+
+export const blankPlaceHolder = { value: '', label: '' }
+
+export const deleteWarningLabelStyle = {
+  marginTop: '1.5rem',
+  marginBottom: '0.8rem',
+  color: '#808080',
+  fontSize: '1.2rem',
+}
+
+export const deleteWarningTitle = 'Choose or enter the reason for deleting this CANS.'
+
+export const deleteWarningDescription = 'This cannot be undone.'
+
+export const otherReasonLabel = 'Enter other reason. *'
+
+export const reasonSelectLabel = 'Reason for deleting. *'

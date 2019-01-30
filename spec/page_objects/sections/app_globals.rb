@@ -2,8 +2,10 @@
 
 class AppGlobals < SitePrism::Section
   element :warning_modal_heading, 'div.warning-modal-heading'
-  element :delete_warning_modal, 'div.modal', text: 'Deleting CANS Warning'
+  element :delete_warning_modal, 'div.modal'
   element :complete_warning_modal, 'div.modal', text: 'Reminder'
+  element :reason_select_drop_down, 'div.list__indicator'
+  elements:reason_select_options, '.list__option'
   element :cancel_button_of_warning, 'button.warning-modal-logout'
   element :agree_button_of_warning, 'button.warning-modal-stay-logged-in'
 end

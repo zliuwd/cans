@@ -23,6 +23,7 @@ class AssessmentActionsEllipsis extends React.Component {
   render() {
     const { isPopoverOpen, isDeleteAssessmentWarningShown } = this.state
     const {
+      date,
       clientId,
       assessmentId,
       assessmentMetaData,
@@ -34,6 +35,7 @@ class AssessmentActionsEllipsis extends React.Component {
     return (
       <React.Fragment>
         <AssessmentDeleteModal
+          date={date}
           isShown={isDeleteAssessmentWarningShown}
           assessmentId={assessmentId}
           toggleModal={this.toggleModal}
@@ -72,6 +74,7 @@ AssessmentActionsEllipsis.propTypes = {
   }).isRequired,
   assessmentStatus: PropTypes.string.isRequired,
   clientId: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
   inheritUrl: PropTypes.string.isRequired,
   updateAssessmentHistoryCallback: PropTypes.func.isRequired,
 }

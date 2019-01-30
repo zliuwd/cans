@@ -41,20 +41,32 @@ class Comment extends Component {
     this.setState({ isFocused: false })
   }
 
+  handleOnKeyUp = () => {
+    const { value } = this.state
+    const { comment, onKeyUp } = this.props
+    if (onKeyUp && value !== comment) {
+      onKeyUp(value)
+    }
+  }
+
   render() {
     const { isFocused, value, safariMaxLengthCompensation } = this.state
-    const { prefix, maxCommentLength, id } = this.props
+    const { prefix, maxCommentLength, id, isCommentIconDisabled = false } = this.props
     const isFolded = !isFocused && !value
     const inputClassSuffix = isFolded ? '-empty' : ''
     const lengthClassSuffix = isFocused ? '' : '-hidden'
     const inputId = `${id}-${prefix}`
+    const renderCommentIcon = isCommentIconDisabled ? null : <CommentIcon isSolid={Boolean(value)} />
+    const renderCommentLabel = isCommentIconDisabled ? null : (
+      <Label for={inputId}>
+        {renderCommentIcon}
+        <span className={`${prefix}-label`}>Comment</span>
+      </Label>
+    )
     return (
       <div className={`${prefix}-wrapper`}>
         <div className={`${prefix}-block`}>
-          <Label for={inputId}>
-            <CommentIcon isSolid={Boolean(value)} />
-            <span className={`${prefix}-label`}>Comment</span>
-          </Label>
+          {renderCommentLabel}
           <textarea
             id={inputId}
             className={`${prefix}-textarea${inputClassSuffix}`}
@@ -62,6 +74,7 @@ class Comment extends Component {
             onChange={this.handleInternalValueUpdate}
             onFocus={this.handleOnFocus}
             onBlur={this.handleOnBlur}
+            onKeyUp={this.handleOnKeyUp}
             maxLength={maxCommentLength + safariMaxLengthCompensation}
             disabled={this.props.disabled}
           />
@@ -76,15 +89,19 @@ Comment.propTypes = {
   comment: PropTypes.string,
   disabled: PropTypes.bool,
   id: PropTypes.string.isRequired,
+  isCommentIconDisabled: PropTypes.bool,
   maxCommentLength: PropTypes.number,
   onChange: PropTypes.func.isRequired,
+  onKeyUp: PropTypes.func,
   prefix: PropTypes.string.isRequired,
 }
 
 Comment.defaultProps = {
   comment: '',
   disabled: false,
+  isCommentIconDisabled: false,
   maxCommentLength: 250,
+  onKeyUp: undefined,
 }
 
 export default Comment

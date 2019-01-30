@@ -105,6 +105,8 @@ feature 'Case Worker Functionality' do
     expect(@client_profile.app_globals).to have_no_warning_modal_heading
     @client_profile.recent_assessment_ellipsis_icon.click
     @client_profile.delete_cans_button.click
+    @form.app_globals.reason_select_drop_down.click
+    @form.app_globals.reason_select_options[0].click
     @form.app_globals.agree_button_of_warning.click
     expect(@client_profile.app_globals).to have_no_warning_modal_heading
     view_cans_change_log_test(current_date, client_name)

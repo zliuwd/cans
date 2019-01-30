@@ -24,6 +24,9 @@
 // WarningModal
 //********************
 div.warning-modal.modal-dialog
+  -webkit-box-shadow: 0 0 20px rgba(0,0,0,0.5)
+  -moz-box-shadow: 0 0 20px rgba(0,0,0,0.5)
+  box-shadow: 0 0 20px rgba(0,0,0,0.5)
   margin-top: 17.4rem
   @media (min-width: 576px)
     max-width: 56rem
@@ -37,14 +40,14 @@ div.warning-modal-body.modal-body
   width: inherit
   background-color: #FFF
   border-radius: .5rem .5rem 0 0
-  border-top: .2rem solid $light-gray
-  border-left: .2rem solid $light-gray
-  border-right: .2rem solid $light-gray
+  border-top: .2rem solid white
+  border-left: .2rem solid white
+  border-right: .2rem solid white
   & > div
-    margin-left: 9.6rem
-    color: #000
+    margin-left: 4rem
+    color: $suva-gray
     size: 1.6rem
-    line-height: 2rem
+    line-height: 1rem
   & > div:nth-child(2)
     margin-bottom: 1.6rem
   & > div:nth-child(3)
@@ -59,8 +62,9 @@ div.warning-modal-body.modal-body
     color: $burgundy
     font-size: 3.6rem
   & > div.warning-modal-heading
+    margin-bottom: 1.5rem
     color: $burgundy
-    font-size: 2.4rem
+    font-size: 2rem
     line-height: 3.1rem
     font-weight: 600
 
@@ -70,20 +74,27 @@ div.warning-modal-footer.modal-footer
   background-color: #FFF
   border-radius: 0 0 .5rem .5rem
   border-top: none
-  border-left: .2rem solid $light-gray
-  border-right: .2rem solid $light-gray
-  border-bottom: .2rem solid $light-gray
+  border-left: .2rem solid white
+  border-right: .2rem solid white
+  border-bottom: .2rem solid white
   & > button
-    width: 17.5rem
-    font-size: 1.4rem
+    padding: 1.5rem 0 1.5rem 0
+    width: 12rem
+    font-size: 1.1rem
     font-weight: 600
   & > button.warning-modal-logout.btn-secondary
-    margin-right: 1.6rem
-    background-color: #D8D8D8
-    color: #076678
+    background-color: Transparent
+    border: none
+    color: $mid-gray
   & > button.warning-modal-stay-logged-in.btn-secondary
-    background-color: #098E88
+    background-color: $burgundy
     color: #FFF
+  & > button.warning-modal-stay-logged-in:disabled
+	  box-shadow: none
+    -webkit-box-shadow: none
+	  -moz-box-shadow: none
+    opacity: 1
+    background-color: $grass-green
 
 //********************
 // Ellipsis
@@ -134,3 +145,4 @@ div.warning-modal-footer.modal-footer
     margin: 0
   > p:nth-child(3), p:nth-child(4), p:nth-child(5), p:nth-child(6)
     color: $gray
+    

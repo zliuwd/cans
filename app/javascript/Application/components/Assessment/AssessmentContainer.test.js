@@ -202,7 +202,7 @@ describe('<AssessmentContainer />', () => {
         wrapper
           .find('ConfidentialityWarning')
           .props()
-          .onRemove()
+          .onNextStep()
         wrapper.instance().handleSubmitWarning(false)
         expect(wrapper.state().isSubmitWarningShown).toEqual(false)
       })
@@ -229,7 +229,7 @@ describe('<AssessmentContainer />', () => {
         wrapper
           .find('PageModal')
           .props()
-          .onRemove()
+          .onNextStep()
         wrapper.instance().handleWarningShow(false)
         expect(wrapper.state().isCaregiverWarningShown).toEqual(false)
         wrapper.instance().handleCaregiverRemove(1)
@@ -248,7 +248,7 @@ describe('<AssessmentContainer />', () => {
         wrapper
           .find('PageModal')
           .props()
-          .onRemove()
+          .onNextStep()
         wrapper.instance().handleWarningShow(false)
         expect(wrapper.state().isCaregiverWarningShown).toEqual(false)
         wrapper.instance().handleCaregiverRemove(null)
@@ -397,7 +397,7 @@ describe('<AssessmentContainer />', () => {
           assessment: assessment,
           isCaregiverWarningShown: true,
         })
-        expect(wrapper.find(PageModal).props().removeButtonLabel).toContain('Remove')
+        expect(wrapper.find(PageModal).props().nextStepButtonLabel).toContain('Remove')
       })
 
       it('should render description when warningShow is true', () => {

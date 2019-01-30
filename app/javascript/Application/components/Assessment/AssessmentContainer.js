@@ -361,10 +361,10 @@ class AssessmentContainer extends Component {
         title={'Warning'}
         warningDescription={caregiverWarning}
         description={'This may affect some of your entries.'}
-        removeButtonLabel={'Remove'}
+        nextStepButtonLabel={'Remove'}
         cancelButtonLabel={'Cancel'}
         onCancel={() => this.handleWarningShow(false)}
-        onRemove={() => {
+        onNextStep={() => {
           this.handleWarningShow(false)
           this.handleCaregiverRemove(this.state.focusedCaregiverId)
         }}
@@ -395,7 +395,7 @@ class AssessmentContainer extends Component {
         {this.state.isSubmitWarningShown ? (
           <ConfidentialityWarning
             onCancel={() => this.handleSubmitWarning()}
-            onRemove={() => {
+            onNextStep={() => {
               this.handleSubmitWarning()
               this.handleSubmitAssessment()
             }}

@@ -8,6 +8,7 @@ import AssessmentActionsMenu from './AssessmentActionsMenu'
 import { AssessmentStatus } from '../Assessment/'
 
 const defaultProps = {
+  date: '01/01/2019',
   inheritUrl: '/staff/0X5',
   clientId: 'C76Jg230X3',
   assessmentId: 1234,

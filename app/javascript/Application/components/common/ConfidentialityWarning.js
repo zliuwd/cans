@@ -11,7 +11,7 @@ export class ConfidentialityWarning extends PureComponent {
       </div>
     )
     const onCompleteDescription = (
-      <div>
+      <div style={{ lineHeight: '3rem' }}>
         In doing so items <strong>7, 48 and EC 41</strong> in this CANS assessment{' '}
         <strong className="cargiver-text-block">will be redacted </strong> when printed.
       </div>
@@ -22,10 +22,10 @@ export class ConfidentialityWarning extends PureComponent {
         title={'Reminder'}
         warningDescription={onCompleteWarning}
         description={onCompleteDescription}
-        removeButtonLabel={'I Agree'}
+        nextStepButtonLabel={'I Agree'}
         cancelButtonLabel={'Cancel'}
         onCancel={this.props.onCancel}
-        onRemove={this.props.onRemove}
+        onNextStep={this.props.onNextStep}
       />
     )
   }
@@ -33,7 +33,7 @@ export class ConfidentialityWarning extends PureComponent {
 
 ConfidentialityWarning.propTypes = {
   onCancel: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired,
+  onNextStep: PropTypes.func.isRequired,
 }
 
 export default ConfidentialityWarning

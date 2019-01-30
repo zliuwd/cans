@@ -8,6 +8,7 @@ import ClientAssessmentHistoryTableCountyName from './ClientAssessmentHistoryTab
 import ClientAssessmentHistoryTableDate from './ClientAssessmentHistoryTableDate'
 import ClientAssessmentHistoryTableUpdatedBy from './ClientAssessmentHistoryTableUpdatedBy'
 import { AssessmentActionsEllipsis } from '../../Assessment/'
+import { isoToLocalDate } from '../../../util/dateHelper'
 
 // These column widths are finely tuned for a ~1200px screen
 const COLUMN_WIDTHS = {
@@ -93,13 +94,24 @@ class ClientAssessmentHistoryTable extends React.Component {
     {
       Header: '',
       Cell: row => {
-        const { inheritUrl, person, id: assessmentId, status, metadata, updateAssessmentHistoryCallback } = row.original
+        const {
+          inheritUrl,
+          person,
+          id: assessmentId,
+          status,
+          metadata,
+          updateAssessmentHistoryCallback,
+          updated_timestamp: updatedTimestamp,
+          created_timestamp: createdTimestamp,
+        } = row.original
+        const formattedTimestamp = isoToLocalDate(updatedTimestamp || createdTimestamp)
         return (
           <AssessmentActionsEllipsis
             inheritUrl={inheritUrl}
             clientId={person.identifier}
             assessmentId={assessmentId}
             assessmentStatus={status}
+            date={formattedTimestamp}
             assessmentMetaData={metadata}
             updateAssessmentHistoryCallback={updateAssessmentHistoryCallback}
           />

@@ -346,6 +346,8 @@ describe('<ClientAssessmentHistoryTable />', () => {
         it('passes the correct column config', () => {
           const row = {
             original: {
+              updated_timestamp: '2019-01-28T12:16:01.874Z',
+              created_timestamp: '2019-01-28T11:02:14.383Z',
               inheritUrl: '/staff/0X5',
               person: { identifier: '0PcpFQu0QM' },
               id: 12345,
@@ -360,6 +362,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
           expect(assessmentTableColumnConfig.Header).toBe('')
           expect(assessmentTableColumnConfig.Cell(row)).toEqual(
             <AssessmentActionsEllipsis
+              date="01/28/2019"
               inheritUrl="/staff/0X5"
               clientId="0PcpFQu0QM"
               assessmentId={12345}

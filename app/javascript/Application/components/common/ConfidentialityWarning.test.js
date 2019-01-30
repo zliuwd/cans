@@ -4,9 +4,9 @@ import { shallow } from 'enzyme'
 
 describe('<ConfidentialityWarning />', () => {
   const defaultProps = {
-    removeButtonLabel: 'Remove',
+    nextStepButtonLabel: 'Remove',
     onCancel: () => {},
-    onRemove: () => {},
+    onNextStep: () => {},
     description: 'test description',
     title: 'Warning',
     warningDescription: 'test warning description',
@@ -51,7 +51,7 @@ describe('<ConfidentialityWarning />', () => {
     it('verify remove button label', () => {
       const props = { ...defaultProps }
       const wrapper = shallow(<ConfidentialityWarning {...props} />)
-      expect(wrapper.find('PageModal').prop('removeButtonLabel')).toBeDefined()
+      expect(wrapper.find('PageModal').prop('nextStepButtonLabel')).toBeDefined()
     })
   })
 
@@ -64,8 +64,8 @@ describe('<ConfidentialityWarning />', () => {
 
     it('verify remove button render', () => {
       const wrapper = shallow(<ConfidentialityWarning {...defaultProps} />)
-      const onRemove = wrapper.find('PageModal').props('onRemove')
-      expect(onRemove).toBeDefined()
+      const onNextStep = wrapper.find('PageModal').props('onNextStep')
+      expect(onNextStep).toBeDefined()
     })
   })
 })

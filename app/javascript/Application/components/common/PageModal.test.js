@@ -4,9 +4,9 @@ import { shallow } from 'enzyme'
 
 describe('<PageModal />', () => {
   const defaultProps = {
-    removeButtonLabel: 'Remove',
+    nextStepButtonLabel: 'Remove',
     onCancel: () => {},
-    onRemove: () => {},
+    onNextStep: () => {},
     description: 'some description',
     title: 'Warning',
     warningDescription: 'warning description',
@@ -83,11 +83,11 @@ describe('<PageModal />', () => {
     })
 
     it('verify remove button label', () => {
-      const props = { ...defaultProps, removeButtonLabel: 'Remove' }
+      const props = { ...defaultProps, nextStepButtonLabel: 'Remove' }
       const wrapper = shallow(<PageModal {...props} />)
-      const RemoveButtonLabel = wrapper.find('.warning-modal-stay-logged-in').props().children
-      expect(RemoveButtonLabel).toEqual('Remove')
-      expect(RemoveButtonLabel.length).toBe(6)
+      const nextStepButtonLabel = wrapper.find('.warning-modal-stay-logged-in').props().children
+      expect(nextStepButtonLabel).toEqual('Remove')
+      expect(nextStepButtonLabel.length).toBe(6)
     })
   })
 
@@ -100,8 +100,8 @@ describe('<PageModal />', () => {
 
     it('verify remove button render', () => {
       const wrapper = shallow(<PageModal {...defaultProps} />)
-      const onRemove = wrapper.find('.warning-modal-stay-logged-in')
-      expect(onRemove.length).toBe(1)
+      const onNextStep = wrapper.find('.warning-modal-stay-logged-in')
+      expect(onNextStep.length).toBe(1)
     })
   })
 })

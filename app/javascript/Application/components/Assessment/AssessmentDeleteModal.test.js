@@ -1,8 +1,10 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import { PageModal } from '../common/'
 import AssessmentDeleteModal from './AssessmentDeleteModal'
 import AssessmentService from './Assessment.service'
+import { Select } from '@cwds/components'
+import Comment from '../common/Comment'
 
 jest.mock('../Assessment/Assessment.service')
 
@@ -16,8 +18,34 @@ const getWrapper = (isShown, toggleModal = () => {}, updateAssessmentHistoryCall
     assessmentId: 1,
     toggleModal,
     updateAssessmentHistoryCallback,
+    date: '01/01/2019',
   }
   return shallow(<AssessmentDeleteModal {...props} />)
+}
+
+const mountWrapper = (isShown, toggleModal = () => {}, updateAssessmentHistoryCallback = () => {}) => {
+  const props = {
+    isShown,
+    assessmentId: 1,
+    toggleModal,
+    updateAssessmentHistoryCallback,
+    date: '01/01/2019',
+  }
+  return mount(<AssessmentDeleteModal {...props} />)
+}
+
+const simulateSelect = (wrapper, optionNumber) => {
+  const count = Array.from(Array(optionNumber))
+  count.forEach(el => {
+    wrapper
+      .find('.list__control')
+      .first()
+      .simulate('keyDown', { key: 'ArrowDown', keyCode: 40 })
+  })
+  wrapper
+    .find('.list__control')
+    .first()
+    .simulate('keyDown', { key: 'Enter', keyCode: 13 })
 }
 
 describe('AssessmentDeleteModal', () => {
@@ -26,6 +54,36 @@ describe('AssessmentDeleteModal', () => {
       it('renders a PageModal', () => {
         const wrapper = getWrapper(true)
         expect(wrapper.find(PageModal).exists()).toBe(true)
+      })
+
+      it('renders a Select', () => {
+        const wrapper = getWrapper(true)
+        expect(wrapper.find(Select).exists()).toBe(true)
+      })
+
+      it('renders a comment when select Other option', () => {
+        const wrapper = mountWrapper(true, toggleModalSpy, assessmentHistoryCallbackSpy)
+        simulateSelect(wrapper, 4)
+        expect(
+          wrapper
+            .find('.list__single-value')
+            .last()
+            .text()
+        ).toEqual('Other')
+        expect(wrapper.find(Comment).exists()).toBe(true)
+      })
+
+      it('still keep comment displayed after user inputted reason then select Other option again', () => {
+        const wrapper = mountWrapper(true, toggleModalSpy, assessmentHistoryCallbackSpy)
+        wrapper.setState({ otherReasonContent: 'some reasons' })
+        simulateSelect(wrapper, 4)
+        expect(
+          wrapper
+            .find('.list__single-value')
+            .last()
+            .text()
+        ).toEqual('Other')
+        expect(wrapper.find(Comment).exists()).toBe(true)
       })
     })
   })
@@ -44,12 +102,12 @@ describe('AssessmentDeleteModal', () => {
 
     it('sets the correct title', () => {
       const title = modalProps.title
-      expect(title).toBe('Deleting CANS Warning')
+      expect(title).toBe('Delete CANS Assessment - 01/01/2019')
     })
 
     it('sets the correct warningDescription', () => {
       const warningDescription = modalProps.warningDescription
-      expect(warningDescription).toEqual('You are attempting to delete this CANS.')
+      expect(warningDescription).toEqual(<div>Choose or enter the reason for deleting this CANS.</div>)
     })
 
     it('sets the correct description', () => {
@@ -63,8 +121,8 @@ describe('AssessmentDeleteModal', () => {
     })
 
     it('sets the correct remove button label', () => {
-      const removeLabel = modalProps.removeButtonLabel
-      expect(removeLabel).toBe('Delete CANS')
+      const nextStepButtonLabel = modalProps.nextStepButtonLabel
+      expect(nextStepButtonLabel).toBe('Delete CANS')
     })
 
     it('sets a function to onCancel', () => {
@@ -73,12 +131,54 @@ describe('AssessmentDeleteModal', () => {
     })
 
     it('sets a function to onRemove', () => {
-      const onRemove = modalProps.onRemove
-      expect(typeof onRemove).toBe('function')
+      const onNextStep = modalProps.onNextStep
+      expect(typeof onNextStep).toBe('function')
+    })
+
+    it('sets true to isNextStepDisabled', () => {
+      const isNextStepDisabled = modalProps.isNextStepDisabled
+      expect(isNextStepDisabled).toBe(true)
     })
   })
 
   describe('Modal Buttons', () => {
+    describe('different delete button render mode', () => {
+      let wrapper
+      let deleteButton
+      beforeEach(() => {
+        wrapper = mountWrapper(true, toggleModalSpy, assessmentHistoryCallbackSpy)
+        deleteButton = wrapper.find('button.warning-modal-stay-logged-in')
+      })
+
+      it('renders disabled delete button at beginning', () => {
+        expect(deleteButton.html()).toContain('disabled')
+      })
+
+      it('renders active delete button when select an option which is not #Other#', () => {
+        simulateSelect(wrapper, 1)
+        wrapper.update()
+        expect(wrapper.state().selectedReason.value).toBe('Entered in error')
+        expect(deleteButton.html()).not.toContain('disabled')
+      })
+
+      it('renders disabled delete button when select #Other#', () => {
+        simulateSelect(wrapper, 4)
+        wrapper.update()
+        expect(wrapper.state().selectedReason.value).toBe('Other')
+        expect(deleteButton.html()).toContain('disabled')
+      })
+
+      it('renders active delete button after input some reason', () => {
+        wrapper.instance().handleOtherReasonContentChange('Hello')
+        expect(deleteButton.html()).not.toContain('disabled')
+      })
+
+      it('renders disabled delete button after user delete all of the input', () => {
+        wrapper.instance().handleOtherReasonContentChange('')
+        expect(deleteButton.html()).toContain('disabled')
+      })
+    })
+
     describe('when the cancel button is clicked', () => {
       it('calls toggleModal', () => {
         const wrapper = getWrapper(true, toggleModalSpy)
@@ -93,13 +193,11 @@ describe('AssessmentDeleteModal', () => {
     })
 
     describe('when the delete cans button is clicked', () => {
-      beforeEach(async () => {
-        const wrapper = getWrapper(true, toggleModalSpy, assessmentHistoryCallbackSpy)
-        const deleteButton = wrapper
-          .find(PageModal)
-          .dive()
-          .find('.warning-modal-stay-logged-in')
-        await deleteButton.simulate('click')
+      beforeEach(() => {
+        const wrapper = mountWrapper(true, toggleModalSpy, assessmentHistoryCallbackSpy)
+        simulateSelect(wrapper, 1)
+        const deleteButton = wrapper.find('button.warning-modal-stay-logged-in')
+        deleteButton.simulate('click')
       })
 
       afterEach(() => {
