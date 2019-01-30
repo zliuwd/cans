@@ -3,11 +3,13 @@
 def app
 DOCKER_REGISTRY_CREDENTIALS_ID = '6ba8d05c-ca13-4818-8329-15d41a089ec0'
 GITHUB_CREDENTIALS_ID = '433ac100-b3c2-4519-b4d6-207c029a103b'
+GITHUB_URL = 'git@github.com:ca-cwds/cans.git'
 DE_ANSIBLE_GITHUB_URL = 'git@github.com:ca-cwds/de-ansible.git'
 JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID = '3ce810c0-b697-4ad1-a1b7-ad656b99686e'
 
 switch(env.BUILD_JOB_TYPE) {
   case "master": buildMaster(); break;
+  case "hotfix": buildHotfix(); break;
   case "acceptance": jobTypeHandledByMasterBuild(); break;
   case "regression": jobTypeHandledByMasterBuild(); break;
   case "regressionStaging": buildRegression('staging','--env CANS_WEB_BASE_URL=https://staging.cwds.ca.gov/cans'); break;
@@ -59,6 +61,30 @@ def buildMaster() {
   }
 }
 
+def buildHotfix() {
+  node('cans-slave') {
+    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
+      parameters([
+        string(defaultValue: '', description: 'Use you release version as a base for hotfix version', name: 'hotfix_version'),
+        string(defaultValue: '', description: '', name: 'branch')
+    ])])
+    try {
+      checkoutBranchStage()
+      buildDockerImageStage()
+      lintAndUnitTestStages()
+      regressionDevTestStage()
+      a11yLintStage()
+      tagRepo() // shared library
+      publishImageStage()
+    } catch(Exception exception) {
+      currentBuild.result = "FAILURE"
+      throw exception
+    } finally {
+      cleanupStage()
+    }
+  }
+}
+
 def buildRegression(nodeName, url) {
   node(nodeName) {
     try {
@@ -77,6 +103,14 @@ def checkoutStage() {
   stage('Checkout') {
     sh "sudo rm -rf *"
     checkout scm
+  }
+}
+
+def checkoutBranchStage() {
+  stage('Checkout') {
+    sh "sudo rm -rf *"
+    checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '$branch']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL]]]
+    newTag = "$hotfix_version"
   }
 }
 
