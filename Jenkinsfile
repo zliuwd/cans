@@ -166,7 +166,7 @@ def tagRepo() {
 }
 
 def acceptanceTestPreintStage() {
-  stage('Acceptance Test Preint') {
+  stage('Regression Test Preint') {
     withDockerRegistry([credentialsId: JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID]) {
       sh "docker-compose -f docker-compose.ci.yml up -d --build cans-test"
       runRegressionDevTests('--env CANS_WEB_BASE_URL=https://cans.preint.cwds.io/cans')
