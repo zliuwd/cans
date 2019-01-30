@@ -23,7 +23,7 @@ class ClientProfile < SitePrism::Page
   end
 
   def is_assessment_deleted?(assessment_date)
-    deleted_assessment = find('p', text: 'Deleted on ' + assessment_date)
+    deleted_assessment = first('p', text: 'Deleted on ' + assessment_date)
     deleted_assessment ? true : false
   end
 

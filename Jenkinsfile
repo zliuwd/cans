@@ -21,7 +21,7 @@ def jobTypeHandledByMasterBuild() {
 }
 
 def buildPullRequest() {
-  node('linux') {
+  node('cans-slave') {
     try {
       checkoutStage()
       checkForLabel() // shared library
@@ -39,7 +39,7 @@ def buildPullRequest() {
 }
 
 def buildMaster() {
-  node('linux') {
+  node('cans-slave') {
     try {
       checkoutStage()
       incrementTag() // shared library
