@@ -2,6 +2,7 @@
 
 class AssessmentChangeLog < SitePrism::Page
   elements :titles, 'div.change-log-title span'
+  element :change_log_delete_status, 'div', text: 'Deleted'
 
   def is_client_name?(client_name)
     client = titles.find { |span| span.text == 'CANS Change Log: ' + client_name }

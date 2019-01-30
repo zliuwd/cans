@@ -74,7 +74,7 @@ feature 'Case Worker Functionality' do
     navigate_to_client_profile(CLIENT_NAME_2)
     view_cans_change_log_test(current_date, CLIENT_NAME_2)
     navigate_to_client_profile(CLIENT_NAME_2)
-    delete_assessment_test(current_date)
+    delete_assessment_test(current_date, CLIENT_NAME_2)
   end
 
   scenario 'Case worker login, tests caregiver domain with new assessment and logs out' do
@@ -97,7 +97,7 @@ feature 'Case Worker Functionality' do
     expect(@client_profile).to have_in_progress_record
   end
 
-  def delete_assessment_test(current_date)
+  def delete_assessment_test(current_date, client_name)
     @client_profile.recent_assessment_ellipsis_icon.click
     @client_profile.delete_cans_button.click
     expect(@client_profile.app_globals.delete_warning_modal['style']).to eq('display: block;')
@@ -106,7 +106,9 @@ feature 'Case Worker Functionality' do
     @client_profile.recent_assessment_ellipsis_icon.click
     @client_profile.delete_cans_button.click
     @form.app_globals.agree_button_of_warning.click
-    expect(@client_profile.is_assessment_deleted?(current_date)).to be(true)
+    expect(@client_profile.app_globals).to have_no_warning_modal_heading
+    view_cans_change_log_test(current_date, client_name)
+    expect(@assessment_changelog).to have_change_log_delete_status
   end
 
   def view_cans_change_log_test(current_date, client_name)
