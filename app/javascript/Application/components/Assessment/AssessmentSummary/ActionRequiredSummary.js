@@ -6,7 +6,7 @@ import SummaryHeader from './SummaryHeader'
 
 const hasTargetRating = item => item.rating === 2
 const tooltip =
-  'Ratings of 2 from all domains except Strengths. This rating indicates that this need interferes with functioning.'
+  'Includes a rating of 1 from the Behavioral/Emotional domain and ratings of 2 from all needs domains. These ratings indicate that this need interferes with functioning.'
 
 const ActionRequiredSummary = ({ domains, i18n }) => (
   <SummaryGrid
