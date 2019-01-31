@@ -5,8 +5,8 @@ import { AssessmentStatus } from '../AssessmentHelper'
 import AssessmentSummary from './AssessmentSummary'
 import './style.sass'
 
-const AssessmentSummaryCard = ({ assessmentStatus, ...props }) =>
-  assessmentStatus === AssessmentStatus.completed ? (
+const AssessmentSummaryCard = ({ assessmentStatus, isSummaryAvailableOnSave, ...props }) =>
+  assessmentStatus === AssessmentStatus.completed || isSummaryAvailableOnSave ? (
     <Card className="card assessment-summary-card">
       <CardHeader>
         <CardTitle className="assessment-summary-card-title">CANS Summary</CardTitle>
@@ -21,10 +21,12 @@ AssessmentSummaryCard.propTypes = {
   assessmentStatus: PropTypes.oneOf(Object.values(AssessmentStatus)),
   domains: PropTypes.array.isRequired,
   i18n: PropTypes.object.isRequired,
+  isSummaryAvailableOnSave: PropTypes.bool,
   isUnderSix: PropTypes.bool.isRequired,
 }
 
 AssessmentSummaryCard.defaultProps = {
+  isSummaryAvailableOnSave: false,
   assessmentStatus: AssessmentStatus.inProgress,
 }
 

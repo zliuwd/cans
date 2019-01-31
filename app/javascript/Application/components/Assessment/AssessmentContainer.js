@@ -30,6 +30,7 @@ import { getCurrentIsoDate, isValidLocalDate } from '../../util/dateHelper'
 import { logPageAction } from '../../util/analytics'
 import { isAuthorized, isCompleteAssessmentAuthorized } from '../common/AuthHelper'
 
+const SCROLL_POSITION_ADJUST = -25 // for manually adjust scroll destination -25 means go up 25px more
 const readOnlyMessageId = 'readonlyMessage'
 export const alertMessage = e => {
   e.preventDefault()
@@ -287,6 +288,15 @@ class AssessmentContainer extends Component {
     }
     if (this.state.assessment.id) {
       this.updateIsEditableState()
+      const canDisplaySummaryOnSave =
+        this.state.assessment.status === AssessmentStatus.inProgress &&
+        this.state.isEditable &&
+        this.state.isValidForSubmit
+      this.setState({ canDisplaySummaryOnSave })
+      if (canDisplaySummaryOnSave) {
+        // scroll the page upwards when assessment summary can display on save
+        completeAutoScroll(this.state.completeScrollTarget, SCROLL_POSITION_ADJUST)
+      }
       // Capture New Relic data after the assessment has been successfully saved
       const countyName = this.handleCountyName()
       logPageAction('assessmentSave', {
@@ -334,8 +344,7 @@ class AssessmentContainer extends Component {
         this.setState({ assessmentServiceStatus: LoadingState.error })
       }
     }
-    const positionAdjust = -25 // for manually adjust scroll destination -25 means go up 25px more
-    completeAutoScroll(this.state.completeScrollTarget, positionAdjust)
+    completeAutoScroll(this.state.completeScrollTarget, SCROLL_POSITION_ADJUST)
     if (this.state.assessment.id) {
       this.updateIsEditableState()
       // Capture New Relic data after the assessment has been successfully submitted
@@ -381,6 +390,7 @@ class AssessmentContainer extends Component {
       i18n,
       assessmentServiceStatus,
       isEditable,
+      canDisplaySummaryOnSave,
     } = this.state
     if (shouldRedirectToClientProfile) {
       return <Redirect push to={{ pathname: trimUrlForClientProfile(this.props.match.url) }} />
@@ -413,6 +423,7 @@ class AssessmentContainer extends Component {
           />
         </div>
         <AssessmentSummaryCard
+          isSummaryAvailableOnSave={canDisplaySummaryOnSave}
           assessmentStatus={assessment.status}
           domains={assessment && assessment.state && assessment.state.domains}
           i18n={i18n}

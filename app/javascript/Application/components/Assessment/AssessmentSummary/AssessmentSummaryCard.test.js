@@ -8,10 +8,15 @@ import AssessmentSummaryCard from './AssessmentSummaryCard'
 describe('AssessmentSummaryCard', () => {
   const domains = [{ items: [{ code: 'My Item', rating: 1 }] }]
   const i18n = { code: 'value' }
-  const render = ({ assessmentStatus = AssessmentStatus.completed, isUnderSix = false } = {}) =>
+  const render = ({
+    assessmentStatus = AssessmentStatus.completed,
+    isSummaryAvailableOnSave = false,
+    isUnderSix = false,
+  } = {}) =>
     shallow(
       <AssessmentSummaryCard
         assessmentStatus={assessmentStatus}
+        isSummaryAvailableOnSave={isSummaryAvailableOnSave}
         domains={domains}
         i18n={i18n}
         isUnderSix={isUnderSix}
@@ -68,6 +73,20 @@ describe('AssessmentSummaryCard', () => {
   describe('when assessment is still in progress', () => {
     it('renders nothing', () => {
       expect(render({ assessmentStatus: AssessmentStatus.inProgress }).type()).toBe(null)
+    })
+
+    it('renders summary if isSummaryAvailableOnSave is true', () => {
+      expect(
+        render({ assessmentStatus: AssessmentStatus.inProgress, isSummaryAvailableOnSave: true })
+          .find(Card)
+          .exists()
+      ).toBe(true)
+    })
+
+    it('renders nothing if isSummaryAvailableOnSave is not true', () => {
+      expect(render({ assessmentStatus: AssessmentStatus.inProgress, isSummaryAvailableOnSave: false }).type()).toBe(
+        null
+      )
     })
   })
 })

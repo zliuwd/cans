@@ -627,6 +627,48 @@ describe('<AssessmentContainer />', () => {
         assessment_county: assessment.county.name,
       })
     })
+
+    describe('#assessment summary card', () => {
+      describe('when all required fields are not filled in and all items are not selected', () => {
+        const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+        wrapper.setState({
+          assesment: initialAssessment,
+          isEditable: true,
+        })
+        wrapper.instance().updateAssessment(initialAssessment)
+        it('does not display summary card', () => {
+          expect(wrapper.find('AssessmentSummaryCard').prop('isSummaryAvailableOnSave')).toEqual(false)
+        })
+      })
+
+      describe('when all required fields are filled in and all items are selected', () => {
+        let wrapper
+        let assessmentServicePutSpy
+        beforeEach(() => {
+          assessmentServicePutSpy = jest.spyOn(AssessmentService, 'update')
+          wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+          assessmentServicePutSpy.mockReturnValue(Promise.resolve(updatedAssessmentWithDomains))
+          wrapper.setState({
+            assessment: updatedAssessmentWithDomains,
+            isEditable: true,
+          })
+          wrapper.instance().updateAssessment(updatedAssessmentWithDomains)
+        })
+
+        it('returns canDisplaySummaryOnSave true', async () => {
+          await wrapper.instance().handleSaveAssessment()
+          expect(wrapper.state('canDisplaySummaryOnSave')).toEqual(true)
+        })
+
+        it('displays summary card and calls completeAutoScroll with right parameters on save', async () => {
+          const completeAutoScrollSpy = jest.spyOn(AssessmentAutoScroll, 'completeAutoScroll')
+          const tuner = -25
+          await wrapper.instance().handleSaveAssessment()
+          expect(wrapper.find('AssessmentSummaryCard').prop('isSummaryAvailableOnSave')).toEqual(true)
+          expect(completeAutoScrollSpy).toHaveBeenCalledWith(0, tuner)
+        })
+      })
+    })
   })
 
   describe('submit assessment', () => {

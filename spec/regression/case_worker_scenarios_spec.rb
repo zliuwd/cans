@@ -45,6 +45,7 @@ feature 'Case Worker Functionality' do
     check_redacted_checkbox_0_to_5
     fill_out_assessment_form_and_check_domain_total
     check_all_progress_are_fully_filled
+    click_save_and_summary_card_is_shown
     warning_and_summary_card_shown_after_complete_button_clicked
     verify_the_tool_tip_of_summary_card
     verify_the_content_of_summary_card('0to5')
@@ -57,6 +58,7 @@ feature 'Case Worker Functionality' do
     check_redacted_checkbox_6_to_21
     fill_out_assessment_form_and_check_domain_total
     check_all_progress_are_fully_filled
+    click_save_and_summary_card_is_shown
     click_complete_button_then_summary_card_shown
     verify_the_tool_tip_of_summary_card
     verify_the_content_of_summary_card('6to21')
@@ -319,6 +321,12 @@ feature 'Case Worker Functionality' do
   def adjust_domain_total_count
     @domain_total_count[0] = (@domain_total_count[0].to_i + 2).to_s
     @domain_total_count[-1] = (@domain_total_count[-1].to_i - 1).to_s
+  end
+
+  def click_save_and_summary_card_is_shown
+    expect(@form.global).to have_save_button
+    save_and_check_the_success_message
+    expect(@form).to have_summary
   end
 
   def warning_and_summary_card_shown_after_complete_button_clicked
