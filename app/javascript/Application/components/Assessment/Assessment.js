@@ -70,9 +70,17 @@ class Assessment extends Component {
   addCaregiverDomainAfter = caregiverIndex => {
     const assessment = clone(this.props.assessment)
     const domains = assessment.state.domains
+    const idArray = domains.map(el => {
+      return el.id
+    })
+    idArray.sort((a, b) => {
+      return b - a
+    })
     for (const [index, domain] of domains.entries()) {
       if (domain.caregiver_index === caregiverIndex) {
-        domains.splice(index + 1, 0, clone(assessment.state.caregiver_domain_template))
+        const template = clone(assessment.state.caregiver_domain_template)
+        template.id = idArray[0] + 1
+        domains.splice(index + 1, 0, template)
         break
       }
     }
@@ -161,12 +169,12 @@ class Assessment extends Component {
             />
             <CardBody>
               {domains.map((domain, index) => {
-                const { code, caregiver_index: caregiverIndex } = domain
+                const { id, code } = domain
                 const domainI18n = getI18nByCode(i18n, code)
                 return (
                   <Domain
                     index={index}
-                    key={code + caregiverIndex + isDefaultExpanded}
+                    key={code + isDefaultExpanded + id}
                     domain={domain}
                     i18n={domainI18n}
                     i18nAll={i18n}
