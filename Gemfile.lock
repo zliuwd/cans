@@ -7,9 +7,9 @@ GIT
 
 GIT
   remote: https://github.com/ca-cwds/dora_api
-  revision: c2636b141dbf478f077ede0705bc5e663b62387b
+  revision: 31bb3b87c0f567c97a0293e72f654e3e60b01c0f
   specs:
-    dora (0.2.0)
+    dora (1.0.0)
 
 GIT
   remote: https://github.com/ca-cwds/system_information.git
@@ -353,7 +353,7 @@ DEPENDENCIES
   chromedriver-helper
   coffee-rails (~> 4.2)
   cwds_store!
-  dora (~> 0.2.0)!
+  dora (~> 1.0.0)!
   dotenv-rails
   faker
   faraday (~> 0.13.1)
@@ -391,4 +391,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.17.1
+   1.17.3
