@@ -220,6 +220,22 @@ describe('<Assessment />', () => {
     })
 
     describe('#addCaregiverDomainAfter', () => {
+      it('adds initial caregiver domain', () => {
+        // given
+        const initialAssessment = clone(assessment)
+        initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0])
+        const mockFn = jest.fn()
+        const wrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+        const instance = wrapper.instance()
+
+        // when
+        instance.addCaregiverDomainAfter()
+
+        // then
+        const updatedAssessment = mockFn.mock.calls[0][0]
+        expect(updatedAssessment.state.domains.map(domain => domain.caregiver_index)).toEqual(['a'])
+      })
+
       it('adds additional caregiver domain', () => {
         // given
         const initialAssessment = clone(assessment)
