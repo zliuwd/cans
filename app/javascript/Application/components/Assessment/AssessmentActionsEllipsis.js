@@ -49,7 +49,7 @@ class AssessmentActionsEllipsis extends React.Component {
             aria-label="Ellipsis Menu Button"
             onClick={this.togglePopover}
           >
-            <Icon icon="ellipsis-v" />
+            <Icon icon="ellipsis-v" size="2x" />
           </Button>
           <AssessmentActionsMenu
             clientId={clientId}
