@@ -187,19 +187,12 @@ export const completeTip = (
 
 export const selectOptions = [
   { value: 'Entered in error', label: 'Entered in error' },
-  { value: 'Referal/Case closed', label: 'Referal/Case closed' },
+  { value: 'Referal / Case closed', label: 'Referal / Case closed' },
   { value: 'Family refused', label: 'Family refused' },
   { value: 'Other', label: 'Other' },
 ]
 
 export const blankPlaceHolder = { value: '', label: '' }
-
-export const deleteWarningLabelStyle = {
-  marginTop: '1.5rem',
-  marginBottom: '0.8rem',
-  color: '#808080',
-  fontSize: '1.2rem',
-}
 
 export const deleteWarningTitle = 'Choose or enter the reason for deleting this CANS.'
 

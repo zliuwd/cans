@@ -1,0 +1,123 @@
+@import "./colors.sass"
+//********************
+// originalWarningModal
+//********************
+div.warning-modal.modal-dialog
+  -webkit-box-shadow: 0 0 20px rgba(0,0,0,0.5)
+  -moz-box-shadow: 0 0 20px rgba(0,0,0,0.5)
+  box-shadow: 0 0 20px rgba(0,0,0,0.5)
+  margin-top: 17.4rem
+  @media (min-width: 576px)
+    max-width: 56rem
+  & > div.modal-content
+    width: inherit
+    border-radius: .5rem
+    border: none
+
+div.warning-modal-body.modal-body
+  padding: 3.2rem 3.2rem 3.2rem 0
+  width: inherit
+  background-color: #FFF
+  border-radius: .5rem .5rem 0 0
+  border-top: .2rem solid white
+  border-left: .2rem solid white
+  border-right: .2rem solid white
+  & > div
+    margin-left: 4rem
+    color: $suva-gray
+    size: 1.6rem
+    line-height: 1rem
+  & > div:nth-child(2)
+    margin-bottom: 1.6rem
+  & > div:nth-child(3)
+    margin-bottom: 1.6rem
+  & > div.warning-modal-exclamation-triangle
+    float: left
+    height: 3.6rem
+    width: 3.6rem
+    margin-left: 3rem
+    margin-right: 3rem
+    & > i.fa-exclamation-triangle
+    color: $burgundy
+    font-size: 3.6rem
+  & > div.warning-modal-heading
+    margin-bottom: 1.5rem
+    color: $burgundy
+    font-size: 2rem
+    line-height: 3.1rem
+    font-weight: 600
+
+div.warning-modal-footer.modal-footer
+  padding: 0 3.2rem 3.2rem 9.6rem
+  width: inherit
+  background-color: #FFF
+  border-radius: 0 0 .5rem .5rem
+  border-top: none
+  border-left: .2rem solid white
+  border-right: .2rem solid white
+  border-bottom: .2rem solid white
+  & > button
+    padding: 1.5rem 0 1.5rem 0
+    width: 12rem
+    font-size: 1.1rem
+    font-weight: 600
+  & > button.warning-modal-logout.btn-secondary
+    background-color: Transparent
+    border: none
+    color: $mid-gray
+  & > button.warning-modal-stay-logged-in.btn-secondary
+    background-color: $burgundy
+    color: #FFF
+  & > button.warning-modal-stay-logged-in:disabled
+	  box-shadow: none
+    -webkit-box-shadow: none
+	  -moz-box-shadow: none
+    opacity: 1
+    background-color: $grass-green
+
+//*********************************
+//  AssessmentDeleteModal
+//*********************************
+.delete-reason-select
+  width: 20rem
+  font-size: 1.5rem
+  line-height: 2rem
+
+.delete-reason-wrapper
+  display: flex
+  justify-content: start
+
+.delete-reason-comment-block
+  display: flex
+  flex-wrap: wrap
+  width: 60%
+
+.delete-reason-textarea-empty
+  font-size: 1.5rem
+  margin-top: 0
+  margin-bottom: 1.5rem
+  width: 43rem
+  height: 4rem
+.delete-reason-textarea
+  font-size: 1.5rem
+  margin-top: 0
+  margin-bottom: 1.5rem
+  width: 43rem
+  height: 4rem
+.delete-reason-text-length-hidden
+  width: 43rem
+  overflow: hidden
+  height: 2rem
+  padding-left: 39.5rem
+  color: $mid-gray
+.delete-reason-text-length
+  width: 43rem
+  overflow: hidden
+  height: 2rem
+  padding-left: 39.5rem
+  color: $mid-gray
+.delete-warning-label
+  margin-top: 1.5rem !important
+  margin-bottom: 1rem !important
+  color: $mid-gray !important
+  font-size: 1.4rem !important

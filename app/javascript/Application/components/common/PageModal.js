@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap'
-import './style.sass'
+import '../../styles/global/modal-styles.sass'
 
 const PageModal = ({
   title,

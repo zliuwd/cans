@@ -4,35 +4,36 @@ import PageModal from '../common/PageModal'
 import { AssessmentService } from '../Assessment'
 import { Select, Label } from '@cwds/components'
 import Comment from '../common/Comment'
-import './style.sass'
+import '../../styles/global/modal-styles.sass'
 import {
   selectOptions,
   blankPlaceHolder,
-  deleteWarningLabelStyle,
   deleteWarningTitle,
   deleteWarningDescription,
   otherReasonLabel,
   reasonSelectLabel,
 } from './AssessmentHelper'
 
+const initialState = {
+  showOtherReasonInput: false,
+  otherReasonContent: '',
+  selectedReason: blankPlaceHolder,
+  isDeleteButtonDisabled: true,
+}
+
 class AssessmentDeleteModal extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showOtherReasonInput: false,
-      otherReasonContent: '',
-      selectedReason: blankPlaceHolder,
-      isDeleteButtonDisabled: true,
+      ...initialState,
     }
   }
 
   handleWarningCancel = () => {
-    this.props.toggleModal()
     this.setState({
-      showOtherReasonInput: false,
-      isDeleteButtonDisabled: true,
-      selectedReason: blankPlaceHolder,
+      ...initialState,
     })
+    this.props.toggleModal()
   }
 
   handleWarningDelete = async () => {
@@ -72,7 +73,7 @@ class AssessmentDeleteModal extends React.Component {
     const warning = <div>{deleteWarningTitle}</div>
     const otherReasonInput = (
       <div>
-        <Label for={'other'} style={deleteWarningLabelStyle}>
+        <Label for={'other'} className={'delete-warning-label'}>
           {otherReasonLabel}
         </Label>
         <div className="other-delete-reason">
@@ -100,7 +101,7 @@ class AssessmentDeleteModal extends React.Component {
         onNextStep={this.handleWarningDelete}
         isNextStepDisabled={this.state.isDeleteButtonDisabled}
       >
-        <Label for={'reasonSelect'} style={deleteWarningLabelStyle}>
+        <Label for={'reasonSelect'} className={'delete-warning-label'}>
           {reasonSelectLabel}
         </Label>
         <div className="delete-reason-select">

@@ -5,6 +5,7 @@ import AssessmentDeleteModal from './AssessmentDeleteModal'
 import AssessmentService from './Assessment.service'
 import { Select } from '@cwds/components'
 import Comment from '../common/Comment'
+import { blankPlaceHolder } from './AssessmentHelper'
 
 jest.mock('../Assessment/Assessment.service')
 
@@ -189,6 +190,22 @@ describe('AssessmentDeleteModal', () => {
         cancelButton.simulate('click')
         expect(toggleModalSpy).toHaveBeenCalledTimes(1)
         jest.clearAllMocks()
+      })
+
+      it('sets state with initialState', () => {
+        const initialState = {
+          showOtherReasonInput: false,
+          otherReasonContent: '',
+          selectedReason: blankPlaceHolder,
+          isDeleteButtonDisabled: true,
+        }
+        const wrapper = getWrapper(true, toggleModalSpy)
+        const cancelButton = wrapper
+          .find(PageModal)
+          .dive()
+          .find('.warning-modal-logout')
+        cancelButton.simulate('click')
+        expect(wrapper.state()).toEqual(initialState)
       })
     })
 
