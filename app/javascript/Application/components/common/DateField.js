@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import DateTimePicker from 'react-widgets/lib/DateTimePicker'
 import Moment from 'moment'
@@ -52,26 +52,39 @@ class DateField extends Component {
   }
 
   render() {
-    const { id, isRequired, ariaLabelledBy, ariaDescribedBy, onRawValueUpdate } = this.props
+    const {
+      id,
+      isRequired,
+      isValid,
+      validationErrorMessage,
+      ariaLabelledBy,
+      ariaDescribedBy,
+      onRawValueUpdate,
+    } = this.props
     const { value, key } = this.state
+    const className = isValid ? '' : 'rw-state-invalid'
     return (
-      <DateTimePicker
-        id={id}
-        key={key}
-        value={value}
-        date={true}
-        time={false}
-        format={LOCAL_DATE_FORMAT}
-        onBlur={this.handleOnBlur}
-        onChange={this.handleOnChange}
-        onKeyUp={onRawValueUpdate}
-        placeholder={'mm/dd/yyyy'}
-        required={isRequired}
-        aria-required={isRequired}
-        aria-labelledby={ariaLabelledBy}
-        aria-describedby={ariaDescribedBy}
-        disabled={this.props.disabled}
-      />
+      <Fragment>
+        <DateTimePicker
+          id={id}
+          key={key}
+          value={value}
+          date={true}
+          time={false}
+          format={LOCAL_DATE_FORMAT}
+          onBlur={this.handleOnBlur}
+          onChange={this.handleOnChange}
+          onKeyUp={onRawValueUpdate}
+          placeholder={'mm/dd/yyyy'}
+          required={isRequired}
+          aria-required={isRequired}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
+          disabled={this.props.disabled}
+          className={className}
+        />
+        {!isValid && <div className={'validation-error-line'}>{validationErrorMessage}</div>}
+      </Fragment>
     )
   }
 }
@@ -79,9 +92,11 @@ class DateField extends Component {
 DateField.defaultProps = {
   disabled: false,
   isRequired: false,
+  isValid: true,
   ariaLabelledBy: null,
   ariaDescribedBy: null,
   onRawValueUpdate: () => {},
+  validationErrorMessage: 'The value is invalid',
   value: null,
 }
 
@@ -91,8 +106,10 @@ DateField.propTypes = {
   disabled: PropTypes.bool,
   id: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
+  isValid: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   onRawValueUpdate: PropTypes.func,
+  validationErrorMessage: PropTypes.string,
   value: PropTypes.string,
 }
 

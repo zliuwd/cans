@@ -36,6 +36,7 @@ export function validateAssessmentForSubmit(assessment) {
 function validateAssessmentDtoFields(assessmentDto) {
   return (
     isDefined(assessmentDto.event_date) &&
+    validateAssessmentEventDate(assessmentDto.person.dob, assessmentDto.event_date) &&
     isDefined(assessmentDto.assessment_type) &&
     isDefined(assessmentDto.completed_as) &&
     isDefined(assessmentDto.has_caregiver)
@@ -44,6 +45,12 @@ function validateAssessmentDtoFields(assessmentDto) {
 
 function validateAssessmentState(assessment) {
   return isDefined(assessment.under_six) && areItemsValid(assessment)
+}
+
+export function validateAssessmentEventDate(dob, eventDate) {
+  if (!eventDate) return false
+  if (!dob) return true
+  return moment(dob).isBefore(moment(eventDate))
 }
 
 function isDefined(value) {

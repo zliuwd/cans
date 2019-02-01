@@ -48,7 +48,7 @@ describe('<AssessmentFormHeader />', () => {
         assessment: assessmentWithCaseNumber,
         client,
         onAssessmentUpdate: jest.fn(),
-        onKeyUp: jest.fn(),
+        onEventDateFieldKeyUp: jest.fn(),
       }
       const caseWrapper = shallow(<AssessmentFormHeader {...props} />)
       const caseNumber = caseWrapper.find('#case-or-referral-number')
@@ -67,7 +67,7 @@ describe('<AssessmentFormHeader />', () => {
         assessment: assessmentWithReferralNumber,
         client,
         onAssessmentUpdate: jest.fn(),
-        onKeyUp: jest.fn(),
+        onEventDateFieldKeyUp: jest.fn(),
       }
       const referralWrapper = shallow(<AssessmentFormHeader {...props} />)
       const referralNumber = referralWrapper.find('#case-or-referral-number')
@@ -81,13 +81,21 @@ describe('<AssessmentFormHeader />', () => {
         assessment,
         client,
         onAssessmentUpdate: jest.fn(),
-        onKeyUp: jest.fn(),
+        onEventDateFieldKeyUp: jest.fn(),
       }
       const caseReferralWrapper = shallow(<AssessmentFormHeader {...props} />)
       const caseNumber = caseReferralWrapper.find('#case-or-referral-number')
       const referralNumberLabel = caseReferralWrapper.find('#case-or-referral-number-label')
       expect(caseNumber.text()).toBe('')
       expect(referralNumberLabel.text()).toBe('Case/Referral Number')
+    })
+  })
+
+  describe('date field', () => {
+    it('should be invalid when the event date is before person.dob', () => {
+      const props = { ...defaultProps, isEventDateBeforeDob: true }
+      const wrapper = shallow(<AssessmentFormHeader {...props} />)
+      expect(wrapper.find('DateField').prop('isValid')).toEqual(false)
     })
   })
 

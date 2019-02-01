@@ -14,6 +14,7 @@ end
 
 class AssessmentFormHeader < SitePrism::Section
   element :date_field, 'input#assessment-date_input'
+  element :date_field_validation_msg, 'div.validation-error-line'
   element :calendar_icon, 'span.rw-i-calendar'
   element :calendar_cell_11, 'td.rw-cell', text: '11'
   element :conducted_by, 'input#conducted-by'

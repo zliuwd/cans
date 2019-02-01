@@ -1,5 +1,6 @@
 import {
   validateAssessmentForSubmit,
+  validateAssessmentEventDate,
   resetConfidentialByDefaultItems,
   shouldDomainBeRendered,
   shouldItemBeRendered,
@@ -15,6 +16,7 @@ import {
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
+import moment from 'moment'
 
 export const assessmentsToSort = [
   {
@@ -43,6 +45,7 @@ const validAssessment = {
   instrument_id: 1,
   person: {
     id: 1,
+    dob: '2000-01-01',
   },
   event_date: '2018-06-29',
   completed_as: 'COMMUNIMETRIC',
@@ -128,6 +131,12 @@ describe('AssessmentHelper', () => {
         expect(validateAssessmentForSubmit(assessment)).toBe(false)
       })
 
+      it('returns false when event_date is before person.dob', () => {
+        const assessment = clone(validAssessment)
+        assessment.person.dob = '2019-01-01'
+        expect(validateAssessmentForSubmit(assessment)).toBe(false)
+      })
+
       it('returns false when no assessment_type', () => {
         const assessment = clone(validAssessment)
         assessment.assessment_type = null
@@ -161,6 +170,28 @@ describe('AssessmentHelper', () => {
         const assessment = clone(validAssessment)
         assessment.state.domains[1].items[0].rating = -1
         expect(validateAssessmentForSubmit(assessment)).toBe(false)
+      })
+    })
+
+    describe('#validateAssessmentEventDate()', () => {
+      it('returns false when no eventDate', () => {
+        const actual = validateAssessmentEventDate(moment('2010-10-10'), null)
+        expect(actual).toBe(false)
+      })
+
+      it('returns true when no dob', () => {
+        const actual = validateAssessmentEventDate(null, moment('2010-10-10'))
+        expect(actual).toBe(true)
+      })
+
+      it('returns false when dob is before eventDate', () => {
+        const actual = validateAssessmentEventDate(moment('2010-10-10'), moment('2001-01-01'))
+        expect(actual).toBe(false)
+      })
+
+      it('returns true when dob is after eventDate', () => {
+        const actual = validateAssessmentEventDate(moment('2001-01-01'), moment('2010-10-10'))
+        expect(actual).toBe(true)
       })
     })
 

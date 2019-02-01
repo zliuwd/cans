@@ -4,7 +4,7 @@ import { AssessmentContainer, AssessmentFormHeader, AssessmentService, I18nServi
 import * as AHelper from './AssessmentHelper'
 import { childInfoJson } from '../Client/Client.helper.test'
 import ClientService from '../Client/Client.service'
-import { shallow, mount } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography/Typography'
 import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
 import AssessmentFormFooter from './AssessmentFormFooter'
@@ -12,13 +12,13 @@ import * as AssessmentAutoScroll from '../../util/assessmentAutoScroll'
 import PageModal from '../common/PageModal'
 import {
   assessment,
-  readOnlyAssessment,
-  updatedAssessment,
+  domainWithTwoCaregiver,
   initialAssessment,
   instrument,
+  readOnlyAssessment,
+  updatedAssessment,
   updatedAssessmentDomains,
   updatedAssessmentWithDomains,
-  domainWithTwoCaregiver,
 } from './assessment.mocks.test'
 import { LoadingState } from '../../util/loadingHelper'
 import { getCurrentIsoDate } from '../../util/dateHelper'
@@ -835,7 +835,7 @@ describe('<AssessmentContainer />', () => {
       })
     })
 
-    describe('handleKeyUp', () => {
+    describe('handleEventDateFieldKeyUp', () => {
       let wrapper
       let instance
       beforeEach(() => {
@@ -849,19 +849,59 @@ describe('<AssessmentContainer />', () => {
 
       it('should set isValidDate to true when date is valid', () => {
         instance.setState({ isValidDate: false })
-        instance.handleKeyUp({ target: { value: '10/09/2018' } })
+        instance.handleEventDateFieldKeyUp({ target: { value: '10/09/2018' } })
         expect(instance.state.isValidDate).toEqual(true)
       })
 
       it('should set isValidDate to false when date is invalid', () => {
-        instance.handleKeyUp({ target: { value: '325982323' } })
+        instance.handleEventDateFieldKeyUp({ target: { value: '325982323' } })
         expect(instance.state.isValidDate).toEqual(false)
-        instance.handleKeyUp({ target: { value: '10/2019/21' } })
+        instance.handleEventDateFieldKeyUp({ target: { value: '10/2019/21' } })
         expect(instance.state.isValidDate).toEqual(false)
-        instance.handleKeyUp({ target: { value: '' } })
+        instance.handleEventDateFieldKeyUp({ target: { value: '' } })
         expect(instance.state.isValidDate).toEqual(false)
-        instance.handleKeyUp({ target: {} })
+        instance.handleEventDateFieldKeyUp({ target: {} })
         expect(instance.state.isValidDate).toEqual(false)
+      })
+    })
+
+    describe('isEventDateBeforeDob', () => {
+      const getWrapper = () => shallow(<AssessmentContainer {...defaultProps} />)
+
+      it('should default isEventDateBeforeDob to false', () => {
+        expect(getWrapper().instance().state.isEventDateBeforeDob).toEqual(false)
+      })
+
+      describe('#handleEventDateFieldKeyUp()', () => {
+        it('should set isEventDateBeforeDob to true when date is before person.dob', () => {
+          const instance = getWrapper().instance()
+          instance.setState({ isValidDate: false, isEventDateBeforeDob: false }) // dob: 2014-01-28
+          instance.handleEventDateFieldKeyUp({ target: { value: '10/09/2000' } })
+          expect(instance.state.isEventDateBeforeDob).toEqual(true)
+        })
+
+        it('should set isEventDateBeforeDob to false when date is after person.dob', () => {
+          const instance = getWrapper().instance()
+          instance.setState({ isValidDate: false, isEventDateBeforeDob: false }) // dob: 2014-01-28
+          instance.handleEventDateFieldKeyUp({ target: { value: '10/09/2018' } })
+          expect(instance.state.isEventDateBeforeDob).toEqual(false)
+        })
+      })
+
+      describe('<AssessmentFormHeader />', () => {
+        it('should set isEventDateBeforeDob prop to true', () => {
+          const wrapper = getWrapper()
+          wrapper.instance().setState({ isValidDate: true, isEventDateBeforeDob: true })
+          expect(wrapper.find('AssessmentFormHeader').prop('isEventDateBeforeDob')).toEqual(true)
+        })
+
+        it('should set isEventDateBeforeDob prop to false', () => {
+          const wrapper = getWrapper()
+          wrapper.instance().setState({ isValidDate: false })
+          expect(wrapper.find('AssessmentFormHeader').prop('isEventDateBeforeDob')).toEqual(false)
+          wrapper.instance().setState({ isValidDate: true, isEventDateBeforeDob: false })
+          expect(wrapper.find('AssessmentFormHeader').prop('isEventDateBeforeDob')).toEqual(false)
+        })
       })
     })
 
@@ -1010,6 +1050,24 @@ describe('<AssessmentContainer />', () => {
             state: {
               domains: [],
               under_six: undefined,
+            },
+          },
+          assessmentServiceStatus: LoadingState.ready,
+        })
+        expect(instance.shouldSaveButtonBeEnabled()).toBeFalsy()
+      })
+
+      it('should return false when isEventDateBeforeDob is true', () => {
+        const instance = getInstance()
+        instance.setState({
+          isValidDate: true,
+          isEventDateBeforeDob: true,
+          isEditable: true,
+          assessment: {
+            event_date: '2010-10-13',
+            state: {
+              domains: [],
+              under_six: true,
             },
           },
           assessmentServiceStatus: LoadingState.ready,

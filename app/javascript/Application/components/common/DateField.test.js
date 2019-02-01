@@ -6,16 +6,20 @@ import { jsDateToIso } from '../../util/dateHelper'
 describe('DateField', () => {
   function mountDateField({
     id = '',
+    isValid = true,
     onChange = () => null,
     onRawValueUpdate = () => null,
     required = undefined,
+    validationErrorMessage = undefined,
     value,
   } = {}) {
     const props = {
       id,
+      isValid,
       onChange,
       onRawValueUpdate,
       required,
+      validationErrorMessage,
       value,
     }
     return mount(<DateField {...props} />)
@@ -72,7 +76,7 @@ describe('DateField', () => {
   })
 
   describe('onRawValueUpdate', () => {
-    it('calls parent onRawValueUpdate with the event when DateTimePicker calls onKeyUp', () => {
+    it('calls parent onRawValueUpdate with the event when DateTimePicker calls onEventDateFieldKeyUp', () => {
       const onRawValueUpdate = jasmine.createSpy('onRawValueUpdate')
       const dateTimePicker = mountDateField({ onRawValueUpdate }).find('DateTimePicker')
       const event = { target: { value: new Date() } }
@@ -122,5 +126,24 @@ describe('DateField', () => {
     input.simulate('change', event)
     input.simulate('blur', event)
     expect(onChange.calls.mostRecent().args[0]).toEqual('')
+  })
+
+  describe('when external validation failed', () => {
+    it('should have a special css class', () => {
+      const dateTimePicker = mountDateField({ isValid: false }).find('DateTimePicker')
+      expect(dateTimePicker.props().className).toEqual('rw-state-invalid')
+    })
+
+    it('should render a default validation error message', () => {
+      const dateField = mountDateField({ isValid: false })
+      const validationErrorBlock = dateField.find('.validation-error-line')
+      expect(validationErrorBlock.text()).toEqual('The value is invalid')
+    })
+
+    it('should render a validation error message', () => {
+      const dateField = mountDateField({ isValid: false, validationErrorMessage: 'Not Valid!' })
+      const validationErrorBlock = dateField.find('.validation-error-line')
+      expect(validationErrorBlock.text()).toEqual('Not Valid!')
+    })
   })
 })

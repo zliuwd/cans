@@ -83,6 +83,7 @@ class AssessmentFormHeader extends PureComponent {
   }
 
   renderDateSelect() {
+    const { assessment, onEventDateFieldKeyUp, disabled, isEventDateBeforeDob } = this.props
     return (
       <Fragment>
         <Label
@@ -96,11 +97,13 @@ class AssessmentFormHeader extends PureComponent {
         <DateField
           required={true}
           id={'assessment-date'}
-          value={this.props.assessment.event_date}
+          value={assessment.event_date}
           onChange={value => this.changeFieldAndUpdateAssessment('event_date', value)}
-          onRawValueUpdate={this.props.onKeyUp}
+          onRawValueUpdate={onEventDateFieldKeyUp}
           ariaLabelledBy={'assessment-date-label'}
-          disabled={this.props.disabled}
+          disabled={disabled}
+          isValid={!isEventDateBeforeDob}
+          validationErrorMessage={'Enter an assessment date that is after the client’s date of birth.'}
         />
       </Fragment>
     )
@@ -250,7 +253,8 @@ class AssessmentFormHeader extends PureComponent {
 }
 AssessmentFormHeader.defaultProps = {
   disabled: false,
-  onKeyUp: () => {},
+  isEventDateBeforeDob: false,
+  onEventDateFieldKeyUp: () => {},
   handleWarningShow: () => {},
 }
 AssessmentFormHeader.propTypes = {
@@ -258,8 +262,9 @@ AssessmentFormHeader.propTypes = {
   client: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   handleWarningShow: PropTypes.func,
+  isEventDateBeforeDob: PropTypes.bool,
   onAssessmentUpdate: PropTypes.func.isRequired,
-  onKeyUp: PropTypes.func,
+  onEventDateFieldKeyUp: PropTypes.func,
 }
 
 export default AssessmentFormHeader

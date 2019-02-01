@@ -14,6 +14,7 @@ import {
   AssessmentStatus,
   AssessmentType,
   validateAssessmentForSubmit,
+  validateAssessmentEventDate,
   defaultEmptyAssessment,
   postSuccessMessage,
   trimUrlForClientProfile,
@@ -26,7 +27,7 @@ import {
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
 import './style.sass'
-import { getCurrentIsoDate, isValidLocalDate } from '../../util/dateHelper'
+import { getCurrentIsoDate, isValidLocalDate, localToIsoDate } from '../../util/dateHelper'
 import { logPageAction } from '../../util/analytics'
 import { isAuthorized, isCompleteAssessmentAuthorized } from '../common/AuthHelper'
 
@@ -49,6 +50,7 @@ class AssessmentContainer extends Component {
       shouldRedirectToClientProfile: false,
       isEditable: !props.disabled,
       isValidDate: true,
+      isEventDateBeforeDob: false,
       isCaregiverWarningShown: false,
       isSubmitWarningShown: false,
       isSaveButtonEnabled: false,
@@ -122,9 +124,10 @@ class AssessmentContainer extends Component {
   }
 
   shouldSaveButtonBeEnabled() {
-    const { assessment, assessmentServiceStatus, isEditable, isValidDate } = this.state
+    const { assessment, assessmentServiceStatus, isEditable, isValidDate, isEventDateBeforeDob } = this.state
     return (
       isValidDate &&
+      !isEventDateBeforeDob &&
       isEditable &&
       assessment.state.under_six !== undefined &&
       Boolean(assessment.event_date) &&
@@ -176,6 +179,7 @@ class AssessmentContainer extends Component {
     }
     this.setState({
       assessment,
+      isEventDateBeforeDob: !validateAssessmentEventDate(client.dob, assessment.event_date),
       assessmentServiceStatus: LoadingState.ready,
     })
     this.fetchI18n(assessment.instrument_id)
@@ -213,8 +217,8 @@ class AssessmentContainer extends Component {
   }
 
   updateAssessment = assessment => {
-    const isValidForSubmit = validateAssessmentForSubmit(assessment)
     assessment.person = this.props.client
+    const isValidForSubmit = validateAssessmentForSubmit(assessment)
     this.setState({
       assessment,
       assessmentServiceStatus: LoadingState.ready,
@@ -358,9 +362,15 @@ class AssessmentContainer extends Component {
 
   handleCancelClick = () => this.setState({ shouldRedirectToClientProfile: true })
 
-  handleKeyUp = date => {
+  handleEventDateFieldKeyUp = date => {
     const dateValue = date.target.value
-    this.setState({ isValidDate: isValidLocalDate(dateValue, true) })
+    const isValidDate = isValidLocalDate(dateValue, true)
+    const dob = this.props.client.dob
+    const isEventDateBeforeDob = isValidDate && !validateAssessmentEventDate(dob, localToIsoDate(dateValue))
+    this.setState({
+      isValidDate,
+      isEventDateBeforeDob,
+    })
   }
 
   renderWarning = () => {
@@ -416,10 +426,11 @@ class AssessmentContainer extends Component {
             client={client}
             assessment={assessment}
             onAssessmentUpdate={this.updateAssessment}
-            onKeyUp={this.handleKeyUp}
+            onEventDateFieldKeyUp={this.handleEventDateFieldKeyUp}
             handleWarningShow={this.handleWarningShow}
             isCaregiverWarningShown={this.state.isCaregiverWarningShown}
             disabled={!isEditable}
+            isEventDateBeforeDob={this.state.isValidDate && this.state.isEventDateBeforeDob}
           />
         </div>
         <AssessmentSummaryCard

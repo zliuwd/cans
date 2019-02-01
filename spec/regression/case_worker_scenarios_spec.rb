@@ -168,7 +168,13 @@ feature 'Case Worker Functionality' do
     @form.header.calendar_cell_11.click
     expect(@form.header.date_field.value).to eq(new_date)
     @form.header.date_field.native.clear
+    long_past_date = Time.now.strftime('01/01/1970')
+    @form.header.date_field.set long_past_date
+    expect(@form.header.date_field.value).to eq(long_past_date)
+    validation_error_msg = 'Enter an assessment date that is after the client’s date of birth.'
+    expect(@form.header.date_field_validation_msg.text).to eq(validation_error_msg)
     @form.header.date_field.set current_date
+    expect(@form.header).to have_no_date_field_validation_msg
   end
 
   def domain_and_item_rating_test
