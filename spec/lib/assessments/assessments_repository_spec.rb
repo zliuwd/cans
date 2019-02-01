@@ -8,6 +8,7 @@ module Assessments
     let(:token) { 'security-token' }
     let(:assessments_repository) { AssessmentsRepository.new(token, http_service) }
     let(:response) { Faraday::Response.new }
+    let(:reason) { 'reason' }
 
     describe '#show' do
       it 'returns an assessment' do
@@ -56,10 +57,10 @@ module Assessments
 
     describe '#delete' do
       it 'returns an assessment' do
-        allow(http_service).to receive(:call)
-          .with('/assessments/33', :delete, token)
+        allow(http_service).to receive(:execute)
+          .with(url: '/assessments/33', method: :delete, token: token, params: { reason: reason })
           .and_return(response)
-        expect(assessments_repository.delete(33)).to eq(response)
+        expect(assessments_repository.delete(33, reason)).to eq(response)
       end
     end
   end

@@ -5,6 +5,7 @@ import { Row, Col } from 'reactstrap'
 import ChangeLogDate from './ChangeLogDate'
 import ChangeLogStatus from './ChangeLogStatus'
 import ChangeLogName from './ChangeLogName'
+import ChangeLogComment from './ChangeLogComment'
 import PrintChangeLog from './PrintChangeLog'
 import { formatClientName } from '../../Client'
 import { clientPropTypes, assessmentHistoryPropTypes } from './ChangeLogHelper'
@@ -28,6 +29,11 @@ const columnConfig = [
     Header: 'Change',
     accessor: 'assessment_change_type',
     Cell: ChangeLogStatus,
+  },
+  {
+    Header: 'Comment',
+    accessor: 'deletion_reason',
+    Cell: ChangeLogComment,
   },
 ]
 

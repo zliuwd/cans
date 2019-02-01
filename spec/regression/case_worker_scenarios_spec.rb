@@ -113,6 +113,7 @@ feature 'Case Worker Functionality' do
     expect(@client_profile.app_globals).to have_no_warning_modal_heading
     view_cans_change_log_test(current_date, client_name)
     expect(@assessment_changelog).to have_change_log_delete_status
+    expect(@assessment_changelog).to have_change_log_entered_in_error_comment
   end
 
   def view_cans_change_log_test(current_date, client_name)

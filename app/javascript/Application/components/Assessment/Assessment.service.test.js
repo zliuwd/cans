@@ -103,10 +103,11 @@ describe('AssessmentService', () => {
     const apiDeleteSpy = jest.spyOn(apiEndpoints, 'apiDelete')
 
     it('deletes an assessment', async () => {
+      const reason = 'reason'
       const assessmentId = 50000
-      await AssessmentService.delete(assessmentId)
+      await AssessmentService.delete(assessmentId, reason)
       expect(apiDeleteSpy).toHaveBeenCalledTimes(1)
-      expect(apiDeleteSpy).toHaveBeenCalledWith(`/assessments/${assessmentId}`)
+      expect(apiDeleteSpy).toHaveBeenCalledWith(`/assessments/${assessmentId}`, { reason })
 
       apiDeleteSpy.mockReset()
     })

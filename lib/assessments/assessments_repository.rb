@@ -27,8 +27,11 @@ module Assessments
       @http_service.call("/assessments/#{id}/changelog", :get, @token)
     end
 
-    def delete(id)
-      @http_service.call("/assessments/#{id}", :delete, @token)
+    def delete(id, reason)
+      @http_service.execute(url: "/assessments/#{id}",
+                            method: :delete,
+                            token: @token,
+                            params: { reason: reason })
     end
   end
 end

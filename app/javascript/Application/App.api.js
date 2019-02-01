@@ -28,9 +28,9 @@ export const apiPut = (path, data) => {
     .catch(handleError)
 }
 
-export const apiDelete = path => {
+export const apiDelete = (path, params) => {
   return appApi
-    .delete(path)
+    .delete(path, { params })
     .then(response => response.data)
     .catch(handleError)
 }

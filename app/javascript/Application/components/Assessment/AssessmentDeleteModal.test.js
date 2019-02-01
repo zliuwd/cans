@@ -225,6 +225,7 @@ describe('AssessmentDeleteModal', () => {
         const deleteServiceSpy = jest.spyOn(AssessmentService, 'delete')
         deleteServiceSpy.mockReturnValue(Promise.resolve(deletedAssessment))
         expect(deleteServiceSpy).toHaveBeenCalledTimes(1)
+        expect(deleteServiceSpy).toBeCalledWith(deletedAssessment.id, 'Entered in error')
       })
 
       it('calls toggleModal', () => {

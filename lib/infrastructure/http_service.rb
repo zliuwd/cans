@@ -9,10 +9,15 @@ module Infrastructure
     end
 
     def call(url, method, token, payload = nil)
-      http_connection.send(method) do |request|
-        request.url url
-        request.headers['Authorization'] = token
-        set_payload(request, method, payload)
+      execute url: url, method: method, token: token, payload: payload
+    end
+
+    def execute(context)
+      http_connection.send(context[:method]) do |request|
+        request.url context[:url]
+        request.headers['Authorization'] = context[:token]
+        set_payload(request, context[:method], context[:payload])
+        request.params = context[:params] unless context[:params].nil?
       end
     end
 

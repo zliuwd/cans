@@ -99,15 +99,16 @@ module Api
 
     describe '#delete' do
       let(:assessment) { { id: 11 } }
+      let(:reason) { 'reason' }
       let(:assessment_response) do
         instance_double('Faraday::Response', body: assessment, status: 200)
       end
 
       it 'returns a successful response with a deleted record' do
         allow(assessments_repository).to receive(:delete)
-          .with('11')
+          .with('11', reason)
           .and_return(assessment_response)
-        delete :delete, params: { id: 11 }
+        delete :delete, params: { id: 11, reason: reason }
         expect(response.body).to eq assessment.to_json
         expect(response.status).to eq 200
       end

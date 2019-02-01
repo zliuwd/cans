@@ -42,11 +42,13 @@ describe('ApiService', () => {
 
     describe('apiDelete', () => {
       it('calls appApi', async () => {
+        const params = { paramName: 'value' }
         const apiSpy = jest.spyOn(appApi, 'delete')
         apiSpy.mockReturnValue(Promise.resolve({ data: 'true' }))
-        const result = await apiEndpoints.apiDelete('/')
+        const result = await apiEndpoints.apiDelete('/', params)
         expect(result).toEqual('true')
         expect(apiSpy).toHaveBeenCalledTimes(1)
+        expect(apiSpy).toBeCalledWith('/', { params })
       })
     })
   })

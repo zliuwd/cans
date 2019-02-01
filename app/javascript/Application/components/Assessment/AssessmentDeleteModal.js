@@ -40,7 +40,10 @@ class AssessmentDeleteModal extends React.Component {
     const { assessmentId, toggleModal, updateAssessmentHistoryCallback } = this.props
 
     toggleModal()
-    await AssessmentService.delete(assessmentId)
+    await AssessmentService.delete(
+      assessmentId,
+      this.state.otherReasonContent !== '' ? this.state.otherReasonContent : this.state.selectedReason.value
+    )
     updateAssessmentHistoryCallback()
   }
 

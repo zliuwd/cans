@@ -29,7 +29,8 @@ module Api
     end
 
     def delete
-      response = Assessments::AssessmentsRepository.new(session[:token]).delete(params[:id])
+      response = Assessments::AssessmentsRepository.new(session[:token]).delete(params[:id],
+                                                                                params[:reason])
       render json: response.body, status: response.status
     end
   end

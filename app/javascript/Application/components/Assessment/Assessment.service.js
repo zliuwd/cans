@@ -23,8 +23,8 @@ export class AssessmentService {
     return apiGet(`/assessments/${id}/changes`)
   }
 
-  static delete(id) {
-    return apiDelete(`/assessments/${id}`)
+  static delete(id, reason) {
+    return apiDelete(`/assessments/${id}`, { reason })
   }
 }
 
