@@ -94,6 +94,23 @@ yarn test:a11y # runs accessibility tests, requires app to be running
 yarn lint
 ```
 
+# Hotfix approach
+## Hotfix steps
+
+1. Check out current hotfix branch
+	* CANS: 1.0.0-hotfix
+2. Fix the issue locally and create PR to сorresponding hotfix branch
+3. **Important!!!** Create PR to master branch with the same fix if relevant to current functionality
+3. When hotfix approved and merged into hotfix branch use one of hotfix Jenkins jobs to build new hotfix artifacts. Hotfix jobs disabled by default. Work with your Sr.Dev/Team Lead to coordinate the hotfix. In order to select correct hotfix version please use hotfix branch name plus a sequential number at the end (for example 1.0.0-hotfix1, 1.0.0-hotfix2). Use https://github.com/ca-cwds/cws-cares/blob/master/prod.yaml to identify the current version of the application in PROD.
+	* CANS: [http://jenkins.dev.cwds.io:8080/view/CANS/job/cans-hotfix-build/](http://jenkins.dev.cwds.io:8080/view/CANS/job/cans-hotfix-build/)
+4. When Docker image with hotfix is built and published to Docker Hub create PR for deployment to PreProd https://github.com/ca-cwds/cws-cares/blob/master/preprod.yml
+5. When hotfix is tested in PreProd, create PR into https://github.com/ca-cwds/cws-cares/blob/master/prod.yaml for deployment to Prod 
+ 
+## After the new release
+1. New hotfix branches should be created for new release versions
+2. Hotfix branches should be protected in GitHub similar to master
+3. Hotfix pipelines in CANS should be changed to use new hotfix branches as a baseline
+
 # Questions
 
 If you have any questions regarding the contents of this repository, please email the Office of Systems Integration at FOSS@osi.ca.gov.
