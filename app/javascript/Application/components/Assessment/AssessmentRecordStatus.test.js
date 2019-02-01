@@ -2,6 +2,7 @@ import React from 'react'
 import AssessmentRecordStatus from './AssessmentRecordStatus'
 import { AssessmentStatus } from '../Assessment/AssessmentHelper'
 import { Icon } from '@cwds/components'
+import { mount } from 'enzyme'
 
 describe('AssessmentRecordStatus', () => {
   describe('when the status is IN_PROGRESS', () => {
@@ -19,16 +20,25 @@ describe('AssessmentRecordStatus', () => {
   })
 
   describe('when the status is COMPLETED', () => {
-    it('renders a check-circle icon and the correct status', () => {
-      const expectedResult = AssessmentRecordStatus({
-        status: AssessmentStatus.completed,
-      })
-      expect(expectedResult).toEqual(
-        <div className={'status-icon-wrapper'}>
-          <Icon name={'check-circle'} set={'fa'} className={'fa-2x'} />
-          <span className={'assessment-completed'}>Complete</span>
-        </div>
-      )
+    const isForTable = false
+    const testprops = { status: AssessmentStatus.completed, isForTable }
+    let wrapper
+    beforeEach(() => {
+      wrapper = mount(<AssessmentRecordStatus {...testprops} />)
+    })
+
+    afterEach(() => {
+      wrapper.unmount()
+    })
+
+    it('renders a check-circle icon with text Completed', () => {
+      expect(wrapper.find(Icon).exists()).toBe(true)
+      expect(wrapper.find(Icon).props().name).toBe('check-circle')
+      expect(wrapper.find('.assessment-completed').text()).toEqual('Completed')
+    })
+
+    it('renders the icon with className #fa-2x#', () => {
+      expect(wrapper.find(Icon).props().className).toBe('fa-2x')
     })
   })
 
@@ -50,6 +60,28 @@ describe('AssessmentRecordStatus', () => {
     it('does not render an icon or a status', () => {
       const expectedResult = AssessmentRecordStatus({ status: null })
       expect(expectedResult).toEqual(null)
+    })
+  })
+
+  describe('when AssessmentRecordStatus is rendered as table mode', () => {
+    const isForTable = true
+    const testprops = { status: AssessmentStatus.deleted, isForTable }
+    let wrapper
+    beforeEach(() => {
+      wrapper = mount(<AssessmentRecordStatus {...testprops} />)
+    })
+
+    afterEach(() => {
+      wrapper.unmount()
+    })
+
+    it('renders a trash-alt icon without text', () => {
+      expect(wrapper.find(Icon).exists()).toBe(true)
+      expect(wrapper.find('.assessment-deleted').text()).toEqual('')
+    })
+
+    it('renders a trash-alt icon with className #fa-1x#', () => {
+      expect(wrapper.find(Icon).props().className).toBe('fa-1x')
     })
   })
 })

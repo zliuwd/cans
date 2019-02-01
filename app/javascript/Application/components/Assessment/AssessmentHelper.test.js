@@ -11,6 +11,7 @@ import {
   postInfoMessage,
   successMsgFrom,
   sortAssessments,
+  statusTextOfHistory,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
@@ -339,6 +340,22 @@ describe('AssessmentHelper', () => {
       expect(sortAssessments(null)).toEqual([])
       expect(sortAssessments(undefined)).toEqual([])
       expect(sortAssessments([])).toEqual([])
+    })
+  })
+
+  describe('#statusText(status, isForTable)', () => {
+    const status = AssessmentStatus.completed
+    const text = getDisplayAssessmentStatus(status)
+    it('return null when isForTable equal to true', () => {
+      const isForTable = true
+      const actual = statusTextOfHistory(text, isForTable)
+      expect(actual).toEqual(null)
+    })
+
+    it('return text when isForTable equal to false', () => {
+      const isForTable = false
+      const actual = statusTextOfHistory(status, isForTable)
+      expect(actual).toEqual(text)
     })
   })
 })

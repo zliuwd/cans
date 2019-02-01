@@ -7,28 +7,27 @@ import ClientAssessmentHistoryTableCaseNumber from './ClientAssessmentHistoryTab
 import ClientAssessmentHistoryTableCountyName from './ClientAssessmentHistoryTableCountyName'
 import ClientAssessmentHistoryTableDate from './ClientAssessmentHistoryTableDate'
 import ClientAssessmentHistoryTableUpdatedBy from './ClientAssessmentHistoryTableUpdatedBy'
+import ClientAssessmentHistoryTableStatus from './ClientAssessmentHistoryTableStatus'
 import { AssessmentActionsEllipsis } from '../../Assessment/'
 import { isoToLocalDate } from '../../../util/dateHelper'
-
-// These column widths are finely tuned for a ~1200px screen
-const COLUMN_WIDTHS = {
-  DATE: 190,
-  SOURCE_NUMBER: 250,
-  COUNTY: 140,
-  UPDATED: 170,
-  UPDATED_BY: 260,
-  ELLIPSIS: 35,
-}
-
+import { COLUMN_WIDTHS } from './AssessmentHistoryTableHelper'
+const commonStyle = { className: 'text-center', headerClassName: 'text-center' }
 class ClientAssessmentHistoryTable extends React.Component {
   columnConfig = [
+    {
+      Header: 'Status',
+      id: 'assessmentTableStatus',
+      Cell: ClientAssessmentHistoryTableStatus,
+      width: COLUMN_WIDTHS.STATUS,
+      accessor: 'status',
+      ...commonStyle,
+    },
     {
       Header: 'Assessment Date',
       id: 'assessmentTableEventDate',
       Cell: ClientAssessmentHistoryTableLink,
       width: COLUMN_WIDTHS.DATE,
-      className: 'text-center',
-      headerClassName: 'text-center',
+      ...commonStyle,
       accessor: assessment => assessment,
       sortMethod: (a, b) => {
         const eventDateA = new Date(a.event_date).getTime()
@@ -45,8 +44,7 @@ class ClientAssessmentHistoryTable extends React.Component {
       Header: 'Case/Referral Number',
       Cell: ClientAssessmentHistoryTableCaseNumber,
       width: COLUMN_WIDTHS.SOURCE_NUMBER,
-      className: 'text-center',
-      headerClassName: 'text-center',
+      ...commonStyle,
       accessor: 'service_source_ui_id',
     },
     {
@@ -54,8 +52,7 @@ class ClientAssessmentHistoryTable extends React.Component {
       id: 'assessmentTableCounty',
       Cell: ClientAssessmentHistoryTableCountyName,
       width: COLUMN_WIDTHS.COUNTY,
-      className: 'text-center',
-      headerClassName: 'text-center',
+      ...commonStyle,
       accessor: assessment => {
         return assessment.county ? `${assessment.county.name}` : ''
       },
@@ -65,8 +62,7 @@ class ClientAssessmentHistoryTable extends React.Component {
       id: 'assessmentTableLastUpdated',
       Cell: ClientAssessmentHistoryTableDate,
       width: COLUMN_WIDTHS.UPDATED,
-      className: 'text-center',
-      headerClassName: 'text-center',
+      ...commonStyle,
       accessor: assessment => {
         const { updated_timestamp: updatedTimestamp, created_timestamp: createdTimestamp } = assessment
         const timestamp = updatedTimestamp || createdTimestamp
@@ -83,8 +79,7 @@ class ClientAssessmentHistoryTable extends React.Component {
       id: 'assessmentTableUpdatedBy',
       Cell: ClientAssessmentHistoryTableUpdatedBy,
       width: COLUMN_WIDTHS.UPDATED_BY,
-      className: 'text-center',
-      headerClassName: 'text-center',
+      ...commonStyle,
       accessor: assessment => {
         const { updated_by: updatedBy, created_by: createdBy } = assessment
         const user = updatedBy || createdBy
@@ -118,8 +113,7 @@ class ClientAssessmentHistoryTable extends React.Component {
         )
       },
       width: COLUMN_WIDTHS.ELLIPSIS,
-      className: 'text-center',
-      headerClassName: 'text-center',
+      ...commonStyle,
       sortable: false,
     },
   ]

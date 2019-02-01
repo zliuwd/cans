@@ -208,3 +208,8 @@ export const deleteWarningDescription = 'This cannot be undone.'
 export const otherReasonLabel = 'Enter other reason. *'
 
 export const reasonSelectLabel = 'Reason for deleting. *'
+
+export const statusTextOfHistory = (status, isForTable) => {
+  const text = getDisplayAssessmentStatus(status)
+  return isForTable ? null : text
+}
