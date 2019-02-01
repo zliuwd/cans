@@ -194,7 +194,7 @@ export const completeTip = (
 
 export const selectOptions = [
   { value: 'Entered in error', label: 'Entered in error' },
-  { value: 'Referal / Case closed', label: 'Referal / Case closed' },
+  { value: 'Referral / Case closed', label: 'Referral / Case closed' },
   { value: 'Family refused', label: 'Family refused' },
   { value: 'Other', label: 'Other' },
 ]

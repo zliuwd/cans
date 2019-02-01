@@ -86,6 +86,19 @@ describe('AssessmentDeleteModal', () => {
         ).toEqual('Other')
         expect(wrapper.find(Comment).exists()).toBe(true)
       })
+
+      it('the second option of select should be #Referral / Case closed#', () => {
+        const wrapper = mountWrapper(true, toggleModalSpy, assessmentHistoryCallbackSpy)
+        simulateSelect(wrapper, 2)
+        expect(
+          wrapper
+            .find('.list__single-value')
+            .last()
+            .text()
+        ).toEqual('Referral / Case closed')
+        expect(wrapper.state().selectedReason.value).toBe('Referral / Case closed')
+        expect(wrapper.find(Comment).exists()).toBe(false)
+      })
     })
   })
 
