@@ -1,7 +1,11 @@
 //TODO: remove this pipeline file and use main Jenkins file when Prod Jenkins will support shared Jenkins library
 JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID = '3ce810c0-b697-4ad1-a1b7-ad656b99686e'
 
-buildRegression('staging','https://staging.cwds.ca.gov/cans')
+switch(env.BUILD_JOB_TYPE) {
+  case "regressionStaging": buildRegression('staging','https://staging.cwds.ca.gov/cans'); break;
+  case "regressionPreprod": buildRegression('preprod','https://preprod.cwds.ca.gov/cans'); break;
+  default: buildRegression('staging','https://staging.cwds.ca.gov/cans');
+}
 
 def buildRegression(nodeName, url) {
   node(nodeName) {
@@ -60,7 +64,7 @@ def regressionTestStage(url) {
 
 def cleanupStage() {
   stage('Cleanup') {
-    sh "docker-compose -f docker-compose.ci.yml down"
+    sh "docker-compose -f docker-compose.ci.yml down -v"
     cleanWs()
   }
 }
