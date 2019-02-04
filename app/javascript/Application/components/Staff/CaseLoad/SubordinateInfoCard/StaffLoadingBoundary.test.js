@@ -1,6 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import StaffLoadingBoundary from './StaffLoadingBoundary'
+import StaffService from '../../Staff.service'
 import LoadingBoundary from '../../../common/LoadingBoundary'
 
 jest.mock('../../Staff.service')
@@ -13,7 +14,7 @@ describe('<StaffLoadingBoundary />', () => {
       </StaffLoadingBoundary>
     )
 
-  it('renders LoadingBoundary ans sets props', () => {
+  it('renders LoadingBoundary and sets props', () => {
     const wrapper = render('XYZ')
     const loadingBoundary = wrapper.find(LoadingBoundary)
     expect(loadingBoundary.exists()).toBeTruthy()
@@ -28,5 +29,13 @@ describe('<StaffLoadingBoundary />', () => {
     wrapper.setProps({ children: <span /> })
     const secondFetch = wrapper.find(LoadingBoundary).props().fetch
     expect(secondFetch).toBe(firstFetch)
+  })
+
+  it('loads staff people on fetch', () => {
+    const spy = jest.spyOn(StaffService, 'fetch')
+    const wrapper = render('ABC')
+    const fetch = wrapper.find(LoadingBoundary).props().fetch
+    fetch()
+    expect(spy).toHaveBeenCalledWith('ABC')
   })
 })

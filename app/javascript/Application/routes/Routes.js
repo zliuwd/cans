@@ -1,10 +1,9 @@
 /* eslint-disable react/no-multi-comp,react/no-children-prop */
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { Page } from '../components/Layout'
 import { navigation } from '../util/constants'
-import PermissionRedirect from './PermissionRedirect'
-import PermissionRedirectBoundary from './PermissionRedirectBoundary'
+import { Page } from '../components/Layout'
+import { ChildListPage, ChildProfilePageWithClient, DashboardRedirectPage } from '../components/pages'
 import SearchRoutes from './SearchRoutes'
 
 const page = (route, navigateTo) => <Page navigateTo={navigateTo} {...route} />
@@ -13,12 +12,10 @@ const Routes = () => {
   return (
     <Switch>
       <Route exact path="/">
-        <PermissionRedirectBoundary>
-          <PermissionRedirect />
-        </PermissionRedirectBoundary>
+        <DashboardRedirectPage />
       </Route>
-      <Route exact path="/clients" children={route => page(route, navigation.CHILD_LIST)} />
-      <Route exact path="/clients/:clientId" children={route => page(route, navigation.CHILD_PROFILE)} />
+      <Route exact path="/clients" component={ChildListPage} />
+      <Route exact path="/clients/:clientId" component={ChildProfilePageWithClient} />
       <Route exact path="/clients/:clientId/assessments" children={route => page(route, navigation.ASSESSMENT_ADD)} />
       <Route
         exact
@@ -54,7 +51,6 @@ const Routes = () => {
         path="/clients/:clientId/assessments/:id/changelog/:status"
         children={route => page(route, navigation.ASSESSMENT_CHANGELOG)}
       />
-
       <SearchRoutes />
     </Switch>
   )

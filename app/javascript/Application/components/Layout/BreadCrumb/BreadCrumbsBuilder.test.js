@@ -39,6 +39,13 @@ const textOfBreadCrumb = component =>
     })
 
 describe('<BreadCrumbsBuilder />', () => {
+  describe('without user', () => {
+    it('renders nothing', () => {
+      const component = wrapper({}, navigation.CHILD_LIST)
+      expect(component.find(BreadCrumbsBuilder).html()).toBe(null)
+    })
+  })
+
   describe('supervisor', () => {
     it('will render the correct BreadCrumbs for supervisor Main Flow', () => {
       const component = wrapper(supervisorMainFlow, 'STAFF_CHANGELOG')
