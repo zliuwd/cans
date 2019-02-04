@@ -60,7 +60,7 @@ def regressionTestStage(url) {
 
 def cleanupStage() {
   stage('Cleanup') {
-    sh "docker-compose -f docker-compose.ci.yml down"
+    sh "docker-compose -f docker-compose.ci.yml down -v"
     cleanWs()
   }
 }

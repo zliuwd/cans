@@ -65,14 +65,13 @@ def buildHotfix() {
   node('cans-slave') {
     properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
       parameters([
-        string(defaultValue: '', description: 'Use you release version as a base for hotfix version', name: 'hotfix_version'),
-        string(defaultValue: '', description: '', name: 'branch')
+        string(defaultValue: '1.0.0-hotfix1', description: 'Use current release version as a base for hotfix version (example: 1.0.0-hotfix1) ', name: 'hotfix_version')
     ])])
     try {
-      checkoutBranchStage()
+      checkoutBranchStage('1.0.0-hotfix')
       buildDockerImageStage()
       lintAndUnitTestStages()
-      regressionDevTestStage()
+      acceptanceTestStage()
       a11yLintStage()
       tagRepo() // shared library
       publishImageStage()
@@ -106,10 +105,10 @@ def checkoutStage() {
   }
 }
 
-def checkoutBranchStage() {
+def checkoutBranchStage(branch) {
   stage('Checkout') {
     sh "sudo rm -rf *"
-    checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '$branch']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL]]]
+    checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: branch]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: GITHUB_CREDENTIALS_ID, url: GITHUB_URL]]]
     newTag = "$hotfix_version"
   }
 }
@@ -150,6 +149,35 @@ def unitTestStage(container) {
   stage('Unit Test') {
     sh "docker exec -t ${container.id} bash -c 'yarn test:coverage'"
     sh "docker exec -t ${container.id} yarn test:rspec"
+  }
+}
+
+def acceptanceTestStage() {
+  stage('Acceptance Test') {
+    hostname = sh(returnStdout: true, script: '/sbin/ifconfig eth0 | grep "inet addr:" | cut -d: -f2 | cut -d " " -f1').trim()
+    withEnv(["HOST=${hostname}"]) {
+      withDockerRegistry([credentialsId: DOCKER_REGISTRY_CREDENTIALS_ID]) {
+        sh "docker-compose -f docker-compose.ci.yml build"
+        sh "docker-compose -f docker-compose.ci.yml run cans-test-all"
+        runAcceptanceTests()
+      }
+    }
+  }
+}
+
+def runAcceptanceTests() {
+  try {
+    sh "docker-compose -f docker-compose.ci.yml exec -T --env TZ=US/Pacific cans-test bundle exec rspec spec/acceptance --format html --out regression-report/index.html"
+  } finally {
+    publishHTML([
+              allowMissing         : true,
+              alwaysLinkToLastBuild: true,
+              keepAll              : true,
+              reportDir            : 'regression-report',
+              reportFiles          : 'index.html',
+              reportName           : 'Acceptance Tests',
+              reportTitles         : 'Acceptance Tests'
+    ])
   }
 }
 
@@ -267,7 +295,7 @@ def triggerReleasePipeline() {
 def cleanupStage() {
   stage('Cleanup') {
     sh "ls -la"
-    sh "docker-compose -f docker-compose.ci.yml down"
+    sh "docker-compose -f docker-compose.ci.yml down -v"
     cleanWs()
   }
 }
