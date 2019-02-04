@@ -319,11 +319,18 @@ def releaseToEnvironment(environment) {
     checkoutStage()
     deployToStage(environment, env.APP_VERSION)
     updateManifestStage(environment, env.APP_VERSION)
+    smokeTestStage(environment)
     switch(environment) {
       case "preint": acceptanceTestPreintStage(); break;
       case "integration": regressionTestStage('--env CANS_WEB_BASE_URL=https://web.integration.cwds.io/cans'); break;
       default: echo "No tests for run for $environment"
     }
+  }
+}
+
+def smokeTestStage(environment) {
+  stage("Smoke Test $environment") {
+    smokeTest('./test/resources/smoketest.sh', "https://web.${environment}.cwds.io/cans/system-information")
   }
 }
 
