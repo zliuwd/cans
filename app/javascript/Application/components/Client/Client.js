@@ -5,7 +5,6 @@ import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
 import PropTypes from 'prop-types'
 import ClientAssessmentHistory from './AssessmentHistory/ClientAssessmentHistory'
-import { CloseableAlert, alertType } from '../common/CloseableAlert'
 import { isoToLocalDate } from '../../util/dateHelper'
 import NavFromProducer from '../../util/NavFromProducer'
 import ClientAssessmentHistoryLoadingBoundary from './AssessmentHistory/ClientAssessmentHistoryLoadingBoundary'
@@ -17,13 +16,7 @@ const DOUBLE_WIDTH = 6
 class Client extends Component {
   constructor(props) {
     super(props)
-    const { isNewForm, successClientId } = (this.props.location || {}).state || {}
-    if (successClientId && this.props.history) {
-      this.props.history.replace({ ...this.props.location, state: {} })
-    }
     this.state = {
-      isNewForm,
-      shouldRenderClientMessage: Boolean(successClientId),
       loadingBoundaryKey: Math.random(),
     }
   }
@@ -89,7 +82,6 @@ class Client extends Component {
 
   render() {
     const { client } = this.props
-    const { isNewForm, shouldRenderClientMessage } = this.state
 
     return (
       <Fragment>
@@ -99,19 +91,6 @@ class Client extends Component {
               <CardHeader className={'card-header-cans'} title="Client Information" />
               <div className={'content'}>
                 <CardContent>
-                  {shouldRenderClientMessage && (
-                    <CloseableAlert
-                      type={alertType.SUCCESS}
-                      message={
-                        isNewForm
-                          ? 'Success! New Child/Youth record has been added.'
-                          : 'Success! Child/Youth record has been updated.'
-                      }
-                      isCloseable
-                      isAutoCloseable
-                    />
-                  )}
-
                   {client && client.identifier ? (
                     <Grid container spacing={24} id={'client-info-content'}>
                       {this.renderClientData(<b>{client.first_name}</b>, 'First Name')}
@@ -138,8 +117,6 @@ class Client extends Component {
 
 Client.propTypes = {
   client: PropTypes.object,
-  history: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({ staffId: PropTypes.string }),
     url: PropTypes.string.isRequired,

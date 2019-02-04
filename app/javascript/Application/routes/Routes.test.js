@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import { Routes } from './'
 import { Route, Switch } from 'react-router-dom'
 import { navigation } from '../util/constants'
-import PermissionRedirect from './PermissionRedirect'
+import { ChildListPage, ChildProfilePageWithClient, DashboardRedirectPage } from '../components/pages'
 import SearchRoutes from './SearchRoutes'
 
 describe('<Router />', () => {
@@ -41,7 +41,7 @@ describe('<Router />', () => {
         .find({ path: '/' })
       expect(route.exists()).toBe(true)
       expect(route.props().exact).toBe(true)
-      expect(route.find(PermissionRedirect).exists()).toBe(true)
+      expect(route.find(DashboardRedirectPage).exists()).toBe(true)
     })
 
     it('renders with 1 <SearchRoutes /> component', () => {
@@ -49,11 +49,21 @@ describe('<Router />', () => {
     })
 
     it('renders a client list route', () => {
-      testRoute('/clients', navigation.CHILD_LIST)
+      const route = getWrapper()
+        .find(Route)
+        .find({ path: '/clients' })
+      expect(route.exists()).toBe(true)
+      expect(route.props().exact).toBe(true)
+      expect(route.props().component).toBe(ChildListPage)
     })
 
     it('renders a child profile route', () => {
-      testRoute('/clients/:clientId', navigation.CHILD_PROFILE)
+      const route = getWrapper()
+        .find(Route)
+        .find({ path: '/clients/:clientId' })
+      expect(route.exists()).toBe(true)
+      expect(route.props().exact).toBe(true)
+      expect(route.props().component).toBe(ChildProfilePageWithClient)
     })
 
     it('renders a child assessments route', () => {

@@ -55,6 +55,9 @@ class BreadCrumbsBuilder extends React.Component {
   }
 
   render() {
+    if (!this.props.user) {
+      return null
+    }
     const navigationElements = this.prepareNavigationElements()
     return <BreadCrumb navigationElements={navigationElements} />
   }
@@ -66,7 +69,7 @@ BreadCrumbsBuilder.propTypes = {
   navigateTo: PropTypes.oneOf(Object.values(navigation)).isRequired,
   subordinate: PropTypes.object,
   url: PropTypes.string,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
 }
 
 BreadCrumbsBuilder.defaultProps = {
@@ -74,6 +77,7 @@ BreadCrumbsBuilder.defaultProps = {
   client: null,
   subordinate: null,
   url: '',
+  user: null,
 }
 
 export default BreadCrumbsBuilder
