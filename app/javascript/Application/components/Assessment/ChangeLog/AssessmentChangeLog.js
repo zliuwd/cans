@@ -34,6 +34,7 @@ const columnConfig = [
     Header: 'Comment',
     accessor: 'deletion_reason',
     Cell: ChangeLogComment,
+    width: 480,
   },
 ]
 
