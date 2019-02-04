@@ -61,7 +61,7 @@ PERRY_BASE_URL=https://web.preint.cwds.io/perry
 
 Then run Rails (`rails s`), Redis (`redis-server`), and the React server (`yarn start` or `./bin/webpack-dev-server`).
 OR
-Run rails and webpack dev sever using single comamnd `yarn dev`
+Run rails and webpack dev sever using single comamnd `yarn dev`, which runs the Procfile.dev with foreman, so make sure foreman utility is installed on your machine. You can quickly install foreman using `gem install foreman` at CANS root folder. Please do not include the foreman gem in the Gemfile
 
 ## Running everything locally with Docker
 
