@@ -38,6 +38,6 @@ feature 'Pages are accessible' do
     find('#PSYCHOSIS-item-expand').click
 
     # this exclude should be discussed with designers
-    expect(page).to be_accessible.excluding '#cancel-assessment'
+    expect(page).to be_accessible.excluding '#cancel-assessment', '#assessment-date_input'
   end
 end
