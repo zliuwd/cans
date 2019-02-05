@@ -392,7 +392,13 @@ feature 'Case Worker Functionality' do
          'Interpersonal', 'Natural Supports', 'Resiliency', 'Spiritual/Religious',
          'Talents and Interests']
       end
-    action_required_column_text = ['Anxiety']
+    action_required_column_text =
+      if age_range == '0to5'
+        ['Anxiety']
+      else
+        ['Psychosis (Thought Disorder)', 'Depression', 'Anxiety', 'Conduct', 'Substance Use',
+         'Anger Control', 'Adjustment to Trauma']
+      end
     immediate_action_required_column_text = ['Oppositional (Non-compliance with Authority)']
     trauma_column_text = ['Physical Abuse', 'Emotional Abuse', 'Neglect', 'Medical Trauma',
                           'Witness to Family Violence', 'Witness to Community/School Violence',

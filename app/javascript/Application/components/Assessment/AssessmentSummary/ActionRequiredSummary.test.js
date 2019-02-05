@@ -33,7 +33,7 @@ describe('<ActionRequiredSummary />', () => {
     ).toBe(i18n)
   })
 
-  describe('with some items', () => {
+  describe('with some items in BEN domain', () => {
     const domains = [
       {
         code: 'BEN',
@@ -48,7 +48,36 @@ describe('<ActionRequiredSummary />', () => {
     ]
     const render = () => mount(<ActionRequiredSummary domains={domains} i18n={i18n} />)
 
-    it('renders all of the data with rating 2', () => {
+    it('renders all of the data with rating 1 and 2 in the domain', () => {
+      const text = render().text()
+      expect(text).toContain('Fear')
+      expect(text).toContain('Ruthless Efficiency')
+      expect(text).toContain('Surprise')
+    })
+
+    it('skips all items with ratings not 2 or 1', () => {
+      const text = render().text()
+      expect(text).not.toContain('Nice Red Uniforms')
+      expect(text).not.toContain('Fanatical Devotion')
+    })
+  })
+
+  describe('with items in other domains', () => {
+    const domains = [
+      {
+        code: 'LFD',
+        items: [
+          { code: 'SURPRISE', rating: 1 },
+          { code: 'FEAR', rating: 2 },
+          { code: 'RUTHLESS_EFFICIENCY', rating: 2 },
+          { code: 'NICE_RED_UNIFORMS', rating: -1 },
+          { code: 'FANATICAL_DEVOTION', rating: 3 },
+        ],
+      },
+    ]
+    const render = () => mount(<ActionRequiredSummary domains={domains} i18n={i18n} />)
+
+    it('renders all of the data with rating 2 in the domain', () => {
       const text = render().text()
       expect(text).toContain('Fear')
       expect(text).toContain('Ruthless Efficiency')
