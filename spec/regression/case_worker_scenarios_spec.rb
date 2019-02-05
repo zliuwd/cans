@@ -171,8 +171,8 @@ feature 'Case Worker Functionality' do
     long_past_date = Time.now.strftime('01/01/1970')
     @form.header.date_field.set long_past_date
     expect(@form.header.date_field.value).to eq(long_past_date)
-    validation_error_msg = 'Enter an assessment date that is after the client’s date of birth.'
-    expect(@form.header.date_field_validation_msg.text).to eq(validation_error_msg)
+    validation_msg = 'Enter an assessment date that is on or after the client’s date of birth.'
+    expect(@form.header.date_field_validation_msg.text).to eq(validation_msg)
     @form.header.date_field.set current_date
     expect(@form.header).to have_no_date_field_validation_msg
   end

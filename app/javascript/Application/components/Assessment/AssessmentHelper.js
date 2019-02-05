@@ -50,7 +50,7 @@ function validateAssessmentState(assessment) {
 export function validateAssessmentEventDate(dob, eventDate) {
   if (!eventDate) return false
   if (!dob) return true
-  return moment(dob).isBefore(moment(eventDate))
+  return moment(dob).isSameOrBefore(moment(eventDate))
 }
 
 function isDefined(value) {
