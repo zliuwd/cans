@@ -30,8 +30,6 @@ feature 'Case Worker Functionality' do
     fill_conducted_by_field('Mike Seaver')
     check_case_or_referral_number
     click_0_to_5_button
-    expand_all_domains
-    collapse_all_domains
     domain_and_item_rating_test
     discretion_and_not_applicable_checkbox_test
     item_and_domain_level_comment_test
@@ -89,6 +87,23 @@ feature 'Case Worker Functionality' do
     save_and_check_the_success_message
   end
 
+  def eliminate_auto_scroll_impact
+    sleep 2
+    @form.item_comment_icons[0].click
+  end
+
+  def expand_first_domain
+    @form.collapsed_domain_headers[0].click
+    expect(@form).to have_domain_level_reg_rating
+    expect(@form).to have_domain_reg_radios
+    eliminate_auto_scroll_impact
+  end
+
+  def expand_first_item
+    @form.inner_items[0].click
+    eliminate_auto_scroll_impact
+  end
+
   def validate_new_assessment(current_date)
     @client_profile.go_to_recently_updated_assessment(current_date)
     expect(@form.global).to have_assessment_page_header
@@ -125,6 +140,7 @@ feature 'Case Worker Functionality' do
 
   def verify_radio_buttons_on_assessment_header(current_date)
     click_0_to_5_button
+    click_0_to_5_button # avoid stuck
     expect(@form.header).to have_redaction_message
     expect(@form.header.date_field.value).to eq(current_date)
     expect(@form.header).to have_conducted_by
@@ -138,11 +154,12 @@ feature 'Case Worker Functionality' do
   end
 
   def validate_domain_radio_and_chevron
-    @form.challenges_domain.click
-    @form.impulse_hyper_activity.click
+    expand_first_domain
+    expand_first_item
     @form.impulse_hyper_activity_input.click
     expect(@form).to have_item_description_header
     @form.impulse_hyper_activity.click
+    eliminate_auto_scroll_impact
     expect(@form).to have_no_item_description_header
     progress_bar_value = page.all('span.progress-value', match: :first).map(&:text)
     progress_bar_value.each { |element| @total_radio_selected.push(element) }
@@ -178,19 +195,18 @@ feature 'Case Worker Functionality' do
   end
 
   def domain_and_item_rating_test
-    @form.collapsed_domain_headers[0].click
-    expect(@form).to have_domain_level_reg_rating
-    target_domain_reg_radios = @form.domain_reg_radios[0, 4]
+    expand_first_domain
+    @form.domain_level_reg_rating[0].click # avoid stuck
     @form.domain_level_reg_rating[0, 4].each_with_index do |label, index|
       label.click
-      expect(target_domain_reg_radios[index].checked?).to be(true)
+      expect(@form.domain_reg_radios[index].checked?).to be(true)
     end
-    @form.inner_items[0].click
+    expand_first_item
     expect(@form).to have_inner_item_rating
     @form.inner_item_rating.each_with_index do |label, index|
       label.click
       expect(@form.inner_item_radios[index].checked?).to be(true)
-      expect(target_domain_reg_radios[index].checked?).to be(true)
+      expect(@form.domain_reg_radios[index].checked?).to be(true)
     end
   end
 

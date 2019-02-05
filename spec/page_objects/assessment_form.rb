@@ -80,6 +80,7 @@ class AssessmentForm < SitePrism::Page
   element :item_level_comment, 'div.item-comment-block textarea'
   element :domain_level_comment, 'div.domain-comment-block textarea'
   elements :domain_toolbar_comment_icon_block, 'div.domain-toolbar-comment-icon-block'
+  elements :item_comment_icons, 'svg.item-toolbar-comment-icon'
   element :item_description_header, 'h1', text: 'Item Description:'
   # Caregiver domain specific elements
   elements :caregiver_domain_headers, 'h2', text: 'Caregiver Resources And Needs Domain'

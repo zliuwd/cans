@@ -132,6 +132,14 @@ const mountDisabledItem = item => {
 }
 
 describe('<Item />', () => {
+  jest.unmock('../../../util/assessmentAutoScroll')
+  const autoScroll = require.requireActual('../../../util/assessmentAutoScroll')
+  autoScroll.expandingThenScroll = jest.fn(() => null)
+  const expandingThenScroll = autoScroll.expandingThenScroll
+  afterEach(() => {
+    expandingThenScroll.mockReset()
+  })
+
   it('can expand and fold', () => {
     const wrapper = mount({ ...itemComponentDefault })
     wrapper.setProps({ ...propsDefault })
@@ -155,6 +163,13 @@ describe('<Item />', () => {
     const wrapper = mount({ ...itemComponentDefault })
     wrapper.find('i.fa-chevron-right').simulate('keydown', { key: 'Enter' })
     expect(wrapper.instance().state.isExpanded).toEqual(true)
+  })
+
+  it('when item expands expandingThenScroll will be invoked', async () => {
+    const wrapper = mount({ ...itemComponentDefault })
+    wrapper.find('i.fa-chevron-right').simulate('click')
+    expect(wrapper.instance().state.isExpanded).toEqual(true)
+    expect(expandingThenScroll).toHaveBeenCalledTimes(1)
   })
 
   it('has a title, description, questions to consider and rating descriptions ', async () => {

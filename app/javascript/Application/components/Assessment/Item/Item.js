@@ -16,6 +16,7 @@ import { getI18nValuesByPrefix } from '../I18nHelper'
 import { stringify } from '../../../util/common'
 import Comment from '../../common/Comment'
 import CommentIcon from '../../common/CommentIcon'
+import { expandingThenScroll, itemRatingOptionsAmount } from '../../../util/assessmentAutoScroll'
 
 const maxCommentLength = 250
 
@@ -81,8 +82,9 @@ class Item extends Component {
     this.props.onConfidentialityUpdate(code, !oldValue, caregiverIndex)
   }
 
-  switchExpandedState = () => {
+  switchExpandedState = event => {
     this.setState({ isExpanded: !this.state.isExpanded })
+    expandingThenScroll(event, this.state.isExpanded, itemRatingOptionsAmount(this.props.item.rating_type))
   }
 
   renderConfidentialCheckbox = (isConfidential, confidential_by_default) => {
