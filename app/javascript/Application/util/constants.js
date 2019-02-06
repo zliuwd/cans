@@ -1,5 +1,15 @@
 export const LOCAL_DATE_FORMAT = 'MM/DD/YYYY'
 export const ISO_DATE_FORMAT = 'YYYY-MM-DD'
+export const VALID_ASSESSMENT_DATE_FORMATS = [
+  'MM/DD/YYYY',
+  'M/DD/YYYY',
+  'MM/D/YYYY',
+  'M/D/YYYY',
+  'MM/DD/YY',
+  'M/DD/YY',
+  'MM/D/YY',
+  'M/D/YY',
+]
 export const DEFAULT_AUTO_HIDE_TIMEOUT = 8000
 export const TIMEOUT_EVENT = 'TIMEOUT_EVENT'
 export const SESSION_EXPIRATION_WARNING_TIME = 300000 // 5 minutes
