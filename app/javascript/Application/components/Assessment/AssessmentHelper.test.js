@@ -193,6 +193,11 @@ describe('AssessmentHelper', () => {
         const actual = validateAssessmentEventDate(moment('2001-01-01'), moment('2010-10-10'))
         expect(actual).toBe(true)
       })
+
+      it('returns true when dob is same as eventDate', () => {
+        const actual = validateAssessmentEventDate(moment('2001-01-01'), moment('2001-01-01'))
+        expect(actual).toBe(true)
+      })
     })
 
     describe('valid state', () => {

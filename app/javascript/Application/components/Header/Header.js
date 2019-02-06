@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { GlobalHeader } from 'react-wood-duck'
-import { trimSafely } from '../../util/formatters'
+import { formatUserName } from '../../util/formatters'
 import { logoutUrl } from '../../util/navigationUtil'
 import UserAccountService from '../common/UserAccountService'
 import { Icon } from '@cwds/components'
@@ -31,17 +31,11 @@ class Header extends React.Component {
   }
 
   updateName = staffPerson => {
-    const userName = this.parseUserName(staffPerson)
+    const userName = formatUserName(staffPerson)
     this.setState({
       userName,
       staffId: staffPerson.staff_id,
     })
-  }
-
-  parseUserName = staffPerson => {
-    const firstName = trimSafely(staffPerson.first_name)
-    const lastName = trimSafely(staffPerson.last_name)
-    return `${firstName} ${lastName}`
   }
 
   invokeCallback = staffId => {

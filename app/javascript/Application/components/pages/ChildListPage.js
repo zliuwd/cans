@@ -5,7 +5,7 @@ import BreadCrumbsBuilder from '../Layout/BreadCrumb/BreadCrumbsBuilder'
 import { CurrentUserCaseLoadPage } from '../Staff'
 import { buildSearchClientsButton as SearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
 import VisitLogger from './VisitLogger'
-import ReactWoodDuckLayout from '../Layout/ReactWoodDuckLayout'
+import FullWidthLayout from '../Layout/FullWidthLayout'
 
 const navigateTo = navigation.CHILD_LIST
 
@@ -21,9 +21,9 @@ const ChildListPage = () => {
       <CurrentUserLoadingBoundary>
         <VisitLogger dashboard={navigateTo} />
       </CurrentUserLoadingBoundary>
-      <ReactWoodDuckLayout breadcrumb={breadcrumb} navigateTo={navigateTo} rightButton={<SearchClientsButton />}>
+      <FullWidthLayout breadcrumb={breadcrumb} navigateTo={navigateTo} rightButton={<SearchClientsButton />}>
         <CurrentUserCaseLoadPage />
-      </ReactWoodDuckLayout>
+      </FullWidthLayout>
     </React.Fragment>
   )
 }

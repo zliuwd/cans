@@ -3,12 +3,9 @@ import { Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { clone } from '../../util/common'
 import { completeAutoScroll } from '../../util/assessmentAutoScroll'
-import PageModal from '../common/PageModal'
-import ConfidentialityWarning from '../common/ConfidentialityWarning'
-import { AssessmentFormHeader, AssessmentFormFooter, AssessmentService, I18nService } from './'
-import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
-import Assessment from './Assessment'
+import { AssessmentService, I18nService } from './'
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper'
+import AssessmentContainerInner from './AssessmentContainerInner'
 import { PrintAssessment } from '../Print'
 import {
   AssessmentStatus,
@@ -18,27 +15,25 @@ import {
   defaultEmptyAssessment,
   postSuccessMessage,
   trimUrlForClientProfile,
-  caregiverWarning,
-  completeTip,
   successMsgFrom,
   postInfoMessage,
   postCloseMessage,
+  alertMessage,
+  getCaregiverDomainsNumber,
+  handleCountyName,
+  updateUrlWithAssessment,
 } from './AssessmentHelper'
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
 import './style.sass'
 import { getCurrentIsoDate, isValidLocalDate, localToIsoDate } from '../../util/dateHelper'
 import { logPageAction } from '../../util/analytics'
-import { isAuthorized, isCompleteAssessmentAuthorized } from '../common/AuthHelper'
+import { isAuthorized } from '../common/AuthHelper'
 
 const SCROLL_POSITION_ADJUST = -25 // for manually adjust scroll destination -25 means go up 25px more
 const readOnlyMessageId = 'readonlyMessage'
-export const alertMessage = e => {
-  e.preventDefault()
-  return (e.returnValue = '')
-}
 
-class AssessmentContainer extends Component {
+export default class AssessmentContainer extends Component {
   constructor(props) {
     super(props)
     this.assessmentHeader = React.createRef()
@@ -51,17 +46,18 @@ class AssessmentContainer extends Component {
       isEditable: !props.disabled,
       isValidDate: true,
       isEventDateBeforeDob: false,
-      isCaregiverWarningShown: false,
       isSubmitWarningShown: false,
       isSaveButtonEnabled: false,
-      focusedCaregiverId: '',
       completeScrollTarget: 0,
     }
   }
 
   async componentDidMount() {
-    this.initAssessment().then(() => this.updateIsEditableState())
     this.handleCompleteScrollTarget()
+    const assessmentId = this.props.match.params.id
+    return (assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment()).then(() => {
+      this.updateIsEditableState()
+    })
   }
 
   componentDidUpdate() {
@@ -72,11 +68,6 @@ class AssessmentContainer extends Component {
     window.removeEventListener('beforeunload', alertMessage)
     this.props.pageHeaderButtonsController.updateHeaderButtonsToDefault()
     postCloseMessage(readOnlyMessageId)
-  }
-
-  initAssessment() {
-    const assessmentId = this.props.match.params.id
-    return assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment()
   }
 
   updateIsEditableState() {
@@ -141,15 +132,6 @@ class AssessmentContainer extends Component {
     }
     return null
   }
-
-  handleWarningShow = (switcher, caregiverIndex) => {
-    caregiverIndex = caregiverIndex || null
-    this.setState({
-      isCaregiverWarningShown: switcher,
-      focusedCaregiverId: caregiverIndex,
-    })
-  }
-
   async fetchNewAssessment() {
     this.setState({ assessmentServiceStatus: LoadingState.waiting })
     try {
@@ -226,12 +208,6 @@ class AssessmentContainer extends Component {
     })
   }
 
-  getCaregiverDomainsNumber = () => {
-    return this.state.assessment.state.domains.filter(domain => {
-      return domain.is_caregiver_domain === true
-    }).length
-  }
-
   handleCaregiverRemoveAll = (name, value) => {
     const tempAssessment = clone(this.state.assessment)
     tempAssessment[name] = value
@@ -240,7 +216,7 @@ class AssessmentContainer extends Component {
 
   handleCaregiverRemove = caregiverIndex => {
     const tempAssessment = clone(this.state.assessment)
-    const captureCaregiverDomains = this.getCaregiverDomainsNumber()
+    const captureCaregiverDomains = getCaregiverDomainsNumber(this.state.assessment)
     if (!caregiverIndex || captureCaregiverDomains <= 1) {
       this.handleCaregiverRemoveAll('has_caregiver', false)
     } else {
@@ -256,24 +232,17 @@ class AssessmentContainer extends Component {
       assessment,
       assessmentServiceStatus: LoadingState.ready,
     })
-    this.updateUrlWithAssessment(assessment)
-  }
-
-  updateUrlWithAssessment(assessment) {
-    this.props.history.push(`${this.props.match.url}/${assessment.id}`)
-  }
-
-  handleCountyName = () => {
-    return this.state.assessment.county ? this.state.assessment.county.name : null
+    updateUrlWithAssessment(this.props.history, this.props.match, assessment)
   }
 
   handleSaveAssessment = async () => {
     this.setState({ assessmentServiceStatus: LoadingState.updating })
     const assessment = this.state.assessment
     assessment.person = this.props.client
+    let updatedAssessment
     if (assessment.id) {
       try {
-        const updatedAssessment = await AssessmentService.update(assessment.id, assessment)
+        updatedAssessment = await AssessmentService.update(assessment.id, assessment)
         postSuccessMessage(this.props.match.url, successMsgFrom.SAVE)
         this.setState({
           assessment: updatedAssessment,
@@ -284,12 +253,13 @@ class AssessmentContainer extends Component {
       }
     } else {
       try {
-        const updatedAssessment = await AssessmentService.postAssessment(assessment)
+        updatedAssessment = await AssessmentService.postAssessment(assessment)
         this.initialSave(updatedAssessment)
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
       }
     }
+
     if (this.state.assessment.id) {
       this.updateIsEditableState()
       const canDisplaySummaryOnSave =
@@ -302,7 +272,7 @@ class AssessmentContainer extends Component {
         completeAutoScroll(this.state.completeScrollTarget, SCROLL_POSITION_ADJUST)
       }
       // Capture New Relic data after the assessment has been successfully saved
-      const countyName = this.handleCountyName()
+      const countyName = handleCountyName(this.state.assessment)
       logPageAction('assessmentSave', {
         assessment_id: this.state.assessment.id,
         assessment_county: countyName,
@@ -339,7 +309,7 @@ class AssessmentContainer extends Component {
       try {
         const submittedAssessment = await AssessmentService.postAssessment(assessment)
         postSuccessMessage(this.props.match.url, successMsgFrom.COMPLETE)
-        this.updateUrlWithAssessment(submittedAssessment)
+        updateUrlWithAssessment(this.props.history, this.props.match, submittedAssessment)
         this.setState({
           assessmentServiceStatus: LoadingState.ready,
           assessment: submittedAssessment,
@@ -352,7 +322,7 @@ class AssessmentContainer extends Component {
     if (this.state.assessment.id) {
       this.updateIsEditableState()
       // Capture New Relic data after the assessment has been successfully submitted
-      const countyName = this.handleCountyName()
+      const countyName = handleCountyName(this.state.assessment)
       logPageAction('assessmentSubmit', {
         assessment_id: this.state.assessment.id,
         assessment_county: countyName,
@@ -372,31 +342,13 @@ class AssessmentContainer extends Component {
       isEventDateBeforeDob,
     })
   }
-
-  renderWarning = () => {
-    return this.state.isCaregiverWarningShown ? (
-      <PageModal
-        isOpen={true}
-        title={'Warning'}
-        warningDescription={caregiverWarning}
-        description={'This may affect some of your entries.'}
-        nextStepButtonLabel={'Remove'}
-        cancelButtonLabel={'Cancel'}
-        onCancel={() => this.handleWarningShow(false)}
-        onNextStep={() => {
-          this.handleWarningShow(false)
-          this.handleCaregiverRemove(this.state.focusedCaregiverId)
-        }}
-      />
-    ) : null
-  }
-
   render() {
     const { client } = this.props
     const {
       shouldRedirectToClientProfile,
       isValidForSubmit,
       assessment,
+      isSubmitWarningShown,
       i18n,
       assessmentServiceStatus,
       isEditable,
@@ -405,66 +357,30 @@ class AssessmentContainer extends Component {
     if (shouldRedirectToClientProfile) {
       return <Redirect push to={{ pathname: trimUrlForClientProfile(this.props.match.url) }} />
     }
-    const canPerformUpdates = isReadyForAction(assessmentServiceStatus)
     const isUnderSix = assessment && assessment.state && assessment.state.under_six
-    const isCompleteButtonEnabled =
-      isEditable && canPerformUpdates && isValidForSubmit && isCompleteAssessmentAuthorized(assessment, client)
     return (
       <Fragment>
-        {this.renderWarning()}
-        {this.state.isSubmitWarningShown ? (
-          <ConfidentialityWarning
-            onCancel={() => this.handleSubmitWarning()}
-            onNextStep={() => {
-              this.handleSubmitWarning()
-              this.handleSubmitAssessment()
-            }}
-          />
-        ) : null}
-        <div rol="completeScrollLocator" ref={this.assessmentHeader}>
-          <AssessmentFormHeader
+        <div ref={this.assessmentHeader}>
+          <AssessmentContainerInner
             client={client}
-            assessment={assessment}
-            onAssessmentUpdate={this.updateAssessment}
             onEventDateFieldKeyUp={this.handleEventDateFieldKeyUp}
-            handleWarningShow={this.handleWarningShow}
-            isCaregiverWarningShown={this.state.isCaregiverWarningShown}
-            disabled={!isEditable}
+            assessment={assessment}
+            i18n={i18n}
+            onAssessmentUpdate={this.updateAssessment}
+            assessmentStatus={assessment.status}
+            isUnderSix={isUnderSix}
+            assessmentServiceStatus={assessmentServiceStatus}
+            isSubmitWarningShown={isSubmitWarningShown}
+            isEditable={isEditable}
+            onCancelClick={this.handleCancelClick}
+            handleSubmitWarning={this.handleSubmitWarning}
+            handleSubmitAssessment={this.handleSubmitAssessment}
+            handleCaregiverRemove={this.handleCaregiverRemove}
+            isValidForSubmit={isValidForSubmit}
+            canDisplaySummaryOnSave={canDisplaySummaryOnSave}
             isEventDateBeforeDob={this.state.isValidDate && this.state.isEventDateBeforeDob}
           />
         </div>
-        <AssessmentSummaryCard
-          isSummaryAvailableOnSave={canDisplaySummaryOnSave}
-          assessmentStatus={assessment.status}
-          domains={assessment && assessment.state && assessment.state.domains}
-          i18n={i18n}
-          isUnderSix={Boolean(isUnderSix)}
-          disabled={!isEditable}
-        />
-
-        <Assessment
-          assessment={assessment}
-          i18n={i18n}
-          onAssessmentUpdate={this.updateAssessment}
-          handleWarningShow={this.handleWarningShow}
-          disabled={!isEditable}
-        />
-        {LoadingState.ready === assessmentServiceStatus &&
-          isEditable &&
-          !(isUnderSix === null || isUnderSix === undefined) &&
-          completeTip}
-        {isUnderSix !== undefined && isEditable ? (
-          <AssessmentFormFooter
-            assessment={assessment}
-            onCancelClick={this.handleCancelClick}
-            isSubmitButtonEnabled={isCompleteButtonEnabled}
-            onSubmitAssessment={
-              this.state.assessment.can_release_confidential_info === true
-                ? this.handleSubmitAssessment
-                : this.handleSubmitWarning
-            }
-          />
-        ) : null}
       </Fragment>
     )
   }
@@ -488,5 +404,3 @@ AssessmentContainer.defaultProps = {
   },
   history: {},
 }
-
-export default AssessmentContainer

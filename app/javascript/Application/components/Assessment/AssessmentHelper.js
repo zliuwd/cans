@@ -50,7 +50,7 @@ function validateAssessmentState(assessment) {
 export function validateAssessmentEventDate(dob, eventDate) {
   if (!eventDate) return false
   if (!dob) return true
-  return moment(dob).isBefore(moment(eventDate))
+  return moment(dob).isSameOrBefore(moment(eventDate))
 }
 
 function isDefined(value) {
@@ -100,6 +100,11 @@ export function getActionVerbByStatus(status) {
     default:
       return 'Updated'
   }
+}
+
+export const alertMessage = e => {
+  e.preventDefault()
+  return (e.returnValue = '')
 }
 
 export function getDisplayAssessmentStatus(status) {
@@ -191,6 +196,20 @@ export const completeTip = (
     The Assessment Date and all assessment ratings must be completed before the Complete button becomes active.
   </Typography>
 )
+
+export const getCaregiverDomainsNumber = domains => {
+  return domains.state.domains.filter(domain => {
+    return domain.is_caregiver_domain === true
+  }).length
+}
+
+export const handleCountyName = assessment => {
+  return assessment.county ? assessment.county.name : null
+}
+
+export const updateUrlWithAssessment = (history, match, assessment) => {
+  return history.push(`${match.url}/${assessment.id}`)
+}
 
 export const selectOptions = [
   { value: 'Entered in error', label: 'Entered in error' },

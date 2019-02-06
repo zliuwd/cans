@@ -1,7 +1,7 @@
 import Cookies from 'universal-cookie'
 import { eventBus } from './eventBus'
 import { TIMEOUT_EVENT, SESSION_EXPIRATION_WARNING_TIME } from './constants'
-import { alertMessage } from '../components/Assessment/AssessmentContainer'
+import { alertMessage } from '../components/Assessment/AssessmentHelper'
 
 class TimeoutService {
   run() {

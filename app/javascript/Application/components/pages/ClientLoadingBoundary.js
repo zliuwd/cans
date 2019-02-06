@@ -18,7 +18,7 @@ class ClientLoadingBoundary extends React.Component {
 
   render() {
     return (
-      <LoadingBoundary childNodeFetchedPropName="client" fetch={this.state.fetch}>
+      <LoadingBoundary childNodeFetchedPropName="client" fetch={this.state.fetch} isHiddenWhileLoading={false}>
         {this.props.children}
       </LoadingBoundary>
     )

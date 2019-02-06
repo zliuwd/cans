@@ -103,7 +103,7 @@ class AssessmentFormHeader extends PureComponent {
           ariaLabelledBy={'assessment-date-label'}
           disabled={disabled}
           isValid={!isEventDateBeforeDob}
-          validationErrorMessage={'Enter an assessment date that is after the client’s date of birth.'}
+          validationErrorMessage={'Enter an assessment date that is on or after the client’s date of birth.'}
         />
       </Fragment>
     )

@@ -1,4 +1,4 @@
-import { isNeedsDomain, isStrengthsDomain, isTraumaDomain } from './DomainHelper'
+import { isNeedsDomain, isStrengthsDomain, isTraumaDomain, isBehavioralNeedsDomain, itemsValue } from './DomainHelper'
 
 const N = 500
 const i18nNumbers = new Array(N).fill().reduce((mapping, _item, i) => {
@@ -62,6 +62,44 @@ describe('DomainHelper', () => {
       expect(isNeedsDomain({ code: 'BEN' })).toBe(true)
       expect(isNeedsDomain({ code: 'OTHER' })).toBe(true)
       expect(isNeedsDomain({ code: '' })).toBe(true)
+    })
+  })
+
+  describe('isBehavioralNeedsDomain', () => {
+    it('is true for the Behavior/Emotional Needs Domain', () => {
+      expect(isBehavioralNeedsDomain({ code: 'BEN' })).toBe(true)
+    })
+
+    it('is false for other domains', () => {
+      expect(isBehavioralNeedsDomain({ code: 'OTHER' })).toBe(false)
+      expect(isBehavioralNeedsDomain({ code: 'STR' })).toBe(false)
+    })
+  })
+
+  describe('itemsValue', () => {
+    it('filters domains and returns values', () => {
+      const domains = [
+        {
+          code: 'BEN',
+          items: [
+            { code: 'SURPRISE', rating: 1 },
+            { code: 'FEAR', rating: 2 },
+            { code: 'RUTHLESS_EFFICIENCY', rating: 2 },
+            { code: 'NICE_RED_UNIFORMS', rating: -1 },
+            { code: 'FANATICAL_DEVOTION', rating: 3 },
+          ],
+        },
+      ]
+      const expectedResult = [
+        { code: 'SURPRISE', rating: 1 },
+        { code: 'FEAR', rating: 2 },
+        { code: 'RUTHLESS_EFFICIENCY', rating: 2 },
+        { code: 'NICE_RED_UNIFORMS', rating: -1 },
+        { code: 'FANATICAL_DEVOTION', rating: 3 },
+      ]
+      const domainFilter = isNeedsDomain
+      const itemFilter = el => true
+      expect(itemsValue(domains, domainFilter, itemFilter)).toEqual(expectedResult)
     })
   })
 })

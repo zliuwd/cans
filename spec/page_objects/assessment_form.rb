@@ -13,6 +13,7 @@ class AssessmentGlobal < SitePrism::Section
 end
 
 class AssessmentFormHeader < SitePrism::Section
+  element :child_name, 'span#child-name'
   element :date_field, 'input#assessment-date_input'
   element :date_field_validation_msg, 'div.validation-error-line'
   element :calendar_icon, 'span.rw-i-calendar'
@@ -29,7 +30,9 @@ class AssessmentFormHeader < SitePrism::Section
   element :authorization_radio_no, 'input#input-can-release-no', visible: false
   element :redaction_message, 'div.warning-text'
   element :age_0_to_5_button, 'button#age-0-5-button'
+  element :age_0_to_5_button_selected, 'button#age-0-5-button.age-button-selected'
   element :age_6_to_21_button, 'button#age-6-21-button'
+  element :age_6_to_21_button_selected, 'button#age-6-21-button.age-button-selected'
 end
 
 class AssessmentSummary < SitePrism::Section
@@ -80,6 +83,7 @@ class AssessmentForm < SitePrism::Page
   element :item_level_comment, 'div.item-comment-block textarea'
   element :domain_level_comment, 'div.domain-comment-block textarea'
   elements :domain_toolbar_comment_icon_block, 'div.domain-toolbar-comment-icon-block'
+  elements :item_comment_icons, 'svg.item-toolbar-comment-icon'
   element :item_description_header, 'h1', text: 'Item Description:'
   # Caregiver domain specific elements
   elements :caregiver_domain_headers, 'h2', text: 'Caregiver Resources And Needs Domain'
@@ -107,7 +111,13 @@ def check_case_or_referral_number
 end
 
 def click_0_to_5_button
-  @form.header.age_0_to_5_button.click
+  with_retry(proc { @form.header.age_0_to_5_button.click },
+             proc { @form.header.wait_until_age_0_to_5_button_selected_visible(wait: 2) })
+end
+
+def click_6_to_21_button
+  with_retry(proc { @form.header.age_6_to_21_button.click },
+             proc { @form.header.wait_until_age_6_to_21_button_selected_visible(wait: 2) })
 end
 
 def expand_all_domains

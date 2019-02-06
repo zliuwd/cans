@@ -1,6 +1,7 @@
 import { smoothScroll } from './invokeSmoothScroll'
 
 const STEP_MS = 50
+const stickyComponentsHeight = 125
 
 export const completeAutoScroll = (target, tuner) => {
   smoothScroll()
@@ -10,7 +11,6 @@ export const completeAutoScroll = (target, tuner) => {
   if (target) {
     let windowOffset = window.pageYOffset
     const viewPortHeight = window.innerHeight
-    const stickyComponentsHeight = 125
     // here to adjust the sticky components total height according to current UI
     const finalTarget = target - stickyComponentsHeight + tuner
     // finalTarget is finally where we want to scroll to
@@ -38,5 +38,26 @@ export const completeAutoScroll = (target, tuner) => {
     const repeat = setInterval(stepMoving, STEP_MS)
 
     // just use setInterval to individually fire the scrollTo so just need a minor delay like '1'
+  }
+}
+
+export const itemRatingOptionsAmount = ratingType => {
+  const regularRatingOptionAmount = 4
+  return ratingType === 'REGULAR' ? regularRatingOptionAmount : 2
+}
+
+export const expandingThenScroll = (event, isExpanded, amountOfChildren) => {
+  smoothScroll()
+  const averageExpandingTime = 45
+  // Ideal time for expanding each domain or item
+  const totalExpandingTime = averageExpandingTime * amountOfChildren
+  const targetInfo = event.target.getBoundingClientRect()
+  const windowOffset = window.pageYOffset
+  const tuner = 15
+  const finalTarget = windowOffset + targetInfo.top - stickyComponentsHeight - tuner
+  if (!isExpanded) {
+    setTimeout(() => {
+      window.scrollTo({ left: 0, top: finalTarget, behavior: 'smooth' })
+    }, totalExpandingTime)
   }
 }

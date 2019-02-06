@@ -10,10 +10,13 @@ require 'page_objects/assessment_changelog'
 feature 'Case Worker Functionality' do
   current_date = Time.now.getlocal.strftime('%m/%d/%Y')
   before(:all) do
+    login
     @form = AssessmentForm.new
     @staff_dash = StaffDashboard.new
     @client_profile = ClientProfile.new
+    @assessment_changelog = AssessmentChangeLog.new
   end
+
   before(:each) do
     @domain_total_count = []
     @total_radio_selected = []
@@ -24,14 +27,12 @@ feature 'Case Worker Functionality' do
   end
 
   scenario 'Form Header, Domain, and Item common functionalities test' do
-    login
+    visit '/'
     create_new_assessment(CLIENT_NAME)
     input_date_and_calendar_icon_test(current_date)
     fill_conducted_by_field('Mike Seaver')
     check_case_or_referral_number
     click_0_to_5_button
-    expand_all_domains
-    collapse_all_domains
     domain_and_item_rating_test
     discretion_and_not_applicable_checkbox_test
     item_and_domain_level_comment_test
@@ -39,7 +40,7 @@ feature 'Case Worker Functionality' do
   end
 
   scenario 'Fill out and complete assessment from 0 to 5' do
-    login
+    visit '/'
     fill_form_header_0_to_5
     expand_all_domains
     check_redacted_checkbox_0_to_5
@@ -52,7 +53,7 @@ feature 'Case Worker Functionality' do
   end
 
   scenario 'Fill out and complete assessment from 6 to 21' do
-    login
+    visit '/'
     fill_form_header_6_to_21
     expand_all_domains
     check_redacted_checkbox_6_to_21
@@ -65,14 +66,13 @@ feature 'Case Worker Functionality' do
   end
 
   scenario 'Case worker creates and deletes assessment' do
-    login
-    @assessment_changelog = AssessmentChangeLog.new
+    visit '/'
     create_new_assessment(CLIENT_NAME_2)
     verify_radio_buttons_on_assessment_header(current_date)
     validate_domain_radio_and_chevron
     save_and_check_the_success_message
     navigate_to_client_profile(CLIENT_NAME_2)
-    validate_new_assessment(current_date)
+    validate_new_assessment(current_date, CLIENT_NAME_2)
     navigate_to_client_profile(CLIENT_NAME_2)
     view_cans_change_log_test(current_date, CLIENT_NAME_2)
     navigate_to_client_profile(CLIENT_NAME_2)
@@ -80,7 +80,7 @@ feature 'Case Worker Functionality' do
   end
 
   scenario 'Case worker login, tests caregiver domain with new assessment and logs out' do
-    login
+    visit '/'
     create_new_assessment(CLIENT_NAME)
     click_0_to_5_button
     expand_all_domains
@@ -89,9 +89,27 @@ feature 'Case Worker Functionality' do
     save_and_check_the_success_message
   end
 
-  def validate_new_assessment(current_date)
+  def eliminate_auto_scroll_impact
+    sleep 2
+    @form.item_comment_icons[0].click
+  end
+
+  def expand_first_domain
+    @form.collapsed_domain_headers[0].click
+    expect(@form).to have_domain_level_reg_rating
+    expect(@form).to have_domain_reg_radios
+    eliminate_auto_scroll_impact
+  end
+
+  def expand_first_item
+    @form.inner_items[0].click
+    eliminate_auto_scroll_impact
+  end
+
+  def validate_new_assessment(current_date, client_name)
     @client_profile.go_to_recently_updated_assessment(current_date)
     expect(@form.global).to have_assessment_page_header
+    expect(@form.header.child_name).to have_content(client_name)
   end
 
   def navigate_to_client_profile(client_name)
@@ -138,11 +156,12 @@ feature 'Case Worker Functionality' do
   end
 
   def validate_domain_radio_and_chevron
-    @form.challenges_domain.click
-    @form.impulse_hyper_activity.click
+    expand_first_domain
+    expand_first_item
     @form.impulse_hyper_activity_input.click
     expect(@form).to have_item_description_header
     @form.impulse_hyper_activity.click
+    eliminate_auto_scroll_impact
     expect(@form).to have_no_item_description_header
     progress_bar_value = page.all('span.progress-value', match: :first).map(&:text)
     progress_bar_value.each { |element| @total_radio_selected.push(element) }
@@ -154,7 +173,7 @@ feature 'Case Worker Functionality' do
     @staff_dash.visit_client_profile(client_name)
     expect(@client_profile).to have_add_cans_link
     @client_profile.add_cans_link.click
-    expect(@form.global).to have_assessment_page_header
+    expect(@form.header.child_name).to have_content(client_name)
   end
 
   def input_date_and_calendar_icon_test(current_date)
@@ -171,26 +190,25 @@ feature 'Case Worker Functionality' do
     long_past_date = Time.now.strftime('01/01/1970')
     @form.header.date_field.set long_past_date
     expect(@form.header.date_field.value).to eq(long_past_date)
-    validation_error_msg = 'Enter an assessment date that is after the client’s date of birth.'
-    expect(@form.header.date_field_validation_msg.text).to eq(validation_error_msg)
+    validation_msg = 'Enter an assessment date that is on or after the client’s date of birth.'
+    expect(@form.header.date_field_validation_msg.text).to eq(validation_msg)
     @form.header.date_field.set current_date
     expect(@form.header).to have_no_date_field_validation_msg
   end
 
   def domain_and_item_rating_test
-    @form.collapsed_domain_headers[0].click
-    expect(@form).to have_domain_level_reg_rating
-    target_domain_reg_radios = @form.domain_reg_radios[0, 4]
+    expand_first_domain
+    @form.domain_level_reg_rating[0].click # avoid stuck
     @form.domain_level_reg_rating[0, 4].each_with_index do |label, index|
       label.click
-      expect(target_domain_reg_radios[index].checked?).to be(true)
+      expect(@form.domain_reg_radios[index].checked?).to be(true)
     end
-    @form.inner_items[0].click
+    expand_first_item
     expect(@form).to have_inner_item_rating
     @form.inner_item_rating.each_with_index do |label, index|
       label.click
       expect(@form.inner_item_radios[index].checked?).to be(true)
-      expect(target_domain_reg_radios[index].checked?).to be(true)
+      expect(@form.domain_reg_radios[index].checked?).to be(true)
     end
   end
 
@@ -245,17 +263,15 @@ feature 'Case Worker Functionality' do
     fill_conducted_by_field('')
     expect(@form.header).to have_redaction_message
     click_0_to_5_button
-    expect(@form.header.age_0_to_5_button[:class].include?('age-button-selected')).to be(true)
     expect(@form).to have_assessment_card_title_0_5
   end
 
   def fill_form_header_6_to_21
     create_new_assessment(CLIENT_NAME)
     fill_conducted_by_field('')
-    @form.header.authorization_label_yes.click
-    expect(@form.header).to have_no_redaction_message
-    @form.header.age_6_to_21_button.click
-    expect(@form.header.age_6_to_21_button[:class].include?('age-button-selected')).to be(true)
+    with_retry(proc { @form.header.authorization_label_yes.click },
+               proc { @form.header.wait_until_redaction_message_invisible(wait: 2) })
+    click_6_to_21_button
     expect(@form).to have_assessment_card_title_6_21
   end
 
@@ -376,7 +392,13 @@ feature 'Case Worker Functionality' do
          'Interpersonal', 'Natural Supports', 'Resiliency', 'Spiritual/Religious',
          'Talents and Interests']
       end
-    action_required_column_text = ['Anxiety']
+    action_required_column_text =
+      if age_range == '0to5'
+        ['Anxiety']
+      else
+        ['Psychosis (Thought Disorder)', 'Depression', 'Anxiety', 'Conduct', 'Substance Use',
+         'Anger Control', 'Adjustment to Trauma']
+      end
     immediate_action_required_column_text = ['Oppositional (Non-compliance with Authority)']
     trauma_column_text = ['Physical Abuse', 'Emotional Abuse', 'Neglect', 'Medical Trauma',
                           'Witness to Family Violence', 'Witness to Community/School Violence',

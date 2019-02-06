@@ -15,6 +15,7 @@ import { isA11yAllowedInput } from '../../util/events'
 import Grid from '@material-ui/core/Grid'
 import { totalScoreCalculation } from './DomainScoreHelper.js'
 import { isEmpty } from '../../util/common'
+import { expandingThenScroll } from '../../util/assessmentAutoScroll'
 import './style.sass'
 
 const mapI18nToState = props => ({
@@ -38,10 +39,11 @@ class Domain extends Component {
     return null
   }
 
-  handleExpandedChange = () => {
+  handleExpandedChange = event => {
     this.setState({
       expanded: !this.state.expanded,
     })
+    expandingThenScroll(event, this.state.expanded, this.props.domain.items.length)
   }
 
   handleAddCaregiverDomain = event => {

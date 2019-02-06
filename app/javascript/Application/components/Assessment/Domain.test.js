@@ -48,7 +48,24 @@ const domainComponentDefault = (
   />
 )
 
+const testExpandingEvent = {
+  type: 'keydown',
+  target: {
+    getBoundingClientRect: () => {
+      return { top: 100 }
+    },
+  },
+}
+
 describe('<Domain />', () => {
+  jest.unmock('../../util/assessmentAutoScroll')
+  const autoScroll = require.requireActual('../../util/assessmentAutoScroll')
+  autoScroll.expandingThenScroll = jest.fn(() => null)
+  const expandingThenScroll = autoScroll.expandingThenScroll
+  afterEach(() => {
+    expandingThenScroll.mockReset()
+  })
+
   it('renders with no exceptions', () => {
     expect(() => shallow(domainComponentDefault)).not.toThrow()
   })
@@ -56,6 +73,13 @@ describe('<Domain />', () => {
   it('renders DomainScore', () => {
     const wrapper = shallow(domainComponentDefault)
     expect(wrapper.find(DomainScore).length).toBe(1)
+  })
+
+  it('when domain expands expandingThenScroll will be invoked', () => {
+    const wrapper = shallow(domainComponentDefault)
+    wrapper.instance().handleExpandedChange(testExpandingEvent)
+    expect(wrapper.instance().state.expanded).toEqual(true)
+    expect(expandingThenScroll).toHaveBeenCalledTimes(1)
   })
 
   it('should propagate onItemCommentUpdate from props to DomainItemList props', () => {
@@ -84,7 +108,7 @@ describe('<Domain />', () => {
 
   it('should render ItemList when extended', () => {
     const wrapper = shallow(domainComponentDefault)
-    wrapper.instance().handleExpandedChange()
+    wrapper.instance().handleExpandedChange(testExpandingEvent)
     wrapper.update()
     expect(wrapper.find(DomainItemList).length).toBe(1)
   })
@@ -98,7 +122,7 @@ describe('<Domain />', () => {
 
     it('should render progress bar when extended', () => {
       const wrapper = shallow(domainComponentDefault)
-      wrapper.instance().handleExpandedChange()
+      wrapper.instance().handleExpandedChange(testExpandingEvent)
       wrapper.update()
       expect(wrapper.instance().state.expanded).toBeTruthy()
       expect(wrapper.find(DomainProgressBar).length).toBe(1)
@@ -108,7 +132,7 @@ describe('<Domain />', () => {
   describe('DomainCommentAccordion', () => {
     it('should render domain comment when extended', () => {
       const wrapper = shallow(domainComponentDefault)
-      wrapper.instance().handleExpandedChange()
+      wrapper.instance().handleExpandedChange(testExpandingEvent)
       expect(wrapper.instance().state.expanded).toBeTruthy()
       expect(wrapper.find(DomainCommentAccordion).length).toBe(1)
     })
@@ -133,7 +157,7 @@ describe('<Domain />', () => {
           onCaregiverNameUpdate={() => {}}
         />
       )
-      wrapper.instance().handleExpandedChange()
+      wrapper.instance().handleExpandedChange(testExpandingEvent)
       expect(wrapper.find(DomainCommentAccordion).props().onDomainCommentUpdate).toBe(onDomainCommentUpdateMock)
     })
   })
@@ -145,6 +169,7 @@ describe('<Domain />', () => {
 
   describe('caregiver domain', () => {
     const callbackMock = jest.fn()
+    const handleWarningShow = jest.fn()
     const domain = {
       ...domainDefault,
       is_caregiver_domain: true,
@@ -154,7 +179,7 @@ describe('<Domain />', () => {
       key: '1',
       canReleaseConfidentialInfo: true,
       domain: { ...domain },
-      handleWarningShow: () => {},
+      handleWarningShow: handleWarningShow,
       i18n: { ...i18nDefault },
       i18nAll: {},
       index: 1,
@@ -170,12 +195,17 @@ describe('<Domain />', () => {
     let wrapper
     beforeEach(() => {
       wrapper = mount(domainComponent)
-      wrapper.instance().handleExpandedChange()
+      wrapper.instance().handleExpandedChange(testExpandingEvent)
       wrapper.update()
     })
 
     it('will render DomainCaregiverControls', () => {
       expect(wrapper.find(DomainCaregiverControls).length).toBe(1)
+    })
+
+    it('warning modal will show when remove caregiver domain', () => {
+      wrapper.instance().handleRemoveCaregiverDomain(testExpandingEvent)
+      expect(handleWarningShow.mock.calls.length).toBe(1)
     })
 
     it('invokes onRemoveCaregiverDomain() callback', () => {
@@ -225,7 +255,7 @@ describe('<Domain />', () => {
               />
             )
             const wrapper = mount(domainComponent)
-            wrapper.instance().handleExpandedChange()
+            wrapper.instance().handleExpandedChange(testExpandingEvent)
             wrapper.update()
             const nameInput = wrapper.find('.caregiver-name').at(0)
 
@@ -267,7 +297,7 @@ describe('<Domain />', () => {
               />
             )
             const wrapper = mount(domainComponent)
-            wrapper.instance().handleExpandedChange()
+            wrapper.instance().handleExpandedChange(testExpandingEvent)
             wrapper.update()
             const nameInput = wrapper.find('.caregiver-name').at(0)
             nameInput.simulate('change', { target: { value: 'Full Name' } })
@@ -310,7 +340,7 @@ describe('<Domain />', () => {
       disabled: true,
     }
     const domainWrapper = shallow(<Domain {...defaultProps} />)
-    domainWrapper.instance().handleExpandedChange()
+    domainWrapper.instance().handleExpandedChange(testExpandingEvent)
     domainWrapper.update()
     domainWrapper.setState({ expanded: true })
 
