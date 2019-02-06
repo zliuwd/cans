@@ -5,7 +5,7 @@ import { navigation } from '../../util/constants'
 import BreadCrumbsBuilder from '../Layout/BreadCrumb/BreadCrumbsBuilder'
 import { Client } from '../Client'
 import { buildSearchClientsButton as SearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
-import ReactWoodDuckLayout from '../Layout/ReactWoodDuckLayout'
+import FullWidthLayout from '../Layout/FullWidthLayout'
 
 const navigateTo = navigation.CHILD_PROFILE
 
@@ -17,9 +17,9 @@ const ChildProfilePage = ({ client, match }) => {
   )
 
   return (
-    <ReactWoodDuckLayout breadcrumb={breadcrumb} navigateTo={navigateTo} rightButton={<SearchClientsButton />}>
-      <Client navigateTo={navigateTo} client={client} match={match} />
-    </ReactWoodDuckLayout>
+    <FullWidthLayout breadcrumb={breadcrumb} navigateTo={navigateTo} rightButton={<SearchClientsButton />}>
+      {client && <Client navigateTo={navigateTo} client={client} match={match} />}
+    </FullWidthLayout>
   )
 }
 

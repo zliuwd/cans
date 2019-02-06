@@ -1,4 +1,4 @@
-import { isFeatureActive, isCans2 } from './features'
+import { isFeatureActive, isCans2, isDesignSystemLayoutEnabled } from './features'
 
 describe('Features', () => {
   let originalWindowOrg
@@ -34,6 +34,23 @@ describe('Features', () => {
     it('is false if the feature is not in window config', () => {
       window.org = Object.freeze({ cans: { active_features: ['Feature One', 'Feature Two'] } })
       expect(isCans2()).toBe(false)
+    })
+  })
+
+  describe('isDesignSystemLayoutEnabled', () => {
+    it('is true when turned on and cans2.0 is enabled', () => {
+      window.org = Object.freeze({ cans: { active_features: ['enable_design_system_layout', 'cans2'] } })
+      expect(isDesignSystemLayoutEnabled()).toBe(true)
+    })
+
+    it('is false if turned off', () => {
+      window.org = Object.freeze({ cans: { active_features: ['cans2'] } })
+      expect(isDesignSystemLayoutEnabled()).toBe(false)
+    })
+
+    it('is false if cans2.0 is disabled', () => {
+      window.org = Object.freeze({ cans: { active_features: ['enable_design_system_layout'] } })
+      expect(isDesignSystemLayoutEnabled()).toBe(false)
     })
   })
 })

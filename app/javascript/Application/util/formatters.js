@@ -65,3 +65,9 @@ export function formatPhoneWithExtCode(phoneNumber, extCode) {
     return formatPhoneNumber(phoneNumber)
   }
 }
+
+export function formatUserName(staffPerson) {
+  const firstName = trimSafely(staffPerson.first_name)
+  const lastName = trimSafely(staffPerson.last_name)
+  return `${firstName} ${lastName}`
+}

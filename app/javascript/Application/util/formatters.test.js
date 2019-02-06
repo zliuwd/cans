@@ -3,6 +3,7 @@ import {
   addTrailingSlash,
   formatPhoneWithExtCode,
   formatPhoneNumber,
+  formatUserName,
   removeTrailingSlash,
   removeLeadingSlash,
 } from './formatters'
@@ -116,6 +117,32 @@ describe('formatters', () => {
       it('should return fully formatted phone number', () => {
         expect(formatPhoneWithExtCode('9167654321', '3333')).toEqual('916-765-4321 ext. 3333')
       })
+    })
+  })
+
+  describe('formatUserName', () => {
+    it('joins the first and last name in order', () => {
+      expect(formatUserName({ first_name: 'Bilbo', last_name: 'Baggins' })).toBe('Bilbo Baggins')
+    })
+
+    it('trims the first name', () => {
+      expect(formatUserName({ first_name: '  Frodo ', last_name: 'Baggins' })).toBe('Frodo Baggins')
+    })
+
+    it('trims the last name', () => {
+      expect(formatUserName({ first_name: 'Gandalf', last_name: ' The Grey  ' })).toBe('Gandalf The Grey')
+    })
+
+    it('displays the last name when first is missing', () => {
+      expect(formatUserName({ first_name: null, last_name: 'Prince' })).toBe(' Prince')
+    })
+
+    it('displays the first name when the last name is missing', () => {
+      expect(formatUserName({ first_name: 'Madonna' })).toBe('Madonna ')
+    })
+
+    it('displays nothing when there is no name', () => {
+      expect(formatUserName({})).toBe(' ')
     })
   })
 })

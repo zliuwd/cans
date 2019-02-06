@@ -7,19 +7,19 @@ import CurrentUserLoadingBoundary from './CurrentUserLoadingBoundary'
 import BreadCrumbsBuilder from '../Layout/BreadCrumb/BreadCrumbsBuilder'
 import { buildSearchClientsButton as SearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
 import VisitLogger from './VisitLogger'
-import ReactWoodDuckLayout from '../Layout/ReactWoodDuckLayout'
+import FullWidthLayout from '../Layout/FullWidthLayout'
 
 describe('Child List Page', () => {
   const render = () => shallow(<ChildListPage />)
 
   it('renders a body of CurrentUserCaseLoadPage', () => {
-    const body = render().find(ReactWoodDuckLayout)
+    const body = render().find(FullWidthLayout)
     expect(body.find(CurrentUserCaseLoadPage).exists()).toBe(true)
   })
 
   it('renders a breadcrumb with current user info', () => {
     const breadcrumbElement = render()
-      .find(ReactWoodDuckLayout)
+      .find(FullWidthLayout)
       .props().breadcrumb
     expect(breadcrumbElement.type).toBe(CurrentUserLoadingBoundary)
     const breadcrumb = breadcrumbElement.props.children
@@ -28,7 +28,7 @@ describe('Child List Page', () => {
   })
 
   it('renders a Search button', () => {
-    const layout = render().find(ReactWoodDuckLayout)
+    const layout = render().find(FullWidthLayout)
     expect(layout.props().rightButton.type).toBe(SearchClientsButton)
   })
 
