@@ -9,7 +9,9 @@ module LoginHelper
   end
 
   def enter_credentials(login_config = default_json)
-    js_script = 'arguments[0].focus(); arguments[0].setAttribute("value", arguments[1]); arguments[0].blur();'
+    js_script = 'arguments[0].focus(); \
+                 arguments[0].setAttribute("value", arguments[1]); \
+                 arguments[0].blur();'
     input_field = find('input#username')
     page.execute_script(js_script, input_field.native, JSON.generate(login_config))
     click_button 'Sign In'

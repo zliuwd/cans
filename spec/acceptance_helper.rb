@@ -27,14 +27,9 @@ def with_retry(func0, func1, times = 3)
       times = 0
     rescue StandardError => e
       times -= 1
-      if times <= 0
-        raise e
-      end
+      raise e if times <= 0
     end
-
-    if times <= 0
-      break
-    end
+    break if times <= 0
   end
 end
 

@@ -111,13 +111,13 @@ def check_case_or_referral_number
 end
 
 def click_0_to_5_button
-  with_retry(Proc.new { @form.header.age_0_to_5_button.click },
-             Proc.new { @form.header.wait_until_age_0_to_5_button_selected_visible(wait: 2) })
+  with_retry(proc { @form.header.age_0_to_5_button.click },
+             proc { @form.header.wait_until_age_0_to_5_button_selected_visible(wait: 2) })
 end
 
 def click_6_to_21_button
-  with_retry(Proc.new { @form.header.age_6_to_21_button.click },
-             Proc.new { @form.header.wait_until_age_6_to_21_button_selected_visible(wait: 2) })
+  with_retry(proc { @form.header.age_6_to_21_button.click },
+             proc { @form.header.wait_until_age_6_to_21_button_selected_visible(wait: 2) })
 end
 
 def expand_all_domains

@@ -269,8 +269,8 @@ feature 'Case Worker Functionality' do
   def fill_form_header_6_to_21
     create_new_assessment(CLIENT_NAME)
     fill_conducted_by_field('')
-    with_retry(Proc.new { @form.header.authorization_label_yes.click },
-               Proc.new { @form.header.wait_until_redaction_message_invisible(wait: 2) })
+    with_retry(proc { @form.header.authorization_label_yes.click },
+               proc { @form.header.wait_until_redaction_message_invisible(wait: 2) })
     click_6_to_21_button
     expect(@form).to have_assessment_card_title_6_21
   end
