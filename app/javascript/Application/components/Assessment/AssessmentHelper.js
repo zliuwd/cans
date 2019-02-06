@@ -102,6 +102,11 @@ export function getActionVerbByStatus(status) {
   }
 }
 
+export const alertMessage = e => {
+  e.preventDefault()
+  return (e.returnValue = '')
+}
+
 export function getDisplayAssessmentStatus(status) {
   switch (status) {
     case AssessmentStatus.inProgress:
@@ -191,6 +196,20 @@ export const completeTip = (
     The Assessment Date and all assessment ratings must be completed before the Complete button becomes active.
   </Typography>
 )
+
+export const getCaregiverDomainsNumber = domains => {
+  return domains.state.domains.filter(domain => {
+    return domain.is_caregiver_domain === true
+  }).length
+}
+
+export const handleCountyName = assessment => {
+  return assessment.county ? assessment.county.name : null
+}
+
+export const updateUrlWithAssessment = (history, match, assessment) => {
+  return history.push(`${match.url}/${assessment.id}`)
+}
 
 export const selectOptions = [
   { value: 'Entered in error', label: 'Entered in error' },

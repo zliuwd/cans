@@ -19,7 +19,7 @@ const AssessmentSummaryCard = ({ assessmentStatus, isSummaryAvailableOnSave, ...
 
 AssessmentSummaryCard.propTypes = {
   assessmentStatus: PropTypes.oneOf(Object.values(AssessmentStatus)),
-  domains: PropTypes.array.isRequired,
+  domains: PropTypes.array,
   i18n: PropTypes.object.isRequired,
   isSummaryAvailableOnSave: PropTypes.bool,
   isUnderSix: PropTypes.bool.isRequired,
@@ -28,6 +28,7 @@ AssessmentSummaryCard.propTypes = {
 AssessmentSummaryCard.defaultProps = {
   isSummaryAvailableOnSave: false,
   assessmentStatus: AssessmentStatus.inProgress,
+  domains: undefined,
 }
 
 export default AssessmentSummaryCard

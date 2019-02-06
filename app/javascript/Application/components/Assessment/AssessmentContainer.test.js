@@ -1,14 +1,13 @@
 import { globalAlertService } from '../../util/GlobalAlertService'
 import React from 'react'
-import { AssessmentContainer, AssessmentFormHeader, AssessmentService, I18nService } from './index'
+import { AssessmentContainer, AssessmentService, I18nService } from './index'
 import * as AHelper from './AssessmentHelper'
 import { childInfoJson } from '../Client/Client.helper.test'
 import ClientService from '../Client/Client.service'
 import { mount, shallow } from 'enzyme'
-import Typography from '@material-ui/core/Typography/Typography'
-import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
 import AssessmentFormFooter from './AssessmentFormFooter'
 import * as AssessmentAutoScroll from '../../util/assessmentAutoScroll'
+import AssessmentContainerInner from '../Assessment/AssessmentContainerInner'
 import PageModal from '../common/PageModal'
 import {
   assessment,
@@ -52,6 +51,7 @@ describe('<AssessmentContainer />', () => {
           updateHeaderButtonsToDefault: () => {},
         },
         client: {},
+        assessment: {},
       }
 
       beforeEach(() => {
@@ -61,26 +61,9 @@ describe('<AssessmentContainer />', () => {
 
       const getLength = (wrapper, component) => wrapper.find(component).length
 
-      it('renders with 1 <AssessmentFormHeader /> component', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        expect(getLength(wrapper, AssessmentFormHeader)).toBe(1)
-      })
-
-      it('renders with 1 <AssessmentSummaryCard /> component', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        expect(getLength(wrapper, AssessmentSummaryCard)).toBe(1)
-      })
-
-      it('renders with 1 <Typography /> component', async () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        await wrapper.instance().componentDidMount()
-        await wrapper.instance().setState({ assessment })
-        expect(getLength(wrapper, Typography)).toBe(1)
-      })
-
-      it('renders without <AssessmentFormFooter /> component initially', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        expect(getLength(wrapper, AssessmentFormFooter)).toBe(0)
+      it('renders with 1 <AssessmentContainerInner/> component', () => {
+        const wrapper = mount(<AssessmentContainer {...props} />)
+        expect(getLength(wrapper, AssessmentContainerInner)).toBe(1)
       })
 
       it('add "beforeunload" event listener when assessment is read-write', async () => {
@@ -200,9 +183,9 @@ describe('<AssessmentContainer />', () => {
           isSubmitWarningShown: true,
         })
         wrapper
-          .find('ConfidentialityWarning')
+          .find(AssessmentContainerInner)
           .props()
-          .onNextStep()
+          .handleSubmitAssessment()
         wrapper.instance().handleSubmitWarning(false)
         expect(wrapper.state().isSubmitWarningShown).toEqual(false)
       })
@@ -223,15 +206,7 @@ describe('<AssessmentContainer />', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         wrapper.instance().setState({
           assessment: assessment,
-          isCaregiverWarningShown: true,
-          focusedCaregiverId: 0,
         })
-        wrapper
-          .find('PageModal')
-          .props()
-          .onNextStep()
-        wrapper.instance().handleWarningShow(false)
-        expect(wrapper.state().isCaregiverWarningShown).toEqual(false)
         wrapper.instance().handleCaregiverRemove(1)
         wrapper.state().assessment.state.domains = updatedAssessmentDomains
         wrapper.instance().updateAssessment(wrapper.state().assessment)
@@ -242,15 +217,11 @@ describe('<AssessmentContainer />', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         wrapper.instance().setState({
           assessment: assessment,
-          isCaregiverWarningShown: true,
-          focusedCaregiverId: null,
         })
         wrapper
-          .find('PageModal')
+          .find(AssessmentContainerInner)
           .props()
-          .onNextStep()
-        wrapper.instance().handleWarningShow(false)
-        expect(wrapper.state().isCaregiverWarningShown).toEqual(false)
+          .handleCaregiverRemove(null)
         wrapper.instance().handleCaregiverRemove(null)
         wrapper.instance().handleCaregiverRemoveAll('has_caregiver', false)
         expect(wrapper.state().assessment.has_caregiver).toEqual(false)
@@ -270,14 +241,11 @@ describe('<AssessmentContainer />', () => {
               domains: [...domainWithTwoCaregiver],
             },
           },
-          isCaregiverWarningShown: true,
-          focusedCaregiverId: 'a',
         })
         wrapper
-          .find('PageModal')
-          .find('.warning-modal-stay-logged-in')
-          .first()
-          .simulate('click')
+          .find(AssessmentContainerInner)
+          .props()
+          .handleCaregiverRemove('a')
 
         wrapper.update()
         expect(wrapper.state().assessment.state.domains.length).toEqual(1)
@@ -295,15 +263,11 @@ describe('<AssessmentContainer />', () => {
               domains: [...domainWithTwoCaregiver],
             },
           },
-          isCaregiverWarningShown: true,
-          focusedCaregiverId: null,
         })
         wrapper
-          .find('PageModal')
-          .find('.warning-modal-stay-logged-in')
-          .first()
-          .simulate('click')
-
+          .find(AssessmentContainerInner)
+          .props()
+          .handleCaregiverRemove()
         wrapper.update()
         expect(wrapper.state().assessment.state.domains.length).toEqual(0)
       })
@@ -317,45 +281,15 @@ describe('<AssessmentContainer />', () => {
             has_caregiver: true,
             state: { ...assessment.state, domains: [...single] },
           },
-          isCaregiverWarningShown: true,
-          focusedCaregiverId: 'b',
         })
         wrapper
-          .find('PageModal')
-          .find('.warning-modal-stay-logged-in')
-          .first()
-          .simulate('click')
+          .find(AssessmentContainerInner)
+          .props()
+          .handleCaregiverRemove()
 
         wrapper.update()
         expect(wrapper.state().assessment.state.domains.length).toEqual(0)
         expect(wrapper.state().assessment.has_caregiver).toEqual(false)
-      })
-    })
-
-    describe('verifies if caregiver id is removed when the state is updated', () => {
-      const props = { ...defaultProps }
-      it('should set cargiver value to null', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().setState({
-          assessment: assessment,
-          isCaregiverWarningShown: true,
-          focusedCaregiverId: 0,
-        })
-        wrapper.instance().handleWarningShow(false)
-        expect(wrapper.state().isCaregiverWarningShown).toEqual(false)
-        expect(wrapper.state().focusedCaregiverId).toEqual(null)
-      })
-
-      it('should update cargiver value in state', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().setState({
-          assessment: assessment,
-          isCaregiverWarningShown: true,
-          focusedCaregiverId: 1,
-        })
-        wrapper.instance().handleWarningShow(false, 1)
-        expect(wrapper.state().isCaregiverWarningShown).toEqual(false)
-        expect(wrapper.state().focusedCaregiverId).toEqual(1)
       })
     })
 
@@ -371,63 +305,6 @@ describe('<AssessmentContainer />', () => {
       })
     })
 
-    describe('warning model when warning is shown', () => {
-      const props = { ...defaultProps }
-      it('should render PageModal component when warningShow is true', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().setState({
-          assessment: assessment,
-          isCaregiverWarningShown: true,
-        })
-        expect(wrapper.find(PageModal).length).toBe(1)
-      })
-
-      it('should render cancel button label when warningShow is true', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().setState({
-          assessment: assessment,
-          isCaregiverWarningShown: true,
-        })
-        expect(wrapper.find(PageModal).props().cancelButtonLabel).toContain('Cancel')
-      })
-
-      it('should render remove button label when warningShow is true', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().setState({
-          assessment: assessment,
-          isCaregiverWarningShown: true,
-        })
-        expect(wrapper.find(PageModal).props().nextStepButtonLabel).toContain('Remove')
-      })
-
-      it('should render description when warningShow is true', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().setState({
-          assessment: assessment,
-          isCaregiverWarningShown: true,
-        })
-        expect(wrapper.find(PageModal).props().description).toContain('This may affect some of your entries.')
-      })
-
-      it('should render title when warningShow is true', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().setState({
-          assessment: assessment,
-          isCaregiverWarningShown: true,
-        })
-        expect(wrapper.find(PageModal).props().title).toContain('Warning')
-      })
-
-      it('should render isOpen when warningShow is true', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().setState({
-          assessment: assessment,
-          isCaregiverWarningShown: true,
-        })
-        expect(wrapper.find(PageModal).props().isOpen).toEqual(true)
-      })
-    })
-
     describe('assessment form with no existing assessment', () => {
       const props = {
         client: childInfoJson,
@@ -440,6 +317,7 @@ describe('<AssessmentContainer />', () => {
       it('calls fetchNewAssessment', async () => {
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
+        assessmentServiceGetSpy.mockReturnValue(Promise.resolve(instrument))
         const wrapper = shallow(<AssessmentContainer {...props} />)
         await wrapper.instance().componentDidMount()
         expect(assessmentServiceGetSpy).toHaveBeenCalledWith()
@@ -461,7 +339,7 @@ describe('<AssessmentContainer />', () => {
       })
 
       it('passes an unset age group to the assessment component', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
+        const wrapper = mount(<AssessmentContainer {...props} />)
         wrapper.instance().onFetchNewAssessmentSuccess(instrument)
         const form = wrapper.find('Assessment')
         expect(form.props().assessment.state.under_six).toBeUndefined()
@@ -495,15 +373,16 @@ describe('<AssessmentContainer />', () => {
       it('calls fetchAssessment', async () => {
         const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
+        assessmentServiceGetSpy.mockReturnValue(Promise.resolve(instrument))
         const wrapper = shallow(<AssessmentContainer {...props} />)
         await wrapper.instance().componentDidMount()
         expect(assessmentServiceGetSpy).toHaveBeenCalledWith()
       })
 
       it('shows the assessment footer', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
+        const wrapper = mount(<AssessmentContainer {...props} />)
         wrapper.instance().onFetchAssessmentSuccess(assessment)
-        expect(wrapper.find(AssessmentFormFooter).exists()).toBeTruthy()
+        expect(wrapper.find('AssessmentFormFooter').exists()).toBeTruthy()
       })
     })
   })
@@ -630,7 +509,7 @@ describe('<AssessmentContainer />', () => {
 
     describe('#assessment summary card', () => {
       describe('when all required fields are not filled in and all items are not selected', () => {
-        const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+        const wrapper = mount(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({
           assesment: initialAssessment,
           isEditable: true,
@@ -661,9 +540,12 @@ describe('<AssessmentContainer />', () => {
         })
 
         it('displays summary card and calls completeAutoScroll with right parameters on save', async () => {
+          jest.spyOn(AssessmentService, 'postAssessment').mockReturnValue(Promise.resolve(assessment))
+          const wrapper = mount(<AssessmentContainer {...defaultProps} />)
           const completeAutoScrollSpy = jest.spyOn(AssessmentAutoScroll, 'completeAutoScroll')
           const tuner = -25
           await wrapper.instance().handleSaveAssessment()
+          wrapper.update()
           expect(wrapper.find('AssessmentSummaryCard').prop('isSummaryAvailableOnSave')).toEqual(true)
           expect(completeAutoScrollSpy).toHaveBeenCalledWith(0, tuner)
         })
@@ -892,15 +774,15 @@ describe('<AssessmentContainer />', () => {
         it('should set isEventDateBeforeDob prop to true', () => {
           const wrapper = getWrapper()
           wrapper.instance().setState({ isValidDate: true, isEventDateBeforeDob: true })
-          expect(wrapper.find('AssessmentFormHeader').prop('isEventDateBeforeDob')).toEqual(true)
+          expect(wrapper.find('AssessmentContainerInner').prop('isEventDateBeforeDob')).toEqual(true)
         })
 
         it('should set isEventDateBeforeDob prop to false', () => {
           const wrapper = getWrapper()
           wrapper.instance().setState({ isValidDate: false })
-          expect(wrapper.find('AssessmentFormHeader').prop('isEventDateBeforeDob')).toEqual(false)
+          expect(wrapper.find('AssessmentContainerInner').prop('isEventDateBeforeDob')).toEqual(false)
           wrapper.instance().setState({ isValidDate: true, isEventDateBeforeDob: false })
-          expect(wrapper.find('AssessmentFormHeader').prop('isEventDateBeforeDob')).toEqual(false)
+          expect(wrapper.find('AssessmentContainerInner').prop('isEventDateBeforeDob')).toEqual(false)
         })
       })
     })
@@ -1080,35 +962,6 @@ describe('<AssessmentContainer />', () => {
   describe('isEditable', () => {
     const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
     wrapper.instance().onFetchAssessmentSuccess(assessment)
-
-    it('should enable <AssessmentFormHeader/> when isEditable=true and disable when isEditable=false', () => {
-      wrapper.instance().setState({ isEditable: true })
-      expect(wrapper.find('AssessmentFormHeader').prop('disabled')).toEqual(false)
-
-      wrapper.instance().setState({ isEditable: false })
-      expect(wrapper.find('AssessmentFormHeader').prop('disabled')).toEqual(true)
-    })
-
-    it('should enable  <AssessmentSummaryCard/> when isEditable=true and disable when isEditable=false', () => {
-      wrapper.instance().setState({ isEditable: true })
-      expect(wrapper.find('AssessmentSummaryCard').prop('disabled')).toEqual(false)
-
-      wrapper.instance().setState({ isEditable: false })
-      expect(wrapper.find('AssessmentSummaryCard').prop('disabled')).toEqual(true)
-    })
-
-    it('should enable  <Assessment/> when isEditable=true and disable when isEditable=false', () => {
-      wrapper.instance().setState({ isEditable: true })
-      expect(wrapper.find('Assessment').prop('disabled')).toEqual(false)
-
-      wrapper.instance().setState({ isEditable: false })
-      expect(wrapper.find('Assessment').prop('disabled')).toEqual(true)
-    })
-
-    it('should enable  <AssessmentFormFooter/> when isEditable=true and should not be rendered when isEditable=false', () => {
-      wrapper.instance().setState({ isEditable: false })
-      expect(wrapper.find('AssessmentFormFooter').exists()).toEqual(false)
-    })
 
     describe('when assessment status=COMPLETED', () => {
       const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
