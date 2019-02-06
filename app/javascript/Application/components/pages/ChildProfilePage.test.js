@@ -6,20 +6,15 @@ import { Client } from '../Client'
 import CurrentUserLoadingBoundary from './CurrentUserLoadingBoundary'
 import BreadCrumbsBuilder from '../Layout/BreadCrumb/BreadCrumbsBuilder'
 import { buildSearchClientsButton as SearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
-import ReactWoodDuckLayout from '../Layout/ReactWoodDuckLayout'
+import FullWidthLayout from '../Layout/FullWidthLayout'
 
 describe('Child Profile Page', () => {
   const defaultProps = { match: { params: { staffId: 'ABC' }, url: '/my/url' } }
   const render = props => shallow(<ChildProfilePage {...props} />)
 
-  it('renders a body of Client', () => {
-    const body = render(defaultProps).find(ReactWoodDuckLayout)
-    expect(body.find(Client).exists()).toBe(true)
-  })
-
   it('renders a breadcrumb with current user info', () => {
     const breadcrumbElement = render(defaultProps)
-      .find(ReactWoodDuckLayout)
+      .find(FullWidthLayout)
       .props().breadcrumb
     expect(breadcrumbElement.type).toBe(CurrentUserLoadingBoundary)
     const breadcrumb = breadcrumbElement.props.children
@@ -28,14 +23,8 @@ describe('Child Profile Page', () => {
   })
 
   it('renders a Search button', () => {
-    const layout = render(defaultProps).find(ReactWoodDuckLayout)
+    const layout = render(defaultProps).find(FullWidthLayout)
     expect(layout.props().rightButton.type).toBe(SearchClientsButton)
-  })
-
-  it('passes route params to Client child', () => {
-    const match = { params: { staffId: '123' }, url: '/path/to/left' }
-    const client = render({ match }).find(Client)
-    expect(client.props().match).toBe(match)
   })
 
   describe('with a client loaded', () => {
@@ -47,8 +36,18 @@ describe('Child Profile Page', () => {
       wrapper = render({ client: fakeClient, match })
     })
 
+    it('renders a body of Client', () => {
+      const body = wrapper.find(FullWidthLayout)
+      expect(body.find(Client).exists()).toBe(true)
+    })
+
+    it('passes route params to Client child', () => {
+      const client = wrapper.find(Client)
+      expect(client.props().match).toBe(match)
+    })
+
     it('passes the client to the breadcrumb', () => {
-      const breadcrumbElement = wrapper.find(ReactWoodDuckLayout).props().breadcrumb
+      const breadcrumbElement = wrapper.find(FullWidthLayout).props().breadcrumb
       expect(breadcrumbElement.type).toBe(CurrentUserLoadingBoundary)
       const breadcrumb = breadcrumbElement.props.children
       expect(breadcrumb.props.client).toBe(fakeClient)
@@ -57,6 +56,15 @@ describe('Child Profile Page', () => {
     it('passes the client to the Client page', () => {
       const clientComponent = wrapper.find(Client)
       expect(clientComponent.props().client).toBe(fakeClient)
+    })
+  })
+
+  describe('without a client loaded', () => {
+    it('renders a layout with an empty body', () => {
+      const body = render(defaultProps).find(FullWidthLayout)
+      expect(body.exists()).toBe(true)
+      expect(body.find(Client).exists()).toBe(false)
+      expect(body.props().children).toBe(null)
     })
   })
 })

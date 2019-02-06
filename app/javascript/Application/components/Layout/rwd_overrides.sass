@@ -1,0 +1,34 @@
+// These classes are built to override module styles in the component library,
+// to allow switching to Component Library headers without removing React Wood
+// Duck completely. Once React Wood Duck is removed, these can be removed as well.
+
+// Banner root
+div[role="banner"]
+  height: 13.6rem
+
+  // App Bar
+  > *:nth-child(1)
+    height: 4rem
+    font-size: 1.6rem
+    padding: .4rem 0
+
+    .mr-2
+      margin-right: .8rem !important
+
+  // Title
+  > *:nth-child(2)
+    h1
+      font-weight: 500
+
+  // Breadcrumb
+  > *:nth-child(3)
+    height: 3.2rem
+
+    .container
+      // Already wrapped in a Container, so override duplicate spacing
+      padding: 0
+      .row-padding
+        margin: 0
+
+      .breadcrumbs
+        font-size: 1.6rem

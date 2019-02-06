@@ -42,4 +42,9 @@ describe('<ClientLoadingBoundary />', () => {
     const secondFetch = wrapper.find(LoadingBoundary).props().fetch
     expect(secondFetch).toBe(firstFetch)
   })
+
+  it('is not hidden while loading', () => {
+    const loadingBoundary = render().find(LoadingBoundary)
+    expect(loadingBoundary.props().isHiddenWhileLoading).toBe(false)
+  })
 })
