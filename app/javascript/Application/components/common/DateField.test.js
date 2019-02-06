@@ -2,6 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import DateField from './DateField'
 import { jsDateToIso } from '../../util/dateHelper'
+import { VALID_ASSESSMENT_DATE_FORMATS } from '../../util/constants'
 
 describe('DateField', () => {
   function mountDateField({
@@ -71,8 +72,12 @@ describe('DateField', () => {
 
   it('displays calendar by default', () => {
     const dateTimePicker = mountDateField({}).find('DateTimePicker')
-    expect(dateTimePicker.props().format).toEqual('MM/DD/YYYY')
     expect(dateTimePicker.props().placeholder).toEqual('mm/dd/yyyy')
+  })
+
+  it('passes defined date formats to parse prop', () => {
+    const dateTimePicker = mountDateField({}).find('DateTimePicker')
+    expect(dateTimePicker.props().parse).toEqual(VALID_ASSESSMENT_DATE_FORMATS)
   })
 
   describe('onRawValueUpdate', () => {

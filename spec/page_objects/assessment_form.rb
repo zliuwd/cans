@@ -30,7 +30,9 @@ class AssessmentFormHeader < SitePrism::Section
   element :authorization_radio_no, 'input#input-can-release-no', visible: false
   element :redaction_message, 'div.warning-text'
   element :age_0_to_5_button, 'button#age-0-5-button'
+  element :age_0_to_5_button_selected, 'button#age-0-5-button.age-button-selected'
   element :age_6_to_21_button, 'button#age-6-21-button'
+  element :age_6_to_21_button_selected, 'button#age-6-21-button.age-button-selected'
 end
 
 class AssessmentSummary < SitePrism::Section
@@ -109,7 +111,13 @@ def check_case_or_referral_number
 end
 
 def click_0_to_5_button
-  @form.header.age_0_to_5_button.click
+  with_retry(proc { @form.header.age_0_to_5_button.click },
+             proc { @form.header.wait_until_age_0_to_5_button_selected_visible(wait: 2) })
+end
+
+def click_6_to_21_button
+  with_retry(proc { @form.header.age_6_to_21_button.click },
+             proc { @form.header.wait_until_age_6_to_21_button_selected_visible(wait: 2) })
 end
 
 def expand_all_domains

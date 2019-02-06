@@ -4,8 +4,8 @@ import DateTimePicker from 'react-widgets/lib/DateTimePicker'
 import Moment from 'moment'
 import momentLocalizer from 'react-widgets-moment'
 import { isEmpty } from '../../util/common'
-import { isoToJsDate, isValidLocalDate, jsDateToIso, localToIsoDate } from '../../util/dateHelper'
-import { LOCAL_DATE_FORMAT } from '../../util/constants'
+import { isoToJsDate, isValidLocalDate, jsDateToIso } from '../../util/dateHelper'
+import { VALID_ASSESSMENT_DATE_FORMATS } from '../../util/constants'
 import './style.sass'
 
 Moment.locale('en')
@@ -39,16 +39,14 @@ class DateField extends Component {
   }
 
   handleOnBlur = event => {
-    this.props.onRawValueUpdate(event)
-    const date = event.target.value
+    const date = new Date(event.target.value)
+    this.props.onRawValueUpdate({ target: { value: date } })
     if (isEmpty(date) || !isValidLocalDate(date)) {
       // recreate <DateTimePicker> to clear raw data in it as a workaround
       if (this.state.value !== date) {
         this.setState({ key: Math.random() })
       }
-      return
     }
-    this.props.onChange(localToIsoDate(date))
   }
 
   render() {
@@ -71,7 +69,7 @@ class DateField extends Component {
           value={value}
           date={true}
           time={false}
-          format={LOCAL_DATE_FORMAT}
+          parse={VALID_ASSESSMENT_DATE_FORMATS}
           onBlur={this.handleOnBlur}
           onChange={this.handleOnChange}
           onKeyUp={onRawValueUpdate}
