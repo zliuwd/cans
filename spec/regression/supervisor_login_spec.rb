@@ -17,7 +17,7 @@ feature 'Supervisor functionality' do
     logout
   end
 
-  scenario 'Supervisor lands on staff list, visits one of staff member clients and logs out' do
+  scenario 'Supervisor lands on staff list, visits one of staff member clients and logs out', smoke: true  do
     login supervisor_json
     expect(@supervisor_dash).to have_supervisor_card_title
     @supervisor_dash.visit_staff_member_dashboard(STAFF_NAME)
