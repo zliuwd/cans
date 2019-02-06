@@ -9,7 +9,11 @@ module LoginHelper
   end
 
   def enter_credentials(login_config = default_json)
-    fill_in 'Authorization JSON', with: JSON.generate(login_config)
+    js_script = 'arguments[0].focus();' \
+                 'arguments[0].setAttribute("value", arguments[1]);' \
+                 'arguments[0].blur();'
+    input_field = find('input#username')
+    page.execute_script(js_script, input_field.native, JSON.generate(login_config))
     click_button 'Sign In'
   end
 
@@ -26,7 +30,7 @@ module LoginHelper
   private
 
   def need_login?
-    ENV.fetch('CANS_AUTHORIZATION_ENABLED', true) && !page.has_content?('CANS')
+    ENV.fetch('CANS_AUTHORIZATION_ENABLED', true) && page.has_css?('input#username', wait: 5)
   end
 
   def default_json
