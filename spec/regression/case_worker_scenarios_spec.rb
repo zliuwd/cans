@@ -10,10 +10,13 @@ require 'page_objects/assessment_changelog'
 feature 'Case Worker Functionality' do
   current_date = Time.now.getlocal.strftime('%m/%d/%Y')
   before(:all) do
+    login
     @form = AssessmentForm.new
     @staff_dash = StaffDashboard.new
     @client_profile = ClientProfile.new
+    @assessment_changelog = AssessmentChangeLog.new
   end
+
   before(:each) do
     @domain_total_count = []
     @total_radio_selected = []
@@ -24,7 +27,7 @@ feature 'Case Worker Functionality' do
   end
 
   scenario 'Form Header, Domain, and Item common functionalities test' do
-    login
+    visit '/'
     create_new_assessment(CLIENT_NAME)
     input_date_and_calendar_icon_test(current_date)
     fill_conducted_by_field('Mike Seaver')
@@ -37,7 +40,7 @@ feature 'Case Worker Functionality' do
   end
 
   scenario 'Fill out and complete assessment from 0 to 5' do
-    login
+    visit '/'
     fill_form_header_0_to_5
     expand_all_domains
     check_redacted_checkbox_0_to_5
@@ -50,7 +53,7 @@ feature 'Case Worker Functionality' do
   end
 
   scenario 'Fill out and complete assessment from 6 to 21' do
-    login
+    visit '/'
     fill_form_header_6_to_21
     expand_all_domains
     check_redacted_checkbox_6_to_21
@@ -63,8 +66,7 @@ feature 'Case Worker Functionality' do
   end
 
   scenario 'Case worker creates and deletes assessment' do
-    login
-    @assessment_changelog = AssessmentChangeLog.new
+    visit '/'
     create_new_assessment(CLIENT_NAME_2)
     verify_radio_buttons_on_assessment_header(current_date)
     validate_domain_radio_and_chevron
@@ -78,7 +80,7 @@ feature 'Case Worker Functionality' do
   end
 
   scenario 'Case worker login, tests caregiver domain with new assessment and logs out' do
-    login
+    visit '/'
     create_new_assessment(CLIENT_NAME)
     click_0_to_5_button
     expand_all_domains
@@ -141,7 +143,6 @@ feature 'Case Worker Functionality' do
 
   def verify_radio_buttons_on_assessment_header(current_date)
     click_0_to_5_button
-    click_0_to_5_button # avoid stuck
     expect(@form.header).to have_redaction_message
     expect(@form.header.date_field.value).to eq(current_date)
     expect(@form.header).to have_conducted_by
@@ -172,7 +173,7 @@ feature 'Case Worker Functionality' do
     @staff_dash.visit_client_profile(client_name)
     expect(@client_profile).to have_add_cans_link
     @client_profile.add_cans_link.click
-    expect(@form.global).to have_assessment_page_header
+    expect(@form.header.child_name).to have_content(client_name)
   end
 
   def input_date_and_calendar_icon_test(current_date)
@@ -262,17 +263,15 @@ feature 'Case Worker Functionality' do
     fill_conducted_by_field('')
     expect(@form.header).to have_redaction_message
     click_0_to_5_button
-    expect(@form.header.age_0_to_5_button[:class].include?('age-button-selected')).to be(true)
     expect(@form).to have_assessment_card_title_0_5
   end
 
   def fill_form_header_6_to_21
     create_new_assessment(CLIENT_NAME)
     fill_conducted_by_field('')
-    @form.header.authorization_label_yes.click
-    expect(@form.header).to have_no_redaction_message
-    @form.header.age_6_to_21_button.click
-    expect(@form.header.age_6_to_21_button[:class].include?('age-button-selected')).to be(true)
+    with_retry(Proc.new { @form.header.authorization_label_yes.click },
+               Proc.new { @form.header.wait_until_redaction_message_invisible(wait: 2) })
+    click_6_to_21_button
     expect(@form).to have_assessment_card_title_6_21
   end
 

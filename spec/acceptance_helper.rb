@@ -18,6 +18,26 @@ STAFF_NAME = 'Regression, QA02'
 CLIENT_LIST_TITLE = 'Client List'
 CAREGIVER_DOMAIN_WARNING_MESSAGE = 'You are about to remove the CAREGIVER from this Assessment.'
 
+def with_retry(func0, func1, times = 3)
+  loop do
+    begin
+      func0.call
+      sleep(1)
+      func1.call
+      times = 0
+    rescue StandardError => e
+      times -= 1
+      if times <= 0
+        raise e
+      end
+    end
+
+    if times <= 0
+      break
+    end
+  end
+end
+
 def acceptance_helper
   return LoginHelper unless ENV.fetch('PROD_LOGIN', false)
   ProdLoginHelper
