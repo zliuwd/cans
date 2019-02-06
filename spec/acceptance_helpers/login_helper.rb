@@ -30,7 +30,7 @@ module LoginHelper
   private
 
   def need_login?
-    ENV.fetch('CANS_AUTHORIZATION_ENABLED', true) && page.has_css?('input#username', wait: 5)
+    ENV.fetch('CANS_AUTHORIZATION_ENABLED', true) && !page.has_content?('CANS', wait: 5)
   end
 
   def default_json
