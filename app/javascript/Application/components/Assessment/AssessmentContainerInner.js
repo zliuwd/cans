@@ -15,7 +15,16 @@ class AssessmentContainerInner extends Component {
     this.state = {
       isCaregiverWarningShown: false,
       focusedCaregiverId: '',
+      isSubmitWarningShown: false,
     }
+  }
+
+  handleSubmitWarning = switcher => {
+    const { assessment } = this.props
+    if (assessment.can_release_confidential_info === false) {
+      this.setState({ isSubmitWarningShown: switcher })
+    }
+    return null
   }
 
   handleWarningShow = (switcher, caregiverIndex) => {
@@ -27,7 +36,7 @@ class AssessmentContainerInner extends Component {
   }
 
   displayModalWarning() {
-    const { handleCaregiverRemove, isSubmitWarningShown, handleSubmitWarning, handleSubmitAssessment } = this.props
+    const { handleCaregiverRemove, handleSubmitAssessment } = this.props
     return (
       <Fragment>
         <RenderWarning
@@ -37,8 +46,8 @@ class AssessmentContainerInner extends Component {
           focusedCaregiverId={this.state.focusedCaregiverId}
         />
         <WarningShow
-          isSubmitWarningShown={isSubmitWarningShown}
-          handleSubmitWarning={handleSubmitWarning}
+          isSubmitWarningShown={this.state.isSubmitWarningShown}
+          handleSubmitWarning={this.handleSubmitWarning}
           handleSubmitAssessment={handleSubmitAssessment}
         />
       </Fragment>
@@ -96,7 +105,6 @@ class AssessmentContainerInner extends Component {
       assessmentServiceStatus,
       isEditable,
       onCancelClick,
-      handleSubmitWarning,
       handleSubmitAssessment,
       isValidForSubmit,
     } = this.props
@@ -112,7 +120,7 @@ class AssessmentContainerInner extends Component {
             onCancelClick={onCancelClick}
             isSubmitButtonEnabled={isCompleteButtonEnabled}
             onSubmitAssessment={
-              assessment.can_release_confidential_info === true ? handleSubmitAssessment : handleSubmitWarning
+              assessment.can_release_confidential_info === true ? handleSubmitAssessment : this.handleSubmitWarning
             }
           />
         ) : null}
@@ -143,12 +151,9 @@ AssessmentContainerInner.propTypes = {
   client: PropTypes.object.isRequired,
   handleCaregiverRemove: PropTypes.func.isRequired,
   handleSubmitAssessment: PropTypes.func.isRequired,
-  handleSubmitWarning: PropTypes.func.isRequired,
   i18n: PropTypes.object.isRequired,
   isEditable: PropTypes.bool,
   isEventDateBeforeDob: PropTypes.bool.isRequired,
-  isSubmitWarningShown: PropTypes.bool.isRequired,
-  isUnderSix: PropTypes.bool,
   isValidForSubmit: PropTypes.bool.isRequired,
   onAssessmentUpdate: PropTypes.func.isRequired,
   onCancelClick: PropTypes.func.isRequired,

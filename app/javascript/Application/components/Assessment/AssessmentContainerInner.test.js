@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import AssessmentContainerInner from '../Assessment/AssessmentContainerInner'
 import { assessment } from './assessment.mocks.test'
 import AssessmentSummaryCard from '../Assessment/AssessmentSummary/AssessmentSummaryCard'
@@ -95,6 +95,54 @@ describe('AssessmentContainerInner />', () => {
       wrapper.instance().handleWarningShow(false, 1)
       expect(wrapper.state().isCaregiverWarningShown).toEqual(false)
       expect(wrapper.state().focusedCaregiverId).toEqual(1)
+    })
+  })
+
+  describe('isSubmit warning shown', () => {
+    it('isSubmitWarning is false it does not renders the ConfidentialityWarning component', () => {
+      const wrapper = shallow(<AssessmentContainerInner {...props} />)
+      wrapper.instance().setState({
+        isSubmitWarningShown: false,
+      })
+      const WarningShow = wrapper.find('WarningShow').dive()
+      expect(WarningShow.find('ConfidentialityWarning').length).toBe(0)
+    })
+
+    it('isSubmitWarning is true it renders the ConfidentialityWarning component', () => {
+      const wrapper = shallow(<AssessmentContainerInner {...props} />)
+      wrapper.instance().setState({
+        isSubmitWarningShown: true,
+      })
+      const WarningShow = wrapper.find('WarningShow').dive()
+      expect(WarningShow.find('ConfidentialityWarning').length).toBe(1)
+    })
+  })
+
+  describe('changes the state of the component when handleSubmitWarning is invoked', () => {
+    it('sets isSubmitWarningShown to false when handleSubmitWarning is called', () => {
+      const wrapper = shallow(<AssessmentContainerInner {...props} />)
+      wrapper.instance().setState({
+        isSubmitWarningShown: true,
+      })
+      wrapper
+        .find('WarningShow')
+        .props()
+        .handleSubmitWarning(false)
+      wrapper.instance().handleSubmitWarning(false)
+      expect(wrapper.state().isSubmitWarningShown).toEqual(false)
+    })
+
+    it('sets isSubmitWarningShown to true when handleSubmitWarning is called', () => {
+      const wrapper = shallow(<AssessmentContainerInner {...props} />)
+      wrapper.instance().setState({
+        isSubmitWarningShown: false,
+      })
+      wrapper
+        .find('WarningShow')
+        .props()
+        .handleSubmitWarning(true)
+      wrapper.instance().handleSubmitWarning(true)
+      expect(wrapper.state().isSubmitWarningShown).toEqual(true)
     })
   })
 

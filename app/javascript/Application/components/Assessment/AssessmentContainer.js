@@ -46,7 +46,6 @@ export default class AssessmentContainer extends Component {
       isEditable: !props.disabled,
       isValidDate: true,
       isEventDateBeforeDob: false,
-      isSubmitWarningShown: false,
       isSaveButtonEnabled: false,
       completeScrollTarget: 0,
     }
@@ -126,12 +125,6 @@ export default class AssessmentContainer extends Component {
     )
   }
 
-  handleSubmitWarning = switcher => {
-    if (this.state.assessment.can_release_confidential_info === false) {
-      this.setState({ isSubmitWarningShown: switcher })
-    }
-    return null
-  }
   async fetchNewAssessment() {
     this.setState({ assessmentServiceStatus: LoadingState.waiting })
     try {
@@ -348,7 +341,6 @@ export default class AssessmentContainer extends Component {
       shouldRedirectToClientProfile,
       isValidForSubmit,
       assessment,
-      isSubmitWarningShown,
       i18n,
       assessmentServiceStatus,
       isEditable,
@@ -367,10 +359,8 @@ export default class AssessmentContainer extends Component {
             i18n={i18n}
             onAssessmentUpdate={this.updateAssessment}
             assessmentServiceStatus={assessmentServiceStatus}
-            isSubmitWarningShown={isSubmitWarningShown}
             isEditable={isEditable}
             onCancelClick={this.handleCancelClick}
-            handleSubmitWarning={this.handleSubmitWarning}
             handleSubmitAssessment={this.handleSubmitAssessment}
             handleCaregiverRemove={this.handleCaregiverRemove}
             isValidForSubmit={isValidForSubmit}
