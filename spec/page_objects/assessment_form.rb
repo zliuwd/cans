@@ -13,6 +13,7 @@ class AssessmentGlobal < SitePrism::Section
 end
 
 class AssessmentFormHeader < SitePrism::Section
+  element :child_name, 'span#child-name'
   element :date_field, 'input#assessment-date_input'
   element :date_field_validation_msg, 'div.validation-error-line'
   element :calendar_icon, 'span.rw-i-calendar'

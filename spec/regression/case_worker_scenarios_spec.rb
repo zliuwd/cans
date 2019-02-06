@@ -70,7 +70,7 @@ feature 'Case Worker Functionality' do
     validate_domain_radio_and_chevron
     save_and_check_the_success_message
     navigate_to_client_profile(CLIENT_NAME_2)
-    validate_new_assessment(current_date)
+    validate_new_assessment(current_date, CLIENT_NAME_2)
     navigate_to_client_profile(CLIENT_NAME_2)
     view_cans_change_log_test(current_date, CLIENT_NAME_2)
     navigate_to_client_profile(CLIENT_NAME_2)
@@ -104,9 +104,10 @@ feature 'Case Worker Functionality' do
     eliminate_auto_scroll_impact
   end
 
-  def validate_new_assessment(current_date)
+  def validate_new_assessment(current_date, client_name)
     @client_profile.go_to_recently_updated_assessment(current_date)
     expect(@form.global).to have_assessment_page_header
+    expect(@form.header.child_name).to have_content(client_name)
   end
 
   def navigate_to_client_profile(client_name)
