@@ -54,9 +54,9 @@ class AssessmentContainerInner extends Component {
       isEventDateBeforeDob,
       canDisplaySummaryOnSave,
       i18n,
-      isUnderSix,
       isEditable,
     } = this.props
+    const isUnderSix = assessment && assessment.state && assessment.state.under_six
     return (
       <Fragment>
         <div rol="completeScrollLocator">
@@ -92,7 +92,6 @@ class AssessmentContainerInner extends Component {
   displayAssessmentFooter() {
     const {
       assessment,
-      isUnderSix,
       client,
       assessmentServiceStatus,
       isEditable,
@@ -101,6 +100,7 @@ class AssessmentContainerInner extends Component {
       handleSubmitAssessment,
       isValidForSubmit,
     } = this.props
+    const isUnderSix = assessment && assessment.state && assessment.state.under_six
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus)
     const isCompleteButtonEnabled =
       isEditable && canPerformUpdates && isValidForSubmit && isCompleteAssessmentAuthorized(assessment, client)
@@ -120,7 +120,8 @@ class AssessmentContainerInner extends Component {
     )
   }
   render() {
-    const { isUnderSix, assessmentServiceStatus, isEditable } = this.props
+    const { assessment, assessmentServiceStatus, isEditable } = this.props
+    const isUnderSix = assessment && assessment.state && assessment.state.under_six
     return (
       <Fragment>
         {this.displayModalWarning()}

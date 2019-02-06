@@ -353,8 +353,24 @@ describe('<AssessmentContainer />', () => {
 
       it('hides the assessment footer', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
+        wrapper.setState({
+          assessment: {
+            ...assessment,
+          },
+        })
         wrapper.instance().onFetchNewAssessmentSuccess(instrument)
         expect(wrapper.find(AssessmentFormFooter).exists()).toBeFalsy()
+      })
+
+      it('shows the assessment footer', () => {
+        const wrapper = mount(<AssessmentContainer {...defaultProps} />)
+        wrapper.setState({
+          assessment: {
+            ...assessment,
+          },
+        })
+        wrapper.instance().onFetchAssessmentSuccess(assessment)
+        expect(wrapper.find('AssessmentFormFooter').exists()).toBeTruthy()
       })
     })
 
@@ -377,12 +393,6 @@ describe('<AssessmentContainer />', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         await wrapper.instance().componentDidMount()
         expect(assessmentServiceGetSpy).toHaveBeenCalledWith()
-      })
-
-      it('shows the assessment footer', () => {
-        const wrapper = mount(<AssessmentContainer {...props} />)
-        wrapper.instance().onFetchAssessmentSuccess(assessment)
-        expect(wrapper.find('AssessmentFormFooter').exists()).toBeTruthy()
       })
     })
   })

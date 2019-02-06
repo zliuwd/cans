@@ -23,7 +23,6 @@ const props = {
   onCancelClick: jest.fn(),
   handleSubmitWarning: jest.fn(),
   onKeyUp: jest.fn(),
-  isUnderSix: true,
   isEventDateBeforeDob: false,
 }
 

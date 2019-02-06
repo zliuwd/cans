@@ -357,7 +357,6 @@ export default class AssessmentContainer extends Component {
     if (shouldRedirectToClientProfile) {
       return <Redirect push to={{ pathname: trimUrlForClientProfile(this.props.match.url) }} />
     }
-    const isUnderSix = assessment && assessment.state && assessment.state.under_six
     return (
       <Fragment>
         <div ref={this.assessmentHeader}>
@@ -367,8 +366,6 @@ export default class AssessmentContainer extends Component {
             assessment={assessment}
             i18n={i18n}
             onAssessmentUpdate={this.updateAssessment}
-            assessmentStatus={assessment.status}
-            isUnderSix={isUnderSix}
             assessmentServiceStatus={assessmentServiceStatus}
             isSubmitWarningShown={isSubmitWarningShown}
             isEditable={isEditable}
