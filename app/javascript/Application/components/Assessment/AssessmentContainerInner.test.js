@@ -23,7 +23,6 @@ const props = {
   onCancelClick: jest.fn(),
   handleSubmitWarning: jest.fn(),
   onKeyUp: jest.fn(),
-  isUnderSix: true,
   isEventDateBeforeDob: false,
 }
 
@@ -96,6 +95,52 @@ describe('AssessmentContainerInner />', () => {
       wrapper.instance().handleWarningShow(false, 1)
       expect(wrapper.state().isCaregiverWarningShown).toEqual(false)
       expect(wrapper.state().focusedCaregiverId).toEqual(1)
+    })
+  })
+
+  describe('isSubmit warning shown', () => {
+    it('isSubmitWarning is false it does not renders the ConfidentialityWarning component', () => {
+      const wrapper = shallow(<AssessmentContainerInner {...props} />)
+      wrapper.instance().setState({
+        isSubmitWarningShown: false,
+      })
+      const WarningShow = wrapper.find('WarningShow').dive()
+      expect(WarningShow.find('ConfidentialityWarning').exists()).toBe(false)
+    })
+
+    it('isSubmitWarning is true it renders the ConfidentialityWarning component', () => {
+      const wrapper = shallow(<AssessmentContainerInner {...props} />)
+      wrapper.instance().setState({
+        isSubmitWarningShown: true,
+      })
+      const WarningShow = wrapper.find('WarningShow').dive()
+      expect(WarningShow.find('ConfidentialityWarning').exists()).toBe(true)
+    })
+  })
+
+  describe('changes the state of the component when handleSubmitWarning is invoked', () => {
+    it('sets isSubmitWarningShown to false when handleSubmitWarning is called', () => {
+      const wrapper = shallow(<AssessmentContainerInner {...props} />)
+      wrapper.instance().setState({
+        isSubmitWarningShown: true,
+      })
+      wrapper
+        .find('WarningShow')
+        .props()
+        .handleSubmitWarning(false)
+      expect(wrapper.state().isSubmitWarningShown).toEqual(false)
+    })
+
+    it('sets isSubmitWarningShown to true when handleSubmitWarning is called', () => {
+      const wrapper = shallow(<AssessmentContainerInner {...props} />)
+      wrapper.instance().setState({
+        isSubmitWarningShown: false,
+      })
+      wrapper
+        .find('WarningShow')
+        .props()
+        .handleSubmitWarning(true)
+      expect(wrapper.state().isSubmitWarningShown).toEqual(true)
     })
   })
 

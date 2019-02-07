@@ -174,32 +174,6 @@ describe('<AssessmentContainer />', () => {
       })
     })
 
-    describe('renders component and shows warning', () => {
-      const props = { ...defaultProps }
-      it('updates state when user clicks I agree and removes warning', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().setState({
-          assessment: assessment,
-          isSubmitWarningShown: true,
-        })
-        wrapper
-          .find(AssessmentContainerInner)
-          .props()
-          .handleSubmitAssessment()
-        wrapper.instance().handleSubmitWarning(false)
-        expect(wrapper.state().isSubmitWarningShown).toEqual(false)
-      })
-
-      it('verify warning is not shown when isSubmitWarningShown is falsy', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().setState({
-          assessment: assessment,
-          isSubmitWarningShown: false,
-        })
-        expect(wrapper.find('ConfidentialityWarning').exists()).toEqual(false)
-      })
-    })
-
     describe('renders a component which shows warning and sets the state', () => {
       const props = { ...defaultProps }
       it('verify the state is updated and removed domains ', () => {
@@ -353,8 +327,24 @@ describe('<AssessmentContainer />', () => {
 
       it('hides the assessment footer', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
+        wrapper.setState({
+          assessment: {
+            ...assessment,
+          },
+        })
         wrapper.instance().onFetchNewAssessmentSuccess(instrument)
         expect(wrapper.find(AssessmentFormFooter).exists()).toBeFalsy()
+      })
+
+      it('shows the assessment footer', () => {
+        const wrapper = mount(<AssessmentContainer {...defaultProps} />)
+        wrapper.setState({
+          assessment: {
+            ...assessment,
+          },
+        })
+        wrapper.instance().onFetchAssessmentSuccess(assessment)
+        expect(wrapper.find('AssessmentFormFooter').exists()).toBeTruthy()
       })
     })
 
@@ -377,12 +367,6 @@ describe('<AssessmentContainer />', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         await wrapper.instance().componentDidMount()
         expect(assessmentServiceGetSpy).toHaveBeenCalledWith()
-      })
-
-      it('shows the assessment footer', () => {
-        const wrapper = mount(<AssessmentContainer {...props} />)
-        wrapper.instance().onFetchAssessmentSuccess(assessment)
-        expect(wrapper.find('AssessmentFormFooter').exists()).toBeTruthy()
       })
     })
   })
