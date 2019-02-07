@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import AssessmentContainerInner from '../Assessment/AssessmentContainerInner'
 import { assessment } from './assessment.mocks.test'
 import AssessmentSummaryCard from '../Assessment/AssessmentSummary/AssessmentSummaryCard'
@@ -105,7 +105,7 @@ describe('AssessmentContainerInner />', () => {
         isSubmitWarningShown: false,
       })
       const WarningShow = wrapper.find('WarningShow').dive()
-      expect(WarningShow.find('ConfidentialityWarning').length).toBe(0)
+      expect(WarningShow.find('ConfidentialityWarning').exists()).toBe(false)
     })
 
     it('isSubmitWarning is true it renders the ConfidentialityWarning component', () => {
@@ -114,7 +114,7 @@ describe('AssessmentContainerInner />', () => {
         isSubmitWarningShown: true,
       })
       const WarningShow = wrapper.find('WarningShow').dive()
-      expect(WarningShow.find('ConfidentialityWarning').length).toBe(1)
+      expect(WarningShow.find('ConfidentialityWarning').exists()).toBe(true)
     })
   })
 
@@ -128,7 +128,6 @@ describe('AssessmentContainerInner />', () => {
         .find('WarningShow')
         .props()
         .handleSubmitWarning(false)
-      wrapper.instance().handleSubmitWarning(false)
       expect(wrapper.state().isSubmitWarningShown).toEqual(false)
     })
 
@@ -141,7 +140,6 @@ describe('AssessmentContainerInner />', () => {
         .find('WarningShow')
         .props()
         .handleSubmitWarning(true)
-      wrapper.instance().handleSubmitWarning(true)
       expect(wrapper.state().isSubmitWarningShown).toEqual(true)
     })
   })
