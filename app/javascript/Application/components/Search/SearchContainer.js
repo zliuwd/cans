@@ -10,7 +10,7 @@ import Sticker from 'react-stickyfill'
 
 const SEARCH_TITLE = 'Search Clients Only'
 const SEARCH_PROMPT = 'Search CWS-CMS for clients only'
-const ASSESSMENTS_TITLE = 'Recently Updated CANS'
+const ASSESSMENTS_TITLE = 'Recently Updated CANS (In-progress only)'
 
 class SearchContainer extends React.Component {
   constructor(props) {

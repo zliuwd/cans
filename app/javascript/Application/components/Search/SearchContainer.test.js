@@ -26,7 +26,7 @@ describe('<SearchContainer />', () => {
 
       it('renders h4 with ASSESSMENTS_TITLE', () => {
         expect(wrapper.find('h4').exists()).toBe(true)
-        expect(wrapper.find('h4').text()).toBe('Recently Updated CANS')
+        expect(wrapper.find('h4').text()).toBe('Recently Updated CANS (In-progress only)')
       })
 
       it('renders a <SearchAssessmentHistoryLoadingBoundary /> component', () => {
