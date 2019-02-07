@@ -1,9 +1,9 @@
 import { smoothScroll } from './invokeSmoothScroll'
 
 const STEP_MS = 50
-const stickyComponentsHeight = 125
 
 export const completeAutoScroll = (target, tuner) => {
+  const stickyComponentsHeight = 125
   smoothScroll()
   // <<<<<< The whole logic is designed for calibrating and slowing down the window scroll process >>>>>>
   // target is the assessmentHeader Bottom, it is equal to the top of summary
@@ -46,11 +46,16 @@ export const itemRatingOptionsAmount = ratingType => {
   return ratingType === 'REGULAR' ? regularRatingOptionAmount : 2
 }
 
-export const expandingThenScroll = (event, isExpanded, amountOfChildren) => {
+export const expandingThenScroll = (event, isExpanded, amountOfChildren, disabled) => {
+  const heightWithWarning = 160
+  const heightWithoutWarning = 122
+  const stickyComponentsHeight = disabled ? heightWithWarning : heightWithoutWarning
   smoothScroll()
   const averageExpandingTime = 45
   // Ideal time for expanding each domain or item
+  const idealTotalExpandingTime = 350
   const totalExpandingTime = averageExpandingTime * amountOfChildren
+  const finalExpandingTime = totalExpandingTime > idealTotalExpandingTime ? totalExpandingTime : idealTotalExpandingTime
   const targetInfo = event.target.getBoundingClientRect()
   const windowOffset = window.pageYOffset
   const tuner = 15
@@ -58,6 +63,6 @@ export const expandingThenScroll = (event, isExpanded, amountOfChildren) => {
   if (!isExpanded) {
     setTimeout(() => {
       window.scrollTo({ left: 0, top: finalTarget, behavior: 'smooth' })
-    }, totalExpandingTime)
+    }, finalExpandingTime)
   }
 }

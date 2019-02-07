@@ -7,6 +7,7 @@ import Divider from '@material-ui/core/Divider'
 import classNames from 'classnames'
 import Comment from '../common/Comment'
 import CommentIcon from '../common/CommentIcon'
+import { expandingThenScroll } from '../../util/assessmentAutoScroll'
 
 const maxCommentLength = 2500
 
@@ -16,8 +17,9 @@ class DomainCommentAccordion extends Component {
     this.state = { isExpanded: false }
   }
 
-  switchExpandedState = () => {
+  switchExpandedState = event => {
     this.setState({ isExpanded: !this.state.isExpanded })
+    expandingThenScroll(event, this.state.expanded, this.props.domain.items.length, this.props.disabled)
   }
 
   handleDomainCommentChange = comment => {

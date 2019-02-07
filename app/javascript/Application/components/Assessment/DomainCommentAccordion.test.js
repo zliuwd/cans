@@ -45,6 +45,14 @@ const domainCommentAccordionDefault = <DomainCommentAccordion {...defaultProps} 
 const domainCommentAccordionWithComment = <DomainCommentAccordion {...propsWithComment} />
 
 describe('<DomainCommentAccordion />', () => {
+  jest.unmock('../../util/assessmentAutoScroll')
+  const autoScroll = require.requireActual('../../util/assessmentAutoScroll')
+  autoScroll.expandingThenScroll = jest.fn(() => null)
+  const expandingThenScroll = autoScroll.expandingThenScroll
+  afterEach(() => {
+    expandingThenScroll.mockReset()
+  })
+
   describe('Expand/Collapse', () => {
     let wrapper
     beforeEach(() => {
@@ -76,6 +84,12 @@ describe('<DomainCommentAccordion />', () => {
     it('when chevron button get focus and press a key other than Tab, accordion will expand', async () => {
       wrapper.find('i.fa-chevron-right').simulate('keydown', { key: 'Enter' })
       expect(wrapper.instance().state.isExpanded).toEqual(true)
+    })
+
+    it('when comment item expanded, expandingThenScroll will be invoked ', async () => {
+      wrapper.find('i.fa-chevron-right').simulate('click')
+      expect(wrapper.instance().state.isExpanded).toEqual(true)
+      expect(expandingThenScroll).toHaveBeenCalledTimes(1)
     })
   })
 

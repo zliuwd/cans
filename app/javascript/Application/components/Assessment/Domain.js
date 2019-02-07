@@ -43,7 +43,7 @@ class Domain extends Component {
     this.setState({
       expanded: !this.state.expanded,
     })
-    expandingThenScroll(event, this.state.expanded, this.props.domain.items.length)
+    expandingThenScroll(event, this.state.expanded, this.props.domain.items.length, this.props.disabled)
   }
 
   handleAddCaregiverDomain = event => {

@@ -84,7 +84,12 @@ class Item extends Component {
 
   switchExpandedState = event => {
     this.setState({ isExpanded: !this.state.isExpanded })
-    expandingThenScroll(event, this.state.isExpanded, itemRatingOptionsAmount(this.props.item.rating_type))
+    expandingThenScroll(
+      event,
+      this.state.isExpanded,
+      itemRatingOptionsAmount(this.props.item.rating_type),
+      this.props.disabled
+    )
   }
 
   renderConfidentialCheckbox = (isConfidential, confidential_by_default) => {
