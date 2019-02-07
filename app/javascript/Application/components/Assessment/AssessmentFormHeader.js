@@ -229,6 +229,7 @@ class AssessmentFormHeader extends PureComponent {
           <Col xs={8}>
             <ConfidentialityAlert
               canReleaseInformation={Boolean(this.props.assessment.can_release_confidential_info)}
+              isUnderSix={this.props.assessment.state.under_six}
             />
           </Col>
         </Row>

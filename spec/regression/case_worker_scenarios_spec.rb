@@ -143,7 +143,7 @@ feature 'Case Worker Functionality' do
 
   def verify_radio_buttons_on_assessment_header(current_date)
     click_0_to_5_button
-    expect(@form.header).to have_redaction_message
+    expect(@form.header).to have_redaction_message_0_to_5
     expect(@form.header.date_field.value).to eq(current_date)
     expect(@form.header).to have_conducted_by
     check_case_or_referral_number
@@ -261,18 +261,20 @@ feature 'Case Worker Functionality' do
   def fill_form_header_0_to_5
     create_new_assessment(CLIENT_NAME)
     fill_conducted_by_field('')
-    expect(@form.header).to have_redaction_message
+    expect(@form.header).to have_no_redaction_message
     click_0_to_5_button
+    expect(@form.header).to have_redaction_message_0_to_5
     expect(@form).to have_assessment_card_title_0_5
   end
 
   def fill_form_header_6_to_21
     create_new_assessment(CLIENT_NAME)
     fill_conducted_by_field('')
+    click_6_to_21_button
+    expect(@form.header).to have_redaction_message_6_to_21
+    expect(@form).to have_assessment_card_title_6_21
     with_retry(proc { @form.header.authorization_label_yes.click },
                proc { @form.header.wait_until_redaction_message_invisible(wait: 2) })
-    click_6_to_21_button
-    expect(@form).to have_assessment_card_title_6_21
   end
 
   def check_redacted_checkbox_0_to_5
