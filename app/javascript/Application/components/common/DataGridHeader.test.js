@@ -1,10 +1,10 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import Tooltip from '@material-ui/core/Tooltip'
-import SummaryHeader from './SummaryHeader'
+import DataGridHeader from './DataGridHeader'
 
-describe('<SummaryHeader />', () => {
-  const render = (title, tooltip) => shallow(<SummaryHeader title={title} tooltip={tooltip} />)
+describe('<DataGridHeader />', () => {
+  const render = (title, tooltip) => shallow(<DataGridHeader title={title} tooltip={tooltip} />)
 
   it('has a title', () => {
     expect(render('Hello World', '(>")>').text()).toContain('Hello World')
@@ -16,6 +16,11 @@ describe('<SummaryHeader />', () => {
     expect(tooltip.exists()).toBe(true)
     expect(tooltip.props().title).toBe('Hello Tooltip')
     expect(tooltip.props().placement).toBe('top')
-    expect(tooltip.props().children).toEqual(<i className="fa fa-info-circle assessment-summary-help-icon" />)
+    expect(tooltip.props().children).toEqual(<i className="fa fa-info-circle data-grid-header-help-icon" />)
+  })
+
+  it('renders no Tooltip when not needed', () => {
+    const header = render('(^"^)')
+    expect(header.find(Tooltip).exists()).toBeFalsy()
   })
 })

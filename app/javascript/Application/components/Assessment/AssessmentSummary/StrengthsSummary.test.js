@@ -2,7 +2,7 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { i18n } from './DomainHelper.test'
 import SummaryGrid from './SummaryGrid'
-import SummaryHeader from './SummaryHeader'
+import DataGridHeader from '../../common/DataGridHeader'
 import StrengthsSummary from './StrengthsSummary'
 
 describe('<StrengthsSummary />', () => {
@@ -16,7 +16,7 @@ describe('<StrengthsSummary />', () => {
 
   it('has a Strengths header', () => {
     expect(shallow(<StrengthsSummary i18n={i18n} />).props().header).toEqual(
-      <SummaryHeader
+      <DataGridHeader
         title="Strengths"
         tooltip={'Ratings of 0 or 1 in the Strengths Domain. These are central or useful in planning.'}
       />

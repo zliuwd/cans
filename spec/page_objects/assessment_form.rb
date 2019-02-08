@@ -40,7 +40,7 @@ class AssessmentFormHeader < SitePrism::Section
 end
 
 class AssessmentSummary < SitePrism::Section
-  elements :summary_card_tips, 'i.assessment-summary-help-icon'
+  elements :summary_card_tips, 'i.data-grid-header-help-icon'
   element :summary_header_strengths, 'span', text: 'Strengths'
   elements :summary_columns, 'div.assessment-summary-card div.rt-tbody'
 end

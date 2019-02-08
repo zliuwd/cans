@@ -2,7 +2,7 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { i18n } from './DomainHelper.test'
 import SummaryGrid from './SummaryGrid'
-import SummaryHeader from './SummaryHeader'
+import DataGridHeader from '../../common/DataGridHeader'
 import ActionRequiredSummary from './ActionRequiredSummary'
 
 describe('<ActionRequiredSummary />', () => {
@@ -16,7 +16,7 @@ describe('<ActionRequiredSummary />', () => {
 
   it('has an Action Required header', () => {
     expect(shallow(<ActionRequiredSummary i18n={i18n} />).props().header).toEqual(
-      <SummaryHeader
+      <DataGridHeader
         title="Action Required"
         tooltip={
           'Includes a rating of 1 from the Behavioral/Emotional domain and ratings of 2 from all needs domains. These ratings indicate that this need interferes with functioning.'

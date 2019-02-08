@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import { DataGrid } from '@cwds/components'
 import StaffTable from './StaffTable'
 import StaffNameLink from './StaffNameLink'
-import { staff as mockStaff, onlyOneStaffCase } from './staff.mocks.test'
+import { onlyOneStaffCase, staff as mockStaff } from './staff.mocks.test'
 
 describe('<StaffTable />', () => {
   const render = staff => shallow(<StaffTable staff={staff} />)
@@ -12,12 +12,6 @@ describe('<StaffTable />', () => {
     render([])
       .props()
       .columns.find(column => column.Header === headerText)
-
-  const assertColumnIsCentered = headerText => {
-    const column = findColumn(headerText)
-    expect(column.className).toBe('text-center')
-    expect(column.headerClassName).toBe('text-center')
-  }
 
   it('renders a DataGrid', () => {
     expect(
@@ -83,19 +77,38 @@ describe('<StaffTable />', () => {
     expect(staffNameColumn.Cell).toBe(StaffNameLink)
   })
 
-  it('centers the "Total Clients" column', () => {
-    assertColumnIsCentered('Total Clients')
+  describe('centered columns', () => {
+    const assertColumnIsCentered = (staffTable, columnIndex) => {
+      const column = staffTable.props().columns[columnIndex]
+      expect(column.className).toBe('text-center')
+      expect(column.headerClassName).toBe('text-center')
+    }
+
+    it('renders columns centered', () => {
+      const staffTable = render(mockStaff)
+      assertColumnIsCentered(staffTable, 1)
+      assertColumnIsCentered(staffTable, 2)
+      assertColumnIsCentered(staffTable, 3)
+      assertColumnIsCentered(staffTable, 4)
+    })
   })
 
-  it('centers the "No Prior" column', () => {
-    assertColumnIsCentered('No Prior')
-  })
-
-  it('centers the "In Progress" column', () => {
-    assertColumnIsCentered('In Progress')
-  })
-
-  it('centers the "Completed" column', () => {
-    assertColumnIsCentered('Completed')
+  describe('tooltips', () => {
+    const assertTitleAndTooltip = (columnIndex, title, tooltip) => {
+      const staffTable = render(mockStaff)
+      const header = staffTable.props().columns[columnIndex].Header
+      expect(header.props.title).toBe(title)
+      expect(header.props.tooltip).toBe(tooltip)
+    }
+    it('renders tooltip for respective columns', () => {
+      assertTitleAndTooltip(1, 'Total Clients', "The number of clients in that staff person's caseload")
+      assertTitleAndTooltip(
+        2,
+        'No Prior',
+        'The count of clients who have never had a CANS assessment in the CARES system'
+      )
+      assertTitleAndTooltip(3, 'In Progress', 'The count of clients who currently have an assessment in progress')
+      assertTitleAndTooltip(4, 'Completed', 'The number of clients who are in completed status')
+    })
   })
 })
