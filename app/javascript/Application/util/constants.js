@@ -35,6 +35,8 @@ export const navigation = Object.freeze({
   SEARCH_CHANGELOG: 'SEARCH_CHANGELOG',
 
   ASSESSMENT_CHANGELOG: 'ASSESSMENT_CHANGELOG',
+
+  ASSESSMENT_COMPARISION: 'ASSESSMENT_COMPARISION',
 })
 
 export const BreadCrumbLinks = Object.freeze({

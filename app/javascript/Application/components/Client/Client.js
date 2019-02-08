@@ -5,6 +5,7 @@ import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
 import PropTypes from 'prop-types'
 import ClientAssessmentHistory from './AssessmentHistory/ClientAssessmentHistory'
+import AssessmentComparison from './AssessmentComparison/AssessmentComparison'
 import { isoToLocalDate } from '../../util/dateHelper'
 import NavFromProducer from '../../util/NavFromProducer'
 import ClientAssessmentHistoryLoadingBoundary from './AssessmentHistory/ClientAssessmentHistoryLoadingBoundary'
@@ -80,9 +81,14 @@ class Client extends Component {
     )
   }
 
+  renderAssessmentComparison = () => {
+    return <AssessmentComparison />
+  }
+
   render() {
     const { client } = this.props
 
+    const urlArray = this.props.match.url.split('/')
     return (
       <Fragment>
         <Grid container spacing={24}>
@@ -108,7 +114,9 @@ class Client extends Component {
               </div>
             </Card>
           </Grid>
-          {this.renderClientAssessmentHistory(client)}
+          {urlArray.includes('comparision')
+            ? this.renderAssessmentComparison()
+            : this.renderClientAssessmentHistory(client)}
         </Grid>
       </Fragment>
     )

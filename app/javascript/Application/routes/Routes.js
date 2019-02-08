@@ -51,6 +51,8 @@ const Routes = () => {
         path="/clients/:clientId/assessments/:id/changelog/:status"
         children={route => page(route, navigation.ASSESSMENT_CHANGELOG)}
       />
+
+      <Route exact path="/comparision/:clientId" component={ChildProfilePageWithClient} />
       <SearchRoutes />
     </Switch>
   )

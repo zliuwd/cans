@@ -2,6 +2,7 @@ import React from 'react'
 import { navigation } from '../../util/constants'
 import { SupervisorDashboard, CaseLoadPage, CurrentUserCaseLoadPage } from '../Staff'
 import { Client } from '../Client'
+import AssessmentComparison from '../Client/AssessmentComparison/AssessmentComparison'
 import { AssessmentContainer, ChangeLogPage } from '../Assessment'
 import { SearchContainer } from '../Search'
 import { Row, Col } from 'reactstrap'
@@ -45,6 +46,10 @@ const PageContentSwitcher = ({ params, navigateTo, client, staffId }) => {
         return client && <AssessmentContainer {...params} />
       case navigation.STAFF_CHANGELOG:
         return client && <ChangeLogPage {...params} />
+
+      case navigation.COMPARISION:
+      console.log('aim')
+        return client && <AssessmentComparison {...params} />
 
       default:
         return null
