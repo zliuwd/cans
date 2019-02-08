@@ -1,8 +1,10 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Card, CardHeader, CardTitle, CardBody, DataGrid } from '@cwds/components'
+import { Card, CardHeader, CardTitle, CardBody } from '@cwds/components'
 import { Row } from 'reactstrap'
 import AssessmentChangeLog from './AssessmentChangeLog'
+import SessionDataGrid from '../../common/SessionDataGrid'
+import { ASSESSMENT_CHANGELOG_PAGE_SIZE_KEY } from '../../../util/sessionStorageUtil'
 
 describe('<AssessmentChangeLog />', () => {
   const defaultProps = {
@@ -77,7 +79,9 @@ describe('<AssessmentChangeLog />', () => {
     })
 
     it('renders a data grid when there is change log data', () => {
-      expect(wrapper.find(DataGrid).exists()).toBe(true)
+      const sessionDataGrid = wrapper.find(SessionDataGrid)
+      expect(sessionDataGrid.exists()).toBe(true)
+      expect(sessionDataGrid.props().pageSizeSessionKey).toBe(ASSESSMENT_CHANGELOG_PAGE_SIZE_KEY)
     })
   })
 
@@ -99,8 +103,8 @@ describe('<AssessmentChangeLog />', () => {
       )
     })
 
-    it('passes change history data to DataGrid', () => {
-      expect(wrapper.find(DataGrid).props().data).toEqual(defaultAssessmentHistory)
+    it('passes change history data to SessionDataGrid', () => {
+      expect(wrapper.find(SessionDataGrid).props().data).toEqual(defaultAssessmentHistory)
     })
   })
 

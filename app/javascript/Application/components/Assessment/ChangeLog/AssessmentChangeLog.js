@@ -1,18 +1,21 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Card, CardHeader, CardTitle, CardBody, DataGrid } from '@cwds/components'
-import { Row, Col } from 'reactstrap'
+import { Card, CardBody, CardHeader, CardTitle } from '@cwds/components'
+import { Col, Row } from 'reactstrap'
 import ChangeLogDate from './ChangeLogDate'
 import ChangeLogStatus from './ChangeLogStatus'
 import ChangeLogName from './ChangeLogName'
 import ChangeLogComment from './ChangeLogComment'
 import PrintChangeLog from './PrintChangeLog'
 import { formatClientName } from '../../Client'
-import { clientPropTypes, assessmentHistoryPropTypes } from './ChangeLogHelper'
+import { assessmentHistoryPropTypes, clientPropTypes } from './ChangeLogHelper'
 import { trimSafely } from '../../../util/formatters'
 import { isoToLocalDate } from '../../../util/dateHelper'
 import { buildSearchClientsButton } from '../../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../../Header/PageHeaderButtons/PrintButton'
+import { ASSESSMENT_CHANGELOG_PAGE_SIZE_KEY } from '../../../util/sessionStorageUtil'
+import { PAGE_SIZES } from '../../../util/DataGridHelper'
+import SessionDataGrid from '../../common/SessionDataGrid'
 
 const columnConfig = [
   {
@@ -84,24 +87,18 @@ class AssessmentChangeLog extends Component {
     const assessmentDate = assessmentHistory.length > 0 ? assessmentHistory[0].event_date : ''
     const formattedDate = assessmentDate ? isoToLocalDate(assessmentDate) : ''
     const titleAssessmentDate = trimSafely(`Assessment Date: ${formattedDate}`)
-    const changeLogTitle = (
+    return (
       <div>
         <span>{titleClientName}</span>
         <span>{titleAssessmentDate}</span>
       </div>
     )
-
-    return changeLogTitle
   }
 
   render() {
     const { client, assessmentHistory } = this.props
-    const assessmentHistoryLength = assessmentHistory.length
-    const minRows = 0
-    const defaultPageSize = 10
-    const showPagination = assessmentHistoryLength > defaultPageSize
-
-    return assessmentHistoryLength > 0 ? (
+    const showPagination = assessmentHistory.length > PAGE_SIZES[0]
+    return assessmentHistory.length > 0 ? (
       <Row>
         <Col xs="12">
           <Card className="change-log-card">
@@ -109,11 +106,12 @@ class AssessmentChangeLog extends Component {
               <CardTitle className="change-log-title">{this.buildChangeLogTitle(client, assessmentHistory)}</CardTitle>
             </CardHeader>
             <CardBody className="pt-0 change-log-body">
-              <DataGrid
+              <SessionDataGrid
                 data={assessmentHistory}
                 showPagination={showPagination}
-                minRows={minRows}
-                defaultPageSize={defaultPageSize}
+                minRows={0}
+                pageSizeSessionKey={ASSESSMENT_CHANGELOG_PAGE_SIZE_KEY}
+                pageSizeOptions={PAGE_SIZES}
                 columns={columnConfig}
                 className="assessment-change-log"
               />

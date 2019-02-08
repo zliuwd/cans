@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Row } from 'reactstrap'
-import { DataGrid } from '@cwds/components'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
 import ClientAssessmentHistoryTableLink from './ClientAssessmentHistoryTableLink'
 import ClientAssessmentHistoryTableCaseNumber from './ClientAssessmentHistoryTableCaseNumber'
@@ -11,6 +10,8 @@ import ClientAssessmentHistoryTableUpdatedBy from './ClientAssessmentHistoryTabl
 import ClientAssessmentHistoryTableStatus from './ClientAssessmentHistoryTableStatus'
 import { navigation } from '../../../util/constants'
 import { AssessmentStatus, AssessmentActionsEllipsis } from '../../Assessment'
+import SessionDataGrid from '../../common/SessionDataGrid'
+import { ASSESSMENT_HISTORY_PAGE_SIZE_KEY } from '../../../util/sessionStorageUtil'
 
 const defaultMockedAssessments = [
   { id: 1 },
@@ -41,35 +42,39 @@ const shallowWrapper = assessments =>
 describe('<ClientAssessmentHistoryTable />', () => {
   describe('layout', () => {
     describe('when there are more than 3 assessments', () => {
-      it('renders a <DataGrid /> within a <Row /> component', () => {
+      it('renders a <SessionDataGrid /> within a <Row /> component', () => {
         const wrapper = shallowWrapper(defaultMockedAssessments)
-        expect(wrapper.find(Row).find(DataGrid).length).toBe(1)
+        expect(wrapper.find(Row).find(SessionDataGrid).length).toBe(1)
       })
     })
 
     describe('when there is 1 assessment', () => {
-      it('does not render a <DataGrid /> within a <Row /> component', () => {
+      it('does not render a <SessionDataGrid /> within a <Row /> component', () => {
         const wrapper = shallowWrapper([{ id: 1 }])
-        expect(wrapper.find(Row).find(DataGrid).length).toBe(0)
+        expect(wrapper.find(Row).find(SessionDataGrid).length).toBe(0)
         expect(wrapper.type()).toBe(null)
       })
     })
 
     describe('when there are 0 assessments', () => {
-      it('does not render a <DataGrid /> within a <Row /> component', () => {
+      it('does not render a <SessionDataGrid /> within a <Row /> component', () => {
         const wrapper = shallowWrapper([])
-        expect(wrapper.find(Row).find(DataGrid).length).toBe(0)
+        expect(wrapper.find(Row).find(SessionDataGrid).length).toBe(0)
         expect(wrapper.type()).toBe(null)
       })
     })
   })
 
-  describe('DataGrid Props', () => {
+  describe('SessionDataGrid Props', () => {
     let dataGrid
 
     beforeEach(() => {
       const wrapper = shallowWrapper(defaultMockedAssessments)
-      dataGrid = wrapper.find(DataGrid)
+      dataGrid = wrapper.find(SessionDataGrid)
+    })
+
+    it('should set pageSizeSessionKey props for SessionDataGrid', () => {
+      expect(dataGrid.props().pageSizeSessionKey).toBe(ASSESSMENT_HISTORY_PAGE_SIZE_KEY)
     })
 
     describe('Data', () => {
@@ -136,12 +141,6 @@ describe('<ClientAssessmentHistoryTable />', () => {
       })
     })
 
-    describe('Default Page Size', () => {
-      it('sets the defaultPageSize to 10', () => {
-        expect(dataGrid.props().defaultPageSize).toBe(10)
-      })
-    })
-
     describe('Class Name', () => {
       it('sets the correct className', () => {
         expect(dataGrid.props().className).toBe('data-grid-client-assessment-history')
@@ -165,7 +164,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
         it('sets showPagination prop to true', () => {
           const mockedAssessments = defaultMockedAssessments.concat([{ id: 11 }, { id: 12 }, { id: 13 }, { id: 14 }])
           const wrapper = shallowWrapper(mockedAssessments)
-          const dataGrid = wrapper.find(DataGrid)
+          const dataGrid = wrapper.find(SessionDataGrid)
           expect(dataGrid.props().showPagination).toBe(true)
         })
       })

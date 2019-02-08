@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Row } from 'reactstrap'
-import { DataGrid } from '@cwds/components'
 import ClientAssessmentHistoryTableLink from './ClientAssessmentHistoryTableLink'
 import ClientAssessmentHistoryTableCaseNumber from './ClientAssessmentHistoryTableCaseNumber'
 import ClientAssessmentHistoryTableCountyName from './ClientAssessmentHistoryTableCountyName'
@@ -11,7 +10,12 @@ import ClientAssessmentHistoryTableStatus from './ClientAssessmentHistoryTableSt
 import { AssessmentActionsEllipsis } from '../../Assessment/'
 import { isoToLocalDate } from '../../../util/dateHelper'
 import { COLUMN_WIDTHS } from './AssessmentHistoryTableHelper'
+import { ASSESSMENT_HISTORY_PAGE_SIZE_KEY } from '../../../util/sessionStorageUtil'
+import { PAGE_SIZES } from '../../../util/DataGridHelper'
+import SessionDataGrid from '../../common/SessionDataGrid'
+
 const commonStyle = { className: 'text-center', headerClassName: 'text-center' }
+
 class ClientAssessmentHistoryTable extends React.Component {
   columnConfig = [
     {
@@ -65,8 +69,7 @@ class ClientAssessmentHistoryTable extends React.Component {
       ...commonStyle,
       accessor: assessment => {
         const { updated_timestamp: updatedTimestamp, created_timestamp: createdTimestamp } = assessment
-        const timestamp = updatedTimestamp || createdTimestamp
-        return timestamp
+        return updatedTimestamp || createdTimestamp
       },
       sortMethod: (a, b) => {
         const dateA = new Date(a).getTime()
@@ -123,10 +126,9 @@ class ClientAssessmentHistoryTable extends React.Component {
     const columnSort = [{ id: 'assessmentTableEventDate', desc: true }]
     const assessmentsLength = assessments.length
     const minRows = 0
-    const defaultPageSize = 10
     const displayDataGridAfterNumAssessments = 3
     const numAssessmentsToRenderInDataGrid = assessmentsLength - displayDataGridAfterNumAssessments
-    const showPagination = numAssessmentsToRenderInDataGrid > defaultPageSize
+    const showPagination = numAssessmentsToRenderInDataGrid > PAGE_SIZES[0]
     const showDataGrid = assessmentsLength > displayDataGridAfterNumAssessments
     const assessmentsSubset = assessments.slice(displayDataGridAfterNumAssessments)
     const assessmentsSubsetWithNavFromAndCallback = assessmentsSubset.map(assessment => {
@@ -141,11 +143,12 @@ class ClientAssessmentHistoryTable extends React.Component {
 
     return showDataGrid ? (
       <Row>
-        <DataGrid
+        <SessionDataGrid
           data={assessmentsSubsetWithNavFromAndCallback}
           showPagination={showPagination}
           minRows={minRows}
-          defaultPageSize={defaultPageSize}
+          pageSizeSessionKey={ASSESSMENT_HISTORY_PAGE_SIZE_KEY}
+          pageSizeOptions={PAGE_SIZES}
           columns={this.columnConfig}
           className={'data-grid-client-assessment-history'}
           defaultSorted={columnSort}

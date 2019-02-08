@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Card, CardHeader, CardBody, CardTitle, DataGrid } from '@cwds/components'
+import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
 import { PAGE_SIZES, gridMinRows } from '../../util/DataGridHelper'
+import SessionDataGrid from '../common/SessionDataGrid'
+import { CLIENT_LIST_PAGE_SIZE_KEY } from '../../util/sessionStorageUtil'
 import './style.sass'
 
 const ClientSocialWorkerCard = props => {
@@ -13,12 +15,13 @@ const ClientSocialWorkerCard = props => {
         </CardTitle>
       </CardHeader>
       <CardBody>
-        <DataGrid
+        <SessionDataGrid
           {...props}
           sortable={true}
           className="client-grid"
           minRows={gridMinRows(props.data)}
           noDataText={'No records found'}
+          pageSizeSessionKey={CLIENT_LIST_PAGE_SIZE_KEY}
           pageSizeOptions={PAGE_SIZES}
           showPaginationBottom={true}
         />

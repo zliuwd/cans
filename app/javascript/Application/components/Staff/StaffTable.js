@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { DataGrid } from '@cwds/components'
 import StaffNameLink from './StaffNameLink'
 import { staffPropType } from './StaffHelper'
 import { PAGE_SIZES, gridMinRows } from '../../util/DataGridHelper'
 import DataGridHeader from '../common/DataGridHeader'
+import SessionDataGrid from '../common/SessionDataGrid'
+import { STAFF_LIST_PAGE_SIZE_KEY } from '../../util/sessionStorageUtil'
 
 const columns = [
   {
@@ -52,9 +53,10 @@ const columns = [
 ]
 
 const StaffTable = ({ staff }) => (
-  <DataGrid
+  <SessionDataGrid
     data={staff}
     columns={columns}
+    pageSizeSessionKey={STAFF_LIST_PAGE_SIZE_KEY}
     pageSizeOptions={PAGE_SIZES}
     showPagination={true}
     minRows={gridMinRows(staff)}

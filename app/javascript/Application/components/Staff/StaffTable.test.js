@@ -1,8 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { DataGrid } from '@cwds/components'
 import StaffTable from './StaffTable'
 import StaffNameLink from './StaffNameLink'
+import SessionDataGrid from '../common/SessionDataGrid'
+import { STAFF_LIST_PAGE_SIZE_KEY } from '../../util/sessionStorageUtil'
 import { onlyOneStaffCase, staff as mockStaff } from './staff.mocks.test'
 
 describe('<StaffTable />', () => {
@@ -13,12 +14,10 @@ describe('<StaffTable />', () => {
       .props()
       .columns.find(column => column.Header === headerText)
 
-  it('renders a DataGrid', () => {
-    expect(
-      render([])
-        .find(DataGrid)
-        .exists()
-    ).toBe(true)
+  it('renders a SessionDataGrid with pageSizeSessionKey', () => {
+    const sessionDataGrid = render([]).find(SessionDataGrid)
+    expect(sessionDataGrid.exists()).toBe(true)
+    expect(sessionDataGrid.props().pageSizeSessionKey).toBe(STAFF_LIST_PAGE_SIZE_KEY)
   })
 
   it('staff name column accessor is working', () => {
@@ -51,19 +50,19 @@ describe('<StaffTable />', () => {
   })
 
   it('shows all rows with pagination', () => {
-    const grid = render([]).find(DataGrid)
+    const grid = render([]).find(SessionDataGrid)
     expect(grid.props().showPagination).toBe(true)
     expect(grid.props().pageSizeOptions).toEqual([10, 25, 50])
   })
 
   it('always displays enough rows for a No Records message', () => {
-    const grid = render([]).find(DataGrid)
+    const grid = render([]).find(SessionDataGrid)
     const spaceForMessage = 3
     expect(grid.props().minRows).toBe(spaceForMessage)
   })
 
   it('sorts by staffName by default', () => {
-    const grid = render([]).find(DataGrid)
+    const grid = render([]).find(SessionDataGrid)
     expect(grid.props().defaultSorted).toEqual([{ id: 'staffName' }])
   })
 
