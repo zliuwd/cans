@@ -24,10 +24,10 @@ class ComparisionOuterTable extends React.Component {
         Header: `${this.props.data.date_info[index].date}`,
         accessor: domain => {
           const ratingTotal = domain.ratting_totals[index]
-          if (domain.code === 'TRM') {
-            return `${ratingTotal}-Y`
-          } else if (!ratingTotal) {
+          if (!ratingTotal) {
             return '--'
+          } else if (domain.code === 'TRM') {
+            return `${ratingTotal}-Y`
           } else {
             return ratingTotal
           }
