@@ -35,17 +35,19 @@ class ComparisionInnerTable extends React.Component {
         },
         accessor: item => {
           let symbol = ''
-          let rating = ''
+          let rating = '--'
+          // first level condition for setting value
           if (item.item_ratings[index]) {
             symbol = this.itemSymbolGenerator(item.item_ratings[index].trend)
             rating = item.item_ratings[index].value
           }
+          // second level condition for return the value
           if (this.props.domainCode === 'TRM') {
             return this.boolRatingGenerator(rating)
           } else if (rating !== -1 && rating !== 8) {
             return rating + symbol
           } else {
-            return '--'
+            return rating
           }
         },
         ...commonStyle,

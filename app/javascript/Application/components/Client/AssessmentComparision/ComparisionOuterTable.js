@@ -23,10 +23,13 @@ class ComparisionOuterTable extends React.Component {
         },
         Header: `${this.props.data.date_info[index].date}`,
         accessor: domain => {
+          const ratingTotal = domain.ratting_totals[index]
           if (domain.code === 'TRM') {
-            return `${domain.ratting_totals[index]}-Y`
+            return `${ratingTotal}-Y`
+          } else if (!ratingTotal) {
+            return '--'
           } else {
-            return domain.ratting_totals[index]
+            return ratingTotal
           }
         },
         className: 'outer-content',
@@ -37,7 +40,8 @@ class ComparisionOuterTable extends React.Component {
 
   renderSubComponent = original => {
     let counter = original.original.items[0].item_ratings
-    if (original.original.code === 'CGV') { // deal with caregiver domains
+    if (original.original.code === 'CGV') {
+      // deal with caregiver domains
       counter = this.props.data.date_info
     }
     return (
