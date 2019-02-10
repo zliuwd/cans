@@ -35,13 +35,13 @@ class ComparisionOuterTable extends React.Component {
     })
   }
 
-  renderSubComponent = (original, counter) => {
+  renderSubComponent = original => {
+    let counter = original.original.items[0].item_ratings
+    if (original.original.code === 'CGV') { // deal with caregiver domains
+      counter = this.props.data.date_info
+    }
     return (
-      <ComparisionInnerTable
-        domainCode={original.original.code}
-        items={original.original.items}
-        counter={original.original.items[0].item_ratings}
-      />
+      <ComparisionInnerTable domainCode={original.original.code} items={original.original.items} counter={counter} />
     )
   }
 

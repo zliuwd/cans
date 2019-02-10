@@ -34,8 +34,12 @@ class ComparisionInnerTable extends React.Component {
           minWidth: '12rem',
         },
         accessor: item => {
-          const symbol = this.itemSymbolGenerator(item.item_ratings[index].trend)
-          const rating = item.item_ratings[index].value
+          let symbol = ''
+          let rating = ''
+          if (item.item_ratings[index]) {
+            symbol = this.itemSymbolGenerator(item.item_ratings[index].trend)
+            rating = item.item_ratings[index].value
+          }
           if (this.props.domainCode === 'TRM') {
             return this.boolRatingGenerator(rating)
           } else if (rating !== -1 && rating !== 8) {
