@@ -13,6 +13,9 @@ class ComparisionInnerTable extends React.Component {
 
   itemSymbolGenerator = trend => {
     let result = ''
+    if (!trend) {
+      return result
+    }
     if (trend === 'up') {
       result = ' ↑'
     } else if (trend === 'down') {

@@ -435,5 +435,59 @@ export const data = {
         },
       ],
     },
+    {
+      code: 'CGV',
+      caregiver_name: 'Seaver',
+      under_six: true,
+      above_six: false,
+      ratting_totals: [10, 8],
+      items: [
+        {
+          under_six_id: 'E34',
+          above_six_id: '41',
+          code: 'SUPERVISION',
+          item_ratings: [{ value: 0, trend: '' }, { value: 2, trend: '' }],
+        },
+        {
+          under_six_id: 'E35',
+          above_six_id: '42',
+          code: 'INVOLVEMENT_WITH_CARE',
+          item_ratings: [{ value: 1, trend: '' }, { value: 2, trend: '' }],
+        },
+        {
+          under_six_id: 'E36',
+          above_six_id: '43',
+          code: 'KNOWLEDGE',
+          item_ratings: [{ value: 0, trend: '' }, { value: 1, trend: '' }],
+        },
+      ],
+    },
+    {
+      code: 'CGV',
+      caregiver_name: 'Kirk Camero',
+      under_six: true,
+      above_six: false,
+      ratting_totals: [13],
+      items: [
+        {
+          under_six_id: 'E34',
+          above_six_id: '41',
+          code: 'SUPERVISION',
+          item_ratings: [{ value: 0, trend: '' }],
+        },
+        {
+          under_six_id: 'E35',
+          above_six_id: '42',
+          code: 'INVOLVEMENT_WITH_CARE',
+          item_ratings: [{ value: 1, trend: '' }],
+        },
+        {
+          under_six_id: 'E36',
+          above_six_id: '43',
+          code: 'KNOWLEDGE',
+          item_ratings: [{ value: 0, trend: '' }],
+        },
+      ],
+    },
   ],
 }

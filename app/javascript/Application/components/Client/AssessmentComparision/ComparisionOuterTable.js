@@ -40,7 +40,7 @@ class ComparisionOuterTable extends React.Component {
       <ComparisionInnerTable
         domainCode={original.original.code}
         items={original.original.items}
-        counter={this.props.data.date_info}
+        counter={original.original.items[0].item_ratings}
       />
     )
   }
@@ -52,6 +52,9 @@ class ComparisionOuterTable extends React.Component {
       width: CP_TABLE_COL_WIDTHS.DOMAIN_NAME,
       Header: 'Domain Name',
       accessor: domain => {
+        if (domain.code === 'CGV' && domain.caregiver_name) {
+          return `${domain.code}-${domain.caregiver_name}`
+        }
         return domain.code
       },
       style: {
