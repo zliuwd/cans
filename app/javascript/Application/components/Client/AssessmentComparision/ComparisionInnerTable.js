@@ -86,7 +86,6 @@ class ComparisionInnerTable extends React.Component {
         columns={itemCmparisionTableTemplate}
         data={items}
         sortable={true}
-        className="client-grid"
         minRows={gridMinRows(this.props.items)}
         noDataText={'No records found'}
         TheadComponent={TheadComponent}

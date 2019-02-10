@@ -108,7 +108,6 @@ class ComparisionOuterTable extends React.Component {
         columns={domainCmparisionTableTemplate}
         data={domains}
         sortable={true}
-        className="client-grid"
         minRows={gridMinRows(this.props.data.domains)}
         noDataText={'No records found'}
         showPaginationBottom={false}
