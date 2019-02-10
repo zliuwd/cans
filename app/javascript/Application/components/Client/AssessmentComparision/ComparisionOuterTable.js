@@ -32,23 +32,18 @@ class ComparisionOuterTable extends React.Component {
     }
     const domainTotalCols = this.domainTotalColsGenerator()
     const expander = {
-      columns: [
-        {
-          expander: true,
-          width: 65,
-          Expander: ({ isExpanded, ...rest }) => (
-            <div>{isExpanded ? <span>&#x2227;</span> : <span>&#x2228;</span>}</div>
-          ),
-          style: {
-            cursor: 'pointer',
-            fontSize: 25,
-            padding: '0',
-            textAlign: 'center',
-            userSelect: 'none',
-          },
-        },
-      ],
+      expander: true,
+      width: 65,
+      Expander: ({ isExpanded, ...rest }) => <div>{isExpanded ? <span>&#x2227;</span> : <span>&#x2228;</span>}</div>,
+      style: {
+        cursor: 'pointer',
+        fontSize: 25,
+        padding: '0',
+        textAlign: 'center',
+        userSelect: 'none',
+      },
     }
+
     const domainCmparisionTableTemplate = [domainNameCol, ...domainTotalCols, expander]
 
     const domains = this.props.data.domains
