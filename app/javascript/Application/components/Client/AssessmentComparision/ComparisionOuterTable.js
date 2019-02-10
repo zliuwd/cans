@@ -22,13 +22,6 @@ class ComparisionOuterTable extends React.Component {
     })
   }
 
-  handleExpandRow = (domainCode, items) => {
-    this.setState({
-      domainCode: domainCode,
-      items: items,
-    })
-  }
-
   render() {
     const counter = this.props.data.date_info
     const domainNameCol = {
@@ -44,7 +37,7 @@ class ComparisionOuterTable extends React.Component {
       expander: true,
       width: 65,
       Expander: ({ isExpanded, domain, ...rest }) => {
-        return <div>{isExpanded ? <span>&#x2227;</span> : <span onClick={() => {}}>&#x2228;</span>}</div>
+        return <div>{isExpanded ? <span>&#x2227;</span> : <span>&#x2228;</span>}</div>
       },
       accessor: domain => {
         return domain.code
@@ -71,13 +64,16 @@ class ComparisionOuterTable extends React.Component {
         minRows={gridMinRows(this.props.data.domains)}
         noDataText={'No records found'}
         showPaginationBottom={false}
-        SubComponent={() => (
-          <ComparisionInnerTable
-            domainCode={this.props.data.domains[0].code}
-            items={this.props.data.domains[0].items}
-            counter={counter}
-          />
-        )}
+        SubComponent={original => {
+          console.log(original)
+          return (
+            <ComparisionInnerTable
+              domainCode={original.original.code}
+              items={original.original.items}
+              counter={counter}
+            />
+          )
+        }}
       />
     )
   }
