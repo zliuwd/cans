@@ -12,6 +12,7 @@ class Assessment extends Component {
     super(props)
     this.state = {
       isDefaultExpanded: false,
+      isChanged: false,
     }
   }
   /* eslint-disable camelcase */
@@ -20,6 +21,9 @@ class Assessment extends Component {
       const assessment = Object.assign({}, nextProps.assessment)
       this.updateCaregiverDomainsIndices(assessment.state)
       this.props.onAssessmentUpdate(assessment)
+    }
+    if (this.props.assessment.id && JSON.stringify(this.props.assessment) !== JSON.stringify(nextProps.assessment)) {
+      this.setState({ isChanged: true })
     }
   }
   /* eslint-enable camelcase */
@@ -170,6 +174,7 @@ class Assessment extends Component {
             <CardBody>
               {domains.map((domain, index) => {
                 const { id, code } = domain
+                console.log(domain)
                 const domainI18n = getI18nByCode(i18n, code)
                 return (
                   <Domain
