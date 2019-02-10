@@ -9,21 +9,20 @@ class ComparisionOuterTable extends React.Component {
     this.state = {}
   }
 
-  domainTotalColsGenerator = domainCmparisionTableTemplate => {
+  domainTotalColsGenerator = () => {
     const counter = this.props.data.date_info
-    counter.forEach((el, index) => {
-      domainCmparisionTableTemplate.push({
+    return counter.map((el, index) => {
+      return {
         id: `assessment-${index}`,
         Header: `${this.props.data.date_info[index].date}`,
         accessor: domain => {
           return domain.ratting_totals[index]
         },
-      })
+      }
     })
   }
 
   render() {
-    const counter = this.props.counter
     const domainNameCol = {
       id: 'domainName',
       Header: 'Domain Name',
@@ -31,20 +30,29 @@ class ComparisionOuterTable extends React.Component {
         return domain.code
       },
     }
-    const domainCmparisionTableTemplate = [domainNameCol]
-
-    this.domainTotalColsGenerator(domainCmparisionTableTemplate)
-    console.log(domainCmparisionTableTemplate)
-    // const domainCmparisionTableTemplate = [
-    //   {
-    //     id: 'domainName',
-    //     Header: 'Domain Name',
-    //     accessor: d => d.code,
-    //   },
-    // ]
+    const domainTotalCols = this.domainTotalColsGenerator()
+    const expander = {
+      columns: [
+        {
+          expander: true,
+          width: 65,
+          Expander: ({ isExpanded, ...rest }) => (
+            <div>{isExpanded ? <span>&#x2227;</span> : <span>&#x2228;</span>}</div>
+          ),
+          style: {
+            cursor: 'pointer',
+            fontSize: 25,
+            padding: '0',
+            textAlign: 'center',
+            userSelect: 'none',
+          },
+        },
+      ],
+    }
+    const domainCmparisionTableTemplate = [domainNameCol, ...domainTotalCols, expander]
 
     const domains = this.props.data.domains
-    console.log(this.props)
+
     return (
       <DataGrid
         columns={domainCmparisionTableTemplate}
@@ -54,6 +62,7 @@ class ComparisionOuterTable extends React.Component {
         minRows={gridMinRows(this.props.data.domains)}
         noDataText={'No records found'}
         showPaginationBottom={false}
+        SubComponent={() => <div style={{ padding: '10px' }}>Hello</div>}
       />
     )
   }
