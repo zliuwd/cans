@@ -16,17 +16,21 @@ class ComparisionOuterTable extends React.Component {
     return counter.map((el, index) => {
       return {
         id: `domain-assessment-${index}`,
-        width: CP_TABLE_COL_WIDTHS.DOMAIN_RATING_TOTAL,
         style: {
+          minWidth: '12rem',
           height: '5rem',
           ...verticalCenter,
         },
         Header: `${this.props.data.date_info[index].date}`,
         accessor: domain => {
-          return domain.ratting_totals[index]
+          if (domain.code === 'TRM') {
+            return `${domain.ratting_totals[index]}-Y`
+          } else {
+            return domain.ratting_totals[index]
+          }
         },
         className: 'outer-content',
-        headerClassName: 'outer-header',
+        headerClassName: 'outer-content-header',
       }
     })
   }
@@ -54,8 +58,8 @@ class ComparisionOuterTable extends React.Component {
         height: '5rem',
         ...verticalCenter,
       },
-      className: 'outer-content',
-      headerClassName: 'outer-header',
+      className: 'outer-domain-name-content',
+      headerClassName: 'outer-domain-name-header',
     }
     const domainTotalCols = this.domainTotalColsGenerator(counter)
     const expander = {
@@ -63,7 +67,19 @@ class ComparisionOuterTable extends React.Component {
       width: CP_TABLE_COL_WIDTHS.EXPANDER,
       expander: true,
       Expander: ({ isExpanded, domain, ...rest }) => {
-        return <div>{isExpanded ? <span>&#x2227;</span> : <span>&#x2228;</span>}</div>
+        return (
+          <div>
+            {isExpanded ? (
+              <span>
+                <div className={'symbol-open'}>&#x2329;</div>
+              </span>
+            ) : (
+              <span>
+                <div className={'symbol-close'}>&#x2329;</div>
+              </span>
+            )}
+          </div>
+        )
       },
       style: {
         cursor: 'pointer',

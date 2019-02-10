@@ -11,13 +11,35 @@ class ComparisionInnerTable extends React.Component {
     this.state = {}
   }
 
+  itemSymbolGenerator = trend => {
+    let result = ''
+    if (trend === 'up') {
+      result = ' ↑'
+    } else if (trend === 'down') {
+      result = ' ↓'
+    }
+    return result
+  }
+
+  boolRatingGenerator = value => (!value ? 'No' : 'Yes')
+
   itemRatingColsGenerator = () => {
     return this.props.counter.map((el, index) => {
       return {
         id: `item-assessment-${index}`,
-        width: CP_TABLE_COL_WIDTHS.ITEM_RATING,
+        style: {
+          minWidth: '12rem',
+        },
         accessor: item => {
-          return item.item_ratings[index].value
+          const symbol = this.itemSymbolGenerator(item.item_ratings[index].trend)
+          const rating = item.item_ratings[index].value
+          if (this.props.domainCode === 'TRM') {
+            return this.boolRatingGenerator(rating)
+          } else if (rating !== -1 && rating !== 8) {
+            return rating + symbol
+          } else {
+            return '--'
+          }
         },
         ...commonStyle,
       }
@@ -31,12 +53,17 @@ class ComparisionInnerTable extends React.Component {
       accessor: item => {
         return item.code
       },
-      ...commonStyle,
+      className: 'inner-item-name-content',
+    }
+
+    const expanderPlaceHolder = {
+      id: 'expander_place_holder',
+      width: CP_TABLE_COL_WIDTHS.EXPANDER,
     }
 
     const itemRatingCols = this.itemRatingColsGenerator()
 
-    const itemCmparisionTableTemplate = [itemNameCol, ...itemRatingCols]
+    const itemCmparisionTableTemplate = [itemNameCol, ...itemRatingCols, expanderPlaceHolder]
 
     const items = this.props.items
 
