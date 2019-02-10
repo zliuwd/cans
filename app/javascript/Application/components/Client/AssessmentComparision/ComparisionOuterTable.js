@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { DataGrid } from '@cwds/components'
 import { gridMinRows } from '../../../util/DataGridHelper'
+import ComparisionInnerTable from './ComparisionInnerTable'
 
 class ComparisionOuterTable extends React.Component {
   constructor(props) {
@@ -9,11 +10,10 @@ class ComparisionOuterTable extends React.Component {
     this.state = {}
   }
 
-  domainTotalColsGenerator = () => {
-    const counter = this.props.data.date_info
+  domainTotalColsGenerator = counter => {
     return counter.map((el, index) => {
       return {
-        id: `assessment-${index}`,
+        id: `domain-assessment-${index}`,
         Header: `${this.props.data.date_info[index].date}`,
         accessor: domain => {
           return domain.ratting_totals[index]
@@ -22,7 +22,15 @@ class ComparisionOuterTable extends React.Component {
     })
   }
 
+  handleExpandRow = (domainCode, items) => {
+    this.setState({
+      domainCode: domainCode,
+      items: items,
+    })
+  }
+
   render() {
+    const counter = this.props.data.date_info
     const domainNameCol = {
       id: 'domainName',
       Header: 'Domain Name',
@@ -30,11 +38,17 @@ class ComparisionOuterTable extends React.Component {
         return domain.code
       },
     }
-    const domainTotalCols = this.domainTotalColsGenerator()
+    const domainTotalCols = this.domainTotalColsGenerator(counter)
     const expander = {
+      id: 'expander',
       expander: true,
       width: 65,
-      Expander: ({ isExpanded, ...rest }) => <div>{isExpanded ? <span>&#x2227;</span> : <span>&#x2228;</span>}</div>,
+      Expander: ({ isExpanded, domain, ...rest }) => {
+        return <div>{isExpanded ? <span>&#x2227;</span> : <span onClick={() => {}}>&#x2228;</span>}</div>
+      },
+      accessor: domain => {
+        return domain.code
+      },
       style: {
         cursor: 'pointer',
         fontSize: 25,
@@ -47,7 +61,7 @@ class ComparisionOuterTable extends React.Component {
     const domainCmparisionTableTemplate = [domainNameCol, ...domainTotalCols, expander]
 
     const domains = this.props.data.domains
-
+    console.log(this.state)
     return (
       <DataGrid
         columns={domainCmparisionTableTemplate}
@@ -57,7 +71,13 @@ class ComparisionOuterTable extends React.Component {
         minRows={gridMinRows(this.props.data.domains)}
         noDataText={'No records found'}
         showPaginationBottom={false}
-        SubComponent={() => <div style={{ padding: '10px' }}>Hello</div>}
+        SubComponent={() => (
+          <ComparisionInnerTable
+            domainCode={this.props.data.domains[0].code}
+            items={this.props.data.domains[0].items}
+            counter={counter}
+          />
+        )}
       />
     )
   }
