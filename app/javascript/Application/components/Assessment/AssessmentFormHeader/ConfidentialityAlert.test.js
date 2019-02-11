@@ -9,7 +9,7 @@ describe('<ConfidentialityAlert />', () => {
       const alert = wrapper.find('.warning-text')
       expect(alert.exists()).toBe(true)
       expect(alert.text()).toMatch(
-        'By selecting "NO" item EC 41 (Substance Use Disorder Item) from this CANS assessment will be redacted when printed.'
+        'By selecting "No" item EC 41 (Substance Use Disorder Item) from this CANS assessment will be redacted when printed.'
       )
     })
 
@@ -18,7 +18,7 @@ describe('<ConfidentialityAlert />', () => {
       const alert = wrapper.find('.warning-text')
       expect(alert.exists()).toBe(true)
       expect(alert.text()).toMatch(
-        'By selecting "NO" items 7 and 48 (Substance Use Disorder Items) from this CANS assessment will be redacted when printed.'
+        'By selecting "No" items 7 and 48 (Substance Use Disorder Items) from this CANS assessment will be redacted when printed.'
       )
     })
 
