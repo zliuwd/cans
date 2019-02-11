@@ -1,5 +1,5 @@
-import moment from 'moment'
-import { ISO_DATE_FORMAT, LOCAL_DATE_FORMAT } from './constants'
+import moment from 'moment-timezone'
+import { ISO_DATE_FORMAT, ISO_DATE_TIME_FORMAT, LOCAL_DATE_FORMAT } from './constants'
 
 /**
  * Returns a formatted local datetime
@@ -128,4 +128,10 @@ export function calculateDateDifferenceInYears(startDate, endDate) {
   }
   const duration = moment.duration(moment(endDate).diff(moment(startDate)))
   return Math.floor(duration.asYears())
+}
+
+export function nowInIsoDateTime() {
+  return `${moment()
+    .tz('America/Los_Angeles')
+    .format(ISO_DATE_TIME_FORMAT)}Z`
 }

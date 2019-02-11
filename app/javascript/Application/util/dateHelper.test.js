@@ -10,6 +10,7 @@ import {
   isValidLocalDate,
   localToIsoDateOrNull,
   calculateDateDifferenceInYears,
+  nowInIsoDateTime,
 } from './dateHelper'
 import moment from 'moment'
 
@@ -215,5 +216,12 @@ describe('#calculateDateDifferenceInYears()', () => {
     expect(calculateDateDifferenceInYears('2007-07-14', '2019-02-08')).toEqual(11)
     expect(calculateDateDifferenceInYears('1981-12-26', '2019-02-08')).toEqual(37)
     expect(calculateDateDifferenceInYears('2012-02-29', '2019-02-08')).toEqual(6)
+  })
+})
+
+describe('123', () => {
+  it('should blah', () => {
+    const now = nowInIsoDateTime()
+    expect(now).toBe('')
   })
 })

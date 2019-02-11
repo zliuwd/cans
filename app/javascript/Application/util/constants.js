@@ -1,5 +1,6 @@
 export const LOCAL_DATE_FORMAT = 'MM/DD/YYYY'
 export const ISO_DATE_FORMAT = 'YYYY-MM-DD'
+export const ISO_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSS'
 export const VALID_ASSESSMENT_DATE_FORMATS = [
   'MM/DD/YYYY',
   'M/DD/YYYY',
