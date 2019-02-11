@@ -13,6 +13,17 @@ class ComparisionOuterTable extends React.Component {
     this.state = {}
   }
 
+  renderTableHeader = index => {
+    return (
+      <div>
+        <div className="outer-header-status">
+          {this.props.data.date_info[index].status === 'IN_PROGRESS' ? 'In Progress' : null}
+        </div>
+        <div>{this.props.data.date_info[index].date}</div>
+      </div>
+    )
+  }
+
   domainTotalColsGenerator = counter => {
     return counter.map((el, index) => {
       return {
@@ -22,7 +33,7 @@ class ComparisionOuterTable extends React.Component {
           height: '5rem',
           ...verticalCenter,
         },
-        Header: `${this.props.data.date_info[index].date}`,
+        Header: this.renderTableHeader(index),
         accessor: domain => {
           const ratingTotal = domain.ratting_totals[index]
           if (!ratingTotal) {
@@ -63,12 +74,14 @@ class ComparisionOuterTable extends React.Component {
           return 'PTACE'
         }
         if (domain.code === 'STR') {
-          return `${domainTitle}(6 to 21)`
+          return `${domainTitle} ( 6 to 21 )`
+        } else if (domain.code === 'EST') {
+          return `${domainTitle} ( 0 to 5 )`
         }
         if (domain.code === 'CGV' && domain.caregiver_name) {
-          return `${domainTitle}-${domain.caregiver_index}-${domain.caregiver_name}`
+          return `Caregiver Domain-${domain.caregiver_index}-${domain.caregiver_name}`
         } else if (domain.code === 'CGV') {
-          return `${domainTitle}-${domain.caregiver_index}`
+          return `Caregiver Domain-${domain.caregiver_index}`
         }
         return domainTitle
       },
@@ -84,7 +97,7 @@ class ComparisionOuterTable extends React.Component {
       id: 'expander',
       width: CP_TABLE_COL_WIDTHS.EXPANDER,
       expander: true,
-      Expander: ({ isExpanded, domain, ...rest }) => {
+      Expander: ({ isExpanded, ...rest }) => {
         return (
           <div>
             {isExpanded ? (

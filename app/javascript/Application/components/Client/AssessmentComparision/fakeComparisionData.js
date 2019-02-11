@@ -739,6 +739,33 @@ export const fourAssessmentCrossingAge = {
       ],
     },
     {
+      code: 'CGV',
+      caregiver_index: 'a',
+      under_six: true,
+      above_six: false,
+      ratting_totals: [10, 8, 6, ''],
+      items: [
+        {
+          under_six_id: 'E34',
+          above_six_id: '41',
+          code: 'SUPERVISION',
+          item_ratings: [{ value: 0, trend: '' }, { value: 2, trend: 'up' }, { value: 2, trend: '' }, ''],
+        },
+        {
+          under_six_id: 'E35',
+          above_six_id: '42',
+          code: 'INVOLVEMENT_WITH_CARE',
+          item_ratings: [{ value: 1, trend: '' }, { value: 2, trend: 'up' }, { value: 0, trend: 'down' }, ''],
+        },
+        {
+          under_six_id: 'E36',
+          above_six_id: '43',
+          code: 'KNOWLEDGE',
+          item_ratings: [{ value: 0, trend: '' }, { value: 1, trend: 'up' }, { value: 3, trend: 'up' }, ''],
+        },
+      ],
+    },
+    {
       code: 'TRM',
       under_six: true,
       above_six: false,
@@ -875,33 +902,6 @@ export const fourAssessmentCrossingAge = {
             { value: 1, trend: '' },
             { value: 1, trend: '' },
           ],
-        },
-      ],
-    },
-    {
-      code: 'CGV',
-      caregiver_index: 'a',
-      under_six: true,
-      above_six: false,
-      ratting_totals: [10, 8, 6, ''],
-      items: [
-        {
-          under_six_id: 'E34',
-          above_six_id: '41',
-          code: 'SUPERVISION',
-          item_ratings: [{ value: 0, trend: '' }, { value: 2, trend: 'up' }, { value: 2, trend: '' }, ''],
-        },
-        {
-          under_six_id: 'E35',
-          above_six_id: '42',
-          code: 'INVOLVEMENT_WITH_CARE',
-          item_ratings: [{ value: 1, trend: '' }, { value: 2, trend: 'up' }, { value: 0, trend: 'down' }, ''],
-        },
-        {
-          under_six_id: 'E36',
-          above_six_id: '43',
-          code: 'KNOWLEDGE',
-          item_ratings: [{ value: 0, trend: '' }, { value: 1, trend: 'up' }, { value: 3, trend: 'up' }, ''],
         },
       ],
     },

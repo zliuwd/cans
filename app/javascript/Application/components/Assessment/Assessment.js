@@ -162,7 +162,6 @@ class Assessment extends Component {
     const isUnderSix = assessmentJson.under_six
     const domains = assessmentJson.domains
     const { isDefaultExpanded } = this.state
-    console.log(domains)
     return (
       <Fragment>
         {!(isUnderSix === null || isUnderSix === undefined) ? (
