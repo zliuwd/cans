@@ -26,7 +26,7 @@ describe(' ClientSocialWorkerCardTempate ', () => {
     expect(expectedFullNameHeader).toEqual('Client Name')
     expect(expectedDoBHeader).toEqual('DOB')
     expect(expectedStatusHeader).toEqual('CANS Status')
-    expect(expectedReminderDateHeader).toEqual('Reminder Date')
+    expect(expectedReminderDateHeader).toEqual('Reassessment Reminder Date')
   })
 
   it('all accessor works', () => {

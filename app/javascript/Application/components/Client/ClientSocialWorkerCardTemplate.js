@@ -38,8 +38,8 @@ and meet the setting rules of reactTable at same time */
       sortable: true,
     },
     {
-      id: 'Reminder Date',
-      Header: 'Reminder Date',
+      id: 'Reassessment Reminder Date',
+      Header: 'Reassessment Reminder Date',
       headerStyle: {
         textAlign: 'center',
       },
