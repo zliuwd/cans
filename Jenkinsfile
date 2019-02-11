@@ -194,19 +194,27 @@ def regressionDevTestStage() {
   }
 }
 
-def runRegressionDevTests(environmentVariables) {
+def runRegressionDevTests(environmentVariables, smokeTest = false) {
   try {
-    sh "docker-compose -f docker-compose.ci.yml exec -T ${environmentVariables} --env TZ=US/Pacific cans-test bundle exec rspec spec/regression --format html --out regression-report/index.html"
+    command = "docker-compose -f docker-compose.ci.yml exec -T ${environmentVariables} --env TZ=US/Pacific cans-test bundle exec rspec spec/regression"
+    if( smokeTest ) {
+      command = "${command} --tag smoke"
+    } else {
+      command = "${command} --format html --out regression-report/index.html"
+    }
+    sh command
   } finally {
-    publishHTML([
-              allowMissing         : true,
-              alwaysLinkToLastBuild: true,
-              keepAll              : true,
-              reportDir            : 'regression-report',
-              reportFiles          : 'index.html',
-              reportName           : 'Regression Tests Dev',
-              reportTitles         : 'Regression Tests Dev'
-    ])
+    if ( !smokeTest ) {
+      publishHTML([
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : 'regression-report',
+                reportFiles          : 'index.html',
+                reportName           : 'Regression Tests Dev',
+                reportTitles         : 'Regression Tests Dev'
+      ])
+    }
   }
 }
 
@@ -227,17 +235,17 @@ def tagRepo() {
   }
 }
 
-def acceptanceTestPreintStage() {
-  stage('Regression Test Preint') {
+def acceptanceTestPreintStage(stageName, smokeTest = false) {
+  stage(stageName) {
     withDockerRegistry([credentialsId: JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID]) {
       sh "docker-compose -f docker-compose.ci.yml up -d --build cans-test"
-      runRegressionDevTests('--env CANS_WEB_BASE_URL=https://cans.preint.cwds.io/cans')
+      runRegressionDevTests('--env CANS_WEB_BASE_URL=https://cans.preint.cwds.io/cans', smokeTest)
     }
   }
 }
 
-def regressionTestStage(environmentVariables) {
-  stage('Regression Test') {
+def regressionTestStage(environmentVariables, stageName = 'Regression Test', smokeTest = false) {
+  stage(stageName) {
     withDockerRegistry([credentialsId: JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID]) {
       withCredentials([
         string(credentialsId: 'cans-supervisor-username', variable: 'SUPERVISOR_USERNAME'),
@@ -252,17 +260,25 @@ def regressionTestStage(environmentVariables) {
         ]) {        
         sh "docker-compose -f docker-compose.ci.yml up -d --build cans-test"
         try {
-          sh "docker-compose -f docker-compose.ci.yml exec -T --env NON_CASEWORKER_USERNAME=$NON_CASEWORKER_USERNAME --env NON_CASEWORKER_PASSWORD=$NON_CASEWORKER_PASSWORD --env NON_CASEWORKER_VERIFICATION_CODE=$NON_CASEWORKER_VERIFICATION_CODE --env SUPERVISOR_USERNAME=$SUPERVISOR_USERNAME --env SUPERVISOR_PASSWORD=$SUPERVISOR_PASSWORD --env SUPERVISOR_VERIFICATION_CODE=$SUPERVISOR_VERIFICATION_CODE --env CASEWORKER_USERNAME=$CASEWORKER_USERNAME --env CASEWORKER_PASSWORD=$CASEWORKER_PASSWORD --env CASEWORKER_VERIFICATION_CODE=$CASEWORKER_VERIFICATION_CODE --env PROD_LOGIN=true ${environmentVariables} cans-test bundle exec rspec spec/regression --format html --out regression-report/index.html"
+          command = "docker-compose -f docker-compose.ci.yml exec -T --env NON_CASEWORKER_USERNAME=$NON_CASEWORKER_USERNAME --env NON_CASEWORKER_PASSWORD=$NON_CASEWORKER_PASSWORD --env NON_CASEWORKER_VERIFICATION_CODE=$NON_CASEWORKER_VERIFICATION_CODE --env SUPERVISOR_USERNAME=$SUPERVISOR_USERNAME --env SUPERVISOR_PASSWORD=$SUPERVISOR_PASSWORD --env SUPERVISOR_VERIFICATION_CODE=$SUPERVISOR_VERIFICATION_CODE --env CASEWORKER_USERNAME=$CASEWORKER_USERNAME --env CASEWORKER_PASSWORD=$CASEWORKER_PASSWORD --env CASEWORKER_VERIFICATION_CODE=$CASEWORKER_VERIFICATION_CODE --env PROD_LOGIN=true ${environmentVariables} cans-test bundle exec rspec spec/regression"
+          if( smokeTest ) {
+            command = "${command} --tag smoke"
+          } else {
+            command = "${command} --format html --out regression-report/index.html"
+          }
+          sh command
         } finally {
-          publishHTML([
-                   allowMissing         : true,
-                   alwaysLinkToLastBuild: true,
-                   keepAll              : true,
-                   reportDir            : 'regression-report',
-                   reportFiles          : 'index.html',
-                   reportName           : 'Regression Tests Prod',
-                   reportTitles         : 'Regression Tests Prod'
-          ])
+          if( !smokeTest ) {
+            publishHTML([
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : 'regression-report',
+                    reportFiles          : 'index.html',
+                    reportName           : 'Regression Tests Prod',
+                    reportTitles         : 'Regression Tests Prod'
+            ])
+          }
         }
       }
     }
@@ -319,8 +335,9 @@ def releaseToEnvironment(environment) {
     checkoutStage()
     deployToStage(environment, env.APP_VERSION)
     updateManifestStage(environment, env.APP_VERSION)
+    smokeTestStage(environment)
     switch(environment) {
-      case "preint": acceptanceTestPreintStage(); break;
+      case "preint": acceptanceTestPreintStage('Regression Test Preint'); break;
       case "integration": regressionTestStage('--env CANS_WEB_BASE_URL=https://web.integration.cwds.io/cans'); break;
       default: echo "No tests for run for $environment"
     }
@@ -339,5 +356,13 @@ def deployToStage(environment, version) {
 def updateManifestStage(environment, version) {
   stage("Update $environment Manifest Version") {
     updateManifest("cans", environment, GITHUB_CREDENTIALS_ID, version)
+  }
+}
+
+def smokeTestStage(environment) {
+  if (environment == 'preint') {
+    acceptanceTestPreintStage('Smoke Test Preint', true);
+  } else {
+    regressionTestStage('--env CANS_WEB_BASE_URL=https://web.integration.cwds.io/cans', 'Smoke Test Integration', true);
   }
 }
