@@ -1,4 +1,4 @@
-export const data = {
+export const fiveAssessmentWithCaregiverChange = {
   date_info: [
     { date: '10/10/2016', status: '' },
     { date: '04/11/2017', status: '' },
@@ -440,25 +440,25 @@ export const data = {
       caregiver_name: 'Seaver',
       under_six: true,
       above_six: false,
-      ratting_totals: [10, 8],
+      ratting_totals: [10, 8, 6, '', ''],
       items: [
         {
           under_six_id: 'E34',
           above_six_id: '41',
           code: 'SUPERVISION',
-          item_ratings: [{ value: 0, trend: '' }, { value: 2, trend: '' }],
+          item_ratings: [{ value: 0, trend: '' }, { value: 2, trend: 'up' }, { value: 2, trend: '' }, '', ''],
         },
         {
           under_six_id: 'E35',
           above_six_id: '42',
           code: 'INVOLVEMENT_WITH_CARE',
-          item_ratings: [{ value: 1, trend: '' }, { value: 2, trend: '' }],
+          item_ratings: [{ value: 1, trend: '' }, { value: 2, trend: 'up' }, { value: 0, trend: 'down' }, '', ''],
         },
         {
           under_six_id: 'E36',
           above_six_id: '43',
           code: 'KNOWLEDGE',
-          item_ratings: [{ value: 0, trend: '' }, { value: 1, trend: '' }],
+          item_ratings: [{ value: 0, trend: '' }, { value: 1, trend: 'up' }, { value: 3, trend: 'up' }],
         },
       ],
     },
@@ -467,25 +467,25 @@ export const data = {
       caregiver_name: 'Kirk Camero',
       under_six: true,
       above_six: false,
-      ratting_totals: [13],
+      ratting_totals: ['', '', '', 13, 7],
       items: [
         {
           under_six_id: 'E34',
           above_six_id: '41',
           code: 'SUPERVISION',
-          item_ratings: [{ value: 0, trend: '' }],
+          item_ratings: ['', '', '', { value: 1, trend: '' }, { value: 0, trend: '' }],
         },
         {
           under_six_id: 'E35',
           above_six_id: '42',
           code: 'INVOLVEMENT_WITH_CARE',
-          item_ratings: [{ value: 1, trend: '' }],
+          item_ratings: ['', '', '', { value: 0, trend: '' }, { value: 2, trend: '' }],
         },
         {
           under_six_id: 'E36',
           above_six_id: '43',
           code: 'KNOWLEDGE',
-          item_ratings: [{ value: 0, trend: '' }],
+          item_ratings: ['', '', '', { value: 0, trend: '' }, { value: 3, trend: '' }],
         },
       ],
     },

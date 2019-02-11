@@ -105,6 +105,7 @@ class ComparisionOuterTable extends React.Component {
     const domains = this.props.data.domains
     return (
       <DataGrid
+        className={'comparision-grid'}
         columns={domainCmparisionTableTemplate}
         data={domains}
         sortable={true}

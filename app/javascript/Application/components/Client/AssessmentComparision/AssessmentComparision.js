@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
-import { data } from './fakeComparisionData.js'
+import { fiveAssessmentWithCaregiverChange } from './fakeComparisionData.js'
 import ComparisionOuterTable from './ComparisionOuterTable'
 
 class AssessmentComparision extends Component {
   constructor(props) {
     super(props)
-    this.state = { data: data }
+    this.state = { data: fiveAssessmentWithCaregiverChange }
   }
   render() {
     const data = this.state.data
