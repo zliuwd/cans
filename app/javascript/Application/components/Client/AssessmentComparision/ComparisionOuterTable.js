@@ -62,6 +62,9 @@ class ComparisionOuterTable extends React.Component {
         if (domain.code === 'TRM') {
           return 'PTACE'
         }
+        if (domain.code === 'STR') {
+          return `${domainTitle}(6 to 21)`
+        }
         if (domain.code === 'CGV' && domain.caregiver_name) {
           return `${domainTitle}-${domain.caregiver_index}-${domain.caregiver_name}`
         } else if (domain.code === 'CGV') {

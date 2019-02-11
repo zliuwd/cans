@@ -627,6 +627,56 @@ export const fourAssessmentCrossingAge = {
       ],
     },
     {
+      code: 'EST',
+      under_six: false,
+      above_six: true,
+      ratting_totals: [8, 15, '', ''],
+      items: [
+        {
+          under_six_id: 'ec25',
+          above_six_id: '',
+          code: 'FAMILY_STRENGTHS',
+          item_ratings: [{ value: 1, trend: '' }, { value: 2, trend: 'up' }, '', ''],
+        },
+        {
+          under_six_id: 'ec26',
+          above_six_id: '',
+          code: 'INTERPERSONAL',
+          item_ratings: [{ value: 2, trend: '' }, { value: 1, trend: 'down' }, '', ''],
+        },
+        {
+          under_six_id: 'ec27',
+          above_six_id: '',
+          code: 'NATURAL_SUPPORTS',
+          item_ratings: [{ value: 1, trend: '' }, { value: 3, trend: 'up' }, '', ''],
+        },
+        {
+          under_six_id: 'ec28',
+          above_six_id: '',
+          code: 'RESILIENCY',
+          item_ratings: [{ value: 1, trend: 'down' }, { value: 2, trend: 'up' }, '', ''],
+        },
+        {
+          under_six_id: 'ec29',
+          above_six_id: '',
+          code: 'RELATIONSHIP_PERMANENCE',
+          item_ratings: [{ value: 0, trend: '' }, { value: 1, trend: 'up' }, '', ''],
+        },
+        {
+          under_six_id: 'ec30',
+          above_six_id: '',
+          code: 'PLAYFULLNESS',
+          item_ratings: [{ value: 3, trend: 'up' }, { value: 1, trend: 'down' }, '', ''],
+        },
+        {
+          under_six_id: 'ec31',
+          above_six_id: '',
+          code: 'FAMILY_SPRITUAL_RELIGIOUS',
+          item_ratings: [{ value: 1, trend: '' }, { value: 1, trend: '' }, '', ''],
+        },
+      ],
+    },
+    {
       code: 'STR',
       under_six: false,
       above_six: true,
@@ -641,7 +691,7 @@ export const fourAssessmentCrossingAge = {
         {
           under_six_id: '',
           above_six_id: '33',
-          code: 'INTERPERSONA',
+          code: 'INTERPERSONAL',
           item_ratings: ['', '', { value: 2, trend: 'down' }, { value: 3, trend: 'up' }],
         },
         {
