@@ -16,6 +16,8 @@ import HasCaregiverQuestion from './AssessmentFormHeader/HasCaregiverQuestion'
 import ConfidentialityAlert from './AssessmentFormHeader/ConfidentialityAlert'
 import UnderSixQuestion from './AssessmentFormHeader/UnderSixQuestion'
 import { Card, CardHeader, CardContent } from '@material-ui/core'
+import { calculateDateDifferenceInYears, isoToLocalDate, isValidDate } from '../../util/dateHelper'
+import moment from 'moment/moment'
 
 class AssessmentFormHeader extends PureComponent {
   handleValueChange = event => this.changeFieldAndUpdateAssessment(event.target.name, event.target.value)
@@ -57,17 +59,42 @@ class AssessmentFormHeader extends PureComponent {
   }
 
   renderClientName() {
-    const { first_name: firstName, last_name: lastName } = this.props.client
+    const { first_name: firstName, last_name: lastName, dob, estimated_dob: estimatedDob } = this.props.client
     return (
-      <div className={'child-name-block'}>
+      <div>
         {firstName && lastName ? (
-          <span id={'child-name'}>{formatClientName(this.props.client)}</span>
+          <div>
+            <div className={'child-name-block'}>
+              <span id={'child-name'}>{formatClientName(this.props.client)}</span>
+            </div>
+            <div>
+              <span id={'child-age'}>{this.formatClientAge(dob)}</span>
+            </div>
+            <div>
+              <span id={'child-dob'}>{this.formatClientDob(dob, estimatedDob)}</span>
+            </div>
+          </div>
         ) : (
-          <span id={'no-data'}>Client Info</span>
+          <div className={'child-name-block'}>
+            <span id={'no-data'}>Client Info</span>
+          </div>
         )}
       </div>
     )
   }
+
+  formatClientAge(dob) {
+    return isValidDate(dob) ? `${calculateDateDifferenceInYears(dob, this.getCurrentDate())} years old` : ''
+  }
+
+  getCurrentDate() {
+    return moment()
+  }
+
+  formatClientDob(dob, estimatedDob) {
+    return isValidDate(dob) ? `DOB: ${isoToLocalDate(dob)}${estimatedDob ? ' (approx.)' : ''}` : ''
+  }
+
   renderCounty() {
     const county = this.props.assessment.county || {}
     const countyName = county.name ? `${county.name} County` : ''

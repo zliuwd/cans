@@ -9,7 +9,9 @@ import {
   isValidDate,
   isValidLocalDate,
   localToIsoDateOrNull,
+  calculateDateDifferenceInYears,
 } from './dateHelper'
+import moment from 'moment'
 
 describe('#isoToLocalDate()', () => {
   it('returns a formatted date', () => {
@@ -184,5 +186,34 @@ describe('#localToIsoDateOrNull()', () => {
 
   it('returns iso date if pass valid Local date', () => {
     expect(localToIsoDateOrNull('12/31/2018')).toEqual('2018-12-31')
+  })
+})
+
+describe('#calculateDateDifferenceInYears()', () => {
+  it('returns null if pass invalid dates', () => {
+    expect(calculateDateDifferenceInYears('', '')).toEqual(null)
+    expect(calculateDateDifferenceInYears('12/31/____', '')).toEqual(null)
+    expect(calculateDateDifferenceInYears(null, null)).toEqual(null)
+    expect(calculateDateDifferenceInYears(null, moment('2019-02-08'))).toEqual(null)
+    expect(calculateDateDifferenceInYears('01/15/2016', '02/08/2019')).toEqual(null)
+  })
+
+  it('returns date difference in years if passing valid moment date', () => {
+    expect(calculateDateDifferenceInYears(moment('2018-12-31'), moment('2019-02-08'))).toEqual(0)
+    expect(calculateDateDifferenceInYears(moment('2017-12-31'), moment('2019-02-08'))).toEqual(1)
+    expect(calculateDateDifferenceInYears(moment('1981-12-31'), moment('2019-02-08'))).toEqual(37)
+  })
+
+  it('returns date difference in years if passing valid JS Date', () => {
+    expect(calculateDateDifferenceInYears(moment('2018-12-31').toDate(), moment('2019-02-08').toDate())).toEqual(0)
+    expect(calculateDateDifferenceInYears(moment('2017-12-31').toDate(), moment('2019-02-08').toDate())).toEqual(1)
+    expect(calculateDateDifferenceInYears(moment('1981-12-31').toDate(), moment('2019-02-08').toDate())).toEqual(37)
+  })
+
+  it('returns date difference in years if passing valid ISO dates in String format', () => {
+    expect(calculateDateDifferenceInYears('2018-12-31', '2019-02-08')).toEqual(0)
+    expect(calculateDateDifferenceInYears('2007-07-14', '2019-02-08')).toEqual(11)
+    expect(calculateDateDifferenceInYears('1981-12-26', '2019-02-08')).toEqual(37)
+    expect(calculateDateDifferenceInYears('2012-02-29', '2019-02-08')).toEqual(6)
   })
 })

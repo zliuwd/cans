@@ -29,6 +29,7 @@ feature 'Case Worker Functionality' do
   scenario 'Form Header, Domain, and Item common functionalities test' do
     visit '/'
     create_new_assessment(CLIENT_NAME)
+    validate_child_dob_and_age('01/03/2013')
     input_date_and_calendar_icon_test(current_date)
     fill_conducted_by_field('Mike Seaver')
     check_case_or_referral_number
@@ -87,6 +88,18 @@ feature 'Case Worker Functionality' do
     caregiver_domain_name_and_item_rating_test
     has_caregiver_domain_option_yes_to_no_test
     save_and_check_the_success_message
+  end
+
+  def validate_child_dob_and_age(dob)
+    expect(@form.header.child_dob).to have_content('DOB: ' + dob)
+    expect(@form.header.child_age).to have_content(age(dob).to_s + ' years old')
+  end
+
+  def age(dob_string)
+    now = Time.now.utc.to_date
+    dob = Date.strptime(dob_string, '%m/%d/%Y')
+    adjustment = now.month > dob.month || (now.month == dob.month && now.day >= dob.day) ? 0 : 1
+    now.year - dob.year - adjustment
   end
 
   def eliminate_auto_scroll_impact

@@ -1,15 +1,18 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
 import { AssessmentFormHeader } from './index'
-import { assessment, client } from './assessment.mocks.test'
+import { assessment, client, clientWithEstimatedDob } from './assessment.mocks.test'
 import { clone } from '../../util/common'
 import ConductedByField from './AssessmentFormHeader/ConductedByField'
 import ConfidentialityAlert from './AssessmentFormHeader/ConfidentialityAlert'
 import UnderSixQuestion from './AssessmentFormHeader/UnderSixQuestion'
 import { Card, CardHeader, CardContent } from '@material-ui/core'
+import moment from 'moment'
 
 describe('<AssessmentFormHeader />', () => {
   const defaultProps = { assessment, client, onAssessmentUpdate: jest.fn() }
+  const propsWithEstimatedDob = { assessment, client: clientWithEstimatedDob, onAssessmentUpdate: jest.fn() }
+
   it('renders with 1 <ConductedByField> component', () => {
     const wrapper = shallow(<AssessmentFormHeader {...defaultProps} />)
     expect(wrapper.find(ConductedByField).exists()).toBe(true)
@@ -219,19 +222,46 @@ describe('<AssessmentFormHeader />', () => {
   })
 
   describe('with client', () => {
+    const defaultWrapper = shallow(<AssessmentFormHeader {...defaultProps} />)
+    const defaultHeaderTitle = shallow(defaultWrapper.find(CardHeader).props().title)
+
     it('displays correct client name', () => {
-      const wrapper = shallow(<AssessmentFormHeader {...defaultProps} />)
+      expect(defaultHeaderTitle.find('#child-name').text()).toBe('Doe, John')
+    })
+
+    it('displays client date of birth', () => {
+      expect(defaultHeaderTitle.find('#child-dob').text()).toBe('DOB: 07/14/2007')
+    })
+
+    it('displays approximate date of birth', () => {
+      const wrapper = shallow(<AssessmentFormHeader {...propsWithEstimatedDob} />)
       const headerTitle = shallow(wrapper.find(CardHeader).props().title)
-      expect(headerTitle.find('#child-name').text()).toBe('Doe, John')
+      expect(headerTitle.find('#child-dob').text()).toBe('DOB: 07/14/2007 (approx.)')
+    })
+
+    it('displays client age', () => {
+      const instance = defaultWrapper.instance()
+      const getCurrentDate = jest.spyOn(instance, 'getCurrentDate')
+      getCurrentDate.mockReturnValue(moment('2019-02-08'))
+      instance.forceUpdate()
+      const headerTitle = shallow(defaultWrapper.find(CardHeader).props().title)
+      expect(headerTitle.find('#child-age').text()).toBe('11 years old')
     })
   })
 
   describe('with no client', () => {
+    const props = { assessment, client: {}, onAssessmentUpdate: jest.fn() }
+    const wrapper = shallow(<AssessmentFormHeader {...props} />)
+    const headerTitle = shallow(wrapper.find(CardHeader).props().title)
+
     it('displays default message', () => {
-      const props = { assessment, client: {}, onAssessmentUpdate: jest.fn() }
-      const wrapper = shallow(<AssessmentFormHeader {...props} />)
-      const headerTitle = shallow(wrapper.find(CardHeader).props().title)
       expect(headerTitle.find('#no-data').text()).toBe('Client Info')
+    })
+
+    it('do not displays child name, age and DOB', () => {
+      expect(headerTitle.find('#child-name').length).toBe(0)
+      expect(headerTitle.find('#child-age').length).toBe(0)
+      expect(headerTitle.find('#child-dob').length).toBe(0)
     })
   })
 

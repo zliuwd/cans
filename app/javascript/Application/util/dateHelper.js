@@ -115,3 +115,17 @@ export function localToIsoDateOrNull(str) {
   }
   return null
 }
+
+/**
+ * Calculates date differece in years
+ * @param startDate Valid start date (ISO date string, moment or JS Date)
+ * @param endDate Valid end date  (ISO date string, moment or JS Date)
+ * @returns {number}
+ */
+export function calculateDateDifferenceInYears(startDate, endDate) {
+  if (!isValidIsoDate(startDate) || !isValidIsoDate(endDate)) {
+    return null
+  }
+  const duration = moment.duration(moment(endDate).diff(moment(startDate)))
+  return Math.floor(duration.asYears())
+}
