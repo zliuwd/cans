@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { DataGrid } from '@cwds/components'
 import { gridMinRows } from '../../../util/DataGridHelper'
 import ComparisionInnerTable from './ComparisionInnerTable'
-import { commonStyle, verticalCenter, CP_TABLE_COL_WIDTHS } from './comparisionHelper'
+import { commonStyle, verticalCenter, CP_TABLE_COL_WIDTHS, getTitle } from './comparisionHelper'
+
 import './style.sass'
 
 class ComparisionOuterTable extends React.Component {
@@ -40,7 +41,14 @@ class ComparisionOuterTable extends React.Component {
 
   renderSubComponent = props => {
     const counter = props.original.items[0].item_ratings
-    return <ComparisionInnerTable domainCode={props.original.code} items={props.original.items} counter={counter} />
+    return (
+      <ComparisionInnerTable
+        domainCode={props.original.code}
+        items={props.original.items}
+        counter={counter}
+        i18n={this.props.i18n}
+      />
+    )
   }
 
   render() {
@@ -50,12 +58,16 @@ class ComparisionOuterTable extends React.Component {
       width: CP_TABLE_COL_WIDTHS.DOMAIN_NAME,
       Header: 'Domain Name',
       accessor: domain => {
-        if (domain.code === 'CGV' && domain.caregiver_name) {
-          return `${domain.code}-${domain.caregiver_index}-${domain.caregiver_name}`
-        } else if (domain.code === 'CGV') {
-          return `${domain.code}-${domain.caregiver_index}`
+        const domainTitle = getTitle(this.props.i18n, domain.code)
+        if (domain.code === 'TRM') {
+          return 'PTACE'
         }
-        return domain.code
+        if (domain.code === 'CGV' && domain.caregiver_name) {
+          return `${domainTitle}-${domain.caregiver_index}-${domain.caregiver_name}`
+        } else if (domain.code === 'CGV') {
+          return `${domainTitle}-${domain.caregiver_index}`
+        }
+        return domainTitle
       },
       style: {
         height: '5rem',

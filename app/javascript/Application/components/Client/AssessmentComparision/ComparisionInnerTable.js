@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { DataGrid } from '@cwds/components'
 import { gridMinRows } from '../../../util/DataGridHelper'
-import { commonStyle, CP_TABLE_COL_WIDTHS } from './comparisionHelper'
+import { commonStyle, CP_TABLE_COL_WIDTHS, getTitle } from './comparisionHelper'
 import './style.sass'
 
 class ComparisionInnerTable extends React.Component {
@@ -62,7 +62,8 @@ class ComparisionInnerTable extends React.Component {
       id: 'itemName',
       width: CP_TABLE_COL_WIDTHS.ITEM_NAME,
       accessor: item => {
-        return item.code
+        const itemTitle = getTitle(this.props.i18n, item.code)
+        return itemTitle
       },
       className: 'inner-item-name-content',
     }

@@ -172,6 +172,7 @@ export default class AssessmentContainer extends Component {
 
   onFetchAssessmentSuccess(assessment) {
     this.updateAssessment(assessment)
+    console.log(assessment)
     this.fetchI18n(assessment.instrument_id)
   }
 

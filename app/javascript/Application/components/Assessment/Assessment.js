@@ -174,8 +174,8 @@ class Assessment extends Component {
             <CardBody>
               {domains.map((domain, index) => {
                 const { id, code } = domain
-                console.log(domain)
                 const domainI18n = getI18nByCode(i18n, code)
+                console.log(domainI18n)
                 return (
                   <Domain
                     index={index}
