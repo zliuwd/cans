@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
-import { fiveAssessmentWithCaregiverChange } from './fakeComparisionData.js'
+import { fiveAssessmentWithCaregiverChange, fourAssessmentCrossingAge } from './fakeComparisionData.js'
 import ComparisionOuterTable from './ComparisionOuterTable'
 
 class AssessmentComparision extends Component {
