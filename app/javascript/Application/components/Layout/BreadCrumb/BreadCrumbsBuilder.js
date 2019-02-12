@@ -31,7 +31,7 @@ class BreadCrumbsBuilder extends React.Component {
     Pipeline.addClientSearchCrumbIfNeeded(elements, navigateTo)
     Pipeline.addChildYouthListCrumbIfNeeded(elements, navigateTo)
 
-    if (subordinate) {
+    if (subordinate && client) {
       Pipeline.addStaffChildProfileCrumbIfNeeded(elements, navigateTo, client, this.props.subordinate.staff_person)
     }
     if (client) {

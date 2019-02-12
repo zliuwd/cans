@@ -1,19 +1,19 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { navigation } from '../../util/constants'
-import ChildListPage from './ChildListPage'
-import { CurrentUserCaseLoadPage } from '../Staff'
+import StaffListPage from './StaffListPage'
+import { SupervisorDashboard } from '../Staff'
 import ContextualBreadCrumb from '../Layout/BreadCrumb/ContextualBreadCrumb'
 import { buildSearchClientsButton as SearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
 import VisitLogger from './VisitLogger'
 import FullWidthLayout from '../Layout/FullWidthLayout'
 
-describe('Child List Page', () => {
-  const render = () => shallow(<ChildListPage />)
+describe('Staff List Page', () => {
+  const render = () => shallow(<StaffListPage />)
 
-  it('renders a body of CurrentUserCaseLoadPage', () => {
+  it('renders a body of SupervisorDashboard', () => {
     const body = render().find(FullWidthLayout)
-    expect(body.find(CurrentUserCaseLoadPage).exists()).toBe(true)
+    expect(body.find(SupervisorDashboard).exists()).toBe(true)
   })
 
   it('renders a breadcrumb with current user info', () => {
@@ -21,7 +21,7 @@ describe('Child List Page', () => {
       .find(FullWidthLayout)
       .props().breadcrumb
     expect(breadcrumb.type).toBe(ContextualBreadCrumb)
-    expect(breadcrumb.props.navigateTo).toBe(navigation.CHILD_LIST)
+    expect(breadcrumb.props.navigateTo).toBe(navigation.STAFF_LIST)
   })
 
   it('renders a Search button', () => {
@@ -32,6 +32,6 @@ describe('Child List Page', () => {
   it('logs the dashboard visit to NewRelic', () => {
     const visitLogger = render().find(VisitLogger)
     expect(visitLogger.exists()).toBe(true)
-    expect(visitLogger.props().dashboard).toBe(navigation.CHILD_LIST)
+    expect(visitLogger.props().dashboard).toBe(navigation.STAFF_LIST)
   })
 })

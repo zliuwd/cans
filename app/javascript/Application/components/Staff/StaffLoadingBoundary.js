@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import StaffService from '../../Staff.service'
-import LoadingBoundary from '../../../common/LoadingBoundary'
+import StaffService from './Staff.service'
+import LoadingBoundary from '../common/LoadingBoundary'
 
 class StaffLoadingBoundary extends React.Component {
   state = {}
@@ -18,7 +18,7 @@ class StaffLoadingBoundary extends React.Component {
 
   render() {
     return (
-      <LoadingBoundary childNodeFetchedPropName={'staffInfo'} fetch={this.state.fetch}>
+      <LoadingBoundary childNodeFetchedPropName={'staffInfo'} fetch={this.state.fetch} isHiddenWhileLoading={false}>
         {this.props.children}
       </LoadingBoundary>
     )

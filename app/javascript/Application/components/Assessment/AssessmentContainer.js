@@ -43,7 +43,7 @@ export default class AssessmentContainer extends Component {
       i18n: {},
       isValidForSubmit: false,
       shouldRedirectToClientProfile: false,
-      isEditable: !props.disabled,
+      isEditable: false,
       isValidDate: true,
       isEventDateBeforeDob: false,
       isSaveButtonEnabled: false,
@@ -375,7 +375,6 @@ export default class AssessmentContainer extends Component {
 
 AssessmentContainer.propTypes = {
   client: PropTypes.object.isRequired,
-  disabled: PropTypes.bool,
   history: PropTypes.object,
   match: PropTypes.object,
   pageHeaderButtonsController: PropTypes.shape({
@@ -385,7 +384,6 @@ AssessmentContainer.propTypes = {
 }
 
 AssessmentContainer.defaultProps = {
-  disabled: false,
   match: {
     params: {},
   },

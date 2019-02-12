@@ -3,19 +3,19 @@ import { shallow } from 'enzyme'
 import { Container, Col, Row } from 'reactstrap'
 import Sticker from 'react-stickyfill'
 import ReactWoodDuckLayout from './ReactWoodDuckLayout'
-import { PageHeader } from '../Header'
+import { Header, PageHeader } from '../Header'
 import { navigation } from '../../util/constants'
 import { GlobalAlert } from '../common'
 
 describe('ReactWoodDuckLayout', () => {
-  const render = ({
-    breadcrumb = null,
-    children = null,
-    navigateTo = navigation.CHILD_LIST,
-    rightButton = null,
-  } = {}) =>
+  const render = ({ breadcrumb, leftButton, children, navigateTo = navigation.CHILD_LIST, rightButton } = {}) =>
     shallow(
-      <ReactWoodDuckLayout breadcrumb={breadcrumb} navigateTo={navigateTo} rightButton={rightButton}>
+      <ReactWoodDuckLayout
+        breadcrumb={breadcrumb}
+        leftButton={leftButton}
+        navigateTo={navigateTo}
+        rightButton={rightButton}
+      >
         {children}
       </ReactWoodDuckLayout>
     )
@@ -28,9 +28,20 @@ describe('ReactWoodDuckLayout', () => {
       .find(Row)
       .find(Col)
 
+  it('has a global Header', () => {
+    const page = render()
+    expect(page.find(Header).exists()).toBe(true)
+  })
+
   it('has a PageHeader', () => {
     const page = render()
     expect(page.find(PageHeader).exists()).toBe(true)
+  })
+
+  it('renders the leftButton in the PageHeader', () => {
+    const leftButton = <div id="my-div" />
+    const page = render({ leftButton })
+    expect(page.find(PageHeader).props().leftButton).toBe(leftButton)
   })
 
   it('renders the rightButton in the PageHeader', () => {

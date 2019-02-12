@@ -2,13 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Sticker from 'react-stickyfill'
 import { Container, Col, Row } from 'reactstrap'
-import { PageHeader } from '../Header'
+import { Header, PageHeader } from '../Header'
 import { GlobalAlert } from '../common'
 import { navigation } from '../../util/constants'
 
-const ReactWoodDuckLayout = ({ breadcrumb, children, navigateTo, rightButton }) => (
+const ReactWoodDuckLayout = ({ breadcrumb, children, leftButton, navigateTo, rightButton }) => (
   <React.Fragment>
-    <PageHeader navigateTo={navigateTo} rightButton={rightButton} />
+    <Header />
+    <PageHeader leftButton={leftButton} navigateTo={navigateTo} rightButton={rightButton} />
     <Sticker>
       <div className="sticky breadcrumb-container">
         {breadcrumb}
@@ -29,12 +30,14 @@ const ReactWoodDuckLayout = ({ breadcrumb, children, navigateTo, rightButton }) 
 ReactWoodDuckLayout.propTypes = {
   breadcrumb: PropTypes.node,
   children: PropTypes.node,
+  leftButton: PropTypes.node,
   navigateTo: PropTypes.oneOf(Object.values(navigation)).isRequired,
   rightButton: PropTypes.node,
 }
 
 ReactWoodDuckLayout.defaultProps = {
   breadcrumb: null,
+  leftButton: null,
   children: null,
   rightButton: null,
 }

@@ -1,10 +1,10 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import CurrentUserLoadingBoundary from './CurrentUserLoadingBoundary'
-import LoadingBoundary from '../common/LoadingBoundary'
-import UserAccountService from '../common/UserAccountService'
+import LoadingBoundary from './LoadingBoundary'
+import UserAccountService from './UserAccountService'
 
-jest.mock('../common/UserAccountService')
+jest.mock('./UserAccountService')
 
 describe('<CurrentUserLoadingBoundary />', () => {
   const render = () =>

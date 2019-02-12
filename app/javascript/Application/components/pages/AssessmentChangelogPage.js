@@ -1,16 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { navigation } from '../../util/constants'
-import ChildProfilePageInner from './ChildProfilePageInner'
+import AssessmentChangelogPageInner from './AssessmentChangelogPageInner'
 import ClientLoadingBoundary from './ClientLoadingBoundary'
 
-const ChildProfilePage = ({ match, navigateTo, staffInfo }) => (
+const AssessmentChangelogPage = ({ match, navigateTo, staffInfo }) => (
   <ClientLoadingBoundary clientId={match.params.clientId}>
-    <ChildProfilePageInner match={match} navigateTo={navigateTo} staffInfo={staffInfo} />
+    <AssessmentChangelogPageInner match={match} navigateTo={navigateTo} staffInfo={staffInfo} />
   </ClientLoadingBoundary>
 )
 
-ChildProfilePage.propTypes = {
+AssessmentChangelogPage.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       staffId: PropTypes.string,
@@ -22,9 +22,9 @@ ChildProfilePage.propTypes = {
   staffInfo: PropTypes.any,
 }
 
-ChildProfilePage.defaultProps = {
+AssessmentChangelogPage.defaultProps = {
   staffInfo: null,
-  navigateTo: navigation.CHILD_PROFILE,
+  navigateTo: navigation.ASSESSMENT_CHANGELOG,
 }
 
-export default ChildProfilePage
+export default AssessmentChangelogPage

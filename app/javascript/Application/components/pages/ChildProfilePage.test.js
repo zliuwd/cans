@@ -2,69 +2,44 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { navigation } from '../../util/constants'
 import ChildProfilePage from './ChildProfilePage'
-import { Client } from '../Client'
-import CurrentUserLoadingBoundary from './CurrentUserLoadingBoundary'
-import BreadCrumbsBuilder from '../Layout/BreadCrumb/BreadCrumbsBuilder'
-import { buildSearchClientsButton as SearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
-import FullWidthLayout from '../Layout/FullWidthLayout'
+import ClientLoadingBoundary from './ClientLoadingBoundary'
+import ChildProfilePageInner from './ChildProfilePageInner'
 
-describe('Child Profile Page', () => {
-  const defaultProps = { match: { params: { staffId: 'ABC' }, url: '/my/url' } }
-  const render = props => shallow(<ChildProfilePage {...props} />)
-
-  it('renders a breadcrumb with current user info', () => {
-    const breadcrumbElement = render(defaultProps)
-      .find(FullWidthLayout)
-      .props().breadcrumb
-    expect(breadcrumbElement.type).toBe(CurrentUserLoadingBoundary)
-    const breadcrumb = breadcrumbElement.props.children
-    expect(breadcrumb.type).toBe(BreadCrumbsBuilder)
-    expect(breadcrumb.props.navigateTo).toBe(navigation.CHILD_PROFILE)
+describe('ChildProfilePage', () => {
+  it('renders a ChildProfilePageInner within a ClientLoadingBoundary', () => {
+    const match = { params: { staffId: 'ABC', clientId: '123' }, url: '/my/url' }
+    const wrapper = shallow(<ChildProfilePage match={match} />)
+    const page = wrapper.find(ChildProfilePageInner)
+    expect(page.exists()).toBe(true)
+    expect(page.parent().type()).toBe(ClientLoadingBoundary)
   })
 
-  it('renders a Search button', () => {
-    const layout = render(defaultProps).find(FullWidthLayout)
-    expect(layout.props().rightButton.type).toBe(SearchClientsButton)
+  it('defaults the navigateTo to CHILD_PROFILE', () => {
+    const match = { params: { staffId: 'ABC', clientId: '123' }, url: '/my/url' }
+    const wrapper = shallow(<ChildProfilePage match={match} />)
+    expect(wrapper.find(ChildProfilePageInner).props().navigateTo).toBe(navigation.CHILD_PROFILE)
   })
 
-  describe('with a client loaded', () => {
-    const fakeClient = { anyKey: 'any value' }
-    const match = { params: { staffId: '123' }, url: '/path/to/left' }
-    let wrapper
-
-    beforeEach(() => {
-      wrapper = render({ client: fakeClient, match })
-    })
-
-    it('renders a body of Client', () => {
-      const body = wrapper.find(FullWidthLayout)
-      expect(body.find(Client).exists()).toBe(true)
-    })
-
-    it('passes route params to Client child', () => {
-      const client = wrapper.find(Client)
-      expect(client.props().match).toBe(match)
-    })
-
-    it('passes the client to the breadcrumb', () => {
-      const breadcrumbElement = wrapper.find(FullWidthLayout).props().breadcrumb
-      expect(breadcrumbElement.type).toBe(CurrentUserLoadingBoundary)
-      const breadcrumb = breadcrumbElement.props.children
-      expect(breadcrumb.props.client).toBe(fakeClient)
-    })
-
-    it('passes the client to the Client page', () => {
-      const clientComponent = wrapper.find(Client)
-      expect(clientComponent.props().client).toBe(fakeClient)
-    })
+  it('passes through a specific navigateTo', () => {
+    const match = { params: { staffId: 'ABC', clientId: '123' }, url: '/my/url' }
+    const navigateTo = navigation.STAFF_CHILD_PROFILE
+    const wrapper = shallow(<ChildProfilePage match={match} navigateTo={navigateTo} />)
+    expect(wrapper.find(ChildProfilePageInner).props().navigateTo).toBe(navigateTo)
   })
 
-  describe('without a client loaded', () => {
-    it('renders a layout with an empty body', () => {
-      const body = render(defaultProps).find(FullWidthLayout)
-      expect(body.exists()).toBe(true)
-      expect(body.find(Client).exists()).toBe(false)
-      expect(body.props().children).toBe(null)
-    })
+  it('uses the clientId from match params', () => {
+    const clientId = 'zxcvbn'
+    const match = { params: { staffId: 'ABC', clientId }, url: '/my/url' }
+    const wrapper = shallow(<ChildProfilePage match={match} />)
+
+    expect(wrapper.find(ClientLoadingBoundary).props().clientId).toBe(clientId)
+  })
+
+  it('passes staffInfo through, if provided', () => {
+    const match = { params: { staffId: 'ABC', clientId: '123' }, url: '/my/url' }
+    const staffInfo = { key: 'value' }
+    const wrapper = shallow(<ChildProfilePage match={match} staffInfo={staffInfo} />)
+
+    expect(wrapper.find(ChildProfilePageInner).props().staffInfo).toBe(staffInfo)
   })
 })

@@ -2,14 +2,14 @@ import React from 'react'
 import CurrentUserLoadingBoundary from '../common/CurrentUserLoadingBoundary'
 import { navigation } from '../../util/constants'
 import ContextualBreadCrumb from '../Layout/BreadCrumb/ContextualBreadCrumb'
-import { CurrentUserCaseLoadPage } from '../Staff'
+import { SupervisorDashboard } from '../Staff'
 import { buildSearchClientsButton as SearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
 import VisitLogger from './VisitLogger'
 import FullWidthLayout from '../Layout/FullWidthLayout'
 
-const navigateTo = navigation.CHILD_LIST
+const navigateTo = navigation.STAFF_LIST
 
-const ChildListPage = () => (
+const StaffListPage = () => (
   <React.Fragment>
     <CurrentUserLoadingBoundary>
       <VisitLogger dashboard={navigateTo} />
@@ -19,9 +19,9 @@ const ChildListPage = () => (
       navigateTo={navigateTo}
       rightButton={<SearchClientsButton />}
     >
-      <CurrentUserCaseLoadPage />
+      <SupervisorDashboard />
     </FullWidthLayout>
   </React.Fragment>
 )
 
-export default ChildListPage
+export default StaffListPage

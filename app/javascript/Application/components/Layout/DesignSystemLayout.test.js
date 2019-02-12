@@ -3,13 +3,19 @@ import { shallow } from 'enzyme'
 import DesignSystemLayout from './DesignSystemLayout'
 import { navigation } from '../../util/constants'
 import { Page, Utils } from '@cwds/components'
-import CurrentUserLoadingBoundary from '../pages/CurrentUserLoadingBoundary'
+import CurrentUserLoadingBoundary from '../common/CurrentUserLoadingBoundary'
+import { GlobalAlert } from '../common'
 import UserMenu from '../Header/UserMenu'
 
 describe('Design System Layout', () => {
-  const render = ({ breadcrumb, children, navigateTo = navigation.CHILD_LIST, rightButton } = {}) =>
+  const render = ({ breadcrumb, children, leftButton, navigateTo = navigation.CHILD_LIST, rightButton } = {}) =>
     shallow(
-      <DesignSystemLayout breadcrumb={breadcrumb} navigateTo={navigateTo} rightButton={rightButton}>
+      <DesignSystemLayout
+        breadcrumb={breadcrumb}
+        leftButton={leftButton}
+        navigateTo={navigateTo}
+        rightButton={rightButton}
+      >
         {children}
       </DesignSystemLayout>
     )
@@ -59,16 +65,54 @@ describe('Design System Layout', () => {
     expect(appBarUserMenu.props.children.type).toBe(UserMenu)
   })
 
+  it('renders the leftButton as a cta', () => {
+    const leftButton = <div id="my-button" />
+    const page = render({ leftButton }).find(Page)
+    const cta = page.props().cta()
+
+    expect(cta.props.children).toContain(leftButton)
+  })
+
   it('renders the rightButton as a cta', () => {
     const rightButton = <div id="my-button" />
     const page = render({ rightButton }).find(Page)
+    const cta = page.props().cta()
 
-    expect(page.props().cta()).toBe(rightButton)
+    expect(cta.props.children).toContain(rightButton)
+  })
+
+  it('can render both buttons at once', () => {
+    const leftButton = <div id="my-left-button" />
+    const rightButton = <div id="my-right-button" />
+    const page = render({ leftButton, rightButton }).find(Page)
+    const cta = page.props().cta()
+
+    expect(cta.props.children).toContain(leftButton)
+    expect(cta.props.children).toContain(rightButton)
+  })
+
+  it('renders global alerts above main children', () => {
+    const children = <div id="my-main" />
+    const page = render({ children }).find(Page)
+    const mainChildren = page.props().main.props.children
+
+    const firstGlobalAlertIndex = mainChildren.findIndex(
+      el => el && el.type === GlobalAlert && el.props.id === undefined
+    )
+    const secondGlobalAlertIndex = mainChildren.findIndex(
+      el => el && el.type === GlobalAlert && el.props.id === 'infoMessages'
+    )
+    const childrenIndex = mainChildren.findIndex(el => el === children)
+
+    expect(firstGlobalAlertIndex).not.toBe(-1)
+    expect(secondGlobalAlertIndex).not.toBe(-1)
+    expect(firstGlobalAlertIndex).toBeLessThan(childrenIndex)
+    expect(secondGlobalAlertIndex).toBeLessThan(childrenIndex)
   })
 
   it('renders children as main', () => {
     const children = <div id="my-main" />
     const page = render({ children }).find(Page)
-    expect(page.props().main()).toBe(children)
+    expect(page.props().main.props.children).toContain(children)
   })
 })

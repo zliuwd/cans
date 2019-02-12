@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import UserAccountService from '../common/UserAccountService'
-import LoadingBoundary from '../common/LoadingBoundary'
+import UserAccountService from './UserAccountService'
+import LoadingBoundary from './LoadingBoundary'
 
 const fetch = () => UserAccountService.fetchCurrent()
 

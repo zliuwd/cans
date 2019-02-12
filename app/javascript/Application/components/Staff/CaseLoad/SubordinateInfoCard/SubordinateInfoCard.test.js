@@ -30,4 +30,9 @@ describe('<SubordinateInfoCard />', () => {
     expect(staffTable.exists()).toBeTruthy()
     expect(staffTable.props().staffInfo).toBe(mockStaff[0])
   })
+
+  it('renders nothing when staffId is not yet loaded', () => {
+    const wrapper = shallow(<SubordinateInfoCard />)
+    expect(wrapper.type()).toBe(null)
+  })
 })
