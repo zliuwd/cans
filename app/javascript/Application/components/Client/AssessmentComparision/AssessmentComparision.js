@@ -4,6 +4,7 @@ import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
 import { I18nService } from '../../Assessment'
 import { fiveAssessmentWithCaregiverChange, fourAssessmentCrossingAge } from './fakeComparisionData.js'
 import ComparisionOuterTable from './ComparisionOuterTable'
+import './style.sass'
 
 class AssessmentComparision extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class AssessmentComparision extends Component {
     return (
       <Fragment>
         <Grid item xs={12}>
-          <Card className="card-cans-client-list">
+          <Card className="card-cans-comparision">
             <CardHeader>
               <CardTitle className={'card-title-fix'}>Assessment Comparision Table</CardTitle>
             </CardHeader>
