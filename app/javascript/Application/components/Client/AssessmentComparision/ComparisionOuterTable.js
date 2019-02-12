@@ -3,25 +3,14 @@ import PropTypes from 'prop-types'
 import { DataGrid } from '@cwds/components'
 import { gridMinRows } from '../../../util/DataGridHelper'
 import ComparisionInnerTable from './ComparisionInnerTable'
-import { commonStyle, verticalCenter, CP_TABLE_COL_WIDTHS, getTitle } from './comparisionHelper'
-
+import ComparisionOuterTableHeader from './ComparisionOuterTableHeader'
+import { verticalCenter, CP_TABLE_COL_WIDTHS, getTitle, expander } from './comparisionHelper'
 import './style.sass'
 
 class ComparisionOuterTable extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
-  }
-
-  renderTableHeader = index => {
-    return (
-      <div>
-        <div className="outer-header-status">
-          {this.props.data.date_info[index].status === 'IN_PROGRESS' ? 'In Progress' : null}
-        </div>
-        <div>{this.props.data.date_info[index].date}</div>
-      </div>
-    )
   }
 
   domainTotalColsGenerator = counter => {
@@ -33,7 +22,7 @@ class ComparisionOuterTable extends React.Component {
           height: '5rem',
           ...verticalCenter,
         },
-        Header: this.renderTableHeader(index),
+        Header: <ComparisionOuterTableHeader index={index} dateInfo={this.props.data.date_info} />,
         accessor: domain => {
           const ratingTotal = domain.ratting_totals[index]
           if (!ratingTotal) {
@@ -92,41 +81,11 @@ class ComparisionOuterTable extends React.Component {
       className: 'outer-domain-name-content',
       headerClassName: 'outer-domain-name-header',
     }
+
     const domainTotalCols = this.domainTotalColsGenerator(counter)
-    const expander = {
-      id: 'expander',
-      width: CP_TABLE_COL_WIDTHS.EXPANDER,
-      expander: true,
-      Expander: ({ isExpanded, ...rest }) => {
-        return (
-          <div>
-            {isExpanded ? (
-              <span>
-                <div className={'symbol-open'}>&#x2329;</div>
-              </span>
-            ) : (
-              <span>
-                <div className={'symbol-close'}>&#x2329;</div>
-              </span>
-            )}
-          </div>
-        )
-      },
-      style: {
-        cursor: 'pointer',
-        fontSize: 25,
-        padding: '0',
-        textAlign: 'center',
-        userSelect: 'none',
-        height: '5rem',
-        ...verticalCenter,
-      },
-      ...commonStyle,
-    }
-
     const domainCmparisionTableTemplate = [domainNameCol, ...domainTotalCols, expander]
-
     const domains = this.props.data.domains
+
     return (
       <DataGrid
         className={'comparision-grid'}
@@ -140,6 +99,18 @@ class ComparisionOuterTable extends React.Component {
       />
     )
   }
+}
+
+ComparisionOuterTable.propTypes = {
+  data: PropTypes.shape({
+    date_info: PropTypes.string.isRequired,
+    domains: PropTypes.array.isRequired,
+  }).isRequired,
+  i18n: PropTypes.object,
+}
+
+ComparisionOuterTable.defaultProps = {
+  i18n: {},
 }
 
 export default ComparisionOuterTable

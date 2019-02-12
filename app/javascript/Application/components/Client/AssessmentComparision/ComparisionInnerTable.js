@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { DataGrid } from '@cwds/components'
 import { gridMinRows } from '../../../util/DataGridHelper'
-import { commonStyle, CP_TABLE_COL_WIDTHS, getTitle } from './comparisionHelper'
+import { commonStyle, CP_TABLE_COL_WIDTHS, getTitle, expanderPlaceHolder } from './comparisionHelper'
 import './style.sass'
 
 class ComparisionInnerTable extends React.Component {
@@ -27,6 +27,7 @@ class ComparisionInnerTable extends React.Component {
   boolRatingGenerator = value => (!value ? 'No' : 'Yes')
 
   itemRatingColsGenerator = () => {
+    const naRating = 8
     return this.props.counter.map((el, index) => {
       return {
         id: `item-assessment-${index}`,
@@ -46,7 +47,7 @@ class ComparisionInnerTable extends React.Component {
           // second level condition for return the value
           if (this.props.domainCode === 'TRM') {
             return this.boolRatingGenerator(rating)
-          } else if (rating !== -1 && rating !== 8) {
+          } else if (rating !== -1 && rating !== naRating) {
             return rating + symbol
           } else {
             return '--'
@@ -66,11 +67,6 @@ class ComparisionInnerTable extends React.Component {
         return itemTitle
       },
       className: 'inner-item-name-content',
-    }
-
-    const expanderPlaceHolder = {
-      id: 'expander_place_holder',
-      width: CP_TABLE_COL_WIDTHS.EXPANDER,
     }
 
     const itemRatingCols = this.itemRatingColsGenerator()
@@ -95,6 +91,17 @@ class ComparisionInnerTable extends React.Component {
       />
     )
   }
+}
+
+ComparisionInnerTable.propTypes = {
+  counter: PropTypes.array.isRequired,
+  domainCode: PropTypes.string.isRequired,
+  i18n: PropTypes.object,
+  items: PropTypes.array.isRequired,
+}
+
+ComparisionInnerTable.defaultProps = {
+  i18n: {},
 }
 
 export default ComparisionInnerTable
