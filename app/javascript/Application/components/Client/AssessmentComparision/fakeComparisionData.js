@@ -11,15 +11,15 @@ const dataTemplate = {
   domains: [
     {
       code: 'STR',
-      // caregiver_name:
-      // caregiver_index:
-      under_six: false,
-      above_six: true,
+      under_six: true, // currently not be used, but expect to keep
+      above_six: false, // currently not be used, but expect to keep
+      caregiver_name: '', // if caregiver
+      caregiver_index: '', // if caregiver
       ratting_totals: [null, null, 20, 7], // length equal to assessment amount, if no value use '' or null
       items: [
         {
-          under_six_id: '',
-          above_six_id: '32',
+          under_six_id: '', // currently not be used, but expect to keep
+          above_six_id: '32', // currently not be used, but expect to keep
           code: 'FAMILY_STRENGTHS',
           item_ratings: [{}, {}, { value: 1, trend: '' }, { value: 1, trend: '' }],
           // length equal to assessment amount, if no value use '' or null
@@ -41,8 +41,7 @@ export const fiveAssessmentWithCaregiverChange = {
   domains: [
     {
       code: 'ECH',
-      under_six: true,
-      above_six: false,
+
       ratting_totals: [13, 13, 12, 12, 11],
       items: [
         {
@@ -157,8 +156,7 @@ export const fiveAssessmentWithCaregiverChange = {
     },
     {
       code: 'EFX',
-      under_six: true,
-      above_six: false,
+
       ratting_totals: [12, 12, 14, 16, 14],
       items: [
         {
@@ -225,8 +223,7 @@ export const fiveAssessmentWithCaregiverChange = {
     },
     {
       code: 'ERB',
-      under_six: true,
-      above_six: false,
+
       ratting_totals: [13, 13, 12, 12, 11],
       items: [
         {
@@ -316,9 +313,89 @@ export const fiveAssessmentWithCaregiverChange = {
       ],
     },
     {
+      code: 'CGV',
+      caregiver_name: 'Seaver',
+      caregiver_index: 'a',
+
+      ratting_totals: [10, 8, 6, null, null],
+      items: [
+        {
+          under_six_id: 'E34',
+          above_six_id: '41',
+          code: 'SUPERVISION',
+          item_ratings: [{ value: 0, trend: '' }, { value: 2, trend: 'up' }, { value: 2, trend: '' }, {}, {}],
+        },
+        {
+          under_six_id: 'E35',
+          above_six_id: '42',
+          code: 'INVOLVEMENT_WITH_CARE',
+          item_ratings: [{ value: 1, trend: '' }, { value: 2, trend: 'up' }, { value: 0, trend: 'down' }, {}, {}],
+        },
+        {
+          under_six_id: 'E36',
+          above_six_id: '43',
+          code: 'KNOWLEDGE',
+          item_ratings: [{ value: 0, trend: '' }, { value: 1, trend: 'up' }, { value: 3, trend: 'up' }],
+        },
+      ],
+    },
+    {
+      code: 'CGV',
+      caregiver_name: 'Seaver',
+      caregiver_index: 'b',
+
+      ratting_totals: [7, 12, 11, null, null],
+      items: [
+        {
+          under_six_id: 'E34',
+          above_six_id: '41',
+          code: 'SUPERVISION',
+          item_ratings: [{ value: 0, trend: '' }, { value: 2, trend: 'up' }, { value: 2, trend: '' }, {}, {}],
+        },
+        {
+          under_six_id: 'E35',
+          above_six_id: '42',
+          code: 'INVOLVEMENT_WITH_CARE',
+          item_ratings: [{ value: 1, trend: '' }, { value: 2, trend: 'up' }, { value: 0, trend: 'down' }, {}, {}],
+        },
+        {
+          under_six_id: 'E36',
+          above_six_id: '43',
+          code: 'KNOWLEDGE',
+          item_ratings: [{ value: 0, trend: '' }, { value: 1, trend: 'up' }, { value: 3, trend: 'up' }],
+        },
+      ],
+    },
+    {
+      code: 'CGV',
+      caregiver_name: 'Kirk Camero',
+      caregiver_index: 'a',
+
+      ratting_totals: [null, null, null, 13, 7],
+      items: [
+        {
+          under_six_id: 'E34',
+          above_six_id: '41',
+          code: 'SUPERVISION',
+          item_ratings: ['', '', '', { value: 1, trend: '' }, { value: 0, trend: '' }],
+        },
+        {
+          under_six_id: 'E35',
+          above_six_id: '42',
+          code: 'INVOLVEMENT_WITH_CARE',
+          item_ratings: ['', '', '', { value: 0, trend: '' }, { value: 2, trend: '' }],
+        },
+        {
+          under_six_id: 'E36',
+          above_six_id: '43',
+          code: 'KNOWLEDGE',
+          item_ratings: ['', '', '', { value: 0, trend: '' }, { value: 3, trend: '' }],
+        },
+      ],
+    },
+    {
       code: 'TRM',
-      under_six: true,
-      above_six: false,
+
       ratting_totals: [5, 4, 4, 4, 4],
       items: [
         {
@@ -467,90 +544,6 @@ export const fiveAssessmentWithCaregiverChange = {
         },
       ],
     },
-    {
-      code: 'CGV',
-      caregiver_name: 'Seaver',
-      caregiver_index: 'a',
-      under_six: true,
-      above_six: false,
-      ratting_totals: [10, 8, 6, null, null],
-      items: [
-        {
-          under_six_id: 'E34',
-          above_six_id: '41',
-          code: 'SUPERVISION',
-          item_ratings: [{ value: 0, trend: '' }, { value: 2, trend: 'up' }, { value: 2, trend: '' }, {}, {}],
-        },
-        {
-          under_six_id: 'E35',
-          above_six_id: '42',
-          code: 'INVOLVEMENT_WITH_CARE',
-          item_ratings: [{ value: 1, trend: '' }, { value: 2, trend: 'up' }, { value: 0, trend: 'down' }, {}, {}],
-        },
-        {
-          under_six_id: 'E36',
-          above_six_id: '43',
-          code: 'KNOWLEDGE',
-          item_ratings: [{ value: 0, trend: '' }, { value: 1, trend: 'up' }, { value: 3, trend: 'up' }],
-        },
-      ],
-    },
-    {
-      code: 'CGV',
-      caregiver_name: 'Seaver',
-      caregiver_index: 'b',
-      under_six: true,
-      above_six: false,
-      ratting_totals: [7, 12, 11, null, null],
-      items: [
-        {
-          under_six_id: 'E34',
-          above_six_id: '41',
-          code: 'SUPERVISION',
-          item_ratings: [{ value: 0, trend: '' }, { value: 2, trend: 'up' }, { value: 2, trend: '' }, {}, {}],
-        },
-        {
-          under_six_id: 'E35',
-          above_six_id: '42',
-          code: 'INVOLVEMENT_WITH_CARE',
-          item_ratings: [{ value: 1, trend: '' }, { value: 2, trend: 'up' }, { value: 0, trend: 'down' }, {}, {}],
-        },
-        {
-          under_six_id: 'E36',
-          above_six_id: '43',
-          code: 'KNOWLEDGE',
-          item_ratings: [{ value: 0, trend: '' }, { value: 1, trend: 'up' }, { value: 3, trend: 'up' }],
-        },
-      ],
-    },
-    {
-      code: 'CGV',
-      caregiver_name: 'Kirk Camero',
-      caregiver_index: 'a',
-      under_six: true,
-      above_six: false,
-      ratting_totals: [null, null, null, 13, 7],
-      items: [
-        {
-          under_six_id: 'E34',
-          above_six_id: '41',
-          code: 'SUPERVISION',
-          item_ratings: ['', '', '', { value: 1, trend: '' }, { value: 0, trend: '' }],
-        },
-        {
-          under_six_id: 'E35',
-          above_six_id: '42',
-          code: 'INVOLVEMENT_WITH_CARE',
-          item_ratings: ['', '', '', { value: 0, trend: '' }, { value: 2, trend: '' }],
-        },
-        {
-          under_six_id: 'E36',
-          above_six_id: '43',
-          code: 'KNOWLEDGE',
-          item_ratings: ['', '', '', { value: 0, trend: '' }, { value: 3, trend: '' }],
-        },
-      ],
-    },
   ],
 }
 
@@ -566,8 +559,7 @@ export const fourAssessmentCrossingAge = {
   domains: [
     {
       code: 'ECH',
-      under_six: true,
-      above_six: false,
+
       ratting_totals: [13, 15, null, null],
       items: [
         {
@@ -628,8 +620,7 @@ export const fourAssessmentCrossingAge = {
     },
     {
       code: 'EST',
-      under_six: false,
-      above_six: true,
+
       ratting_totals: [8, 15, null, null],
       items: [
         {
@@ -678,8 +669,7 @@ export const fourAssessmentCrossingAge = {
     },
     {
       code: 'STR',
-      under_six: false,
-      above_six: true,
+
       ratting_totals: [null, null, 20, 7],
       items: [
         {
@@ -741,8 +731,7 @@ export const fourAssessmentCrossingAge = {
     {
       code: 'CGV',
       caregiver_index: 'a',
-      under_six: true,
-      above_six: false,
+
       ratting_totals: [10, 8, 6, ''],
       items: [
         {
@@ -767,8 +756,7 @@ export const fourAssessmentCrossingAge = {
     },
     {
       code: 'TRM',
-      under_six: true,
-      above_six: false,
+
       ratting_totals: [5, 4, 4, 4],
       items: [
         {
