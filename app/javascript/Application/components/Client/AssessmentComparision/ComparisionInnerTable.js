@@ -38,7 +38,7 @@ class ComparisionInnerTable extends React.Component {
           let symbol = ''
           let rating = ''
           // first level condition check undefine and setting value
-          if (item.item_ratings[index]) {
+          if (item.item_ratings[index] && item.item_ratings[index].value !== undefined) {
             symbol = this.itemSymbolGenerator(item.item_ratings[index].trend)
             rating = item.item_ratings[index].value
           } else {

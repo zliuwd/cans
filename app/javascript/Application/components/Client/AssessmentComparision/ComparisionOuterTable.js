@@ -103,7 +103,7 @@ class ComparisionOuterTable extends React.Component {
 
 ComparisionOuterTable.propTypes = {
   data: PropTypes.shape({
-    date_info: PropTypes.string.isRequired,
+    date_info: PropTypes.array.isRequired,
     domains: PropTypes.array.isRequired,
   }).isRequired,
   i18n: PropTypes.object,

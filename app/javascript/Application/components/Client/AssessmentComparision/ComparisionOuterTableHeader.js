@@ -11,7 +11,7 @@ const ComparisionOuterTableHeader = ({ index, dateInfo }) => {
 }
 
 ComparisionOuterTableHeader.propTypes = {
-  dateInfo: PropTypes.string.isRequired,
+  dateInfo: PropTypes.array.isRequired,
   index: PropTypes.number.isRequired,
 }
 

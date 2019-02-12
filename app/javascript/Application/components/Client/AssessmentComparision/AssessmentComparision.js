@@ -8,7 +8,7 @@ import ComparisionOuterTable from './ComparisionOuterTable'
 class AssessmentComparision extends Component {
   constructor(props) {
     super(props)
-    this.state = { data: fourAssessmentCrossingAge }
+    this.state = { data: fiveAssessmentWithCaregiverChange }
   }
 
   componentDidMount() {
@@ -32,7 +32,6 @@ class AssessmentComparision extends Component {
 
   render() {
     const data = this.state.data
-    const counter = new Array(this.state.data.date_info.length)
     return (
       <Fragment>
         <Grid item xs={12}>
@@ -41,7 +40,7 @@ class AssessmentComparision extends Component {
               <CardTitle className={'card-title-fix'}>Assessment Comparision Table</CardTitle>
             </CardHeader>
             <CardBody>
-              <ComparisionOuterTable data={data} counter={counter} i18n={this.state.i18n} />
+              <ComparisionOuterTable data={data} i18n={this.state.i18n} />
             </CardBody>
           </Card>
         </Grid>
@@ -49,9 +48,5 @@ class AssessmentComparision extends Component {
     )
   }
 }
-
-AssessmentComparision.propTypes = {}
-
-AssessmentComparision.defaultProps = {}
 
 export default AssessmentComparision
