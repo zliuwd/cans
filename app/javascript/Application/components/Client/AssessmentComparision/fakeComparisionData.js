@@ -1,13 +1,13 @@
-const dataTemplate = {
+const dataExample = {
   // just four assessment record, and mixed with different age ranges, with none name caregiver domain
-  // order is important, for index 0 to index 3, oldest to current
+  // order is important, for index 0 to index 3, the earliest to current
   date_info: [
     { date: '03/01/2016', status: '' },
     { date: '09/21/2016', status: '' },
     { date: '10/11/2017', status: '' },
     { date: '01/01/2019', status: 'IN_PROGRESS' },
   ], // length equal to assessment amount, if no value use '' or null
-  // order is important, for index 0 to index 3, oldest to current
+  // order is important, for index 0 to index 3, the earliest to current
   domains: [
     {
       code: 'STR',
@@ -23,7 +23,7 @@ const dataTemplate = {
           code: 'FAMILY_STRENGTHS',
           item_ratings: [{}, {}, { value: 1, trend: '' }, { value: 1, trend: '' }],
           // length equal to assessment amount, if no value {} or null
-          // order is important, for index 0 to index 3, oldest to current
+          // order is important, for index 0 to index 3, the earliest to current
         },
       ],
     },
