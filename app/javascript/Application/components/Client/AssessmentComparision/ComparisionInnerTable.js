@@ -19,7 +19,7 @@ class ComparisionInnerTable extends React.Component {
     if (trend === 'up') {
       result = ' ↑'
     } else if (trend === 'down') {
-      result = ' ↓'
+      result = ' ↓' // there is no arrow-down icon in CWDS lib so use code for both
     }
     return result
   }

@@ -15,14 +15,14 @@ const dataTemplate = {
       above_six: false, // currently not be used, but expect to keep
       caregiver_name: '', // if caregiver
       caregiver_index: '', // if caregiver
-      ratting_totals: [null, null, 20, 7], // length equal to assessment amount, if no value use '' or null
+      ratting_totals: [null, null, 20, 7], // length equal to assessment amount, if no value use  null
       items: [
         {
           under_six_id: '', // currently not be used, but expect to keep
           above_six_id: '32', // currently not be used, but expect to keep
           code: 'FAMILY_STRENGTHS',
           item_ratings: [{}, {}, { value: 1, trend: '' }, { value: 1, trend: '' }],
-          // length equal to assessment amount, if no value use '' or null
+          // length equal to assessment amount, if no value {} or null
           // order is important, for index 0 to index 3, oldest to current
         },
       ],
@@ -65,7 +65,7 @@ export const fiveAssessmentWithCaregiverChange = {
             { value: 3, trend: '' },
             { value: 3, trend: '' },
             { value: 3, trend: '' },
-            { value: 3, trend: 'down' },
+            { value: 3, trend: '' },
           ],
         },
         {
