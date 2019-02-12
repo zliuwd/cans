@@ -12,7 +12,6 @@ class Assessment extends Component {
     super(props)
     this.state = {
       isDefaultExpanded: false,
-      isChanged: false,
     }
   }
   /* eslint-disable camelcase */
@@ -21,9 +20,6 @@ class Assessment extends Component {
       const assessment = Object.assign({}, nextProps.assessment)
       this.updateCaregiverDomainsIndices(assessment.state)
       this.props.onAssessmentUpdate(assessment)
-    }
-    if (this.props.assessment.id && JSON.stringify(this.props.assessment) !== JSON.stringify(nextProps.assessment)) {
-      this.setState({ isChanged: true })
     }
   }
   /* eslint-enable camelcase */
