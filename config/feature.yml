@@ -2,15 +2,13 @@ development:
   features:
     authentication: <%= ENV.fetch('AUTHENTICATION_ENABLED', true) %>
     cans2: <%= ENV.fetch('CANS2', false) %>
-    enable_design_system_layout: <%= ENV.fetch('ENABLE_DESIGN_SYSTEM_LAYOUT', false) %>
+
 test:
   features:
     authentication: <%= ENV.fetch('AUTHENTICATION_ENABLED', true) %>
     cans2: <%= ENV.fetch('CANS2', false) %>
-    enable_design_system_layout: <%= ENV.fetch('ENABLE_DESIGN_SYSTEM_LAYOUT', false) %>
 
 production:
   features:
     authentication: <%= ENV.fetch('AUTHENTICATION_ENABLED', true) %>
     cans2: <%= ENV.fetch('CANS2', false) %>
-    enable_design_system_layout: <%= ENV.fetch('ENABLE_DESIGN_SYSTEM_LAYOUT', false) %>
