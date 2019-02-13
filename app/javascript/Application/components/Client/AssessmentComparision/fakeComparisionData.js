@@ -15,7 +15,7 @@ const dataExample = {
       above_six: false, // currently not be used, but expect to keep
       caregiver_name: '', // if caregiver
       caregiver_index: '', // if caregiver
-      ratting_totals: [null, null, 20, 7], // length equal to assessment amount, if no value use  null
+      rating_totals: [null, null, 20, 7], // length equal to assessment amount, if no value use  null
       items: [
         {
           under_six_id: '', // currently not be used, but expect to keep
@@ -42,7 +42,7 @@ export const fiveAssessmentWithCaregiverChange = {
     {
       code: 'ECH',
 
-      ratting_totals: [13, 13, 12, 12, 11],
+      rating_totals: [13, 13, 12, 12, 11],
       items: [
         {
           under_six_id: 'EC01',
@@ -157,7 +157,7 @@ export const fiveAssessmentWithCaregiverChange = {
     {
       code: 'EFX',
 
-      ratting_totals: [12, 12, 14, 16, 14],
+      rating_totals: [12, 12, 14, 16, 14],
       items: [
         {
           under_six_id: 'EC10',
@@ -224,7 +224,7 @@ export const fiveAssessmentWithCaregiverChange = {
     {
       code: 'ERB',
 
-      ratting_totals: [13, 13, 12, 12, 11],
+      rating_totals: [13, 13, 12, 12, 11],
       items: [
         {
           under_six_id: 'EC15',
@@ -317,7 +317,7 @@ export const fiveAssessmentWithCaregiverChange = {
       caregiver_name: 'Seaver',
       caregiver_index: 'a',
 
-      ratting_totals: [10, 8, 6, null, null],
+      rating_totals: [10, 8, 6, null, null],
       items: [
         {
           under_six_id: 'E34',
@@ -344,7 +344,7 @@ export const fiveAssessmentWithCaregiverChange = {
       caregiver_name: 'Seaver',
       caregiver_index: 'b',
 
-      ratting_totals: [7, 12, 11, null, null],
+      rating_totals: [7, 12, 11, null, null],
       items: [
         {
           under_six_id: 'E34',
@@ -371,7 +371,7 @@ export const fiveAssessmentWithCaregiverChange = {
       caregiver_name: 'Kirk Camero',
       caregiver_index: 'a',
 
-      ratting_totals: [null, null, null, 13, 7],
+      rating_totals: [null, null, null, 13, 7],
       items: [
         {
           under_six_id: 'E34',
@@ -396,7 +396,7 @@ export const fiveAssessmentWithCaregiverChange = {
     {
       code: 'TRM',
 
-      ratting_totals: [5, 4, 4, 4, 4],
+      rating_totals: [5, 4, 4, 4, 4],
       items: [
         {
           under_six_id: 'T01',
@@ -560,7 +560,7 @@ export const fourAssessmentCrossingAge = {
     {
       code: 'ECH',
 
-      ratting_totals: [13, 15, null, null],
+      rating_totals: [13, 15, null, null],
       items: [
         {
           under_six_id: 'EC01',
@@ -621,7 +621,7 @@ export const fourAssessmentCrossingAge = {
     {
       code: 'EST',
 
-      ratting_totals: [8, 15, null, null],
+      rating_totals: [8, 15, null, null],
       items: [
         {
           under_six_id: 'ec25',
@@ -670,7 +670,7 @@ export const fourAssessmentCrossingAge = {
     {
       code: 'STR',
 
-      ratting_totals: [null, null, 20, 7],
+      rating_totals: [null, null, 20, 7],
       items: [
         {
           under_six_id: '',
@@ -732,7 +732,7 @@ export const fourAssessmentCrossingAge = {
       code: 'CGV',
       caregiver_index: 'a',
 
-      ratting_totals: [10, 8, 6, ''],
+      rating_totals: [10, 8, 6, ''],
       items: [
         {
           under_six_id: 'E34',
@@ -757,7 +757,7 @@ export const fourAssessmentCrossingAge = {
     {
       code: 'TRM',
 
-      ratting_totals: [5, 4, 4, 4],
+      rating_totals: [5, 4, 4, 4],
       items: [
         {
           under_six_id: 'T01',
