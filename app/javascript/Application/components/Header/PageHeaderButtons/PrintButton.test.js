@@ -2,6 +2,8 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import PrintButton from './PrintButton'
 import { Print } from '../../Print'
+import { eventBus } from '../../../util/eventBus'
+import { ASSESSMENT_PRINT_EVENT } from '../../../util/constants'
 
 describe('PrintButton', () => {
   let wrapper
@@ -80,15 +82,6 @@ describe('PrintButton', () => {
   })
 
   describe('print through keyboard', () => {
-    it('should add and remove event handler', () => {
-      const adder = jest.spyOn(global, 'addEventListener').mockImplementation(() => {})
-      const remover = jest.spyOn(global, 'removeEventListener').mockImplementation(() => {})
-      const wrapper = shallow(printButton(true))
-      expect(adder).toHaveBeenCalledTimes(1)
-      wrapper.unmount()
-      expect(remover).toHaveBeenCalledTimes(1)
-    })
-
     it('should print when a user press ctrl+p', () => {
       const wrapper = shallow(printButton(true))
       wrapper.instance().handleCtrlP({
@@ -96,6 +89,7 @@ describe('PrintButton', () => {
         key: 'p',
         preventDefault: () => {},
       })
+      eventBus.post(ASSESSMENT_PRINT_EVENT)
       expect(wrapper.find(Print).length).toBe(1)
     })
 
@@ -106,7 +100,17 @@ describe('PrintButton', () => {
         key: 'p',
         preventDefault: () => {},
       })
+      eventBus.post(ASSESSMENT_PRINT_EVENT)
       expect(wrapper.find(Print).length).toBe(1)
+    })
+
+    it('should add and remove event handler', () => {
+      const adder = jest.spyOn(global, 'addEventListener').mockImplementation(() => {})
+      const remover = jest.spyOn(global, 'removeEventListener').mockImplementation(() => {})
+      const wrapper = shallow(printButton(true))
+      expect(adder).toHaveBeenCalledTimes(1)
+      wrapper.unmount()
+      expect(remover).toHaveBeenCalledTimes(1)
     })
   })
 })

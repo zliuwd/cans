@@ -2,14 +2,18 @@ import React, { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { Print } from '../../Print'
 import { buildButton } from '../PageHeaderButtonsBuilder'
+import { eventBus } from '../../../util/eventBus'
+import { UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT } from '../../../util/constants'
 
 class PrintButton extends Component {
   constructor(props) {
     super(props)
     this.state = { shouldPrintNow: false }
+    this.togglePrintNow = this.togglePrintNow.bind(this)
   }
 
   componentDidMount() {
+    eventBus.subscribe(ASSESSMENT_PRINT_EVENT, this.togglePrintNow)
     this.activeCtrlP()
   }
 
@@ -29,19 +33,23 @@ class PrintButton extends Component {
 
   handleCtrlP = event => {
     if ((event.ctrlKey || event.metaKey) && event.key === 'p') {
-      this.togglePrintNow()
+      this.onPrint()
       event.preventDefault()
     }
   }
 
-  togglePrintNow = () => {
+  onPrint = () => {
+    eventBus.post(UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT)
+  }
+
+  togglePrintNow() {
     this.setState({ shouldPrintNow: !this.state.shouldPrintNow })
   }
 
   renderPrintButton = () => {
     const { isEnabled } = this.props
 
-    return buildButton('Print', 'fa-print', this.togglePrintNow, isEnabled)
+    return buildButton('Print', 'fa-print', this.onPrint, isEnabled)
   }
 
   render() {
