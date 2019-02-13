@@ -47,9 +47,9 @@ export const itemRatingOptionsAmount = ratingType => {
 }
 
 export const expandingThenScroll = (event, isExpanded, amountOfChildren, disabled) => {
-  // Until Component Library has a sticky slot for warnings, we always assume the warning is not sticky
-  const heightWithoutWarning = 136
-  const stickyComponentsHeight = heightWithoutWarning
+  const heightWithWarning = 160
+  const heightWithoutWarning = 122
+  const stickyComponentsHeight = disabled ? heightWithWarning : heightWithoutWarning
   smoothScroll()
   const averageExpandingTime = 45
   // Ideal time for expanding each domain or item
