@@ -67,10 +67,10 @@ class AssessmentFormHeader extends PureComponent {
             <div className={'child-name-block'}>
               <span id={'child-name'}>{formatClientName(this.props.client)}</span>
             </div>
-            <div>
+            <div className={'helper-text'}>
               <span id={'child-age'}>{this.formatClientAge(dob)}</span>
             </div>
-            <div>
+            <div className={'helper-text'}>
               <span id={'child-dob'}>{this.formatClientDob(dob, estimatedDob)}</span>
             </div>
           </div>
