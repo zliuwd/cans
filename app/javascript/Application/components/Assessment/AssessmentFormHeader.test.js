@@ -57,7 +57,7 @@ describe('<AssessmentFormHeader />', () => {
       const caseNumber = caseWrapper.find('#case-or-referral-number')
       const caseNumberLabel = caseWrapper.find('#case-or-referral-number-label')
       expect(caseNumber.text()).toBe('0687-9473-7673-8000672')
-      expect(caseNumberLabel.text()).toBe('Case Number')
+      expect(caseNumberLabel.children().text()).toBe('Case Number')
     })
 
     it('renders with referral number and Referral Number label', () => {
@@ -76,7 +76,7 @@ describe('<AssessmentFormHeader />', () => {
       const referralNumber = referralWrapper.find('#case-or-referral-number')
       const referralNumberLabel = referralWrapper.find('#case-or-referral-number-label')
       expect(referralNumber.text()).toBe('4704-9166-3831-2001287')
-      expect(referralNumberLabel.text()).toBe('Referral Number')
+      expect(referralNumberLabel.children().text()).toBe('Referral Number')
     })
 
     it('renders without case/referral number when not exists and Case/Referral Number label', () => {
@@ -90,7 +90,7 @@ describe('<AssessmentFormHeader />', () => {
       const caseNumber = caseReferralWrapper.find('#case-or-referral-number')
       const referralNumberLabel = caseReferralWrapper.find('#case-or-referral-number-label')
       expect(caseNumber.text()).toBe('')
-      expect(referralNumberLabel.text()).toBe('Case/Referral Number')
+      expect(referralNumberLabel.children().text()).toBe('Case/Referral Number')
     })
   })
 
@@ -108,12 +108,14 @@ describe('<AssessmentFormHeader />', () => {
       wrapped = shallow(<AssessmentFormHeader {...defaultProps} />)
     })
 
-    it('renderDateSelect() returns correct label text', () => {
-      expect(
-        mount(wrapped.instance().renderDateSelect())
-          .find('Label')
-          .text()
-      ).toBe('Assessment Date *')
+    it('renders top 4 labels', () => {
+      const labels = wrapped.find('.assessment-form-header-label').map(label => label.children().text())
+      expect(labels).toEqual([
+        'Assessment Date *',
+        'Select CANS Template *',
+        'Assessment Conducted by',
+        'Case/Referral Number',
+      ])
     })
 
     it('renderHasCaregiverQuestion() returns correct label text', () => {
@@ -268,7 +270,7 @@ describe('<AssessmentFormHeader />', () => {
   describe('with county', () => {
     it('displays correct county name', () => {
       const wrapper = shallow(<AssessmentFormHeader {...defaultProps} />)
-      const headerAction = shallow(wrapper.find(CardHeader).props().action)
+      const headerAction = shallow(wrapper.find(CardHeader).props().title)
       expect(headerAction.find('#county-name').text()).toBe('Calaveras County')
     })
   })

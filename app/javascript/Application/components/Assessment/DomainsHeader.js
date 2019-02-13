@@ -9,7 +9,7 @@ const DomainsHeader = props => {
     <CardHeader className="domains-expand-collapse-header">
       <CardTitle className="assessment-card-title">
         <span className={'domains-expand-collapse-age-range'}>{isUnderSix ? 'Age Range 0-5' : 'Age Range 6-21'}</span>
-        <Button className={'domains-expand-collapse-button-right'} onClick={expandCollapse}>
+        <Button color="link" className={'domains-expand-collapse-button-right'} onClick={expandCollapse}>
           {isDefaultExpanded ? 'Collapse All' : 'Expand All'}
         </Button>
       </CardTitle>

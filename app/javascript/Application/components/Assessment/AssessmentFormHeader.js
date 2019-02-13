@@ -99,54 +99,34 @@ class AssessmentFormHeader extends PureComponent {
     const county = this.props.assessment.county || {}
     const countyName = county.name ? `${county.name} County` : ''
     return (
-      <div>
-        {countyName ? (
-          <div className={'county-name-block'}>
-            <span id={'county-name'}>{countyName}</span>
-          </div>
-        ) : null}
-      </div>
+      countyName && (
+        <div id={'county-name'} className={'county-name-block'}>
+          {countyName}
+        </div>
+      )
     )
   }
 
   renderDateSelect() {
     const { assessment, onEventDateFieldKeyUp, disabled, isEventDateBeforeDob } = this.props
     return (
-      <Fragment>
-        <Label
-          required
-          id={'assessment-date-label'}
-          className={'assessment-form-header-label'}
-          htmlFor="assessment-date_input"
-        >
-          Assessment Date *
-        </Label>
-        <DateField
-          required={true}
-          id={'assessment-date'}
-          value={assessment.event_date}
-          onChange={value => this.changeFieldAndUpdateAssessment('event_date', value)}
-          onRawValueUpdate={onEventDateFieldKeyUp}
-          ariaLabelledBy={'assessment-date-label'}
-          disabled={disabled}
-          isValid={!isEventDateBeforeDob}
-          validationErrorMessage={'Enter an assessment date that is on or after the client’s date of birth.'}
-        />
-      </Fragment>
+      <DateField
+        required={true}
+        id={'assessment-date'}
+        value={assessment.event_date}
+        onChange={value => this.changeFieldAndUpdateAssessment('event_date', value)}
+        onRawValueUpdate={onEventDateFieldKeyUp}
+        ariaLabelledBy={'assessment-date-label'}
+        disabled={disabled}
+        isValid={!isEventDateBeforeDob}
+        validationErrorMessage={'Enter an assessment date that is on or after the client’s date of birth.'}
+      />
     )
   }
 
   renderCaseNumber() {
-    const caseReferralNumber = clientCaseReferralNumber(this.props.assessment.service_source)
     return (
       <Fragment>
-        <div
-          id={'case-or-referral-number-label'}
-          htmlFor={'case-or-referral-number'}
-          className={'assessment-form-header-case-or-referral-number-label'}
-        >
-          {caseReferralNumber}
-        </div>
         <div id={'case-or-referral-number'} className={'assessment-form-header-case-or-referral-number'}>
           {this.props.assessment.service_source_ui_id}
         </div>
@@ -217,18 +197,60 @@ class AssessmentFormHeader extends PureComponent {
     )
   }
 
+  renderCardHeader() {
+    return (
+      <CardHeader
+        title={
+          <div className={'assessment-header-title'}>
+            {this.renderClientName()}
+            {this.renderCounty()}
+          </div>
+        }
+        className={'assessment-header-card-header'}
+      />
+    )
+  }
+
+  renderTopLabels() {
+    return (
+      <Row>
+        <Col sm={2}>
+          <Label
+            required
+            id={'assessment-date-label'}
+            className={'assessment-form-header-label'}
+            htmlFor="assessment-date_input"
+          >
+            Assessment Date *
+          </Label>
+        </Col>
+        <Col sm={3}>
+          <Label className={'assessment-form-header-label'}>Select CANS Template *</Label>
+        </Col>
+        <Col sm={4}>
+          <Label for={'conducted-by'} className={'assessment-form-header-label'}>
+            Assessment Conducted by
+          </Label>
+        </Col>
+        <Col sm={3}>
+          <Label
+            id={'case-or-referral-number-label'}
+            htmlFor={'case-or-referral-number'}
+            className={'assessment-form-header-label'}
+          >
+            {clientCaseReferralNumber(this.props.assessment.service_source)}
+          </Label>
+        </Col>
+      </Row>
+    )
+  }
+
   renderCardContent() {
     return (
-      <CardContent
-        style={{
-          textAlign: 'left',
-          marginLeft: 0,
-          marginRight: 0,
-          backgroundColor: 'white',
-        }}
-      >
+      <CardContent>
+        {this.renderTopLabels()}
         <Row className={'assessment-form-header-inputs'}>
-          <Col sm={3}>{this.renderDateSelect()}</Col>
+          <Col sm={2}>{this.renderDateSelect()}</Col>
           <Col xs={3}>
             <UnderSixQuestion
               isUnderSix={this.props.assessment.state.under_six}
@@ -236,7 +258,7 @@ class AssessmentFormHeader extends PureComponent {
               disabled={this.props.disabled}
             />
           </Col>
-          <Col sm={3}>
+          <Col sm={4}>
             <ConductedByField
               id={'conducted-by'}
               value={this.props.assessment.conducted_by}
@@ -247,12 +269,12 @@ class AssessmentFormHeader extends PureComponent {
           <Col sm={3}>{this.renderCaseNumber()}</Col>
         </Row>
         <Row>
-          <Col xs={3}>{this.renderHasCaregiverQuestion()}</Col>
+          <Col sm={2}>{this.renderHasCaregiverQuestion()}</Col>
           <Col xs={3}>{this.renderCanReleaseInfoQuestion()}</Col>
         </Row>
 
         <Row className={'authorization-warning'}>
-          <Col xs={4} />
+          <Col xs={3} />
           <Col xs={8}>
             <ConfidentialityAlert
               canReleaseInformation={Boolean(this.props.assessment.can_release_confidential_info)}
@@ -267,12 +289,8 @@ class AssessmentFormHeader extends PureComponent {
   render() {
     return (
       <Fragment>
-        <Card style={{ marginBottom: 20, marginLeft: 0, marginRight: 0 }} className={'assessment-header-date'}>
-          <CardHeader
-            title={this.renderClientName()}
-            action={this.renderCounty()}
-            className={'assessment-header-card-header'}
-          />
+        <Card className={'assessment-form-header-card'}>
+          {this.renderCardHeader()}
           {this.renderCardContent()}
         </Card>
       </Fragment>

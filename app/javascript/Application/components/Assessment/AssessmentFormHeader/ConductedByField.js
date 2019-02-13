@@ -1,27 +1,18 @@
-import React, { PureComponent, Fragment } from 'react'
-import { Label, Input } from 'reactstrap'
+import React from 'react'
+import { Input } from 'reactstrap'
 import PropTypes from 'prop-types'
 
-class ConductedByField extends PureComponent {
-  render() {
-    return (
-      <Fragment>
-        <Label for={this.props.id} className={'assessment-form-header-label'}>
-          Assessment Conducted by
-        </Label>
-        <Input
-          type={'text'}
-          className={'assessment-form-header-input'}
-          id={this.props.id}
-          value={this.props.value}
-          onChange={this.props.onChange}
-          disabled={this.props.disabled}
-          maxLength={100}
-        />
-      </Fragment>
-    )
-  }
-}
+const ConductedByField = ({ id, value, onChange, disabled }) => (
+  <Input
+    type={'text'}
+    className={'assessment-form-header-input'}
+    id={id}
+    value={value}
+    onChange={onChange}
+    disabled={disabled}
+    maxLength={100}
+  />
+)
 
 ConductedByField.defaultProps = {
   id: 'conducted-by',

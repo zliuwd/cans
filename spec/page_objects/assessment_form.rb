@@ -55,7 +55,7 @@ class AssessmentForm < SitePrism::Page
   section :app_globals, AppGlobals, 'body'
   section :global, AssessmentGlobal, 'body'
   section :breadcrumbs, Breadcrumbs, 'div.breadcrumb-container'
-  section :header, AssessmentFormHeader, 'div.assessment-header-date'
+  section :header, AssessmentFormHeader, 'div.assessment-form-header-card'
   section :summary, AssessmentSummary, 'div.assessment-summary-card'
   section :footer, AssessmentFormFooter, 'div.form-footer'
   element :assessment_card_title_0_5, 'div.assessment-card-title', text: 'Age Range 0-5'

@@ -1,0 +1,42 @@
+@import '../../../styles/global/colors.sass'
+
+//********************
+// UnderSixQuestion
+//********************
+.age-buttons-group
+  margin-top: 1rem
+  width: 100%
+
+%button-in-group
+  background: #fff
+  color: $deep-cyan
+  height: 3.4rem
+  width: 50%
+  min-width: 7rem
+  padding: 0
+  margin: 0
+  font-size: 1.2rem
+  text-align: center
+  border-radius: 0
+  border: 1.0rem
+  outline: $deep-cyan solid thin
+
+.age-button
+  @extend %button-in-group
+
+.age-button-selected
+  @extend %button-in-group
+  background: $deep-cyan
+  color: #fff
+
+.age-button:hover:enabled
+  @extend .age-button-selected
+
+.age-button-selected:hover:enabled
+  @extend .age-button-selected
+
+.age-button:disabled
+  @extend .age-button
+
+.age-button-selected:disabled
+  @extend .age-button-selected

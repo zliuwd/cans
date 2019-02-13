@@ -9,13 +9,6 @@ describe('<ConductedByField/>', () => {
     onChange: jest.fn(),
   }
 
-  it('renders label', () => {
-    const wrapper = shallow(<ConductedByField {...props} />)
-    const label = wrapper.find('Label').first()
-    expect(label.prop('for')).toBe(props.id)
-    expect(label.html()).toContain('Assessment Conducted by')
-  })
-
   it('renders input', () => {
     const wrapper = shallow(<ConductedByField {...props} />)
     const input = wrapper.find('Input')
@@ -29,7 +22,7 @@ describe('<ConductedByField/>', () => {
     expect(wrapper.find('Input').prop('disabled')).toBeTruthy()
   })
 
-  it('calls onOhange', () => {
+  it('calls onChange', () => {
     const mockFn = jest.fn()
     const wrapper = shallow(<ConductedByField {...props} onChange={mockFn} />)
     const event = { target: { name: 'conducted_by', value: 'conductedByValue' } }
