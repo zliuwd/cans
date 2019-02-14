@@ -9,7 +9,9 @@ describe('<InputField />', () => {
     expect(wrapper.props().foo).toBe('bar')
     expect(wrapper.props().baz).toBe('123')
     expect(wrapper.props().className).toBe('hello')
-    expect(wrapper.props().placeholder).toBe('ex: Last Name, First Name')
+    expect(wrapper.props().placeholder).toBe(
+      'Enter: Last Name, First Name DOB (MM/DD/YYYY), example: Smith, Joe 02/13/2008'
+    )
   })
 
   it('unwraps the value from the event on change', () => {
