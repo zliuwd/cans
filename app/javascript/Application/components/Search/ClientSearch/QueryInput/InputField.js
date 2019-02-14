@@ -25,7 +25,7 @@ class InputField extends React.PureComponent {
 
   render() {
     const { onChange, openMenu, ...props } = this.props
-    const placeholder = 'ex: Last Name, First Name'
+    const placeholder = 'Enter: Last Name, First Name DOB (MM/DD/YYYY), example: Smith, Joe 02/13/2008'
     return (
       <input
         {...props}

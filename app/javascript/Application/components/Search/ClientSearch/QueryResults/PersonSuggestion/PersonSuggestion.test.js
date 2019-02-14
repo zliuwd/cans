@@ -57,11 +57,6 @@ describe('<PersonSuggestion />', () => {
       expect(wrapper.find(LanguageInfo).exists()).toBe(true)
     })
 
-    it('renders a client county span', () => {
-      const wrapper = shallow(<PersonSuggestion {...defaultProps} />)
-      expect(wrapper.find('span.client-county').exists()).toBe(true)
-    })
-
     it('renders a <LegacyInfo /> component', () => {
       const wrapper = shallow(<PersonSuggestion {...defaultProps} />)
       expect(wrapper.find(LegacyInfo).exists()).toBe(true)

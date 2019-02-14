@@ -42,12 +42,6 @@ const PersonSuggestion = ({
       </div>
       <div className="col-md-7">
         <div className="row county-client-case-row">
-          <div className="col-md-4">
-            <div className="row search-item-header">County of Jurisdiction</div>
-            <div className="row">
-              <span className="client-county">{clientCounties[0]}</span>
-            </div>
-          </div>
           <div className="col-md-5">
             <div className="row search-item-header">Client ID</div>
             <div className="row">
