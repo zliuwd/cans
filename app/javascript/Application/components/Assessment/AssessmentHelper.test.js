@@ -116,6 +116,28 @@ const validAssessment = {
         under_six: false,
         above_six: true,
       },
+      {
+        items: [
+          {
+            under_six_id: 'EC34',
+            above_six_id: '41',
+            code: 'SUPERVISION',
+            required: true,
+            confidential: false,
+            confidential_by_default: false,
+            rating_type: 'REGULAR',
+            has_na_option: false,
+            rating: 1,
+          },
+        ],
+        id: 6,
+        is_caregiver_domain: true,
+        code: 'CGV',
+        under_six: true,
+        above_six: true,
+        caregiver_index: 'a',
+        caregiver_name: 'Mike',
+      },
     ],
   },
 }
@@ -135,6 +157,20 @@ describe('AssessmentHelper', () => {
         const assessment = clone(validAssessment)
         assessment.person.dob = '2019-01-01'
         expect(validateAssessmentForSubmit(assessment)).toBe(false)
+      })
+
+      it('returns false when no caregiverName is entered', () => {
+        const assessment = clone(validAssessment)
+        assessment.state.domains[0].is_caregiver_domain = true
+        assessment.state.domains[0].caregiver_name = ''
+        expect(validateAssessmentForSubmit(assessment)).toBe(false)
+      })
+
+      it('returns true when caregiverName is entered', () => {
+        const assessment = clone(validAssessment)
+        assessment.state.domains[0].is_caregiver_domain = true
+        assessment.state.domains[0].caregiver_name = 'Mike'
+        expect(validateAssessmentForSubmit(assessment)).toBe(true)
       })
 
       it('returns false when no assessment_type', () => {

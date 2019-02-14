@@ -70,7 +70,7 @@ class Domain extends Component {
       <div className={'caregiver-name-wrapper'}>
         <Input
           bsSize="lg"
-          placeholder="Caregiver Name"
+          placeholder="ex. Last Name, First Name/Relationship to child or youth"
           className={'caregiver-name'}
           value={this.state.caregiverName}
           maxLength={50}
@@ -108,6 +108,7 @@ class Domain extends Component {
       disabled,
     }
     const totalScore = totalScoreCalculation(items)
+    const warningText = <span className={'caregiver-warning-text'}> Caregiver Name is required</span>
     return shouldDomainBeRendered(isAssessmentUnderSix, domain) ? (
       <Fragment>
         <ExpansionPanel expanded={expanded} onChange={this.handleExpandedChange} elevation={0}>
@@ -119,12 +120,16 @@ class Domain extends Component {
             <Grid container direction="row" justify="flex-end" alignItems="flex-end" spacing={0} style={{ padding: 0 }}>
               <Grid item xs={8}>
                 <Typography variant="title" style={{ color: '#0e6f89', fontSize: 16 }}>
-                  {title} {caregiverName && `- ${caregiverName}`}
+                  {title}
                   {description ? (
                     <Tooltip title={description} placement="top" classes={{ tooltip: 'tooltip_' }}>
                       <i className="fa fa-info-circle domain-help-icon" />
                     </Tooltip>
-                  ) : null}
+                  ) : null}{' '}
+                  {(isCaregiverDomain && caregiverName === '') ||
+                  (isCaregiverDomain && caregiverName && caregiverName.trim() === '')
+                    ? warningText
+                    : caregiverName && `- ${caregiverName}`}
                 </Typography>
               </Grid>
               <Grid item xs={4} className={'domain-metric'}>

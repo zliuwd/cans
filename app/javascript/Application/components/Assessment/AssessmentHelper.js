@@ -44,7 +44,7 @@ function validateAssessmentDtoFields(assessmentDto) {
 }
 
 function validateAssessmentState(assessment) {
-  return isDefined(assessment.under_six) && areItemsValid(assessment)
+  return isDefined(assessment.under_six) && areItemsValid(assessment) && validateCaregiverDomainName(assessment)
 }
 
 export function validateAssessmentEventDate(dob, eventDate) {
@@ -55,6 +55,14 @@ export function validateAssessmentEventDate(dob, eventDate) {
 
 function isDefined(value) {
   return typeof value !== 'undefined' && value !== null && value !== ''
+}
+
+export function validateCaregiverDomainName(assessment) {
+  const isCaregiverNamePresent = assessment.domains
+    .filter(domain => domain.is_caregiver_domain === true)
+    .map(e => (e.caregiver_name !== undefined ? e.caregiver_name.trim() : ''))
+    .every(e => e)
+  return isCaregiverNamePresent
 }
 
 function areItemsValid(assessment) {
