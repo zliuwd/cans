@@ -92,6 +92,17 @@ feature 'Case Worker Functionality' do
     save_and_check_the_success_message
   end
 
+  scenario 'Case worker attempts to print unsaved assessment then cancel' do
+    CONDUCTED_BY = 'Test Name'
+    visit '/'
+    create_new_assessment(CLIENT_NAME)
+    click_0_to_5_button
+    fill_conducted_by_field(CONDUCTED_BY)
+    print_assessment
+    unsaved_warning_close
+    expect(@form.header.conducted_by.value).to eq(CONDUCTED_BY)
+  end
+
   def validate_child_dob_and_age(dob)
     expect(@form.header.child_dob).to have_content('DOB: ' + dob)
     expect(@form.header.child_age).to have_content(age(dob).to_s + ' years old')
@@ -473,5 +484,27 @@ feature 'Case Worker Functionality' do
     @form.app_globals.agree_button_of_warning.click
     expect(@form.caregiver_name_fields.length).to eq(0)
     expect(@form.header.has_caregiver_no_radio.checked?).to be(true)
+  end
+
+  def print_assessment
+    @form.header.print_button.click
+  end
+
+  def unsaved_warning_close
+    @form.app_globals.return_to_the_assessment_button.click
+    validate_unsaved_warning_closed
+  end
+
+  def unsaved_warning_save_and_continue
+    @form.app_globals.save_and_continue_button.click
+    validate_unsaved_warning_closed
+  end
+
+  def unsaved_warning_discard_and_continue
+    @form.app_globals.discard_and_continue_button.click
+  end
+
+  def validate_unsaved_warning_closed
+    expect(page).not_to have_css('.unsaved-warning-modal-heading')
   end
 end

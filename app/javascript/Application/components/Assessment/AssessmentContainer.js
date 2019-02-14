@@ -29,6 +29,7 @@ import './style.sass'
 import { getCurrentIsoDate, isValidLocalDate, localToIsoDate } from '../../util/dateHelper'
 import { logPageAction } from '../../util/analytics'
 import { isAuthorized } from '../common/AuthHelper'
+import UnsavedDataWarning from '../common/UnsavedDataWarning'
 
 const SCROLL_POSITION_ADJUST = -25 // for manually adjust scroll destination -25 means go up 25px more
 const readOnlyMessageId = 'readonlyMessage'
@@ -37,6 +38,7 @@ export default class AssessmentContainer extends Component {
   constructor(props) {
     super(props)
     this.assessmentHeader = React.createRef()
+    this.loadAssessment = this.loadAssessment.bind(this)
     this.state = {
       assessment: defaultEmptyAssessment,
       assessmentServiceStatus: LoadingState.idle,
@@ -48,25 +50,31 @@ export default class AssessmentContainer extends Component {
       isEventDateBeforeDob: false,
       isSaveButtonEnabled: false,
       completeScrollTarget: 0,
+      isUnsaved: false,
     }
   }
 
   async componentDidMount() {
     this.handleCompleteScrollTarget()
-    const assessmentId = this.props.match.params.id
-    return (assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment()).then(() => {
-      this.updateIsEditableState()
-    })
+    this.loadAssessment()
   }
 
-  componentDidUpdate() {
-    this.updateSaveButtonStatusIfNeeded()
+  componentDidUpdate(prevProps, prevState) {
+    const isUnsavedChanged = prevState.isUnsaved !== this.state.isUnsaved
+    this.updateSaveButtonStatusIfNeeded(isUnsavedChanged)
   }
 
   componentWillUnmount() {
     window.removeEventListener('beforeunload', alertMessage)
     this.props.pageHeaderButtonsController.updateHeaderButtonsToDefault()
     postCloseMessage(readOnlyMessageId)
+  }
+
+  loadAssessment() {
+    const assessmentId = this.props.match.params.id
+    return (assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment()).then(() => {
+      this.updateIsEditableState()
+    })
   }
 
   updateIsEditableState() {
@@ -105,9 +113,9 @@ export default class AssessmentContainer extends Component {
     this.props.pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
   }
 
-  updateSaveButtonStatusIfNeeded() {
+  updateSaveButtonStatusIfNeeded(isUnsavedChanged) {
     const newSaveButtonStatus = this.shouldSaveButtonBeEnabled()
-    if (this.state.isSaveButtonEnabled !== newSaveButtonStatus) {
+    if (this.state.isSaveButtonEnabled !== newSaveButtonStatus || isUnsavedChanged) {
       this.initHeaderButtons(newSaveButtonStatus)
       this.setState({ isSaveButtonEnabled: newSaveButtonStatus })
     }
@@ -172,6 +180,7 @@ export default class AssessmentContainer extends Component {
 
   onFetchAssessmentSuccess(assessment) {
     this.updateAssessment(assessment)
+    this.setState({ isUnsaved: false })
     this.fetchI18n(assessment.instrument_id)
   }
 
@@ -198,6 +207,7 @@ export default class AssessmentContainer extends Component {
       assessment,
       assessmentServiceStatus: LoadingState.ready,
       isValidForSubmit,
+      isUnsaved: true,
     })
   }
 
@@ -224,6 +234,7 @@ export default class AssessmentContainer extends Component {
     this.setState({
       assessment,
       assessmentServiceStatus: LoadingState.ready,
+      isUnsaved: false,
     })
     updateUrlWithAssessment(this.props.history, this.props.match, assessment)
   }
@@ -240,6 +251,7 @@ export default class AssessmentContainer extends Component {
         this.setState({
           assessment: updatedAssessment,
           assessmentServiceStatus: LoadingState.ready,
+          isUnsaved: false,
         })
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
@@ -352,6 +364,11 @@ export default class AssessmentContainer extends Component {
     return (
       <Fragment>
         <div ref={this.assessmentHeader}>
+          <UnsavedDataWarning
+            discardAndContinue={this.loadAssessment}
+            saveAndContinue={this.handleSaveAssessment}
+            isUnsaved={this.state.isUnsaved}
+          />
           <AssessmentContainerInner
             client={client}
             onEventDateFieldKeyUp={this.handleEventDateFieldKeyUp}

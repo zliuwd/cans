@@ -39,6 +39,7 @@ class AssessmentFormHeader < SitePrism::Section
   element :age_0_to_5_button_selected, 'button#age-0-5-button.age-button-selected'
   element :age_6_to_21_button, 'button#age-6-21-button'
   element :age_6_to_21_button_selected, 'button#age-6-21-button.age-button-selected'
+  element :print_button, :xpath, '//div[@class="header-buttons-block"]/button[2]'
 end
 
 class AssessmentSummary < SitePrism::Section

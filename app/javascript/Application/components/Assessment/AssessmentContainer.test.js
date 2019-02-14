@@ -120,7 +120,7 @@ describe('<AssessmentContainer />', () => {
         }
         const wrapper = shallow(<AssessmentContainer {...props} />, { disableLifecycleMethods: true })
         wrapper.instance().shouldSaveButtonBeEnabled = jest.fn(() => true)
-        wrapper.instance().componentDidUpdate()
+        wrapper.instance().componentDidUpdate({}, { isUnsaved: false })
         expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
       })
 
@@ -137,7 +137,7 @@ describe('<AssessmentContainer />', () => {
           }
           const wrapper = shallow(<AssessmentContainer {...props} />, { disableLifecycleMethods: true })
           wrapper.instance().shouldSaveButtonBeEnabled = jest.fn(() => true)
-          wrapper.instance().componentDidUpdate()
+          wrapper.instance().componentDidUpdate({}, { isUnsaved: false })
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(1)
         })
 
@@ -153,7 +153,7 @@ describe('<AssessmentContainer />', () => {
           }
           const wrapper = shallow(<AssessmentContainer {...props} />, { disableLifecycleMethods: true })
           wrapper.instance().shouldSaveButtonBeEnabled = jest.fn(() => false)
-          wrapper.instance().componentDidUpdate()
+          wrapper.instance().componentDidUpdate({}, { isUnsaved: false })
           expect(updateHeaderButtonsMock).toHaveBeenCalledTimes(0)
         })
       })
