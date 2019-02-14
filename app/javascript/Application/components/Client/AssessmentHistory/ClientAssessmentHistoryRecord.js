@@ -25,7 +25,11 @@ ClientAssessmentHistoryRecord.propTypes = {
   inheritUrl: PropTypes.string.isRequired,
   navFrom: PropTypes.string.isRequired,
   updateAssessmentHistoryCallback: PropTypes.func.isRequired,
-  userId: PropTypes.string.isRequired,
+  userId: PropTypes.string,
+}
+
+ClientAssessmentHistoryRecord.defaultProps = {
+  userId: null,
 }
 
 export default ClientAssessmentHistoryRecord
