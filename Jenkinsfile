@@ -13,6 +13,7 @@ switch(env.BUILD_JOB_TYPE) {
   case "acceptance": jobTypeHandledByMasterBuild(); break;
   case "regression": jobTypeHandledByMasterBuild(); break;
   case "regressionStaging": buildRegression('staging','--env CANS_WEB_BASE_URL=https://staging.cwds.ca.gov/cans'); break;
+  case "regressionPreprod": buildRegression('preprod','--env CANS_WEB_BASE_URL=https://preprod.cwds.ca.gov/cans'); break;
   case "release": releasePipeline(); break;
   default: buildPullRequest();
 }
