@@ -1,10 +1,9 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import Item from './Item'
-import Checkbox from '@material-ui/core/Checkbox'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import CommentIcon from '../../common/CommentIcon'
 import Comment from '../../common/Comment'
+import ConfidentialCheckbox from './ConfidentialCheckbox'
 
 const itemDefault = {
   code: 'lf10family',
@@ -221,6 +220,37 @@ describe('<Item />', () => {
     })
   })
 
+  describe('renders <ConfidentialCheckbox />', () => {
+    it('renders ConfidentialCheckbox', async () => {
+      const wrapper = mount({ ...itemComponentDefault })
+      wrapper.setProps({
+        ...propsDefault,
+        caregiverIndex: 'a',
+      })
+      const target = wrapper.find(ConfidentialCheckbox)
+      expect(target.exists()).toBe(true)
+    })
+
+    it('renders ConfidentialCheckbox with correct props', async () => {
+      const wrapper = mount({ ...itemComponentDefault })
+      wrapper.setProps({
+        ...propsDefault,
+        caregiverIndex: 'a',
+      })
+      const target = wrapper.find(ConfidentialCheckbox)
+      const expectedProps = [
+        'isConfidential',
+        'isConfidentialByDefault',
+        'code',
+        'canReleaseConfidentialInfo',
+        'disabled',
+        'handleConfidentialityChange',
+      ]
+      expect(Object.keys(target.props())).toEqual(expectedProps)
+      expect(typeof target.props().handleConfidentialityChange).toBe('function')
+    })
+  })
+
   describe('N/A option', () => {
     it('when have N/A option, N/A checkbox will be rendered. After checked, handleRatingChange will be called for 1 time', () => {
       const item = { ...itemWithOutNaChecked }
@@ -323,30 +353,6 @@ describe('<Item />', () => {
     })
   })
 
-  describe('canReleaseConfidentialInfo', () => {
-    it('should disable the confidential checkbox when false paired with an item thats confidential_by_default', () => {
-      const wrapper = shallow(
-        <Item
-          isAssessmentUnderSix={false}
-          item={{ ...itemDefault }}
-          i18n={{ ...i18nDefault }}
-          canReleaseConfidentialInfo={false}
-          onCommentUpdate={() => {}}
-          onRatingUpdate={() => {}}
-          onConfidentialityUpdate={() => {}}
-        />
-      )
-      expect(
-        wrapper
-          .find(FormControlLabel)
-          .dive()
-          .dive()
-          .find(Checkbox)
-          .prop('disabled')
-      ).toEqual(true)
-    })
-  })
-
   describe('#handleCommentChange()', () => {
     it('should propagate handleCommentChange to onChange Comment prop', () => {
       const onCommentUpdateMock = jest.fn()
@@ -377,68 +383,6 @@ describe('<Item />', () => {
       wrapper.setState({ isExpanded: true })
       expect(wrapper.find(Comment).props().comment).toBe('a comment')
     })
-  })
-
-  it('should have "Confidential" title when item is confidential by default', () => {
-    const wrapper = shallow(
-      <Item
-        isAssessmentUnderSix={false}
-        item={{ ...itemDefault }}
-        i18n={{ ...i18nDefault }}
-        canReleaseConfidentialInfo={false}
-        onCommentUpdate={() => {}}
-        onRatingUpdate={() => {}}
-        onConfidentialityUpdate={() => {}}
-      />
-    )
-    expect(
-      wrapper
-        .find(FormControlLabel)
-        .dive()
-        .prop('label')
-    ).toEqual('Confidential')
-  })
-
-  it('should have "Discretion Needed" title when item is not confidential by default', () => {
-    const wrapper = shallow(
-      <Item
-        isAssessmentUnderSix={false}
-        item={{ ...nonSUDItem }}
-        i18n={{ ...i18nDefault }}
-        canReleaseConfidentialInfo={false}
-        onCommentUpdate={() => {}}
-        onRatingUpdate={() => {}}
-        onConfidentialityUpdate={() => {}}
-      />
-    )
-    expect(
-      wrapper
-        .find(FormControlLabel)
-        .dive()
-        .prop('label')
-    ).toEqual('Discretion Needed')
-  })
-
-  it('should propagate disabled prop to Discretion Needed checkbox', () => {
-    const wrapper = shallow(
-      <Item
-        isAssessmentUnderSix={false}
-        item={{ ...nonSUDItem }}
-        i18n={{ ...i18nDefault }}
-        canReleaseConfidentialInfo={false}
-        onCommentUpdate={() => {}}
-        onRatingUpdate={() => {}}
-        onConfidentialityUpdate={() => {}}
-        disabled={true}
-      />
-    )
-    const checkboxWrapper = shallow(
-      wrapper
-        .find(FormControlLabel)
-        .dive()
-        .prop('control')
-    )
-    expect(checkboxWrapper.prop('disabled')).toBe(true)
   })
 
   it('should propagate disable prop to <ItemRegularRating />', () => {

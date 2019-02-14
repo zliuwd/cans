@@ -75,11 +75,11 @@ function areItemsValid(assessment) {
   return itemsWithNoRating.length === 0
 }
 
-export function resetConfidentialByDefaultItems(assessment) {
+export function resetConfidentialByDefaultItems(assessment, value) {
   assessment.state.domains.map(domain => {
     domain.items.map(item => {
       if (item.confidential_by_default) {
-        item.confidential = true
+        item.confidential = value
       }
     })
   })

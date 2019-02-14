@@ -251,15 +251,19 @@ describe('AssessmentHelper', () => {
   })
 
   describe('#resetConfidentialByDefaultItems()', () => {
-    it('should initialize all confidential by default items with confidential=true', () => {
+    it('should reset all confidential by default items with the value of second parameter', () => {
       // given
       const assessment = clone(validAssessment)
-      expect(assessment.state.domains[0].items[0].confidential).toBe(false)
+      assessment.state.domains[0].items[0].confidential = true
 
       // when
-      resetConfidentialByDefaultItems(assessment)
+      resetConfidentialByDefaultItems(assessment, false)
 
       // then
+      expect(assessment.state.domains[0].items[0].confidential).toBe(false)
+      // then
+      resetConfidentialByDefaultItems(assessment, true)
+
       expect(assessment.state.domains[0].items[0].confidential).toBe(true)
     })
   })

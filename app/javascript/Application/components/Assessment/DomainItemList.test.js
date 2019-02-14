@@ -1,7 +1,8 @@
 import React from 'react'
-import { mount, shallow } from 'enzyme'
+import { shallow } from 'enzyme'
 import DomainItemList from './DomainItemList'
 import Item from './Item'
+import Divider from '@material-ui/core/Divider'
 
 describe('<DomainItemList/>', () => {
   const fakeItemListProps = {
@@ -21,11 +22,7 @@ describe('<DomainItemList/>', () => {
 
   let wrapper
   beforeEach(() => {
-    wrapper = mount(<DomainItemList {...fakeItemListProps} />)
-  })
-
-  afterEach(() => {
-    wrapper.unmount()
+    wrapper = shallow(<DomainItemList {...fakeItemListProps} />)
   })
 
   it('will render a Item for each item in the props', () => {
@@ -33,7 +30,7 @@ describe('<DomainItemList/>', () => {
   })
 
   it('will render a Divider for each Item', () => {
-    expect(wrapper.find('Divider').length).toBe(2)
+    expect(wrapper.find(Divider).length).toBe(2)
   })
 
   it('will render Item with right props', () => {

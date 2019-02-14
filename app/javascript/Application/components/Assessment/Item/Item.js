@@ -3,9 +3,6 @@ import PropTypes from 'prop-types'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
-import Checkbox from '@material-ui/core/Checkbox'
-import FormControl from '@material-ui/core/FormControl'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import classNames from 'classnames'
 import ItemNaCheckbox from './ItemNaCheckbox'
 import ItemBooleanRating from './ItemBooleanRating'
@@ -16,6 +13,7 @@ import { getI18nValuesByPrefix } from '../I18nHelper'
 import { stringify } from '../../../util/common'
 import Comment from '../../common/Comment'
 import CommentIcon from '../../common/CommentIcon'
+import ConfidentialCheckbox from './ConfidentialCheckbox'
 import { expandingThenScroll, itemRatingOptionsAmount } from '../../../util/assessmentAutoScroll'
 
 const maxCommentLength = 250
@@ -92,31 +90,6 @@ class Item extends Component {
     )
   }
 
-  renderConfidentialCheckbox = (isConfidential, confidential_by_default) => {
-    const code = this.props.item.code
-    return (
-      <div className={'item-confidential-block'}>
-        <form autoComplete="off">
-          <FormControl>
-            <FormControlLabel
-              onChange={this.handleConfidentialityChange}
-              label={confidential_by_default ? 'Confidential' : 'Discretion Needed'}
-              value={stringify(isConfidential)}
-              id={`${code}Checkbox`}
-              control={
-                <Checkbox
-                  checked={isConfidential}
-                  disabled={(confidential_by_default && !this.props.canReleaseConfidentialInfo) || this.props.disabled}
-                  color={'default'}
-                />
-              }
-            />
-          </FormControl>
-        </form>
-      </div>
-    )
-  }
-
   renderQtcIfNeeded = qtcDescriptions => {
     return qtcDescriptions.length > 0 ? (
       <div>
@@ -159,6 +132,15 @@ class Item extends Component {
       onRatingUpdate: this.handleRatingChange,
       disabled: this.props.disabled,
     }
+    const confidentialCheckboxProps = {
+      isConfidential,
+      isConfidentialByDefault: confidential_by_default,
+      code,
+      canReleaseConfidentialInfo: this.props.canReleaseConfidentialInfo,
+      disabled: this.props.disabled,
+      handleConfidentialityChange: this.handleConfidentialityChange,
+    }
+
     return (
       <div>
         <Paper>
@@ -192,7 +174,7 @@ class Item extends Component {
             ) : null}
             <CommentIcon isSolid={Boolean(item.comment)} className={'item-toolbar-comment-icon'} />
             <Typography variant="title" className={'item-confidential-checkbox'}>
-              {this.renderConfidentialCheckbox(isConfidential, confidential_by_default)}
+              <ConfidentialCheckbox {...confidentialCheckboxProps} />
             </Typography>
             {rating_type === 'REGULAR' ? (
               <ItemRegularRating {...ratingProps} />

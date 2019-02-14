@@ -201,6 +201,16 @@ describe('<AssessmentFormHeader />', () => {
       updatedAssessment.can_release_confidential_info = false
       updatedAssessment.state.domains[0].items[3].confidential = true
       expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
+
+      const switchToYesEvent = {
+        target: { name: 'can_release_confidential_info', value: 'true' },
+      }
+      wrapper.instance().handleCanReleaseInfoChange(switchToYesEvent)
+      // then
+      const secondUpdatedAssessment = clone(assessment)
+      secondUpdatedAssessment.can_release_confidential_info = true
+      secondUpdatedAssessment.state.domains[0].items[3].confidential = false
+      expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
     })
   })
 
