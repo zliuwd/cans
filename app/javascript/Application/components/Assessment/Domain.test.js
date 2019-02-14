@@ -310,6 +310,101 @@ describe('<Domain />', () => {
             expect(callbackMock.mock.calls[0][0]).toBe('a')
             expect(callbackMock.mock.calls[0][1]).toBe('Full Name')
           })
+
+          it('renders a warning text when no caregiver name is filled', () => {
+            const domain = {
+              ...domainDefault,
+              is_caregiver_domain: true,
+              caregiver_index: 'a',
+              caregiver_name: undefined,
+            }
+            const callbackMock = jest.fn()
+            const domainComponent = (
+              <Domain
+                key={'1'}
+                canReleaseConfidentialInfo={true}
+                domain={{ ...domain }}
+                isAssessmentUnderSix={true}
+                i18n={{ ...i18nDefault }}
+                i18nAll={{}}
+                index={1}
+                onItemCommentUpdate={() => {}}
+                onDomainCommentUpdate={() => {}}
+                onRatingUpdate={() => {}}
+                onConfidentialityUpdate={() => {}}
+                onAddCaregiverDomain={() => {}}
+                handleWarningShow={() => {}}
+                onCaregiverNameUpdate={callbackMock}
+              />
+            )
+            const wrapper = mount(domainComponent)
+            const alert = wrapper.find('.caregiver-warning-text')
+            expect(alert.exists()).toBe(true)
+            expect(alert.text()).toMatch(' Caregiver Name is required')
+          })
+
+          it('renders a warning text when caregiver name is blank or whitespace', () => {
+            const domain = {
+              ...domainDefault,
+              is_caregiver_domain: true,
+              caregiver_index: 'a',
+              caregiver_name: ' ',
+            }
+            const callbackMock = jest.fn()
+            const domainComponent = (
+              <Domain
+                key={'1'}
+                canReleaseConfidentialInfo={true}
+                domain={{ ...domain }}
+                isAssessmentUnderSix={true}
+                i18n={{ ...i18nDefault }}
+                i18nAll={{}}
+                index={1}
+                onItemCommentUpdate={() => {}}
+                onDomainCommentUpdate={() => {}}
+                onRatingUpdate={() => {}}
+                onConfidentialityUpdate={() => {}}
+                onAddCaregiverDomain={() => {}}
+                handleWarningShow={() => {}}
+                onCaregiverNameUpdate={callbackMock}
+              />
+            )
+            const wrapper = mount(domainComponent)
+            const alert = wrapper.find('.caregiver-warning-text')
+            expect(alert.exists()).toBe(true)
+            expect(alert.text()).toMatch(' Caregiver Name is required')
+          })
+
+          it('warning text is not rendered when caregiver name is filled', () => {
+            const domain = {
+              ...domainDefault,
+              is_caregiver_domain: true,
+              caregiver_index: 'a',
+              caregiver_name: 'a',
+            }
+            const callbackMock = jest.fn()
+            const domainComponent = (
+              <Domain
+                key={'1'}
+                canReleaseConfidentialInfo={true}
+                domain={{ ...domain }}
+                isAssessmentUnderSix={true}
+                i18n={{ ...i18nDefault }}
+                i18nAll={{}}
+                index={1}
+                onItemCommentUpdate={() => {}}
+                onDomainCommentUpdate={() => {}}
+                onRatingUpdate={() => {}}
+                onConfidentialityUpdate={() => {}}
+                onAddCaregiverDomain={() => {}}
+                handleWarningShow={() => {}}
+                onCaregiverNameUpdate={callbackMock}
+              />
+            )
+            const wrapper = mount(domainComponent)
+            const alert = wrapper.find('.caregiver-warning-text')
+            expect(alert.exists()).toBe(false)
+          })
         })
       })
     })

@@ -45,6 +45,7 @@ feature 'Case Worker Functionality' do
     fill_form_header_0_to_5
     expand_all_domains
     check_redacted_checkbox_0_to_5
+    verify_caregiver_name_input_field_and_label
     fill_out_assessment_form_and_check_domain_total
     check_all_progress_are_fully_filled
     click_save_and_summary_card_is_shown
@@ -58,6 +59,7 @@ feature 'Case Worker Functionality' do
     fill_form_header_6_to_21
     expand_all_domains
     check_redacted_checkbox_6_to_21
+    verify_caregiver_name_input_field_and_label
     fill_out_assessment_form_and_check_domain_total
     check_all_progress_are_fully_filled
     click_save_and_summary_card_is_shown
@@ -116,6 +118,14 @@ feature 'Case Worker Functionality' do
   def eliminate_auto_scroll_impact
     sleep 2
     @form.item_comment_icons[0].click
+  end
+
+  def verify_caregiver_name_input_field_and_label
+    expect(@form.caregiver_domain_headers[0].text).to include('Caregiver Name is required')
+    @form.caregiver_name_fields[0].set 'Awesome Caregiver'
+    expect(@form.caregiver_name_fields[0].value).to eq('Awesome Caregiver')
+    expect(@form.caregiver_domain_headers[0].text).to include('Awesome Caregiver')
+    expect(@form.caregiver_domain_headers[0].text).to_not include('Caregiver Name is required')
   end
 
   def expand_first_domain
