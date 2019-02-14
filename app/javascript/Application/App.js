@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react'
-import { Header } from './components/Header'
 import { BrowserRouter } from 'react-router-dom'
 import { Routes } from './routes'
 import TimeoutWarning from './components/common/TimeoutWarning'
@@ -11,7 +10,6 @@ const App = () => {
   return (
     <BrowserRouter basename={basePath}>
       <Fragment>
-        <Header />
         <TimeoutWarning />
         <Routes />
       </Fragment>

@@ -3,7 +3,7 @@ import { Container, Row, Col } from '@cwds/components'
 import SubordinateInfoTotalRecord from './SubordinateInfoTotalRecord'
 import SubordinateInfoCountRecord from './SubordinateInfoCountRecord'
 import SubordinateInfoRecord from './SubordinateInfoRecord'
-import { staffInfoDefaultProps, staffInfoPropTypes } from '../../StaffHelper'
+import { staffInfoPropTypes } from '../../StaffHelper'
 import { formatPhoneWithExtCode } from '../../../../util/formatters'
 
 const SubordinateInfoTable = ({ staffInfo }) => {
@@ -32,8 +32,8 @@ const SubordinateInfoTable = ({ staffInfo }) => {
   )
 }
 
-SubordinateInfoTable.propTypes = staffInfoPropTypes
-
-SubordinateInfoTable.defaultProps = staffInfoDefaultProps
+SubordinateInfoTable.propTypes = {
+  staffInfo: staffInfoPropTypes.isRequired,
+}
 
 export default SubordinateInfoTable

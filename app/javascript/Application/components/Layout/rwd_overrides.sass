@@ -32,3 +32,14 @@ div[role="banner"]
 
       .breadcrumbs
         font-size: 1.6rem
+
+// Body root
+div[role="banner"] + div
+  margin-top: 13.6rem
+
+// Main
+div[role="main"]:not(#main-content)
+  // Alerts
+  > .container
+    margin-bottom: 0.5rem
+    padding: 0

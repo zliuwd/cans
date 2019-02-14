@@ -2,33 +2,33 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { Routes } from './'
 import { Route, Switch } from 'react-router-dom'
-import { navigation } from '../util/constants'
-import { ChildListPage, ChildProfilePageWithClient, DashboardRedirectPage } from '../components/pages'
+import {
+  AssessmentChangelogPage,
+  AssessmentPage,
+  ChildListPage,
+  ChildProfilePage,
+  DashboardRedirectPage,
+  StaffListPage,
+  SubordinateAssessmentChangelogPage,
+  SubordinateAssessmentPage,
+  SubordinateProfilePage,
+  SubordinateChildProfilePage,
+} from '../components/pages'
 import SearchRoutes from './SearchRoutes'
 
 describe('<Router />', () => {
   describe('#render', () => {
     const getWrapper = () => shallow(<Routes />)
     const getLength = component => getWrapper().find(component).length
-
-    const testRoute = (path, navigateTo) => {
-      const mockRoute = {
-        location: {},
-        match: {
-          params: {
-            clientId: '1',
-          },
-        },
-      }
-
-      const route = getWrapper()
+    const getRoute = path =>
+      getWrapper()
         .find(Route)
         .find({ path })
+
+    const expectExactComponent = (route, component) => {
       expect(route.exists()).toBe(true)
       expect(route.props().exact).toBe(true)
-
-      const page = route.props().children(mockRoute)
-      expect(page.props.navigateTo).toBe(navigateTo)
+      expect(route.props().component).toBe(component)
     }
 
     it('renders with 1 <Switch /> component', () => {
@@ -49,57 +49,50 @@ describe('<Router />', () => {
     })
 
     it('renders a client list route', () => {
-      const route = getWrapper()
-        .find(Route)
-        .find({ path: '/clients' })
-      expect(route.exists()).toBe(true)
-      expect(route.props().exact).toBe(true)
-      expect(route.props().component).toBe(ChildListPage)
+      expectExactComponent(getRoute('/clients'), ChildListPage)
     })
 
     it('renders a child profile route', () => {
-      const route = getWrapper()
-        .find(Route)
-        .find({ path: '/clients/:clientId' })
-      expect(route.exists()).toBe(true)
-      expect(route.props().exact).toBe(true)
-      expect(route.props().component).toBe(ChildProfilePageWithClient)
+      expectExactComponent(getRoute('/clients/:clientId'), ChildProfilePage)
     })
 
     it('renders a child assessments route', () => {
-      testRoute('/clients/:clientId/assessments', navigation.ASSESSMENT_ADD)
+      expectExactComponent(getRoute('/clients/:clientId/assessments'), AssessmentPage)
     })
 
     it('renders a child assessment edit route', () => {
-      testRoute('/clients/:clientId/assessments/:id', navigation.ASSESSMENT_EDIT)
+      expectExactComponent(getRoute('/clients/:clientId/assessments/:id'), AssessmentPage)
     })
 
     it('renders a supervisor dashboard route', () => {
-      testRoute('/staff', navigation.STAFF_LIST)
+      expectExactComponent(getRoute('/staff'), StaffListPage)
     })
 
     it('renders a route for staff case load pages', () => {
-      testRoute('/staff/:staffId', navigation.STAFF_READ)
+      expectExactComponent(getRoute('/staff/:staffId'), SubordinateProfilePage)
     })
 
     it('renders a route for staff access client list', () => {
-      testRoute('/staff/:staffId/clients/:clientId', navigation.STAFF_CHILD_PROFILE)
+      expectExactComponent(getRoute('/staff/:staffId/clients/:clientId'), SubordinateChildProfilePage)
     })
 
     it('renders a route for staff access assessment edit', () => {
-      testRoute('/staff/:staffId/clients/:clientId/assessments/:id', navigation.STAFF_ASSESSMENT_EDIT)
+      expectExactComponent(getRoute('/staff/:staffId/clients/:clientId/assessments/:id'), SubordinateAssessmentPage)
     })
 
     it('renders a route for staff access assessment add', () => {
-      testRoute('/staff/:staffId/clients/:clientId/assessments/', navigation.STAFF_ASSESSMENT_ADD)
+      expectExactComponent(getRoute('/staff/:staffId/clients/:clientId/assessments/'), SubordinateAssessmentPage)
     })
 
     it('renders a route for supervisor to access changelog', () => {
-      testRoute('/staff/:staffId/clients/:clientId/assessments/:id/changelog/:status', navigation.STAFF_CHANGELOG)
+      expectExactComponent(
+        getRoute('/staff/:staffId/clients/:clientId/assessments/:id/changelog/:status'),
+        SubordinateAssessmentChangelogPage
+      )
     })
 
     it('renders a route for access changelog', () => {
-      testRoute('/clients/:clientId/assessments/:id/changelog/:status', navigation.ASSESSMENT_CHANGELOG)
+      expectExactComponent(getRoute('/clients/:clientId/assessments/:id/changelog/:status'), AssessmentChangelogPage)
     })
   })
 })

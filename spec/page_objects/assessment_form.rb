@@ -14,6 +14,8 @@ end
 
 class AssessmentFormHeader < SitePrism::Section
   element :child_name, 'span#child-name'
+  element :child_dob, 'span#child-dob'
+  element :child_age, 'span#child-age'
   element :date_field, 'input#assessment-date_input'
   element :date_field_validation_msg, 'div.validation-error-line'
   element :calendar_icon, 'span.rw-i-calendar'
@@ -54,7 +56,7 @@ class AssessmentForm < SitePrism::Page
   section :app_globals, AppGlobals, 'body'
   section :global, AssessmentGlobal, 'body'
   section :breadcrumbs, Breadcrumbs, 'div.breadcrumb-container'
-  section :header, AssessmentFormHeader, 'div.assessment-header-date'
+  section :header, AssessmentFormHeader, 'div.assessment-form-header-card'
   section :summary, AssessmentSummary, 'div.assessment-summary-card'
   section :footer, AssessmentFormFooter, 'div.form-footer'
   element :assessment_card_title_0_5, 'div.assessment-card-title', text: 'Age Range 0-5'

@@ -2,9 +2,10 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import ClientsLoadingBoundary from './ClientsLoadingBoundary'
 import { ClientListCard } from '../../Client'
-import StaffLoadingBoundary from './SubordinateInfoCard/StaffLoadingBoundary'
+import StaffLoadingBoundary from '../StaffLoadingBoundary'
 import SubordinateInfoCard from './SubordinateInfoCard/SubordinateInfoCard'
 import { navigation } from '../../../util/constants'
+
 const CaseLoadPage = ({ staffId }) => (
   <Fragment>
     <StaffLoadingBoundary staffId={staffId}>
@@ -18,7 +19,11 @@ const CaseLoadPage = ({ staffId }) => (
 )
 
 CaseLoadPage.propTypes = {
-  staffId: PropTypes.string.isRequired,
+  staffId: PropTypes.string,
+}
+
+CaseLoadPage.defaultProps = {
+  staffId: null,
 }
 
 export default CaseLoadPage

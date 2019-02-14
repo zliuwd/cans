@@ -3,16 +3,16 @@ import { shallow } from 'enzyme'
 import CaseLoadPage from './CaseLoadPage'
 import ClientsLoadingBoundary from './ClientsLoadingBoundary'
 import { ClientListCard } from '../../Client'
-import StaffLoadingBoundary from './SubordinateInfoCard/StaffLoadingBoundary'
+import StaffLoadingBoundary from '../StaffLoadingBoundary'
 import SubordinateInfoCard from './SubordinateInfoCard/SubordinateInfoCard'
 
 jest.mock('../../../util/CurrentUser')
 
 describe('<CaseLoadPage />', () => {
-  const render = (staffId = 'ABC') => shallow(<CaseLoadPage staffId={staffId} />, { disableLifecycleMethods: true })
+  const render = staffId => shallow(<CaseLoadPage staffId={staffId} />, { disableLifecycleMethods: true })
 
   it('renders SubordinateInfoCard within a StaffLoadingBoundary', async () => {
-    const wrapper = render()
+    const wrapper = render('ABC')
     expect(
       wrapper
         .find(StaffLoadingBoundary)
@@ -27,7 +27,7 @@ describe('<CaseLoadPage />', () => {
   })
 
   it('renders ClientListCard within a ClientsLoadingBoundary', () => {
-    const wrapper = render()
+    const wrapper = render('ABC')
     expect(
       wrapper
         .find(ClientsLoadingBoundary)

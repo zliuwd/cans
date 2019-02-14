@@ -1,31 +1,25 @@
 /* eslint-disable react/no-multi-comp,react/no-children-prop */
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { Page } from '../components/Layout'
-import { navigation } from '../util/constants'
-
-const page = (route, navigateTo) => <Page navigateTo={navigateTo} {...route} />
+import {
+  SearchAssessmentChangelogPage,
+  SearchAssessmentPage,
+  SearchChildProfilePage,
+  SearchPage,
+} from '../components/pages'
 
 const SearchRoutes = () => {
   return (
     <Switch>
-      <Route exact path="/search" children={route => page(route, navigation.CLIENT_SEARCH)} />
-      <Route
-        exact
-        path="/search/clients/:clientId/assessments/:id"
-        children={route => page(route, navigation.SEARCH_ASSESSMENT_EDIT)}
-      />
+      <Route exact path="/search" component={SearchPage} />
+      <Route exact path="/search/clients/:clientId/assessments/:id" component={SearchAssessmentPage} />
       <Route
         exact
         path="/search/clients/:clientId/assessments/:id/changelog/:status"
-        children={route => page(route, navigation.SEARCH_CHANGELOG)}
+        component={SearchAssessmentChangelogPage}
       />
-      <Route
-        exact
-        path="/search/clients/:clientId/assessments"
-        children={route => page(route, navigation.SEARCH_ASSESSMENT_ADD)}
-      />
-      <Route exact path="/search/clients/:clientId" children={route => page(route, navigation.SEARCH_CHILD_PROFILE)} />
+      <Route exact path="/search/clients/:clientId/assessments" component={SearchAssessmentPage} />
+      <Route exact path="/search/clients/:clientId" component={SearchChildProfilePage} />
     </Switch>
   )
 }

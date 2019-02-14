@@ -120,7 +120,9 @@ class AssessmentContainerInner extends Component {
             onCancelClick={onCancelClick}
             isSubmitButtonEnabled={isCompleteButtonEnabled}
             onSubmitAssessment={
-              assessment.can_release_confidential_info === true ? handleSubmitAssessment : this.handleSubmitWarning
+              assessment.can_release_confidential_info === true
+                ? handleSubmitAssessment
+                : this.handleSubmitWarning.bind(this, true)
             }
           />
         ) : null}

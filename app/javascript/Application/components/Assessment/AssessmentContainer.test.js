@@ -333,6 +333,8 @@ describe('<AssessmentContainer />', () => {
           },
         })
         wrapper.instance().onFetchNewAssessmentSuccess(instrument)
+        wrapper.instance().updateIsEditableState()
+        wrapper.update()
         expect(wrapper.find(AssessmentFormFooter).exists()).toBeFalsy()
       })
 
@@ -344,6 +346,8 @@ describe('<AssessmentContainer />', () => {
           },
         })
         wrapper.instance().onFetchAssessmentSuccess(assessment)
+        wrapper.instance().updateIsEditableState()
+        wrapper.update()
         expect(wrapper.find('AssessmentFormFooter').exists()).toBeTruthy()
       })
     })
@@ -467,7 +471,7 @@ describe('<AssessmentContainer />', () => {
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
         jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
-        wrapper.setState({ assessment: { ...assessment, id: 1 } })
+        wrapper.setState({ assessment: { ...assessment, id: 1 }, isEditable: true })
 
         expect(wrapper.instance().state.isEditable).toBe(true)
         const assessmentAfterUpdate = { ...assessment, metadata: { allowed_operations: [] } }

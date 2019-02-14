@@ -472,6 +472,14 @@ export const i18n = {
 export const client = {
   first_name: 'John',
   last_name: 'Doe',
+  dob: '2007-07-14',
+}
+
+export const clientWithEstimatedDob = {
+  first_name: 'John',
+  last_name: 'Doe',
+  dob: '2007-07-14',
+  estimated_dob: true,
 }
 
 export const assessmentPrint = {

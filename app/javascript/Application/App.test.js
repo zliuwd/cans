@@ -9,8 +9,8 @@ describe('<App />', () => {
   const getWrapper = () => shallow(<App />)
   const getLength = component => getWrapper().find(component).length
 
-  it('renders with <Header /> component', () => {
-    expect(getLength(Header)).toBe(1)
+  it('has no <Header /> component', () => {
+    expect(getLength(Header)).toBe(0)
   })
 
   it('renders with <TimeoutWarning /> component', () => {

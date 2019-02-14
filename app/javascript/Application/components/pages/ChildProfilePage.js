@@ -1,40 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import CurrentUserLoadingBoundary from './CurrentUserLoadingBoundary'
 import { navigation } from '../../util/constants'
-import BreadCrumbsBuilder from '../Layout/BreadCrumb/BreadCrumbsBuilder'
-import { Client } from '../Client'
-import { buildSearchClientsButton as SearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
-import FullWidthLayout from '../Layout/FullWidthLayout'
+import ChildProfilePageInner from './ChildProfilePageInner'
+import ClientLoadingBoundary from './ClientLoadingBoundary'
 
-const navigateTo = navigation.CHILD_PROFILE
-
-const ChildProfilePage = ({ client, match }) => {
-  const breadcrumb = (
-    <CurrentUserLoadingBoundary>
-      <BreadCrumbsBuilder navigateTo={navigateTo} client={client} />
-    </CurrentUserLoadingBoundary>
-  )
-
-  return (
-    <FullWidthLayout breadcrumb={breadcrumb} navigateTo={navigateTo} rightButton={<SearchClientsButton />}>
-      {client && <Client navigateTo={navigateTo} client={client} match={match} />}
-    </FullWidthLayout>
-  )
-}
+const ChildProfilePage = ({ match, navigateTo, staffInfo }) => (
+  <ClientLoadingBoundary clientId={match.params.clientId}>
+    <ChildProfilePageInner match={match} navigateTo={navigateTo} staffInfo={staffInfo} />
+  </ClientLoadingBoundary>
+)
 
 ChildProfilePage.propTypes = {
-  client: PropTypes.object,
   match: PropTypes.shape({
     params: PropTypes.shape({
       staffId: PropTypes.string,
+      clientId: PropTypes.string.isRequired,
     }).isRequired,
     url: PropTypes.string.isRequired,
   }).isRequired,
+  navigateTo: PropTypes.any,
+  staffInfo: PropTypes.any,
 }
 
 ChildProfilePage.defaultProps = {
-  client: null,
+  staffInfo: null,
+  navigateTo: navigation.CHILD_PROFILE,
 }
 
 export default ChildProfilePage

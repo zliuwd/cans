@@ -1,10 +1,10 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import StaffLoadingBoundary from './StaffLoadingBoundary'
-import StaffService from '../../Staff.service'
-import LoadingBoundary from '../../../common/LoadingBoundary'
+import StaffService from './Staff.service'
+import LoadingBoundary from '../common/LoadingBoundary'
 
-jest.mock('../../Staff.service')
+jest.mock('./Staff.service')
 
 describe('<StaffLoadingBoundary />', () => {
   const render = staffId =>
@@ -37,5 +37,9 @@ describe('<StaffLoadingBoundary />', () => {
     const fetch = wrapper.find(LoadingBoundary).props().fetch
     fetch()
     expect(spy).toHaveBeenCalledWith('ABC')
+  })
+
+  it('is not hidden while loading', () => {
+    expect(render('123').props().isHiddenWhileLoading).toBe(false)
   })
 })
