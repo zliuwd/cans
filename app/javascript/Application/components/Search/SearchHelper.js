@@ -8,10 +8,23 @@ import { RESIDENCE_TYPES } from '../../enums/AddressType'
 import { isPlacementHome } from './util/isPlacementHome'
 import { zipFormatter } from './util/zipFormatter'
 import { Maybe } from '../../util/maybe'
+import Fuse from 'fuse.js'
 
 export const mapCounties = result => {
   return result.get('client_counties') ? result.get('client_counties').map(county => county.get('description')) : List()
 }
+
+export const mapMatchingAka = ({ searchResult, searchTerm }) => {
+  const akas = searchResult.get('akas', List()).toJS()
+  const options = {
+    threshold: 0.7,
+    keys: ['first_name', 'last_name', 'middle_name'],
+  }
+  const fuse = new Fuse(akas, options)
+  const aka = searchTerm ? fuse.search(searchTerm)[0] : null
+  return aka || null
+}
+
 export const mapLanguages = result => {
   return result.get('languages')
     ? result

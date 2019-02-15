@@ -47,7 +47,10 @@ describe('<ClientFetcher />', () => {
     it('fetches clients from Search Service', async () => {
       actualResults = await wrapper.props().fetch({ searchTerm: 'Johnny McRealPerson' })
       expect(actualResults.items).toEqual(expectedItems)
-      expect(selectPeopleResults).toHaveBeenCalledWith({ results: items, systemCodes })
+      expect(selectPeopleResults).toHaveBeenCalledWith({
+        response: { results: items, systemCodes },
+        searchTerm: 'Johnny McRealPerson',
+      })
       expect(getClients).toHaveBeenCalledWith({ searchTerm: 'Johnny McRealPerson' })
     })
 

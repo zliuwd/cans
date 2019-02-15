@@ -6,6 +6,7 @@ import AgeInfo from './AgeInfo'
 import LanguageInfo from './LanguageInfo'
 import AddressInfo from './AddressInfo'
 import LegacyInfo from './LegacyInfo'
+import AkaInfo from './AkaInfo'
 
 const PersonSuggestion = ({
   fullName,
@@ -17,6 +18,7 @@ const PersonSuggestion = ({
   isSealed,
   legacyDescriptor,
   clientCounties,
+  matchingAka,
 }) => {
   return (
     <div className="row">
@@ -31,6 +33,15 @@ const PersonSuggestion = ({
             <div className="row name-row">
               <FullName fullName={fullName} />
             </div>
+            <div className="row">
+              <AkaInfo aka={matchingAka} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="col-md-7">
+        <div className="row">
+          <div className="col-md-4">
             <div className="row gender-age-row">
               <Gender gender={gender} />
               <AgeInfo dateOfBirth={dateOfBirth} />
@@ -38,19 +49,11 @@ const PersonSuggestion = ({
             <div className="row search-item-header">Primary Language</div>
             <div className="row">{<LanguageInfo languages={languages} />}</div>
           </div>
-        </div>
-      </div>
-      <div className="col-md-7">
-        <div className="row county-client-case-row">
           <div className="col-md-5">
             <div className="row search-item-header">Client ID</div>
-            <div className="row">
+            <div className="row search-item">
               <LegacyInfo legacyUiId={legacyDescriptor.legacy_ui_id} />
             </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
             <div className="row search-item-header">Active Address</div>
             <div className="row">{<AddressInfo {...address} />}</div>
           </div>
@@ -70,6 +73,7 @@ PersonSuggestion.defaultProps = {
   isSealed: false,
   legacyDescriptor: {},
   clientCounties: [],
+  matchingAka: {},
 }
 
 PersonSuggestion.propTypes = {
@@ -82,6 +86,7 @@ PersonSuggestion.propTypes = {
   isSensitive: PropTypes.bool,
   languages: PropTypes.array,
   legacyDescriptor: PropTypes.object,
+  matchingAka: PropTypes.object,
 }
 
 export default PersonSuggestion

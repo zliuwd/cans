@@ -32,6 +32,14 @@ export const clientResponse = {
         id: '998',
       },
     ],
+    akas: [
+      {
+        name_type: 'AKA',
+        last_name: 'Doolittle',
+        id: 'MYl4QKc0Ki',
+        first_name: 'James',
+      },
+    ],
     addresses: [
       {
         id: '1',

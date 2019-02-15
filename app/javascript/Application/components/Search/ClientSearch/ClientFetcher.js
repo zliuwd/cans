@@ -10,7 +10,7 @@ const fetch = query =>
     const clientData = { results: clients, systemCodes }
     return {
       ...query,
-      items: selectPeopleResults(clientData),
+      items: selectPeopleResults({ response: clientData, searchTerm: query.searchTerm }),
       totalResults: response.hits.total,
     }
   })
