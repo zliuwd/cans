@@ -1,5 +1,7 @@
+import React from 'react'
 import { formatClientName, formatClientStatus } from './Client.helper'
 import { renderDate, renderReminderDate, cellTempSwitcher } from './ClientSocialWorkerCardTemplateHelper'
+import DataGridHeader from '../common/DataGridHeader'
 import './style.sass'
 
 export function SocialWorkerCardTemplate(navFrom, staffId) {
@@ -39,7 +41,14 @@ and meet the setting rules of reactTable at same time */
     },
     {
       id: 'Reassessment Reminder Date',
-      Header: 'Reassessment Reminder Date',
+      Header: (
+        <DataGridHeader
+          title={'Reassessment Reminder Date'}
+          tooltip={
+            'A CANS reassessment should be completed in conjunction with the case plan update or at a minimum of every six months.'
+          }
+        />
+      ),
       headerStyle: {
         textAlign: 'center',
       },
