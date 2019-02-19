@@ -5,7 +5,8 @@ require 'page_objects/sections/breadcrumbs'
 
 class AssessmentGlobal < SitePrism::Section
   element :assessment_page_header, 'h1', text: 'CANS Communimetric Assessment Form'
-  element :save_button, 'div.header-buttons-block i.fa-save'
+  element :save_button, '.header-button i.fa-save'
+  element :print_button, '.header-button-icon.fa-print'
   element :global_save_success_message_box, 'div.global-alert', text: 'Success! '\
                                             'CANS assessment has been saved'
   element :global_complete_message_box, 'div.global-alert', text: 'This assessment was completed '\
@@ -39,7 +40,6 @@ class AssessmentFormHeader < SitePrism::Section
   element :age_0_to_5_button_selected, 'button#age-0-5-button.age-button-selected'
   element :age_6_to_21_button, 'button#age-6-21-button'
   element :age_6_to_21_button_selected, 'button#age-6-21-button.age-button-selected'
-  element :print_button, :xpath, '//div[@class="header-buttons-block"]/button[2]'
 end
 
 class AssessmentSummary < SitePrism::Section
@@ -55,7 +55,7 @@ end
 class AssessmentForm < SitePrism::Page
   section :app_globals, AppGlobals, 'body'
   section :global, AssessmentGlobal, 'body'
-  section :breadcrumbs, Breadcrumbs, 'div.breadcrumb-container'
+  section :breadcrumbs, Breadcrumbs, '.breadcrumbs'
   section :header, AssessmentFormHeader, 'div.assessment-form-header-card'
   section :summary, AssessmentSummary, 'div.assessment-summary-card'
   section :footer, AssessmentFormFooter, 'div.form-footer'
@@ -147,4 +147,8 @@ end
 def save_and_check_the_success_message
   @form.global.save_button.click
   expect(@form.global).to have_global_save_success_message_box
+end
+
+def print_assessment
+  @form.global.print_button.click
 end

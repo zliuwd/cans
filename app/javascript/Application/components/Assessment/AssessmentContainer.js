@@ -31,7 +31,7 @@ import { logPageAction } from '../../util/analytics'
 import { isAuthorized } from '../common/AuthHelper'
 import UnsavedDataWarning from '../common/UnsavedDataWarning'
 
-const SCROLL_POSITION_ADJUST = -25 // for manually adjust scroll destination -25 means go up 25px more
+const SCROLL_POSITION_ADJUST = 15 // for manually adjust scroll destination 15 means go down 15px more
 const readOnlyMessageId = 'readonlyMessage'
 
 export default class AssessmentContainer extends Component {

@@ -531,7 +531,7 @@ describe('<AssessmentContainer />', () => {
           jest.spyOn(AssessmentService, 'postAssessment').mockReturnValue(Promise.resolve(assessment))
           const wrapper = mount(<AssessmentContainer {...defaultProps} />)
           const completeAutoScrollSpy = jest.spyOn(AssessmentAutoScroll, 'completeAutoScroll')
-          const tuner = -25
+          const tuner = 15
           await wrapper.instance().handleSaveAssessment()
           wrapper.update()
           expect(wrapper.find('AssessmentSummaryCard').prop('isSummaryAvailableOnSave')).toEqual(true)
@@ -576,7 +576,7 @@ describe('<AssessmentContainer />', () => {
 
       it('should call completeAutoScroll with right parameters', async () => {
         const completeAutoScrollSpy = jest.spyOn(AssessmentAutoScroll, 'completeAutoScroll')
-        const tuner = -25
+        const tuner = 15
         await wrapper.instance().handleSubmitAssessment()
         expect(completeAutoScrollSpy).toHaveBeenCalledWith(0, tuner)
       })

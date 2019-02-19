@@ -486,10 +486,6 @@ feature 'Case Worker Functionality' do
     expect(@form.header.has_caregiver_no_radio.checked?).to be(true)
   end
 
-  def print_assessment
-    @form.header.print_button.click
-  end
-
   def unsaved_warning_close
     @form.app_globals.return_to_the_assessment_button.click
     validate_unsaved_warning_closed

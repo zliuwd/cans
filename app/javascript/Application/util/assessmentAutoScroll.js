@@ -3,7 +3,7 @@ import { smoothScroll } from './invokeSmoothScroll'
 const STEP_MS = 50
 
 export const completeAutoScroll = (target, tuner) => {
-  const stickyComponentsHeight = 125
+  const stickyComponentsHeight = 136
   smoothScroll()
   // <<<<<< The whole logic is designed for calibrating and slowing down the window scroll process >>>>>>
   // target is the assessmentHeader Bottom, it is equal to the top of summary
@@ -47,8 +47,9 @@ export const itemRatingOptionsAmount = ratingType => {
 }
 
 export const expandingThenScroll = (event, isExpanded, amountOfChildren, disabled) => {
-  const heightWithWarning = 160
-  const heightWithoutWarning = 122
+  // Until Component Library has a sticky slot for warnings, we always assume the warning is not sticky
+  const heightWithoutWarning = 136
+  const heightWithWarning = 186
   const stickyComponentsHeight = disabled ? heightWithWarning : heightWithoutWarning
   smoothScroll()
   const averageExpandingTime = 45
