@@ -5,7 +5,7 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import { NA_RATING } from './RatingHelper'
+import { NA_RATING } from './ItemHelper'
 import { stringify } from '../../../util/common'
 
 const getTextPresentationForRating = (isBooleanRating, index) => {

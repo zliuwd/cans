@@ -40,11 +40,7 @@ class AssessmentFormHeader extends PureComponent {
     const canReleaseInfo = event.target.value === 'true'
     const assessment = clone(this.props.assessment)
     assessment.can_release_confidential_info = canReleaseInfo
-    if (!canReleaseInfo) {
-      resetConfidentialByDefaultItems(assessment, true)
-    } else {
-      resetConfidentialByDefaultItems(assessment, false)
-    }
+    resetConfidentialByDefaultItems(assessment, !canReleaseInfo)
     this.props.onAssessmentUpdate(assessment)
   }
 

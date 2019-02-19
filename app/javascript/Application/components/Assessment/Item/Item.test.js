@@ -1,14 +1,15 @@
 import React from 'react'
-import { mount, shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import Item from './Item'
 import CommentIcon from '../../common/CommentIcon'
 import Comment from '../../common/Comment'
 import ConfidentialCheckbox from './ConfidentialCheckbox'
+import ItemInner from './ItemInner'
 
 const itemDefault = {
   code: 'lf10family',
-  under_six_id: 1,
-  above_six_id: 101,
+  under_six_id: '1',
+  above_six_id: '101',
   required: true,
   confidential: true,
   confidential_by_default: true,
@@ -24,8 +25,8 @@ const itemWithComment = {
 
 const nonSUDItem = {
   code: 'lf10family',
-  under_six_id: 1,
-  above_six_id: 101,
+  under_six_id: '1',
+  above_six_id: '101',
   required: true,
   confidential: true,
   confidential_by_default: false,
@@ -36,8 +37,8 @@ const nonSUDItem = {
 
 const itemWithNaChecked = {
   code: 'lf10family',
-  under_six_id: 1,
-  above_six_id: 101,
+  under_six_id: '1',
+  above_six_id: '101',
   required: true,
   confidential: true,
   confidential_by_default: true,
@@ -48,8 +49,8 @@ const itemWithNaChecked = {
 
 const itemWithOutNaChecked = {
   code: 'lf10family',
-  under_six_id: 1,
-  above_six_id: 101,
+  under_six_id: '1',
+  above_six_id: '101',
   required: true,
   confidential: true,
   confidential_by_default: true,
@@ -86,21 +87,6 @@ const itemComponentDefault = (
 
 const mountItem = item => {
   return mount(
-    <Item
-      key={'1'}
-      canReleaseConfidentialInfo={true}
-      item={item}
-      isAssessmentUnderSix={false}
-      i18n={{ ...i18nDefault }}
-      onRatingUpdate={() => {}}
-      onConfidentialityUpdate={() => {}}
-      onCommentUpdate={() => {}}
-    />
-  )
-}
-
-const shallowItem = item => {
-  return shallow(
     <Item
       key={'1'}
       canReleaseConfidentialInfo={true}
@@ -202,19 +188,19 @@ describe('<Item />', () => {
 
   describe('CommentIcon in the toolbar', () => {
     it('should render CommentIcon with item-toolbar-comment-icon style', () => {
-      const wrapper = shallowItem(itemDefault)
+      const wrapper = mountItem(itemDefault)
       const commentIcon = wrapper.find(CommentIcon)
       expect(commentIcon.props().className.includes('item-toolbar-comment-icon')).toBeTruthy()
     })
 
     it('should render outlined CommentIcon when no comment for the item', () => {
-      const wrapper = shallowItem(itemDefault)
+      const wrapper = mountItem(itemDefault)
       const commentIcon = wrapper.find(CommentIcon)
       expect(commentIcon.props().isSolid).toBeFalsy()
     })
 
     it('should render solid CommentIcon when item has a comment', () => {
-      const wrapper = shallowItem(itemWithComment)
+      const wrapper = mountItem(itemWithComment)
       const commentIcon = wrapper.find(CommentIcon)
       expect(commentIcon.props().isSolid).toBeTruthy()
     })
@@ -335,7 +321,7 @@ describe('<Item />', () => {
   describe('Actions', () => {
     it('invokes onConfidentialityUpdate callback on confidentiality change', () => {
       const onConfidentialityUpdateMock = jest.fn()
-      const wrapper = shallow(
+      const wrapper = mount(
         <Item
           key={'1'}
           canReleaseConfidentialInfo={true}
@@ -356,7 +342,7 @@ describe('<Item />', () => {
   describe('#handleCommentChange()', () => {
     it('should propagate handleCommentChange to onChange Comment prop', () => {
       const onCommentUpdateMock = jest.fn()
-      const wrapper = shallow(
+      const wrapper = mount(
         <Item
           isAssessmentUnderSix={false}
           item={{ ...itemDefault }}
@@ -379,14 +365,14 @@ describe('<Item />', () => {
 
   describe('Comment', () => {
     it('should be rendered with a comment in props', () => {
-      const wrapper = shallowItem(itemWithComment)
+      const wrapper = mountItem(itemWithComment)
       wrapper.setState({ isExpanded: true })
       expect(wrapper.find(Comment).props().comment).toBe('a comment')
     })
   })
 
   it('should propagate disable prop to <ItemRegularRating />', () => {
-    const wrapper = shallow(
+    const wrapper = mount(
       <Item
         isAssessmentUnderSix={false}
         item={{ ...nonSUDItem }}
@@ -403,7 +389,7 @@ describe('<Item />', () => {
 
   it('should propagate disable prop to <ItemBooleanRating />', () => {
     const boolRatingItem = { ...nonSUDItem, rating_type: 'BOOLEAN' }
-    const wrapper = shallow(
+    const wrapper = mount(
       <Item
         isAssessmentUnderSix={false}
         item={{ ...boolRatingItem }}
@@ -419,7 +405,7 @@ describe('<Item />', () => {
   })
 
   it('should propagate disable prop to <ItemDescriptionRating />', () => {
-    const wrapper = shallow(
+    const wrapper = mount(
       <Item
         isAssessmentUnderSix={false}
         item={{ ...nonSUDItem }}
@@ -436,7 +422,7 @@ describe('<Item />', () => {
   })
 
   it('should propagate disable prop to <Comment />', () => {
-    const wrapper = shallow(
+    const wrapper = mount(
       <Item
         isAssessmentUnderSix={false}
         item={{ ...nonSUDItem }}
@@ -450,5 +436,59 @@ describe('<Item />', () => {
     )
     wrapper.find('#lf10family-item-expand').simulate('click')
     expect(wrapper.find('Comment').prop('disabled')).toBe(true)
+  })
+})
+
+describe('Complementary tests for CANS-755 refactor', () => {
+  let wrapper
+  beforeEach(() => {
+    wrapper = mountItem(itemWithComment)
+  })
+
+  afterEach(() => {
+    wrapper.unmount()
+  })
+
+  it('will initially render ItemInner', () => {
+    const target = wrapper.find(ItemInner)
+    expect(target.exists()).toBe(true)
+  })
+
+  it('will render ItemInner with correct props', () => {
+    const target = wrapper.find(ItemInner)
+    const expectedProps = [
+      'item',
+      'isAssessmentUnderSix',
+      'caregiverIndex',
+      'disabled',
+      'canReleaseConfidentialInfo',
+      'code',
+      'rating_type',
+      'has_na_option',
+      'rating',
+      'isConfidential',
+      'confidential_by_default',
+      'under_six_id',
+      'above_six_id',
+      'comment',
+      'itemNumber',
+      'isExpanded',
+      'title',
+      'description',
+      'qtcDescriptions',
+      'ratingDescriptions',
+      'isBooleanRating',
+      'classes',
+      'handleRatingChange',
+      'handleConfidentialityChange',
+      'handleNaValueSetting',
+      'switchExpandedState',
+      'handleKeyCheck',
+      'handleCommentChange',
+      'maxCommentLength',
+      'isConfidentialByDefault',
+      'hasNaOption',
+    ]
+    expect(Object.keys(target.props())).toEqual(expectedProps)
   })
 })
