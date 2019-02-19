@@ -1,16 +1,17 @@
-function EventBus() {
-  const eventCallbacksPairs = []
-  this.subscribe = (eventType, callback) => {
-    const eventCallbacksPair = findEventCallbacksPair(eventType)
+class EventBus {
+  eventCallbacksPairs = []
+  subscribe(eventType, callback) {
+    const eventCallbacksPair = this.findEventCallbacksPair(eventType)
 
     if (eventCallbacksPair) {
       eventCallbacksPair.callbacks.push(callback)
     } else {
-      eventCallbacksPairs.push(new EventCallbacksPair(eventType, callback))
+      this.eventCallbacksPairs.push(new EventCallbacksPair(eventType, callback))
     }
   }
-  this.post = (eventType, args) => {
-    const eventCallbacksPair = findEventCallbacksPair(eventType)
+
+  post(eventType, args) {
+    const eventCallbacksPair = this.findEventCallbacksPair(eventType)
 
     if (!eventCallbacksPair) {
       return
@@ -19,15 +20,15 @@ function EventBus() {
     eventCallbacksPair.callbacks.forEach(callback => callback(args))
   }
 
-  this.unsubscribe = (eventType, callback) => {
-    const eventCallbacksPair = findEventCallbacksPair(eventType)
+  unsubscribe(eventType, callback) {
+    const eventCallbacksPair = this.findEventCallbacksPair(eventType)
     if (eventCallbacksPair) {
       eventCallbacksPair.callbacks.splice(eventCallbacksPair.callbacks.indexOf(callback), 1)
     }
   }
 
-  const findEventCallbacksPair = eventType => {
-    return eventCallbacksPairs.find(eventObject => eventObject.eventType === eventType)
+  findEventCallbacksPair(eventType) {
+    return this.eventCallbacksPairs.find(eventObject => eventObject.eventType === eventType)
   }
 }
 
