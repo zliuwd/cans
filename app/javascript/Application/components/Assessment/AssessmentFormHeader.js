@@ -40,9 +40,7 @@ class AssessmentFormHeader extends PureComponent {
     const canReleaseInfo = event.target.value === 'true'
     const assessment = clone(this.props.assessment)
     assessment.can_release_confidential_info = canReleaseInfo
-    if (!canReleaseInfo) {
-      resetConfidentialByDefaultItems(assessment)
-    }
+    resetConfidentialByDefaultItems(assessment, !canReleaseInfo)
     this.props.onAssessmentUpdate(assessment)
   }
 
@@ -52,10 +50,11 @@ class AssessmentFormHeader extends PureComponent {
     this.props.onAssessmentUpdate(assessment)
   }
 
-  updateUnderSix = value => {
+  updateUnderSixAndAllDomainsExpand = value => {
     const assessment = clone(this.props.assessment)
     assessment.state.under_six = value
     this.props.onAssessmentUpdate(assessment)
+    this.props.expandCollapse(false)
   }
 
   renderClientName() {
@@ -254,7 +253,7 @@ class AssessmentFormHeader extends PureComponent {
           <Col xs={3}>
             <UnderSixQuestion
               isUnderSix={this.props.assessment.state.under_six}
-              onChange={this.updateUnderSix}
+              onChange={this.updateUnderSixAndAllDomainsExpand}
               disabled={this.props.disabled}
             />
           </Col>
@@ -302,11 +301,13 @@ AssessmentFormHeader.defaultProps = {
   isEventDateBeforeDob: false,
   onEventDateFieldKeyUp: () => {},
   handleWarningShow: () => {},
+  expandCollapse: () => {},
 }
 AssessmentFormHeader.propTypes = {
   assessment: PropTypes.object.isRequired,
   client: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
+  expandCollapse: PropTypes.func,
   handleWarningShow: PropTypes.func,
   isEventDateBeforeDob: PropTypes.bool,
   onAssessmentUpdate: PropTypes.func.isRequired,

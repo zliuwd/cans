@@ -315,51 +315,50 @@ describe('<Assessment />', () => {
       })
     })
   })
+})
 
-  describe('#handleExpandAllDomains()', () => {
+describe('DomainsHeader', () => {
+  it('passes isDefaultExpanded prop to DomainsHeader', () => {
     const mockFn = jest.fn()
-    const initialAssessment = clone(assessment)
     const assessmentWrapper = shallow(
-      <Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />
+      <Assessment onAssessmentUpdate={mockFn} assessment={assessment} i18n={i18n} isDefaultExpanded={false} />
     )
-    it('updates isDefaultExpanded state to false when Collapse All Button is clicked ', () => {
-      assessmentWrapper.instance().setState({
-        isDefaultExpanded: false,
-      })
-      expect(assessmentWrapper.state().isDefaultExpanded).toEqual(false)
-    })
-
-    it('updates isDefaultExpanded state to true when Expand All Button is clicked ', () => {
-      assessmentWrapper.instance().setState({
-        isDefaultExpanded: true,
-      })
-      expect(assessmentWrapper.state().isDefaultExpanded).toEqual(true)
-    })
+    const domainHeader = assessmentWrapper.find('DomainsHeader')
+    expect(domainHeader.prop('isDefaultExpanded')).toEqual(false)
   })
 })
 
-describe('Each Domain Key value matches isDefaultExpanded of the Assessment ', () => {
-  it('verfiyies the key value for each domain is false when the Assessment isDefaultExpanded state is false ', () => {
+describe('Each Domain Key value', () => {
+  it('verifies the key value for each domain is false when isDefaultExpanded prop is false', () => {
     const mockFn = jest.fn()
-    const assessmentWrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={assessment} i18n={i18n} />)
-    assessmentWrapper.instance().setState({
-      isDefaultExpanded: false,
-    })
+    const assessmentWrapper = shallow(
+      <Assessment onAssessmentUpdate={mockFn} assessment={assessment} i18n={i18n} isDefaultExpanded={false} />
+    )
 
     const domains = assessmentWrapper.find(Domain)
 
     domains.forEach(domain => expect(domain.key()).toContain('false'))
   })
 
-  it('verfiyies the key value for each domain is true when the Assessment isDefaultExpanded state is true ', () => {
+  it('verifies the key value for each domain is true when isDefaultExpanded prop is true', () => {
     const mockFn = jest.fn()
-    const assessmentWrapper = shallow(<Assessment onAssessmentUpdate={mockFn} assessment={assessment} i18n={i18n} />)
-    assessmentWrapper.instance().setState({
-      isDefaultExpanded: true,
-    })
+    const assessmentWrapper = shallow(
+      <Assessment onAssessmentUpdate={mockFn} assessment={assessment} i18n={i18n} isDefaultExpanded={true} />
+    )
 
     const domains = assessmentWrapper.find(Domain)
 
     domains.forEach(domain => expect(domain.key()).toContain('true'))
+  })
+
+  it('verifies key value for each domain has isUnderSix of the Assessment', () => {
+    const mockFn = jest.fn()
+    const assessmentWrapper = shallow(
+      <Assessment onAssessmentUpdate={mockFn} assessment={assessment} i18n={i18n} isDefaultExpanded={true} />
+    )
+    const isUnderSix = assessment.state.under_six
+    const domains = assessmentWrapper.find(Domain)
+
+    domains.forEach(domain => expect(domain.key()).toContain(isUnderSix))
   })
 })

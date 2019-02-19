@@ -25,6 +25,12 @@ def jobTypeHandledByMasterBuild() {
 
 def buildPullRequest() {
   node('cans-slave') {
+    def triggerProperties = githubPullRequestBuilderTriggerProperties()
+    properties([
+      githubConfig(),
+      pipelineTriggers([triggerProperties]),
+      buildDiscarderDefaults()
+    ])
     try {
       checkoutStage()
       checkForLabel() // shared library
@@ -43,6 +49,12 @@ def buildPullRequest() {
 
 def buildMaster() {
   node('cans-slave') {
+    triggerProperties = pullRequestMergedTriggerProperties('cans-master')
+    properties([
+      githubConfig(),
+      pipelineTriggers([triggerProperties]),
+      buildDiscarderDefaults('master')
+    ])
     try {
       checkoutStage()
       incrementTag() // shared library
@@ -366,4 +378,8 @@ def smokeTestStage(environment) {
   } else {
     regressionTestStage('--env CANS_WEB_BASE_URL=https://web.integration.cwds.io/cans', 'Smoke Test Integration', true);
   }
+}
+
+def githubConfig() {
+  githubConfigProperties('https://github.com/ca-cwds/cans')
 }

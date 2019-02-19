@@ -33,7 +33,7 @@ describe('SearchSelectors', () => {
         ...peopleSearch,
         systemCodes,
       }
-      const peopleResults = selectPeopleResults(response)
+      const peopleResults = selectPeopleResults({ response })
       expect(peopleResults).toEqual([bartSimpsonResult])
     })
 
@@ -45,7 +45,7 @@ describe('SearchSelectors', () => {
         ...peopleSearch,
         systemCodes,
       }
-      const peopleResults = selectPeopleResults(response)
+      const peopleResults = selectPeopleResults({ response })
       expect(peopleResults[0].address).toEqual({
         city: 'Flushing',
         state: 'state',
@@ -75,7 +75,7 @@ describe('SearchSelectors', () => {
         ...peopleSearch,
         systemCodes,
       }
-      const peopleResults = selectPeopleResults(response)
+      const peopleResults = selectPeopleResults({ response })
       expect(peopleResults[0].address).toEqual(null)
       expect(peopleResults[0].phoneNumber).toEqual(null)
     })
@@ -87,7 +87,7 @@ describe('SearchSelectors', () => {
         results: [clientWithNoCsecInfo],
       }
       const response = { ...peopleSearch, systemCodes }
-      const peopleResults = selectPeopleResults(response)
+      const peopleResults = selectPeopleResults({ response })
       expect(peopleResults[0].isCsec).toEqual(false)
     })
 
@@ -99,7 +99,7 @@ describe('SearchSelectors', () => {
       ]
       const peopleSearch = { results: [clientWithCsecInfo] }
       const response = { ...peopleSearch, systemCodes }
-      const peopleResults = selectPeopleResults(response)
+      const peopleResults = selectPeopleResults({ response })
       expect(peopleResults[0].isCsec).toEqual(false)
     })
 
@@ -126,7 +126,7 @@ describe('SearchSelectors', () => {
           ...peopleSearch,
           systemCodes,
         }
-        const peopleResults = selectPeopleResults(response)
+        const peopleResults = selectPeopleResults({ response })
         expect(peopleResults[0].fullName).toEqual('Sim<em>pson</em>, <em>Bar</em>t')
         expect(peopleResults[0].ssn).toEqual('<em>123-45-6789</em>')
         expect(peopleResults[0].dateOfBirth).toEqual('<em>1990-02-13</em>')
@@ -151,7 +151,7 @@ describe('SearchSelectors', () => {
           ...peopleSearch,
           systemCodes,
         }
-        const peopleResults = selectPeopleResults(response)
+        const peopleResults = selectPeopleResults({ response })
         expect(peopleResults[0].fullName).toEqual('Sim<em>pson</em>, <em>Bar</em>t')
         expect(peopleResults[0].ssn).toEqual('<em>123-45-6789</em>')
         expect(peopleResults[0].dateOfBirth).toEqual('<em>1990-02-13</em>')
@@ -168,7 +168,7 @@ describe('SearchSelectors', () => {
           ...peopleSearch,
           systemCodes,
         }
-        const peopleResults = selectPeopleResults(response)
+        const peopleResults = selectPeopleResults({ response })
         expect(peopleResults[0].fullName).toEqual('Sim<em>pson</em>, <em>Bar</em>t')
       })
 
@@ -183,7 +183,7 @@ describe('SearchSelectors', () => {
           ...peopleSearch,
           systemCodes,
         }
-        const peopleResults = selectPeopleResults(response)
+        const peopleResults = selectPeopleResults({ response })
         expect(peopleResults[0].fullName).toEqual('Sim<em>pson</em>, <em>Bar</em>t')
       })
 
@@ -195,7 +195,7 @@ describe('SearchSelectors', () => {
           ...peopleSearch,
           systemCodes,
         }
-        const peopleResults = selectPeopleResults(response)
+        const peopleResults = selectPeopleResults({ response })
         expect(peopleResults[0].fullName).toEqual('<em>Simpson</em>, Bart')
       })
 
@@ -209,7 +209,7 @@ describe('SearchSelectors', () => {
           ...peopleSearch,
           systemCodes,
         }
-        const peopleResults = selectPeopleResults(response)
+        const peopleResults = selectPeopleResults({ response })
         expect(peopleResults[0].fullName).toEqual('Simpson, Bart')
       })
     })
@@ -222,7 +222,7 @@ describe('SearchSelectors', () => {
         ...peopleSearch,
         systemCodes,
       }
-      const peopleResults = selectPeopleResults(response)
+      const peopleResults = selectPeopleResults({ response })
       expect(peopleResults[0].ssn).toEqual('123-45-6789')
     })
 
@@ -241,8 +241,25 @@ describe('SearchSelectors', () => {
         ...peopleSearch,
         systemCodes,
       }
-      const peopleResults = selectPeopleResults(response)
+      const peopleResults = selectPeopleResults({ response })
       expect(peopleResults[0].ssn).toEqual('<em>123-45-6789</em>')
+    })
+  })
+
+  it('maps the matching aka', () => {
+    const peopleSearch = {
+      results: [clientResponse],
+    }
+    const response = {
+      ...peopleSearch,
+      systemCodes,
+    }
+    const peopleResults = selectPeopleResults({ response, searchTerm: 'James Doolittle' })
+    expect(peopleResults[0].matchingAka).toEqual({
+      id: 'MYl4QKc0Ki',
+      name_type: 'AKA',
+      first_name: 'James',
+      last_name: 'Doolittle',
     })
   })
 })

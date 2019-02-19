@@ -320,7 +320,7 @@ feature 'Case Worker Functionality' do
     @form.header.authorization_label_yes.click
     within @form.ec41_title.sibling('h2.item-confidential-checkbox') do
       ec41_checkbox = find('input[type = "checkbox"]', visible: false)
-      expect(ec41_checkbox.checked?).to be(true)
+      expect(ec41_checkbox.checked?).to be(false)
       expect(ec41_checkbox.disabled?).to be(false)
     end
     @form.header.authorization_label_no.click
@@ -329,12 +329,12 @@ feature 'Case Worker Functionality' do
   def check_redacted_checkbox_6_to_21
     within @form.sub7_title.sibling('h2.item-confidential-checkbox') do
       sub7_checkbox = find('input[type = "checkbox"]', visible: false)
-      expect(sub7_checkbox.checked?).to be(true)
+      expect(sub7_checkbox.checked?).to be(false)
       expect(sub7_checkbox.disabled?).to be(false)
     end
     within @form.sub48a_title.sibling('h2.item-confidential-checkbox') do
       sub48a_checkbox = find('input[type = "checkbox"]', visible: false)
-      expect(sub48a_checkbox.checked?).to be(true)
+      expect(sub48a_checkbox.checked?).to be(false)
       expect(sub48a_checkbox.disabled?).to be(false)
     end
     @form.header.authorization_label_no.click
@@ -484,10 +484,6 @@ feature 'Case Worker Functionality' do
     @form.app_globals.agree_button_of_warning.click
     expect(@form.caregiver_name_fields.length).to eq(0)
     expect(@form.header.has_caregiver_no_radio.checked?).to be(true)
-  end
-
-  def print_assessment
-    @form.header.print_button.click
   end
 
   def unsaved_warning_close

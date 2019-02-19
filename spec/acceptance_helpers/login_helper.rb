@@ -23,8 +23,8 @@ module LoginHelper
   end
 
   def click_logout
-    find('.profile-avatar').click
-    find('.c_dropdown').click
+    find('.fa-user').click
+    find('button[role="menuitem"]').click
   end
 
   private

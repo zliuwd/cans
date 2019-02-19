@@ -1,6 +1,6 @@
-import { UNSET_RATING, NA_RATING, isNARating } from './RatingHelper'
+import { UNSET_RATING, NA_RATING, isNARating } from './ItemHelper'
 
-describe('RatingHelper', () => {
+describe('ItemHelper', () => {
   describe('UNSET_RATING', () => {
     it('is -1', () => {
       expect(UNSET_RATING).toBe(-1)

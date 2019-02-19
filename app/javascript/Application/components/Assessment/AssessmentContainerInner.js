@@ -16,6 +16,7 @@ class AssessmentContainerInner extends Component {
       isCaregiverWarningShown: false,
       focusedCaregiverId: '',
       isSubmitWarningShown: false,
+      isDefaultExpanded: false,
     }
   }
 
@@ -32,6 +33,13 @@ class AssessmentContainerInner extends Component {
     this.setState({
       isCaregiverWarningShown: switcher,
       focusedCaregiverId: caregiverIndex,
+    })
+  }
+
+  handleExpandAllDomains = value => {
+    const isExpanded = typeof value === typeof true ? value : !this.state.isDefaultExpanded
+    this.setState({
+      isDefaultExpanded: isExpanded,
     })
   }
 
@@ -66,6 +74,7 @@ class AssessmentContainerInner extends Component {
       isEditable,
     } = this.props
     const isUnderSix = assessment && assessment.state && assessment.state.under_six
+    const isDefaultExpanded = this.state.isDefaultExpanded
     return (
       <Fragment>
         <div rol="completeScrollLocator">
@@ -78,6 +87,7 @@ class AssessmentContainerInner extends Component {
             isCaregiverWarningShown={this.state.isCaregiverWarningShown}
             disabled={!isEditable}
             isEventDateBeforeDob={isEventDateBeforeDob}
+            expandCollapse={this.handleExpandAllDomains}
           />
         </div>
         <AssessmentSummaryCard
@@ -94,6 +104,8 @@ class AssessmentContainerInner extends Component {
           onAssessmentUpdate={onAssessmentUpdate}
           handleWarningShow={this.handleWarningShow}
           disabled={!isEditable}
+          isDefaultExpanded={isDefaultExpanded}
+          expandCollapse={this.handleExpandAllDomains}
         />
       </Fragment>
     )

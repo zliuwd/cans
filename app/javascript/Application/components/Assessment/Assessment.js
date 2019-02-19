@@ -8,12 +8,6 @@ import { Card, CardBody } from '@cwds/components'
 
 const INDICES = 'abcdefghijklmnopqrstuvwxyz'
 class Assessment extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isDefaultExpanded: false,
-    }
-  }
   /* eslint-disable camelcase */
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.assessment.state.domains.length === 0 && nextProps.assessment.state.domains.length !== 0) {
@@ -144,20 +138,13 @@ class Assessment extends Component {
     this.props.onAssessmentUpdate(assessment)
   }
 
-  handleExpandAllDomains = () => {
-    this.setState({
-      isDefaultExpanded: !this.state.isDefaultExpanded,
-    })
-  }
-
   render() {
-    const i18n = this.props.i18n
+    const { i18n, isDefaultExpanded } = this.props
     const assessmentDto = this.props.assessment
     const canReleaseConfidentialInfo = assessmentDto.can_release_confidential_info
     const assessmentJson = assessmentDto.state
     const isUnderSix = assessmentJson.under_six
     const domains = assessmentJson.domains
-    const { isDefaultExpanded } = this.state
     return (
       <Fragment>
         {!(isUnderSix === null || isUnderSix === undefined) ? (
@@ -165,7 +152,7 @@ class Assessment extends Component {
             <DomainsHeader
               isUnderSix={isUnderSix}
               isDefaultExpanded={isDefaultExpanded}
-              expandCollapse={this.handleExpandAllDomains}
+              expandCollapse={this.props.expandCollapse}
             />
             <CardBody>
               {domains.map((domain, index) => {
@@ -174,7 +161,7 @@ class Assessment extends Component {
                 return (
                   <Domain
                     index={index}
-                    key={code + isDefaultExpanded + id}
+                    key={code + isDefaultExpanded + id + isUnderSix}
                     domain={domain}
                     i18n={domainI18n}
                     i18nAll={i18n}
@@ -204,14 +191,18 @@ class Assessment extends Component {
 Assessment.propTypes = {
   assessment: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
+  expandCollapse: PropTypes.func,
   handleWarningShow: PropTypes.func,
   i18n: PropTypes.object.isRequired,
+  isDefaultExpanded: PropTypes.bool,
   onAssessmentUpdate: PropTypes.func.isRequired,
 }
 
 Assessment.defaultProps = {
   disabled: false,
+  expandCollapse: () => {},
   handleWarningShow: () => {},
+  isDefaultExpanded: false,
 }
 
 export default Assessment

@@ -22,11 +22,15 @@ describe(' ClientSocialWorkerCardTempate ', () => {
     const expectedFullNameHeader = template()[0].Header
     const expectedDoBHeader = template()[1].Header
     const expectedStatusHeader = template()[2].Header
-    const expectedReminderDateHeader = template()[3].Header
+    const expectedReminderDateHeader = template()[3].Header.props.title
+    const expectedReminderDateHeaderTooltip = template()[3].Header.props.tooltip
     expect(expectedFullNameHeader).toEqual('Client Name')
     expect(expectedDoBHeader).toEqual('DOB')
     expect(expectedStatusHeader).toEqual('CANS Status')
     expect(expectedReminderDateHeader).toEqual('Reassessment Reminder Date')
+    expect(expectedReminderDateHeaderTooltip).toEqual(
+      'A CANS reassessment should be completed in conjunction with the case plan update or at a minimum of every six months.'
+    )
   })
 
   it('all accessor works', () => {

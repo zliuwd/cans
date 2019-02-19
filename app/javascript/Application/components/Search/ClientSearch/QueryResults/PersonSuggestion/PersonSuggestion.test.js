@@ -7,12 +7,21 @@ import AgeInfo from './AgeInfo'
 import LanguageInfo from './LanguageInfo'
 import LegacyInfo from './LegacyInfo'
 import AddressInfo from './AddressInfo'
+import AkaInfo from './AkaInfo'
 
 describe('<PersonSuggestion />', () => {
   const defaultProps = {
     fullName: 'Reap, Casey Aaron',
     dateOfBirth: '<em>1987-11-21</em>',
     gender: 'male',
+    akas: [
+      {
+        id: 'MYl4QKc0Ki',
+        name_type: 'AKA',
+        first_name: 'James',
+        last_name: 'Doolittle',
+      },
+    ],
     address: {
       city: 'Quincy',
       state: 'CA',
@@ -65,6 +74,11 @@ describe('<PersonSuggestion />', () => {
     it('renders an <AddressInfo /> component', () => {
       const wrapper = shallow(<PersonSuggestion {...defaultProps} />)
       expect(wrapper.find(AddressInfo).exists()).toBe(true)
+    })
+
+    it('renders an <AkaInfo /> component', () => {
+      const wrapper = shallow(<PersonSuggestion {...defaultProps} />)
+      expect(wrapper.find(AkaInfo).exists()).toBe(true)
     })
   })
 

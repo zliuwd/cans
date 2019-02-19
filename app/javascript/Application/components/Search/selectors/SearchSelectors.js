@@ -9,6 +9,7 @@ import {
   mapAddress,
   mapPhoneNumber,
   mapCounties,
+  mapMatchingAka,
 } from '../SearchHelper'
 
 const formatSSN = ssn => ssn && ssn.replace(/(\d{3})(\d{2})(\d{4})/, '$1-$2-$3')
@@ -49,7 +50,7 @@ const formatFullName = (result, highlight) =>
 
 const hasActiveCsec = _result => false
 
-export const selectPeopleResults = response => {
+export const selectPeopleResults = ({ response, searchTerm = null }) => {
   const results = fromJS(response).get('results')
   const systemCodes = fromJS({ systemCodes: response.systemCodes })
 
@@ -71,6 +72,7 @@ export const selectPeopleResults = response => {
         isCsec: hasActiveCsec(result),
         ssn: formatSSN(maybeHighlightedField(result, highlight, 'ssn') || result.get('ssn')),
         clientCounties: mapCounties(result),
+        matchingAka: mapMatchingAka({ searchResult: result, searchTerm }),
         address: mapAddress(result, systemCodes),
         phoneNumber: formatPhoneNumber(mapPhoneNumber(result).first()),
         isSensitive: mapIsSensitive(result),

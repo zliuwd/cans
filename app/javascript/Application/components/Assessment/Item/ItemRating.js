@@ -7,7 +7,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { stringify } from '../../../util/common'
 import { withStyles } from '@material-ui/core/styles'
 import { ieStyleFixer } from './ItemStyling'
-import { isNARating } from './RatingHelper'
+import { isNARating } from './ItemHelper'
 
 const ieFixStyle = ieStyleFixer()
 

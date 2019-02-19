@@ -120,6 +120,7 @@ export const bartSimpsonResult = {
   isProbationYouth: true,
   ssn: '123-45-6789',
   clientCounties: ['SysCode Nowhere', 'SysCode Places'],
+  matchingAka: null,
   address: {
     city: 'Flushing',
     state: 'state',
@@ -135,3 +136,37 @@ export const bartSimpsonResult = {
   isSealed: false,
   sort: [sortAfterScore, 'person-summary#9GE4pyI0N3'],
 }
+
+export const akas = [
+  {
+    name_type: 'AKA',
+    last_name: 'Doolittle',
+    id: 'MYl4QKc0Ki',
+    first_name: 'James',
+  },
+  {
+    name_type: 'Doe',
+    last_name: 'Howland',
+    id: 'OiRrdgc0Ki',
+    first_name: 'John',
+  },
+  {
+    name_type: 'Doe',
+    last_name: 'Fratelli',
+    id: 'H3TYeHO0Ki',
+    first_name: 'Gino',
+  },
+  {
+    name_type: 'AKA',
+    last_name: 'Hunley',
+    id: 'ToGs5P40Ki',
+    first_name: 'Alan',
+  },
+  {
+    name_type: 'Legal',
+    last_name: 'Aldrich',
+    id: '7MqLPlO0Ki',
+    middle_name: 'Allison',
+    first_name: 'Billy',
+  },
+]

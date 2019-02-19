@@ -201,14 +201,30 @@ describe('<AssessmentFormHeader />', () => {
       updatedAssessment.can_release_confidential_info = false
       updatedAssessment.state.domains[0].items[3].confidential = true
       expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
+
+      const switchToYesEvent = {
+        target: { name: 'can_release_confidential_info', value: 'true' },
+      }
+      wrapper.instance().handleCanReleaseInfoChange(switchToYesEvent)
+      // then
+      const secondUpdatedAssessment = clone(assessment)
+      secondUpdatedAssessment.can_release_confidential_info = true
+      secondUpdatedAssessment.state.domains[0].items[3].confidential = false
+      expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
     })
   })
 
   describe('UnderSixQuestion onChange', () => {
-    it('will set under_six to its opposite', () => {
+    it('will set under_six to its opposite and sets exapndAllDomains to false', () => {
       // given
-      const mockFn = jest.fn()
-      const props = { assessment, client, onAssessmentUpdate: mockFn }
+      const assessmentUpdateMockFn = jest.fn()
+      const expandCollapseMockFn = jest.fn()
+      const props = {
+        assessment,
+        client,
+        onAssessmentUpdate: assessmentUpdateMockFn,
+        expandCollapse: expandCollapseMockFn,
+      }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(assessment.state.under_six).toBe(false)
       // when
@@ -219,7 +235,8 @@ describe('<AssessmentFormHeader />', () => {
       // then
       const updatedAssessment = clone(assessment)
       updatedAssessment.state.under_six = true
-      expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
+      expect(assessmentUpdateMockFn).toHaveBeenCalledWith(updatedAssessment)
+      expect(expandCollapseMockFn).toHaveBeenCalledWith(false)
     })
   })
 

@@ -7,6 +7,7 @@ import {
   mapPhoneNumber,
   mapAddress,
   encodedSearchAfterParams,
+  mapMatchingAka,
 } from './SearchHelper'
 import {
   resultWithPhoneNumbers,
@@ -14,6 +15,7 @@ import {
   addressPlacementHome,
   addressCommon,
   sortAfterScore,
+  akas,
 } from './clientresults.mocks'
 import { RESIDENCE_TYPES } from '../../enums/AddressType'
 import { unableToDetermineCodes } from '../../enums/SystemCodes'
@@ -254,5 +256,38 @@ describe('encodedSearchAfterParams', () => {
     expect(encodedSearchAfterParams(sortAfter)).toBe(
       'search_after%5B%5D=125.48025&search_after%5B%5D=person-summary%239GE4pyI0N3'
     )
+  })
+})
+
+describe('mapMatchingAka', () => {
+  it('return aka when searchTerm exactly match the akas', () => {
+    const searchResult = fromJS({ akas })
+    const aka = mapMatchingAka({ searchResult, searchTerm: 'James Doolittle' })
+    expect(aka.first_name).toBe('James')
+    expect(aka.last_name).toBe('Doolittle')
+    expect(aka.name_type).toBe('AKA')
+  })
+
+  it('return null when searchTerm does not match', () => {
+    const searchResult = fromJS({ akas })
+    expect(mapMatchingAka({ searchResult, searchTerm: 'xyzabcxyz' })).toEqual(null)
+  })
+
+  it('returns null when akas is empty array', () => {
+    const akas = []
+    const searchResult = fromJS({ akas })
+    expect(mapMatchingAka({ searchResult, searchTerm: 'John Doe' })).toEqual(null)
+  })
+
+  it('returns null when search term is null', () => {
+    const searchResult = fromJS({ akas })
+    expect(mapMatchingAka({ searchResult, searchTerm: null })).toEqual(null)
+  })
+
+  it('returns proper AKA when fuzzy search is used', () => {
+    const searchResult = fromJS({ akas })
+    expect(mapMatchingAka({ searchResult, searchTerm: 'James Dulittle' }).last_name).toEqual('Doolittle')
+    expect(mapMatchingAka({ searchResult, searchTerm: 'James Dulittl' }).last_name).toEqual('Doolittle')
+    expect(mapMatchingAka({ searchResult, searchTerm: 'Gino Frotteli' }).last_name).toEqual('Fratelli')
   })
 })

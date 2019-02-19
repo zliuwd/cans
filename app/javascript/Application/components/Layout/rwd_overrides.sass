@@ -33,6 +33,17 @@ div[role="banner"]
       .breadcrumbs
         font-size: 1.6rem
 
+
+// Page alerts (until a slot exists)
+.page-alerts
+  position: sticky
+  top: 14.6rem
+  left: auto
+  z-index: 1000
+
+  > :last-child
+    margin-bottom: 1rem
+
 // Body root
 div[role="banner"] + div
   margin-top: 13.6rem
