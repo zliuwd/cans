@@ -24,7 +24,7 @@ class PersonSearchForm extends PureComponent {
     return (
       <Card className="card hidden-print client-search-card">
         <CardHeader className="card-header-search">
-          <CardTitle className={'card-title-fix'}>{searchTitle}</CardTitle>
+          <CardTitle>{searchTitle}</CardTitle>
         </CardHeader>
         <CardBody className="card-body-search">
           <ClientFetcher>

@@ -8,7 +8,7 @@ const SubordinateInfoCard = ({ staffInfo }) =>
   staffInfo && (
     <Card className={'card supervisor-card'}>
       <CardHeader>
-        <CardTitle className={'card-title-fix'}>{formatClientName(staffInfo.staff_person)}</CardTitle>
+        <CardTitle>{formatClientName(staffInfo.staff_person)}</CardTitle>
       </CardHeader>
       <CardBody>
         <SubordinateInfoTable staffInfo={staffInfo} />

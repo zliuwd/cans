@@ -10,7 +10,7 @@ const ClientSocialWorkerCard = props => {
   return (
     <Card className="card-cans-client-list">
       <CardHeader>
-        <CardTitle className={'card-title-fix'}>
+        <CardTitle>
           Client List<span className="client-list-records-amount">({props.title})</span>
         </CardTitle>
       </CardHeader>

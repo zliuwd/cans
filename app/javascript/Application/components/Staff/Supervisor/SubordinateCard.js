@@ -11,7 +11,7 @@ const SubordinateCard = ({ loadingState, staff }) => {
   return (
     <Card className={'card supervisor-card'} loading={loadingProp}>
       <CardHeader>
-        <CardTitle className={'card-title-fix'}>Assigned Staff</CardTitle>
+        <CardTitle>Assigned Staff</CardTitle>
       </CardHeader>
       <CardBody>
         <StaffTable staff={staff} />
