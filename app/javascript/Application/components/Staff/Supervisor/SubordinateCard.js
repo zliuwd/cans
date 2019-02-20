@@ -4,12 +4,11 @@ import { Card, CardHeader, CardBody, CardTitle } from '@cwds/components'
 import StaffTable from '../StaffTable'
 import { LoadingState } from '../../../util/loadingHelper'
 import { staffPropType } from '../StaffHelper'
-import './style.sass'
 
 const SubordinateCard = ({ loadingState, staff }) => {
   const loadingProp = loadingState === LoadingState.updating ? 'true' : undefined
   return (
-    <Card className={'card supervisor-card'} loading={loadingProp}>
+    <Card className={'card'} loading={loadingProp}>
       <CardHeader>
         <CardTitle>Assigned Staff</CardTitle>
       </CardHeader>
