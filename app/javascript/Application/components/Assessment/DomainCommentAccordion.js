@@ -51,6 +51,7 @@ class DomainCommentAccordion extends Component {
           <Typography
             variant="title"
             style={{
+              fontSize: '0.8rem',
               flex: 1,
               textAlign: 'left',
               marginLeft: 10,
