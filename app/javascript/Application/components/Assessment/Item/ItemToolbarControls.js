@@ -51,7 +51,7 @@ const ItemToolbarControls = props => {
         />
       ) : null}
       <CommentIcon isSolid={Boolean(comment)} className={'item-toolbar-comment-icon'} />
-      <Typography variant="title" className={'item-confidential-checkbox'}>
+      <Typography variant="body2" className={'item-confidential-checkbox'}>
         <ConfidentialCheckbox {...confidentialCheckboxProps} />
       </Typography>
       {ratingType === 'REGULAR' ? <ItemRegularRating {...ratingProps} /> : <ItemBooleanRating {...ratingProps} />}

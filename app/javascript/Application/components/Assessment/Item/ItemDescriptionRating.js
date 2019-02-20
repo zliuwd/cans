@@ -34,7 +34,7 @@ class ItemDescriptionRating extends PureComponent {
     const labelId = `${code}-inter-controls-label`
     return (
       <Fragment>
-        <Typography id={labelId} variant="display1" style={{ marginTop: '1.5rem' }}>
+        <Typography id={labelId} variant="subheading" style={{ marginTop: '0.9375rem' }}>
           Ratings:
         </Typography>
         <form autoComplete="off">
@@ -44,8 +44,8 @@ class ItemDescriptionRating extends PureComponent {
                 <FormControlLabel
                   value={stringify(NA_RATING)}
                   control={<Radio value={stringify(NA_RATING)} color={'default'} />}
-                  label={<Typography variant="headline">N/A = {naRatingDescription}</Typography>}
-                  style={{ fontSize: '1.3rem' }}
+                  label={<Typography variant="body2">N/A = {naRatingDescription}</Typography>}
+                  style={{ fontSize: '0.8125rem' }}
                 />
               ) : null}
               {ratingDescriptions.map((label, i) => {
@@ -64,9 +64,9 @@ class ItemDescriptionRating extends PureComponent {
                         }}
                       />
                     }
-                    style={{ fontSize: '1.3rem' }}
+                    style={{ fontSize: '0.8125rem' }}
                     label={
-                      <Typography variant="headline">
+                      <Typography variant="body2">
                         {getTextPresentationForRating(isBooleanRating, i)} = {label}
                       </Typography>
                     }

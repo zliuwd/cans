@@ -4,10 +4,10 @@ import Typography from '@material-ui/core/Typography'
 const ItemQtcDescriptions = ({ qtcDescriptions }) => {
   return (
     <div>
-      <Typography variant="display1" style={{ marginTop: '1.5rem' }}>
+      <Typography variant="subheading" style={{ marginTop: '1.5rem' }}>
         Questions to Consider:
       </Typography>
-      <Typography variant="headline" role={'list'}>
+      <Typography variant="body2" role="list">
         {qtcDescriptions.map((description, i) => {
           return <li key={i}>{description}</li>
         })}
