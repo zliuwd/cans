@@ -65,29 +65,33 @@ describe('<DomainCommentAccordion />', () => {
 
     it('has chevron right icon to expand', () => {
       const foldedText = wrapper.text()
-      expect(wrapper.find('#BEHEMO-comment-accordion-expand').hasClass('fa-chevron-right')).toBe(true)
+      const chevron = wrapper.find('Icon#BEHEMO-comment-accordion-expand')
+      expect(chevron.props().icon).toBe('chevron-down')
+      expect(chevron.props().rotation).toBe(270)
       expect(foldedText).toMatch(/Comment/)
     })
 
     it('expands and has chevron down icon ', () => {
-      wrapper.find('#BEHEMO-comment-accordion-expand').simulate('click')
+      wrapper.find('Icon#BEHEMO-comment-accordion-expand').simulate('click')
       const expandedText = wrapper.text()
-      expect(wrapper.find('#BEHEMO-comment-accordion-expand').hasClass('fa-chevron-down')).toBe(true)
+      const chevron = wrapper.find('Icon#BEHEMO-comment-accordion-expand')
+      expect(chevron.props().icon).toBe('chevron-down')
+      expect(chevron.props().rotation).toBe(null)
       expect(expandedText).toMatch(/Comment/)
     })
 
     it('when chevron button get focus and press tab accordion will not expand', async () => {
-      wrapper.find('i.fa-chevron-right').simulate('keydown', { key: 'Tab' })
+      wrapper.find('Icon#BEHEMO-comment-accordion-expand').simulate('keydown', { key: 'Tab' })
       expect(wrapper.instance().state.isExpanded).toEqual(false)
     })
 
     it('when chevron button get focus and press a key other than Tab, accordion will expand', async () => {
-      wrapper.find('i.fa-chevron-right').simulate('keydown', { key: 'Enter' })
+      wrapper.find('Icon#BEHEMO-comment-accordion-expand').simulate('keydown', { key: 'Enter' })
       expect(wrapper.instance().state.isExpanded).toEqual(true)
     })
 
     it('when comment item expanded, expandingThenScroll will be invoked ', async () => {
-      wrapper.find('i.fa-chevron-right').simulate('click')
+      wrapper.find('Icon#BEHEMO-comment-accordion-expand').simulate('click')
       expect(wrapper.instance().state.isExpanded).toEqual(true)
       expect(expandingThenScroll).toHaveBeenCalledTimes(1)
     })
@@ -98,7 +102,7 @@ describe('<DomainCommentAccordion />', () => {
     const foldedText = wrapper.text()
     expect(foldedText).toMatch(/Comment/)
 
-    wrapper.find('#BEHEMO-comment-accordion-expand').simulate('click')
+    wrapper.find('Icon#BEHEMO-comment-accordion-expand').simulate('click')
     const expandedText = wrapper.text()
     expect(expandedText).toMatch(/Comment/)
   })
