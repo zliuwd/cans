@@ -70,7 +70,7 @@ class Domain extends Component {
     return (
       <div className={'caregiver-name-wrapper'}>
         <Input
-          bsSize="lg"
+          bsSize="sm"
           placeholder="ex. Last Name, First Name/Relationship to child or youth"
           className={'caregiver-name'}
           value={this.state.caregiverName}

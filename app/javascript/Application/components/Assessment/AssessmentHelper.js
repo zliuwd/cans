@@ -200,7 +200,7 @@ export const caregiverWarning = (
 )
 
 export const completeTip = (
-  <Typography variant="headline" className={'submit-validation-message'}>
+  <Typography variant="body1" className={'submit-validation-message'}>
     The Assessment Date and all assessment ratings must be completed before the Complete button becomes active.
   </Typography>
 )
