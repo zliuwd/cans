@@ -4,6 +4,8 @@ import { UNSAVED_ASSESSMENT_VALIDATION_EVENT } from '../../util/constants'
 import { eventBus } from '../../util/eventBus'
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap'
 import { Icon } from '@cwds/components'
+import { breadCrumbOnClickHandler } from '../Layout/BreadCrumb/BreadCrumbPipeline'
+import { alertMessage } from '../Assessment/AssessmentHelper'
 
 class UnsavedDataWarning extends Component {
   constructor(context) {
@@ -14,14 +16,18 @@ class UnsavedDataWarning extends Component {
     this.close = this.close.bind(this)
     this.onAction = this.onAction.bind(this)
     this.onValidation = this.onValidation.bind(this)
+    this.onBreadCrumbsClick = this.onBreadCrumbsClick.bind(this)
+    this.continueAction = this.continueAction.bind(this)
   }
 
   componentDidMount() {
+    breadCrumbOnClickHandler.onClick = this.onBreadCrumbsClick
     eventBus.subscribe(UNSAVED_ASSESSMENT_VALIDATION_EVENT, this.onValidation)
   }
 
   componentWillUnmount() {
     eventBus.unsubscribe(UNSAVED_ASSESSMENT_VALIDATION_EVENT, this.onValidation)
+    breadCrumbOnClickHandler.onClick = event => {}
   }
 
   close() {
@@ -36,11 +42,27 @@ class UnsavedDataWarning extends Component {
     }
   }
 
+  onBreadCrumbsClick(event) {
+    if (this.props.isUnsaved) {
+      event.preventDefault()
+      this.setState({ isOpened: true, href: event.target.href })
+    }
+  }
+
   onAction(action) {
     action().then(() => {
-      eventBus.post(this.state.event)
+      this.continueAction()
       this.close()
     })
+  }
+
+  continueAction() {
+    if (this.state.event !== undefined) {
+      eventBus.post(this.state.event)
+    } else {
+      window.removeEventListener('beforeunload', alertMessage)
+      document.location.href = this.state.href
+    }
   }
 
   render() {

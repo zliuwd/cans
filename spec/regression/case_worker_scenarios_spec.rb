@@ -103,6 +103,38 @@ feature 'Case Worker Functionality' do
     expect(@form.header.conducted_by.value).to eq(CONDUCTED_BY)
   end
 
+  scenario 'Case worker clicks breadcrumbs when assessment is unsaved then saves it' do
+    CONDUCTED_BY = 'Test Name'
+    CONDUCTED_BY_UPDATED = 'Test Name 2'
+    visit '/'
+    create_new_assessment(CLIENT_NAME)
+    click_0_to_5_button
+    fill_conducted_by_field(CONDUCTED_BY)
+    save_and_check_the_success_message
+    fill_conducted_by_field(CONDUCTED_BY_UPDATED)
+    @form.breadcrumbs.route_from_breadcrumbs(CLIENT_NAME)
+    unsaved_warning_save_and_continue
+    expect(@client_profile).to have_in_progress_record
+    first_assessment_in_history.click
+    expect(@form.header.conducted_by.value).to eq(CONDUCTED_BY_UPDATED)
+  end
+
+  scenario 'Case worker clicks breadcrumbs when assessment is unsaved then discard' do
+    CONDUCTED_BY = 'Test Name'
+    CONDUCTED_BY_UPDATED = 'Test Name 2'
+    visit '/'
+    create_new_assessment(CLIENT_NAME)
+    click_0_to_5_button
+    fill_conducted_by_field(CONDUCTED_BY)
+    save_and_check_the_success_message
+    fill_conducted_by_field(CONDUCTED_BY_UPDATED)
+    @form.breadcrumbs.route_from_breadcrumbs(CLIENT_NAME)
+    unsaved_warning_discard_and_continue
+    expect(@client_profile).to have_in_progress_record
+    first_assessment_in_history.click
+    expect(@form.header.conducted_by.value).to eq(CONDUCTED_BY)
+  end
+
   def validate_child_dob_and_age(dob)
     expect(@form.header.child_dob).to have_content('DOB: ' + dob)
     expect(@form.header.child_age).to have_content(age(dob).to_s + ' years old')
@@ -502,5 +534,9 @@ feature 'Case Worker Functionality' do
 
   def validate_unsaved_warning_closed
     expect(page).not_to have_css('.unsaved-warning-modal-heading')
+  end
+
+  def first_assessment_in_history
+    @client_profile.recently_updated_assessments_links[0]
   end
 end

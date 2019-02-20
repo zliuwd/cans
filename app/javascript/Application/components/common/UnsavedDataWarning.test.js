@@ -4,6 +4,7 @@ import { shallow } from 'enzyme'
 import { eventBus } from './../../util/eventBus'
 import { UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT } from './../../util/constants'
 import { Button } from 'reactstrap'
+import { breadCrumbOnClickHandler } from '../Layout/BreadCrumb/BreadCrumbPipeline'
 
 describe('<UnsavedDataWarning />', () => {
   const action = () => {
@@ -30,6 +31,19 @@ describe('<UnsavedDataWarning />', () => {
     it('<UnsavedDataWarning /> is present when unsaved assessment validation event is received', () => {
       const wrapper = openWarning()
       expect(wrapper.instance().state.isOpened).toBeTruthy()
+    })
+  })
+
+  describe('unsaved data warning breadcrums callback', () => {
+    it('<UnsavedDataWarning /> sets breadcrumb callback', () => {
+      const wrapper = shallow(warning(false))
+      expect(wrapper.instance().onBreadCrumbsClick).toEqual(breadCrumbOnClickHandler.onClick)
+    })
+
+    it('<UnsavedDataWarning /> unsets breadcrumb callback on unload', () => {
+      const wrapper = shallow(warning(false))
+      wrapper.instance().componentWillUnmount()
+      expect(wrapper.instance().onBreadCrumbsClick).not.toEqual(breadCrumbOnClickHandler.onClick)
     })
   })
 

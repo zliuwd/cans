@@ -5,6 +5,22 @@ import { formatName, selfChecker, crumbsGroup, selfCheckerKeyWords } from './Bre
 import { Link } from 'react-router-dom'
 import { AssessmentStatus } from '../../Assessment/'
 
+export const breadCrumbOnClickHandler = {
+  onClick: event => {},
+}
+
+const onClick = event => {
+  breadCrumbOnClickHandler.onClick(event)
+}
+
+const link = (href, text) => {
+  return (
+    <Link to={href} onClick={onClick}>
+      {text}
+    </Link>
+  )
+}
+
 export const homeCrumbHandler = (user, elements) => {
   let url
   let linkText
@@ -22,7 +38,7 @@ export const homeCrumbHandler = (user, elements) => {
       linkText = BreadCrumbLinks.CLIENT_SEARCH
       break
   }
-  elements.push(<Link to={url}>{linkText}</Link>)
+  elements.push(link(url, linkText))
 }
 
 export const addStaffListIfNeeded = (elements, navigateTo) => {
@@ -36,7 +52,7 @@ export const addStaffProfileIfNeeded = (elements, navigateTo, staffPerson) => {
     elements.push(formatName(staffPerson))
   }
   if (crumbsGroup.staffProfile.includes(navigateTo)) {
-    elements.push(<Link to={`/staff/${staffPerson.identifier}`}>{formatName(staffPerson)}</Link>)
+    elements.push(link(`/staff/${staffPerson.identifier}`, formatName(staffPerson)))
   }
 }
 
@@ -44,15 +60,13 @@ export const addChildYouthListCrumbIfNeeded = (elements, navigateTo) => {
   if (selfChecker(navigateTo, selfCheckerKeyWords.CHILD_LIST)) {
     elements.push(BreadCrumbLinks.CLIENT_LIST)
   } else if (crumbsGroup.clientList.includes(navigateTo)) {
-    elements.push(<Link to={'/clients'}>{BreadCrumbLinks.CLIENT_LIST}</Link>)
+    elements.push(link('/clients', BreadCrumbLinks.CLIENT_LIST))
   }
 }
 
 export const addStaffChildProfileCrumbIfNeeded = (elements, navigateTo, client, staffPerson) => {
   if (crumbsGroup.staffChildProfile.includes(navigateTo)) {
-    elements.push(
-      <Link to={`/staff/${staffPerson.identifier}/clients/${client.identifier}`}>{formatName(client)}</Link>
-    )
+    elements.push(link(`/staff/${staffPerson.identifier}/clients/${client.identifier}`, formatName(client)))
   }
 }
 
@@ -60,9 +74,9 @@ export const addChildProfileCrumbIfNeeded = (elements, navigateTo, client) => {
   if (selfChecker(navigateTo, selfCheckerKeyWords.PROFILE_OVERALL)) {
     elements.push(formatName(client))
   } else if (crumbsGroup.searchChildProfile.includes(navigateTo)) {
-    elements.push(<Link to={`/search/clients/${client.identifier}`}>{formatName(client)}</Link>)
+    elements.push(link(`/search/clients/${client.identifier}`, formatName(client)))
   } else if (crumbsGroup.clientProfile.includes(navigateTo)) {
-    elements.push(<Link to={`/clients/${client.identifier}`}>{formatName(client)}</Link>)
+    elements.push(link(`/clients/${client.identifier}`, formatName(client)))
   }
 } // search and client dashboard could share this logic becasue they just need 3 parameters
 
@@ -77,9 +91,10 @@ export const addStaffAssessmentFormCrumbIfNeeded = (
   if (status === AssessmentStatus.deleted) {
   } else if (navigateTo === navigation.STAFF_CHANGELOG) {
     elements.push(
-      <Link to={`/staff/${staffPerson.identifier}/clients/${client.identifier}/assessments/${assessmentId}`}>
-        {BreadCrumbLinks.CANS_ASSESSMENT_FORM}
-      </Link>
+      link(
+        `/staff/${staffPerson.identifier}/clients/${client.identifier}/assessments/${assessmentId}`,
+        BreadCrumbLinks.CANS_ASSESSMENT_FORM
+      )
     )
   }
 } // only when staff nav to changlog then show the link type asform
@@ -92,15 +107,11 @@ export const addAssessmentFormCrumbIfNeeded = (elements, navigateTo, client, ass
     elements.push(BreadCrumbLinks.CANS_ASSESSMENT_FORM)
   } else if (navigateTo === navigation.SEARCH_CHANGELOG) {
     elements.push(
-      <Link to={`/search/clients/${client.identifier}/assessments/${assessmentId}`}>
-        {BreadCrumbLinks.CANS_ASSESSMENT_FORM}
-      </Link>
+      link(`/search/clients/${client.identifier}/assessments/${assessmentId}`, BreadCrumbLinks.CANS_ASSESSMENT_FORM)
     )
   } else if (crumbsGroup.assessmentForm.includes(navigateTo)) {
     elements.push(
-      <Link to={`/clients/${client.identifier}/assessments/${assessmentId}`}>
-        {BreadCrumbLinks.CANS_ASSESSMENT_FORM}
-      </Link>
+      link(`/clients/${client.identifier}/assessments/${assessmentId}`, BreadCrumbLinks.CANS_ASSESSMENT_FORM)
     )
   }
 }
@@ -109,7 +120,7 @@ export const addClientSearchCrumbIfNeeded = (elements, navigateTo) => {
   if (selfChecker(navigateTo, selfCheckerKeyWords.CLIENT_SEARCH)) {
     elements.push(BreadCrumbLinks.CLIENT_SEARCH)
   } else if (crumbsGroup.search.includes(navigateTo)) {
-    elements.push(<Link to={`/search`}>{BreadCrumbLinks.CLIENT_SEARCH}</Link>)
+    elements.push(link(`/search`, BreadCrumbLinks.CLIENT_SEARCH))
   }
 }
 
