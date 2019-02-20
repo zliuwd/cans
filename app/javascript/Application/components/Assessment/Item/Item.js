@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { UNSET_RATING, NA_RATING, isNARating } from './ItemHelper'
 import { getI18nValuesByPrefix } from '../I18nHelper'
 import { stringify } from '../../../util/common'

@@ -1,6 +1,5 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import Icon from '@cwds/icons'
 import Item from './Item'
 import CommentIcon from '../../common/CommentIcon'
 import Comment from '../../common/Comment'
