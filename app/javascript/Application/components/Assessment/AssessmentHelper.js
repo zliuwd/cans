@@ -115,6 +115,14 @@ export const alertMessage = e => {
   return (e.returnValue = '')
 }
 
+export const disableUnsavedValidation = () => {
+  window.removeEventListener('beforeunload', alertMessage)
+}
+
+export const enableUnsavedValidation = () => {
+  window.addEventListener('beforeunload', alertMessage)
+}
+
 export function getDisplayAssessmentStatus(status) {
   switch (status) {
     case AssessmentStatus.inProgress:

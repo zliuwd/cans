@@ -4,7 +4,7 @@ import { shallow } from 'enzyme'
 import { eventBus } from './../../util/eventBus'
 import { UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT } from './../../util/constants'
 import { Button } from 'reactstrap'
-import { breadCrumbOnClickHandler } from '../Layout/BreadCrumb/BreadCrumbPipeline'
+import { breadCrumbOnClickHandler } from '../Layout/BreadCrumb/BreadCrumb'
 
 describe('<UnsavedDataWarning />', () => {
   const action = () => {
@@ -53,6 +53,26 @@ describe('<UnsavedDataWarning />', () => {
       wrapper.instance().close()
       expect(wrapper.instance().state.isOpened).toBeFalsy()
       expect(wrapper.instance().state.event).toBeUndefined()
+    })
+
+    it('"continueAction" sends callback event if one is present', () => {
+      const wrapper = openWarning()
+      const callbackEvent = 'CALLBACK'
+      wrapper.instance().state.event = callbackEvent
+      const eventBusPost = jest.spyOn(eventBus, 'post')
+      wrapper.instance().continueAction()
+      expect(eventBusPost).toBeCalledWith(callbackEvent)
+    })
+
+    it('"continueAction" change document href if event is not present', () => {
+      const wrapper = shallow(warning(true))
+      const href = '/href'
+      wrapper.instance().state.href = href
+      global.location.assign = jest.fn()
+      const removeEventListener = jest.spyOn(global, 'removeEventListener')
+      wrapper.instance().continueAction()
+      expect(removeEventListener).toBeCalled()
+      expect(global.location.assign).toBeCalledWith(href)
     })
   })
 

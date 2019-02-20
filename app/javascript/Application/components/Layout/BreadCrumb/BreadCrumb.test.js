@@ -1,5 +1,5 @@
 import React from 'react'
-import BreadCrumb from './BreadCrumb'
+import BreadCrumb, { onBreadCrumbClick } from './BreadCrumb'
 import { shallow } from 'enzyme'
 
 describe('bread crumb rendering', () => {
@@ -35,5 +35,16 @@ describe('bread crumb rendering', () => {
     ]
     breadCrumbComponent = shallow(<BreadCrumb navigationElements={props} />)
     expect(breadCrumbComponent.find('a').length).toEqual(3)
+  })
+
+  it('verify on click handler is set for dashboard link', () => {
+    const props = [
+      <a key="" href="/dashboard">
+        {' '}
+        DASHBOARD
+      </a>,
+    ]
+    breadCrumbComponent = shallow(<BreadCrumb navigationElements={props} />)
+    expect(breadCrumbComponent.find('a').get(0).props.onClick).toEqual(onBreadCrumbClick)
   })
 })

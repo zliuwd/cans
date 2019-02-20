@@ -13,6 +13,9 @@ import {
   successMsgFrom,
   sortAssessments,
   statusTextOfHistory,
+  disableUnsavedValidation,
+  alertMessage,
+  enableUnsavedValidation,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
@@ -432,6 +435,20 @@ describe('AssessmentHelper', () => {
       const isForTable = false
       const actual = statusTextOfHistory(status, isForTable)
       expect(actual).toEqual(text)
+    })
+  })
+
+  describe('"beforeunload" event handlers', () => {
+    it('"beforeunload" is set when enableUnsavedValidation is called', () => {
+      global.addEventListener = jest.fn()
+      enableUnsavedValidation()
+      expect(global.addEventListener).toBeCalledWith('beforeunload', alertMessage)
+    })
+
+    it('"beforeunload" is set when disableUnsavedValidation is called', () => {
+      global.removeEventListener = jest.fn()
+      disableUnsavedValidation()
+      expect(global.removeEventListener).toBeCalledWith('beforeunload', alertMessage)
     })
   })
 })

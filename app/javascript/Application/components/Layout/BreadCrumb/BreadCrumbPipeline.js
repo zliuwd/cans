@@ -4,18 +4,11 @@ import { userDashboardChecker } from '../../../util/userDashboardChecker'
 import { formatName, selfChecker, crumbsGroup, selfCheckerKeyWords } from './BreadCrumbHelper'
 import { Link } from 'react-router-dom'
 import { AssessmentStatus } from '../../Assessment/'
+import { onBreadCrumbClick } from './BreadCrumb'
 
-export const breadCrumbOnClickHandler = {
-  onClick: event => {},
-}
-
-const onClick = event => {
-  breadCrumbOnClickHandler.onClick(event)
-}
-
-const link = (href, text) => {
+export const breadCrumbLink = (href, text) => {
   return (
-    <Link to={href} onClick={onClick}>
+    <Link to={href} onClick={onBreadCrumbClick}>
       {text}
     </Link>
   )
@@ -38,7 +31,7 @@ export const homeCrumbHandler = (user, elements) => {
       linkText = BreadCrumbLinks.CLIENT_SEARCH
       break
   }
-  elements.push(link(url, linkText))
+  elements.push(breadCrumbLink(url, linkText))
 }
 
 export const addStaffListIfNeeded = (elements, navigateTo) => {
@@ -52,7 +45,7 @@ export const addStaffProfileIfNeeded = (elements, navigateTo, staffPerson) => {
     elements.push(formatName(staffPerson))
   }
   if (crumbsGroup.staffProfile.includes(navigateTo)) {
-    elements.push(link(`/staff/${staffPerson.identifier}`, formatName(staffPerson)))
+    elements.push(breadCrumbLink(`/staff/${staffPerson.identifier}`, formatName(staffPerson)))
   }
 }
 
@@ -60,13 +53,13 @@ export const addChildYouthListCrumbIfNeeded = (elements, navigateTo) => {
   if (selfChecker(navigateTo, selfCheckerKeyWords.CHILD_LIST)) {
     elements.push(BreadCrumbLinks.CLIENT_LIST)
   } else if (crumbsGroup.clientList.includes(navigateTo)) {
-    elements.push(link('/clients', BreadCrumbLinks.CLIENT_LIST))
+    elements.push(breadCrumbLink('/clients', BreadCrumbLinks.CLIENT_LIST))
   }
 }
 
 export const addStaffChildProfileCrumbIfNeeded = (elements, navigateTo, client, staffPerson) => {
   if (crumbsGroup.staffChildProfile.includes(navigateTo)) {
-    elements.push(link(`/staff/${staffPerson.identifier}/clients/${client.identifier}`, formatName(client)))
+    elements.push(breadCrumbLink(`/staff/${staffPerson.identifier}/clients/${client.identifier}`, formatName(client)))
   }
 }
 
@@ -74,9 +67,9 @@ export const addChildProfileCrumbIfNeeded = (elements, navigateTo, client) => {
   if (selfChecker(navigateTo, selfCheckerKeyWords.PROFILE_OVERALL)) {
     elements.push(formatName(client))
   } else if (crumbsGroup.searchChildProfile.includes(navigateTo)) {
-    elements.push(link(`/search/clients/${client.identifier}`, formatName(client)))
+    elements.push(breadCrumbLink(`/search/clients/${client.identifier}`, formatName(client)))
   } else if (crumbsGroup.clientProfile.includes(navigateTo)) {
-    elements.push(link(`/clients/${client.identifier}`, formatName(client)))
+    elements.push(breadCrumbLink(`/clients/${client.identifier}`, formatName(client)))
   }
 } // search and client dashboard could share this logic becasue they just need 3 parameters
 
@@ -91,7 +84,7 @@ export const addStaffAssessmentFormCrumbIfNeeded = (
   if (status === AssessmentStatus.deleted) {
   } else if (navigateTo === navigation.STAFF_CHANGELOG) {
     elements.push(
-      link(
+      breadCrumbLink(
         `/staff/${staffPerson.identifier}/clients/${client.identifier}/assessments/${assessmentId}`,
         BreadCrumbLinks.CANS_ASSESSMENT_FORM
       )
@@ -107,11 +100,14 @@ export const addAssessmentFormCrumbIfNeeded = (elements, navigateTo, client, ass
     elements.push(BreadCrumbLinks.CANS_ASSESSMENT_FORM)
   } else if (navigateTo === navigation.SEARCH_CHANGELOG) {
     elements.push(
-      link(`/search/clients/${client.identifier}/assessments/${assessmentId}`, BreadCrumbLinks.CANS_ASSESSMENT_FORM)
+      breadCrumbLink(
+        `/search/clients/${client.identifier}/assessments/${assessmentId}`,
+        BreadCrumbLinks.CANS_ASSESSMENT_FORM
+      )
     )
   } else if (crumbsGroup.assessmentForm.includes(navigateTo)) {
     elements.push(
-      link(`/clients/${client.identifier}/assessments/${assessmentId}`, BreadCrumbLinks.CANS_ASSESSMENT_FORM)
+      breadCrumbLink(`/clients/${client.identifier}/assessments/${assessmentId}`, BreadCrumbLinks.CANS_ASSESSMENT_FORM)
     )
   }
 }
@@ -120,7 +116,7 @@ export const addClientSearchCrumbIfNeeded = (elements, navigateTo) => {
   if (selfChecker(navigateTo, selfCheckerKeyWords.CLIENT_SEARCH)) {
     elements.push(BreadCrumbLinks.CLIENT_SEARCH)
   } else if (crumbsGroup.search.includes(navigateTo)) {
-    elements.push(link(`/search`, BreadCrumbLinks.CLIENT_SEARCH))
+    elements.push(breadCrumbLink(`/search`, BreadCrumbLinks.CLIENT_SEARCH))
   }
 }
 

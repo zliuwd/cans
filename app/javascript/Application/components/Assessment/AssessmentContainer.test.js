@@ -467,7 +467,7 @@ describe('<AssessmentContainer />', () => {
         expect(postSuccessSpy).toHaveBeenCalledTimes(1)
       })
 
-      it('should set isEditable to false after submit', async () => {
+      it('should set isEditable and isUnsaved to false after submit', async () => {
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
         jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
@@ -480,6 +480,7 @@ describe('<AssessmentContainer />', () => {
         wrapper.update()
 
         expect(wrapper.instance().state.isEditable).toBe(false)
+        expect(wrapper.instance().state.isUnsaved).toBe(false)
       })
     })
 

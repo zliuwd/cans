@@ -7,8 +7,10 @@ import {
   addStaffChildProfileCrumbIfNeeded,
   addChildYouthListCrumbIfNeeded,
   addChildProfileCrumbIfNeeded,
+  breadCrumbLink,
 } from './BreadCrumbPipeline'
 import { clone } from '../../../util/common'
+import { onBreadCrumbClick } from './BreadCrumb'
 
 const fakedata = {
   elements: [],
@@ -131,5 +133,10 @@ describe('BreadCrumbPipeline: the part which was not covered by Component test',
     addClientSearchCrumbIfNeeded(testData.elements, testData.navigateTo)
     const linkText = testData.elements[0]
     expect(linkText).toEqual(BreadCrumbLinks.CLIENT_SEARCH)
+  })
+
+  it('verify on click handler is set for links', () => {
+    const link = breadCrumbLink('/href', 'text')
+    expect(link.props.onClick).toEqual(onBreadCrumbClick)
   })
 })

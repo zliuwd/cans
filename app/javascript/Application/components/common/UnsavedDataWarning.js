@@ -4,8 +4,8 @@ import { UNSAVED_ASSESSMENT_VALIDATION_EVENT } from '../../util/constants'
 import { eventBus } from '../../util/eventBus'
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap'
 import { Icon } from '@cwds/components'
-import { breadCrumbOnClickHandler } from '../Layout/BreadCrumb/BreadCrumbPipeline'
-import { alertMessage } from '../Assessment/AssessmentHelper'
+import { disableUnsavedValidation } from '../Assessment/AssessmentHelper'
+import { breadCrumbOnClickHandler } from '../Layout/BreadCrumb/BreadCrumb'
 
 class UnsavedDataWarning extends Component {
   constructor(context) {
@@ -60,8 +60,8 @@ class UnsavedDataWarning extends Component {
     if (this.state.event !== undefined) {
       eventBus.post(this.state.event)
     } else {
-      window.removeEventListener('beforeunload', alertMessage)
-      document.location.href = this.state.href
+      disableUnsavedValidation()
+      window.location.assign(this.state.href)
     }
   }
 

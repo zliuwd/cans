@@ -18,10 +18,11 @@ import {
   successMsgFrom,
   postInfoMessage,
   postCloseMessage,
-  alertMessage,
   getCaregiverDomainsNumber,
   handleCountyName,
   updateUrlWithAssessment,
+  disableUnsavedValidation,
+  enableUnsavedValidation,
 } from './AssessmentHelper'
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
@@ -65,7 +66,7 @@ export default class AssessmentContainer extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', alertMessage)
+    disableUnsavedValidation()
     this.props.pageHeaderButtonsController.updateHeaderButtonsToDefault()
     postCloseMessage(readOnlyMessageId)
   }
@@ -81,9 +82,7 @@ export default class AssessmentContainer extends Component {
     const assessment = this.state.assessment
     const isEditable = Boolean(!assessment || !assessment.id || isAuthorized(assessment, 'update'))
     this.setState({ isEditable })
-    isEditable
-      ? window.addEventListener('beforeunload', alertMessage)
-      : window.removeEventListener('beforeunload', alertMessage)
+    isEditable ? enableUnsavedValidation() : disableUnsavedValidation()
     this.postReadOnlyMessageIfNeeded()
   }
 
@@ -306,6 +305,7 @@ export default class AssessmentContainer extends Component {
         this.setState({
           assessmentServiceStatus: LoadingState.ready,
           assessment: submittedAssessment,
+          isUnsaved: false,
         })
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
@@ -318,6 +318,7 @@ export default class AssessmentContainer extends Component {
         this.setState({
           assessmentServiceStatus: LoadingState.ready,
           assessment: submittedAssessment,
+          isUnsaved: false,
         })
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
