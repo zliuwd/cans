@@ -15,7 +15,7 @@ import ConductedByField from './AssessmentFormHeader/ConductedByField'
 import HasCaregiverQuestion from './AssessmentFormHeader/HasCaregiverQuestion'
 import ConfidentialityAlert from './AssessmentFormHeader/ConfidentialityAlert'
 import UnderSixQuestion from './AssessmentFormHeader/UnderSixQuestion'
-import { Card, CardHeader, CardContent } from '@material-ui/core'
+import { Card, CardBody, CardHeader, CardTitle } from '@cwds/components'
 import { calculateDateDifferenceInYears, isoToLocalDate, isValidDate } from '../../util/dateHelper'
 import moment from 'moment/moment'
 
@@ -198,15 +198,12 @@ class AssessmentFormHeader extends PureComponent {
 
   renderCardHeader() {
     return (
-      <CardHeader
-        title={
-          <div className={'assessment-header-title'}>
-            {this.renderClientName()}
-            {this.renderCounty()}
-          </div>
-        }
-        className={'assessment-header-card-header'}
-      />
+      <CardHeader>
+        <CardTitle className={'assessment-header-title'}>
+          {this.renderClientName()}
+          {this.renderCounty()}
+        </CardTitle>
+      </CardHeader>
     )
   }
 
@@ -246,7 +243,7 @@ class AssessmentFormHeader extends PureComponent {
 
   renderCardContent() {
     return (
-      <CardContent>
+      <CardBody>
         {this.renderTopLabels()}
         <Row className={'assessment-form-header-inputs'}>
           <Col sm={2}>{this.renderDateSelect()}</Col>
@@ -281,18 +278,16 @@ class AssessmentFormHeader extends PureComponent {
             />
           </Col>
         </Row>
-      </CardContent>
+      </CardBody>
     )
   }
 
   render() {
     return (
-      <Fragment>
-        <Card className={'assessment-form-header-card'}>
-          {this.renderCardHeader()}
-          {this.renderCardContent()}
-        </Card>
-      </Fragment>
+      <Card>
+        {this.renderCardHeader()}
+        {this.renderCardContent()}
+      </Card>
     )
   }
 }

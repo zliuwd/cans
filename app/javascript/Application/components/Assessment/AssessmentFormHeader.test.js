@@ -1,12 +1,12 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import { AssessmentFormHeader } from './index'
 import { assessment, client, clientWithEstimatedDob } from './assessment.mocks.test'
 import { clone } from '../../util/common'
 import ConductedByField from './AssessmentFormHeader/ConductedByField'
 import ConfidentialityAlert from './AssessmentFormHeader/ConfidentialityAlert'
 import UnderSixQuestion from './AssessmentFormHeader/UnderSixQuestion'
-import { Card, CardHeader, CardContent } from '@material-ui/core'
+import { Card, CardBody, CardHeader, CardTitle } from '@cwds/components'
 import moment from 'moment'
 
 describe('<AssessmentFormHeader />', () => {
@@ -241,37 +241,44 @@ describe('<AssessmentFormHeader />', () => {
   })
 
   describe('with client', () => {
-    const defaultWrapper = shallow(<AssessmentFormHeader {...defaultProps} />)
-    const defaultHeaderTitle = shallow(defaultWrapper.find(CardHeader).props().title)
-
     it('displays correct client name', () => {
-      expect(defaultHeaderTitle.find('#child-name').text()).toBe('Doe, John')
+      const title = shallow(<AssessmentFormHeader {...defaultProps} />)
+        .find(CardTitle)
+        .dive()
+      expect(title.find('#child-name').text()).toBe('Doe, John')
     })
 
     it('displays client date of birth', () => {
-      expect(defaultHeaderTitle.find('#child-dob').text()).toBe('DOB: 07/14/2007')
+      const title = shallow(<AssessmentFormHeader {...defaultProps} />)
+        .find(CardTitle)
+        .dive()
+      expect(title.find('#child-dob').text()).toBe('DOB: 07/14/2007')
     })
 
     it('displays approximate date of birth', () => {
-      const wrapper = shallow(<AssessmentFormHeader {...propsWithEstimatedDob} />)
-      const headerTitle = shallow(wrapper.find(CardHeader).props().title)
-      expect(headerTitle.find('#child-dob').text()).toBe('DOB: 07/14/2007 (approx.)')
+      const title = shallow(<AssessmentFormHeader {...propsWithEstimatedDob} />)
+        .find(CardTitle)
+        .dive()
+      expect(title.find('#child-dob').text()).toBe('DOB: 07/14/2007 (approx.)')
     })
 
     it('displays client age', () => {
-      const instance = defaultWrapper.instance()
+      const instance = shallow(<AssessmentFormHeader {...defaultProps} />).instance()
       const getCurrentDate = jest.spyOn(instance, 'getCurrentDate')
       getCurrentDate.mockReturnValue(moment('2019-02-08'))
       instance.forceUpdate()
-      const headerTitle = shallow(defaultWrapper.find(CardHeader).props().title)
-      expect(headerTitle.find('#child-age').text()).toBe('11 years old')
+      const title = shallow(<AssessmentFormHeader {...defaultProps} />)
+        .find(CardTitle)
+        .dive()
+      expect(title.find('#child-age').text()).toBe('11 years old')
     })
   })
 
   describe('with no client', () => {
     const props = { assessment, client: {}, onAssessmentUpdate: jest.fn() }
-    const wrapper = shallow(<AssessmentFormHeader {...props} />)
-    const headerTitle = shallow(wrapper.find(CardHeader).props().title)
+    const headerTitle = shallow(<AssessmentFormHeader {...props} />)
+      .find(CardTitle)
+      .dive()
 
     it('displays default message', () => {
       expect(headerTitle.find('#no-data').text()).toBe('Client Info')
@@ -286,9 +293,10 @@ describe('<AssessmentFormHeader />', () => {
 
   describe('with county', () => {
     it('displays correct county name', () => {
-      const wrapper = shallow(<AssessmentFormHeader {...defaultProps} />)
-      const headerAction = shallow(wrapper.find(CardHeader).props().title)
-      expect(headerAction.find('#county-name').text()).toBe('Calaveras County')
+      const title = shallow(<AssessmentFormHeader {...defaultProps} />)
+        .find(CardTitle)
+        .dive()
+      expect(title.find('#county-name').text()).toBe('Calaveras County')
     })
   })
 
@@ -360,7 +368,7 @@ describe('<AssessmentFormHeader />', () => {
       })
 
       it('has a card content', () => {
-        expect(wrapper.find(CardContent).exists()).toBe(true)
+        expect(wrapper.find(CardBody).exists()).toBe(true)
       })
     })
   })
