@@ -5,8 +5,9 @@ import TimeoutWarning from './components/common/TimeoutWarning'
 
 import './style.sass'
 
+export const basePath = process.env.CANS_BASE_PATH || '/cans'
+
 const App = () => {
-  const basePath = process.env.CANS_BASE_PATH || '/cans'
   return (
     <BrowserRouter basename={basePath}>
       <Fragment>

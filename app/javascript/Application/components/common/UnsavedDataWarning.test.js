@@ -5,6 +5,7 @@ import { eventBus } from './../../util/eventBus'
 import { UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT } from './../../util/constants'
 import { Button } from 'reactstrap'
 import { breadCrumbOnClickHandler } from '../Layout/BreadCrumb/BreadCrumb'
+import { Redirect } from 'react-router'
 
 describe('<UnsavedDataWarning />', () => {
   const action = () => {
@@ -64,15 +65,13 @@ describe('<UnsavedDataWarning />', () => {
       expect(eventBusPost).toBeCalledWith(callbackEvent)
     })
 
-    it('"continueAction" change document href if event is not present', () => {
+    it('"continueAction" change page location if event is not present', () => {
       const wrapper = shallow(warning(true))
-      const href = '/href'
-      wrapper.instance().state.href = href
-      global.location.assign = jest.fn()
-      const removeEventListener = jest.spyOn(global, 'removeEventListener')
+      wrapper.instance().state.href = 'http://test.test/cans/clients'
       wrapper.instance().continueAction()
-      expect(removeEventListener).toBeCalled()
-      expect(global.location.assign).toBeCalledWith(href)
+      wrapper.update()
+      expect(wrapper.type()).toEqual(Redirect)
+      expect(wrapper.instance().state.redirect).toEqual('/clients')
     })
   })
 

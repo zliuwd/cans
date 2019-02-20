@@ -4,10 +4,16 @@ import { UNSAVED_ASSESSMENT_VALIDATION_EVENT } from '../../util/constants'
 import { eventBus } from '../../util/eventBus'
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap'
 import { Icon } from '@cwds/components'
-import { disableUnsavedValidation } from '../Assessment/AssessmentHelper'
 import { breadCrumbOnClickHandler } from '../Layout/BreadCrumb/BreadCrumb'
+import { Redirect } from 'react-router'
+import { basePath } from '../../App'
 
 class UnsavedDataWarning extends Component {
+  static getRouteFromUrl(url) {
+    const routeIndex = url.indexOf(basePath) + basePath.length
+    return url.substring(routeIndex)
+  }
+
   constructor(context) {
     super(context)
     this.state = {
@@ -60,12 +66,16 @@ class UnsavedDataWarning extends Component {
     if (this.state.event !== undefined) {
       eventBus.post(this.state.event)
     } else {
-      disableUnsavedValidation()
-      window.location.assign(this.state.href)
+      this.setState({
+        redirect: UnsavedDataWarning.getRouteFromUrl(this.state.href),
+      })
     }
   }
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />
+    }
     return (
       <Modal className="warning-modal" isOpen={this.state.isOpened}>
         <ModalBody className="unsaved-warning-modal-body">
