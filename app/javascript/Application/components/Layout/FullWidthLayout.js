@@ -7,8 +7,6 @@ import { GlobalAlert } from '../common'
 import UserMenu from '../Header/UserMenu'
 import Sticker from 'react-stickyfill'
 
-import './rwd_overrides.sass'
-
 const { CaresProvider, defaultConfig } = Utils
 const id = x => x
 
