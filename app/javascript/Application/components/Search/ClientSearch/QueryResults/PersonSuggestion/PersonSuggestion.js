@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Icon from '@cwds/icons'
 import FullName from './FullName'
 import Gender from './Gender'
 import AgeInfo from './AgeInfo'
@@ -25,7 +26,7 @@ const PersonSuggestion = ({
       <div className="col-md-5">
         <div className="row">
           <div className="col-md-4 profile-picture">
-            <i className="fa fa-user" />
+            <Icon className="user-icon" icon="user" />
             {isSensitive && <div className="information-flag image-caption">Sensitive</div>}
             {isSealed && <div className="information-flag image-caption">Sealed</div>}
           </div>
