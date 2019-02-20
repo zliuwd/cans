@@ -221,7 +221,7 @@ $item-confidential-label-height: 6.05rem
 
 .bool-rating-domain-comment-accordion-comment-icon
   margin-right: $toolbar-comment-icon-right-margin + $confidential-checkbox-width + $confidential-checkbox-right-margin + $bool-rating-width
-  
+
 //********************
 // ItemComment
 //********************
@@ -234,23 +234,30 @@ $item-confidential-label-height: 6.05rem
   flex-wrap: wrap
   width: 60%
 
+  label
+    display: block
+
 .item-comment-label
   color: $black
-  margin-left: 0.8rem
+  margin-left: 0.5rem
   vertical-align: text-bottom
 
 .item-comment-textarea
+  appearance: none
+  border: 1px solid $medium-gray
+  display: block
   font-size: 0.9375rem
   margin-top: 0
-  height: 7rem
+  height: 4.375rem
   transition: height 1s
+  width: 100%
   &::placeholder
     color: $light-gray
 
 .item-comment-textarea-empty
   @extend .item-comment-textarea
-  min-height: 3.2rem
-  height: 3.2rem
+  min-height: 2rem
+  height: 2rem
 
 .item-toolbar-comment-icon
   margin-right: $toolbar-comment-icon-right-margin
@@ -260,7 +267,7 @@ $item-confidential-label-height: 6.05rem
   overflow: hidden
   text-align: right
   transition: height 1s
-  height: 1.8rem
+  height: 1.125rem
 
 .item-comment-text-length-hidden
   @extend .item-comment-text-length
@@ -297,27 +304,35 @@ $item-confidential-label-height: 6.05rem
 
 .domain-comment-label
   color: $black
-  margin-left: 0.8rem
+  margin-left: 0.5rem
   vertical-align: text-bottom
 
+  label
+    display: block
+
 .domain-comment-textarea
+  appearance: none
+  border: 1px solid $medium-gray
+  display: block
   font-size: 0.9375rem
   margin-top: 0
-  min-height: 20rem
+  min-height: 12.5rem
+  transition: height 1s
+  width: 100%
   &::placeholder
     color: $light-gray
 
 .domain-comment-textarea-empty
   @extend .domain-comment-textarea
-  min-height: 12rem
-  height: 12rem
+  min-height: 7.5rem
+  height: 7.5rem
 
 .domain-comment-text-length
   width: 100%
   overflow: hidden
   text-align: right
   transition: height 1s
-  height: 1.8rem
+  height: 1.125rem
 
 .domain-comment-text-length-hidden
   @extend .item-comment-text-length
