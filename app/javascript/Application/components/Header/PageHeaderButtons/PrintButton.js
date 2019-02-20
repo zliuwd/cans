@@ -19,6 +19,7 @@ class PrintButton extends Component {
 
   componentWillUnmount() {
     this.muteCtrlP()
+    eventBus.unsubscribe(ASSESSMENT_PRINT_EVENT, this.togglePrintNow)
   }
 
   activeCtrlP = () => {
