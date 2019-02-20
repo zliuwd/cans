@@ -15,12 +15,12 @@
 @babel/traverse,7.0.0-beta.44,MIT,https://babeljs.io/
 @babel/types,7.0.0-beta.44,MIT,https://babeljs.io/
 @babel/types,7.1.6,MIT,https://babeljs.io/
-@cwds/components,0.8.3,AGPL-3.0,https://cws-cares.netlify.com/
+@cwds/components,0.8.4,AGPL-3.0,https://cws-cares.netlify.com/
 @cwds/core,0.5.6,AGPL-3.0,http:
-@cwds/core,0.8.3,AGPL-3.0,http:
-@cwds/datagrid,0.8.3,AGPL-3.0,https://cws-cares.netlify.com/apps/datagrid
-@cwds/icons,0.8.3,AGPL-3.0,https://cws-cares.netlify.com/
-@cwds/reactstrap,0.8.3,AGPL-3.0,https://cws-cares.netlify.com/libs/reactstrap
+@cwds/core,0.8.4,AGPL-3.0,http:
+@cwds/datagrid,0.8.4,AGPL-3.0,https://cws-cares.netlify.com/apps/datagrid
+@cwds/icons,0.8.4,AGPL-3.0,https://cws-cares.netlify.com/
+@cwds/reactstrap,0.8.4,AGPL-3.0,https://cws-cares.netlify.com/libs/reactstrap
 @emotion/babel-utils,0.6.10,MIT,Unknown
 @emotion/hash,0.6.6,MIT,Unknown
 @emotion/memoize,0.6.6,MIT,Unknown

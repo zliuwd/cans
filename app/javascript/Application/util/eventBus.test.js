@@ -31,4 +31,18 @@ describe('Event Bus', () => {
     eventBus.post(otherEventType, event2)
     expect(callBack3Called).toEqual(true)
   })
+
+  it('unsubscribe test', () => {
+    const eventType = 'EventType'
+    const event1 = 'event1'
+    let callBack1Called = false
+    const callBack1 = event => {
+      callBack1Called = true
+    }
+    // subscribe
+    eventBus.subscribe(eventType, callBack1)
+    eventBus.unsubscribe(eventType, callBack1)
+    eventBus.post(eventType, event1)
+    expect(callBack1Called).toEqual(false)
+  })
 })
