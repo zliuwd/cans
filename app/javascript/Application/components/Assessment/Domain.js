@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
+import Icon from '@cwds/icons'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
@@ -123,7 +124,7 @@ class Domain extends Component {
                   {title}
                   {description ? (
                     <Tooltip title={description} placement="top" classes={{ tooltip: 'tooltip_' }}>
-                      <i className="fa fa-info-circle domain-help-icon" />
+                      <Icon className="domain-help-icon" icon="info-circle" />
                     </Tooltip>
                   ) : null}{' '}
                   {(isCaregiverDomain && caregiverName === '') ||
