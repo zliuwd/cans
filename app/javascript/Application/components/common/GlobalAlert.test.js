@@ -43,11 +43,10 @@ describe('<GlobalAlert>', () => {
       globalAlertService.postError({ message: 'One more Error message' })
 
       const closeTopAlert = () => {
-        return findAlerts()
+        findAlerts()
           .at(0)
-          .dive()
-          .find('.close-icon')
-          .simulate('click')
+          .props()
+          .onClose()
       }
 
       closeTopAlert()
