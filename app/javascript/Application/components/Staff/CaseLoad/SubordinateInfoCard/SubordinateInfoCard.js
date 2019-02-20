@@ -6,7 +6,7 @@ import { formatClientName } from '../../../Client/Client.helper'
 
 const SubordinateInfoCard = ({ staffInfo }) =>
   staffInfo && (
-    <Card className={'card supervisor-card'}>
+    <Card>
       <CardHeader>
         <CardTitle>{formatClientName(staffInfo.staff_person)}</CardTitle>
       </CardHeader>
