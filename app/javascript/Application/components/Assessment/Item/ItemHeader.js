@@ -21,6 +21,7 @@ const ItemHeader = props => {
       <Typography
         variant="title"
         style={{
+          fontSize: '.8rem',
           flex: 1,
           textAlign: 'left',
           marginLeft: 10,

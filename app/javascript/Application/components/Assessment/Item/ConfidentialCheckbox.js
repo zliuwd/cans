@@ -19,6 +19,7 @@ const ConfidentialCheckbox = props => {
       <form autoComplete="off">
         <FormControl>
           <FormControlLabel
+            classes={{ label: 'item-confidential-label' }}
             onChange={handleConfidentialityChange}
             label={isConfidentialByDefault ? 'Confidential' : 'Discretion Needed'}
             value={stringify(isConfidential)}
