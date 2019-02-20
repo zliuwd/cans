@@ -20,6 +20,10 @@ class UnsavedDataWarning extends Component {
     eventBus.subscribe(UNSAVED_ASSESSMENT_VALIDATION_EVENT, this.onValidation)
   }
 
+  componentWillUnmount() {
+    eventBus.unsubscribe(UNSAVED_ASSESSMENT_VALIDATION_EVENT, this.onValidation)
+  }
+
   close() {
     this.setState({ isOpened: false, event: undefined })
   }
