@@ -97,10 +97,6 @@ class Item extends Component {
     const itemNumber = isAssessmentUnderSix ? under_six_id : above_six_id
     const { isExpanded, title, description, qtcDescriptions, ratingDescriptions } = this.state
     const isBooleanRating = rating_type === 'BOOLEAN'
-    const classes = classNames('item-expand-icon', {
-      'fa fa-chevron-right': !isExpanded,
-      'fa fa-chevron-down': isExpanded,
-    })
     const propsResource = {
       item,
       isAssessmentUnderSix,
@@ -123,7 +119,6 @@ class Item extends Component {
       qtcDescriptions,
       ratingDescriptions,
       isBooleanRating,
-      classes,
       handleRatingChange: this.handleRatingChange,
       handleConfidentialityChange: this.handleConfidentialityChange,
       handleNaValueSetting: this.handleNaValueSetting,

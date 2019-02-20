@@ -1,5 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
+import Icon from '@cwds/icons'
 import Item from './Item'
 import CommentIcon from '../../common/CommentIcon'
 import Comment from '../../common/Comment'
@@ -129,30 +130,34 @@ describe('<Item />', () => {
     const wrapper = mount({ ...itemComponentDefault })
     wrapper.setProps({ ...propsDefault })
     const foldedText = wrapper.text()
-    expect(wrapper.find('#lf10family-item-expand').hasClass('fa-chevron-right')).toBe(true)
+    let icon = wrapper.find('#lf10family-item-expand').at(0)
+    expect(icon.props().icon).toBe('chevron-down')
+    expect(icon.props().rotation).toBe(270)
     expect(foldedText).not.toMatch(/Description/)
 
-    wrapper.find('#lf10family-item-expand').simulate('click')
+    icon.simulate('click')
     const expandedText = wrapper.text()
-    expect(wrapper.find('#lf10family-item-expand').hasClass('fa-chevron-down')).toBe(true)
+    icon = wrapper.find('#lf10family-item-expand').at(0)
+    expect(icon.props().icon).toBe('chevron-down')
+    expect(icon.props().rotation).toBe(null)
     expect(expandedText).toMatch(/Description/)
   })
 
   it('when chevron button get focus and press tab item will not expand', async () => {
     const wrapper = mount({ ...itemComponentDefault })
-    wrapper.find('i.fa-chevron-right').simulate('keydown', { key: 'Tab' })
+    wrapper.find('Icon[icon="chevron-down"]').simulate('keydown', { key: 'Tab' })
     expect(wrapper.instance().state.isExpanded).toEqual(false)
   })
 
   it('when chevron button get focus and press a key other than Tab, item will expand', async () => {
     const wrapper = mount({ ...itemComponentDefault })
-    wrapper.find('i.fa-chevron-right').simulate('keydown', { key: 'Enter' })
+    wrapper.find('Icon[icon="chevron-down"]').simulate('keydown', { key: 'Enter' })
     expect(wrapper.instance().state.isExpanded).toEqual(true)
   })
 
   it('when item expands expandingThenScroll will be invoked', async () => {
     const wrapper = mount({ ...itemComponentDefault })
-    wrapper.find('i.fa-chevron-right').simulate('click')
+    wrapper.find('Icon[icon="chevron-down"]').simulate('click')
     expect(wrapper.instance().state.isExpanded).toEqual(true)
     expect(expandingThenScroll).toHaveBeenCalledTimes(1)
   })
@@ -166,7 +171,7 @@ describe('<Item />', () => {
     expect(foldedText).not.toMatch(/qtc/)
     expect(foldedText).not.toMatch(/rating/)
 
-    wrapper.find('#lf10family-item-expand').simulate('click')
+    wrapper.find('Icon#lf10family-item-expand').simulate('click')
     const expandedText = wrapper.text()
     expect(expandedText).toMatch(/TITLE/)
     expect(expandedText).toMatch(/Description:Description/)
@@ -245,7 +250,7 @@ describe('<Item />', () => {
       const instance = wrapper.instance()
       jest.spyOn(instance, 'handleRatingChange')
       wrapper.setProps({ ...propsDefault })
-      wrapper.find('#lf10family-item-expand').simulate('click')
+      wrapper.find('Icon#lf10family-item-expand').simulate('click')
       wrapper.find('FormControlLabel[label="N/A"]').prop('onChange')({ target: { value: 8 } })
       expect(instance.handleRatingChange).toHaveBeenCalledTimes(1)
     })
@@ -257,7 +262,7 @@ describe('<Item />', () => {
       const instance = wrapper.instance()
       jest.spyOn(instance, 'handleNaValueSetting')
       wrapper.setProps({ ...propsDefault })
-      wrapper.find('#lf10family-item-expand').simulate('click')
+      wrapper.find('Icon#lf10family-item-expand').simulate('click')
       wrapper.find('FormControlLabel[label="N/A"]').prop('onChange')({ target: { value: 8 } })
       wrapper.update()
       expect(instance.handleNaValueSetting).toHaveBeenCalledTimes(2)
@@ -271,7 +276,7 @@ describe('<Item />', () => {
       const instance = wrapper.instance()
       jest.spyOn(instance, 'handleNaValueSetting')
       wrapper.setProps({ ...propsDefault })
-      wrapper.find('#lf10family-item-expand').simulate('click')
+      wrapper.find('Icon#lf10family-item-expand').simulate('click')
       wrapper.find('FormControlLabel[label="N/A"]').prop('onChange')({ target: { value: -1 } })
       wrapper.update()
       expect(instance.handleNaValueSetting).toHaveBeenCalledTimes(2)
@@ -283,7 +288,7 @@ describe('<Item />', () => {
       item.has_na_option = false
       const wrapper = mountItem(item)
       wrapper.setProps({ ...propsDefault })
-      wrapper.find('#lf10family-item-expand').simulate('click')
+      wrapper.find('Icon#lf10family-item-expand').simulate('click')
       const naCheckbox = wrapper.find('FormControlLabel[label="N/A"]').find('Checkbox')
       expect(naCheckbox.length).toBe(0)
     })
@@ -292,7 +297,7 @@ describe('<Item />', () => {
       const item = { ...itemDefault }
       item.has_na_option = true
       const wrapper = mountDisabledItem(item)
-      wrapper.find('#lf10family-item-expand').simulate('click')
+      wrapper.find('Icon#lf10family-item-expand').simulate('click')
       const naCheckbox = wrapper.find('ItemNaCheckbox')
       expect(naCheckbox.prop('disabled')).toBe(true)
     })
@@ -302,7 +307,7 @@ describe('<Item />', () => {
     it('can have Regular rating', () => {
       const wrapper = mount({ ...itemComponentDefault })
       wrapper.setProps({ ...propsDefault })
-      wrapper.find('#lf10family-item-expand').simulate('click')
+      wrapper.find('Icon#lf10family-item-expand').simulate('click')
       const expandedText = wrapper.text()
       expect(expandedText).toMatch(/0 = rating 0 description1 = rating 1 description/)
     })
@@ -312,7 +317,7 @@ describe('<Item />', () => {
       item.rating_type = 'BOOLEAN'
       const wrapper = mountItem(item)
       wrapper.setProps({ ...propsDefault })
-      wrapper.find('#lf10family-item-expand').simulate('click')
+      wrapper.find('Icon#lf10family-item-expand').simulate('click')
       const expandedText = wrapper.text()
       expect(expandedText).toMatch(/No = rating 0 descriptionYes = rating 1 description/)
     })
@@ -417,7 +422,7 @@ describe('<Item />', () => {
         disabled={true}
       />
     )
-    wrapper.find('#lf10family-item-expand').simulate('click')
+    wrapper.find('Icon#lf10family-item-expand').simulate('click')
     expect(wrapper.find('ItemDescriptionRating').prop('disabled')).toBe(true)
   })
 
@@ -434,7 +439,7 @@ describe('<Item />', () => {
         disabled={true}
       />
     )
-    wrapper.find('#lf10family-item-expand').simulate('click')
+    wrapper.find('Icon#lf10family-item-expand').simulate('click')
     expect(wrapper.find('Comment').prop('disabled')).toBe(true)
   })
 })
@@ -478,7 +483,6 @@ describe('Complementary tests for CANS-755 refactor', () => {
       'qtcDescriptions',
       'ratingDescriptions',
       'isBooleanRating',
-      'classes',
       'handleRatingChange',
       'handleConfidentialityChange',
       'handleNaValueSetting',

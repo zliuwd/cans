@@ -9,13 +9,14 @@ import ItemDescription from './ItemDescription'
 const ItemInner = props => {
   const itemHeaderProps = {
     code: props.code,
-    classes: props.classes,
+    isExpanded: props.isExpanded,
     onClick: props.switchExpandedState,
     onKeyDown: props.handleKeyCheck,
     itemNumber: props.itemNumber,
     caregiverIndex: props.caregiverIndex,
     title: props.title,
   }
+
   const toolbarControlsProps = {
     itemCode: props.code,
     hasNaOption: props.has_na_option,
@@ -63,7 +64,6 @@ const ItemInner = props => {
 ItemInner.propTypes = {
   canReleaseConfidentialInfo: PropTypes.bool.isRequired,
   caregiverIndex: PropTypes.string,
-  classes: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
   comment: PropTypes.string,
   description: PropTypes.string.isRequired,
@@ -76,6 +76,7 @@ ItemInner.propTypes = {
   isBooleanRating: PropTypes.bool.isRequired,
   isConfidential: PropTypes.bool.isRequired,
   isConfidentialByDefault: PropTypes.bool,
+  isExpanded: PropTypes.bool.isRequired,
   itemNumber: PropTypes.string.isRequired,
   maxCommentLength: PropTypes.number.isRequired,
   qtcDescriptions: PropTypes.array.isRequired,
