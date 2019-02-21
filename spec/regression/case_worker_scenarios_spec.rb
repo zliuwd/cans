@@ -114,6 +114,7 @@ feature 'Case Worker Functionality' do
     fill_conducted_by_field(CONDUCTED_BY_UPDATED)
     @form.breadcrumbs.route_from_breadcrumbs(CLIENT_NAME)
     unsaved_warning_save_and_continue
+    sleep 3
     first_assessment_in_history.click
     expect(@form.header.conducted_by.value).to eq(CONDUCTED_BY_UPDATED)
   end
@@ -129,6 +130,7 @@ feature 'Case Worker Functionality' do
     fill_conducted_by_field(CONDUCTED_BY_UPDATED)
     @form.breadcrumbs.route_from_breadcrumbs(CLIENT_NAME)
     unsaved_warning_discard_and_continue
+    sleep 3
     first_assessment_in_history.click
     expect(@form.header.conducted_by.value).to eq(CONDUCTED_BY)
   end
