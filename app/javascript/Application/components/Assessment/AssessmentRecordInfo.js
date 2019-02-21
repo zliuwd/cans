@@ -27,7 +27,7 @@ class AssessmentRecordInfo extends Component {
 
     return (
       <Card className="card-assessment-record-info">
-        <CardBody>
+        <CardBody className="card-assessment-record-body">
           <AssessmentActionsEllipsis
             inheritUrl={inheritUrl}
             clientId={person.identifier}
