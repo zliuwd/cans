@@ -160,6 +160,30 @@ describe('<Domain />', () => {
       wrapper.instance().handleExpandedChange(testExpandingEvent)
       expect(wrapper.find(DomainCommentAccordion).props().onDomainCommentUpdate).toBe(onDomainCommentUpdateMock)
     })
+
+    it('should propogate props domainBottomCollapseClick to DomainCommentAccordion', () => {
+      const wrapper = shallow(
+        <Domain
+          key={'1'}
+          canReleaseConfidentialInfo={true}
+          domain={{ ...domainDefault }}
+          isAssessmentUnderSix={true}
+          i18n={{ ...i18nDefault }}
+          i18nAll={{}}
+          index={1}
+          onItemCommentUpdate={() => {}}
+          onDomainCommentUpdate={() => {}}
+          onRatingUpdate={() => {}}
+          onConfidentialityUpdate={() => {}}
+          onAddCaregiverDomain={() => {}}
+          handleWarningShow={() => {}}
+          onCaregiverNameUpdate={() => {}}
+        />
+      )
+      wrapper.instance().handleExpandedChange(testExpandingEvent)
+      const target = wrapper.find(DomainCommentAccordion)
+      expect(Object.keys(target.props()).includes('domainBottomCollapseClick')).toBe(true)
+    })
   })
 
   it('renders comment icon on the domain header', () => {

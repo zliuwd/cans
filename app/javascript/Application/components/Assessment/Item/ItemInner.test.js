@@ -69,18 +69,18 @@ describe('<ItemInner/>', () => {
     expect(target.exists()).toBe(true)
     const expectedProps = [
       'itemCode',
-      'hasNaOption',
-      'rating',
       'onRatingUpdate',
       'disabled',
       'isConfidential',
       'isConfidentialByDefault',
-      'code',
       'canReleaseConfidentialInfo',
       'handleConfidentialityChange',
       'handleNaValueSetting',
       'comment',
       'ratingType',
+      'code',
+      'hasNaOption',
+      'rating',
     ]
     expect(Object.keys(target.props())).toEqual(expectedProps)
   })
@@ -92,16 +92,17 @@ describe('<ItemInner/>', () => {
     const expectedProps = [
       'description',
       'qtcDescriptions',
-      'code',
       'ratingDescriptions',
       'isBooleanRating',
-      'rating',
-      'hasNaOption',
       'handleRatingChange',
       'disabled',
       'comment',
       'handleCommentChange',
       'maxCommentLength',
+      'itemBottomCollapseClick',
+      'code',
+      'hasNaOption',
+      'rating',
     ]
     expect(Object.keys(target.props())).toEqual(expectedProps)
   })

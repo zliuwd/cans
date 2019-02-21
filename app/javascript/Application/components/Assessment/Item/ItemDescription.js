@@ -5,6 +5,8 @@ import Typography from '@material-ui/core/Typography'
 import ItemQtcDescriptions from './ItemQtcDescriptions'
 import ItemDescriptionRating from './ItemDescriptionRating'
 import Comment from '../../common/Comment'
+import BottomCollapseIcon from '../BottomCollapseIcon'
+import './style.sass'
 
 const ItemDescription = props => {
   const {
@@ -20,6 +22,7 @@ const ItemDescription = props => {
     comment,
     handleCommentChange,
     maxCommentLength,
+    itemBottomCollapseClick,
   } = props
   return (
     <Paper style={{ padding: '1rem 3rem' }}>
@@ -45,6 +48,9 @@ const ItemDescription = props => {
         maxCommentLength={maxCommentLength}
         disabled={disabled}
       />
+      <div className={'item-inner-collapse-icon-container'}>
+        <BottomCollapseIcon code={code} onClick={itemBottomCollapseClick} />
+      </div>
     </Paper>
   )
 }
@@ -58,6 +64,7 @@ ItemDescription.propTypes = {
   handleRatingChange: PropTypes.func.isRequired,
   hasNaOption: PropTypes.bool.isRequired,
   isBooleanRating: PropTypes.bool.isRequired,
+  itemBottomCollapseClick: PropTypes.func.isRequired,
   maxCommentLength: PropTypes.number.isRequired,
   qtcDescriptions: PropTypes.array.isRequired,
   rating: PropTypes.number.isRequired,

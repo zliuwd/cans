@@ -5,6 +5,7 @@ import ItemDescriptionRating from './ItemDescriptionRating'
 import Comment from '../../common/Comment'
 import { mount } from 'enzyme'
 import ItemDescription from './ItemDescription'
+import BottomCollapseIcon from '../BottomCollapseIcon'
 
 const fakeProps = {
   description: 'someThing',
@@ -19,6 +20,7 @@ const fakeProps = {
   comment: 'someComment',
   handleCommentChange: jest.fn(),
   maxCommentLength: 200,
+  itemBottomCollapseClick: jest.fn(),
 }
 
 describe('<ItemDescription />', () => {
@@ -73,6 +75,13 @@ describe('<ItemDescription />', () => {
       'isCommentIconDisabled',
       'onKeyUp',
     ]
+    expect(Object.keys(target.props())).toEqual(expectedProps)
+  })
+
+  it('will render BottomCollapseIcon with correct props', () => {
+    const target = wrapper.find(BottomCollapseIcon)
+    expect(target.exists()).toBe(true)
+    const expectedProps = ['code', 'onClick']
     expect(Object.keys(target.props())).toEqual(expectedProps)
   })
 })

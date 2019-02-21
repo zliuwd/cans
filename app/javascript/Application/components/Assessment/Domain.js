@@ -158,6 +158,7 @@ class Domain extends Component {
                   domain={domain}
                   onDomainCommentUpdate={this.props.onDomainCommentUpdate}
                   disabled={this.props.disabled}
+                  domainBottomCollapseClick={this.handleExpandedChange}
                 />
                 {isCaregiverDomain &&
                   !this.props.disabled && (

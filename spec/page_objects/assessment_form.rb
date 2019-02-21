@@ -78,6 +78,8 @@ class AssessmentForm < SitePrism::Page
   element :collapse_all_button, 'button', text: 'COLLAPSE ALL'
   element :collapsed_chevron, 'div[aria-expanded="false"]'
   element :expanded_chevron, 'div[aria-expanded="true"]'
+  elements :domain_bottom_chevron, 'div.domain-inner-collapse-icon-container svg'
+  elements :item_bottom_chevron, 'div.item-inner-collapse-icon-container svg'
   elements :domain_level_reg_rating, 'div.item-reg-rating label'
   elements :domain_reg_radios, 'div.item-reg-rating input', visible: false
   elements :inner_item_rating, 'div.item-form-control label'
