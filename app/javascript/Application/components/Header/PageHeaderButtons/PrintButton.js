@@ -40,7 +40,11 @@ class PrintButton extends Component {
   }
 
   onPrint = () => {
-    eventBus.post(UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT)
+    if (this.props.isAssessmentRendered) {
+      eventBus.post(UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT)
+    } else {
+      this.togglePrintNow()
+    }
   }
 
   togglePrintNow() {
@@ -67,8 +71,13 @@ class PrintButton extends Component {
 }
 
 PrintButton.propTypes = {
+  isAssessmentRendered: PropTypes.bool,
   isEnabled: PropTypes.bool.isRequired,
   node: PropTypes.node.isRequired,
+}
+
+PrintButton.defaultProps = {
+  isAssessmentRendered: false,
 }
 
 export default PrintButton

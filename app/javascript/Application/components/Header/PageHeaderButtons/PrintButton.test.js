@@ -7,7 +7,9 @@ import { ASSESSMENT_PRINT_EVENT } from '../../../util/constants'
 
 describe('PrintButton', () => {
   let wrapper
-  const printButton = enabled => <PrintButton node={<div>{'change log'}</div>} isEnabled={enabled} />
+  const printButton = enabled => (
+    <PrintButton node={<div>{'change log'}</div>} isEnabled={enabled} isAssessmentRendered={true} />
+  )
 
   describe('isEnabled is true', () => {
     beforeEach(() => {
