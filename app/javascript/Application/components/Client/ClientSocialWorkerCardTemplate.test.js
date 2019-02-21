@@ -29,7 +29,7 @@ describe(' ClientSocialWorkerCardTempate ', () => {
     expect(expectedStatusHeader).toEqual('CANS Status')
     expect(expectedReminderDateHeader).toEqual('Reassessment Reminder Date')
     expect(expectedReminderDateHeaderTooltip).toEqual(
-      'A CANS reassessment should be completed in conjunction with the case plan update or at a minimum of every six months.'
+      'A CANS reassessment should be completed in conjunction with the case plan update or at a minimum of every six months'
     )
   })
 
