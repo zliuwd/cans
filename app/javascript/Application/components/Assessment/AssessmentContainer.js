@@ -108,7 +108,7 @@ export default class AssessmentContainer extends Component {
     const { assessment, i18n, isEditable } = this.state
     const node = <PrintAssessment assessment={assessment} i18n={i18n} />
     const leftButton = isEditable ? buildSaveAssessmentButton(this.handleSaveAssessment, isSaveButtonEnabled) : null
-    const rightButton = <PrintButton node={node} isEnabled={true} />
+    const rightButton = <PrintButton node={node} isEnabled={true} isAssessmentRendered={true} />
     this.props.pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
   }
 
