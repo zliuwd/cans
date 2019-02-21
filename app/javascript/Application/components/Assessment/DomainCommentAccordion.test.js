@@ -3,6 +3,7 @@ import { shallow, mount } from 'enzyme'
 import DomainCommentAccordion from './DomainCommentAccordion'
 import Comment from '../common/Comment'
 import CommentIcon from '../common/CommentIcon'
+import BottomCollapseIcon from './BottomCollapseIcon'
 
 const domainDefault = {
   id: '1',
@@ -25,6 +26,7 @@ const domainDefault = {
 const domainWithComment = {
   ...domainDefault,
   comment: 'Domain test comment',
+  domainBottomCollapseClick: jest.fn(),
 }
 
 const defaultProps = {
@@ -32,6 +34,7 @@ const defaultProps = {
   title: 'familiaDomain',
   domain: { ...domainDefault },
   onDomainCommentUpdate: () => {},
+  domainBottomCollapseClick: jest.fn(),
 }
 
 const propsWithComment = {
@@ -39,6 +42,7 @@ const propsWithComment = {
   title: 'familiaDomain',
   domain: { ...domainWithComment },
   onDomainCommentUpdate: () => {},
+  domainBottomCollapseClick: jest.fn(),
 }
 
 const domainCommentAccordionDefault = <DomainCommentAccordion {...defaultProps} />
@@ -112,6 +116,7 @@ describe('<DomainCommentAccordion />', () => {
           title={'familiaDomain'}
           domain={{ ...domainWithComment }}
           onDomainCommentUpdate={onDomainCommentUpdateMock}
+          domainBottomCollapseClick={jest.fn()}
         />
       )
       wrapper.setState({ isExpanded: true })
@@ -163,6 +168,14 @@ describe('<DomainCommentAccordion />', () => {
       const wrapper = shallow(<DomainCommentAccordion {...propsWithComment} disabled={true} />)
       wrapper.setState({ isExpanded: true })
       expect(wrapper.find('Comment').prop('disabled')).toBe(true)
+    })
+
+    it('will render <BottomCollapseIcon/> with correct props', () => {
+      const wrapper = shallow(<DomainCommentAccordion {...propsWithComment} disabled={true} />)
+      const target = wrapper.find(BottomCollapseIcon)
+      expect(target.exists()).toBe(true)
+      const expectedProps = ['code', 'onClick']
+      expect(Object.keys(target.props())).toEqual(expectedProps)
     })
   })
 })
