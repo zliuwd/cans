@@ -50,6 +50,7 @@ end
 
 class AssessmentFormFooter < SitePrism::Section
   element :complete_button, 'button#submit-assessment'
+  element :change_log_link, '.view-changelog-link'
 end
 
 class AssessmentForm < SitePrism::Page

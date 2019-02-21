@@ -9,6 +9,7 @@ require 'page_objects/assessment_changelog'
 
 feature 'Case Worker Functionality' do
   current_date = Time.now.getlocal.strftime('%m/%d/%Y')
+  assessment_link = 'CANS Assessment Form'
   before(:all) do
     login
     @form = AssessmentForm.new
@@ -66,6 +67,28 @@ feature 'Case Worker Functionality' do
     click_complete_button_then_summary_card_shown
     verify_the_tool_tip_of_summary_card
     verify_the_content_of_summary_card('6to21')
+  end
+
+  scenario 'Case worker attempts to access changelog from assessment' do
+    CONDUCTED_BY = 'Test Name'
+    CONDUCTED_BY_UPDATED = 'Test Name 2'
+    visit '/'
+    create_new_assessment(CLIENT_NAME)
+    click_0_to_5_button
+    fill_conducted_by_field(CONDUCTED_BY)
+    validate_change_log_link
+    unsaved_warning_save_and_continue
+    validate_changelog_page_is_accessible(current_date, CLIENT_NAME)
+    visit_assessment_page_from_changelog(assessment_link)
+    fill_conducted_by_field(CONDUCTED_BY_UPDATED)
+    validate_change_log_link
+    unsaved_warning_discard_and_continue
+    validate_changelog_page_is_accessible(current_date, CLIENT_NAME)
+    visit_assessment_page_from_changelog(assessment_link)
+    fill_conducted_by_field(CONDUCTED_BY)
+    validate_change_log_link
+    unsaved_warning_close
+    expect(@form.header.conducted_by.value).to eq(CONDUCTED_BY)
   end
 
   scenario 'Case worker creates and deletes assessment' do
@@ -510,5 +533,18 @@ feature 'Case Worker Functionality' do
 
   def validate_unsaved_warning_closed
     expect(page).not_to have_css('.unsaved-warning-modal-heading')
+  end
+
+  def validate_change_log_link
+    @form.footer.change_log_link.click
+  end
+
+  def validate_changelog_page_is_accessible(current_date, client_name)
+    expect(@assessment_changelog.is_client_name?(client_name)).to be(true)
+    expect(@assessment_changelog.is_assessment?(current_date)).to be(true)
+  end
+
+  def visit_assessment_page_from_changelog(assessment_link)
+    @form.breadcrumbs.route_from_breadcrumbs(assessment_link)
   end
 end
