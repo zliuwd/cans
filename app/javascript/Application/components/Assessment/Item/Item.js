@@ -73,12 +73,14 @@ class Item extends Component {
 
   switchExpandedState = event => {
     this.setState({ isExpanded: !this.state.isExpanded })
-    expandingThenScroll(
-      event,
-      this.state.isExpanded,
-      itemRatingOptionsAmount(this.props.item.rating_type),
-      this.props.disabled
-    )
+    if (event) {
+      expandingThenScroll(
+        event,
+        this.state.isExpanded,
+        itemRatingOptionsAmount(this.props.item.rating_type),
+        this.props.disabled
+      )
+    }
   }
 
   render = () => {

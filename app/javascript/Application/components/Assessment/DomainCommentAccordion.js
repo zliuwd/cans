@@ -8,6 +8,7 @@ import classNames from 'classnames'
 import Comment from '../common/Comment'
 import CommentIcon from '../common/CommentIcon'
 import { expandingThenScroll } from '../../util/assessmentAutoScroll'
+import BottomCollapseIcon from './BottomCollapseIcon'
 
 const maxCommentLength = 2500
 
@@ -95,6 +96,9 @@ class DomainCommentAccordion extends Component {
           {this.renderDomainCommentHeader(code, classes, domain, commentTitle)}
           {isExpanded ? this.renderDomainCommentBody(id, comment) : null}
         </div>
+        <Paper className={'domain-inner-collapse-icon-container'}>
+          <BottomCollapseIcon code={this.props.domain.code} onClick={this.props.domainBottomCollapseClick} />
+        </Paper>
         <Divider />
       </div>
     )
@@ -104,6 +108,7 @@ class DomainCommentAccordion extends Component {
 DomainCommentAccordion.propTypes = {
   disabled: PropTypes.bool,
   domain: PropTypes.object.isRequired,
+  domainBottomCollapseClick: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   onDomainCommentUpdate: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,

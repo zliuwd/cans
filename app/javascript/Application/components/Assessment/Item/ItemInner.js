@@ -18,13 +18,10 @@ const ItemInner = props => {
   }
   const toolbarControlsProps = {
     itemCode: props.code,
-    hasNaOption: props.has_na_option,
-    rating: props.rating,
     onRatingUpdate: props.handleRatingChange,
     disabled: props.disabled,
     isConfidential: props.isConfidential,
     isConfidentialByDefault: props.confidential_by_default,
-    code: props.code,
     canReleaseConfidentialInfo: props.canReleaseConfidentialInfo,
     handleConfidentialityChange: props.handleConfidentialityChange,
     handleNaValueSetting: props.handleNaValueSetting,
@@ -35,34 +32,33 @@ const ItemInner = props => {
   const itemDescriptionProps = {
     description: props.description,
     qtcDescriptions: props.qtcDescriptions,
-    code: props.code,
     ratingDescriptions: props.ratingDescriptions,
     isBooleanRating: props.isBooleanRating,
-    rating: props.rating,
-    hasNaOption: props.has_na_option,
     handleRatingChange: props.handleRatingChange,
     disabled: props.disabled,
     comment: props.comment,
     handleCommentChange: props.handleCommentChange,
     maxCommentLength: props.maxCommentLength,
+    itemBottomCollapseClick: props.switchExpandedState,
   }
+
+  const sharingProps = { code: props.code, hasNaOption: props.has_na_option, rating: props.rating }
 
   return (
     <div>
       <Paper>
         <Toolbar style={{ justifyContent: 'left' }}>
           <ItemHeader {...itemHeaderProps} />
-          <ItemToolbarControls {...toolbarControlsProps} />
+          <ItemToolbarControls {...toolbarControlsProps} {...sharingProps} />
         </Toolbar>
       </Paper>
-      {props.isExpanded ? <ItemDescription {...itemDescriptionProps} /> : null}
+      {props.isExpanded ? <ItemDescription {...itemDescriptionProps} {...sharingProps} /> : null}
     </div>
   )
 }
 
 ItemInner.propTypes = {
   canReleaseConfidentialInfo: PropTypes.bool.isRequired,
-  caregiverIndex: PropTypes.string,
   classes: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
   comment: PropTypes.string,
@@ -86,8 +82,7 @@ ItemInner.propTypes = {
 
 ItemInner.defaultProps = {
   isConfidentialByDefault: undefined,
-  hasNaOption: undefined,
-  caregiverIndex: '',
+  hasNaOption: false,
   disabled: false,
   comment: '',
 }
