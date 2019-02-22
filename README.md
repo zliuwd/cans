@@ -49,31 +49,25 @@ There are two primary ways of running the CANS app:
 1. Running the CANS app and all dependencies locally using Docker, or...
 2. Running only the CANS app and using an existing environment such as Preint as an API backend.
 
-## Running with Preint
+## Running with Preint environment
 
-In order to run against Preint, create a `.env` file pointing to the CANS API and Perry in Preint:
+In order to run against Preint environment: 
+1. Create a `.env` file and copy its body from the [CWDS env-store repo's cans.dev.local-with-preint.env](https://github.com/ca-cwds/env-store/blob/master/envs/cans/cans.dev.local-with-preint.env) (the repo is private, for CWDS developers usage only).
+2. Run local instance of Redis (`docker-compose up redis` or `redis-server` if you have it installed)
+3. Run CANS application: 
+    1. Run Rails (`rails s`), and the webpack dev server (`yarn start` or `./bin/webpack-dev-server`).
+    2. **OR** Run rails and webpack dev sever using single comamnd `yarn dev`, which runs the Procfile.dev with foreman, so make sure foreman utility is installed on your machine. You can quickly install foreman using `gem install foreman` at CANS root folder. Please do not include the foreman gem in the Gemfile
 
-```
-AUTHENTICATION_ENABLED=true
-CANS_API_BASE_URL=https://cansapi.preint.cwds.io
-PERRY_BASE_URL=https://web.preint.cwds.io/perry
-```
+## Running everything locally with Docker Compose
 
-Then run Rails (`rails s`), Redis (`redis-server`), and the React server (`yarn start` or `./bin/webpack-dev-server`).
-OR
-Run rails and webpack dev sever using single comamnd `yarn dev`, which runs the Procfile.dev with foreman, so make sure foreman utility is installed on your machine. You can quickly install foreman using `gem install foreman` at CANS root folder. Please do not include the foreman gem in the Gemfile
+You will need a full **.env** file for this.
+Copy it from the [CWDS env-store repo's cans.dev.local.env](https://github.com/ca-cwds/env-store/blob/master/envs/cans/cans.dev.local.env) (the repo is private, for CWDS developers usage only).
 
-## Running everything locally with Docker
+Once you have your **.env** file next to the **docker-compose.yml** file, start up your dependency applications by running:
 
-You will need a full .env file for this.
-An example can be found in the [CWDS env-store repo](https://github.com/ca-cwds/env-store/blob/master/envs/cans/.env),
-or ask another developer.
+```docker-compose up```
 
-Once you have your .env file, run Redis and CANS API through Docker. This will also run API dependencies such as Perry.
-
-```docker-compose up redis cans-api```
-
-Then run Rails (`rails s`) and the React server (`yarn start` or `./bin/webpack-dev-server`).
+Then run Rails (`rails s`) and the webpack development server (`yarn start` or `./bin/webpack-dev-server`). **OR** Run rails and webpack dev sever using single comamnd `yarn dev`, which runs the Procfile.dev with foreman, so make sure foreman utility is installed on your machine. You can quickly install foreman using `gem install foreman` at CANS root folder. Please do not include the foreman gem in the Gemfile.
 
 ## Linting and Tests
 
@@ -90,6 +84,7 @@ Other commands:
 ```
 yarn test:rspec # runs Rspec unit tests
 yarn test:acceptance # runs acceptance tests, requires app to be running
+yarn test:regression # runs regression tests, requires app to be running
 yarn test:a11y # runs accessibility tests, requires app to be running
 yarn lint
 ```
