@@ -1,8 +1,5 @@
 import React, { Component, Fragment } from 'react'
 import Grid from '@material-ui/core/Grid'
-import Card from '@material-ui/core/Card/Card'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardContent from '@material-ui/core/CardContent'
 import PropTypes from 'prop-types'
 import ClientAssessmentHistory from './AssessmentHistory/ClientAssessmentHistory'
 import AssessmentComparision from './AssessmentComparision/AssessmentComparision'
@@ -10,6 +7,7 @@ import { isoToLocalDate } from '../../util/dateHelper'
 import NavFromProducer from '../../util/NavFromProducer'
 import ClientAssessmentHistoryLoadingBoundary from './AssessmentHistory/ClientAssessmentHistoryLoadingBoundary'
 import { urlTrimmer } from '../../util/urlTrimmer'
+import { Card, CardHeader, CardBody, CardTitle, Button } from '@cwds/components'
 
 const SINGLE_WIDTH = 3
 const DOUBLE_WIDTH = 6
@@ -19,7 +17,12 @@ class Client extends Component {
     super(props)
     this.state = {
       loadingBoundaryKey: Math.random(),
+      showComparision: false,
     }
+  }
+
+  contentSwitch = () => {
+    this.setState({ showComparision: !this.state.showComparision })
   }
 
   renderClientData(data, label, gridSize = SINGLE_WIDTH, itemId = label) {
@@ -87,16 +90,25 @@ class Client extends Component {
 
   render() {
     const { client } = this.props
+    const { showComparision } = this.state
 
-    const urlArray = this.props.match.url.split('/')
     return (
       <Fragment>
         <Grid container spacing={24}>
           <Grid item xs={12}>
-            <Card className={'card'}>
-              <CardHeader className={'card-header-cans'} title="Client Information" />
+            <Card>
+              <CardHeader className={'client-card-header'}>
+                <CardTitle>
+                  <span className={'client-card-title'}>{'Client Information'}</span>
+                  <span className={'client-card-header-button-container'}>
+                    <Button className={'client-card-header-button'} onClick={this.contentSwitch}>
+                      {!showComparision ? 'Show Assessment Comparision' : 'Show Assessment History'}
+                    </Button>
+                  </span>
+                </CardTitle>
+              </CardHeader>
               <div className={'content'}>
-                <CardContent>
+                <CardBody>
                   {client && client.identifier ? (
                     <Grid container spacing={24} id={'client-info-content'}>
                       {this.renderClientData(<b>{client.first_name}</b>, 'First Name')}
@@ -110,13 +122,11 @@ class Client extends Component {
                   ) : (
                     <span id={'no-data'}>No Child Data Found</span>
                   )}
-                </CardContent>
+                </CardBody>
               </div>
             </Card>
           </Grid>
-          {urlArray.includes('comparision')
-            ? this.renderAssessmentComparision()
-            : this.renderClientAssessmentHistory(client)}
+          {this.state.showComparision ? this.renderAssessmentComparision() : this.renderClientAssessmentHistory(client)}
         </Grid>
       </Fragment>
     )
