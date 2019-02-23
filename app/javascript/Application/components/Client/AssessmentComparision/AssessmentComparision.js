@@ -9,7 +9,7 @@ import './style.sass'
 class AssessmentComparision extends Component {
   constructor(props) {
     super(props)
-    this.state = { data: fiveAssessmentWithCaregiverChange }
+    this.state = { data: fourAssessmentCrossingAge }
   }
 
   componentDidMount() {

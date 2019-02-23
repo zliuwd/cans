@@ -80,7 +80,6 @@ class ComparisionInnerTable extends React.Component {
     return (
       <DataGrid
         key={this.props.domainCode}
-        className={'comparision-grid'}
         columns={itemCmparisionTableTemplate}
         data={items}
         sortable={true}
