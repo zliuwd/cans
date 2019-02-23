@@ -23,10 +23,6 @@ describe('PrintButton', () => {
       expect(buttonProps.disabled).toBeFalsy()
     })
 
-    it('renders a font awesome print icon', () => {
-      expect(wrapper.find('i.fa-print').exists()).toBe(true)
-    })
-
     it('renders a span with the text "Print"', () => {
       const span = wrapper.find('Button.header-button').find('span.header-button-caption')
       expect(span.exists()).toBe(true)
@@ -44,10 +40,6 @@ describe('PrintButton', () => {
       const buttonProps = button.props()
       expect(button.exists()).toBe(true)
       expect(buttonProps.disabled).toBeTruthy()
-    })
-
-    it('renders a font awesome print icon', () => {
-      expect(wrapper.find('i.fa-print').exists()).toBe(true)
     })
 
     it('renders a span with the text "Print"', () => {

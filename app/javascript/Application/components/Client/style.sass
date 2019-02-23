@@ -5,33 +5,8 @@
 //**************************
 //  ClientListCard
 //**************************
-
-.card-cans-client-list
-  > *:first-child
-    border-radius: calc(0.28rem - 1px) calc(0.28rem - 1px) 0 0
-    padding: 1.6rem
-
-  h3
-    margin-top: 0
-
-  > *:last-child
-    padding: 1.6rem
-
-.client-list-records-amount
-  padding: 0.5rem
-
 .client-list-table-cell-center
   text-align: center
-
-//**************************
-//  ClientInformationCard
-//**************************
-
-.client-information-title
-  margin-top: .25rem
-
-.client-information-body
-  padding-left: 1.5rem
 
 //**************************
 //  ClientSocialWorkerCard
@@ -49,8 +24,10 @@
 .history-item-info
   color: $label
 .card-header-client
-  padding: 1.5rem 3rem
-  line-height: 2.7rem
+  padding: .9375rem 1.875rem
+  line-height: 1.6875rem
+#add-cans-link
+  font-size: .75rem
 .card-header-client-assessment-history
   > div:first-child
     > a:nth-child(2), span:nth-child(2)
@@ -62,15 +39,18 @@
       color: $light-blue
       text-transform: uppercase
       text-decoration: underline
+.card-assessment-record-body
+  padding: .625rem
 .card-body-client-assessment-history
+  padding: .625rem
   .card-assessment-record-info
     border-color: $white
-    padding: 0 1.5rem
+    padding: 0 .9375rem
   > .row:nth-child(2)
-    padding: 0 2rem
+    padding: 0 1.25rem
   .data-grid-client-assessment-history
     width: 100%
-    padding: 2rem 1.5rem
+    padding: 1.25rem .9375rem
     border: none
     -ms-overflow-style: -ms-autohiding-scrollbar
   #no-data

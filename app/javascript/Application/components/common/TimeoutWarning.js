@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap'
+import Icon from '@cwds/icons'
 import { TIMEOUT_EVENT } from './../../util/constants'
 import { eventBus } from './../../util/eventBus'
 import { SecurityService } from './Security.service'
@@ -44,7 +45,7 @@ export class TimeoutWarning extends Component {
       <Modal className="warning-modal" isOpen={this.state.isOpened}>
         <ModalBody className="warning-modal-body">
           <div className="warning-modal-exclamation-triangle">
-            <i className="fa fa-exclamation-triangle" />
+            <Icon icon="exclamation-triangle" size="2x" color="danger" />
           </div>
           <div className="warning-modal-heading">Session timeout!</div>
           <div>Due to inactivity, your session is about to timeout. Any unsaved work will be lost.</div>

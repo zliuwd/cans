@@ -8,10 +8,10 @@ import './style.sass'
 
 const ClientSocialWorkerCard = props => {
   return (
-    <Card className="card-cans-client-list">
+    <Card>
       <CardHeader>
-        <CardTitle className={'card-title-fix'}>
-          Client List<span className="client-list-records-amount">({props.title})</span>
+        <CardTitle>
+          Client List <span>({props.title})</span>
         </CardTitle>
       </CardHeader>
       <CardBody>

@@ -4,6 +4,8 @@ import { shallow } from 'enzyme'
 import PersonSearchForm from './PersonSearchForm'
 import SearchAssessmentHistoryLoadingBoundary from './AssessmentHistory/SearchAssessmentHistoryLoadingBoundary'
 import SearchAssessmentHistory from './AssessmentHistory/SearchAssessmentHistory'
+import { globalAlertService } from '../../util/GlobalAlertService'
+import { INFO_GLOBAL_ALERT_ID } from '../Assessment/AssessmentHelper'
 
 describe('<SearchContainer />', () => {
   describe('init SearchContainer', () => {
@@ -13,11 +15,14 @@ describe('<SearchContainer />', () => {
         wrapper = shallow(<SearchContainer navigateTo="SEARCH" match={{ url: '/staff/0X5' }} />)
       })
 
-      it('renders with a <CloseableAlert /> component', () => {
-        expect(wrapper.find('CloseableAlert').exists()).toBe(true)
-        expect(wrapper.find('CloseableAlert').prop('message')).toEqual(
-          'To Start a CANS Assessment, Search and Select the Child'
-        )
+      it('should display alert box', async () => {
+        const postInfoSpy = jest.spyOn(globalAlertService, 'postInfo')
+        await wrapper.instance().componentDidMount()
+        expect(postInfoSpy).toHaveBeenCalledWith({
+          message: 'To Start a CANS Assessment, Search and Select the Child',
+          isAutoCloseable: false,
+          componentId: INFO_GLOBAL_ALERT_ID,
+        })
       })
 
       it('renders with a <PersonSearchForm /> component', () => {

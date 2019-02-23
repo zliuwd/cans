@@ -37,7 +37,6 @@ const fakeProps = {
   qtcDescriptions: ['qtcDescriptions'],
   ratingDescriptions: ['ratingDescriptions'],
   isBooleanRating: false,
-  classes: 'someClassess',
   handleRatingChange: () => {},
   handleConfidentialityChange: () => {},
   handleNaValueSetting: () => {},
@@ -60,7 +59,7 @@ describe('<ItemInner/>', () => {
   it('will initially render ItemHeader with correct props', () => {
     const target = wrapper.find(ItemHeader)
     expect(target.exists()).toBe(true)
-    const expectedProps = ['code', 'classes', 'onClick', 'onKeyDown', 'itemNumber', 'caregiverIndex', 'title']
+    const expectedProps = ['code', 'isExpanded', 'onClick', 'onKeyDown', 'itemNumber', 'caregiverIndex', 'title']
     expect(Object.keys(target.props())).toEqual(expectedProps)
   })
 

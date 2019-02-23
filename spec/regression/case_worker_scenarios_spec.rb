@@ -215,9 +215,8 @@ feature 'Case Worker Functionality' do
   def validate_domain_radio_and_chevron
     expand_first_domain
     expand_first_item
-    @form.impulse_hyper_activity_input.click
     expect(@form).to have_item_description_header
-    @form.impulse_hyper_activity.click
+    @form.impulse_hyperactivity.click
     eliminate_auto_scroll_impact
     expect(@form).to have_no_item_description_header
     progress_bar_value = page.all('span.progress-value', match: :first).map(&:text)
@@ -343,13 +342,13 @@ feature 'Case Worker Functionality' do
   end
 
   def check_redacted_checkbox_0_to_5
-    within @form.ec41_title.sibling('h2.item-confidential-checkbox') do
+    within @form.ec41_title.sibling('.item-confidential-checkbox') do
       ec41_checkbox = find('input[type = "checkbox"]', visible: false)
       expect(ec41_checkbox.checked?).to be(true)
       expect(ec41_checkbox.disabled?).to be(true)
     end
     @form.header.authorization_label_yes.click
-    within @form.ec41_title.sibling('h2.item-confidential-checkbox') do
+    within @form.ec41_title.sibling('.item-confidential-checkbox') do
       ec41_checkbox = find('input[type = "checkbox"]', visible: false)
       expect(ec41_checkbox.checked?).to be(false)
       expect(ec41_checkbox.disabled?).to be(false)
@@ -358,23 +357,23 @@ feature 'Case Worker Functionality' do
   end
 
   def check_redacted_checkbox_6_to_21
-    within @form.sub7_title.sibling('h2.item-confidential-checkbox') do
+    within @form.sub7_title.sibling('.item-confidential-checkbox') do
       sub7_checkbox = find('input[type = "checkbox"]', visible: false)
       expect(sub7_checkbox.checked?).to be(false)
       expect(sub7_checkbox.disabled?).to be(false)
     end
-    within @form.sub48a_title.sibling('h2.item-confidential-checkbox') do
+    within @form.sub48a_title.sibling('.item-confidential-checkbox') do
       sub48a_checkbox = find('input[type = "checkbox"]', visible: false)
       expect(sub48a_checkbox.checked?).to be(false)
       expect(sub48a_checkbox.disabled?).to be(false)
     end
     @form.header.authorization_label_no.click
-    within @form.sub7_title.sibling('h2.item-confidential-checkbox') do
+    within @form.sub7_title.sibling('.item-confidential-checkbox') do
       sub7_checkbox = find('input[type = "checkbox"]', visible: false)
       expect(sub7_checkbox.checked?).to be(true)
       expect(sub7_checkbox.disabled?).to be(true)
     end
-    within @form.sub48a_title.sibling('h2.item-confidential-checkbox') do
+    within @form.sub48a_title.sibling('.item-confidential-checkbox') do
       sub48a_checkbox = find('input[type = "checkbox"]', visible: false)
       expect(sub48a_checkbox.checked?).to be(true)
       expect(sub48a_checkbox.disabled?).to be(true)

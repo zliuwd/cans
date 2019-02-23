@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import Icon from '@cwds/icons'
 import Tooltip from '@material-ui/core/Tooltip'
 import DataGridHeader from './DataGridHeader'
 
@@ -16,7 +17,11 @@ describe('<DataGridHeader />', () => {
     expect(tooltip.exists()).toBe(true)
     expect(tooltip.props().title).toBe('Hello Tooltip')
     expect(tooltip.props().placement).toBe('top')
-    expect(tooltip.props().children).toEqual(<i className="fa fa-info-circle data-grid-header-help-icon" />)
+
+    const icon = tooltip.props().children
+    expect(icon.type).toBe(Icon)
+    expect(icon.props.icon).toBe('info-circle')
+    expect(icon.props.className).toBe('data-grid-header-help-icon')
   })
 
   it('renders no Tooltip when not needed', () => {

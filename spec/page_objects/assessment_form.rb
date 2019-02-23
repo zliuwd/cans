@@ -5,8 +5,8 @@ require 'page_objects/sections/breadcrumbs'
 
 class AssessmentGlobal < SitePrism::Section
   element :assessment_page_header, 'h1', text: 'CANS Communimetric Assessment Form'
-  element :save_button, '.header-button i.fa-save'
-  element :print_button, '.header-button-icon.fa-print'
+  element :save_button, 'button', text: 'SAVE'
+  element :print_button, 'button', text: 'PRINT'
   element :global_save_success_message_box, 'div.global-alert', text: 'Success! '\
                                             'CANS assessment has been saved'
   element :global_complete_message_box, 'div.global-alert', text: 'This assessment was completed '\
@@ -43,7 +43,7 @@ class AssessmentFormHeader < SitePrism::Section
 end
 
 class AssessmentSummary < SitePrism::Section
-  elements :summary_card_tips, 'i.data-grid-header-help-icon'
+  elements :summary_card_tips, '.data-grid-header-help-icon'
   element :summary_header_strengths, 'span', text: 'Strengths'
   elements :summary_columns, 'div.assessment-summary-card div.rt-tbody'
 end
@@ -66,14 +66,13 @@ class AssessmentForm < SitePrism::Page
   element :sub7_title, 'h2', text: '7. SUBSTANCE USE'
   element :sub48a_title, 'h2', text: '48a. SUBSTANCE USE'
   elements :collapsed_domain_headers, 'div[aria-expanded="false"] h2'
-  elements :inner_items, 'i.item-expand-icon'
+  elements :inner_items, '.item-expand-icon'
   elements :process_counts, 'span.progress-value'
   elements :fully_filled_progress_bars, 'div[aria-valuenow="100"][role="progressbar"]'
   elements :domain_score_badges, 'span.domain-score-badge'
   element :challenges_domain, 'svg#domain5-expand'
   element :caregiver_domain, 'svg#domain11-expand'
-  element :impulse_hyper_activity, 'i#IMPULSIVITY_HYPERACTIVITY-item-expand'
-  element :impulse_hyper_activity_input, '#input-IMPULSIVITY_HYPERACTIVITY-0-select'
+  element :impulse_hyperactivity, '#IMPULSIVITY_HYPERACTIVITY-item-expand'
   element :expand_all_button, 'button', text: 'EXPAND ALL'
   element :collapse_all_button, 'button', text: 'COLLAPSE ALL'
   element :collapsed_chevron, 'div[aria-expanded="false"]'
@@ -93,8 +92,8 @@ class AssessmentForm < SitePrism::Page
   element :item_level_comment, 'div.item-comment-block textarea'
   element :domain_level_comment, 'div.domain-comment-block textarea'
   elements :domain_toolbar_comment_icon_block, 'div.domain-toolbar-comment-icon-block'
-  elements :item_comment_icons, 'svg.item-toolbar-comment-icon'
-  element :item_description_header, 'h1', text: 'Item Description:'
+  elements :item_comment_icons, '.item-toolbar-comment-icon'
+  element :item_description_header, 'h3', text: 'Item Description:'
   # Caregiver domain specific elements
   elements :caregiver_domain_headers, 'h2', text: 'Caregiver Resources And Needs Domain'
   element :caregiver_domain_substance_use_confidential_checkbox,

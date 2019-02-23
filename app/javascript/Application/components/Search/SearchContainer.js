@@ -4,9 +4,9 @@ import PersonSearchForm from './PersonSearchForm'
 import SearchAssessmentHistoryLoadingBoundary from './AssessmentHistory/SearchAssessmentHistoryLoadingBoundary'
 import SearchAssessmentHistory from './AssessmentHistory/SearchAssessmentHistory'
 import NavFromProducer from '../../util/NavFromProducer'
+import { globalAlertService } from '../../util/GlobalAlertService'
+import { INFO_GLOBAL_ALERT_ID } from '../Assessment/AssessmentHelper'
 import './style.sass'
-import { alertType, CloseableAlert } from '../common'
-import Sticker from 'react-stickyfill'
 
 const SEARCH_TITLE = 'Search Clients Only'
 const SEARCH_PROMPT = 'Search CWS-CMS for clients only'
@@ -20,6 +20,14 @@ class SearchContainer extends React.Component {
     }
   }
 
+  componentDidMount() {
+    globalAlertService.postInfo({
+      message: 'To Start a CANS Assessment, Search and Select the Child',
+      isAutoCloseable: false,
+      componentId: INFO_GLOBAL_ALERT_ID,
+    })
+  }
+
   updateSearchAssessmentHistory = () => {
     this.setState({ loadingBoundaryKey: Math.random() })
   }
@@ -27,17 +35,7 @@ class SearchContainer extends React.Component {
   render() {
     const { loadingBoundaryKey } = this.state
     return (
-      <div className="client-search-container">
-        <Sticker>
-          <div className="top-alert-container">
-            <CloseableAlert
-              id={'top-alert-box'}
-              message={'To Start a CANS Assessment, Search and Select the Child'}
-              type={alertType.INFO}
-              isCloseable={true}
-            />
-          </div>
-        </Sticker>
+      <div>
         <PersonSearchForm searchTitle={SEARCH_TITLE} searchPrompt={SEARCH_PROMPT} />
         <h4 className="client-assessments-title">{ASSESSMENTS_TITLE}</h4>
         <SearchAssessmentHistoryLoadingBoundary key={loadingBoundaryKey}>

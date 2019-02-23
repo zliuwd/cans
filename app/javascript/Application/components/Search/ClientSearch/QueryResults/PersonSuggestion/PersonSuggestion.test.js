@@ -43,7 +43,7 @@ describe('<PersonSuggestion />', () => {
   describe('page layout', () => {
     it('renders a font awesome user avatar', () => {
       const wrapper = shallow(<PersonSuggestion {...defaultProps} />)
-      expect(wrapper.find('i.fa-user').length).toBe(1)
+      expect(wrapper.find('Icon[icon="user"]').length).toBe(1)
     })
 
     it('renders a <FullName /> component', () => {

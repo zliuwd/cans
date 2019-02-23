@@ -54,7 +54,7 @@ class PrintButton extends Component {
   renderPrintButton = () => {
     const { isEnabled } = this.props
 
-    return buildButton('Print', 'fa-print', this.onPrint, isEnabled)
+    return buildButton('Print', null, this.onPrint, isEnabled)
   }
 
   render() {

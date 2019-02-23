@@ -40,26 +40,16 @@ export class CloseableAlert extends Component {
   }
 
   render() {
-    if (this.state.isClosed) {
-      return null
-    }
-
     const { message, type, isCloseable, className } = this.props
+    const { isClosed } = this.state
     return (
-      <Alert color={type} className={className}>
+      <Alert
+        color={type}
+        className={className}
+        toggle={isCloseable ? this.handleCloseAlert : undefined}
+        isOpen={!isClosed}
+      >
         {message}
-        {isCloseable && (
-          <div className="float-right">
-            <i
-              aria-label="Close Alert"
-              className="fa fa-times close-icon"
-              onClick={this.handleCloseAlert}
-              onKeyPress={this.handleCloseAlert}
-              role={'button'}
-              tabIndex={'0'}
-            />
-          </div>
-        )}
       </Alert>
     )
   }

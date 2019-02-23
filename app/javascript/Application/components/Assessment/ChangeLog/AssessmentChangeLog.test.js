@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Card, CardHeader, CardTitle, CardBody } from '@cwds/components'
-import { Row } from 'reactstrap'
 import AssessmentChangeLog from './AssessmentChangeLog'
 import SessionDataGrid from '../../common/SessionDataGrid'
 import { ASSESSMENT_CHANGELOG_PAGE_SIZE_KEY } from '../../../util/sessionStorageUtil'
@@ -58,10 +57,6 @@ describe('<AssessmentChangeLog />', () => {
       wrapper = getWrapper()
     })
 
-    it('renders a Row', () => {
-      expect(wrapper.find(Row).length).toBe(1)
-    })
-
     it('renders a card when there is change log data', () => {
       expect(wrapper.find(Card).exists()).toBe(true)
     })
@@ -99,7 +94,7 @@ describe('<AssessmentChangeLog />', () => {
           .dive()
           .html()
       ).toBe(
-        '<div class="change-log-title card-title"><div><span>CANS Change Log: Abbott, See K</span><span>Assessment Date: 01/05/2018</span></div></div>'
+        '<div class="card-title"><div class="change-log-title"><span>CANS Change Log: Abbott, See K</span><span>Assessment Date: 01/05/2018</span></div></div>'
       )
     })
 

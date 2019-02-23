@@ -46,7 +46,7 @@ const ItemRating = props => {
             display: 'flex',
             flexWrap: 'nowrap',
             flexDirection: 'row',
-            height: '8px',
+            height: '1rem',
           }}
           disabled={isNARating(props.rating) || props.disabled}
         >

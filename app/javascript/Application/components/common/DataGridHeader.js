@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Icon from '@cwds/icons'
 import Tooltip from '@material-ui/core/Tooltip'
 import './style.sass'
 
@@ -8,7 +9,7 @@ const DataGridHeader = ({ title, tooltip }) => (
     <span>{title}</span>
     {tooltip && (
       <Tooltip title={tooltip} placement="top" classes={{ tooltip: 'tooltip_' }}>
-        <i className="fa fa-info-circle data-grid-header-help-icon" />
+        <Icon className="data-grid-header-help-icon" icon="info-circle" />
       </Tooltip>
     )}
   </div>

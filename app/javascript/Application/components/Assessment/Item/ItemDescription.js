@@ -26,8 +26,8 @@ const ItemDescription = props => {
   } = props
   return (
     <Paper style={{ padding: '1rem 3rem' }}>
-      <Typography variant="display1">Item Description:</Typography>
-      <Typography variant="headline">{description}</Typography>
+      <Typography variant="subheading">Item Description:</Typography>
+      <Typography variant="body2">{description}</Typography>
       {qtcDescriptions.length > 0 ? <ItemQtcDescriptions qtcDescriptions={qtcDescriptions} /> : null}
       {ratingDescriptions.length > 0 ? (
         <ItemDescriptionRating

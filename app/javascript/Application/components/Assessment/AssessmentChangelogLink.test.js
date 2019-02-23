@@ -29,7 +29,6 @@ describe('AssessmentChangelogLink', () => {
 
       it('sets the correct props', () => {
         const changeLogMenuItemProps = changeLogMenuItem.props()
-        expect(changeLogMenuItemProps.className).toBe('view-changelog-link')
         expect(typeof changeLogMenuItemProps.onClick).toBe('function')
       })
     })

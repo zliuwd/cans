@@ -1,17 +1,12 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import App from './App'
-import { Header } from './components/Header/'
 import { Routes } from './routes'
 import TimeoutWarning from './components/common/TimeoutWarning'
 
 describe('<App />', () => {
   const getWrapper = () => shallow(<App />)
   const getLength = component => getWrapper().find(component).length
-
-  it('has no <Header /> component', () => {
-    expect(getLength(Header)).toBe(0)
-  })
 
   it('renders with <TimeoutWarning /> component', () => {
     expect(getLength(TimeoutWarning)).toBe(1)

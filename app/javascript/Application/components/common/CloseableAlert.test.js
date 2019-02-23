@@ -6,21 +6,21 @@ jest.useFakeTimers()
 
 describe('<CloseableAlert>', () => {
   describe('render', () => {
-    it('has a message and no close button', () => {
+    it('has a message and no toggle function', () => {
       // given + when
       const alert = shallow(<CloseableAlert message={'welcome'} type={'info'} />)
 
       // then
       expect(alert.render().text()).toBe('welcome')
-      expect(alert.find('.close-icon').length).toBe(0)
+      expect(alert.props().toggle).toBeUndefined()
     })
 
-    it('has a close icon when needed', () => {
+    it('has a toggle function when closeable', () => {
       // given + when
       const alert = shallow(<CloseableAlert isCloseable={true} type={'info'} message={''} />)
 
       // then
-      expect(alert.find('.close-icon').length).toBe(1)
+      expect(alert.props().toggle).toBeDefined()
     })
   })
 
@@ -37,13 +37,13 @@ describe('<CloseableAlert>', () => {
       expect(alert.render().text()).toBe('')
     })
 
-    it('hides on close icon click', () => {
+    it('hides when underlying alert is toggled', () => {
       // given
       const alert = shallow(<CloseableAlert message={'welcome'} isCloseable={true} type={'info'} />)
       expect(alert.render().text()).toBe('welcome')
 
       // when
-      alert.find('.close-icon').simulate('click')
+      alert.props().toggle()
       alert.update()
 
       // then

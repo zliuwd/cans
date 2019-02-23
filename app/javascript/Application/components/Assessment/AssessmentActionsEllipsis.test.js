@@ -96,10 +96,6 @@ describe('<AssessmentActionsEllipsis />', () => {
       it('sets the correct props', () => {
         expect(icon.props().icon).toBe('ellipsis-v')
       })
-
-      it('sets ellipsis size to 2x', () => {
-        expect(icon.props().size).toBe('2x')
-      })
     })
 
     describe('AssessmentActionsMenu', () => {

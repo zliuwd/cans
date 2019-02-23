@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import Icon from '@cwds/icons'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Divider from '@material-ui/core/Divider'
-import classNames from 'classnames'
 import Comment from '../common/Comment'
 import CommentIcon from '../common/CommentIcon'
 import { expandingThenScroll } from '../../util/assessmentAutoScroll'
@@ -35,21 +35,25 @@ class DomainCommentAccordion extends Component {
     }
   }
 
-  renderDomainCommentHeader = (code, classes, domain, commentTitle) => {
+  renderDomainCommentHeader = (code, isExpanded, domain, commentTitle) => {
+    const ROTATION_RIGHT = 270
     return (
       <Paper>
-        <Toolbar style={{ justifyContent: 'left' }}>
-          <i
+        <Toolbar className="domain-comment-header">
+          <Icon
             id={`${code}-comment-accordion-expand`}
+            className="item-expand-icon"
             role="link"
             tabIndex={0}
-            className={classes}
+            icon="chevron-down"
+            rotation={isExpanded ? null : ROTATION_RIGHT}
             onClick={this.switchExpandedState}
             onKeyDown={this.handleKeyCheck}
           />
           <Typography
             variant="title"
             style={{
+              fontSize: '0.8rem',
               flex: 1,
               textAlign: 'left',
               marginLeft: 10,
@@ -69,7 +73,7 @@ class DomainCommentAccordion extends Component {
 
   renderDomainCommentBody = (id, comment) => {
     return (
-      <Paper style={{ padding: '1rem 3rem' }} className={'domain-comment-accordion-paper'}>
+      <Paper className={'domain-comment-accordion-paper'}>
         <Comment
           id={id}
           comment={comment}
@@ -86,14 +90,10 @@ class DomainCommentAccordion extends Component {
     const { isExpanded } = this.state
     const { code, comment } = domain
     const commentTitle = `Overall ${title} Comment`
-    const classes = classNames('item-expand-icon', {
-      'fa fa-chevron-right': !isExpanded,
-      'fa fa-chevron-down': isExpanded,
-    })
     return (
       <div key={`${code}`}>
         <div>
-          {this.renderDomainCommentHeader(code, classes, domain, commentTitle)}
+          {this.renderDomainCommentHeader(code, isExpanded, domain, commentTitle)}
           {isExpanded ? this.renderDomainCommentBody(id, comment) : null}
         </div>
         <Paper className={'domain-inner-collapse-icon-container'}>

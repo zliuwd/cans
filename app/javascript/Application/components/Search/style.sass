@@ -1,40 +1,37 @@
 @import "./../../styles/global/colors.sass"
 
 //**************************
-//  SearchContainer
-//**************************
-.client-search-container
-  margin-top: 1.4rem
-  #no-data
-    margin-left: 3.5rem
-
-//**************************
 //  ClientSearchForm
 //**************************
 .client-search-card
-  padding-bottom: 2rem
-
+  padding-bottom: 1.25rem
+  label
+    color: $suva-gray
+    padding-top: .75rem
+  input
+    width: 100%
+    padding: .625rem .4375rem .625rem .4375rem
 //**************************
 //  SearchAssessmentHistory
 //**************************
 .card-header-search
-  padding: 1.5rem 3rem
+  padding: 0.9375rem 1.875rem
   h3
     margin-top: 0
 .card-body-search
-  padding: 0 3rem
+  padding: 0 1.875rem
   .search-history-item:last-child
     border-bottom: none
   .search-history-item
     border-bottom: 1px solid $breeze
-    padding: 1.4rem 0
+    padding: 0.875rem 0
     margin-top: 0
     margin-bottom: 0
     .row:first-child
-      padding-bottom: .5rem
+      padding-bottom: .3125rem
     .assessment-status
       font-weight: bolder
-      line-height: 3rem
+      line-height: 1.875rem
       padding-left: 0
     .item-info
       > p
@@ -45,6 +42,6 @@
 //  ASSESSMENTS_TITLE
 //**************************
 .client-assessments-title
-  padding-left: 2rem
-  margin-top: 2rem
+  padding-left: 1.25rem
+  margin-top: 1.25rem
   color: $gray

@@ -38,7 +38,12 @@ class AssessmentChangelogLink extends React.Component {
       return <Redirect push to={redirectProps} />
     }
     return (
-      <Button className={'view-changelog-link'} color="link" onClick={this.onClick} onKeyPress={this.onClick}>
+      <Button
+        className={'view-changelog-link button-fix-secondary'}
+        color="link"
+        onClick={this.onClick}
+        onKeyPress={this.onClick}
+      >
         <strong>view change log</strong>
       </Button>
     )
