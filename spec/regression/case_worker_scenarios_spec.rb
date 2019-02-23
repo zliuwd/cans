@@ -216,6 +216,7 @@ feature 'Case Worker Functionality' do
     expand_first_domain
     expand_first_item
     expect(@form).to have_item_description_header
+    expect(@form).to have_impulse_hyperactivity
     @form.impulse_hyperactivity.click
     eliminate_auto_scroll_impact
     expect(@form).to have_no_item_description_header
