@@ -1,8 +1,8 @@
 export const ieFixedStyle = {
   radio: {
-    width: '2rem',
-    marginRight: '3rem',
-    marginLeft: '-1rem',
+    width: '1.25rem',
+    marginRight: '1.875rem',
+    marginLeft: '-0.625rem',
     '&$checked': {
       color: '#09798E',
     },
@@ -16,7 +16,7 @@ export const ieFixedStyle = {
 
 export const noneIeFixedStyle = {
   radio: {
-    width: '0.7rem',
+    width: '0.4375rem',
     '&$checked': {
       disabled: { color: '000000' },
       color: '#09798E',
