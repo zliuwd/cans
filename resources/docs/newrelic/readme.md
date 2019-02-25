@@ -40,6 +40,9 @@ SELECT uniqueCount(assessment_id) as 'number of assessments' FROM PageAction FAC
 Assessments Completed Since 1 day ago: 
 SELECT uniqueCount(assessment_id) as 'number of assessments' FROM PageAction FACET assessment_county WHERE actionName = 'assessmentSubmit' and appName = 'cans.staging.cwds.io' SINCE 1 day ago LIMIT 60
 
+Assessments Deleted Since 1 day ago:
+SELECT uniqueCount(assessment_id) as 'number of assessments' FROM PageAction FACET assessment_county WHERE actionName = 'assessmentDelete' and appName = 'cans.staging.cwds.io' SINCE 1 day ago LIMIT 60
+
 Users Accessing CANS Dashboard Since 1 day ago:
 SELECT staff_county, dashboard, staff_id as 'UserID' FROM PageAction where appName = 'cans.staging.cwds.io' SINCE 1 day ago limit 200
 
