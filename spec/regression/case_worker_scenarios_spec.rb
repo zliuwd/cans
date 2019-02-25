@@ -234,6 +234,7 @@ feature 'Case Worker Functionality' do
   end
 
   def input_date_and_calendar_icon_test(current_date)
+    expect(@form.header).to have_enabled_date_field
     @form.header.date_field.click
     @form.header.date_field.native.clear # avoid stuck
     @form.header.date_field.native.clear

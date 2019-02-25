@@ -18,6 +18,7 @@ class AssessmentFormHeader < SitePrism::Section
   element :child_dob, 'span#child-dob'
   element :child_age, 'span#child-age'
   element :date_field, 'input#assessment-date_input'
+  element :enabled_date_field, 'input#assessment-date_input[aria-disabled="false"]'
   element :date_field_validation_msg, 'div.validation-error-line'
   element :calendar_icon, 'span.rw-i-calendar'
   element :calendar_cell_11, 'td.rw-cell', text: '11'
