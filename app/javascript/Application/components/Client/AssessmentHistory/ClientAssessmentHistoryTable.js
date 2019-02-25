@@ -96,6 +96,7 @@ class ClientAssessmentHistoryTable extends React.Component {
           inheritUrl,
           person,
           id: assessmentId,
+          county,
           status,
           metadata,
           updateAssessmentHistoryCallback,
@@ -107,6 +108,7 @@ class ClientAssessmentHistoryTable extends React.Component {
           <AssessmentActionsEllipsis
             inheritUrl={inheritUrl}
             clientId={person.identifier}
+            assessmentCounty={county ? county.name : ''}
             assessmentId={assessmentId}
             assessmentStatus={status}
             date={formattedTimestamp}

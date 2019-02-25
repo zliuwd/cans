@@ -5,6 +5,7 @@ import { AssessmentService } from '../Assessment'
 import { Select, Label } from '@cwds/components'
 import Comment from '../common/Comment'
 import '../../styles/global/modal-styles.sass'
+import { logPageAction } from '../../util/analytics'
 import {
   selectOptions,
   blankPlaceHolder,
@@ -37,13 +38,19 @@ class AssessmentDeleteModal extends React.Component {
   }
 
   handleWarningDelete = async () => {
-    const { assessmentId, toggleModal, updateAssessmentHistoryCallback } = this.props
+    const { assessmentCounty, assessmentId, toggleModal, updateAssessmentHistoryCallback } = this.props
 
     toggleModal()
     await AssessmentService.delete(
       assessmentId,
       this.state.otherReasonContent !== '' ? this.state.otherReasonContent : this.state.selectedReason.value
     )
+
+    logPageAction('assessmentDelete', {
+      assessment_id: assessmentId,
+      assessment_county: assessmentCounty,
+    })
+
     updateAssessmentHistoryCallback()
   }
 
@@ -124,6 +131,7 @@ class AssessmentDeleteModal extends React.Component {
 }
 
 AssessmentDeleteModal.propTypes = {
+  assessmentCounty: PropTypes.string.isRequired,
   assessmentId: PropTypes.number.isRequired,
   date: PropTypes.string.isRequired,
   isShown: PropTypes.bool.isRequired,

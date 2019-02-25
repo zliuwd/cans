@@ -11,6 +11,7 @@ const defaultProps = {
   date: '01/01/2019',
   inheritUrl: '/staff/0X5',
   clientId: 'C76Jg230X3',
+  assessmentCounty: 'San Francisco',
   assessmentId: 1234,
   assessmentStatus: AssessmentStatus.inProgress,
   assessmentMetaData: {

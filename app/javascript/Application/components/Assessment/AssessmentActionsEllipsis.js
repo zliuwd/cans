@@ -25,6 +25,7 @@ class AssessmentActionsEllipsis extends React.Component {
     const {
       date,
       clientId,
+      assessmentCounty,
       assessmentId,
       assessmentMetaData,
       assessmentStatus,
@@ -37,6 +38,7 @@ class AssessmentActionsEllipsis extends React.Component {
         <AssessmentDeleteModal
           date={date}
           isShown={isDeleteAssessmentWarningShown}
+          assessmentCounty={assessmentCounty}
           assessmentId={assessmentId}
           toggleModal={this.toggleModal}
           updateAssessmentHistoryCallback={updateAssessmentHistoryCallback}
@@ -68,6 +70,7 @@ class AssessmentActionsEllipsis extends React.Component {
 }
 
 AssessmentActionsEllipsis.propTypes = {
+  assessmentCounty: PropTypes.string.isRequired,
   assessmentId: PropTypes.number.isRequired,
   assessmentMetaData: PropTypes.shape({
     allowed_operations: PropTypes.array,

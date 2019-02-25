@@ -6,8 +6,10 @@ import AssessmentService from './Assessment.service'
 import { Select } from '@cwds/components'
 import Comment from '../common/Comment'
 import { blankPlaceHolder } from './AssessmentHelper'
+import * as Analytics from '../../util/analytics'
 
 jest.mock('../Assessment/Assessment.service')
+jest.mock('../../util/analytics')
 
 const deletedAssessment = { id: 1, status: 'DELETED' }
 const toggleModalSpy = jest.fn()
@@ -16,6 +18,7 @@ const assessmentHistoryCallbackSpy = jest.fn()
 const getWrapper = (isShown, toggleModal = () => {}, updateAssessmentHistoryCallback = () => {}) => {
   const props = {
     isShown,
+    assessmentCounty: 'Yolo',
     assessmentId: 1,
     toggleModal,
     updateAssessmentHistoryCallback,
@@ -27,6 +30,7 @@ const getWrapper = (isShown, toggleModal = () => {}, updateAssessmentHistoryCall
 const mountWrapper = (isShown, toggleModal = () => {}, updateAssessmentHistoryCallback = () => {}) => {
   const props = {
     isShown,
+    assessmentCounty: 'Yolo',
     assessmentId: 1,
     toggleModal,
     updateAssessmentHistoryCallback,
@@ -223,7 +227,10 @@ describe('AssessmentDeleteModal', () => {
     })
 
     describe('when the delete cans button is clicked', () => {
+      const analyticsSpy = jest.spyOn(Analytics, 'logPageAction')
+
       beforeEach(() => {
+        analyticsSpy.mockReset()
         const wrapper = mountWrapper(true, toggleModalSpy, assessmentHistoryCallbackSpy)
         simulateSelect(wrapper, 1)
         const deleteButton = wrapper.find('button.warning-modal-stay-logged-in')
@@ -247,6 +254,13 @@ describe('AssessmentDeleteModal', () => {
 
       it('calls the updateAssessmentHistoryCallback', () => {
         expect(assessmentHistoryCallbackSpy).toHaveBeenCalledTimes(1)
+      })
+
+      it('logs a page action', () => {
+        expect(analyticsSpy).toHaveBeenCalledWith('assessmentDelete', {
+          assessment_id: 1,
+          assessment_county: 'Yolo',
+        })
       })
     })
   })

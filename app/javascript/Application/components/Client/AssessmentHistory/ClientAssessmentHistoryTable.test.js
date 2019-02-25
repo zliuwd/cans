@@ -14,16 +14,16 @@ import SessionDataGrid from '../../common/SessionDataGrid'
 import { ASSESSMENT_HISTORY_PAGE_SIZE_KEY } from '../../../util/sessionStorageUtil'
 
 const defaultMockedAssessments = [
-  { id: 1 },
-  { id: 2 },
-  { id: 3 },
-  { id: 4 },
-  { id: 5 },
-  { id: 6 },
-  { id: 7 },
-  { id: 8 },
-  { id: 9 },
-  { id: 10 },
+  { id: 1, county: { name: 'Los Angeles' } },
+  { id: 2, county: { name: 'Los Angeles' } },
+  { id: 3, county: { name: 'Los Angeles' } },
+  { id: 4, county: { name: 'Los Angeles' } },
+  { id: 5, county: { name: 'Los Angeles' } },
+  { id: 6, county: { name: 'Los Angeles' } },
+  { id: 7, county: { name: 'Los Angeles' } },
+  { id: 8, county: { name: 'Los Angeles' } },
+  { id: 9, county: { name: 'Los Angeles' } },
+  { id: 10, county: { name: 'Los Angeles' } },
 ]
 
 const updateAssessmentHistoryCallback = () => {}
@@ -84,6 +84,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
         expect(data).toEqual([
           {
             id: 4,
+            county: { name: 'Los Angeles' },
             inheritUrl: 'clients/AdE0PWu0X5',
             navFrom: 'CHILD_PROFILE_OVERALL',
             userId: '1',
@@ -91,6 +92,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
           },
           {
             id: 5,
+            county: { name: 'Los Angeles' },
             inheritUrl: 'clients/AdE0PWu0X5',
             navFrom: 'CHILD_PROFILE_OVERALL',
             userId: '1',
@@ -98,6 +100,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
           },
           {
             id: 6,
+            county: { name: 'Los Angeles' },
             inheritUrl: 'clients/AdE0PWu0X5',
             navFrom: 'CHILD_PROFILE_OVERALL',
             userId: '1',
@@ -105,6 +108,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
           },
           {
             id: 7,
+            county: { name: 'Los Angeles' },
             inheritUrl: 'clients/AdE0PWu0X5',
             navFrom: 'CHILD_PROFILE_OVERALL',
             userId: '1',
@@ -112,6 +116,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
           },
           {
             id: 8,
+            county: { name: 'Los Angeles' },
             inheritUrl: 'clients/AdE0PWu0X5',
             navFrom: 'CHILD_PROFILE_OVERALL',
             userId: '1',
@@ -119,6 +124,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
           },
           {
             id: 9,
+            county: { name: 'Los Angeles' },
             inheritUrl: 'clients/AdE0PWu0X5',
             navFrom: 'CHILD_PROFILE_OVERALL',
             userId: '1',
@@ -126,6 +132,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
           },
           {
             id: 10,
+            county: { name: 'Los Angeles' },
             inheritUrl: 'clients/AdE0PWu0X5',
             navFrom: 'CHILD_PROFILE_OVERALL',
             userId: '1',
@@ -362,6 +369,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
               created_timestamp: '2019-01-28T11:02:14.383Z',
               inheritUrl: '/staff/0X5',
               person: { identifier: '0PcpFQu0QM' },
+              county: { name: 'Los Angeles' },
               id: 12345,
               status: AssessmentStatus.completed,
               metadata: {
@@ -378,6 +386,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
               inheritUrl="/staff/0X5"
               clientId="0PcpFQu0QM"
               assessmentId={12345}
+              assessmentCounty="Los Angeles"
               assessmentStatus="COMPLETED"
               assessmentMetaData={{
                 allowed_operations: ['read', 'update', 'create', 'write', 'delete'],

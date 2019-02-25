@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Card, CardBody } from '@cwds/components'
 import { isoToLocalDate } from '../../util/dateHelper'
-import { getActionVerbByStatus } from './AssessmentHelper'
+import { getActionVerbByStatus, handleCountyName } from './AssessmentHelper'
 import AssessmentLink from './AssessmentLink'
 import AssessmentRecordStatus from './AssessmentRecordStatus'
 import { clientCaseReferralNumber } from '../Client/Client.helper'
@@ -31,6 +31,7 @@ class AssessmentRecordInfo extends Component {
           <AssessmentActionsEllipsis
             inheritUrl={inheritUrl}
             clientId={person.identifier}
+            assessmentCounty={handleCountyName(assessment)}
             assessmentId={id}
             assessmentMetaData={metadata}
             date={formattedTimestamp}

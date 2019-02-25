@@ -90,6 +90,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97501)
+      expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().assessmentCounty).toBe('Alameda')
       expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
@@ -116,6 +117,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(completedWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97502)
+      expect(completedWrapper.find(AssessmentActionsEllipsis).props().assessmentCounty).toBe('Alameda')
       expect(completedWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
@@ -142,6 +144,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(deletedWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97502)
+      expect(deletedWrapper.find(AssessmentActionsEllipsis).props().assessmentCounty).toBe('Alameda')
       expect(deletedWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
@@ -168,6 +171,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97503)
+      expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().assessmentCounty).toBe('Alameda')
       expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
@@ -196,6 +200,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97501)
+      expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().assessmentCounty).toBe('Alameda')
       expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
@@ -222,6 +227,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(completedWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97502)
+      expect(completedWrapper.find(AssessmentActionsEllipsis).props().assessmentCounty).toBe('Alameda')
       expect(completedWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
@@ -248,6 +254,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(deletedWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97502)
+      expect(deletedWrapper.find(AssessmentActionsEllipsis).props().assessmentCounty).toBe('Alameda')
       expect(deletedWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
@@ -274,6 +281,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97503)
+      expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().assessmentCounty).toBe('Alameda')
       expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
@@ -305,6 +313,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97501)
+      expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().assessmentCounty).toBe('Alameda')
       expect(inProgressWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
@@ -334,6 +343,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(completedWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97502)
+      expect(completedWrapper.find(AssessmentActionsEllipsis).props().assessmentCounty).toBe('Alameda')
       expect(completedWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
@@ -360,6 +370,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(deletedWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97502)
+      expect(deletedWrapper.find(AssessmentActionsEllipsis).props().assessmentCounty).toBe('Alameda')
       expect(deletedWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
@@ -389,6 +400,7 @@ describe('AssessmentRecordInfo', () => {
         .map(child => child.props().children)
 
       expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().assessmentId).toBe(97503)
+      expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().assessmentCounty).toBe('Alameda')
       expect(noUpdateInfoWrapper.find(AssessmentActionsEllipsis).props().clientId).toBe('123')
       expect(assessmentInfo).toEqual([
         'Casey Middle Test, Jr',
