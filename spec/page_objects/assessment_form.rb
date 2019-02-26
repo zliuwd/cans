@@ -112,6 +112,7 @@ class AssessmentForm < SitePrism::Page
 end
 
 def fill_conducted_by_field(text)
+  @form.header.conducted_by.set ''
   @form.header.conducted_by.set text
   expect(@form.header.conducted_by.value).to eq(text)
 end
