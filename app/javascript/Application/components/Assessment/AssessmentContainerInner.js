@@ -120,24 +120,22 @@ class AssessmentContainerInner extends Component {
       handleSubmitAssessment,
       isValidForSubmit,
     } = this.props
-    const isUnderSix = assessment && assessment.state && assessment.state.under_six
     const canPerformUpdates = isReadyForAction(assessmentServiceStatus)
     const isCompleteButtonEnabled =
       isEditable && canPerformUpdates && isValidForSubmit && isCompleteAssessmentAuthorized(assessment, client)
     return (
       <Fragment>
-        {isUnderSix !== undefined && isEditable ? (
-          <AssessmentFormFooter
-            assessment={assessment}
-            onCancelClick={onCancelClick}
-            isSubmitButtonEnabled={isCompleteButtonEnabled}
-            onSubmitAssessment={
-              assessment.can_release_confidential_info === true
-                ? handleSubmitAssessment
-                : this.handleSubmitWarning.bind(this, true)
-            }
-          />
-        ) : null}
+        <AssessmentFormFooter
+          isEditable={isEditable}
+          assessment={assessment}
+          onCancelClick={onCancelClick}
+          isSubmitButtonEnabled={isCompleteButtonEnabled}
+          onSubmitAssessment={
+            assessment.can_release_confidential_info === true
+              ? handleSubmitAssessment
+              : this.handleSubmitWarning.bind(this, true)
+          }
+        />
       </Fragment>
     )
   }

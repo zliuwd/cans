@@ -10,6 +10,7 @@ class UnsavedDataWarning extends Component {
     super(context)
     this.state = {
       isOpened: false,
+      isAssessmentSaved: false,
     }
     this.close = this.close.bind(this)
     this.onAction = this.onAction.bind(this)
@@ -33,6 +34,11 @@ class UnsavedDataWarning extends Component {
       this.setState({ isOpened: true, event })
     } else {
       eventBus.post(event)
+    }
+    if (this.props.assessmentId) {
+      this.setState({ isAssessmentSaved: true })
+    } else {
+      this.setState({ isAssessmentSaved: false, event })
     }
   }
 
@@ -72,27 +78,32 @@ class UnsavedDataWarning extends Component {
             {'SAVE CHANGES AND CONTINUE'}
           </Button>
         </ModalFooter>
-        <ModalFooter className="warning-modal-footer">
-          <Button
-            className={'unsaved-warning-modal-discard'}
-            onClick={() => {
-              this.onAction(this.props.discardAndContinue)
-            }}
-          >
-            {'Discard changes and continue'}
-          </Button>
-        </ModalFooter>
+        {this.state.isAssessmentSaved ? (
+          <ModalFooter className="warning-modal-footer">
+            <Button
+              className={'unsaved-warning-modal-discard'}
+              onClick={() => {
+                this.onAction(this.props.discardAndContinue)
+              }}
+            >
+              {'Discard changes and continue'}
+            </Button>
+          </ModalFooter>
+        ) : null}
       </Modal>
     )
   }
 }
 
 UnsavedDataWarning.propTypes = {
+  assessmentId: PropTypes.number,
   discardAndContinue: PropTypes.func.isRequired,
   isUnsaved: PropTypes.bool.isRequired,
   saveAndContinue: PropTypes.func.isRequired,
 }
 
-UnsavedDataWarning.defaultProps = {}
+UnsavedDataWarning.defaultProps = {
+  assessmentId: undefined,
+}
 
 export default UnsavedDataWarning

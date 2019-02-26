@@ -16,12 +16,25 @@ describe('<UnsavedDataWarning />', () => {
     })
   }
 
-  const warning = (unsaved = false) => {
-    return <UnsavedDataWarning discardAndContinue={action()} saveAndContinue={action()} isUnsaved={unsaved} />
+  const warning = (unsaved = false, assessmentId = undefined) => {
+    return (
+      <UnsavedDataWarning
+        discardAndContinue={action()}
+        saveAndContinue={action()}
+        isUnsaved={unsaved}
+        assessmentId={assessmentId}
+      />
+    )
+  }
+
+  const unsavedAssessment = () => {
+    const wrapper = shallow(warning(true, undefined))
+    eventBus.post(UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT)
+    return wrapper
   }
 
   const openWarning = () => {
-    const wrapper = shallow(warning(true))
+    const wrapper = shallow(warning(true, 1234))
     eventBus.post(UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT)
     return wrapper
   }
@@ -70,6 +83,11 @@ describe('<UnsavedDataWarning />', () => {
         .simulate('click')
       expect(wrapper.instance().props.discardAndContinue).toBeCalled()
       expect(wrapper.instance().state.isOpened).toBeFalsy()
+    })
+
+    it('should not render discardAndContinue button on a unsaved assessment', () => {
+      const wrapper = unsavedAssessment()
+      expect(wrapper.state().isAssessmentSaved).toBeFalsy()
     })
   })
 })

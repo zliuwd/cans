@@ -18,7 +18,8 @@ describe('AssessmentFormFooter', () => {
   }) =>
     shallow(
       <AssessmentFormFooter
-        assessment={{ person: { identifier: 'aaa' } }}
+        assessment={{ person: { identifier: 'aaa' }, state: { under_six: true } }}
+        isEditable={true}
         isSubmitButtonEnabled={isSubmitButtonEnabled}
         onCancelClick={onCancelClick}
         onSubmitAssessment={onSubmitAssessment}
@@ -29,10 +30,11 @@ describe('AssessmentFormFooter', () => {
     )
 
   describe('cancel button', () => {
-    it('invokes a callback', () => {
+    it('invokes a callback and should render footer buttons when isEditable=true', () => {
       const mockFn = jest.fn()
       const footer = render({ onCancelClick: mockFn })
       footer.find('Button#cancel-assessment').simulate('click')
+      expect(footer.find('Button#cancel-assessment').exists()).toEqual(true)
       expect(mockFn).toHaveBeenCalledTimes(1)
     })
   })
@@ -53,5 +55,32 @@ describe('AssessmentFormFooter', () => {
       const footer = render({ isSubmitButtonEnabled: false })
       expect(footer.find('CompleteAssessmentButton').props().disabled).toBe(true)
     })
+  })
+})
+
+describe('form footer buttons', () => {
+  const render = ({
+    isSubmitButtonEnabled = true,
+    onCancelClick = jest.fn(),
+    onSubmitAssessment = jest.fn(),
+    onClick = jest.fn(),
+    assessmentId = 1234,
+    assessmentStatus = AssessmentStatus.inProgress,
+  }) =>
+    shallow(
+      <AssessmentFormFooter
+        assessment={{ person: { identifier: 'aaa' }, state: { under_six: false } }}
+        isEditable={false}
+        isSubmitButtonEnabled={isSubmitButtonEnabled}
+        onCancelClick={onCancelClick}
+        onSubmitAssessment={onSubmitAssessment}
+        assessmentStatus={assessmentStatus}
+        assessmentId={assessmentId}
+        onClick={onClick}
+      />
+    )
+  it('FooterButtons should not be rendered when isEditable=false', () => {
+    const footer = render({ isSubmitButtonEnabled: true })
+    expect(footer.find('Button#cancel-assessment').exists()).toEqual(false)
   })
 })

@@ -38,9 +38,9 @@ describe('AssessmentContainerInner />', () => {
       expect(getLength(wrapper, AssessmentFormHeader)).toBe(1)
     })
 
-    it('renders without <AssessmentFormFooter /> component initially', () => {
+    it('renders with <AssessmentFormFooter /> component initially', () => {
       const wrapper = shallow(<AssessmentContainerInner {...props} />)
-      expect(getLength(wrapper, AssessmentFormFooter)).toBe(0)
+      expect(getLength(wrapper, AssessmentFormFooter)).toBe(1)
     })
   })
 
@@ -201,11 +201,6 @@ describe('AssessmentContainerInner />', () => {
 
       wrapper.setProps({ isEditable: false })
       expect(wrapper.find('Assessment').prop('disabled')).toEqual(true)
-    })
-
-    it('should enable  <AssessmentFormFooter/> when isEditable=true and should not be rendered when isEditable=false', () => {
-      wrapper.setProps({ isEditable: false })
-      expect(wrapper.find('AssessmentFormFooter').exists()).toEqual(false)
     })
   })
 })
