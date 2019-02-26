@@ -191,22 +191,22 @@ describe('<Item />', () => {
   })
 
   describe('CommentIcon in the toolbar', () => {
-    it('should render CommentIcon with item-toolbar-comment-icon style', () => {
+    it('should not render CommentIcon if item has no comment', () => {
       const wrapper = mountItem(itemDefault)
       const commentIcon = wrapper.find(CommentIcon)
-      expect(commentIcon.props().className.includes('item-toolbar-comment-icon')).toBeTruthy()
+      expect(commentIcon.exists()).toBe(false)
     })
 
-    it('should render outlined CommentIcon when no comment for the item', () => {
-      const wrapper = mountItem(itemDefault)
-      const commentIcon = wrapper.find(CommentIcon)
-      expect(commentIcon.props().isSolid).toBeFalsy()
-    })
-
-    it('should render solid CommentIcon when item has a comment', () => {
+    it('should render CommentIcon if item has a comment', () => {
       const wrapper = mountItem(itemWithComment)
       const commentIcon = wrapper.find(CommentIcon)
-      expect(commentIcon.props().isSolid).toBeTruthy()
+      expect(commentIcon.exists()).toBe(true)
+    })
+
+    it('should render CommentIcon with item-toolbar-comment-icon style if item has a comment', () => {
+      const wrapper = mountItem(itemWithComment)
+      const commentIcon = wrapper.find(CommentIcon)
+      expect(commentIcon.props().className.includes('item-toolbar-comment-icon')).toBeTruthy()
     })
   })
 

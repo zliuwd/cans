@@ -133,27 +133,27 @@ describe('<DomainCommentAccordion />', () => {
     })
   })
 
-  describe('CommentIcon in the accordion', () => {
+  describe('CommentIcon in the domain comment accordion', () => {
     it('should render CommentIcon with domain-comment-accordion-comment-icon style', () => {
-      const wrapper = shallow(domainCommentAccordionDefault)
+      const wrapper = shallow(domainCommentAccordionWithComment)
       const commentIcon = wrapper.find(CommentIcon)
       expect(commentIcon.props().className.includes('domain-comment-accordion-comment-icon')).toBeTruthy()
     })
 
-    it('should render outlined CommentIcon when no comment for the domain', () => {
+    it('should not render CommentIcon if the domain has no comment', () => {
       const wrapper = shallow(domainCommentAccordionDefault)
       const commentIcon = wrapper.find(CommentIcon)
-      expect(commentIcon.props().isSolid).toBeFalsy()
+      expect(commentIcon.exists()).toBe(false)
     })
 
-    it('should render solid CommentIcon when domain has a comment', () => {
+    it('should render CommentIcon if the domain has a comment', () => {
       const wrapper = shallow(domainCommentAccordionWithComment)
       const commentIcon = wrapper.find(CommentIcon)
-      expect(commentIcon.props().isSolid).toBeTruthy()
+      expect(commentIcon.exists()).toBe(true)
     })
 
     it('sets ratingType prop on CommentIcon based on domain item rating type', () => {
-      const wrapper = shallow(domainCommentAccordionDefault)
+      const wrapper = shallow(domainCommentAccordionWithComment)
       const commentIcon = wrapper.find(CommentIcon)
       expect(commentIcon.props().ratingType).toBe('reg-rating')
     })

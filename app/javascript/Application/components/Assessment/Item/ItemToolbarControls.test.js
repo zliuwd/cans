@@ -50,9 +50,20 @@ describe('<ItemToolbarControls />', () => {
     expect(Object.keys(target.props())).toEqual(expectedProps)
   })
 
-  it('will render CommentIcons', () => {
+  it('will render CommentIcon if item has a comment', () => {
     const target = wrapper.find(CommentIcon)
     expect(target.exists()).toBe(true)
+  })
+
+  it('will not render a CommentIcon if item has no comment', () => {
+    const noCommentwrapper = mount(<ItemToolbarControls {...fakeProps} comment={''} />)
+    const target = noCommentwrapper.find(CommentIcon)
+    expect(target.exists()).toBe(false)
+  })
+
+  it('should render CommentIcon with item-toolbar-comment-icon style', () => {
+    const commentIcon = wrapper.find(CommentIcon)
+    expect(commentIcon.props().className.includes('item-toolbar-comment-icon')).toBeTruthy()
   })
 
   it('will render ConfidentialCheckbox with correct props', () => {

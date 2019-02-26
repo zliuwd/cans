@@ -56,10 +56,10 @@ class Comment extends Component {
     const inputClassSuffix = isFolded ? '-empty' : ''
     const lengthClassSuffix = isFocused ? '' : '-hidden'
     const inputId = `${id}-${prefix}`
-    const renderCommentIcon = isCommentIconDisabled ? null : <CommentIcon isSolid={Boolean(value)} />
+    const renderCommentIcon = isCommentIconDisabled ? null : <CommentIcon />
     const renderCommentLabel = isCommentIconDisabled ? null : (
       <Label for={inputId}>
-        {renderCommentIcon}
+        {isFolded ? null : renderCommentIcon}
         <span className={`${prefix}-label`}>Comment</span>
       </Label>
     )

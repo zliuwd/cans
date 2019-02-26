@@ -61,11 +61,12 @@ class DomainCommentAccordion extends Component {
           >
             {commentTitle}
           </Typography>
-          <CommentIcon
-            isSolid={Boolean(domain.comment)}
-            className={'domain-comment-accordion-comment-icon'}
-            ratingType={domain.items[0].rating_type === 'BOOLEAN' ? 'bool-rating' : 'reg-rating'}
-          />
+          {domain.comment ? (
+            <CommentIcon
+              className={'domain-comment-accordion-comment-icon'}
+              ratingType={domain.items[0].rating_type === 'BOOLEAN' ? 'bool-rating' : 'reg-rating'}
+            />
+          ) : null}
         </Toolbar>
       </Paper>
     )

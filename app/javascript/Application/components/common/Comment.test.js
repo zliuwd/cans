@@ -101,14 +101,9 @@ describe('<Comment />', () => {
     })
 
     describe('ItemCommentIcon', () => {
-      it('should be solid when a comment is not empty', () => {
+      it('shows CommentIcon if Item has a comment', () => {
         const wrapper = getWrapper('a comment')
-        expect(wrapper.find(CommentIcon).props().isSolid).toBeTruthy()
-      })
-
-      it('should be outlined when a comment is empty', () => {
-        const wrapper = getWrapper('')
-        expect(wrapper.find(CommentIcon).props().isSolid).toBeFalsy()
+        expect(wrapper.find(CommentIcon).exists()).toBe(true)
       })
     })
 

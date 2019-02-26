@@ -140,7 +140,6 @@ feature 'Case Worker Functionality' do
 
   def eliminate_auto_scroll_impact
     sleep 2
-    @form.item_comment_icons[0].click
   end
 
   def verify_caregiver_name_input_field_and_label

@@ -8,41 +8,36 @@ const domainWithComment = {
   items: [],
 }
 
+const domainWithNoComment = {
+  comment: null,
+  items: [{}, { comment: null }, {}],
+}
+
 const domainWithItemComment = {
   comment: null,
   items: [{}, {}, { comment: 'This one!' }],
 }
 
-const domainWithNoComments = {
-  comment: null,
-  items: [{}, { comment: null }, {}],
-}
-
 describe('<DomainCommentIcon />', () => {
   const render = domain => shallow(<DomainCommentIcon domain={domain} />)
 
-  it('renders a comment icon', () => {
-    const root = render(domainWithNoComments)
+  it('renders a comment icon when the domain has a comment', () => {
+    const root = render(domainWithComment)
     expect(root.find(CommentIcon).exists()).toBe(true)
   })
 
-  it('has a className', () => {
-    const root = render(domainWithNoComments)
+  it('has a className if domain has a comment', () => {
+    const root = render(domainWithComment)
     expect(root.props().className).toBe('domain-toolbar-comment-icon')
   })
 
-  it('renders a hollow comment icon when the domain has no comments', () => {
-    const root = render(domainWithNoComments)
-    expect(root.props().isSolid).toBe(false)
+  it('does not render a comment icon when the domain has no comment', () => {
+    const root = render(domainWithNoComment)
+    expect(root.find(CommentIcon).exists()).toBe(false)
   })
 
-  it('renders a solid comment icon when the domain has a comment', () => {
-    const root = render(domainWithComment)
-    expect(root.props().isSolid).toBe(true)
-  })
-
-  it('rendres a solid comment icon when the domain has item comments', () => {
+  it('rendres a comment icon when the domain has item comment', () => {
     const root = render(domainWithItemComment)
-    expect(root.props().isSolid).toBe(true)
+    expect(root.find(CommentIcon).exists()).toBe(true)
   })
 })

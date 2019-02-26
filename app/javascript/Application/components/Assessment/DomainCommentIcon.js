@@ -4,8 +4,7 @@ import CommentIcon from '../common/CommentIcon'
 
 const DomainCommentIcon = ({ domain: { comment, items } }) => {
   const hasComment = Boolean(comment) || items.some(item => item.comment)
-
-  return <CommentIcon className="domain-toolbar-comment-icon" isSolid={hasComment} />
+  return hasComment ? <CommentIcon className="domain-toolbar-comment-icon" /> : null
 }
 
 DomainCommentIcon.propTypes = {
