@@ -130,15 +130,15 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@cwds/components@^0.8.4":
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/@cwds/components/-/components-0.8.4.tgz#d9a86cbd6424c48643dee4c7534e1313628bae9d"
-  integrity sha512-xeiqMaiyNh9ktD4T5ez75kPW1zJEorD+VkgMbePGnBMw6CK3AtoL5XqN5diWyvuqV7zszrjNzNh6qKN1Ev8sww==
+"@cwds/components@^0.8.5":
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/@cwds/components/-/components-0.8.5.tgz#df832f93c30196a9f131b5fb8474fcbe3e97e7a4"
+  integrity sha512-tKiyRtIfVbwLaMQGWdjBJLWvVS9EE5DbIT+XeTGlyxIV8aYHQxXXLBEegq4pyl9vXq6nzkq6ZdTTkLBTcLjeHQ==
   dependencies:
-    "@cwds/core" "^0.8.4"
-    "@cwds/datagrid" "^0.8.4"
-    "@cwds/icons" "^0.8.4"
-    "@cwds/reactstrap" "^0.8.4"
+    "@cwds/core" "^0.8.5"
+    "@cwds/datagrid" "^0.8.5"
+    "@cwds/icons" "^0.8.5"
+    "@cwds/reactstrap" "^0.8.5"
     bootstrap "^4.1.3"
     classnames "^2.2.6"
     lodash.omit "^4.5.0"
@@ -152,19 +152,19 @@
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/@cwds/core/-/core-0.5.6.tgz#9061e4c26b06b099d58399a67a54d65ef1ec5e35"
 
-"@cwds/core@^0.8.4":
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/@cwds/core/-/core-0.8.4.tgz#7574957f590f7d06bdf16cf08f6d923993b659ed"
-  integrity sha512-pIJW8UNuYYq10rrnSHQDFnhHgtKxc391aU5zNbrUGZUecG6EDpWZw16eUsEEwNrJ2Z6+MyvSf29AAoEIUmtBDA==
+"@cwds/core@^0.8.5":
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/@cwds/core/-/core-0.8.5.tgz#78327e92eb3a4ea615fd57b301ee20618f08cdb5"
+  integrity sha512-TSPQdCcAS8GytqifpkQBsDHWsRcK6q1Ya23LucJlIxJe7CUT+gB3KzLw94UEo+UnPqkpWQxlbX+uhKAN8+bVhw==
 
-"@cwds/datagrid@^0.8.4":
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/@cwds/datagrid/-/datagrid-0.8.4.tgz#bace03f469cf7e46f37e215c6113c66aa1f85a94"
-  integrity sha512-UX/xZrzi/yD/YDrgR42F4+0N5gTwED7URu56jD9SF2isIIAd3lVdGebCETJfMR9q7NYVKGdqxAJCZ8shHsquFw==
+"@cwds/datagrid@^0.8.5":
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/@cwds/datagrid/-/datagrid-0.8.5.tgz#10beda722253e3ac07be40c185906ecab7ec8203"
+  integrity sha512-rpubAPfx+FJecjnHrYMoo5ohXHXd96I+AbvuGvzG0Qt+8ASBF+S1qOVgxusC90vQ1ddclQpXYDvtjBgp6/5Csg==
   dependencies:
-    "@cwds/core" "^0.8.4"
-    "@cwds/icons" "^0.8.4"
-    "@cwds/reactstrap" "^0.8.4"
+    "@cwds/core" "^0.8.5"
+    "@cwds/icons" "^0.8.5"
+    "@cwds/reactstrap" "^0.8.5"
     bootstrap "^4.1.3"
     classnames "^2.2.6"
     lodash.omit "^4.5.0"
@@ -172,21 +172,21 @@
     react-select "^2.1.1"
     react-table "^6.8.6"
 
-"@cwds/icons@^0.8.4":
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/@cwds/icons/-/icons-0.8.4.tgz#c5a405606fd87cadb6ac682b19c5f1aa242c7859"
-  integrity sha512-ReUhhw0HDTyw+UCVukF9hWa/XCkQgjpcp1HFU6vUhjaUU+2assFAW1GTjczfQd7BCd+NFhOlKTsfzr0/743BRA==
+"@cwds/icons@^0.8.5":
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/@cwds/icons/-/icons-0.8.5.tgz#62bace61cea1a5f96737322756ff54e6cbb9bcdd"
+  integrity sha512-O055mKpik9mkihJWCArSi8M0tsvSPZvH+H+jFsBQiOuhRftUQO0C9nbHqPGr/i+e7/JMkWYbIz3DmEatH2wFQg==
   dependencies:
-    "@cwds/core" "^0.8.4"
+    "@cwds/core" "^0.8.5"
     "@fortawesome/fontawesome-svg-core" "^1.2.5"
     "@fortawesome/free-regular-svg-icons" "^5.5.0"
     "@fortawesome/free-solid-svg-icons" "^5.5.0"
     "@fortawesome/react-fontawesome" "^0.1.3"
 
-"@cwds/reactstrap@^0.8.4":
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/@cwds/reactstrap/-/reactstrap-0.8.4.tgz#75d3034d93846fc0c234784d9eea6fb6ee082090"
-  integrity sha512-hPPxeW22xQGX5hAk6ox4k9F9M66g9XFyOxWRiE2IIoW3Wkb2aQzECQMRK4J6GAG97z89gNoyxw0nO4W31dqdQA==
+"@cwds/reactstrap@^0.8.5":
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/@cwds/reactstrap/-/reactstrap-0.8.5.tgz#f1331db0757efa94694345a72e89736eb8534071"
+  integrity sha512-iFTuaiyxv0VfUH5mco/lGAVwUQgfITvuve+1PzIvAXI3u474uR6MNxUznNOER9v6spmVxQyzQ9tUIEBSplEhPA==
   dependencies:
     reactstrap "^7.1.0"
 
