@@ -49,8 +49,10 @@ module Infrastructure
           Rack::MockRequest.env_for('http://example.com', {})
         end
         let(:privileges) { ['CANS-rollout'] }
+        let(:staff_id) { 'aac' }
         let(:account_json) do
-          { 'privileges': privileges }.to_json
+          { 'privileges': privileges,
+            'staffId': staff_id }.to_json
         end
 
         it 'returns validated token from session' do
@@ -63,15 +65,16 @@ module Infrastructure
           expect(request.session['token']).to eq 'good_token'
         end
 
-        it 'skips privileges save if they exist' do
+        it 'skips user attributes save if they exist' do
           request = Rack::Request.new(environment)
           request.session['privileges'] = privileges
+          request.session['staff_id'] = staff_id
           request.session['token'] = 'good_token'
           allow(security_gateway).to receive(:validate_token)
             .with('good_token').and_return('good_token')
           security_policy.validate_access(request)
 
-          expect(security_policy).not_to receive(:set_privileges)
+          expect(security_policy).not_to receive(:set_user_attributes)
         end
 
         it 'saves privileges if they do not exist' do
@@ -82,6 +85,16 @@ module Infrastructure
           security_policy.validate_access(request)
 
           expect(request.session['privileges']).to eq privileges
+        end
+
+        it 'saves staff id if it is not in the session' do
+          request = Rack::Request.new(environment)
+          request.session['token'] = 'good_token'
+          allow(security_gateway).to receive(:validate_token)
+            .with('good_token').and_return(account_json)
+          security_policy.validate_access(request)
+
+          expect(request.session['staff_id']).to eq staff_id
         end
       end
 

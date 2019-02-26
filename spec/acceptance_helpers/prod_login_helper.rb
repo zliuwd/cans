@@ -45,6 +45,7 @@ module ProdLoginHelper
 
   def enter_verification_code(login_config)
     return unless page.has_content?('Verification')
+
     fill_in 'code', with: login_config[:verification_code]
     click_button 'validateButton'
   end

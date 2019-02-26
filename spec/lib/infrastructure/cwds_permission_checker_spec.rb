@@ -12,10 +12,23 @@ module Infrastructure
         Rack::MockRequest.env_for('http://example.com?accessCode=good_accessCode', {})
       end
 
-      context 'when there is no session' do
-        it 'redirects when user has no privileges' do
+      context 'redirects to error page' do
+        before do
           allow(ENV).to receive(:fetch).with('CANS_BASE_PATH', '/').and_return('/cans')
           allow(ENV).to receive(:fetch).with('CANS_BASE_PATH', '').and_return('/cans')
+        end
+
+        it 'when there is invalid session' do
+          status, headers = cwds_permission_checker.call(environment)
+          expect(status).to eq 301
+          expect(headers['Location']).to eq '/cans/error_page'
+        end
+
+        it 'when there is no Staff Id in the session' do
+          request = Rack::Request.new(environment)
+          request.session['privileges'] = ['CANS-rollout']
+          request.session['staff_id'] = nil
+          allow(application).to receive(:call).with(environment).and_return([200, {}, {}])
           status, headers = cwds_permission_checker.call(environment)
           expect(status).to eq 301
           expect(headers['Location']).to eq '/cans/error_page'
@@ -23,9 +36,10 @@ module Infrastructure
       end
 
       context 'when there is a valid session' do
-        it 'user is able to access the application with valid privileges' do
+        it 'user is able to access the application with valid privileges and Staff Id' do
           request = Rack::Request.new(environment)
           request.session['privileges'] = ['CANS-rollout']
+          request.session['staff_id'] = ['aac']
           allow(application).to receive(:call).with(environment).and_return([200, {}, {}])
           status, _headers = cwds_permission_checker.call(environment)
           expect(status).to eq 200

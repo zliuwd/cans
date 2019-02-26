@@ -14,9 +14,9 @@ module Infrastructure
       if session_token
         perry_account_response = @security_gateway.validate_token(session_token)
 
-        # there may be existing session becuase of shared redis session
-        # Verify here that 'previleges' needed by cans exists
-        set_privileges(request, session_token, perry_account_response)
+        # there may be existing session because of shared redis session
+        # Verify here that 'privileges' needed by cans exists
+        set_user_attributes(request, session_token, perry_account_response)
         return session_token if perry_account_response
       end
 
@@ -24,13 +24,13 @@ module Infrastructure
       return unless new_token
 
       request.session['token'] = new_token
-      set_privileges(request, new_token)
+      set_user_attributes(request, new_token)
     end
 
     private
 
-    def set_privileges(request, token, perry_account_response = nil)
-      return if request.session['privileges'].present?
+    def set_user_attributes(request, token, perry_account_response = nil)
+      return if request.session['privileges'].present? && request.session['staff_id'].present?
 
       perry_account_response ||= @security_gateway.validate_token(token)
 
@@ -38,6 +38,7 @@ module Infrastructure
 
       perry_account_json = JSON.parse(perry_account_response, symbolize_names: true)
       request.session['privileges'] = perry_account_json[:privileges]
+      request.session['staff_id'] = perry_account_json[:staffId]
     end
 
     def fetch_new_token(access_code)

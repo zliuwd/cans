@@ -35,6 +35,7 @@ end
 
 def acceptance_helper
   return LoginHelper unless ENV.fetch('PROD_LOGIN', false)
+
   ProdLoginHelper
 end
 

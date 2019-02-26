@@ -23,13 +23,13 @@ module Infrastructure
 
     def do_call(environment)
       request = Rack::Request.new(environment)
-      return redirect_to_error_page(request.url) unless valid_privileges(request)
+      return redirect_to_error_page(request.url) unless valid_user_attributes(request)
 
       @application.call(environment)
     end
 
-    def valid_privileges(request)
-      request.session['privileges']&.include?('CANS-rollout')
+    def valid_user_attributes(request)
+      request.session['privileges']&.include?('CANS-rollout') && !request.session['staff_id'].nil?
     end
 
     def redirect_to_error_page(_url)
