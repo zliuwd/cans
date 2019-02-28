@@ -20,6 +20,7 @@ import {
   postCloseMessage,
   alertMessage,
   getCaregiverDomainsNumber,
+  handlePrintButtonEnabled,
   handleCountyName,
   updateUrlWithAssessment,
 } from './AssessmentHelper'
@@ -109,7 +110,8 @@ export default class AssessmentContainer extends Component {
     const { assessment, i18n, isEditable } = this.state
     const node = <PrintAssessment assessment={assessment} i18n={i18n} />
     const leftButton = isEditable ? buildSaveAssessmentButton(this.handleSaveAssessment, isSaveButtonEnabled) : null
-    const rightButton = <PrintButton node={node} isEnabled={true} isAssessmentRendered={true} />
+    const isPrintButtonEnabled = handlePrintButtonEnabled(this.state)
+    const rightButton = <PrintButton node={node} isEnabled={isPrintButtonEnabled} isAssessmentRendered={true} />
     this.props.pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
   }
 

@@ -240,3 +240,7 @@ export const statusTextOfHistory = (status, isForTable) => {
   const text = getDisplayAssessmentStatus(status)
   return isForTable ? null : text
 }
+
+export const handlePrintButtonEnabled = state => {
+  return Boolean(state.assessment.state.under_six !== undefined && state.isValidDate)
+}
