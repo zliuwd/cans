@@ -110,11 +110,6 @@ export function getActionVerbByStatus(status) {
   }
 }
 
-export const alertMessage = e => {
-  e.preventDefault()
-  return (e.returnValue = '')
-}
-
 export function getDisplayAssessmentStatus(status) {
   switch (status) {
     case AssessmentStatus.inProgress:

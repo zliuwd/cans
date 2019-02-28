@@ -2,8 +2,7 @@ import React, { Fragment, Component } from 'react'
 import PropTypes from 'prop-types'
 import { Print } from '../../Print'
 import { buildButton } from '../PageHeaderButtonsBuilder'
-import { eventBus } from '../../../util/eventBus'
-import { UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT } from '../../../util/constants'
+import pageLockService from './../../common/PageLockService'
 
 class PrintButton extends Component {
   constructor(props) {
@@ -13,13 +12,11 @@ class PrintButton extends Component {
   }
 
   componentDidMount() {
-    eventBus.subscribe(ASSESSMENT_PRINT_EVENT, this.togglePrintNow)
     this.activeCtrlP()
   }
 
   componentWillUnmount() {
     this.muteCtrlP()
-    eventBus.unsubscribe(ASSESSMENT_PRINT_EVENT, this.togglePrintNow)
   }
 
   activeCtrlP = () => {
@@ -40,11 +37,7 @@ class PrintButton extends Component {
   }
 
   onPrint = () => {
-    if (this.props.isAssessmentRendered) {
-      eventBus.post(UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT)
-    } else {
-      this.togglePrintNow()
-    }
+    pageLockService.confirm(this.togglePrintNow)
   }
 
   togglePrintNow() {
@@ -71,13 +64,8 @@ class PrintButton extends Component {
 }
 
 PrintButton.propTypes = {
-  isAssessmentRendered: PropTypes.bool,
   isEnabled: PropTypes.bool.isRequired,
   node: PropTypes.node.isRequired,
-}
-
-PrintButton.defaultProps = {
-  isAssessmentRendered: false,
 }
 
 export default PrintButton

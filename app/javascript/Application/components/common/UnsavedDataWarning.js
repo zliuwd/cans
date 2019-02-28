@@ -1,50 +1,57 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { UNSAVED_ASSESSMENT_VALIDATION_EVENT } from '../../util/constants'
-import { eventBus } from '../../util/eventBus'
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap'
 import { Icon } from '@cwds/components'
+import pageLockService from './PageLockService'
 
 class UnsavedDataWarning extends Component {
   constructor(context) {
     super(context)
     this.state = {
       isOpened: false,
-      isAssessmentSaved: false,
     }
     this.close = this.close.bind(this)
-    this.onAction = this.onAction.bind(this)
-    this.onValidation = this.onValidation.bind(this)
+    this.onButtonClick = this.onButtonClick.bind(this)
+    this.onPageLeave = this.onPageLeave.bind(this)
   }
 
   componentDidMount() {
-    eventBus.subscribe(UNSAVED_ASSESSMENT_VALIDATION_EVENT, this.onValidation)
+    this.mounted = true
+    if (this.props.isUnsaved) {
+      pageLockService.lock(this.onPageLeave)
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.isUnsaved) {
+      pageLockService.lock(this.onPageLeave)
+    } else {
+      pageLockService.unlock()
+    }
   }
 
   componentWillUnmount() {
-    eventBus.unsubscribe(UNSAVED_ASSESSMENT_VALIDATION_EVENT, this.onValidation)
+    pageLockService.unlock()
+    this.mounted = false
   }
 
   close() {
-    this.setState({ isOpened: false, event: undefined })
+    if (this.mounted) {
+      this.setState({ isOpened: false, action: undefined })
+    }
   }
 
-  onValidation(event) {
+  onPageLeave(action) {
     if (this.props.isUnsaved) {
-      this.setState({ isOpened: true, event })
+      this.setState({ isOpened: true, action })
     } else {
-      eventBus.post(event)
-    }
-    if (this.props.assessmentId) {
-      this.setState({ isAssessmentSaved: true })
-    } else {
-      this.setState({ isAssessmentSaved: false, event })
+      action()
     }
   }
 
-  onAction(action) {
-    action().then(() => {
-      eventBus.post(this.state.event)
+  onButtonClick(assessmentAction) {
+    assessmentAction().then(() => {
+      this.state.action()
       this.close()
     })
   }
@@ -72,18 +79,18 @@ class UnsavedDataWarning extends Component {
           <Button
             className={'unsaved-warning-modal-save'}
             onClick={() => {
-              this.onAction(this.props.saveAndContinue)
+              this.onButtonClick(this.props.saveAndContinue)
             }}
           >
             {'SAVE CHANGES AND CONTINUE'}
           </Button>
         </ModalFooter>
-        {this.state.isAssessmentSaved ? (
+        {this.props.assessmentId ? (
           <ModalFooter className="warning-modal-footer">
             <Button
               className={'unsaved-warning-modal-discard'}
               onClick={() => {
-                this.onAction(this.props.discardAndContinue)
+                this.onButtonClick(this.props.discardAndContinue)
               }}
             >
               {'Discard changes and continue'}
