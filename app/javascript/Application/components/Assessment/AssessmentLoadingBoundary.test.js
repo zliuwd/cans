@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import AssessmentManager from './AssessmentManager'
+import AssessmentLoadingBoundary from './AssessmentLoadingBoundary'
 import AssessmentService from './Assessment.service'
 import I18nService from './I18n.service'
 import LoadingBoundary from '../common/LoadingBoundary'
@@ -8,12 +8,12 @@ import LoadingBoundary from '../common/LoadingBoundary'
 jest.mock('./Assessment.service')
 jest.mock('./I18n.service')
 
-describe('AssessmentManager', () => {
+describe('AssessmentLoadingBoundary', () => {
   const render = (instrumentId, assessmentId) =>
     shallow(
-      <AssessmentManager instrumentId={instrumentId} assessmentId={assessmentId}>
+      <AssessmentLoadingBoundary instrumentId={instrumentId} assessmentId={assessmentId}>
         <div />
-      </AssessmentManager>
+      </AssessmentLoadingBoundary>
     )
 
   const findChild = wrapper => wrapper.find(LoadingBoundary).find('div')

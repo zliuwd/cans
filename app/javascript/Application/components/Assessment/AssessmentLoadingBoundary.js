@@ -17,7 +17,7 @@ const fetchFactory = (assessmentId, instrumentId) => () =>
     i18n,
   }))
 
-class AssessmentManager extends React.Component {
+class AssessmentLoadingBoundary extends React.Component {
   state = {}
 
   static getDerivedStateFromProps(props, state) {
@@ -56,14 +56,14 @@ class AssessmentManager extends React.Component {
   }
 }
 
-AssessmentManager.propTypes = {
+AssessmentLoadingBoundary.propTypes = {
   assessmentId: PropTypes.string,
   children: PropTypes.node.isRequired,
   instrumentId: PropTypes.string.isRequired,
 }
 
-AssessmentManager.defaultProps = {
+AssessmentLoadingBoundary.defaultProps = {
   assessmentId: null,
 }
 
-export default AssessmentManager
+export default AssessmentLoadingBoundary
