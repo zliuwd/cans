@@ -1,9 +1,8 @@
 import React from 'react'
 import UnsavedDataWarning from './UnsavedDataWarning'
 import { shallow } from 'enzyme'
-import { eventBus } from './../../util/eventBus'
-import { UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT } from './../../util/constants'
 import { Button } from 'reactstrap'
+import pageLockService from './PageLockService'
 
 describe('<UnsavedDataWarning />', () => {
   const action = () => {
@@ -29,13 +28,13 @@ describe('<UnsavedDataWarning />', () => {
 
   const unsavedAssessment = () => {
     const wrapper = shallow(warning(true, undefined))
-    eventBus.post(UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT)
+    wrapper.instance().onPageLeave(() => {})
     return wrapper
   }
 
-  const openWarning = () => {
-    const wrapper = shallow(warning(true, 1234))
-    eventBus.post(UNSAVED_ASSESSMENT_VALIDATION_EVENT, ASSESSMENT_PRINT_EVENT)
+  const openWarning = (unsaved = true) => {
+    const wrapper = shallow(warning(unsaved, 1234))
+    wrapper.instance().onPageLeave(() => {})
     return wrapper
   }
 
@@ -51,7 +50,26 @@ describe('<UnsavedDataWarning />', () => {
       const wrapper = openWarning()
       wrapper.instance().close()
       expect(wrapper.instance().state.isOpened).toBeFalsy()
-      expect(wrapper.instance().state.event).toBeUndefined()
+      expect(wrapper.instance().state.action).toBeUndefined()
+    })
+
+    it('page is unlocked when assessment is saved', () => {
+      pageLockService.unlock()
+      openWarning(false)
+      expect(pageLockService.pageLock).toBeUndefined()
+    })
+
+    it('page is locked when assessment is unsaved', () => {
+      pageLockService.unlock()
+      openWarning(true)
+      expect(pageLockService.pageLock).toBeDefined()
+    })
+
+    it('page is unlocked when warning is unmounted', () => {
+      pageLockService.unlock()
+      const wrapper = openWarning(true)
+      wrapper.instance().componentWillUnmount()
+      expect(pageLockService.pageLock).toBeUndefined()
     })
   })
 

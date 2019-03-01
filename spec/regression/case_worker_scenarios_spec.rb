@@ -31,6 +31,11 @@ feature 'Case Worker Functionality' do
     visit '/'
     create_new_assessment(CLIENT_NAME)
     validate_child_dob_and_age('01/03/2013')
+    validate_save_button
+    click_0_to_5_button
+    clear_date_field
+    fill_conducted_by_field('Mike Seaver')
+    validate_save_button
     input_date_and_calendar_icon_test(current_date)
     fill_conducted_by_field('Mike Seaver')
     check_case_or_referral_number
@@ -230,6 +235,11 @@ feature 'Case Worker Functionality' do
     expect(@client_profile).to have_add_cans_link
     @client_profile.add_cans_link.click
     expect(@form.header.child_name).to have_content(client_name)
+  end
+
+  def clear_date_field
+    @form.header.date_field.native.clear # avoid stuck
+    @form.header.date_field.native.clear
   end
 
   def input_date_and_calendar_icon_test(current_date)

@@ -13,6 +13,7 @@ import {
   successMsgFrom,
   sortAssessments,
   statusTextOfHistory,
+  handlePrintButtonEnabled,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
@@ -432,6 +433,35 @@ describe('AssessmentHelper', () => {
       const isForTable = false
       const actual = statusTextOfHistory(status, isForTable)
       expect(actual).toEqual(text)
+    })
+  })
+
+  describe('handlePrintButtonEnabled', () => {
+    it('returns false when age template is undefined', () => {
+      const fakeState = {
+        assessment: { state: { under_six: undefined } },
+        isValidDate: true,
+      }
+      const actual = handlePrintButtonEnabled(fakeState)
+      expect(actual).toEqual(false)
+    })
+
+    it('returns true when age template is selected and assessment has a date', () => {
+      const fakeState = {
+        assessment: { state: { under_six: true } },
+        isValidDate: true,
+      }
+      const actual = handlePrintButtonEnabled(fakeState)
+      expect(actual).toEqual(true)
+    })
+
+    it('returns false when date is not available', () => {
+      const fakeState = {
+        assessment: { state: { under_six: undefined } },
+        isValidDate: false,
+      }
+      const actual = handlePrintButtonEnabled(fakeState)
+      expect(actual).toEqual(false)
     })
   })
 })

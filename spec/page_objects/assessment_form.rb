@@ -153,6 +153,10 @@ def save_and_check_the_success_message
   expect(@form.global).to have_global_save_success_message_box
 end
 
+def validate_save_button
+  expect(@form.global.save_button.disabled?).to be(true)
+end
+
 def print_assessment
   @form.global.print_button.click
 end

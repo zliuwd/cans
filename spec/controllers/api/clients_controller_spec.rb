@@ -24,5 +24,21 @@ module Api
         expect(response.body).to eq client.to_json
       end
     end
+
+    describe '#show_comparison' do
+      let(:comparison) { { event_dates: ['someDates'], domains: ['someDomains'] } }
+      let(:comparison_response) do
+        instance_double('Faraday::Response', body: comparison, status: 200)
+      end
+
+      it 'returns a set of assessment comparison data' do
+        allow(clients_repository)
+          .to receive(:show_comparison)
+          .with('100')
+          .and_return(comparison_response)
+        get :show_comparison, params: { id: 100 }
+        expect(response.body).to eq comparison.to_json
+      end
+    end
   end
 end

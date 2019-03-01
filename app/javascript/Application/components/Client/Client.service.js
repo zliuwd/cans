@@ -4,7 +4,9 @@ export class ClientService {
   static fetch(id) {
     return apiGet(`/clients/${id}`)
   }
-
+  static getAssessmentComparison(id) {
+    return apiGet(`/clients/${id}/assessment_comparison`)
+  }
   static search({ firstName, middleName, lastName, dob, pagination: { page, pageSize } }) {
     const payload = {
       first_name: firstName,

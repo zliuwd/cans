@@ -1,30 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
-import { UNSAVED_ASSESSMENT_VALIDATION_EVENT, CHANGE_LOG_EVENT } from '../../util/constants'
 import { Button } from '@cwds/components'
-import { eventBus } from '../../util/eventBus'
+import pageLockService from '../common/PageLockService'
 
 class AssessmentChangelogLink extends React.Component {
   state = {
     shouldRedirect: false,
   }
 
-  componentDidMount() {
-    eventBus.subscribe(CHANGE_LOG_EVENT, this.canRedirectAssessment)
-  }
-
-  componentWillUnmount() {
-    eventBus.unsubscribe(CHANGE_LOG_EVENT, this.canRedirectAssessment)
-  }
-
-  canRedirectAssessment = () => {
-    this.setState({ shouldRedirect: true })
-  }
-
-  onClick = event => {
-    event.preventDefault()
-    eventBus.post(UNSAVED_ASSESSMENT_VALIDATION_EVENT, CHANGE_LOG_EVENT)
+  onClick = () => {
+    pageLockService.confirm(() => this.setState({ shouldRedirect: true }))
   }
 
   render() {

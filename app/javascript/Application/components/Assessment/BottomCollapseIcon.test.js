@@ -34,7 +34,7 @@ describe('<BottomCollapseIcon />', () => {
     expect(typeof target.props().onKeyPress).toBe('function')
   })
 
-  it('will invoke onClick after be clicked', () => {
+  it('will invoke onClick after is clicked', () => {
     const target = wrapper.find(Icon)
     target.simulate('click')
     expect(fakeProps.onClick).toHaveBeenCalledTimes(1)

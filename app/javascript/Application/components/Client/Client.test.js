@@ -6,8 +6,6 @@ import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
 import { MemoryRouter } from 'react-router-dom'
-import ClientAssessmentHistory from './AssessmentHistory/ClientAssessmentHistory'
-import ClientAssessmentHistoryLoadingBoundary from './AssessmentHistory/ClientAssessmentHistoryLoadingBoundary'
 
 const client = {
   id: 1,
@@ -24,7 +22,7 @@ const client = {
 }
 
 const params = {
-  match: { params: { id: '1' }, url: '/staff/0X5/clients/AznnyCs0X5' },
+  match: { params: { id: '1', staffId: '05X' }, url: '/staff/0X5/clients/AznnyCs0X5' },
   location: { pathname: 'client' },
   history: { location: '/client' },
   client,
@@ -46,14 +44,6 @@ describe('<Client />', () => {
 
     it('renders with <CardContent /> component', () => {
       expect(getLength(CardContent)).toBe(1)
-    })
-
-    it('renders with 1 <ClientAssessmentHistoryLoadingBoundary /> component', () => {
-      expect(getLength(ClientAssessmentHistoryLoadingBoundary)).toBe(1)
-    })
-
-    it('renders with 1 <ClientAssessmentHistory /> component', () => {
-      expect(getLength(ClientAssessmentHistory)).toBe(1)
     })
 
     it('sensitivityTypeLabel', () => {
@@ -78,7 +68,7 @@ describe('<Client />', () => {
 
   describe('with no childData', () => {
     const params = {
-      match: { params: { id: '1' }, url: '/staff/0X5/clients/AznnyCs0X5' },
+      match: { params: { id: '1', staffId: '0X5' }, url: '/staff/0X5/clients/AznnyCs0X5' },
       location: { pathname: 'client' },
       history: { location: '/client' },
       navigateTo: 'CLIENT_LIST',

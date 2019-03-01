@@ -1,6 +1,7 @@
 import { globalAlertService } from '../../util/GlobalAlertService'
 import React from 'react'
-import { AssessmentContainer, AssessmentService, I18nService } from './index'
+import { AssessmentContainer, AssessmentService } from './index'
+import { I18nService } from '../common/'
 import * as AHelper from './AssessmentHelper'
 import { childInfoJson } from '../Client/Client.helper.test'
 import ClientService from '../Client/Client.service'
@@ -9,12 +10,13 @@ import AssessmentFormFooter from './AssessmentFormFooter'
 import * as AssessmentAutoScroll from '../../util/assessmentAutoScroll'
 import AssessmentContainerInner from '../Assessment/AssessmentContainerInner'
 import PageModal from '../common/PageModal'
+import pageLockService from '../common/PageLockService'
+
 import {
   assessment,
   domainWithTwoCaregiver,
   initialAssessment,
   instrument,
-  readOnlyAssessment,
   updatedAssessment,
   updatedAssessmentDomains,
   updatedAssessmentWithDomains,
@@ -64,30 +66,6 @@ describe('<AssessmentContainer />', () => {
       it('renders with 1 <AssessmentContainerInner/> component', () => {
         const wrapper = mount(<AssessmentContainer {...props} />)
         expect(getLength(wrapper, AssessmentContainerInner)).toBe(1)
-      })
-
-      it('add "beforeunload" event listener when assessment is read-write', async () => {
-        const adder = jest.spyOn(window, 'addEventListener')
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        await wrapper.instance().updateIsEditableState()
-        expect(adder).toHaveBeenCalledTimes(1)
-      })
-
-      it('remove "beforeunload" event listener when assessment is read-only', async () => {
-        const remover = jest.spyOn(window, 'removeEventListener')
-        const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
-        wrapper.instance().setState({
-          assessment: readOnlyAssessment,
-        })
-        await wrapper.instance().updateIsEditableState()
-        expect(remover).toHaveBeenCalledTimes(1)
-      })
-
-      it('call removeEventListener in componentWillUnmount', () => {
-        const remover = jest.spyOn(window, 'removeEventListener')
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().componentWillUnmount()
-        expect(remover).toHaveBeenCalledTimes(1)
       })
     })
 
@@ -677,6 +655,7 @@ describe('<AssessmentContainer />', () => {
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />, {
           disableLifecycleMethods: true,
         })
+        pageLockService.unlock()
         await wrapper.instance().handleCancelClick()
         expect(wrapper.state().shouldRedirectToClientProfile).toEqual(true)
         expect(wrapper.find('Redirect').exists()).toBe(true)

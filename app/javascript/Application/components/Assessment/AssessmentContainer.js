@@ -3,7 +3,8 @@ import { Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { clone } from '../../util/common'
 import { completeAutoScroll } from '../../util/assessmentAutoScroll'
-import { AssessmentService, I18nService } from './'
+import { AssessmentService } from './'
+import { I18nService } from '../common/'
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper'
 import AssessmentContainerInner from './AssessmentContainerInner'
 import { PrintAssessment } from '../Print'
@@ -18,8 +19,8 @@ import {
   successMsgFrom,
   postInfoMessage,
   postCloseMessage,
-  alertMessage,
   getCaregiverDomainsNumber,
+  handlePrintButtonEnabled,
   handleCountyName,
   updateUrlWithAssessment,
 } from './AssessmentHelper'
@@ -30,6 +31,7 @@ import { getCurrentIsoDate, isValidLocalDate, localToIsoDate } from '../../util/
 import { logPageAction } from '../../util/analytics'
 import { isAuthorized } from '../common/AuthHelper'
 import UnsavedDataWarning from '../common/UnsavedDataWarning'
+import pageLockService from '../common/PageLockService'
 
 const SCROLL_POSITION_ADJUST = 15 // for manually adjust scroll destination 15 means go down 15px more
 const readOnlyMessageId = 'readonlyMessage'
@@ -65,7 +67,6 @@ export default class AssessmentContainer extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', alertMessage)
     this.props.pageHeaderButtonsController.updateHeaderButtonsToDefault()
     postCloseMessage(readOnlyMessageId)
   }
@@ -81,9 +82,6 @@ export default class AssessmentContainer extends Component {
     const assessment = this.state.assessment
     const isEditable = Boolean(!assessment || !assessment.id || isAuthorized(assessment, 'update'))
     this.setState({ isEditable })
-    isEditable
-      ? window.addEventListener('beforeunload', alertMessage)
-      : window.removeEventListener('beforeunload', alertMessage)
     this.postReadOnlyMessageIfNeeded()
   }
 
@@ -109,7 +107,8 @@ export default class AssessmentContainer extends Component {
     const { assessment, i18n, isEditable } = this.state
     const node = <PrintAssessment assessment={assessment} i18n={i18n} />
     const leftButton = isEditable ? buildSaveAssessmentButton(this.handleSaveAssessment, isSaveButtonEnabled) : null
-    const rightButton = <PrintButton node={node} isEnabled={true} isAssessmentRendered={true} />
+    const isPrintButtonEnabled = handlePrintButtonEnabled(this.state)
+    const rightButton = <PrintButton node={node} isEnabled={isPrintButtonEnabled} />
     this.props.pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
   }
 
@@ -306,6 +305,7 @@ export default class AssessmentContainer extends Component {
         this.setState({
           assessmentServiceStatus: LoadingState.ready,
           assessment: submittedAssessment,
+          isUnsaved: false,
         })
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
@@ -314,10 +314,12 @@ export default class AssessmentContainer extends Component {
       try {
         const submittedAssessment = await AssessmentService.postAssessment(assessment)
         postSuccessMessage(this.props.match.url, successMsgFrom.COMPLETE)
+        pageLockService.unlock()
         updateUrlWithAssessment(this.props.history, this.props.match, submittedAssessment)
         this.setState({
           assessmentServiceStatus: LoadingState.ready,
           assessment: submittedAssessment,
+          isUnsaved: false,
         })
       } catch (e) {
         this.setState({ assessmentServiceStatus: LoadingState.error })
@@ -335,7 +337,10 @@ export default class AssessmentContainer extends Component {
     }
   }
 
-  handleCancelClick = () => this.setState({ shouldRedirectToClientProfile: true })
+  handleCancelClick = () =>
+    pageLockService.confirm(() => {
+      this.setState({ shouldRedirectToClientProfile: true })
+    })
 
   handleEventDateFieldKeyUp = date => {
     const dateValue = date.target.value

@@ -22,6 +22,24 @@ describe('ClientService', () => {
     })
   })
 
+  describe('#getAssessmentComparison', () => {
+    const apiGetSpy = jest.spyOn(apiEndpoints, 'apiGet')
+
+    beforeEach(() => {
+      apiGetSpy.mockReset()
+    })
+
+    it('returns assessment comparison data', async () => {
+      const clientId = 1
+      const mockComparisonData = { event_dates: ['someDates'], domains: ['someDomains'] }
+      apiGetSpy.mockReturnValue(mockComparisonData)
+      const assessmentComparisonData = await ClientService.getAssessmentComparison(clientId)
+      expect(assessmentComparisonData).toBe(mockComparisonData)
+      expect(apiGetSpy).toHaveBeenCalledTimes(1)
+      expect(apiGetSpy).toHaveBeenCalledWith(`/clients/${clientId}/assessment_comparison`)
+    })
+  })
+
   describe('#addClient', () => {
     const apiGetSpy = jest.spyOn(apiEndpoints, 'apiPost')
 

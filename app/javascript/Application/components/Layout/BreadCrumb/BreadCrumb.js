@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import '../style.sass'
+import ExternalLink from '../../common/ExternalLink'
 
 const BreadCrumb = ({ navigationElements }) => (
   <span className={'breadcrumbs'}>
-    <a href="/dashboard">Dashboard</a>{' '}
+    <ExternalLink href={'/dashboard'} text={'Dashboard'} />{' '}
     {navigationElements.map((nav, index) => (
       <span key={index}>
         <span className={'crumb-divider'}> &gt; </span>

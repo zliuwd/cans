@@ -28,3 +28,16 @@ export function clientCaseReferralNumber(serviceSource) {
   }
   return caseReferralNumber
 }
+
+export const recordsMode = Object.freeze({
+  HISTORY: 'Show History',
+  COMPARISON: 'Show Comparison',
+})
+
+export const shouldRenderRecordsSwitch = assessments => {
+  const iniLen = assessments.length
+  const deletedAssessments = assessments.filter(el => {
+    return el.status === 'DELETED'
+  })
+  return iniLen - deletedAssessments.length > 1 // have at least two accessable assessments
+}

@@ -8,6 +8,7 @@ import AddCansLink from '../AddCansLink'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
 import { navigation } from '../../../util/constants'
 import { LoadingState } from '../../../util/loadingHelper'
+import RecordsModeSwitchButton from '../RecordsModeSwitchButton'
 
 const client = {
   identifier: '0PcpFQu0QM',
@@ -53,6 +54,7 @@ const getWrapper = (assessments, loadingState = LoadingState.ready) => {
     assessments,
     loadingState,
     ...defaultProps,
+    recordsModeSwitch: jest.fn(),
   }
   return shallow(<ClientAssessmentHistory {...props} />)
 }
@@ -80,6 +82,13 @@ describe('<ClientAssessmentHistory', () => {
     it('renders a <AddCansLink /> in the Card header', () => {
       const wrapper = getWrapper(mockedAssessmentsWithEventDate)
       expect(wrapper.find(AddCansLink).length).toBe(1)
+    })
+
+    it('renders a <RecordsModeSwitchButton /> in the Card header with correct props', () => {
+      const wrapper = getWrapper(mockedAssessmentsWithEventDate)
+      const target = wrapper.find(RecordsModeSwitchButton)
+      expect(target.length).toBe(1)
+      expect(Object.keys(target.props())).toContain('switchButtonName', 'recordsModeSwitch', 'assessments')
     })
 
     it('renders a <CardBody /> component', () => {

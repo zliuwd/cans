@@ -3,8 +3,6 @@ import { shallow } from 'enzyme'
 import { Redirect } from 'react-router-dom'
 import AssessmentChangelogLink from './AssessmentChangelogLink'
 import { AssessmentStatus } from '../Assessment/AssessmentHelper'
-import { CHANGE_LOG_EVENT } from '../../util/constants'
-import { eventBus } from '../../util/eventBus'
 
 const defaultProps = {
   assessmentId: 1234,
@@ -51,7 +49,6 @@ describe('AssessmentChangelogLink', () => {
             target: { className: 'view-changelog-link' },
             preventDefault: () => {},
           })
-          eventBus.post(CHANGE_LOG_EVENT)
           expect(wrapper.find(Redirect).exists()).toBe(true)
         })
 
@@ -60,7 +57,6 @@ describe('AssessmentChangelogLink', () => {
             target: { className: 'view-changelog-link' },
             preventDefault: () => {},
           })
-          eventBus.post(CHANGE_LOG_EVENT)
           expect(wrapper.find(Redirect).props().to).toEqual({
             pathname: '1234/changelog/IN_PROGRESS',
           })
