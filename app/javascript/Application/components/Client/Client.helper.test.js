@@ -1,4 +1,9 @@
-import { clientCaseReferralNumber, formatClientName, formatClientStatus } from './Client.helper'
+import {
+  clientCaseReferralNumber,
+  formatClientName,
+  formatClientStatus,
+  shouldRenderRecordsSwitch,
+} from './Client.helper'
 
 describe('Client.helper', () => {
   describe('formatClientName', () => {
@@ -191,5 +196,26 @@ describe('All mock data are defined', () => {
     expect(socialWorkerClientsJson).toBeDefined()
     expect(personsJson).toBeDefined()
     expect(childInfoJson).toBeDefined()
+  })
+})
+
+describe('shouldRenderRecordsSwitch', () => {
+  const twoOrMoreValidAssessments = [
+    { id: 1, status: 'COMPLETED' },
+    { id: 2, status: 'COMPLETED' },
+    { id: 3, status: 'COMPLETED' },
+  ]
+  const onlyOneValidAssessments = [{ id: 1, status: 'COMPLETED' }, { id: 2, status: 'DELETED' }]
+  const noValidAssessments = [{ id: 1, status: 'DELETE' }, { id: 2, status: 'DELETED' }]
+  it('will return true when there are two or more assesment which status are not DELETED', () => {
+    expect(shouldRenderRecordsSwitch(twoOrMoreValidAssessments)).toBe(true)
+  })
+
+  it('will return false when there is only one assesment which status is not DELETED', () => {
+    expect(shouldRenderRecordsSwitch(onlyOneValidAssessments)).toBe(false)
+  })
+
+  it('will return false when there is no assesment which status is not DELETED', () => {
+    expect(shouldRenderRecordsSwitch(noValidAssessments)).toBe(false)
   })
 })

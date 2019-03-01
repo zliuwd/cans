@@ -10,5 +10,9 @@ module Clients
     def show(id)
       @http_service.call("/clients/#{id}", :get, @token)
     end
+
+    def show_comparison(id)
+      @http_service.call("/clients/#{id}/assessment_comparison", :get, @token)
+    end
   end
 end

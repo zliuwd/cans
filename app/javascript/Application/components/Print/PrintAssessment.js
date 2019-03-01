@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { getI18nByCode } from '../Assessment/I18nHelper'
+import { getI18nByCode } from '../common/I18nHelper'
 import PrintSummary from './PrintSummary'
 import {
   alertSignBox,

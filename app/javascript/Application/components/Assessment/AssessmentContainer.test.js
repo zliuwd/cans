@@ -1,6 +1,7 @@
 import { globalAlertService } from '../../util/GlobalAlertService'
 import React from 'react'
-import { AssessmentContainer, AssessmentService, I18nService } from './index'
+import { AssessmentContainer, AssessmentService } from './index'
+import { I18nService } from '../common/'
 import * as AHelper from './AssessmentHelper'
 import { childInfoJson } from '../Client/Client.helper.test'
 import ClientService from '../Client/Client.service'

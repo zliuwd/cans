@@ -1,5 +1,5 @@
 import React from 'react'
-import { getI18nByCode } from './I18nHelper'
+import { getI18nByCode } from '../common/I18nHelper'
 import Item from './Item'
 import { shouldItemBeRendered } from './AssessmentHelper'
 import Divider from '@material-ui/core/Divider'

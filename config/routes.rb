@@ -12,7 +12,11 @@ Rails.application.routes.draw do
 
     resources :people_searches, only: :index
 
-    resources :clients, only: [:show]
+    resources :clients, only: [:show] do
+      member do
+        get 'assessment_comparison', to: 'clients#show_comparison'
+      end
+    end
 
     resources :instruments, only: [:show] do
       member do
