@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { navigation } from '../../util/constants'
 import AssessmentPageInner from './AssessmentPageInner'
-import { AssessmentContainer } from '../Assessment'
+import { AssessmentForm } from '../Assessment'
 import ContextualBreadCrumb from '../Layout/BreadCrumb/ContextualBreadCrumb'
 import FullWidthLayout from '../Layout/FullWidthLayout'
 
@@ -71,18 +71,18 @@ describe('Assessment Page Inner', () => {
       wrapper = render({ client: fakeClient, match, history, navigateTo, staffInfo })
     })
 
-    it('renders a body of AssessmentContainer', () => {
+    it('renders a body of AssessmentForm', () => {
       const body = wrapper.find(FullWidthLayout)
-      expect(body.find(AssessmentContainer).exists()).toBe(true)
+      expect(body.find(AssessmentForm).exists()).toBe(true)
     })
 
-    it('passes route params to AssessmentContainer child', () => {
-      const assessment = wrapper.find(AssessmentContainer)
+    it('passes route params to AssessmentForm child', () => {
+      const assessment = wrapper.find(AssessmentForm)
       expect(assessment.props().match).toBe(match)
     })
 
-    it('passes router history to AssessmentContainer child', () => {
-      const assessment = wrapper.find(AssessmentContainer)
+    it('passes router history to AssessmentForm child', () => {
+      const assessment = wrapper.find(AssessmentForm)
       expect(assessment.props().history).toBe(history)
     })
 
@@ -96,20 +96,20 @@ describe('Assessment Page Inner', () => {
       expect(breadcrumb.props.subordinate).toBe(staffInfo)
     })
 
-    it('passes the client to the AssessmentContainer page', () => {
-      const assessment = wrapper.find(AssessmentContainer)
+    it('passes the client to the AssessmentForm page', () => {
+      const assessment = wrapper.find(AssessmentForm)
       expect(assessment.props().client).toBe(fakeClient)
     })
 
-    it('updates header buttons when requested by AssessmentContainer', () => {
-      const assessment = wrapper.find(AssessmentContainer)
+    it('updates header buttons when requested by AssessmentForm', () => {
+      const assessment = wrapper.find(AssessmentForm)
       assessment.props().pageHeaderButtonsController.updateHeaderButtons('foo', 'bar')
       expect(wrapper.state().leftButton).toBe('foo')
       expect(wrapper.state().rightButton).toBe('bar')
     })
 
     it('provides a dummy default method for compatibility', () => {
-      const assessment = wrapper.find(AssessmentContainer)
+      const assessment = wrapper.find(AssessmentForm)
       expect(() => assessment.props().pageHeaderButtonsController.updateHeaderButtonsToDefault()).not.toThrow()
     })
 

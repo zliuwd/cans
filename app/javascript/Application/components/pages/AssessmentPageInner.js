@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ContextualBreadCrumb from '../Layout/BreadCrumb/ContextualBreadCrumb'
-import { AssessmentContainer } from '../Assessment'
+import { AssessmentForm } from '../Assessment'
 import FullWidthLayout from '../Layout/FullWidthLayout'
 
 class AssessmentPageInner extends React.Component {
@@ -36,7 +36,7 @@ class AssessmentPageInner extends React.Component {
         navigateTo={navigateTo}
       >
         {client && (
-          <AssessmentContainer
+          <AssessmentForm
             client={client}
             history={history}
             match={match}

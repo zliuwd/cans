@@ -8,10 +8,15 @@ const MyComponent = () => 'Hello'
 
 describe('AssessmentDraftManager', () => {
   const initialAssessment = AssessmentMocks.assessment
+  const i18n = { key: 'value' }
 
   const render = (onSave = () => {}) =>
     shallow(
-      <AssessmentDraftManager assessment={initialAssessment} loadingState={LoadingState.ready} onSave={onSave}>
+      <AssessmentDraftManager
+        assessmentWithI18n={{ assessment: initialAssessment, i18n }}
+        loadingState={LoadingState.ready}
+        onSave={onSave}
+      >
         <MyComponent />
       </AssessmentDraftManager>
     )
@@ -23,9 +28,29 @@ describe('AssessmentDraftManager', () => {
     expect(wrapper.state().assessment).toEqual(initialAssessment)
   })
 
+  it('updates the saved assessment when the loading state transitions to Ready', () => {
+    const wrapper = shallow(
+      <AssessmentDraftManager
+        assessmentWithI18n={{ assessment: null, i18n }}
+        loadingState={LoadingState.waiting}
+        onSave={() => {}}
+      >
+        <MyComponent />
+      </AssessmentDraftManager>
+    )
+    wrapper.setProps({ assessmentWithI18n: { assessment: initialAssessment, i18n }, loadingState: LoadingState.ready })
+    wrapper.update()
+    expect(wrapper.state().assessment).toEqual(initialAssessment)
+  })
+
   it('passes the assessment down to the child', () => {
     const wrapper = render()
     expect(findChild(wrapper).props().assessment).toEqual(initialAssessment)
+  })
+
+  it('passes the i18n values down to the child', () => {
+    const wrapper = render()
+    expect(findChild(wrapper).props().i18n).toEqual(i18n)
   })
 
   it('passes the loading state down to the child', () => {

@@ -5,13 +5,20 @@ import { LoadingState } from '../../util/loadingHelper'
 class AssessmentDraftManager extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      assessment: props.assessment,
+    const assessment = props.assessmentWithI18n && props.assessmentWithI18n.assessment
+    this.state = { assessment }
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (state.assessment === null && props.loadingState === LoadingState.ready) {
+      return { assessment: props.assessmentWithI18n && props.assessmentWithI18n.assessment }
     }
+    return null
   }
 
   handleResetAssessment = () => {
-    this.setState({ assessment: this.props.assessment })
+    const assessment = this.props.assessmentWithI18n && this.props.assessmentWithI18n.assessment
+    this.setState({ assessment })
   }
 
   handleSaveAssessment = () => {
@@ -25,6 +32,7 @@ class AssessmentDraftManager extends React.PureComponent {
   render() {
     return React.cloneElement(this.props.children, {
       assessment: this.state.assessment,
+      i18n: this.props.assessmentWithI18n && this.props.assessmentWithI18n.i18n,
       loadingState: this.props.loadingState,
       onResetAssessment: this.handleResetAssessment,
       onSaveAssessment: this.handleSaveAssessment,
@@ -34,14 +42,18 @@ class AssessmentDraftManager extends React.PureComponent {
 }
 
 AssessmentDraftManager.propTypes = {
-  assessment: PropTypes.object,
+  assessmentWithI18n: PropTypes.shape({
+    assessment: PropTypes.object,
+    i18n: PropTypes.object.isRequired,
+  }),
   children: PropTypes.element.isRequired,
   loadingState: PropTypes.oneOf(Object.values(LoadingState)),
-  onSave: PropTypes.func.isRequired,
+  onSave: PropTypes.func,
 }
 
 AssessmentDraftManager.defaultProps = {
-  assessment: null,
+  assessmentWithI18n: null,
   loadingState: LoadingState.waiting,
+  onSave: () => {},
 }
 export default AssessmentDraftManager

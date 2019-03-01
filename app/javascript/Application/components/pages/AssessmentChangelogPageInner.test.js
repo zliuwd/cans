@@ -72,7 +72,7 @@ describe('AssessmentChangelogPageInner', () => {
       expect(pageComponent.props().client).toBe(fakeClient)
     })
 
-    it('updates header buttons when requested by AssessmentContainer', () => {
+    it('updates header buttons when requested by page content', () => {
       const page = wrapper.find(ChangeLogPage)
       page.props().pageHeaderButtonsController.updateHeaderButtons('foo', 'bar')
       expect(wrapper.state().leftButton).toBe('foo')
