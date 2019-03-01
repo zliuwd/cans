@@ -43,4 +43,26 @@ describe(' ClientSocialWorkerCardTempate ', () => {
     expect(accessorStatus).toEqual('No prior CANS')
     expect(accessorReminderDate).toEqual('10/26/2018')
   })
+
+  describe('sort method', () => {
+    describe('date A is more recent than date B', () => {
+      it('sorts date A before date B', () => {
+        const dateA = '01/02/2018'
+        const dateB = '01/01/2018'
+        const clientSocialWorkerColumn = template()[1].sortMethod(dateA, dateB)
+
+        expect(clientSocialWorkerColumn).toBe(1)
+      })
+    })
+
+    describe('date A is less recent than date B', () => {
+      it('sorts date B before date A', () => {
+        const dateA = '01/01/2018'
+        const dateB = '01/02/2018'
+        const clientSocialWorkerColumn = template()[1].sortMethod(dateA, dateB)
+
+        expect(clientSocialWorkerColumn).toBe(-1)
+      })
+    })
+  })
 })

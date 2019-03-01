@@ -25,7 +25,11 @@ and meet the setting rules of reactTable at same time */
       },
       accessor: client => renderDate(client.dob),
       className: 'client-list-table-cell-center',
-      sortable: true,
+      sortMethod: (a, b) => {
+        const dateA = new Date(a).getTime()
+        const dateB = new Date(b).getTime()
+        return dateA > dateB ? 1 : -1
+      },
     },
     {
       id: 'CANS Status',
