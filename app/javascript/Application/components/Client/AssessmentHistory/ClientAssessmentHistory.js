@@ -9,6 +9,8 @@ import AddCansLink from '../AddCansLink'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
 import { sortAssessments } from '../../Assessment/'
 import { LoadingState } from '../../../util/loadingHelper'
+import RecordsModeSwitchButton from '../RecordsModeSwitchButton'
+import { recordsMode } from '../Client.helper'
 
 class ClientAssessmentHistory extends PureComponent {
   renderAssessments = assessments => {
@@ -61,6 +63,11 @@ class ClientAssessmentHistory extends PureComponent {
           <CardHeader className={'card-header-cans card-header-client card-header-client-assessment-history'}>
             <CardTitle>
               <span>Assessment History</span>
+              <RecordsModeSwitchButton
+                switchButtonName={recordsMode.COMPARISON}
+                recordsModeSwitch={this.props.recordsModeSwitch}
+                assessments={assessments}
+              />
               <AddCansLink clientIdentifier={client.identifier} disabled={!isAuthorized(client, 'createAssessment')} />
             </CardTitle>
           </CardHeader>
@@ -80,6 +87,7 @@ ClientAssessmentHistory.propTypes = {
   inheritUrl: PropTypes.string.isRequired,
   loadingState: PropTypes.string,
   navFrom: PropTypes.string,
+  recordsModeSwitch: PropTypes.func.isRequired,
   updateAssessmentHistoryCallback: PropTypes.func.isRequired,
   userId: PropTypes.string,
 }

@@ -17,5 +17,14 @@ module Clients
         expect(clients_repository.show(12)).to eq(response)
       end
     end
+
+    describe '#show_comparison' do
+      it 'returns comparison data' do
+        allow(http_service).to receive(:call)
+          .with('/clients/16/assessment_comparison', :get, token)
+          .and_return(response)
+        expect(clients_repository.show_comparison(16)).to eq(response)
+      end
+    end
   end
 end

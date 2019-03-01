@@ -12,9 +12,16 @@ export const DomainPropType = PropTypes.shape({
 
 export const DomainsPropType = PropTypes.arrayOf(DomainPropType)
 
-const STRENGTH_DOMAINS = ['STR', 'EST']
-const TRAUMA_DOMAIN = 'TRM'
-const BEN_DOMAIN = 'BEN'
+export const domainCodes = Object.freeze({
+  STRENGTH_DOMAIN_UNDER_SIX: 'EST',
+  STRENGTH_DOMAIN_ABOVE_SIX: 'STR',
+  PTACE_DOMAIN: 'TRM',
+  BEHAVIORAL_DMAIN: 'BEN',
+})
+
+const STRENGTH_DOMAINS = [domainCodes.STRENGTH_DOMAIN_UNDER_SIX, domainCodes.STRENGTH_DOMAIN_ABOVE_SIX]
+const TRAUMA_DOMAIN = domainCodes.PTACE_DOMAIN
+const BEN_DOMAIN = domainCodes.BEHAVIORAL_DMAIN
 
 export const isStrengthsDomain = ({ code }) => STRENGTH_DOMAINS.includes(code)
 
