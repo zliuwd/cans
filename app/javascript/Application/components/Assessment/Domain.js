@@ -11,10 +11,10 @@ import { Input } from 'reactstrap'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
 import DomainCommentAccordion from './DomainCommentAccordion'
 import DomainCommentIcon from './DomainCommentIcon'
-import { shouldDomainBeRendered, shouldItemBeRendered } from './AssessmentHelper'
+import { shouldDomainBeRendered } from './AssessmentHelper'
 import { isA11yAllowedInput } from '../../util/events'
 import Grid from '@material-ui/core/Grid'
-import { totalScoreCalculation } from './DomainScoreHelper.js'
+import { totalScoreCalculation, itemFilter } from './DomainScoreHelper.js'
 import { isEmpty } from '../../util/common'
 import { expandingThenScroll } from '../../util/assessmentAutoScroll'
 import './style.sass'
@@ -108,7 +108,8 @@ class Domain extends Component {
       canReleaseConfidentialInfo,
       disabled,
     }
-    const totalScore = totalScoreCalculation(items.filter(item => shouldItemBeRendered(isAssessmentUnderSix, item)))
+    const validItems = itemFilter(items, isAssessmentUnderSix)
+    const totalScore = totalScoreCalculation(validItems)
     const warningText = <span className={'caregiver-warning-text'}> Caregiver Name is required</span>
     return shouldDomainBeRendered(isAssessmentUnderSix, domain) ? (
       <Fragment>
