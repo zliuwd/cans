@@ -5,7 +5,7 @@ import { shallow } from 'enzyme'
 describe('bread crumb rendering', () => {
   let breadCrumbComponent
   it('should render "Back to: Dashboard" by default', () => {
-    const crumbs = shallow(<BreadCrumb navigationElements={[]} />)
+    const crumbs = shallow(<BreadCrumb navigationElements={[]} />).render()
     expect(crumbs.text()).toMatch('Dashboard ')
     const dashboardAnchor = crumbs.find('a')
     expect(dashboardAnchor.length).toEqual(1)
@@ -19,7 +19,7 @@ describe('bread crumb rendering', () => {
         DASHBOARD
       </a>,
     ]
-    breadCrumbComponent = shallow(<BreadCrumb navigationElements={props} />)
+    breadCrumbComponent = shallow(<BreadCrumb navigationElements={props} />).render()
     expect(breadCrumbComponent.find('a').length).toEqual(2)
   })
 
@@ -33,7 +33,7 @@ describe('bread crumb rendering', () => {
         CHILD YOUTH/LIST
       </a>,
     ]
-    breadCrumbComponent = shallow(<BreadCrumb navigationElements={props} />)
+    breadCrumbComponent = shallow(<BreadCrumb navigationElements={props} />).render()
     expect(breadCrumbComponent.find('a').length).toEqual(3)
   })
 })

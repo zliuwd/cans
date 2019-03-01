@@ -42,3 +42,4 @@ export const isSafari =
 /* eslint-disable spaced-comment */
 export const isIE = /*@cc_on!@*/ false || Boolean(document.documentMode)
 /* eslint-enable spaced-comment */
+export const basePath = process.env.CANS_BASE_PATH || '/cans'

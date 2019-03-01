@@ -2,11 +2,11 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import AssessmentLoadingBoundary from './AssessmentLoadingBoundary'
 import AssessmentService from './Assessment.service'
-import I18nService from './I18n.service'
+import I18nService from '../common/I18n.service'
 import LoadingBoundary from '../common/LoadingBoundary'
 
 jest.mock('./Assessment.service')
-jest.mock('./I18n.service')
+jest.mock('../common/I18n.service')
 
 describe('AssessmentLoadingBoundary', () => {
   const render = (instrumentId, assessmentId) =>

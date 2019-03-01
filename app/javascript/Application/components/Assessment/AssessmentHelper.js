@@ -110,11 +110,6 @@ export function getActionVerbByStatus(status) {
   }
 }
 
-export const alertMessage = e => {
-  e.preventDefault()
-  return (e.returnValue = '')
-}
-
 export function getDisplayAssessmentStatus(status) {
   switch (status) {
     case AssessmentStatus.inProgress:
@@ -239,4 +234,8 @@ export const reasonSelectLabel = 'Reason for deleting. *'
 export const statusTextOfHistory = (status, isForTable) => {
   const text = getDisplayAssessmentStatus(status)
   return isForTable ? null : text
+}
+
+export const handlePrintButtonEnabled = state => {
+  return Boolean(state.assessment.state.under_six !== undefined && state.isValidDate)
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { UNSET_RATING, NA_RATING, isNARating } from './ItemHelper'
-import { getI18nValuesByPrefix } from '../I18nHelper'
+import { getI18nValuesByPrefix } from '../../common/I18nHelper'
 import { stringify } from '../../../util/common'
 
 import { expandingThenScroll, itemRatingOptionsAmount } from '../../../util/assessmentAutoScroll'

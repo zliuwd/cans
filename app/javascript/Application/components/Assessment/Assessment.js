@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { getI18nByCode } from './I18nHelper'
+import { getI18nByCode } from '../common/I18nHelper'
 import Domain from './Domain'
 import { clone } from '../../util/common'
 import DomainsHeader from './DomainsHeader'

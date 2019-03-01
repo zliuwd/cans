@@ -15,3 +15,5 @@ const throwError = type => message => {
 /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
 console.error = throwError('Error')
 console.warn = throwError('Warning')
+
+process.env.CANS_BASE_PATH = '/'

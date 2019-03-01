@@ -1,14 +1,14 @@
 import Cookies from 'universal-cookie'
 import { eventBus } from './eventBus'
 import { TIMEOUT_EVENT, SESSION_EXPIRATION_WARNING_TIME } from './constants'
-import { alertMessage } from '../components/Assessment/AssessmentHelper'
+import pageLockService from '../components/common/PageLockService'
 
 class TimeoutService {
   run() {
     const cookies = new Cookies()
     const expirationTime = cookies.get('_ca_cans_timeout')
     if (!expirationTime) {
-      window.removeEventListener('beforeunload', alertMessage)
+      pageLockService.unlock()
       window.location.reload()
       return
     }

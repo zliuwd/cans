@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { AssessmentService, I18nService } from './'
+import AssessmentService from './Assessment.service'
+import I18nService from '../common/I18n.service'
 import LoadingBoundary from '../common/LoadingBoundary'
 
 const fetchI18n = instrumentId => I18nService.fetchByInstrumentId(instrumentId)
