@@ -37,7 +37,7 @@ class PrintButton extends Component {
   }
 
   onPrint = () => {
-    pageLockService.confirm(this.togglePrintNow)
+    pageLockService.confirm(this.togglePrintNow, { isDiscardDisabled: this.props.assessmentId === undefined })
   }
 
   togglePrintNow() {
@@ -64,8 +64,13 @@ class PrintButton extends Component {
 }
 
 PrintButton.propTypes = {
+  assessmentId: PropTypes.number,
   isEnabled: PropTypes.bool.isRequired,
   node: PropTypes.node.isRequired,
+}
+
+PrintButton.defaultProps = {
+  assessmentId: undefined,
 }
 
 export default PrintButton

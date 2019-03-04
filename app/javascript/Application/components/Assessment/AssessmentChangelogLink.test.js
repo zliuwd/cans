@@ -60,6 +60,7 @@ describe('AssessmentChangelogLink', () => {
           expect(wrapper.find(Redirect).props().to).toEqual({
             pathname: '1234/changelog/IN_PROGRESS',
           })
+          expect(wrapper.state.isDiscardDisabled).toBeFalsy()
         })
       })
     })
