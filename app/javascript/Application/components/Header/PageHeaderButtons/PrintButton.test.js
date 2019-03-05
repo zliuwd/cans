@@ -2,8 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import PrintButton from './PrintButton'
 import { Print } from '../../Print'
-import { eventBus } from '../../../util/eventBus'
-import { ASSESSMENT_PRINT_EVENT } from '../../../util/constants'
+import pageLockService from './../../common/PageLockService'
 
 describe('PrintButton', () => {
   let wrapper
@@ -77,14 +76,17 @@ describe('PrintButton', () => {
 
   describe('print through keyboard', () => {
     it('should print when a user press ctrl+p', () => {
+      const confirm = jest.spyOn(pageLockService, 'confirm')
       const wrapper = shallow(printButton(true))
       wrapper.instance().handleCtrlP({
         ctrlKey: true,
         key: 'p',
         preventDefault: () => {},
       })
-      eventBus.post(ASSESSMENT_PRINT_EVENT)
       expect(wrapper.find(Print).length).toBe(1)
+      expect(confirm).toHaveBeenCalledWith(wrapper.instance().togglePrintNow, {
+        isDiscardDisabled: true,
+      })
     })
 
     it('when a user press meta+p', () => {
@@ -94,7 +96,6 @@ describe('PrintButton', () => {
         key: 'p',
         preventDefault: () => {},
       })
-      eventBus.post(ASSESSMENT_PRINT_EVENT)
       expect(wrapper.find(Print).length).toBe(1)
     })
 

@@ -43,4 +43,66 @@ describe(' ClientSocialWorkerCardTempate ', () => {
     expect(accessorStatus).toEqual('No prior CANS')
     expect(accessorReminderDate).toEqual('10/26/2018')
   })
+
+  describe('sort method', () => {
+    describe('sorts in accending order', () => {
+      it('sorts by day', () => {
+        const dobA = '01/02/2018'
+        const dobB = '01/01/2018'
+        const clientSocialWorkerColumn = template()[1].sortMethod(dobA, dobB)
+
+        expect(clientSocialWorkerColumn).toBe(1)
+      })
+
+      it('sorts by year', () => {
+        const dobA = '01/01/2018'
+        const dobB = '12/12/2017'
+        const clientSocialWorkerColumn = template()[1].sortMethod(dobA, dobB)
+
+        expect(clientSocialWorkerColumn).toBe(1)
+      })
+
+      it('sorts by month', () => {
+        const dobA = '03/05/2018'
+        const dobB = '02/05/2018'
+        const clientSocialWorkerColumn = template()[1].sortMethod(dobA, dobB)
+
+        expect(clientSocialWorkerColumn).toBe(1)
+      })
+    })
+
+    describe('sorts in descending order', () => {
+      it('sorts by day', () => {
+        const dobA = '01/01/2018'
+        const dobB = '01/02/2018'
+        const clientSocialWorkerColumn = template()[1].sortMethod(dobA, dobB)
+
+        expect(clientSocialWorkerColumn).toBe(-1)
+      })
+
+      it('sorts by year', () => {
+        const dobA = '12/12/2017'
+        const dobB = '01/01/2018'
+        const clientSocialWorkerColumn = template()[1].sortMethod(dobA, dobB)
+
+        expect(clientSocialWorkerColumn).toBe(-1)
+      })
+
+      it('sorts by month', () => {
+        const dobA = '02/05/2018'
+        const dobB = '03/05/2018'
+        const clientSocialWorkerColumn = template()[1].sortMethod(dobA, dobB)
+
+        expect(clientSocialWorkerColumn).toBe(-1)
+      })
+
+      it('sorts with empty value', () => {
+        const dobA = ''
+        const dobB = '03/05/2018'
+        const clientSocialWorkerColumn = template()[1].sortMethod(dobA, dobB)
+
+        expect(clientSocialWorkerColumn).toBe(-1)
+      })
+    })
+  })
 })

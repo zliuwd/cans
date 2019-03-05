@@ -10,7 +10,9 @@ class AssessmentChangelogLink extends React.Component {
   }
 
   onClick = () => {
-    pageLockService.confirm(() => this.setState({ shouldRedirect: true }))
+    pageLockService.confirm(() => this.setState({ shouldRedirect: true }), {
+      isDiscardDisabled: this.props.assessmentId === undefined,
+    })
   }
 
   render() {

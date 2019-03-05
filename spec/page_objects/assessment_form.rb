@@ -68,6 +68,7 @@ class AssessmentForm < SitePrism::Page
   element :sub48a_title, 'h2', text: '48a. SUBSTANCE USE'
   elements :collapsed_domain_headers, 'div[aria-expanded="false"] h2'
   elements :inner_items, '.item-expand-icon'
+  elements :expanded_inner_items, 'svg[data-icon="chevron-down"].item-expand-icon'
   elements :process_counts, 'span.progress-value'
   elements :fully_filled_progress_bars, 'div[aria-valuenow="100"][role="progressbar"]'
   elements :domain_score_badges, 'span.domain-score-badge'

@@ -14,7 +14,7 @@ import DomainCommentIcon from './DomainCommentIcon'
 import { shouldDomainBeRendered } from './AssessmentHelper'
 import { isA11yAllowedInput } from '../../util/events'
 import Grid from '@material-ui/core/Grid'
-import { totalScoreCalculation } from './DomainScoreHelper.js'
+import { totalScoreCalculation, itemFilter } from './DomainScoreHelper.js'
 import { isEmpty } from '../../util/common'
 import { expandingThenScroll } from '../../util/assessmentAutoScroll'
 import './style.sass'
@@ -108,7 +108,8 @@ class Domain extends Component {
       canReleaseConfidentialInfo,
       disabled,
     }
-    const totalScore = totalScoreCalculation(items)
+    const validItems = itemFilter(items, isAssessmentUnderSix)
+    const totalScore = totalScoreCalculation(validItems)
     const warningText = <span className={'caregiver-warning-text'}> Caregiver Name is required</span>
     return shouldDomainBeRendered(isAssessmentUnderSix, domain) ? (
       <Fragment>
@@ -186,6 +187,7 @@ Domain.propTypes = {
   i18nAll: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   isAssessmentUnderSix: PropTypes.bool,
+  isDefaultExpanded: PropTypes.bool,
   onAddCaregiverDomain: PropTypes.func.isRequired,
   onCaregiverNameUpdate: PropTypes.func.isRequired,
   onConfidentialityUpdate: PropTypes.func.isRequired,
@@ -198,6 +200,7 @@ Domain.defaultProps = {
   disabled: false,
   handleWarningShow: () => {},
   isAssessmentUnderSix: null,
+  isDefaultExpanded: false,
 }
 
 export default Domain

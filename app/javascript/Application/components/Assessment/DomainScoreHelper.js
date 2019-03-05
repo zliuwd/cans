@@ -1,3 +1,8 @@
+import { shouldItemBeRendered } from './AssessmentHelper'
+export const itemFilter = (items, isAssessmentUnderSix) => {
+  return items.filter(item => shouldItemBeRendered(isAssessmentUnderSix, item))
+}
+
 export function totalScoreCalculation(items) {
   let noneTouched = 0
   let result = 0

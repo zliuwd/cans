@@ -1,4 +1,4 @@
-import { totalScoreCalculation } from './DomainScoreHelper'
+import { totalScoreCalculation, itemFilter } from './DomainScoreHelper'
 
 const fakeRatedRegItems = [{ rating: 1 }, { rating: 2 }, { rating: 3 }]
 const fakeRatedNaItems = [{ rating: 1 }, { rating: 2 }, { rating: 8 }]
@@ -30,5 +30,18 @@ describe('totalScoreCalculation ()', () => {
   it('will return correct number when items contain N/A, noneTouched, zero and regular rating ', () => {
     const actualReturn = totalScoreCalculation(fakeMixedRatedItems)
     expect(actualReturn).toBe(1)
+  })
+})
+
+describe('itemFilter()', () => {
+  const fakeItems = [{ id: 1, under_six_id: 'underSix' }, { id: 1, above_six_id: 'aboveSix' }]
+  it('will return under six items when isAssessmentUnderSix equal to true', () => {
+    const actualReturn = itemFilter(fakeItems, true)
+    expect(actualReturn[0].under_six_id).toBe('underSix')
+  })
+
+  it('will return above six items when isAssessmentUnderSix equal to false', () => {
+    const actualReturn = itemFilter(fakeItems, false)
+    expect(actualReturn[0].above_six_id).toBe('aboveSix')
   })
 })

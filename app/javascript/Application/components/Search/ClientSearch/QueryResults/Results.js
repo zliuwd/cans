@@ -10,7 +10,6 @@ const Results = ({
   getItemProps,
   highlightedIndex,
   isOpen,
-  onLoadMoreResults,
   results: { items, totalResults, searchTerm },
 }) => {
   clearItems()
