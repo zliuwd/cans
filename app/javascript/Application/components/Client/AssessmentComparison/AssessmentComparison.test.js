@@ -135,11 +135,41 @@ describe('<AssessmentComparison />', () => {
     expect(Object.keys(target.props())).toContain('data', 'i18n')
   })
 
-  it('will render null when got invalid comparisonRecords', () => {
+  it('will render null when got empty comparisonRecords', () => {
     const invalidProps = {
       recordsModeSwitch: jest.fn(),
       comparisonRecords: {},
+      loadingState: 'READY',
+    }
+    const wrapper = mount(<AssessmentComparison {...invalidProps} />)
+    expect(wrapper.text()).toBe(null)
+  })
+
+  it('will render null when got undefined comparisonRecords', () => {
+    const invalidProps = {
+      recordsModeSwitch: jest.fn(),
+      comparisonRecords: undefined,
       loadingState: 'ERROR',
+    }
+    const wrapper = mount(<AssessmentComparison {...invalidProps} />)
+    expect(wrapper.text()).toBe(null)
+  })
+
+  it('will render null when comparisonRecords.data is invalid', () => {
+    const invalidProps = {
+      recordsModeSwitch: jest.fn(),
+      comparisonRecords: { data: undefined, i18n: { i18n: 'value' } },
+      loadingState: 'READY',
+    }
+    const wrapper = mount(<AssessmentComparison {...invalidProps} />)
+    expect(wrapper.text()).toBe(null)
+  })
+
+  it('will render null when comparisonRecords.i18n is invalid', () => {
+    const invalidProps = {
+      recordsModeSwitch: jest.fn(),
+      comparisonRecords: { data: fakeData, i18n: undefined },
+      loadingState: 'READY',
     }
     const wrapper = mount(<AssessmentComparison {...invalidProps} />)
     expect(wrapper.text()).toBe(null)
