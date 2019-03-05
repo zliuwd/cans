@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import AssessmentForm from './AssessmentForm'
-import AssessmentContainer from './AssessmentContainer'
+import NewAssessmentContainer from './NewAssessmentContainer'
 import AssessmentDraftManager from './AssessmentDraftManager'
 import AssessmentLoadingBoundary from './AssessmentLoadingBoundary'
 
@@ -15,9 +15,9 @@ describe('AssessmentForm', () => {
   const render = ({ match = defaultMatch } = {}) =>
     shallow(<AssessmentForm client={{}} match={match} pageHeaderButtonsController={fakeButtonController} />)
 
-  it('renders an AssessmentContainer inside an AssessmentDraftManager inside an AssessmentLoadingBoundary', () => {
+  it('renders an NewAssessmentContainer inside an AssessmentDraftManager inside an AssessmentLoadingBoundary', () => {
     const wrapper = render()
-    const child = wrapper.find(AssessmentContainer)
+    const child = wrapper.find(NewAssessmentContainer)
     expect(child.exists()).toBe(true)
     expect(child.parent().type()).toBe(AssessmentDraftManager)
     const draftManager = wrapper.find(AssessmentDraftManager)

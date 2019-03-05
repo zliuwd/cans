@@ -28,7 +28,7 @@ describe('AssessmentDraftManager', () => {
     expect(wrapper.state().assessment).toEqual(initialAssessment)
   })
 
-  it('updates the saved assessment when the loading state transitions to Ready', () => {
+  it('saves the draft assessment to state when the loading state transitions to Ready', () => {
     const wrapper = shallow(
       <AssessmentDraftManager
         assessmentWithI18n={{ assessment: null, i18n }}
@@ -41,6 +41,26 @@ describe('AssessmentDraftManager', () => {
     wrapper.setProps({ assessmentWithI18n: { assessment: initialAssessment, i18n }, loadingState: LoadingState.ready })
     wrapper.update()
     expect(wrapper.state().assessment).toEqual(initialAssessment)
+  })
+
+  it('updates the draft assessment when the loading state transitions to Ready from Updating', () => {
+    const wrapper = shallow(
+      <AssessmentDraftManager
+        assessmentWithI18n={{ assessment: initialAssessment, i18n }}
+        loadingState={LoadingState.updating}
+        onSave={() => {}}
+      >
+        <MyComponent />
+      </AssessmentDraftManager>
+    )
+
+    const updatedAssessment = {
+      ...initialAssessment,
+      can_release_confidential_info: !initialAssessment.can_release_confidential_info,
+    }
+    wrapper.setProps({ assessmentWithI18n: { assessment: updatedAssessment, i18n }, loadingState: LoadingState.ready })
+    wrapper.update()
+    expect(wrapper.state().assessment).toEqual(updatedAssessment)
   })
 
   it('passes the assessment down to the child', () => {
@@ -112,12 +132,10 @@ describe('AssessmentDraftManager', () => {
       ...initialAssessment,
       can_release_confidential_info: !initialAssessment.can_release_confidential_info,
     }
-    wrapper.setState({ assessment: updatedAssessment })
-    wrapper.update()
 
     findChild(wrapper)
       .props()
-      .onSaveAssessment()
+      .onSaveAssessment(updatedAssessment)
 
     expect(handleSave).toHaveBeenCalledWith(updatedAssessment)
   })

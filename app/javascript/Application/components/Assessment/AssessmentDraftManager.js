@@ -6,14 +6,20 @@ class AssessmentDraftManager extends React.PureComponent {
   constructor(props) {
     super(props)
     const assessment = props.assessmentWithI18n && props.assessmentWithI18n.assessment
-    this.state = { assessment }
+    this.state = {
+      assessment,
+      loadingState: props.loadingState,
+    }
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (state.assessment === null && props.loadingState === LoadingState.ready) {
-      return { assessment: props.assessmentWithI18n && props.assessmentWithI18n.assessment }
+    if (state.loadingState !== LoadingState.ready && props.loadingState === LoadingState.ready) {
+      return {
+        assessment: props.assessmentWithI18n && props.assessmentWithI18n.assessment,
+        loadingState: props.loadingState,
+      }
     }
-    return null
+    return { loadingState: props.loadingState }
   }
 
   handleResetAssessment = () => {
@@ -21,8 +27,8 @@ class AssessmentDraftManager extends React.PureComponent {
     this.setState({ assessment })
   }
 
-  handleSaveAssessment = () => {
-    this.props.onSave(this.state.assessment)
+  handleSaveAssessment = assessment => {
+    this.props.onSave(assessment)
   }
 
   handleSetAssessment = assessment => {

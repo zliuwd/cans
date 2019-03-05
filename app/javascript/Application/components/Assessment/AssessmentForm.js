@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import AssessmentContainer from './AssessmentContainer'
+import NewAssessmentContainer from './NewAssessmentContainer'
 import AssessmentDraftManager from './AssessmentDraftManager'
 import AssessmentLoadingBoundary from './AssessmentLoadingBoundary'
 
@@ -9,7 +9,7 @@ const AssessmentForm = ({ client, history, match, pageHeaderButtonsController })
   return (
     <AssessmentLoadingBoundary instrumentId="1" assessmentId={assessmentId}>
       <AssessmentDraftManager>
-        <AssessmentContainer
+        <NewAssessmentContainer
           client={client}
           history={history}
           match={match}
