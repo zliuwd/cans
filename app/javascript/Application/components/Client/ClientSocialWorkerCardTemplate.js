@@ -1,6 +1,6 @@
 import React from 'react'
 import { formatClientName, formatClientStatus } from './Client.helper'
-import { renderDate, renderReminderDate, cellTempSwitcher } from './ClientSocialWorkerCardTemplateHelper'
+import { renderDate, renderReminderDate, sortDOB, cellTempSwitcher } from './ClientSocialWorkerCardTemplateHelper'
 import DataGridHeader from '../common/DataGridHeader'
 import './style.sass'
 
@@ -25,7 +25,7 @@ and meet the setting rules of reactTable at same time */
       },
       accessor: client => renderDate(client.dob),
       className: 'client-list-table-cell-center',
-      sortable: true,
+      sortMethod: sortDOB,
     },
     {
       id: 'CANS Status',
