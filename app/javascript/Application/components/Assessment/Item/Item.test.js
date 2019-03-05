@@ -441,57 +441,55 @@ describe('<Item />', () => {
     wrapper.find('Icon#lf10family-item-expand').simulate('click')
     expect(wrapper.find('Comment').prop('disabled')).toBe(true)
   })
-})
 
-describe('Complementary tests for CANS-755 refactor', () => {
-  let wrapper
-  beforeEach(() => {
-    wrapper = mountItem(itemWithComment)
-  })
+  describe('Complementary tests for CANS-755 refactor', () => {
+    let wrapper
+    beforeEach(() => {
+      wrapper = mountItem(itemWithComment)
+    })
 
-  afterEach(() => {
-    wrapper.unmount()
-  })
+    afterEach(() => {
+      wrapper.unmount()
+    })
 
-  it('will initially render ItemInner', () => {
-    const target = wrapper.find(ItemInner)
-    expect(target.exists()).toBe(true)
-  })
+    it('will initially render ItemInner', () => {
+      const target = wrapper.find(ItemInner)
+      expect(target.exists()).toBe(true)
+    })
 
-  it('will render ItemInner with correct props', () => {
-    const target = wrapper.find(ItemInner)
-    const expectedProps = [
-      'item',
-      'isAssessmentUnderSix',
-      'caregiverIndex',
-      'disabled',
-      'canReleaseConfidentialInfo',
-      'code',
-      'rating_type',
-      'has_na_option',
-      'rating',
-      'isConfidential',
-      'confidential_by_default',
-      'under_six_id',
-      'above_six_id',
-      'comment',
-      'itemNumber',
-      'isExpanded',
-      'title',
-      'description',
-      'qtcDescriptions',
-      'ratingDescriptions',
-      'isBooleanRating',
-      'handleRatingChange',
-      'handleConfidentialityChange',
-      'handleNaValueSetting',
-      'switchExpandedState',
-      'handleKeyCheck',
-      'handleCommentChange',
-      'maxCommentLength',
-      'isConfidentialByDefault',
-      'hasNaOption',
-    ]
-    expect(Object.keys(target.props())).toEqual(expectedProps)
+    it('will render ItemInner with correct props', () => {
+      const target = wrapper.find(ItemInner)
+      const expectedProps = [
+        'item',
+        'isAssessmentUnderSix',
+        'caregiverIndex',
+        'disabled',
+        'canReleaseConfidentialInfo',
+        'code',
+        'rating_type',
+        'hasNaOption',
+        'rating',
+        'isConfidential',
+        'isConfidentialByDefault',
+        'under_six_id',
+        'above_six_id',
+        'comment',
+        'itemNumber',
+        'isExpanded',
+        'title',
+        'description',
+        'qtcDescriptions',
+        'ratingDescriptions',
+        'isBooleanRating',
+        'handleRatingChange',
+        'handleConfidentialityChange',
+        'handleNaValueSetting',
+        'switchExpandedState',
+        'handleKeyCheck',
+        'handleCommentChange',
+        'maxCommentLength',
+      ]
+      expect(Object.keys(target.props())).toEqual(expectedProps)
+    })
   })
 })

@@ -36,7 +36,7 @@ const ClientAssessmentStatistics = props => {
       <AssessmentComparisonLoadingBoundary
         clientIdentifier={clientIdentifier}
         key={`${loadingBoundaryKey}-comparison`}
-        instrumentId={1}
+        instrumentId="1"
       >
         {isComparisonShown ? <AssessmentComparison recordsModeSwitch={recordsModeSwitch} /> : <Fragment />}
       </AssessmentComparisonLoadingBoundary>

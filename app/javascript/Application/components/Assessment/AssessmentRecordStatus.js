@@ -4,35 +4,29 @@ import { AssessmentStatus, statusTextOfHistory } from '../Assessment/AssessmentH
 import { Icon } from '@cwds/components'
 import './style.sass'
 
-const statusIcon = (name, fontSize) => <Icon name={name} set={'fa'} className={`fa-${fontSize}`} />
+const iconMap = {
+  [AssessmentStatus.inProgress]: 'circle-notch',
+  [AssessmentStatus.completed]: 'check-circle',
+  [AssessmentStatus.deleted]: 'trash-alt',
+}
+
+const classNameMap = {
+  [AssessmentStatus.inProgress]: 'assessment-in-progress',
+  [AssessmentStatus.completed]: 'assessment-completed',
+  [AssessmentStatus.deleted]: 'assessment-deleted',
+}
 
 function AssessmentRecordStatus({ status, isForTable = false }) {
   const fontSize = isForTable ? '1x' : '2x'
-  switch (status) {
-    case AssessmentStatus.inProgress:
-      return (
-        <div className={'status-icon-wrapper'}>
-          {statusIcon('circle-notch', fontSize)}
-          <span className={'assessment-in-progress'}>{statusTextOfHistory(status, isForTable)}</span>
-        </div>
-      )
-    case AssessmentStatus.completed:
-      return (
-        <div className={'status-icon-wrapper'}>
-          {statusIcon('check-circle', fontSize)}
-          <span className={'assessment-completed'}>{statusTextOfHistory(status, isForTable)}</span>
-        </div>
-      )
-    case AssessmentStatus.deleted:
-      return (
-        <div className={'status-icon-wrapper'}>
-          {statusIcon('trash-alt', fontSize)}
-          <span className={'assessment-deleted'}>{statusTextOfHistory(status, isForTable)}</span>
-        </div>
-      )
-    default:
-      return null
-  }
+  const icon = iconMap[status]
+  const className = classNameMap[status]
+
+  return icon ? (
+    <div className="status-icon-wrapper">
+      <Icon name={icon} set={'fa'} className={`fa-${fontSize}`} />
+      <span className={className}>{statusTextOfHistory(status, isForTable)}</span>
+    </div>
+  ) : null
 }
 
 AssessmentRecordStatus.propTypes = {
