@@ -167,6 +167,16 @@ feature 'Case Worker Functionality' do
     eliminate_auto_scroll_impact
   end
 
+  def collapse_first_expanded_item
+    @form.expanded_inner_items[0].click
+    eliminate_auto_scroll_impact
+  end
+
+  def scroll_to_top
+    page.execute_script 'window.scrollTo(0,0)'
+    eliminate_auto_scroll_impact
+  end
+
   def validate_new_assessment(current_date, client_name)
     @client_profile.go_to_recently_updated_assessment(current_date)
     expect(@form.global).to have_assessment_page_header
@@ -217,12 +227,11 @@ feature 'Case Worker Functionality' do
   end
 
   def validate_domain_radio_and_chevron
+    scroll_to_top
     expand_first_domain
     expand_first_item
     expect(@form).to have_item_description_header
-    eliminate_auto_scroll_impact
-    @form.impulse_hyperactivity.click
-    eliminate_auto_scroll_impact
+    collapse_first_expanded_item
     expect(@form).to have_no_item_description_header
     progress_bar_value = page.all('span.progress-value', match: :first).map(&:text)
     progress_bar_value.each { |element| @total_radio_selected.push(element) }

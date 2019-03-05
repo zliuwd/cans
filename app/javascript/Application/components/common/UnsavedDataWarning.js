@@ -41,9 +41,9 @@ class UnsavedDataWarning extends Component {
     }
   }
 
-  onPageLeave(action) {
+  onPageLeave(action, options) {
     if (this.props.isUnsaved) {
-      this.setState({ isOpened: true, action })
+      this.setState({ isOpened: true, action, isDiscardDisabled: options.isDiscardDisabled })
     } else {
       action()
     }
@@ -85,7 +85,7 @@ class UnsavedDataWarning extends Component {
             {'SAVE CHANGES AND CONTINUE'}
           </Button>
         </ModalFooter>
-        {this.props.assessmentId ? (
+        {!this.state.isDiscardDisabled ? (
           <ModalFooter className="warning-modal-footer">
             <Button
               className={'unsaved-warning-modal-discard'}
@@ -103,14 +103,9 @@ class UnsavedDataWarning extends Component {
 }
 
 UnsavedDataWarning.propTypes = {
-  assessmentId: PropTypes.number,
   discardAndContinue: PropTypes.func.isRequired,
   isUnsaved: PropTypes.bool.isRequired,
   saveAndContinue: PropTypes.func.isRequired,
-}
-
-UnsavedDataWarning.defaultProps = {
-  assessmentId: undefined,
 }
 
 export default UnsavedDataWarning

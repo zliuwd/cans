@@ -28,13 +28,13 @@ describe('<UnsavedDataWarning />', () => {
 
   const unsavedAssessment = () => {
     const wrapper = shallow(warning(true, undefined))
-    wrapper.instance().onPageLeave(() => {})
+    wrapper.instance().onPageLeave(() => {}, {})
     return wrapper
   }
 
   const openWarning = (unsaved = true) => {
     const wrapper = shallow(warning(unsaved, 1234))
-    wrapper.instance().onPageLeave(() => {})
+    wrapper.instance().onPageLeave(() => {}, {})
     return wrapper
   }
 

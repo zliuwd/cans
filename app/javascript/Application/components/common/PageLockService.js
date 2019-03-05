@@ -36,9 +36,9 @@ class PageLockService {
   // action could be print, re-routing confirmation, etc...
   // this method is called from components which need confirmation. Ex.: print button
   // if page is not locked then action called immediately
-  confirm(action) {
+  confirm(action, options = {}) {
     if (this.pageLock) {
-      this.pageLock.tryAction(action)
+      this.pageLock.tryAction(action, options)
     } else {
       action()
     }

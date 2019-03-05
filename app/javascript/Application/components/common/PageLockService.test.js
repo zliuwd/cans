@@ -33,7 +33,7 @@ describe('PageLockService', () => {
   it('tries the action when locked and confirmed', () => {
     pageLockService.lock(tryAction)
     pageLockService.confirm(action)
-    expect(tryAction).toHaveBeenCalledWith(action)
+    expect(tryAction).toHaveBeenCalledWith(action, {})
   })
 
   it('does the action when unlocked and confirmed', () => {
