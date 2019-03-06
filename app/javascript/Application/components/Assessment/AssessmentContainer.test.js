@@ -16,7 +16,6 @@ import {
   assessment,
   domainWithTwoCaregiver,
   initialAssessment,
-  instrument,
   updatedAssessment,
   updatedAssessmentDomains,
   updatedAssessmentWithDomains,
@@ -284,7 +283,7 @@ describe('<AssessmentContainer />', () => {
 
       it('hides the submit validation message', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().onFetchNewAssessmentSuccess(instrument)
+        wrapper.instance().onFetchNewAssessmentSuccess(initialAssessment)
         expect(wrapper.find('.submit-validation-message').exists()).toBe(false)
       })
 
@@ -295,7 +294,6 @@ describe('<AssessmentContainer />', () => {
             ...assessment,
           },
         })
-        wrapper.instance().onFetchNewAssessmentSuccess(instrument)
         wrapper.instance().updateIsEditableState()
         wrapper.update()
         expect(wrapper.find(AssessmentFormFooter).exists()).toBeFalsy()
@@ -400,7 +398,6 @@ describe('<AssessmentContainer />', () => {
         const postSuccessSpy = jest.spyOn(AHelper, 'postSuccessMessage')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
         jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment))
-        jest.spyOn(AssessmentService, 'initializeAssessment').mockReturnValue(Promise.resolve(instrument))
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({ assessment: { ...assessment, id: 1 } })
         // when
@@ -416,7 +413,6 @@ describe('<AssessmentContainer />', () => {
         const postSuccessSpy = jest.spyOn(globalAlertService, 'postSuccess')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
         jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment))
-        jest.spyOn(AssessmentService, 'initializeAssessment').mockReturnValue(Promise.resolve(instrument))
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({ assessment: { ...assessment, id: 1 } })
         // when
@@ -429,7 +425,6 @@ describe('<AssessmentContainer />', () => {
 
       it('should set isEditable to false after submit', async () => {
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-        jest.spyOn(AssessmentService, 'initializeAssessment').mockReturnValue(Promise.resolve(instrument))
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({ assessment: { ...assessment, id: 1 }, isEditable: true })
 

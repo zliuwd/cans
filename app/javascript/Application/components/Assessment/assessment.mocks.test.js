@@ -447,21 +447,6 @@ export const updatedAssessment = {
   event_date: '2018-06-11',
 }
 
-export const instrument = {
-  id: 1,
-  prototype: {
-    id: 0,
-    domains: [
-      {
-        id: 0,
-        code: 'string',
-        underSix: false,
-        aboveSix: false,
-      },
-    ],
-  },
-}
-
 export const i18n = {
   '10._description_': 'Child youth relationship',
   '10._rating_.1._description_': 'Identified need requires monitoring',
