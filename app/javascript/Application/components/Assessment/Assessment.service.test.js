@@ -36,15 +36,15 @@ describe('AssessmentService', () => {
     })
   })
 
-  describe('#fetcheNewAssessment', () => {
+  describe('#initializeAssessment', () => {
     const apiGetSpy = jest.spyOn(apiEndpoints, 'apiGet')
 
-    it('gets a new assessment', async () => {
+    it('gets a new initialized assessment', async () => {
       apiGetSpy.mockReturnValue(initialAssessment)
-      const newAssessment = await AssessmentService.fetchNewAssessment()
+      const newAssessment = await AssessmentService.initializeAssessment(123)
       expect(newAssessment).toEqual(initialAssessment)
       expect(apiGetSpy).toHaveBeenCalledTimes(1)
-      expect(apiGetSpy).toHaveBeenCalledWith(`/instruments/1`)
+      expect(apiGetSpy).toHaveBeenCalledWith(`/clients/123/assessments/_initialize`)
 
       apiGetSpy.mockReset()
     })
