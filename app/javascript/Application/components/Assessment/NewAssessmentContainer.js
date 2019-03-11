@@ -3,7 +3,12 @@ import PropTypes from 'prop-types'
 import { isValidLocalDate, localToIsoDate } from '../../util/dateHelper'
 import { LoadingState } from '../../util/loadingHelper'
 import AssessmentContainerInner from './AssessmentContainerInner'
-import { AssessmentStatus, defaultEmptyAssessment, validateAssessmentEventDate } from './AssessmentHelper'
+import {
+  AssessmentStatus,
+  defaultEmptyAssessment,
+  validateAssessmentEventDate,
+  validateAssessmentForSubmit,
+} from './AssessmentHelper'
 import AssessmentPageHeader from './AssessmentPageHeader'
 import { isAuthorized } from '../common/AuthHelper'
 
@@ -58,11 +63,12 @@ class NewAssessmentContainer extends React.PureComponent {
     const { assessment, client, i18n, loadingState, pageHeaderButtonsController } = this.props
     const { isEventDateBeforeDob, isValidDate } = this.state
 
-    const isEditable = Boolean(!assessment || !assessment.id || isAuthorized(assessment, 'update'))
-
     if (assessment === null) {
       return null
     }
+
+    const isEditable = Boolean(!assessment || !assessment.id || isAuthorized(assessment, 'update'))
+    const isValidForSubmit = validateAssessmentForSubmit(assessment)
 
     return (
       <React.Fragment>
@@ -86,7 +92,7 @@ class NewAssessmentContainer extends React.PureComponent {
           handleCaregiverRemove={() => {}}
           handleSubmitAssessment={this.handleSubmitAssessment}
           isEventDateBeforeDob={isValidDate && isEventDateBeforeDob}
-          isValidForSubmit={false}
+          isValidForSubmit={isValidForSubmit}
           onAssessmentUpdate={this.handleUpdateAssessment}
           onCancelClick={() => {}}
           onEventDateFieldKeyUp={this.handleEventDateFieldKeyUp}
@@ -97,7 +103,11 @@ class NewAssessmentContainer extends React.PureComponent {
 }
 
 NewAssessmentContainer.propTypes = {
-  assessment: PropTypes.any,
+  assessment: PropTypes.shape({
+    person: PropTypes.shape({
+      dob: PropTypes.string.isRequired,
+    }).isRequired,
+  }),
   client: PropTypes.shape({
     dob: PropTypes.string.isRequired,
   }).isRequired,

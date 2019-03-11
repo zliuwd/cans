@@ -3,8 +3,10 @@ import { shallow } from 'enzyme'
 import NewAssessmentContainer from './NewAssessmentContainer'
 import AssessmentContainerInner from './AssessmentContainerInner'
 import AssessmentPageHeader from './AssessmentPageHeader'
-import { AssessmentStatus } from './AssessmentHelper'
+import * as AssessmentHelper from './AssessmentHelper'
 import { initialAssessment, assessment as mockAssessment } from './assessment.mocks.test'
+
+const AssessmentStatus = AssessmentHelper.AssessmentStatus
 
 describe('NewAssessmentContainer', () => {
   const fakeController = {
@@ -13,7 +15,7 @@ describe('NewAssessmentContainer', () => {
   }
 
   const render = ({
-    assessment = { state: { under_six: false } },
+    assessment = mockAssessment,
     client = { dob: '2018-01-01' },
     onSaveAssessment = () => {},
     onSetAssessment = () => {},
@@ -55,7 +57,7 @@ describe('NewAssessmentContainer', () => {
 
     expect(onSaveAssessment).toHaveBeenCalledTimes(1)
     expect(onSaveAssessment).toHaveBeenCalledWith({
-      state: { under_six: false },
+      ...mockAssessment,
       status: AssessmentStatus.completed,
       person: client,
     })
@@ -73,7 +75,7 @@ describe('NewAssessmentContainer', () => {
 
     expect(onSaveAssessment).toHaveBeenCalledTimes(1)
     expect(onSaveAssessment).toHaveBeenCalledWith({
-      state: { under_six: false },
+      ...mockAssessment,
       person: client,
     })
   })
@@ -134,7 +136,7 @@ describe('NewAssessmentContainer', () => {
   })
 
   it('tracks draft event_date as the user types', () => {
-    const assessment = { state: {}, event_date: '2018-01-01' }
+    const assessment = { ...mockAssessment, event_date: '2018-01-01' }
     const wrapper = render({ assessment })
 
     expect(wrapper.state().isValidDate).toBe(true)
@@ -155,7 +157,7 @@ describe('NewAssessmentContainer', () => {
   })
 
   it('validates event date against dob as the user types', () => {
-    const assessment = { state: {}, event_date: '2018-01-01' }
+    const assessment = { ...mockAssessment, event_date: '2018-01-01' }
     const client = { identifier: 'foo', dob: '2017-02-02' }
     const wrapper = render({ assessment, client })
 
@@ -210,9 +212,22 @@ describe('NewAssessmentContainer', () => {
     wrapper.update()
     expect(wrapper.find(AssessmentContainerInner).props().isEventDateBeforeDob).toBe(false)
   })
+
+  it('uses the AssessmentHelper to validate the assessment for submit when valid', () => {
+    jest.spyOn(AssessmentHelper, 'validateAssessmentForSubmit').mockReturnValue(true)
+
+    const wrapper = render()
+    expect(wrapper.find(AssessmentContainerInner).props().isValidForSubmit).toBe(true)
+  })
+
+  it('uses the AssessmentHelper to validate the assessment for submit when invalid', () => {
+    jest.spyOn(AssessmentHelper, 'validateAssessmentForSubmit').mockReturnValue(false)
+
+    const wrapper = render()
+    expect(wrapper.find(AssessmentContainerInner).props().isValidForSubmit).toBe(false)
+  })
 })
 // TODO
 // Scroll behavior
 // Unsaved changes
-// isEditable state
 // Update URL on first save
