@@ -3,16 +3,26 @@ import PropTypes from 'prop-types'
 import { LoadingState } from '../../util/loadingHelper'
 import AssessmentContainerInner from './AssessmentContainerInner'
 import { AssessmentStatus, defaultEmptyAssessment } from './AssessmentHelper'
+import AssessmentPageHeader from './AssessmentPageHeader'
 import { isAuthorized } from '../common/AuthHelper'
 
 class NewAssessmentContainer extends React.PureComponent {
   handleSubmitAssessment = () => {
-    const newAssessment = {
+    this.save({
       ...this.props.assessment,
-      person: this.props.client,
       status: AssessmentStatus.completed,
-    }
+    })
+  }
 
+  handleSaveAssessment = () => {
+    this.save(this.props.assessment)
+  }
+
+  save = assessment => {
+    const newAssessment = {
+      ...assessment,
+      person: this.props.client,
+    }
     this.props.onSaveAssessment(newAssessment)
   }
 
@@ -26,26 +36,41 @@ class NewAssessmentContainer extends React.PureComponent {
   }
 
   render() {
-    const { assessment, client, i18n, loadingState } = this.props
+    const { assessment, client, i18n, loadingState, pageHeaderButtonsController } = this.props
 
     const isEditable = Boolean(!assessment || !assessment.id || isAuthorized(assessment, 'update'))
 
+    if (assessment === null) {
+      return null
+    }
+
     return (
-      <AssessmentContainerInner
-        assessment={assessment || defaultEmptyAssessment}
-        assessmentServiceStatus={loadingState}
-        client={client}
-        i18n={i18n}
-        isEditable={isEditable}
-        // TODO: Do we need these props?
-        handleCaregiverRemove={() => {}}
-        handleSubmitAssessment={this.handleSubmitAssessment}
-        isEventDateBeforeDob={false}
-        isValidForSubmit={false}
-        onAssessmentUpdate={this.handleUpdateAssessment}
-        onCancelClick={() => {}}
-        onEventDateFieldKeyUp={() => {}}
-      />
+      <React.Fragment>
+        <AssessmentPageHeader
+          assessment={assessment}
+          i18n={i18n}
+          isEditable={isEditable}
+          isSaveButtonEnabled={true}
+          isValidDate={true}
+          onSaveAssessment={this.handleSaveAssessment}
+          pageHeaderButtonsController={pageHeaderButtonsController}
+        />
+        <AssessmentContainerInner
+          assessment={assessment || defaultEmptyAssessment}
+          assessmentServiceStatus={loadingState}
+          client={client}
+          i18n={i18n}
+          isEditable={isEditable}
+          // TODO: Do we need these props?
+          handleCaregiverRemove={() => {}}
+          handleSubmitAssessment={this.handleSubmitAssessment}
+          isEventDateBeforeDob={false}
+          isValidForSubmit={false}
+          onAssessmentUpdate={this.handleUpdateAssessment}
+          onCancelClick={() => {}}
+          onEventDateFieldKeyUp={() => {}}
+        />
+      </React.Fragment>
     )
   }
 }
@@ -58,6 +83,10 @@ NewAssessmentContainer.propTypes = {
   onResetAssessment: PropTypes.func,
   onSaveAssessment: PropTypes.func,
   onSetAssessment: PropTypes.func,
+  pageHeaderButtonsController: PropTypes.shape({
+    updateHeaderButtons: PropTypes.func.isRequired,
+    updateHeaderButtonsToDefault: PropTypes.func.isRequired,
+  }).isRequired,
 }
 NewAssessmentContainer.defaultProps = {
   assessment: null,

@@ -28,19 +28,32 @@ describe('AssessmentDraftManager', () => {
     expect(wrapper.state().assessment).toEqual(initialAssessment)
   })
 
-  it('saves the draft assessment to state when the loading state transitions to Ready', () => {
-    const wrapper = shallow(
-      <AssessmentDraftManager
-        assessmentWithI18n={{ assessment: null, i18n }}
-        loadingState={LoadingState.waiting}
-        onSave={() => {}}
-      >
-        <MyComponent />
-      </AssessmentDraftManager>
-    )
-    wrapper.setProps({ assessmentWithI18n: { assessment: initialAssessment, i18n }, loadingState: LoadingState.ready })
-    wrapper.update()
-    expect(wrapper.state().assessment).toEqual(initialAssessment)
+  describe('without a loaded assessment', () => {
+    let wrapper
+    beforeEach(() => {
+      wrapper = shallow(
+        <AssessmentDraftManager
+          assessmentWithI18n={{ assessment: null, i18n }}
+          loadingState={LoadingState.waiting}
+          onSave={() => {}}
+        >
+          <MyComponent />
+        </AssessmentDraftManager>
+      )
+    })
+
+    it('saves the draft assessment to state when the loading state transitions to Ready', () => {
+      wrapper.setProps({
+        assessmentWithI18n: { assessment: initialAssessment, i18n },
+        loadingState: LoadingState.ready,
+      })
+      wrapper.update()
+      expect(wrapper.state().assessment).toEqual(initialAssessment)
+    })
+
+    it('is considered clean', () => {
+      expect(findChild(wrapper).props().isDirty).toBe(false)
+    })
   })
 
   it('updates the draft assessment when the loading state transitions to Ready from Updating', () => {
@@ -63,65 +76,72 @@ describe('AssessmentDraftManager', () => {
     expect(wrapper.state().assessment).toEqual(updatedAssessment)
   })
 
-  it('passes the assessment down to the child', () => {
-    const wrapper = render()
-    expect(findChild(wrapper).props().assessment).toEqual(initialAssessment)
+  describe('when the draft assessment is clean', () => {
+    let wrapper
+    beforeEach(() => {
+      wrapper = render()
+    })
+
+    it('passes isDirty as false', () => {
+      expect(findChild(wrapper).props().isDirty).toBe(false)
+    })
+
+    it('passes the assessment down to the child', () => {
+      expect(findChild(wrapper).props().assessment).toEqual(initialAssessment)
+    })
+
+    it('passes the i18n values down to the child', () => {
+      expect(findChild(wrapper).props().i18n).toEqual(i18n)
+    })
+
+    it('passes the loading state down to the child', () => {
+      expect(findChild(wrapper).props().loadingState).toBe(LoadingState.ready)
+    })
+
+    it('provides a callback to modify the draft assessment', () => {
+      const updatedAssessment = {
+        ...initialAssessment,
+        can_release_confidential_info: !initialAssessment.can_release_confidential_info,
+      }
+
+      findChild(wrapper)
+        .props()
+        .onSetAssessment(updatedAssessment)
+
+      expect(wrapper.state().assessment).toEqual(updatedAssessment)
+    })
   })
 
-  it('passes the i18n values down to the child', () => {
-    const wrapper = render()
-    expect(findChild(wrapper).props().i18n).toEqual(i18n)
-  })
-
-  it('passes the loading state down to the child', () => {
-    const wrapper = render()
-    expect(findChild(wrapper).props().loadingState).toBe(LoadingState.ready)
-  })
-
-  it('passes the draft assessment when changes have occurred', () => {
-    const wrapper = render()
-
+  describe('when the draft assessment is dirty', () => {
     const updatedAssessment = {
       ...initialAssessment,
       can_release_confidential_info: !initialAssessment.can_release_confidential_info,
     }
-    wrapper.setState({ assessment: updatedAssessment })
-    wrapper.update()
+    let wrapper
 
-    expect(findChild(wrapper).props().assessment).toEqual(updatedAssessment)
-    expect(findChild(wrapper).props().assessment).not.toEqual(initialAssessment)
-  })
+    beforeEach(() => {
+      wrapper = render()
 
-  it('provides a callback to modify the draft assessment', () => {
-    const wrapper = render()
+      wrapper.setState({ assessment: updatedAssessment })
+      wrapper.update()
+    })
 
-    const updatedAssessment = {
-      ...initialAssessment,
-      can_release_confidential_info: !initialAssessment.can_release_confidential_info,
-    }
+    it('passes isDirty as true', () => {
+      expect(findChild(wrapper).props().isDirty).toBe(true)
+    })
 
-    findChild(wrapper)
-      .props()
-      .onSetAssessment(updatedAssessment)
+    it('passes the draft assessment when changes have occurred', () => {
+      expect(findChild(wrapper).props().assessment).toEqual(updatedAssessment)
+      expect(findChild(wrapper).props().assessment).not.toEqual(initialAssessment)
+    })
 
-    expect(wrapper.state().assessment).toEqual(updatedAssessment)
-  })
+    it('provides a callback to reset the draft state to what is persisted', () => {
+      findChild(wrapper)
+        .props()
+        .onResetAssessment(initialAssessment)
 
-  it('provides a callback to reset the draft state to what is persisted', () => {
-    const wrapper = render()
-
-    const updatedAssessment = {
-      ...initialAssessment,
-      can_release_confidential_info: !initialAssessment.can_release_confidential_info,
-    }
-    wrapper.setState({ assessment: updatedAssessment })
-    wrapper.update()
-
-    findChild(wrapper)
-      .props()
-      .onResetAssessment(initialAssessment)
-
-    expect(wrapper.state().assessment).toEqual(initialAssessment)
+      expect(wrapper.state().assessment).toEqual(initialAssessment)
+    })
   })
 
   it('provides a callback to persist the draft state', () => {

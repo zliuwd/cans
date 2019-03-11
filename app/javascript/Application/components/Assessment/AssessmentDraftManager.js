@@ -39,6 +39,9 @@ class AssessmentDraftManager extends React.PureComponent {
     return React.cloneElement(this.props.children, {
       assessment: this.state.assessment,
       i18n: this.props.assessmentWithI18n && this.props.assessmentWithI18n.i18n,
+      isDirty: Boolean(
+        this.props.assessmentWithI18n && this.props.assessmentWithI18n.assessment !== this.state.assessment
+      ),
       loadingState: this.props.loadingState,
       onResetAssessment: this.handleResetAssessment,
       onSaveAssessment: this.handleSaveAssessment,
