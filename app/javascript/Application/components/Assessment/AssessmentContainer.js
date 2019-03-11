@@ -356,6 +356,7 @@ export default class AssessmentContainer extends Component {
             discardAndContinue={this.loadAssessment}
             saveAndContinue={this.handleSaveAssessment}
             isUnsaved={this.state.isUnsaved}
+            isSavable={this.state.isSaveButtonEnabled}
             assessmentId={assessment.id}
           />
           <AssessmentContainerInner
