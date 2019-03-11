@@ -6,6 +6,7 @@ import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
 import { MemoryRouter } from 'react-router-dom'
+import ClientAssessmentStatistics from './ClientAssessmentStatistics'
 
 const client = {
   id: 1,
@@ -44,6 +45,23 @@ describe('<Client />', () => {
 
     it('renders with <CardContent /> component', () => {
       expect(getLength(CardContent)).toBe(1)
+    })
+
+    it('renders <ClientAssessmentStatistics /> component with correct props', () => {
+      const wrapper = getWrapper()
+      const target = wrapper.find(ClientAssessmentStatistics)
+      expect(target.length).toBe(1)
+      expect(Object.keys(target.props())).toContain(
+        'clientIdentifier',
+        'loadingBoundaryKey',
+        'isComparisonShown',
+        'client',
+        'navFrom',
+        'inheritUrl',
+        'userId',
+        'updateAssessmentHistoryCallback',
+        'recordsModeSwitch'
+      )
     })
 
     it('sensitivityTypeLabel', () => {
@@ -170,6 +188,15 @@ describe('<Client />', () => {
       it('renders id without space', () => {
         const clientDataWrapper = shallow(wrapper.instance().renderClientData('data', 'label with spaces'))
         expect(clientDataWrapper.find('#client-data-label_with_spaces').html()).toEqual(expect.stringContaining('data'))
+      })
+    })
+
+    describe('method recordsModeSwitch ', () => {
+      it('changes state isComparisonShown to true', () => {
+        const wrapper = shallow(<Client {...params} />)
+        expect(wrapper.state().isComparisonShown).toBe(false)
+        wrapper.instance().recordsModeSwitch()
+        expect(wrapper.state().isComparisonShown).toBe(true)
       })
     })
 

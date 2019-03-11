@@ -37,6 +37,7 @@ class AssessmentComparisonLoadingBoundary extends React.Component {
 AssessmentComparisonLoadingBoundary.propTypes = {
   children: PropTypes.node.isRequired,
   clientIdentifier: PropTypes.string.isRequired,
+  instrumentId: PropTypes.string.isRequired,
 }
 
 export default AssessmentComparisonLoadingBoundary

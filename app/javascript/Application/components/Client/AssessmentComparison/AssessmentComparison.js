@@ -7,10 +7,11 @@ import RecordsModeSwitchButton from '../RecordsModeSwitchButton'
 import { recordsMode } from '../Client.helper'
 
 const AssessmentComparison = props => {
-  const { data, i18n } = props.comparisonRecords
-  if (!data || !i18n) {
+  const { comparisonRecords } = props
+  if (!comparisonRecords || !comparisonRecords.data || !comparisonRecords.i18n) {
     return null
   }
+  const { data, i18n } = props.comparisonRecords
   return (
     <Container>
       <Card className="card-cans-comparison">

@@ -187,6 +187,7 @@ Domain.propTypes = {
   i18nAll: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   isAssessmentUnderSix: PropTypes.bool,
+  isDefaultExpanded: PropTypes.bool,
   onAddCaregiverDomain: PropTypes.func.isRequired,
   onCaregiverNameUpdate: PropTypes.func.isRequired,
   onConfidentialityUpdate: PropTypes.func.isRequired,
@@ -199,6 +200,7 @@ Domain.defaultProps = {
   disabled: false,
   handleWarningShow: () => {},
   isAssessmentUnderSix: null,
+  isDefaultExpanded: false,
 }
 
 export default Domain

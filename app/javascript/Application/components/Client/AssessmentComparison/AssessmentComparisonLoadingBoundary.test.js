@@ -15,7 +15,7 @@ describe('<AssessmentComparisonLoadingBoundary />', () => {
     )
 
   it('renders LoadingBoundary and sets props', () => {
-    const wrapper = render('0PcpFQu0QM', 1)
+    const wrapper = render('0PcpFQu0QM', '1')
     const loadingBoundary = wrapper.find(LoadingBoundary)
     expect(loadingBoundary.exists()).toBeTruthy()
     expect(loadingBoundary.props().childNodeFetchedPropName).toBe('comparisonRecords')
@@ -24,7 +24,7 @@ describe('<AssessmentComparisonLoadingBoundary />', () => {
   })
 
   it('does not update if the id does not change', () => {
-    const wrapper = render('XYZ', 1)
+    const wrapper = render('XYZ', '1')
     const firstFetch = wrapper.find(LoadingBoundary).props().fetch
     wrapper.setProps({ children: <span /> })
     const secondFetch = wrapper.find(LoadingBoundary).props().fetch
@@ -32,7 +32,7 @@ describe('<AssessmentComparisonLoadingBoundary />', () => {
   })
 
   it('fetch method works well', () => {
-    const wrapper = render('XYZ', 1)
+    const wrapper = render('XYZ', '1')
     const getAssessmentComparisonSpy = jest.spyOn(ClientService, 'getAssessmentComparison')
     const fetchI18nSpy = jest.spyOn(I18nService, 'fetchByInstrumentId')
     wrapper
@@ -46,7 +46,7 @@ describe('<AssessmentComparisonLoadingBoundary />', () => {
   })
 
   it('fetch will return an object', () => {
-    const wrapper = render('XYZ', 1)
+    const wrapper = render('XYZ', '1')
     jest.spyOn(ClientService, 'getAssessmentComparison').mockReturnValue(Promise.resolve({ data: 'someValue' }))
     jest.spyOn(I18nService, 'fetchByInstrumentId').mockReturnValue(Promise.resolve({ i18n: 'someValue' }))
     const target = wrapper

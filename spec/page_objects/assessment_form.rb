@@ -35,7 +35,7 @@ class AssessmentFormHeader < SitePrism::Section
   element :redaction_message, 'div.warning-text'
   element :redaction_message_0_to_5, 'div.warning-text', text: 'By selecting "No" item EC 41'\
     ' (Substance Use Disorder Item) from this CANS assessment will be redacted when printed.'
-  element :redaction_message_6_to_21, 'div.warning-text', text: 'By selecting "No" items 7 and 48'\
+  element :redaction_message_6_to_21, 'div.warning-text', text: 'By selecting "No" items 8 and 48'\
     ' (Substance Use Disorder Items) from this CANS assessment will be redacted when printed.'
   element :age_0_to_5_button, 'button#age-0-5-button'
   element :age_0_to_5_button_selected, 'button#age-0-5-button.age-button-selected'

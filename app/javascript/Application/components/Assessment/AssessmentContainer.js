@@ -10,7 +10,6 @@ import AssessmentContainerInner from './AssessmentContainerInner'
 import { PrintAssessment } from '../Print'
 import {
   AssessmentStatus,
-  AssessmentType,
   validateAssessmentForSubmit,
   validateAssessmentEventDate,
   defaultEmptyAssessment,
@@ -27,7 +26,7 @@ import {
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
 import './style.sass'
-import { getCurrentIsoDate, isValidLocalDate, localToIsoDate } from '../../util/dateHelper'
+import { isValidLocalDate, localToIsoDate } from '../../util/dateHelper'
 import { logPageAction } from '../../util/analytics'
 import { isAuthorized } from '../common/AuthHelper'
 import UnsavedDataWarning from '../common/UnsavedDataWarning'
@@ -135,33 +134,17 @@ export default class AssessmentContainer extends Component {
   async fetchNewAssessment() {
     this.setState({ assessmentServiceStatus: LoadingState.waiting })
     try {
-      const instrument = await AssessmentService.fetchNewAssessment()
-      return this.onFetchNewAssessmentSuccess(instrument)
+      const assessment = await AssessmentService.initializeAssessment(this.props.client.identifier)
+      return this.onFetchNewAssessmentSuccess(assessment)
     } catch (e) {
       return this.setState({ assessmentServiceStatus: LoadingState.error })
     }
   }
 
-  onFetchNewAssessmentSuccess(instrument) {
-    const client = this.props.client
-    const assessment = {
-      instrument_id: instrument.id,
-      person: client,
-      service_source: client.service_source,
-      service_source_id: client.service_source_id,
-      service_source_ui_id: client.service_source_ui_id,
-      county: client.county,
-      assessment_type: AssessmentType.initial,
-      status: AssessmentStatus.inProgress,
-      state: instrument.prototype,
-      event_date: getCurrentIsoDate(),
-      has_caregiver: true,
-      completed_as: 'COMMUNIMETRIC',
-      can_release_confidential_info: false,
-    }
+  onFetchNewAssessmentSuccess(assessment) {
     this.setState({
       assessment,
-      isEventDateBeforeDob: !validateAssessmentEventDate(client.dob, assessment.event_date),
+      isEventDateBeforeDob: !validateAssessmentEventDate(this.props.client.dob, assessment.event_date),
       assessmentServiceStatus: LoadingState.ready,
     })
     this.fetchI18n(assessment.instrument_id)

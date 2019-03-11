@@ -12,7 +12,7 @@ export class ConfidentialityWarning extends PureComponent {
     )
     const onCompleteDescription = (
       <div style={{ lineHeight: '3rem' }}>
-        In doing so items <strong>7, 48 and EC 41</strong> in this CANS assessment{' '}
+        In doing so items <strong>8, 48 and EC 41</strong> in this CANS assessment{' '}
         <strong className="cargiver-text-block">will be redacted </strong> when printed.
       </div>
     )

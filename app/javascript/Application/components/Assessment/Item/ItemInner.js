@@ -22,7 +22,7 @@ const ItemInner = props => {
     onRatingUpdate: props.handleRatingChange,
     disabled: props.disabled,
     isConfidential: props.isConfidential,
-    isConfidentialByDefault: props.confidential_by_default,
+    isConfidentialByDefault: props.isConfidentialByDefault,
     canReleaseConfidentialInfo: props.canReleaseConfidentialInfo,
     handleConfidentialityChange: props.handleConfidentialityChange,
     handleNaValueSetting: props.handleNaValueSetting,
@@ -43,7 +43,7 @@ const ItemInner = props => {
     itemBottomCollapseClick: props.switchExpandedState,
   }
 
-  const sharingProps = { code: props.code, hasNaOption: props.has_na_option, rating: props.rating }
+  const sharingProps = { code: props.code, hasNaOption: props.hasNaOption, rating: props.rating }
 
   return (
     <div>
@@ -67,6 +67,7 @@ ItemInner.propTypes = {
   disabled: PropTypes.bool,
   handleCommentChange: PropTypes.func.isRequired,
   handleConfidentialityChange: PropTypes.func.isRequired,
+  handleKeyCheck: PropTypes.func,
   handleNaValueSetting: PropTypes.func.isRequired,
   handleRatingChange: PropTypes.func.isRequired,
   hasNaOption: PropTypes.bool,
@@ -79,15 +80,19 @@ ItemInner.propTypes = {
   qtcDescriptions: PropTypes.array.isRequired,
   rating: PropTypes.number.isRequired,
   ratingDescriptions: PropTypes.array.isRequired,
+  rating_type: PropTypes.string.isRequired,
+  switchExpandedState: PropTypes.func,
   title: PropTypes.string.isRequired,
 }
 
 ItemInner.defaultProps = {
   caregiverIndex: '',
-  isConfidentialByDefault: undefined,
-  hasNaOption: false,
-  disabled: false,
   comment: '',
+  disabled: false,
+  isConfidentialByDefault: undefined,
+  handleKeyCheck: undefined,
+  hasNaOption: false,
+  switchExpandedState: undefined,
 }
 
 export default ItemInner

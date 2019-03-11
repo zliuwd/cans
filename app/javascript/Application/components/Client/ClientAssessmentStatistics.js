@@ -30,15 +30,15 @@ const ClientAssessmentStatistics = props => {
             recordsModeSwitch={recordsModeSwitch}
           />
         ) : (
-          <div />
+          <Fragment />
         )}
       </ClientAssessmentHistoryLoadingBoundary>
       <AssessmentComparisonLoadingBoundary
         clientIdentifier={clientIdentifier}
         key={`${loadingBoundaryKey}-comparison`}
-        instrumentId={1}
+        instrumentId="1"
       >
-        {isComparisonShown ? <AssessmentComparison recordsModeSwitch={recordsModeSwitch} /> : <div />}
+        {isComparisonShown ? <AssessmentComparison recordsModeSwitch={recordsModeSwitch} /> : <Fragment />}
       </AssessmentComparisonLoadingBoundary>
     </Fragment>
   )
