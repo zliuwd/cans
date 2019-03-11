@@ -60,7 +60,7 @@ describe('Assessment Page Inner', () => {
   })
 
   describe('with a client loaded', () => {
-    const fakeClient = { anyKey: 'any value' }
+    const fakeClient = { identifier: 'my client' }
     const match = { params: {}, url: '/path/to/left' }
     const history = { name: 'fake history object' }
     const staffInfo = { anyKey: 'staff info' }

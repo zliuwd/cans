@@ -6,14 +6,14 @@ import LoadingBoundary from '../common/LoadingBoundary'
 
 const fetchI18n = instrumentId => I18nService.fetchByInstrumentId(instrumentId)
 
-const fetch = assessmentId =>
-  assessmentId ? AssessmentService.fetch(assessmentId) : AssessmentService.fetchNewAssessment()
+const fetch = (assessmentId, clientId) =>
+  assessmentId ? AssessmentService.fetch(assessmentId) : AssessmentService.initializeAssessment(clientId)
 
 const postOrUpdate = (assessmentId, assessment) =>
   assessmentId ? AssessmentService.update(assessmentId, assessment) : AssessmentService.postAssessment(assessment)
 
-const fetchFactory = (assessmentId, instrumentId) => () =>
-  Promise.all([fetch(assessmentId), fetchI18n(instrumentId)]).then(([assessment, i18n]) => ({
+const fetchFactory = (assessmentId, clientId, instrumentId) => () =>
+  Promise.all([fetch(assessmentId, clientId), fetchI18n(instrumentId)]).then(([assessment, i18n]) => ({
     assessment,
     i18n,
   }))
@@ -25,7 +25,7 @@ class AssessmentLoadingBoundary extends React.Component {
     if (props.assessmentId !== state.assessmentId) {
       return {
         assessmentId: props.assessmentId,
-        fetch: fetchFactory(props.assessmentId, props.instrumentId),
+        fetch: fetchFactory(props.assessmentId, props.clientId, props.instrumentId),
       }
     }
     return null
@@ -60,6 +60,7 @@ class AssessmentLoadingBoundary extends React.Component {
 AssessmentLoadingBoundary.propTypes = {
   assessmentId: PropTypes.string,
   children: PropTypes.node.isRequired,
+  clientId: PropTypes.string.isRequired,
   instrumentId: PropTypes.string.isRequired,
 }
 

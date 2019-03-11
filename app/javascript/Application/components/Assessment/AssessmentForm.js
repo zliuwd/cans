@@ -7,7 +7,7 @@ import AssessmentLoadingBoundary from './AssessmentLoadingBoundary'
 const AssessmentForm = ({ client, history, match, pageHeaderButtonsController }) => {
   const assessmentId = match.params.id
   return (
-    <AssessmentLoadingBoundary instrumentId="1" assessmentId={assessmentId}>
+    <AssessmentLoadingBoundary clientId={client.identifier} assessmentId={assessmentId} instrumentId="1">
       <AssessmentDraftManager>
         <NewAssessmentContainer
           client={client}
@@ -21,7 +21,9 @@ const AssessmentForm = ({ client, history, match, pageHeaderButtonsController })
 }
 
 AssessmentForm.propTypes = {
-  client: PropTypes.object.isRequired,
+  client: PropTypes.shape({
+    identifier: PropTypes.string.isRequired,
+  }).isRequired,
   history: PropTypes.object,
   match: PropTypes.shape({
     params: PropTypes.shape({

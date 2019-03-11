@@ -13,7 +13,13 @@ describe('AssessmentForm', () => {
   const defaultMatch = { params: { id: '123' } }
 
   const render = ({ match = defaultMatch } = {}) =>
-    shallow(<AssessmentForm client={{}} match={match} pageHeaderButtonsController={fakeButtonController} />)
+    shallow(
+      <AssessmentForm
+        client={{ identifier: 'alice' }}
+        match={match}
+        pageHeaderButtonsController={fakeButtonController}
+      />
+    )
 
   it('renders an NewAssessmentContainer inside an AssessmentDraftManager inside an AssessmentLoadingBoundary', () => {
     const wrapper = render()

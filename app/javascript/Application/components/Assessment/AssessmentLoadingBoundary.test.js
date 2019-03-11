@@ -11,7 +11,7 @@ jest.mock('../common/I18n.service')
 describe('AssessmentLoadingBoundary', () => {
   const render = (instrumentId, assessmentId) =>
     shallow(
-      <AssessmentLoadingBoundary instrumentId={instrumentId} assessmentId={assessmentId}>
+      <AssessmentLoadingBoundary instrumentId={instrumentId} assessmentId={assessmentId} clientId="bob">
         <div />
       </AssessmentLoadingBoundary>
     )
@@ -40,7 +40,7 @@ describe('AssessmentLoadingBoundary', () => {
   })
 
   describe('when given no assessmentId', () => {
-    const assessmentSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment')
+    const assessmentSpy = jest.spyOn(AssessmentService, 'initializeAssessment')
     const i18nSpy = jest.spyOn(I18nService, 'fetchByInstrumentId')
     const instrumentId = '12121'
     let wrapper
@@ -55,6 +55,7 @@ describe('AssessmentLoadingBoundary', () => {
       const fetch = wrapper.find(LoadingBoundary).props().fetch
       fetch()
       expect(assessmentSpy).toHaveBeenCalledTimes(1)
+      expect(assessmentSpy).toHaveBeenCalledWith('bob')
     })
 
     it('loads i18n information for the given instrument', () => {
