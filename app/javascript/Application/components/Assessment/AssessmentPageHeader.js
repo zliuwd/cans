@@ -3,23 +3,25 @@ import PropTypes from 'prop-types'
 import { PrintAssessment } from '../Print'
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
-import { handlePrintButtonEnabled } from './AssessmentHelper'
+import { handlePrintButtonEnabled, validateAssessmentEventDate } from './AssessmentHelper'
+import { LoadingState, isReadyForAction } from '../../util/loadingHelper'
 
 class AssessmentPageHeader extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = { isSaveButtonEnabled: props.isSaveButtonEnabled }
+    this.state = { isSaveButtonEnabled: this.isSaveable() }
   }
 
   componentDidMount() {
-    this.initHeaderButtons(this.props.isSaveButtonEnabled)
+    this.initHeaderButtons(this.isSaveable())
   }
 
   componentDidUpdate() {
-    if (this.state.isSaveButtonEnabled !== this.props.isSaveButtonEnabled) {
-      this.initHeaderButtons(this.props.isSaveButtonEnabled)
+    const isSaveButtonEnabled = this.isSaveable()
+    if (this.state.isSaveButtonEnabled !== isSaveButtonEnabled) {
+      this.initHeaderButtons(isSaveButtonEnabled)
       /* eslint-disable react/no-did-update-set-state */
-      this.setState({ isSaveButtonEnabled: this.props.isSaveButtonEnabled })
+      this.setState({ isSaveButtonEnabled: isSaveButtonEnabled })
       /* eslint-enable react/no-did-update-set-state */
     }
   }
@@ -37,6 +39,18 @@ class AssessmentPageHeader extends React.PureComponent {
     this.props.pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
   }
 
+  isSaveable() {
+    const { assessment, clientDateOfBirth, isValidDate, isEditable, loadingState } = this.props
+    return (
+      assessment.state.under_six !== undefined &&
+      isValidDate &&
+      validateAssessmentEventDate(clientDateOfBirth, assessment.event_date) &&
+      isEditable &&
+      Boolean(assessment.event_date) &&
+      isReadyForAction(loadingState)
+    )
+  }
+
   render() {
     // This component entirely operates through the pageHeaderButtonsController callbacks
     return null
@@ -48,11 +62,13 @@ AssessmentPageHeader.propTypes = {
     state: PropTypes.shape({
       under_six: PropTypes.bool,
     }).isRequired,
+    event_date: PropTypes.string,
   }).isRequired,
+  clientDateOfBirth: PropTypes.string.isRequired,
   i18n: PropTypes.any.isRequired,
   isEditable: PropTypes.bool.isRequired,
-  isSaveButtonEnabled: PropTypes.bool.isRequired,
   isValidDate: PropTypes.bool.isRequired,
+  loadingState: PropTypes.oneOf(Object.values(LoadingState)).isRequired,
   onSaveAssessment: PropTypes.func.isRequired,
   pageHeaderButtonsController: PropTypes.shape({
     updateHeaderButtons: PropTypes.func.isRequired,

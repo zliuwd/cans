@@ -48,10 +48,11 @@ class NewAssessmentContainer extends React.PureComponent {
       <React.Fragment>
         <AssessmentPageHeader
           assessment={assessment}
+          clientDateOfBirth={client.dob}
           i18n={i18n}
           isEditable={isEditable}
-          isSaveButtonEnabled={true}
           isValidDate={true}
+          loadingState={loadingState}
           onSaveAssessment={this.handleSaveAssessment}
           pageHeaderButtonsController={pageHeaderButtonsController}
         />
@@ -77,7 +78,9 @@ class NewAssessmentContainer extends React.PureComponent {
 
 NewAssessmentContainer.propTypes = {
   assessment: PropTypes.any,
-  client: PropTypes.any.isRequired,
+  client: PropTypes.shape({
+    dob: PropTypes.string.isRequired,
+  }).isRequired,
   i18n: PropTypes.any,
   loadingState: PropTypes.oneOf(Object.values(LoadingState)),
   onResetAssessment: PropTypes.func,

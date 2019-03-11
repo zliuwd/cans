@@ -14,7 +14,7 @@ describe('NewAssessmentContainer', () => {
 
   const render = ({
     assessment = { state: { under_six: false } },
-    client = {},
+    client = { dob: '2018-01-01' },
     onSaveAssessment = () => {},
     onSetAssessment = () => {},
   } = {}) =>
@@ -44,7 +44,7 @@ describe('NewAssessmentContainer', () => {
   })
 
   it('calls onSaveAssessment with completed assessment when submitted', () => {
-    const client = { identifier: '123' }
+    const client = { identifier: '123', dob: '2018-01-01' }
     const onSaveAssessment = jest.fn()
     const wrapper = render({ client, onSaveAssessment })
 
@@ -62,7 +62,7 @@ describe('NewAssessmentContainer', () => {
   })
 
   it('calls onSaveAssessment with the current assessment when saved', () => {
-    const client = { identifier: '123' }
+    const client = { identifier: '123', dob: '2018-01-01' }
     const onSaveAssessment = jest.fn()
     const wrapper = render({ client, onSaveAssessment })
 
@@ -117,7 +117,7 @@ describe('NewAssessmentContainer', () => {
   })
 
   it('updates the draft assessment upon request', () => {
-    const client = { id: 'hello' }
+    const client = { identifier: 'hello', dob: '2018-01-01' }
     const onSetAssessment = jest.fn()
     const wrapper = render({ client, onSetAssessment })
 

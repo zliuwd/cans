@@ -15,7 +15,7 @@ describe('AssessmentForm', () => {
   const render = ({ match = defaultMatch } = {}) =>
     shallow(
       <AssessmentForm
-        client={{ identifier: 'alice' }}
+        client={{ identifier: 'alice', dob: '2018-01-01' }}
         match={match}
         pageHeaderButtonsController={fakeButtonController}
       />
