@@ -1,12 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { isValidLocalDate, localToIsoDate } from '../../util/dateHelper'
 import { LoadingState } from '../../util/loadingHelper'
 import AssessmentContainerInner from './AssessmentContainerInner'
-import { AssessmentStatus, defaultEmptyAssessment } from './AssessmentHelper'
+import { AssessmentStatus, defaultEmptyAssessment, validateAssessmentEventDate } from './AssessmentHelper'
 import AssessmentPageHeader from './AssessmentPageHeader'
 import { isAuthorized } from '../common/AuthHelper'
 
 class NewAssessmentContainer extends React.PureComponent {
+  constructor(props) {
+    super(props)
+    this.state = {
+      isEventDateBeforeDob: false,
+      isValidDate: true,
+    }
+  }
+
   handleSubmitAssessment = () => {
     this.save({
       ...this.props.assessment,
@@ -35,8 +44,19 @@ class NewAssessmentContainer extends React.PureComponent {
     this.props.onSetAssessment(newAssessment)
   }
 
+  handleEventDateFieldKeyUp = ({ target: { value: dateValue } }) => {
+    const isValidDate = isValidLocalDate(dateValue, true)
+    const dob = this.props.client.dob
+    const isEventDateBeforeDob = isValidDate && !validateAssessmentEventDate(dob, localToIsoDate(dateValue))
+    this.setState({
+      isValidDate,
+      isEventDateBeforeDob,
+    })
+  }
+
   render() {
     const { assessment, client, i18n, loadingState, pageHeaderButtonsController } = this.props
+    const { isEventDateBeforeDob, isValidDate } = this.state
 
     const isEditable = Boolean(!assessment || !assessment.id || isAuthorized(assessment, 'update'))
 
@@ -48,10 +68,10 @@ class NewAssessmentContainer extends React.PureComponent {
       <React.Fragment>
         <AssessmentPageHeader
           assessment={assessment}
-          clientDateOfBirth={client.dob}
           i18n={i18n}
           isEditable={isEditable}
-          isValidDate={true}
+          isEventDateBeforeDob={isEventDateBeforeDob}
+          isValidDate={isValidDate}
           loadingState={loadingState}
           onSaveAssessment={this.handleSaveAssessment}
           pageHeaderButtonsController={pageHeaderButtonsController}
@@ -65,11 +85,11 @@ class NewAssessmentContainer extends React.PureComponent {
           // TODO: Do we need these props?
           handleCaregiverRemove={() => {}}
           handleSubmitAssessment={this.handleSubmitAssessment}
-          isEventDateBeforeDob={false}
+          isEventDateBeforeDob={isValidDate && isEventDateBeforeDob}
           isValidForSubmit={false}
           onAssessmentUpdate={this.handleUpdateAssessment}
           onCancelClick={() => {}}
-          onEventDateFieldKeyUp={() => {}}
+          onEventDateFieldKeyUp={this.handleEventDateFieldKeyUp}
         />
       </React.Fragment>
     )

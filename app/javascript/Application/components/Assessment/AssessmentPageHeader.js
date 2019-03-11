@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { PrintAssessment } from '../Print'
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
-import { handlePrintButtonEnabled, validateAssessmentEventDate } from './AssessmentHelper'
+import { handlePrintButtonEnabled } from './AssessmentHelper'
 import { LoadingState, isReadyForAction } from '../../util/loadingHelper'
 
 class AssessmentPageHeader extends React.PureComponent {
@@ -40,11 +40,11 @@ class AssessmentPageHeader extends React.PureComponent {
   }
 
   isSaveable() {
-    const { assessment, clientDateOfBirth, isValidDate, isEditable, loadingState } = this.props
+    const { assessment, isEventDateBeforeDob, isValidDate, isEditable, loadingState } = this.props
     return (
       assessment.state.under_six !== undefined &&
       isValidDate &&
-      validateAssessmentEventDate(clientDateOfBirth, assessment.event_date) &&
+      !isEventDateBeforeDob &&
       isEditable &&
       Boolean(assessment.event_date) &&
       isReadyForAction(loadingState)
@@ -64,9 +64,9 @@ AssessmentPageHeader.propTypes = {
     }).isRequired,
     event_date: PropTypes.string,
   }).isRequired,
-  clientDateOfBirth: PropTypes.string.isRequired,
   i18n: PropTypes.any.isRequired,
   isEditable: PropTypes.bool.isRequired,
+  isEventDateBeforeDob: PropTypes.bool.isRequired,
   isValidDate: PropTypes.bool.isRequired,
   loadingState: PropTypes.oneOf(Object.values(LoadingState)).isRequired,
   onSaveAssessment: PropTypes.func.isRequired,

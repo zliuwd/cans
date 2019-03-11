@@ -14,9 +14,9 @@ describe('AssessmentPageHeader', () => {
     shallow(
       <AssessmentPageHeader
         assessment={fakeAssessment}
-        clientDateOfBirth={'2018-01-01'}
         i18n={i18n}
         isEditable={true}
+        isEventDateBeforeDob={false}
         isValidDate={true}
         loadingState={LoadingState.ready}
         onSaveAssessment={() => {}}
@@ -77,9 +77,9 @@ describe('AssessmentPageHeader', () => {
     const header = shallow(
       <AssessmentPageHeader
         assessment={{ state: { under_six: true }, event_date: '2019-01-01' }}
-        clientDateOfBirth={'2018-01-01'}
         i18n={i18n}
         isEditable={true}
+        isEventDateBeforeDob={false}
         isValidDate={true}
         loadingState={LoadingState.ready}
         onSaveAssessment={() => {}}
@@ -93,9 +93,9 @@ describe('AssessmentPageHeader', () => {
     const header = shallow(
       <AssessmentPageHeader
         assessment={{ state: { under_six: false }, event_date: '2019-01-01' }}
-        clientDateOfBirth={'2018-01-01'}
         i18n={i18n}
         isEditable={true}
+        isEventDateBeforeDob={false}
         isValidDate={true}
         loadingState={LoadingState.ready}
         onSaveAssessment={() => {}}
@@ -109,9 +109,9 @@ describe('AssessmentPageHeader', () => {
     const header = shallow(
       <AssessmentPageHeader
         assessment={{ state: { under_six: undefined }, event_date: '2019-01-01' }}
-        clientDateOfBirth={'2018-01-01'}
         i18n={i18n}
         isEditable={true}
+        isEventDateBeforeDob={false}
         isValidDate={true}
         loadingState={LoadingState.ready}
         onSaveAssessment={() => {}}
@@ -125,9 +125,9 @@ describe('AssessmentPageHeader', () => {
     const header = shallow(
       <AssessmentPageHeader
         assessment={{ state: { under_six: true }, event_date: '2019-01-01' }}
-        clientDateOfBirth={'2018-01-01'}
         i18n={i18n}
         isEditable={false}
+        isEventDateBeforeDob={false}
         isValidDate={true}
         loadingState={LoadingState.ready}
         onSaveAssessment={() => {}}
@@ -141,9 +141,9 @@ describe('AssessmentPageHeader', () => {
     const header = shallow(
       <AssessmentPageHeader
         assessment={{ state: { under_six: true }, event_date: '2017-01-01' }}
-        clientDateOfBirth={'2018-01-01'}
         i18n={i18n}
         isEditable={true}
+        isEventDateBeforeDob={true}
         isValidDate={true}
         loadingState={LoadingState.ready}
         onSaveAssessment={() => {}}
@@ -157,9 +157,9 @@ describe('AssessmentPageHeader', () => {
     const header = shallow(
       <AssessmentPageHeader
         assessment={{ state: { under_six: true }, event_date: '2019-01-01' }}
-        clientDateOfBirth={'2018-01-01'}
         i18n={i18n}
         isEditable={false}
+        isEventDateBeforeDob={false}
         isValidDate={true}
         loadingState={LoadingState.ready}
         onSaveAssessment={() => {}}
@@ -173,9 +173,9 @@ describe('AssessmentPageHeader', () => {
     const header = shallow(
       <AssessmentPageHeader
         assessment={{ state: { under_six: true }, event_date: '' }}
-        clientDateOfBirth={'2018-01-01'}
         i18n={i18n}
         isEditable={true}
+        isEventDateBeforeDob={false}
         isValidDate={true}
         loadingState={LoadingState.ready}
         onSaveAssessment={() => {}}
@@ -189,9 +189,9 @@ describe('AssessmentPageHeader', () => {
     const header = shallow(
       <AssessmentPageHeader
         assessment={{ state: { under_six: true }, event_date: '2019-01-01' }}
-        clientDateOfBirth={'2018-01-01'}
         i18n={i18n}
         isEditable={true}
+        isEventDateBeforeDob={false}
         isValidDate={true}
         loadingState={LoadingState.updating}
         onSaveAssessment={() => {}}

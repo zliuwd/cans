@@ -132,6 +132,84 @@ describe('NewAssessmentContainer', () => {
       person: client,
     })
   })
+
+  it('tracks draft event_date as the user types', () => {
+    const assessment = { state: {}, event_date: '2018-01-01' }
+    const wrapper = render({ assessment })
+
+    expect(wrapper.state().isValidDate).toBe(true)
+
+    wrapper
+      .find(AssessmentContainerInner)
+      .props()
+      .onEventDateFieldKeyUp({ target: { value: 'invalid' } })
+    wrapper.update()
+    expect(wrapper.state().isValidDate).toBe(false)
+
+    wrapper
+      .find(AssessmentContainerInner)
+      .props()
+      .onEventDateFieldKeyUp({ target: { value: '10/09/2018' } })
+    wrapper.update()
+    expect(wrapper.state().isValidDate).toBe(true)
+  })
+
+  it('validates event date against dob as the user types', () => {
+    const assessment = { state: {}, event_date: '2018-01-01' }
+    const client = { identifier: 'foo', dob: '2017-02-02' }
+    const wrapper = render({ assessment, client })
+
+    expect(wrapper.state().isEventDateBeforeDob).toBe(false)
+
+    wrapper
+      .find(AssessmentContainerInner)
+      .props()
+      .onEventDateFieldKeyUp({ target: { value: '01/01/2017' } })
+    wrapper.update()
+    expect(wrapper.state().isEventDateBeforeDob).toBe(true)
+
+    wrapper
+      .find(AssessmentContainerInner)
+      .props()
+      .onEventDateFieldKeyUp({ target: { value: '10/09/2018' } })
+    wrapper.update()
+    expect(wrapper.state().isEventDateBeforeDob).toBe(false)
+  })
+
+  it('passes isValidDate and isEventDateBeforeDob to the page header for validation', () => {
+    const wrapper = render()
+    wrapper.setState({ isValidDate: false, isEventDateBeforeDob: true })
+    wrapper.update()
+    expect(wrapper.find(AssessmentPageHeader).props().isValidDate).toBe(false)
+    expect(wrapper.find(AssessmentPageHeader).props().isEventDateBeforeDob).toBe(true)
+
+    wrapper.setState({ isValidDate: true, isEventDateBeforeDob: false })
+    wrapper.update()
+    expect(wrapper.find(AssessmentPageHeader).props().isValidDate).toBe(true)
+    expect(wrapper.find(AssessmentPageHeader).props().isEventDateBeforeDob).toBe(false)
+  })
+
+  it('passes isEventDateBeforeDob to the page header for validation, if event date is valid', () => {
+    const wrapper = render()
+    wrapper.setState({ isValidDate: true, isEventDateBeforeDob: true })
+    wrapper.update()
+    expect(wrapper.find(AssessmentContainerInner).props().isEventDateBeforeDob).toBe(true)
+
+    wrapper.setState({ isValidDate: true, isEventDateBeforeDob: false })
+    wrapper.update()
+    expect(wrapper.find(AssessmentContainerInner).props().isEventDateBeforeDob).toBe(false)
+  })
+
+  it('passes isEventDateBeforeDob to the page header as false, if event date is not valid', () => {
+    const wrapper = render()
+    wrapper.setState({ isValidDate: false, isEventDateBeforeDob: true })
+    wrapper.update()
+    expect(wrapper.find(AssessmentContainerInner).props().isEventDateBeforeDob).toBe(false)
+
+    wrapper.setState({ isValidDate: false, isEventDateBeforeDob: false })
+    wrapper.update()
+    expect(wrapper.find(AssessmentContainerInner).props().isEventDateBeforeDob).toBe(false)
+  })
 })
 // TODO
 // Scroll behavior
