@@ -6,6 +6,7 @@ import AssessmentContainerInner from './AssessmentContainerInner'
 import {
   AssessmentStatus,
   defaultEmptyAssessment,
+  getCaregiverDomainsNumber,
   validateAssessmentEventDate,
   validateAssessmentForSubmit,
 } from './AssessmentHelper'
@@ -38,6 +39,28 @@ class NewAssessmentContainer extends React.PureComponent {
       person: this.props.client,
     }
     this.props.onSaveAssessment(newAssessment)
+  }
+
+  handleCaregiverRemove = caregiverIndex => {
+    const captureCaregiverDomains = getCaregiverDomainsNumber(this.props.assessment)
+
+    let filter
+    if (!caregiverIndex || captureCaregiverDomains <= 1) {
+      filter = domain => !domain.is_caregiver_domain
+    } else {
+      filter = domain => domain.caregiver_index !== caregiverIndex
+    }
+
+    const newDomains = this.props.assessment.state.domains.filter(filter)
+
+    this.props.onSetAssessment({
+      ...this.props.assessment,
+      state: {
+        ...this.props.assessment.state,
+        domains: newDomains,
+      },
+      has_caregiver: newDomains.some(domain => domain.is_caregiver_domain),
+    })
   }
 
   handleUpdateAssessment = assessment => {
@@ -89,7 +112,7 @@ class NewAssessmentContainer extends React.PureComponent {
           i18n={i18n}
           isEditable={isEditable}
           // TODO: Do we need these props?
-          handleCaregiverRemove={() => {}}
+          handleCaregiverRemove={this.handleCaregiverRemove}
           handleSubmitAssessment={this.handleSubmitAssessment}
           isEventDateBeforeDob={isValidDate && isEventDateBeforeDob}
           isValidForSubmit={isValidForSubmit}
@@ -107,6 +130,15 @@ NewAssessmentContainer.propTypes = {
     person: PropTypes.shape({
       dob: PropTypes.string.isRequired,
     }).isRequired,
+    state: PropTypes.shape({
+      domains: PropTypes.arrayOf(
+        PropTypes.shape({
+          is_caregiver_domain: PropTypes.bool,
+          caregiver_index: PropTypes.string,
+        })
+      ).isRequired,
+    }).isRequired,
+    has_caregiver: PropTypes.bool.isRequired,
   }),
   client: PropTypes.shape({
     dob: PropTypes.string.isRequired,

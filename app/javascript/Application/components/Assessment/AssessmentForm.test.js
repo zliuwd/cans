@@ -10,12 +10,14 @@ describe('AssessmentForm', () => {
     updateHeaderButtons: () => {},
     updateHeaderButtonsToDefault: () => {},
   }
-  const defaultMatch = { params: { id: '123' } }
+  const defaultMatch = { params: { id: '123' }, url: '/hello' }
+  const defaultHistory = { push: () => {} }
 
   const render = ({ match = defaultMatch } = {}) =>
     shallow(
       <AssessmentForm
         client={{ identifier: 'alice', dob: '2018-01-01' }}
+        history={defaultHistory}
         match={match}
         pageHeaderButtonsController={fakeButtonController}
       />
@@ -36,12 +38,12 @@ describe('AssessmentForm', () => {
   })
 
   it('loads the assessment specified in the match params', () => {
-    const wrapper = render({ match: { params: { id: '10101' } } })
+    const wrapper = render({ match: { params: { id: '10101' }, url: '/' } })
     expect(wrapper.find(AssessmentLoadingBoundary).props().assessmentId).toBe('10101')
   })
 
   it('loads a new assessmentId when no match specified', () => {
-    const wrapper = render({ match: { params: {} } })
+    const wrapper = render({ match: { params: {}, url: '/' } })
     expect(wrapper.find(AssessmentLoadingBoundary).props().assessmentId).toBe(null)
   })
 })

@@ -8,13 +8,8 @@ const AssessmentForm = ({ client, history, match, pageHeaderButtonsController })
   const assessmentId = match.params.id
   return (
     <AssessmentLoadingBoundary clientId={client.identifier} assessmentId={assessmentId} instrumentId="1">
-      <AssessmentDraftManager>
-        <NewAssessmentContainer
-          client={client}
-          history={history}
-          match={match}
-          pageHeaderButtonsController={pageHeaderButtonsController}
-        />
+      <AssessmentDraftManager history={history} match={match}>
+        <NewAssessmentContainer client={client} pageHeaderButtonsController={pageHeaderButtonsController} />
       </AssessmentDraftManager>
     </AssessmentLoadingBoundary>
   )

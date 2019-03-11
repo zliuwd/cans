@@ -10,11 +10,19 @@ describe('AssessmentDraftManager', () => {
   const initialAssessment = AssessmentMocks.assessment
   const i18n = { key: 'value' }
 
-  const render = (onSave = () => {}) =>
+  const render = ({
+    onSave = () => {},
+    assessment = initialAssessment,
+    history = { push: jest.fn() },
+    match = { url: '' },
+    loadingState = LoadingState.ready,
+  } = {}) =>
     shallow(
       <AssessmentDraftManager
-        assessmentWithI18n={{ assessment: initialAssessment, i18n }}
-        loadingState={LoadingState.ready}
+        assessmentWithI18n={{ assessment, i18n }}
+        history={history}
+        loadingState={loadingState}
+        match={match}
         onSave={onSave}
       >
         <MyComponent />
@@ -28,12 +36,62 @@ describe('AssessmentDraftManager', () => {
     expect(wrapper.state().assessment).toEqual(initialAssessment)
   })
 
+  it('updates the url when a new assessment is updated with an id', () => {
+    const pushSpy = jest.fn()
+    const history = { push: pushSpy }
+    const match = { url: '/path/to/assessment' }
+    const wrapper = render({
+      assessment: AssessmentMocks.initialAssessment,
+      loadingState: LoadingState.ready,
+      history,
+      match,
+    })
+    wrapper.setProps({ loadingState: LoadingState.updating })
+    wrapper.update()
+    const prevProps = wrapper.instance().props
+    const prevState = wrapper.state()
+    wrapper.setProps({
+      assessmentWithI18n: { assessment: AssessmentMocks.assessment, i18n },
+      loadingState: LoadingState.ready,
+    })
+    wrapper.update()
+    wrapper.instance().componentDidUpdate(prevProps, prevState)
+
+    expect(pushSpy).toHaveBeenCalledWith('/path/to/assessment/1')
+  })
+
+  it('does not update the url when an assessment already had an id', () => {
+    const pushSpy = jest.fn()
+    const history = { push: pushSpy }
+    const match = { url: '/path/to/assessment' }
+    const wrapper = render({
+      assessment: AssessmentMocks.assessment,
+      loadingState: LoadingState.ready,
+      history,
+      match,
+    })
+    wrapper.setProps({ loadingState: LoadingState.updating })
+    wrapper.update()
+    const prevProps = wrapper.instance().props
+    const prevState = wrapper.state()
+    wrapper.setProps({
+      assessmentWithI18n: { assessment: { ...AssessmentMocks.assessment, id: 2 }, i18n },
+      loadingState: LoadingState.ready,
+    })
+    wrapper.update()
+    wrapper.instance().componentDidUpdate(prevProps, prevState)
+
+    expect(pushSpy).not.toHaveBeenCalled()
+  })
+
   describe('without a loaded assessment', () => {
     let wrapper
     beforeEach(() => {
       wrapper = shallow(
         <AssessmentDraftManager
           assessmentWithI18n={{ assessment: null, i18n }}
+          history={{ push: () => {} }}
+          match={{ url: '' }}
           loadingState={LoadingState.waiting}
           onSave={() => {}}
         >
@@ -60,6 +118,8 @@ describe('AssessmentDraftManager', () => {
     const wrapper = shallow(
       <AssessmentDraftManager
         assessmentWithI18n={{ assessment: initialAssessment, i18n }}
+        history={{ push: () => {} }}
+        match={{ url: '' }}
         loadingState={LoadingState.updating}
         onSave={() => {}}
       >
@@ -146,7 +206,7 @@ describe('AssessmentDraftManager', () => {
 
   it('provides a callback to persist the draft state', () => {
     const handleSave = jest.fn()
-    const wrapper = render(handleSave)
+    const wrapper = render({ onSave: handleSave })
 
     const updatedAssessment = {
       ...initialAssessment,

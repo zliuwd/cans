@@ -4,7 +4,7 @@ import NewAssessmentContainer from './NewAssessmentContainer'
 import AssessmentContainerInner from './AssessmentContainerInner'
 import AssessmentPageHeader from './AssessmentPageHeader'
 import * as AssessmentHelper from './AssessmentHelper'
-import { initialAssessment, assessment as mockAssessment } from './assessment.mocks.test'
+import { initialAssessment, assessment as mockAssessment, domainWithTwoCaregiver } from './assessment.mocks.test'
 
 const AssessmentStatus = AssessmentHelper.AssessmentStatus
 
@@ -78,6 +78,78 @@ describe('NewAssessmentContainer', () => {
       ...mockAssessment,
       person: client,
     })
+  })
+
+  it('removes a single caregiver onCaregiverRemove', () => {
+    const client = { identifier: '123', dob: '2018-01-01' }
+    const assessment = {
+      ...mockAssessment,
+      person: client,
+      has_caregiver: true,
+      state: {
+        ...mockAssessment.state,
+        domains: [...domainWithTwoCaregiver],
+      },
+    }
+    const onSetAssessment = jest.fn()
+    const wrapper = render({ client, onSetAssessment, assessment })
+
+    wrapper
+      .find(AssessmentContainerInner)
+      .props()
+      .handleCaregiverRemove('a')
+    expect(onSetAssessment).toHaveBeenCalledTimes(1)
+    const setAssessment = onSetAssessment.mock.calls[0][0]
+    expect(setAssessment.state.domains.length).toBe(1)
+    expect(setAssessment.state.domains[0].caregiver_index).toBe('b')
+  })
+
+  it('removes all caregivers onCaregiverRemove with no index', () => {
+    const client = { identifier: '123', dob: '2018-01-01' }
+    const assessment = {
+      ...mockAssessment,
+      person: client,
+      has_caregiver: true,
+      state: {
+        ...mockAssessment.state,
+        domains: [...domainWithTwoCaregiver],
+      },
+    }
+    const onSetAssessment = jest.fn()
+    const wrapper = render({ client, onSetAssessment, assessment })
+
+    wrapper
+      .find(AssessmentContainerInner)
+      .props()
+      .handleCaregiverRemove()
+    expect(onSetAssessment).toHaveBeenCalledTimes(1)
+    const setAssessment = onSetAssessment.mock.calls[0][0]
+    expect(setAssessment.has_caregiver).toBe(false)
+    expect(setAssessment.state.domains.length).toBe(0)
+  })
+
+  it('updates has_caregiver when the last caregiver domain is removed', () => {
+    const client = { identifier: '123', dob: '2018-01-01' }
+    const assessment = {
+      ...mockAssessment,
+      person: client,
+      has_caregiver: true,
+      state: {
+        ...mockAssessment.state,
+        domains: [domainWithTwoCaregiver[0]],
+      },
+    }
+    const onSetAssessment = jest.fn()
+    const wrapper = render({ client, onSetAssessment, assessment })
+
+    wrapper
+      .find(AssessmentContainerInner)
+      .props()
+      .handleCaregiverRemove('a')
+    expect(onSetAssessment).toHaveBeenCalledTimes(1)
+    const setAssessment = onSetAssessment.mock.calls[0][0]
+    expect(setAssessment.has_caregiver).toBe(false)
+    expect(setAssessment.state.domains.length).toBe(0)
   })
 
   it('renders nothing when there is no assessment', () => {
@@ -230,4 +302,3 @@ describe('NewAssessmentContainer', () => {
 // TODO
 // Scroll behavior
 // Unsaved changes
-// Update URL on first save

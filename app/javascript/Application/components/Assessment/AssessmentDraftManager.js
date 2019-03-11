@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { LoadingState } from '../../util/loadingHelper'
+import { updateUrlWithAssessment } from './AssessmentHelper'
 
 class AssessmentDraftManager extends React.PureComponent {
   constructor(props) {
@@ -20,6 +21,18 @@ class AssessmentDraftManager extends React.PureComponent {
       }
     }
     return { loadingState: props.loadingState }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.assessment &&
+      prevState.assessment.id === undefined &&
+      this.state.assessment &&
+      this.state.assessment.id !== undefined
+    ) {
+      // New assessment has been saved
+      updateUrlWithAssessment(this.props.history, this.props.match, this.state.assessment)
+    }
   }
 
   handleResetAssessment = () => {
@@ -56,7 +69,13 @@ AssessmentDraftManager.propTypes = {
     i18n: PropTypes.object.isRequired,
   }),
   children: PropTypes.element.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
   loadingState: PropTypes.oneOf(Object.values(LoadingState)),
+  match: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+  }).isRequired,
   onSave: PropTypes.func,
 }
 
