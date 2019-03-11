@@ -7,8 +7,8 @@ export class AssessmentService {
   static update(id, assessment) {
     return apiPut(`/assessments/${id}`, assessment)
   }
-  static fetchNewAssessment() {
-    return apiGet('/instruments/1')
+  static initializeAssessment(clientId) {
+    return apiGet(`/clients/${clientId}/assessments/_initialize`)
   }
   static search(searchRequest) {
     return apiPost('/assessments/_search', searchRequest)

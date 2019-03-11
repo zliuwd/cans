@@ -40,5 +40,21 @@ module Api
         expect(response.body).to eq comparison.to_json
       end
     end
+
+    describe '#show_init_assessment' do
+      let(:assessment) { { instrument_id: 1, state: {} } }
+      let(:operation_response) do
+        instance_double('Faraday::Response', body: assessment, status: 200)
+      end
+
+      it 'returns an initialized assessment' do
+        allow(clients_repository)
+          .to receive(:show_init_assessment)
+          .with('123')
+          .and_return(operation_response)
+        get :show_init_assessment, params: { id: 123 }
+        expect(response.body).to eq assessment.to_json
+      end
+    end
   end
 end

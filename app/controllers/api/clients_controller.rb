@@ -11,5 +11,10 @@ module Api
       response = Clients::ClientsRepository.new(session[:token]).show_comparison(params[:id])
       render json: response.body, status: response.status
     end
+
+    def show_init_assessment
+      response = Clients::ClientsRepository.new(session[:token]).show_init_assessment(params[:id])
+      render json: response.body, status: response.status
+    end
   end
 end

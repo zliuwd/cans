@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     resources :clients, only: [:show] do
       member do
         get 'assessment_comparison', to: 'clients#show_comparison'
+        get 'assessments/_initialize', to: 'clients#show_init_assessment'
       end
     end
 

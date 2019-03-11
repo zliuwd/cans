@@ -145,7 +145,7 @@ class PrintAssessment extends PureComponent {
     return (
       <div style={alertSignBox}>
         <strong>
-          By selecting NO, Items 7, 48, and EC 41 (Substance Use Disorder Items) from this CANS assessment will be
+          By selecting NO, Items 8, 48, and EC 41 (Substance Use Disorder Items) from this CANS assessment will be
           redacted when printed.
         </strong>
       </div>

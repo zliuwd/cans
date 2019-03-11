@@ -91,6 +91,7 @@ arr-flatten,1.1.0,MIT,https://github.com/jonschlinkert/arr-flatten
 arr-union,3.1.0,MIT,https://github.com/jonschlinkert/arr-union
 array-equal,1.0.0,MIT,http://jongleberry.com
 array-filter,0.0.1,MIT,https://github.com/juliangruber/array-filter
+array-filter,1.0.0,MIT,https://github.com/juliangruber/array-filter
 array-find-index,1.0.2,MIT,sindresorhus.com
 array-flatten,1.1.1,MIT,https://github.com/blakeembrey/array-flatten
 array-flatten,2.1.1,MIT,https://github.com/blakeembrey/array-flatten
@@ -455,15 +456,16 @@ engine.io-client,3.2.1,MIT,https://github.com/socketio/engine.io-client
 engine.io-parser,2.1.2,MIT,https://github.com/socketio/engine.io-parser
 enhanced-resolve,3.4.1,MIT,http://github.com/webpack/enhanced-resolve
 entities,1.1.1,Simplified BSD,Unknown
-enzyme,3.5.0,MIT,http://airbnb.io/enzyme/
-enzyme-adapter-react-16,1.3.0,MIT,http://airbnb.io/enzyme/
-enzyme-adapter-utils,1.6.0,MIT,http://airbnb.io/enzyme/
+enzyme,3.9.0,MIT,http://airbnb.io/enzyme/
+enzyme-adapter-react-16,1.10.0,MIT,http://airbnb.io/enzyme/
+enzyme-adapter-utils,1.10.0,MIT,http://airbnb.io/enzyme/
 equalizer,0.0.11,MIT,https://github.com/dkubb/equalizer
 errno,0.1.7,MIT,Unknown
 error-ex,1.3.2,MIT,Unknown
 erubi,1.7.1,MIT,https://github.com/jeremyevans/erubi
 es-abstract,1.12.0,MIT,http://ljharb.codes
-es-to-primitive,1.1.1,MIT,Unknown
+es-abstract,1.13.0,MIT,http://ljharb.codes
+es-to-primitive,1.2.0,MIT,Unknown
 es5-ext,0.10.46,ISC,http://www.medikoo.com/
 es6-iterator,2.0.3,MIT,http://www.medikoo.com/
 es6-map,0.1.5,MIT,http://www.medikoo.com/
@@ -488,7 +490,7 @@ eslint-plugin-jsx-a11y,6.1.1,MIT,Unknown
 eslint-plugin-node,6.0.1,MIT,https://github.com/mysticatea/eslint-plugin-node#readme
 eslint-plugin-prettier,2.6.2,MIT,https://github.com/prettier/eslint-plugin-prettier#readme
 eslint-plugin-promise,3.8.0,ISC,Unknown
-eslint-plugin-react,7.11.1,MIT,https://github.com/yannickcr/eslint-plugin-react
+eslint-plugin-react,7.12.4,MIT,https://github.com/yannickcr/eslint-plugin-react
 eslint-plugin-standard,3.1.0,MIT,https://github.com/xjamundx/eslint-plugin-standard#readme
 eslint-rule-composer,0.3.0,MIT,https://github.com/not-an-aardvark/eslint-rule-composer#readme
 eslint-scope,3.7.1,Simplified BSD,http://github.com/eslint/eslint-scope
@@ -632,6 +634,7 @@ home-or-tmp,2.0.0,MIT,sindresorhus.com
 hosted-git-info,2.7.1,ISC,https://github.com/npm/hosted-git-info
 hpack.js,2.1.6,MIT,https://github.com/indutny/hpack.js#readme
 html-comment-regex,1.1.1,MIT,https://github.com/stevemao/html-comment-regex
+html-element-map,1.0.0,MIT,https://github.com/ljharb/html-element-map#readme
 html-encoding-sniffer,1.0.2,MIT,https://domenic.me/
 html-entities,1.2.1,MIT,Unknown
 htmlparser2,3.10.0,MIT,Unknown
@@ -735,7 +738,7 @@ is-stream,1.1.0,MIT,sindresorhus.com
 is-string,1.0.4,MIT,Unknown
 is-subset,0.1.1,MIT,Unknown
 is-svg,2.1.0,MIT,sindresorhus.com
-is-symbol,1.0.1,MIT,Unknown
+is-symbol,1.0.2,MIT,Unknown
 is-typedarray,1.0.0,MIT,https://github.com/hughsk/is-typedarray
 is-utf8,0.2.1,MIT,Unknown
 is-windows,1.0.2,MIT,https://github.com/jonschlinkert/is-windows
@@ -982,13 +985,16 @@ object-hash,1.3.0,MIT,https://github.com/puleos/object-hash
 object-inspect,1.6.0,MIT,https://github.com/substack/object-inspect
 object-is,1.0.1,MIT,https://github.com/ljharb/object-is
 object-keys,1.0.12,MIT,http://ljharb.codes
+object-keys,1.1.0,MIT,http://ljharb.codes
 object-visit,1.0.1,MIT,https://github.com/jonschlinkert/object-visit
 object.assign,4.1.0,MIT,Unknown
 object.entries,1.0.4,MIT,Unknown
+object.fromentries,2.0.0,MIT,Unknown
 object.getownpropertydescriptors,2.0.3,MIT,Unknown
 object.omit,2.0.1,MIT,https://github.com/jonschlinkert/object.omit
 object.pick,1.3.0,MIT,https://github.com/jonschlinkert/object.pick
 object.values,1.0.4,MIT,Unknown
+object.values,1.1.0,MIT,Unknown
 obuf,1.1.2,MIT,https://github.com/indutny/offset-buffer
 on-finished,2.3.0,MIT,Unknown
 on-headers,1.0.1,MIT,Unknown
@@ -1135,6 +1141,7 @@ promise,7.3.1,MIT,Unknown
 promise-inflight,1.0.1,ISC,https://github.com/iarna/promise-inflight#readme
 prompts,0.1.14,MIT,https://github.com/terkelg/prompts
 prop-types,15.6.2,MIT,https://facebook.github.io/react/
+prop-types,15.7.2,MIT,https://facebook.github.io/react/
 prop-types-extra,1.1.0,MIT,https://github.com/react-bootstrap/prop-types-extra#readme
 proxy-addr,2.0.4,MIT,Unknown
 prr,1.0.1,MIT,https://github.com/rvagg/prr
@@ -1179,15 +1186,15 @@ raw-body,2.3.2,MIT,http://jongleberry.com
 rb-fsevent,0.10.3,MIT,http://rubygems.org/gems/rb-fsevent
 rb-inotify,0.9.10,MIT,https://github.com/guard/rb-inotify
 rc,1.2.8,(BSD-2-Clause OR MIT OR Apache-2.0),dominictarr.com
-react,16.4.2,MIT,https://reactjs.org/
+react,16.8.3,MIT,https://reactjs.org/
 react-component-managers,3.2.2,MIT,Unknown
-react-dom,16.4.2,MIT,https://reactjs.org/
+react-dom,16.8.3,MIT,https://reactjs.org/
 react-event-listener,0.6.3,MIT,https://github.com/oliviertassinari/react-event-listener
 react-input-autosize,2.2.1,MIT,Unknown
-react-input-mask,2.0.3,MIT,https://github.com/sanniassin/react-input-mask
 react-input-mask,2.0.4,MIT,https://github.com/sanniassin/react-input-mask
 react-is,16.4.2,MIT,https://reactjs.org/
 react-is,16.6.3,MIT,https://reactjs.org/
+react-is,16.8.3,MIT,https://reactjs.org/
 react-jss,8.6.1,MIT,https://github.com/cssinjs/react-jss
 react-lifecycles-compat,3.0.4,MIT,Unknown
 react-popper,0.10.4,MIT,https://github.com/souporserious/react-popper
@@ -1250,6 +1257,7 @@ require-main-filename,1.0.1,ISC,https://github.com/yargs/require-main-filename#r
 require-uncached,1.0.3,MIT,sindresorhus.com
 requires-port,1.0.0,MIT,https://github.com/unshiftio/requires-port
 resolve,1.1.7,MIT,http://substack.net
+resolve,1.10.0,MIT,http://substack.net
 resolve,1.8.1,MIT,http://substack.net
 resolve-cwd,2.0.0,MIT,sindresorhus.com
 resolve-from,1.0.1,MIT,sindresorhus.com
@@ -1290,6 +1298,7 @@ sass-listen,4.0.0,MIT,https://github.com/sass/listen
 sass-loader,6.0.7,MIT,https://github.com/webpack-contrib/sass-loader
 sass-rails,5.0.7,MIT,https://github.com/rails/sass-rails
 sax,1.2.4,ISC,http://blog.izs.me/
+scheduler,0.13.3,MIT,https://reactjs.org/
 schema-utils,0.3.0,MIT,https://github.com/webpack-contrib/schema-utils#readme
 schema-utils,0.4.7,MIT,https://github.com/webpack-contrib/schema-utils
 scss-tokenizer,0.2.3,MIT,https://github.com/sasstools/scss-tokenizer
@@ -1298,6 +1307,7 @@ selenium-webdriver,3.13.0,Apache 2.0,https://github.com/SeleniumHQ/selenium
 selfsigned,1.10.3,MIT,http://joseoncode.com
 semver,5.3.0,ISC,Unknown
 semver,5.5.1,ISC,Unknown
+semver,5.6.0,ISC,Unknown
 send,0.16.2,MIT,Unknown
 serialize-javascript,1.5.0,New BSD,https://github.com/yahoo/serialize-javascript
 serve-index,1.9.1,MIT,Unknown
@@ -1374,6 +1384,7 @@ string-length,2.0.0,MIT,sindresorhus.com
 string-width,1.0.2,MIT,sindresorhus.com
 string-width,2.1.1,MIT,sindresorhus.com
 string.prototype.padend,3.0.0,MIT,Unknown
+string.prototype.trim,1.1.2,MIT,http://ljharb.codes
 string_decoder,1.1.1,MIT,https://github.com/nodejs/string_decoder
 strip-ansi,3.0.1,MIT,sindresorhus.com
 strip-ansi,4.0.0,MIT,sindresorhus.com

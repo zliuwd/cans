@@ -26,5 +26,14 @@ module Clients
         expect(clients_repository.show_comparison(16)).to eq(response)
       end
     end
+
+    describe '#show_init_assessment' do
+      it 'returns initialezed assessment' do
+        allow(http_service).to receive(:call)
+          .with('/clients/123/assessments/_initialize', :get, token)
+          .and_return(response)
+        expect(clients_repository.show_init_assessment(123)).to eq(response)
+      end
+    end
   end
 end

@@ -17,7 +17,6 @@ import {
   assessment,
   domainWithTwoCaregiver,
   initialAssessment,
-  instrument,
   updatedAssessment,
   updatedAssessmentDomains,
   updatedAssessmentWithDomains,
@@ -267,40 +266,25 @@ describe('<AssessmentContainer />', () => {
         },
       }
 
-      it('calls fetchNewAssessment', async () => {
-        const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment')
+      it('calls initializeAssessment', async () => {
+        const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'initializeAssessment')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-        assessmentServiceGetSpy.mockReturnValue(Promise.resolve(instrument))
+        assessmentServiceGetSpy.mockReturnValue(Promise.resolve(initialAssessment))
         const wrapper = shallow(<AssessmentContainer {...props} />)
         await wrapper.instance().componentDidMount()
-        expect(assessmentServiceGetSpy).toHaveBeenCalledWith()
+        expect(assessmentServiceGetSpy).toHaveBeenCalledWith('aaaaaaaaaa')
       })
 
       it('sets a new assessment on component state', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         expect(wrapper.state('assessment').instrument_id).toBeFalsy()
-        wrapper.instance().onFetchNewAssessmentSuccess(instrument)
-        const assessment = wrapper.state('assessment')
-        expect(assessment).toEqual({
-          ...initialAssessment,
-          service_source: 'CASE',
-          service_source_id: 'C6vN5DG0Aq',
-          service_source_ui_id: '0687-9473-7673-8000672',
-        })
-        expect(assessment.person).toEqual(childInfoJson)
-        expect(assessment.county).toEqual(childInfoJson.county)
-      })
-
-      it('passes an unset age group to the assessment component', () => {
-        const wrapper = mount(<AssessmentContainer {...props} />)
-        wrapper.instance().onFetchNewAssessmentSuccess(instrument)
-        const form = wrapper.find('Assessment')
-        expect(form.props().assessment.state.under_six).toBeUndefined()
+        wrapper.instance().onFetchNewAssessmentSuccess(initialAssessment)
+        expect(wrapper.state('assessment')).toEqual(initialAssessment)
       })
 
       it('hides the submit validation message', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().onFetchNewAssessmentSuccess(instrument)
+        wrapper.instance().onFetchNewAssessmentSuccess(initialAssessment)
         expect(wrapper.find('.submit-validation-message').exists()).toBe(false)
       })
 
@@ -311,7 +295,6 @@ describe('<AssessmentContainer />', () => {
             ...assessment,
           },
         })
-        wrapper.instance().onFetchNewAssessmentSuccess(instrument)
         wrapper.instance().updateIsEditableState()
         wrapper.update()
         expect(wrapper.find(AssessmentFormFooter).exists()).toBeFalsy()
@@ -324,7 +307,6 @@ describe('<AssessmentContainer />', () => {
             ...assessment,
           },
         })
-        wrapper.instance().onFetchAssessmentSuccess(assessment)
         wrapper.instance().updateIsEditableState()
         wrapper.update()
         expect(wrapper.find('AssessmentFormFooter').exists()).toBeTruthy()
@@ -333,23 +315,21 @@ describe('<AssessmentContainer />', () => {
 
     describe('assessment form with an existing assessment', () => {
       const props = {
-        location: { childId: 1 },
+        match: { params: { id: 123 } },
         pageHeaderButtonsController: {
           updateHeaderButtons: () => {},
           updateHeaderButtonsToDefault: () => {},
         },
-        isSaveButtonEnabled: true,
         client: {},
-        assessment,
       }
 
       it('calls fetchAssessment', async () => {
-        const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetchNewAssessment')
+        const assessmentServiceGetSpy = jest.spyOn(AssessmentService, 'fetch')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-        assessmentServiceGetSpy.mockReturnValue(Promise.resolve(instrument))
+        assessmentServiceGetSpy.mockReturnValue(Promise.resolve(assessment))
         const wrapper = shallow(<AssessmentContainer {...props} />)
         await wrapper.instance().componentDidMount()
-        expect(assessmentServiceGetSpy).toHaveBeenCalledWith()
+        expect(assessmentServiceGetSpy).toHaveBeenCalledWith(123)
       })
     })
   })
@@ -419,7 +399,6 @@ describe('<AssessmentContainer />', () => {
         const postSuccessSpy = jest.spyOn(AHelper, 'postSuccessMessage')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
         jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment))
-        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({ assessment: { ...assessment, id: 1 } })
         // when
@@ -435,7 +414,6 @@ describe('<AssessmentContainer />', () => {
         const postSuccessSpy = jest.spyOn(globalAlertService, 'postSuccess')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
         jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessment))
-        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({ assessment: { ...assessment, id: 1 } })
         // when
@@ -448,7 +426,6 @@ describe('<AssessmentContainer />', () => {
 
       it('should set isEditable to false after submit', async () => {
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
-        jest.spyOn(AssessmentService, 'fetchNewAssessment').mockReturnValue(Promise.resolve(instrument))
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({ assessment: { ...assessment, id: 1 }, isEditable: true })
 
