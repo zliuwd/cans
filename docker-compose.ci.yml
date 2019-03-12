@@ -75,7 +75,7 @@ services:
       TOKEN_VALIDATION_URL: http://perry:8080/perry/authn/validate?token=
 
   cans-api:
-    image: cwds/cans-api:1.4.0_444-RC
+    image: cwds/cans-api:1.6.2_449-RC
     hostname: cans-api
     depends_on:
       - db2
