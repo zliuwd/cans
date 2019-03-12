@@ -34,7 +34,7 @@ def buildPullRequest() {
     try {
       checkoutStage()
       checkForLabel() // shared library
-      buildDockerImageStage()
+      buildDockerImageForTest()
       lintAndUnitTestStages()
       regressionDevTestStage()
       a11yLintStage()
@@ -58,10 +58,11 @@ def buildMaster() {
     try {
       checkoutStage()
       incrementTag() // shared library
-      buildDockerImageStage()
+      buildDockerImageForTest()
       lintAndUnitTestStages()
       regressionDevTestStage()
       a11yLintStage()
+      buildDockerImageStage()
       tagRepo() // shared library
       publishImageStage()
       triggerReleasePipeline()  
@@ -138,9 +139,15 @@ def incrementTag() {
   }
 }
 
+def buildDockerImageForTest() {
+  stage('Build Docker Image For Test') {
+    app = buildDockerImageForTest('./docker/web/Dockerfile')
+  }
+}
+
 def buildDockerImageStage() {
   stage('Build Docker Image') {
-    app = buildDockerImageForTest('./docker/web/Dockerfile')
+    app = docker.build("cwds/cans:${env.BUILD_ID}", "-f docker/web/Dockerfile .")
   }
 }
 
