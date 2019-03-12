@@ -140,21 +140,20 @@ def incrementTag() {
 
 def buildDockerImageStage() {
   stage('Build Docker Image') {
-    app = docker.build("cwds/cans:${env.BUILD_ID}", "-f docker/web/Dockerfile .")
+    app = buildDockerImageForTest('./docker/web/Dockerfile')
   }
 }
 
 def lintAndUnitTestStages() {
   app.withRun("-e CI=true") { container ->
-    lintStage(container)
+    lintStage()
     unitTestStage(container)
   }
 }
 
-def lintStage(container) {
+def lintStage() {
   stage('Lint') {
-    sh "docker exec -t ${container.id} yarn lint"
-    sh "docker exec -t ${container.id} rubocop"
+    lint()
   }
 }
 
