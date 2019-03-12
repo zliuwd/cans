@@ -87,9 +87,11 @@ export const domainRatingSwitcher = (ratingTotal, type) => {
 }
 
 const itemRatingGenerator = (itemRatings, index) => {
+  const itemTrend = itemRatings[index].trend !== undefined ? itemRatings[index].trend : ''
+  const itemSymbolGenerator = itemTrend === 'UP' ? '↑' : '' || itemTrend === 'DOWN' ? '↓' : ''
   let rating = ''
   if (itemRatings[index] && itemRatings[index].value !== undefined) {
-    rating = itemRatings[index].value
+    rating = `${itemRatings[index].value} ${itemSymbolGenerator}`
   } else {
     rating = dashes
   }
