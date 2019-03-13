@@ -377,7 +377,7 @@ feature 'Case Worker Functionality' do
   end
 
   def check_redacted_checkbox_6_to_21
-    within @form.sub7_title.sibling('.item-confidential-checkbox') do
+    within @form.sub8_title.sibling('.item-confidential-checkbox') do
       sub7_checkbox = find('input[type = "checkbox"]', visible: false)
       expect(sub7_checkbox.checked?).to be(false)
       expect(sub7_checkbox.disabled?).to be(false)
@@ -388,7 +388,7 @@ feature 'Case Worker Functionality' do
       expect(sub48a_checkbox.disabled?).to be(false)
     end
     @form.header.authorization_label_no.click
-    within @form.sub7_title.sibling('.item-confidential-checkbox') do
+    within @form.sub8_title.sibling('.item-confidential-checkbox') do
       sub7_checkbox = find('input[type = "checkbox"]', visible: false)
       expect(sub7_checkbox.checked?).to be(true)
       expect(sub7_checkbox.disabled?).to be(true)
@@ -482,8 +482,8 @@ feature 'Case Worker Functionality' do
       if age_range == '0to5'
         ['Anxiety']
       else
-        ['Psychosis (Thought Disorder)', 'Depression', 'Anxiety', 'Conduct', 'Substance Use',
-         'Anger Control', 'Adjustment to Trauma']
+        ['Psychosis (Thought Disorder)', 'Depression', 'Anxiety', 'Conduct',
+         'Anger Control', 'Substance Use', 'Adjustment to Trauma']
       end
     immediate_action_required_column_text = ['Oppositional (Non-compliance with Authority)']
     trauma_column_text = ['Physical Abuse', 'Emotional Abuse', 'Neglect', 'Medical Trauma',

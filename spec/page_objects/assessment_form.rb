@@ -64,7 +64,7 @@ class AssessmentForm < SitePrism::Page
   element :assessment_card_title_0_5, 'div.assessment-card-title', text: 'Age Range 0-5'
   element :assessment_card_title_6_21, 'div.assessment-card-title', text: 'Age Range 6-21'
   element :ec41_title, 'h2', text: 'EC41'
-  element :sub7_title, 'h2', text: '7. SUBSTANCE USE'
+  element :sub8_title, 'h2', text: '8. SUBSTANCE USE'
   element :sub48a_title, 'h2', text: '48a. SUBSTANCE USE'
   elements :collapsed_domain_headers, 'div[aria-expanded="false"] h2'
   elements :inner_items, '.item-expand-icon'

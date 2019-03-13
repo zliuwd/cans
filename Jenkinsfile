@@ -34,7 +34,7 @@ def buildPullRequest() {
     try {
       checkoutStage()
       checkForLabel() // shared library
-      buildDockerImageStage()
+      buildDockerImageForTest()
       lintAndUnitTestStages()
       regressionDevTestStage()
       a11yLintStage()
@@ -58,10 +58,11 @@ def buildMaster() {
     try {
       checkoutStage()
       incrementTag() // shared library
-      buildDockerImageStage()
+      buildDockerImageForTest()
       lintAndUnitTestStages()
       regressionDevTestStage()
       a11yLintStage()
+      buildDockerImageStage()
       tagRepo() // shared library
       publishImageStage()
       triggerReleasePipeline()  
@@ -138,6 +139,12 @@ def incrementTag() {
   }
 }
 
+def buildDockerImageForTest() {
+  stage('Build Docker Image For Test') {
+    app = buildDockerImageForTest('./docker/web/Dockerfile')
+  }
+}
+
 def buildDockerImageStage() {
   stage('Build Docker Image') {
     app = docker.build("cwds/cans:${env.BUILD_ID}", "-f docker/web/Dockerfile .")
@@ -146,15 +153,14 @@ def buildDockerImageStage() {
 
 def lintAndUnitTestStages() {
   app.withRun("-e CI=true") { container ->
-    lintStage(container)
+    lintStage()
     unitTestStage(container)
   }
 }
 
-def lintStage(container) {
+def lintStage() {
   stage('Lint') {
-    sh "docker exec -t ${container.id} yarn lint"
-    sh "docker exec -t ${container.id} rubocop"
+    lint()
   }
 }
 
