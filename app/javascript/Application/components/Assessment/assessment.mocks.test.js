@@ -103,85 +103,6 @@ export const assessment = {
   },
 }
 
-export const readOnlyAssessment = {
-  id: 1,
-  instrument_id: 1,
-  person: childInfoJson,
-  county: childInfoJson.county,
-  assessment_type: 'INITIAL',
-  status: 'IN_PROGRESS',
-  completed_as: 'COMMUNIMETRIC',
-  can_release_confidential_info: false,
-  has_caregiver: false,
-  state: {
-    under_six: false,
-    caregiver_domain_template: {
-      id: '6',
-      code: 'CGV',
-      is_caregiver_domain: true,
-      items: [
-        {
-          code: '1',
-        },
-      ],
-    },
-    domains: [
-      {
-        id: 0,
-        code: '123',
-        items: [
-          {
-            above_six_id: '1',
-            code: '1',
-            confidential: false,
-            confidential_by_default: false,
-            rating: 1,
-            rating_type: 'REGULAR',
-            required: true,
-            under_six_id: 'EC01',
-          },
-          {
-            above_six_id: '2',
-            code: 'SUBSTANCE_USE',
-            confidential: false,
-            confidential_by_default: false,
-            rating: 1,
-            rating_type: 'REGULAR',
-            required: true,
-            under_six_id: 'EC01',
-          },
-          {
-            above_six_id: '2',
-            code: 'SUBSTANCE_USE_CAREGIVER',
-            confidential: false,
-            confidential_by_default: false,
-            rating: 1,
-            rating_type: 'REGULAR',
-            required: true,
-            under_six_id: 'EC01',
-          },
-          {
-            above_six_id: '2',
-            code: 'EXPOSURE',
-            confidential: false,
-            confidential_by_default: true,
-            rating: 1,
-            rating_type: 'REGULAR',
-            required: true,
-            under_six_id: 'EC01',
-          },
-        ],
-        underSix: true,
-        aboveSix: true,
-      },
-    ],
-  },
-  event_date: '2018-06-11',
-  metadata: {
-    allowed_operations: [],
-  },
-}
-
 export const updatedAssessmentWithDomains = {
   id: 1,
   instrument_id: 1,
@@ -1299,4 +1220,28 @@ export const assessmentWithNoUpdateInfoWithNoClientandReferralNumber = {
   county: {
     name: 'Alameda',
   },
+}
+
+export const subsequentAssessment = {
+  assessment_type: 'SUBSEQUENT',
+  preceding_assessment_id: 123,
+  instrument_id: 1,
+  person: childInfoJson,
+  county: childInfoJson.county,
+  status: 'IN_PROGRESS',
+  completed_as: 'COMMUNIMETRIC',
+  can_release_confidential_info: false,
+  has_caregiver: true,
+  state: {
+    id: 0,
+    domains: [
+      {
+        id: 0,
+        code: 'string',
+        underSix: false,
+        aboveSix: false,
+      },
+    ],
+  },
+  event_date: getCurrentIsoDate(),
 }

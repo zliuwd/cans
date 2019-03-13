@@ -5,23 +5,24 @@ import { clone } from '../../util/common'
 import { completeAutoScroll } from '../../util/assessmentAutoScroll'
 import { AssessmentService } from './'
 import { I18nService } from '../common/'
-import { LoadingState, isReadyForAction } from '../../util/loadingHelper'
+import { isReadyForAction, LoadingState } from '../../util/loadingHelper'
 import AssessmentContainerInner from './AssessmentContainerInner'
 import { PrintAssessment } from '../Print'
 import {
   AssessmentStatus,
-  validateAssessmentForSubmit,
-  validateAssessmentEventDate,
   defaultEmptyAssessment,
-  postSuccessMessage,
-  trimUrlForClientProfile,
-  successMsgFrom,
-  postInfoMessage,
-  postCloseMessage,
   getCaregiverDomainsNumber,
-  handlePrintButtonEnabled,
   handleCountyName,
+  handlePrintButtonEnabled,
+  isSubsequentType,
+  postCloseMessage,
+  postInfoMessage,
+  postSuccessMessage,
+  successMsgFrom,
+  trimUrlForClientProfile,
   updateUrlWithAssessment,
+  validateAssessmentEventDate,
+  validateAssessmentForSubmit,
 } from './AssessmentHelper'
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
@@ -31,6 +32,7 @@ import { logPageAction } from '../../util/analytics'
 import { isAuthorized } from '../common/AuthHelper'
 import UnsavedDataWarning from '../common/UnsavedDataWarning'
 import pageLockService from '../common/PageLockService'
+import ReassessmentModal from './ReassessmentModal'
 
 const SCROLL_POSITION_ADJUST = 15 // for manually adjust scroll destination 15 means go down 15px more
 const readOnlyMessageId = 'readonlyMessage'
@@ -52,6 +54,7 @@ export default class AssessmentContainer extends Component {
       isSaveButtonEnabled: false,
       completeScrollTarget: 0,
       isUnsaved: false,
+      isReassessmentModalShown: false,
     }
   }
 
@@ -66,7 +69,7 @@ export default class AssessmentContainer extends Component {
   }
 
   componentWillUnmount() {
-    this.props.pageHeaderButtonsController.updateHeaderButtonsToDefault()
+    this.props.pageHeaderController.updateHeaderButtonsToDefault()
     postCloseMessage(readOnlyMessageId)
   }
 
@@ -108,7 +111,7 @@ export default class AssessmentContainer extends Component {
     const leftButton = isEditable ? buildSaveAssessmentButton(this.handleSaveAssessment, isSaveButtonEnabled) : null
     const isPrintButtonEnabled = handlePrintButtonEnabled(this.state)
     const rightButton = <PrintButton node={node} isEnabled={isPrintButtonEnabled} assessmentId={assessment.id} />
-    this.props.pageHeaderButtonsController.updateHeaderButtons(leftButton, rightButton)
+    this.props.pageHeaderController.updateHeaderButtons(leftButton, rightButton)
   }
 
   updateSaveButtonStatusIfNeeded(isUnsavedChanged) {
@@ -142,12 +145,20 @@ export default class AssessmentContainer extends Component {
   }
 
   onFetchNewAssessmentSuccess(assessment) {
+    this.updatePageTitle(assessment)
     this.setState({
       assessment,
+      isReassessmentModalShown: isSubsequentType(assessment.assessment_type),
       isEventDateBeforeDob: !validateAssessmentEventDate(this.props.client.dob, assessment.event_date),
       assessmentServiceStatus: LoadingState.ready,
     })
     this.fetchI18n(assessment.instrument_id)
+  }
+
+  updatePageTitle(assessment) {
+    const isReassessment = isSubsequentType(assessment.assessment_type)
+    const title = isReassessment ? 'CANS Reassessment Form' : 'CANS Assessment Form'
+    this.props.pageHeaderController.updateHeaderTitle(title)
   }
 
   async fetchAssessment(id) {
@@ -161,6 +172,7 @@ export default class AssessmentContainer extends Component {
   }
 
   onFetchAssessmentSuccess(assessment) {
+    this.updatePageTitle(assessment)
     this.updateAssessment(assessment)
     this.setState({ isUnsaved: false })
     this.fetchI18n(assessment.instrument_id)
@@ -335,6 +347,17 @@ export default class AssessmentContainer extends Component {
       isEventDateBeforeDob,
     })
   }
+
+  startEmptyReassessment = () => {
+    const assessment = { ...this.state.assessment, preceding_assessment_id: null }
+    this.updateAssessment(assessment)
+    this.setState({ isReassessmentModalShown: false })
+  }
+
+  fillAssessmentWithPrecedingData = async () => {
+    this.setState({ isReassessmentModalShown: false })
+  }
+
   render() {
     const { client } = this.props
     const {
@@ -345,6 +368,7 @@ export default class AssessmentContainer extends Component {
       assessmentServiceStatus,
       isEditable,
       canDisplaySummaryOnSave,
+      isReassessmentModalShown,
     } = this.state
     if (shouldRedirectToClientProfile) {
       return <Redirect push to={{ pathname: trimUrlForClientProfile(this.props.match.url) }} />
@@ -352,6 +376,11 @@ export default class AssessmentContainer extends Component {
     return (
       <Fragment>
         <div ref={this.assessmentHeader}>
+          <ReassessmentModal
+            startEmpty={this.startEmptyReassessment}
+            isOpen={isReassessmentModalShown}
+            fillPrecedingData={this.fillAssessmentWithPrecedingData}
+          />
           <UnsavedDataWarning
             discardAndContinue={this.loadAssessment}
             saveAndContinue={this.handleSaveAssessment}
@@ -384,9 +413,10 @@ AssessmentContainer.propTypes = {
   client: PropTypes.object.isRequired,
   history: PropTypes.object,
   match: PropTypes.object,
-  pageHeaderButtonsController: PropTypes.shape({
+  pageHeaderController: PropTypes.shape({
     updateHeaderButtons: PropTypes.func.isRequired,
     updateHeaderButtonsToDefault: PropTypes.func.isRequired,
+    updateHeaderTitle: PropTypes.func.isRequired,
   }).isRequired,
 }
 

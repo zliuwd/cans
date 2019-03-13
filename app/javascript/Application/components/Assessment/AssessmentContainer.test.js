@@ -11,11 +11,11 @@ import * as AssessmentAutoScroll from '../../util/assessmentAutoScroll'
 import AssessmentContainerInner from '../Assessment/AssessmentContainerInner'
 import PageModal from '../common/PageModal'
 import pageLockService from '../common/PageLockService'
-
 import {
   assessment,
   domainWithTwoCaregiver,
   initialAssessment,
+  subsequentAssessment,
   updatedAssessment,
   updatedAssessmentDomains,
   updatedAssessmentWithDomains,
@@ -29,9 +29,10 @@ jest.mock('../../util/analytics')
 const defaultProps = {
   location: { childId: 1 },
   match: { params: { id: 1 }, url: 'someurl/someid/someending' },
-  pageHeaderButtonsController: {
+  pageHeaderController: {
     updateHeaderButtons: () => {},
     updateHeaderButtonsToDefault: () => {},
+    updateHeaderTitle: () => {},
   },
   client: childInfoJson,
 }
@@ -47,10 +48,7 @@ describe('<AssessmentContainer />', () => {
       const props = {
         location: { childId: 10 },
         match: { params: { id: 1 }, url: 'someUrl' },
-        pageHeaderButtonsController: {
-          updateHeaderButtons: () => {},
-          updateHeaderButtonsToDefault: () => {},
-        },
+        pageHeaderController: { ...defaultProps.pageHeaderController },
         client: {},
         assessment: {},
       }
@@ -74,9 +72,10 @@ describe('<AssessmentContainer />', () => {
         const props = {
           ...defaultProps,
           match: { params: {} },
-          pageHeaderButtonsController: {
+          pageHeaderController: {
             updateHeaderButtons: updateHeaderButtonsMock,
             updateHeaderButtonsToDefault: () => {},
+            updateHeaderTitle: () => {},
           },
         }
         const wrapper = shallow(<AssessmentContainer {...props} />, { disableLifecycleMethods: true })
@@ -90,9 +89,10 @@ describe('<AssessmentContainer />', () => {
         const props = {
           ...defaultProps,
           match: { params: {} },
-          pageHeaderButtonsController: {
+          pageHeaderController: {
             updateHeaderButtons: updateHeaderButtonsMock,
             updateHeaderButtonsToDefault: () => {},
+            updateHeaderTitle: () => {},
           },
         }
         const wrapper = shallow(<AssessmentContainer {...props} />, { disableLifecycleMethods: true })
@@ -107,9 +107,10 @@ describe('<AssessmentContainer />', () => {
           const props = {
             ...defaultProps,
             match: { params: {} },
-            pageHeaderButtonsController: {
+            pageHeaderController: {
               updateHeaderButtons: updateHeaderButtonsMock,
               updateHeaderButtonsToDefault: () => {},
+              updateHeaderTitle: () => {},
             },
           }
           const wrapper = shallow(<AssessmentContainer {...props} />, { disableLifecycleMethods: true })
@@ -123,9 +124,10 @@ describe('<AssessmentContainer />', () => {
           const props = {
             ...defaultProps,
             match: { params: {} },
-            pageHeaderButtonsController: {
+            pageHeaderController: {
               updateHeaderButtons: updateHeaderButtonsMock,
               updateHeaderButtonsToDefault: () => {},
+              updateHeaderTitle: () => {},
             },
           }
           const wrapper = shallow(<AssessmentContainer {...props} />, { disableLifecycleMethods: true })
@@ -140,9 +142,10 @@ describe('<AssessmentContainer />', () => {
         const props = {
           ...defaultProps,
           match: { params: {} },
-          pageHeaderButtonsController: {
+          pageHeaderController: {
             updateHeaderButtons: () => {},
             updateHeaderButtonsToDefault: updateToDefaultMock,
+            updateHeaderTitle: () => {},
           },
         }
         const wrapper = shallow(<AssessmentContainer {...props} />)
@@ -259,9 +262,10 @@ describe('<AssessmentContainer />', () => {
     describe('assessment form with no existing assessment', () => {
       const props = {
         client: childInfoJson,
-        pageHeaderButtonsController: {
+        pageHeaderController: {
           updateHeaderButtons: () => {},
           updateHeaderButtonsToDefault: () => {},
+          updateHeaderTitle: () => {},
         },
       }
 
@@ -315,9 +319,10 @@ describe('<AssessmentContainer />', () => {
     describe('assessment form with an existing assessment', () => {
       const props = {
         match: { params: { id: 123 } },
-        pageHeaderButtonsController: {
+        pageHeaderController: {
           updateHeaderButtons: () => {},
           updateHeaderButtonsToDefault: () => {},
+          updateHeaderTitle: () => {},
         },
         client: {},
       }
@@ -454,7 +459,7 @@ describe('<AssessmentContainer />', () => {
       describe('when all required fields are not filled in and all items are not selected', () => {
         const wrapper = mount(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({
-          assesment: initialAssessment,
+          assessment: initialAssessment,
           isEditable: true,
         })
         wrapper.instance().updateAssessment(initialAssessment)
@@ -511,9 +516,10 @@ describe('<AssessmentContainer />', () => {
       const props = {
         match: { params: { id: 1 }, url: 'someurl/someid/someending' },
         client: childInfoJson,
-        pageHeaderButtonsController: {
+        pageHeaderController: {
           updateHeaderButtons: () => {},
           updateHeaderButtonsToDefault: () => {},
+          updateHeaderTitle: () => {},
         },
       }
 
@@ -601,10 +607,7 @@ describe('<AssessmentContainer />', () => {
         match: { params: { id: 1 }, url: 'someUrl' },
         history: { push: jest.fn() },
         client: childInfoJson,
-        pageHeaderButtonsController: {
-          updateHeaderButtons: () => {},
-          updateHeaderButtonsToDefault: () => {},
-        },
+        pageHeaderController: { ...defaultProps.pageHeaderController },
       }
       const wrapper = shallow(<AssessmentContainer {...props} />)
 
@@ -958,6 +961,83 @@ describe('<AssessmentContainer />', () => {
           componentId: 'infoMessages',
           messageId: 'readonlyMessage',
         })
+      })
+    })
+  })
+
+  describe('reassessment', () => {
+    it('renders a reassessment modal when new assessment is of SUBSEQUENT type', () => {
+      const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+      expect(wrapper.find('ReassessmentModal').props().isOpen).toBeFalsy()
+      wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
+      expect(wrapper.find('ReassessmentModal').props().isOpen).toBeTruthy()
+    })
+
+    it('starts an empty reassessment form', () => {
+      const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+      wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
+      wrapper
+        .find('ReassessmentModal')
+        .props()
+        .startEmpty()
+      expect(wrapper.state().assessment.preceding_assessment_id).toBeNull()
+      expect(wrapper.state().isReassessmentModalShown).toBeFalsy()
+    })
+
+    it('starts a reassessment form with preceding assessment data', async () => {
+      const precedingAssessment = { ...assessment, status: 'COMPLETED' }
+      jest.spyOn(AssessmentService, 'fetch').mockReturnValue(Promise.resolve({ ...precedingAssessment }))
+      const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+      wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
+      wrapper
+        .find('ReassessmentModal')
+        .props()
+        .fillPrecedingData()
+      expect(wrapper.state().isReassessmentModalShown).toBeFalsy()
+    })
+  })
+
+  describe('page title', () => {
+    let updateHeaderTitleMock
+    let props
+
+    beforeEach(() => {
+      updateHeaderTitleMock = jest.fn()
+      props = {
+        ...defaultProps,
+        pageHeaderController: {
+          updateHeaderButtons: () => {},
+          updateHeaderButtonsToDefault: () => {},
+          updateHeaderTitle: updateHeaderTitleMock,
+        },
+      }
+    })
+
+    describe('with assessment (not reassessment) form', () => {
+      it('updates page title when assessment fetched', () => {
+        const wrapper = shallow(<AssessmentContainer {...props} />)
+        wrapper.instance().onFetchNewAssessmentSuccess(assessment)
+        expect(updateHeaderTitleMock).toHaveBeenCalledWith('CANS Assessment Form')
+      })
+
+      it('updates page title when loading existent assessment', () => {
+        const wrapper = shallow(<AssessmentContainer {...props} />)
+        wrapper.instance().onFetchAssessmentSuccess(assessment)
+        expect(updateHeaderTitleMock).toHaveBeenCalledWith('CANS Assessment Form')
+      })
+    })
+
+    describe('with reassessment form', () => {
+      it('updates page title when new reassessment', () => {
+        const wrapper = shallow(<AssessmentContainer {...props} />)
+        wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
+        expect(updateHeaderTitleMock).toHaveBeenCalledWith('CANS Reassessment Form')
+      })
+
+      it('updates page title when loading existent reassessment', () => {
+        const wrapper = shallow(<AssessmentContainer {...props} />)
+        wrapper.instance().onFetchAssessmentSuccess(subsequentAssessment)
+        expect(updateHeaderTitleMock).toHaveBeenCalledWith('CANS Reassessment Form')
       })
     })
   })

@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import FullWidthLayout from './FullWidthLayout'
-import { navigation } from '../../util/constants'
 import { Page, Utils } from '@cwds/components'
 import CurrentUserLoadingBoundary from '../common/CurrentUserLoadingBoundary'
 import { GlobalAlert } from '../common'
@@ -9,14 +8,9 @@ import UserMenu from '../Header/UserMenu'
 import Sticker from 'react-stickyfill'
 
 describe('FullWidthLayout', () => {
-  const render = ({ breadcrumb, children, leftButton, navigateTo = navigation.CHILD_LIST, rightButton } = {}) =>
+  const render = ({ breadcrumb, children, pageTitle, leftButton, rightButton } = {}) =>
     shallow(
-      <FullWidthLayout
-        breadcrumb={breadcrumb}
-        leftButton={leftButton}
-        navigateTo={navigateTo}
-        rightButton={rightButton}
-      >
+      <FullWidthLayout breadcrumb={breadcrumb} pageTitle={pageTitle} leftButton={leftButton} rightButton={rightButton}>
         {children}
       </FullWidthLayout>
     )
@@ -43,19 +37,14 @@ describe('FullWidthLayout', () => {
   })
 
   describe('title', () => {
-    it('is "CANS Communimetric Assessment Form" when new assessment page', () => {
-      const wrapper = render({ navigateTo: navigation.ASSESSMENT_ADD })
-      expect(wrapper.find(Page).props().title).toEqual('CANS Communimetric Assessment Form')
-    })
-
-    it('should send "CANS Communimetric Assessment Form" title when existent assessment page', () => {
-      const wrapper = render({ navigateTo: navigation.ASSESSMENT_EDIT })
-      expect(wrapper.find(Page).props().title).toEqual('CANS Communimetric Assessment Form')
-    })
-
-    it('should send default title for other pages', () => {
-      const wrapper = render({ navigateTo: navigation.CLIENT_SEARCH })
+    it('sends "CANS Assessment Application" title to Page component by default', () => {
+      const wrapper = render()
       expect(wrapper.find(Page).props().title).toEqual('CANS Assessment Application')
+    })
+
+    it('sends pageTitle to Page component as title', () => {
+      const wrapper = render({ pageTitle: 'Page Title' })
+      expect(wrapper.find(Page).props().title).toEqual('Page Title')
     })
   })
 

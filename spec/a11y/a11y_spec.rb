@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 require 'acceptance_helper'
+require 'helpers/assessment_helper'
 
 feature 'Pages are accessible' do
+  assessment_helper = AssessmentHelper.new
   client_identifier = '0PcpFQu0QM'
 
   before(:all) do
@@ -25,13 +27,8 @@ feature 'Pages are accessible' do
   end
 
   scenario 'Assessment Form page is accessible' do
-    visit "/clients/#{client_identifier}/assessments"
-    expect(page).to have_content 'CANS Communimetric Assessment Form'
-    # DatePicker's calendar popup has a lazy rendering so we have to open and close it
-    # to comply with accessibility rules
-    click_button 'Select date'
-    click_button 'Select date'
-    # Select age group to see the domains
+    visit '/'
+    assessment_helper.start_assessment_for CLIENT_NAME
     click_button 'Age: 6-21'
     # Expanding one domain and one item in it to assert their accessibility
     find('#domain0-expand').click

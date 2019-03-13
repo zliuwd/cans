@@ -17,7 +17,6 @@ const SearchPage = ({ match }) => (
     </CurrentUserLoadingBoundary>
     <FullWidthLayout
       breadcrumb={<ContextualBreadCrumb navigateTo={navigateTo} />}
-      navigateTo={navigateTo}
       rightButton={<SearchClientsButton />}
     >
       <SearchContainer match={match} navigateTo={navigateTo} />
