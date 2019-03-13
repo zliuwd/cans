@@ -3,6 +3,7 @@ import { shallow } from 'enzyme'
 import { LoadingState } from '../../util/loadingHelper'
 import NewAssessmentContainer from './NewAssessmentContainer'
 import AssessmentContainerInner from './AssessmentContainerInner'
+import AssessmentPageActions from './AssessmentPageActions'
 import AssessmentPageHeader from './AssessmentPageHeader'
 import AssessmentStatusMessages from './AssessmentStatusMessages'
 import AssessmentSummaryScroller from './AssessmentSummaryScroller'
@@ -56,6 +57,13 @@ describe('NewAssessmentContainer', () => {
     wrapper.setState({ completeScrollTarget: 1234 })
     const scroller = wrapper.find(AssessmentSummaryScroller)
     expect(scroller.props().scrollTarget).toBe(1234)
+  })
+
+  it('renders AssessmentPageActions', () => {
+    const pageActions = render().find(AssessmentPageActions)
+    expect(pageActions.exists()).toBe(true)
+    expect(pageActions.props().loadingState).toBe(LoadingState.waiting)
+    expect(pageActions.props().assessment).toBe(mockAssessment)
   })
 
   it('renders an AssessmentPageHeader', () => {

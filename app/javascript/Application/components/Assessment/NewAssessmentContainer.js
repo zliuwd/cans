@@ -10,6 +10,7 @@ import {
   validateAssessmentEventDate,
   validateAssessmentForSubmit,
 } from './AssessmentHelper'
+import AssessmentPageActions from './AssessmentPageActions'
 import AssessmentPageHeader from './AssessmentPageHeader'
 import AssessmentStatusMessages from './AssessmentStatusMessages'
 import AssessmentSummaryScroller from './AssessmentSummaryScroller'
@@ -122,6 +123,7 @@ class NewAssessmentContainer extends React.PureComponent {
           loadingState={loadingState}
           url={url}
         />
+        <AssessmentPageActions assessment={assessment} loadingState={loadingState} />
         <AssessmentPageHeader
           assessment={assessment}
           i18n={i18n}
