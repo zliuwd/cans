@@ -9,7 +9,11 @@ const AssessmentForm = ({ client, history, match, pageHeaderButtonsController })
   return (
     <AssessmentLoadingBoundary clientId={client.identifier} assessmentId={assessmentId} instrumentId="1">
       <AssessmentDraftManager history={history} match={match}>
-        <NewAssessmentContainer client={client} pageHeaderButtonsController={pageHeaderButtonsController} />
+        <NewAssessmentContainer
+          client={client}
+          pageHeaderButtonsController={pageHeaderButtonsController}
+          url={match.url}
+        />
       </AssessmentDraftManager>
     </AssessmentLoadingBoundary>
   )
@@ -24,6 +28,7 @@ AssessmentForm.propTypes = {
     params: PropTypes.shape({
       id: PropTypes.string,
     }).isRequired,
+    url: PropTypes.string.isRequired,
   }).isRequired,
   pageHeaderButtonsController: PropTypes.shape({
     updateHeaderButtons: PropTypes.func.isRequired,

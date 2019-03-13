@@ -35,6 +35,14 @@ describe('AssessmentLoadingBoundary', () => {
     expect(secondFetch).toBe(firstFetch)
   })
 
+  it('does not update if the assessment id goes from null to something, which is due to a new assessment being saved', () => {
+    const wrapper = render('1', null)
+    const firstFetch = wrapper.find(LoadingBoundary).props().fetch
+    wrapper.setProps({ assessmentId: '12345' })
+    const secondFetch = wrapper.find(LoadingBoundary).props().fetch
+    expect(secondFetch).toBe(firstFetch)
+  })
+
   it('is not hidden while loading', () => {
     expect(render('1', '123').props().isHiddenWhileLoading).toBe(false)
   })

@@ -1,8 +1,10 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import { LoadingState } from '../../util/loadingHelper'
 import NewAssessmentContainer from './NewAssessmentContainer'
 import AssessmentContainerInner from './AssessmentContainerInner'
 import AssessmentPageHeader from './AssessmentPageHeader'
+import AssessmentStatusMessages from './AssessmentStatusMessages'
 import * as AssessmentHelper from './AssessmentHelper'
 import { initialAssessment, assessment as mockAssessment, domainWithTwoCaregiver } from './assessment.mocks.test'
 
@@ -28,8 +30,17 @@ describe('NewAssessmentContainer', () => {
         onSaveAssessment={onSaveAssessment}
         onSetAssessment={onSetAssessment}
         pageHeaderButtonsController={fakeController}
+        url="/path"
       />
     )
+
+  it('renders AssessmentStatusMessages', () => {
+    const messages = render().find(AssessmentStatusMessages)
+    expect(messages.props().loadingState).toBe(LoadingState.waiting)
+    expect(messages.props().url).toBe('/path')
+    expect(messages.props().isEditable).toBe(true)
+    expect(messages.props().isCompleted).toBe(false)
+  })
 
   it('renders an AssessmentPageHeader', () => {
     const header = render().find(AssessmentPageHeader)

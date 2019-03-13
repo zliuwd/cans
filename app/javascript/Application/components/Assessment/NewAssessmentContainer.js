@@ -11,6 +11,7 @@ import {
   validateAssessmentForSubmit,
 } from './AssessmentHelper'
 import AssessmentPageHeader from './AssessmentPageHeader'
+import AssessmentStatusMessages from './AssessmentStatusMessages'
 import { isAuthorized } from '../common/AuthHelper'
 
 class NewAssessmentContainer extends React.PureComponent {
@@ -83,18 +84,25 @@ class NewAssessmentContainer extends React.PureComponent {
   }
 
   render() {
-    const { assessment, client, i18n, loadingState, pageHeaderButtonsController } = this.props
+    const { assessment, client, i18n, loadingState, pageHeaderButtonsController, url } = this.props
     const { isEventDateBeforeDob, isValidDate } = this.state
 
     if (assessment === null) {
       return null
     }
 
+    const isCompleted = assessment.status === AssessmentStatus.completed
     const isEditable = Boolean(!assessment || !assessment.id || isAuthorized(assessment, 'update'))
     const isValidForSubmit = validateAssessmentForSubmit(assessment)
 
     return (
       <React.Fragment>
+        <AssessmentStatusMessages
+          isCompleted={isCompleted}
+          isEditable={isEditable}
+          loadingState={loadingState}
+          url={url}
+        />
         <AssessmentPageHeader
           assessment={assessment}
           i18n={i18n}
@@ -152,6 +160,7 @@ NewAssessmentContainer.propTypes = {
     updateHeaderButtons: PropTypes.func.isRequired,
     updateHeaderButtonsToDefault: PropTypes.func.isRequired,
   }).isRequired,
+  url: PropTypes.string.isRequired,
 }
 NewAssessmentContainer.defaultProps = {
   assessment: null,

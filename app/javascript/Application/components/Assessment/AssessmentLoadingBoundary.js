@@ -22,7 +22,7 @@ class AssessmentLoadingBoundary extends React.Component {
   state = {}
 
   static getDerivedStateFromProps(props, state) {
-    if (props.assessmentId !== state.assessmentId) {
+    if (props.assessmentId !== state.assessmentId && state.assessmentId !== null) {
       return {
         assessmentId: props.assessmentId,
         fetch: fetchFactory(props.assessmentId, props.clientId, props.instrumentId),
