@@ -36,7 +36,7 @@ services:
       LOG_LEVEL: ${LOG_LEVEL}
 
   cans-api:
-    image: cwds/cans-api:1.4.0_444-RC
+    image: cwds/cans-api:1.6.1_448-RC
     hostname: cans-api
     depends_on:
       - db2

@@ -8,10 +8,13 @@ class AssessmentPageInner extends React.Component {
   constructor() {
     super()
     this.state = {
+      pageTitle: null,
       leftButton: null,
       rightButton: null,
     }
   }
+
+  updateHeaderTitle = title => this.setState({ pageTitle: title })
 
   updateHeaderButtons = (leftButton, rightButton) => this.setState({ leftButton, rightButton })
 
@@ -19,28 +22,24 @@ class AssessmentPageInner extends React.Component {
 
   render() {
     const { client, history, match, navigateTo, staffInfo } = this.props
-    const { leftButton, rightButton } = this.state
+    const { pageTitle, leftButton, rightButton } = this.state
 
     const breadcrumb = <ContextualBreadCrumb navigateTo={navigateTo} client={client} subordinate={staffInfo} />
 
-    const pageHeaderButtonsController = {
+    const pageHeaderController = {
       updateHeaderButtons: this.updateHeaderButtons,
       updateHeaderButtonsToDefault: this.updateHeaderButtonsToDefault,
+      updateHeaderTitle: this.updateHeaderTitle,
     }
 
     return (
-      <FullWidthLayout
-        breadcrumb={breadcrumb}
-        leftButton={leftButton}
-        rightButton={rightButton}
-        navigateTo={navigateTo}
-      >
+      <FullWidthLayout breadcrumb={breadcrumb} pageTitle={pageTitle} leftButton={leftButton} rightButton={rightButton}>
         {client && (
           <AssessmentContainer
             client={client}
             history={history}
             match={match}
-            pageHeaderButtonsController={pageHeaderButtonsController}
+            pageHeaderController={pageHeaderController}
           />
         )}
       </FullWidthLayout>

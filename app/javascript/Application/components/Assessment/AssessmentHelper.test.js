@@ -14,6 +14,8 @@ import {
   sortAssessments,
   statusTextOfHistory,
   handlePrintButtonEnabled,
+  isSubsequentType,
+  AssessmentType,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
@@ -462,6 +464,28 @@ describe('AssessmentHelper', () => {
       }
       const actual = handlePrintButtonEnabled(fakeState)
       expect(actual).toEqual(false)
+    })
+  })
+
+  describe('#isSubsequentType()', () => {
+    it('returns true for SUBSEQUENT assessment type', () => {
+      expect(isSubsequentType('SUBSEQUENT')).toBeTruthy()
+      expect(isSubsequentType(AssessmentType.subsequent)).toBeTruthy()
+    })
+
+    it('returns false for other assessment types besides SUBSEQUENT', () => {
+      expect(isSubsequentType(AssessmentType.initial)).toBeFalsy()
+      expect(isSubsequentType(AssessmentType.annual)).toBeFalsy()
+      expect(isSubsequentType(AssessmentType.discharge)).toBeFalsy()
+    })
+
+    it('returns false for any other inputs', () => {
+      expect(isSubsequentType(undefined)).toBeFalsy()
+      expect(isSubsequentType(null)).toBeFalsy()
+      expect(isSubsequentType('')).toBeFalsy()
+      expect(isSubsequentType('any string')).toBeFalsy()
+      expect(isSubsequentType(100)).toBeFalsy()
+      expect(isSubsequentType({})).toBeFalsy()
     })
   })
 })

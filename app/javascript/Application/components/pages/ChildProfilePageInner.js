@@ -8,7 +8,6 @@ import FullWidthLayout from '../Layout/FullWidthLayout'
 const ChildProfilePageInner = ({ client, match, navigateTo, staffInfo }) => (
   <FullWidthLayout
     breadcrumb={<ContextualBreadCrumb navigateTo={navigateTo} client={client} subordinate={staffInfo} />}
-    navigateTo={navigateTo}
     rightButton={<SearchClientsButton />}
   >
     {client && <Client navigateTo={navigateTo} client={client} match={match} />}

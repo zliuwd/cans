@@ -41,7 +41,6 @@ class AssessmentChangelogPageInner extends React.Component {
         }
         leftButton={leftButton}
         rightButton={rightButton}
-        navigateTo={navigateTo}
       >
         {client && (
           <ChangeLogPage match={match} client={client} pageHeaderButtonsController={pageHeaderButtonsController} />

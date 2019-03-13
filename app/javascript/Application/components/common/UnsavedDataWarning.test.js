@@ -15,12 +15,13 @@ describe('<UnsavedDataWarning />', () => {
     })
   }
 
-  const warning = (unsaved = false, assessmentId = undefined) => {
+  const warning = (unsaved = false, assessmentId = undefined, savable = true) => {
     return (
       <UnsavedDataWarning
         discardAndContinue={action()}
         saveAndContinue={action()}
         isUnsaved={unsaved}
+        isSavable={savable}
         assessmentId={assessmentId}
       />
     )
@@ -28,6 +29,12 @@ describe('<UnsavedDataWarning />', () => {
 
   const unsavedAssessment = () => {
     const wrapper = shallow(warning(true, undefined))
+    wrapper.instance().onPageLeave(() => {}, {})
+    return wrapper
+  }
+
+  const unsavableAssessment = () => {
+    const wrapper = shallow(warning(true, undefined, false))
     wrapper.instance().onPageLeave(() => {}, {})
     return wrapper
   }
@@ -91,6 +98,16 @@ describe('<UnsavedDataWarning />', () => {
         .simulate('click')
       expect(wrapper.instance().props.saveAndContinue).toBeCalled()
       expect(wrapper.instance().state.isOpened).toBeFalsy()
+    })
+
+    it('"Save" button is disabled for unsavable assessment', () => {
+      const wrapper = unsavableAssessment()
+      expect(wrapper.find('#unsaved-warning-modal-save').length).toBe(0)
+    })
+
+    it('"Save" button is enabled for savable assessment', () => {
+      const wrapper = openWarning()
+      expect(wrapper.find('#unsaved-warning-modal-save').disabled).toBeFalsy()
     })
 
     it('"Discard" button does call saveAndContinue and closes modal', () => {

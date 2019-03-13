@@ -11,7 +11,6 @@ const navigateTo = navigation.STAFF_READ
 const SubordinateProfilePageInner = ({ staffInfo }) => (
   <FullWidthLayout
     breadcrumb={<ContextualBreadCrumb navigateTo={navigateTo} subordinate={staffInfo} />}
-    navigateTo={navigateTo}
     rightButton={<SearchClientsButton />}
   >
     {staffInfo && staffInfo.staff_person && <CaseLoadPage staffId={staffInfo.staff_person.identifier} />}

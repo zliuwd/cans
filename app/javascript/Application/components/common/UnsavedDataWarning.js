@@ -77,6 +77,7 @@ class UnsavedDataWarning extends Component {
             {'Return to the assessment'}
           </Button>
           <Button
+            disabled={!this.props.isSavable}
             className={'unsaved-warning-modal-save'}
             onClick={() => {
               this.onButtonClick(this.props.saveAndContinue)
@@ -104,6 +105,7 @@ class UnsavedDataWarning extends Component {
 
 UnsavedDataWarning.propTypes = {
   discardAndContinue: PropTypes.func.isRequired,
+  isSavable: PropTypes.bool.isRequired,
   isUnsaved: PropTypes.bool.isRequired,
   saveAndContinue: PropTypes.func.isRequired,
 }

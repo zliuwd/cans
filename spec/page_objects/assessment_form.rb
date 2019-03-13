@@ -4,7 +4,8 @@ require 'page_objects/sections/app_globals'
 require 'page_objects/sections/breadcrumbs'
 
 class AssessmentGlobal < SitePrism::Section
-  element :assessment_page_header, 'h1', text: 'CANS Communimetric Assessment Form'
+  element :assessment_page_header, 'h1', text: 'CANS Assessment Form'
+  element :reassessment_page_header, 'h1', text: 'CANS Reassessment Form'
   element :save_button, 'button', text: 'SAVE'
   element :print_button, 'button', text: 'PRINT'
   element :global_save_success_message_box, 'div.global-alert', text: 'Success! '\
@@ -54,6 +55,20 @@ class AssessmentFormFooter < SitePrism::Section
   element :change_log_link, '.view-changelog-link'
 end
 
+class ReassessmentModal < SitePrism::Section
+  element :title, '.cans-modal-body > .info-modal-title'
+  element :start_new_button, 'button.modal-regular-button', text: 'Start new'
+  element :use_previous_button, 'button.modal-regular-button', text: 'Use previous rating'
+
+  def start_empty_reassessment
+    start_new_button.click
+  end
+
+  def fill_reassessment_with_preceding_data
+    use_previous_button.click
+  end
+end
+
 class AssessmentForm < SitePrism::Page
   section :app_globals, AppGlobals, 'body'
   section :global, AssessmentGlobal, 'body'
@@ -61,10 +76,11 @@ class AssessmentForm < SitePrism::Page
   section :header, AssessmentFormHeader, 'div.assessment-form-header-card'
   section :summary, AssessmentSummary, 'div.assessment-summary-card'
   section :footer, AssessmentFormFooter, 'div.form-footer'
+  section :reassessment_modal, ReassessmentModal, 'div.reassessment-modal'
   element :assessment_card_title_0_5, 'div.assessment-card-title', text: 'Age Range 0-5'
   element :assessment_card_title_6_21, 'div.assessment-card-title', text: 'Age Range 6-21'
   element :ec41_title, 'h2', text: 'EC41'
-  element :sub7_title, 'h2', text: '7. SUBSTANCE USE'
+  element :sub8_title, 'h2', text: '8. SUBSTANCE USE'
   element :sub48a_title, 'h2', text: '48a. SUBSTANCE USE'
   elements :collapsed_domain_headers, 'div[aria-expanded="false"] h2'
   elements :inner_items, '.item-expand-icon'

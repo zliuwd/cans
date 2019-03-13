@@ -16,7 +16,6 @@ const ChildListPage = () => (
     </CurrentUserLoadingBoundary>
     <FullWidthLayout
       breadcrumb={<ContextualBreadCrumb navigateTo={navigateTo} />}
-      navigateTo={navigateTo}
       rightButton={<SearchClientsButton />}
     >
       <CurrentUserCaseLoadPage />

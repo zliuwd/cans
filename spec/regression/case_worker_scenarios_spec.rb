@@ -2,6 +2,7 @@
 
 require 'acceptance_helper'
 require 'feature'
+require 'helpers/assessment_helper'
 require 'page_objects/assessment_form'
 require 'page_objects/client_profile'
 require 'page_objects/staff_dashboard'
@@ -10,12 +11,14 @@ require 'page_objects/assessment_changelog'
 feature 'Case Worker Functionality' do
   current_date = Time.now.getlocal.strftime('%m/%d/%Y')
   assessment_link = 'CANS Assessment Form'
+
   before(:all) do
     login
     @form = AssessmentForm.new
     @staff_dash = StaffDashboard.new
     @client_profile = ClientProfile.new
     @assessment_changelog = AssessmentChangeLog.new
+    @assessment_helper = AssessmentHelper.new
   end
 
   before(:each) do
@@ -29,7 +32,7 @@ feature 'Case Worker Functionality' do
 
   scenario 'Form Header, Domain, and Item common functionalities test' do
     visit '/'
-    create_new_assessment(CLIENT_NAME)
+    @assessment_helper.start_assessment_for CLIENT_NAME
     validate_child_dob_and_age('01/03/2013')
     validate_save_button
     click_0_to_5_button
@@ -46,21 +49,21 @@ feature 'Case Worker Functionality' do
     save_and_check_the_success_message
   end
 
-  scenario 'Fill out and complete assessment from 0 to 5' do
+  scenario 'Fill out and complete (re)assessment from 0 to 5' do
     visit '/'
-    fill_form_header_0_to_5
+    is_reassessment = fill_form_header_0_to_5
     expand_all_domains
     check_redacted_checkbox_0_to_5
     verify_caregiver_name_input_field_and_label
     fill_out_assessment_form_and_check_domain_total
     check_all_progress_are_fully_filled
     click_save_and_summary_card_is_shown
-    warning_and_summary_card_shown_after_complete_button_clicked
+    warning_and_summary_card_shown_after_complete_button_clicked(is_reassessment)
     verify_the_tool_tip_of_summary_card
     verify_the_content_of_summary_card('0to5')
   end
 
-  scenario 'Fill out and complete assessment from 6 to 21' do
+  scenario 'Fill out and complete (re)assessment from 6 to 21' do
     visit '/'
     fill_form_header_6_to_21
     expand_all_domains
@@ -78,7 +81,7 @@ feature 'Case Worker Functionality' do
     CONDUCTED_BY = 'Test Name'
     CONDUCTED_BY_UPDATED = 'Test Name 2'
     visit '/'
-    create_new_assessment(CLIENT_NAME)
+    @assessment_helper.start_assessment_for CLIENT_NAME
     click_0_to_5_button
     fill_conducted_by_field(CONDUCTED_BY)
     validate_change_log_link
@@ -98,7 +101,7 @@ feature 'Case Worker Functionality' do
 
   scenario 'Case worker creates and deletes assessment' do
     visit '/'
-    create_new_assessment(CLIENT_NAME_2)
+    @assessment_helper.start_assessment_for CLIENT_NAME_2
     verify_radio_buttons_on_assessment_header(current_date)
     validate_domain_radio_and_chevron
     save_and_check_the_success_message
@@ -112,7 +115,7 @@ feature 'Case Worker Functionality' do
 
   scenario 'Case worker login, tests caregiver domain with new assessment and logs out' do
     visit '/'
-    create_new_assessment(CLIENT_NAME)
+    @assessment_helper.start_assessment_for CLIENT_NAME
     click_0_to_5_button
     expand_all_domains
     caregiver_domain_name_and_item_rating_test
@@ -123,7 +126,7 @@ feature 'Case Worker Functionality' do
   scenario 'Case worker attempts to print unsaved assessment then cancel' do
     CONDUCTED_BY = 'Test Name'
     visit '/'
-    create_new_assessment(CLIENT_NAME)
+    @assessment_helper.start_assessment_for CLIENT_NAME
     click_0_to_5_button
     fill_conducted_by_field(CONDUCTED_BY)
     print_assessment
@@ -238,14 +241,6 @@ feature 'Case Worker Functionality' do
     expect(progress_bar_value).to eq(@total_radio_selected)
   end
 
-  def create_new_assessment(client_name)
-    @staff_dash.client_link(client_name).text eq(client_name)
-    @staff_dash.visit_client_profile(client_name)
-    expect(@client_profile).to have_add_cans_link
-    @client_profile.add_cans_link.click
-    expect(@form.header.child_name).to have_content(client_name)
-  end
-
   def clear_date_field
     @form.header.date_field.native.clear # avoid stuck
     @form.header.date_field.native.clear
@@ -343,16 +338,17 @@ feature 'Case Worker Functionality' do
   end
 
   def fill_form_header_0_to_5
-    create_new_assessment(CLIENT_NAME)
+    is_reassessment = @assessment_helper.start_assessment_for CLIENT_NAME
     fill_conducted_by_field('')
     expect(@form.header).to have_no_redaction_message
     click_0_to_5_button
     expect(@form.header).to have_redaction_message_0_to_5
     expect(@form).to have_assessment_card_title_0_5
+    is_reassessment
   end
 
   def fill_form_header_6_to_21
-    create_new_assessment(CLIENT_NAME)
+    @assessment_helper.start_assessment_for CLIENT_NAME
     fill_conducted_by_field('')
     click_6_to_21_button
     expect(@form.header).to have_redaction_message_6_to_21
@@ -377,7 +373,7 @@ feature 'Case Worker Functionality' do
   end
 
   def check_redacted_checkbox_6_to_21
-    within @form.sub7_title.sibling('.item-confidential-checkbox') do
+    within @form.sub8_title.sibling('.item-confidential-checkbox') do
       sub7_checkbox = find('input[type = "checkbox"]', visible: false)
       expect(sub7_checkbox.checked?).to be(false)
       expect(sub7_checkbox.disabled?).to be(false)
@@ -388,7 +384,7 @@ feature 'Case Worker Functionality' do
       expect(sub48a_checkbox.disabled?).to be(false)
     end
     @form.header.authorization_label_no.click
-    within @form.sub7_title.sibling('.item-confidential-checkbox') do
+    within @form.sub8_title.sibling('.item-confidential-checkbox') do
       sub7_checkbox = find('input[type = "checkbox"]', visible: false)
       expect(sub7_checkbox.checked?).to be(true)
       expect(sub7_checkbox.disabled?).to be(true)
@@ -438,12 +434,16 @@ feature 'Case Worker Functionality' do
     expect(@form).to have_summary
   end
 
-  def warning_and_summary_card_shown_after_complete_button_clicked
+  def warning_and_summary_card_shown_after_complete_button_clicked(is_reassessment)
     expect(@form.header.authorization_radio_no.checked?).to be(true)
     @form.footer.complete_button.click
     expect(@form.app_globals.complete_warning_modal['style']).to eq('display: block;')
     @form.app_globals.cancel_button_of_warning.click
-    expect(@form.global).to have_assessment_page_header
+    if is_reassessment
+      expect(@form.global).to have_reassessment_page_header
+    else
+      expect(@form.global).to have_assessment_page_header
+    end
     expect(@form.footer).to have_complete_button
     @form.footer.complete_button.click
     @form.app_globals.agree_button_of_warning.click
@@ -482,8 +482,8 @@ feature 'Case Worker Functionality' do
       if age_range == '0to5'
         ['Anxiety']
       else
-        ['Psychosis (Thought Disorder)', 'Depression', 'Anxiety', 'Conduct', 'Substance Use',
-         'Anger Control', 'Adjustment to Trauma']
+        ['Psychosis (Thought Disorder)', 'Depression', 'Anxiety', 'Conduct',
+         'Anger Control', 'Substance Use', 'Adjustment to Trauma']
       end
     immediate_action_required_column_text = ['Oppositional (Non-compliance with Authority)']
     trauma_column_text = ['Physical Abuse', 'Emotional Abuse', 'Neglect', 'Medical Trauma',

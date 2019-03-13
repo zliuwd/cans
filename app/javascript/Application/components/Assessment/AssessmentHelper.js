@@ -239,3 +239,7 @@ export const statusTextOfHistory = (status, isForTable) => {
 export const handlePrintButtonEnabled = state => {
   return Boolean(state.assessment.state.under_six !== undefined && state.isValidDate)
 }
+
+export function isSubsequentType(type) {
+  return AssessmentType.subsequent === type
+}

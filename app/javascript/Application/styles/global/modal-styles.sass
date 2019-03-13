@@ -154,6 +154,10 @@ button.unsaved-warning-modal-save, button.unsaved-warning-modal-save:hover
   width: 13.13rem !important
   border: none
 
+  &:disabled
+    background-color: $zumthor
+    border-color: $zumthor
+
 button.unsaved-warning-modal-discard, button.unsaved-warning-modal-discard:hover
   background-color: Transparent
   color: $dark-cyan
@@ -167,3 +171,38 @@ div.unsaved-warning-modal-heading
   font-size: 1.25rem
   line-height: 1.94rem
   font-weight: 600
+
+//*********************************
+// Modal common elements
+//*********************************
+.cans-modal-body
+  padding: 1.5rem 2.5rem
+  font-weight: 300
+
+%cans-modal-title
+  margin-bottom: 0.4rem
+  font-size: 1.25rem
+  line-height: 1.8rem
+  font-weight: 600
+  letter-spacing: 0.4px
+
+.info-modal-title
+  @extend %cans-modal-title
+  color: #0f476a
+
+.cans-modal-footer
+  display: flex
+  justify-content: flex-end
+  padding: 0.5rem 2.5rem 2rem 2.5rem
+  & > button:not(:first-child)
+    margin-left: 1rem
+
+.modal-regular-button, .modal-regular-button:hover:not(:disabled)
+  border-color: $dark-cyan
+  background-color: Transparent
+  min-height: 2.8rem
+  min-width: 10rem
+  padding: 0 2.5rem
+  border-width: 1px
+  font-size: 0.9rem
+  color: $dark-cyan

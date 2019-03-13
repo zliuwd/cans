@@ -30,7 +30,6 @@ describe('Assessment Page Inner', () => {
     const breadcrumb = layout.props().breadcrumb
 
     expect(breadcrumb.props.navigateTo).toBe(navigation.ASSESSMENT_ADD)
-    expect(layout.props().navigateTo).toBe(navigation.ASSESSMENT_ADD)
   })
 
   it('handles navigateTo for an existing assessment', () => {
@@ -43,7 +42,6 @@ describe('Assessment Page Inner', () => {
     const breadcrumb = layout.props().breadcrumb
 
     expect(breadcrumb.props.navigateTo).toBe(navigation.ASSESSMENT_EDIT)
-    expect(layout.props().navigateTo).toBe(navigation.ASSESSMENT_EDIT)
   })
 
   it('handles navigateTo for a supervisor view', () => {
@@ -56,7 +54,6 @@ describe('Assessment Page Inner', () => {
     const breadcrumb = layout.props().breadcrumb
 
     expect(breadcrumb.props.navigateTo).toBe(navigation.STAFF_ASSESSMENT_EDIT)
-    expect(layout.props().navigateTo).toBe(navigation.STAFF_ASSESSMENT_EDIT)
   })
 
   describe('with a client loaded', () => {
@@ -101,25 +98,36 @@ describe('Assessment Page Inner', () => {
       expect(assessment.props().client).toBe(fakeClient)
     })
 
+    it('updates header title when requested by AssessmentContainer', () => {
+      const assessment = wrapper.find(AssessmentContainer)
+      assessment.props().pageHeaderController.updateHeaderTitle('New Title')
+      expect(wrapper.state().pageTitle).toBe('New Title')
+    })
+
     it('updates header buttons when requested by AssessmentContainer', () => {
       const assessment = wrapper.find(AssessmentContainer)
-      assessment.props().pageHeaderButtonsController.updateHeaderButtons('foo', 'bar')
+      assessment.props().pageHeaderController.updateHeaderButtons('foo', 'bar')
       expect(wrapper.state().leftButton).toBe('foo')
       expect(wrapper.state().rightButton).toBe('bar')
     })
 
     it('provides a dummy default method for compatibility', () => {
       const assessment = wrapper.find(AssessmentContainer)
-      expect(() => assessment.props().pageHeaderButtonsController.updateHeaderButtonsToDefault()).not.toThrow()
+      expect(() => assessment.props().pageHeaderController.updateHeaderButtonsToDefault()).not.toThrow()
     })
 
-    it('passes header buttons to the layout', () => {
-      const buttons = { leftButton: 'To the Left, To the Left', rightButton: 'All right, all right, all right' }
-      wrapper.setState(buttons)
+    it('passes header buttons and title to the layout', () => {
+      const state = {
+        pageTitle: 'The Page Title',
+        leftButton: 'To the Left, To the Left',
+        rightButton: 'All right, all right, all right',
+      }
+      wrapper.setState(state)
 
       const layout = wrapper.find(FullWidthLayout)
-      expect(layout.props().leftButton).toBe(buttons.leftButton)
-      expect(layout.props().rightButton).toBe(buttons.rightButton)
+      expect(layout.props().pageTitle).toBe(state.pageTitle)
+      expect(layout.props().leftButton).toBe(state.leftButton)
+      expect(layout.props().rightButton).toBe(state.rightButton)
     })
   })
 })
