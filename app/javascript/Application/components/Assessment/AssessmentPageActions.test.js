@@ -28,17 +28,24 @@ describe('AssessmentPageActions', () => {
   })
 
   it('logs a page action when the assessment is saved', () => {
-    const assessment = { id: 123, county: { name: 'Madera' } }
+    const assessment = { id: 123, county: { name: 'Madera' }, status: AssessmentStatus.inProgress }
     const wrapper = render({ assessment, loadingState: LoadingState.updating })
     wrapper.setProps({ loadingState: LoadingState.ready })
     expect(analyticsSpy).toHaveBeenCalledWith('assessmentSave', { assessment_id: 123, assessment_county: 'Madera' })
   })
 
   it('logs a page action when the assessment is completed', () => {
-    const assessment = { id: 456, county: { name: 'Yolo' } }
+    const assessment = { id: 456, county: { name: 'Yolo' }, status: AssessmentStatus.inProgress }
     const wrapper = render({ assessment, loadingState: LoadingState.updating })
     const completedAssessment = { ...assessment, status: AssessmentStatus.completed }
     wrapper.setProps({ assessment: completedAssessment, loadingState: LoadingState.ready })
     expect(analyticsSpy).toHaveBeenCalledWith('assessmentSubmit', { assessment_id: 456, assessment_county: 'Yolo' })
+  })
+
+  it('logs a page action when a completed assessment is re-saved', () => {
+    const assessment = { id: 789, county: { name: 'Marin' }, status: AssessmentStatus.completed }
+    const wrapper = render({ assessment, loadingState: LoadingState.updating })
+    wrapper.setProps({ loadingState: LoadingState.ready })
+    expect(analyticsSpy).toHaveBeenCalledWith('assessmentSave', { assessment_id: 789, assessment_county: 'Marin' })
   })
 })

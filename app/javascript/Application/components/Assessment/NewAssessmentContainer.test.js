@@ -352,5 +352,4 @@ describe('NewAssessmentContainer', () => {
 })
 // TODO
 // Unsaved changes
-// NewRelic
 // Cancel button

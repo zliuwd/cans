@@ -10,7 +10,8 @@ class AssessmentPageActions extends React.Component {
     const assessment = this.props.assessment
 
     if (isSaved && assessment.id) {
-      const action = assessment.status === AssessmentStatus.completed ? 'assessmentSubmit' : 'assessmentSave'
+      const wasSubmit = assessment.status === AssessmentStatus.completed && prevProps.assessment.status !== AssessmentStatus.completed
+      const action = wasSubmit ? 'assessmentSubmit' : 'assessmentSave'
       logPageAction(action, {
         assessment_id: assessment.id,
         assessment_county: handleCountyName(assessment),
@@ -29,6 +30,7 @@ AssessmentPageActions.propTypes = {
     county: PropTypes.shape({
       name: PropTypes.string,
     }),
+    status: PropTypes.oneOf(Object.values(AssessmentStatus)).isRequired,
   }).isRequired,
   loadingState: PropTypes.oneOf(Object.values(LoadingState)).isRequired,
 }
