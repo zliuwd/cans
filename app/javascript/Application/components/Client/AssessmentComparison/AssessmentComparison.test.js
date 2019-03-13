@@ -72,20 +72,25 @@ export const fakeData = {
               value: 1,
               type: 'REGULAR',
               assessment_id: 65005,
+              trend: 'UP',
             },
             {
               value: 1,
               type: 'REGULAR',
               assessment_id: 65006,
+              trend: 'DOWN',
             },
             {
               assessment_id: 65007,
+              trend: 'UP',
             },
             {
               assessment_id: 65008,
+              trend: 'UP',
             },
             {
               assessment_id: 65009,
+              trend: 'UP',
             },
           ],
         },
