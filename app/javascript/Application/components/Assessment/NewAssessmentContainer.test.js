@@ -5,6 +5,7 @@ import NewAssessmentContainer from './NewAssessmentContainer'
 import AssessmentContainerInner from './AssessmentContainerInner'
 import AssessmentPageHeader from './AssessmentPageHeader'
 import AssessmentStatusMessages from './AssessmentStatusMessages'
+import AssessmentSummaryScroller from './AssessmentSummaryScroller'
 import * as AssessmentHelper from './AssessmentHelper'
 import { initialAssessment, assessment as mockAssessment, domainWithTwoCaregiver } from './assessment.mocks.test'
 
@@ -40,6 +41,21 @@ describe('NewAssessmentContainer', () => {
     expect(messages.props().url).toBe('/path')
     expect(messages.props().isEditable).toBe(true)
     expect(messages.props().isCompleted).toBe(false)
+  })
+
+  it('renders an AssessmentSummaryScroller', () => {
+    const scroller = render().find(AssessmentSummaryScroller)
+    expect(scroller.props().loadingState).toBe(LoadingState.waiting)
+    expect(scroller.props().canDisplaySummaryOnSave).toBe(true)
+    expect(scroller.props().scrollTarget).toBe(0)
+    expect(scroller.props().targetAdjustment).toBe(15)
+  })
+
+  it('uses the header ref as a scrollTarget for the AssessmentSummaryScroller', () => {
+    const wrapper = render()
+    wrapper.setState({ completeScrollTarget: 1234 })
+    const scroller = wrapper.find(AssessmentSummaryScroller)
+    expect(scroller.props().scrollTarget).toBe(1234)
   })
 
   it('renders an AssessmentPageHeader', () => {
@@ -309,7 +325,24 @@ describe('NewAssessmentContainer', () => {
     const wrapper = render()
     expect(wrapper.find(AssessmentContainerInner).props().isValidForSubmit).toBe(false)
   })
+
+  describe('when not canDisplaySummaryOnSave', () => {
+    let wrapper
+
+    beforeEach(() => {
+      wrapper = render({ assessment: initialAssessment })
+    })
+
+    it('passes false to AssessmentSummaryScroller', () => {
+      expect(wrapper.find(AssessmentSummaryScroller).props().canDisplaySummaryOnSave).toBe(false)
+    })
+
+    it('passes false to AssessmentContainerInner', () => {
+      expect(wrapper.find(AssessmentContainerInner).props().canDisplaySummaryOnSave).toBe(false)
+    })
+  })
 })
 // TODO
-// Scroll behavior
 // Unsaved changes
+// NewRelic
+// Cancel button

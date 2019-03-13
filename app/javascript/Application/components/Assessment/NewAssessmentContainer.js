@@ -12,15 +12,22 @@ import {
 } from './AssessmentHelper'
 import AssessmentPageHeader from './AssessmentPageHeader'
 import AssessmentStatusMessages from './AssessmentStatusMessages'
+import AssessmentSummaryScroller from './AssessmentSummaryScroller'
 import { isAuthorized } from '../common/AuthHelper'
 
 class NewAssessmentContainer extends React.PureComponent {
   constructor(props) {
     super(props)
+    this.assessmentHeader = React.createRef()
     this.state = {
+      completeScrollTarget: 0,
       isEventDateBeforeDob: false,
       isValidDate: true,
     }
+  }
+
+  componentDidUpdate() {
+    this.calculateAssessmentSummaryScrollTarget()
   }
 
   handleSubmitAssessment = () => {
@@ -83,9 +90,18 @@ class NewAssessmentContainer extends React.PureComponent {
     })
   }
 
+  calculateAssessmentSummaryScrollTarget = () => {
+    const element = this.assessmentHeader
+    if (this.state.completeScrollTarget === 0 && element.current) {
+      this.setState({
+        completeScrollTarget: element.current.getBoundingClientRect().bottom,
+      })
+    }
+  }
+
   render() {
     const { assessment, client, i18n, loadingState, pageHeaderButtonsController, url } = this.props
-    const { isEventDateBeforeDob, isValidDate } = this.state
+    const { completeScrollTarget, isEventDateBeforeDob, isValidDate } = this.state
 
     if (assessment === null) {
       return null
@@ -94,9 +110,12 @@ class NewAssessmentContainer extends React.PureComponent {
     const isCompleted = assessment.status === AssessmentStatus.completed
     const isEditable = Boolean(!assessment || !assessment.id || isAuthorized(assessment, 'update'))
     const isValidForSubmit = validateAssessmentForSubmit(assessment)
+    const canDisplaySummaryOnSave = isCompleted || (isEditable && isValidForSubmit)
+
+    const tuner = 15
 
     return (
-      <React.Fragment>
+      <div ref={this.assessmentHeader}>
         <AssessmentStatusMessages
           isCompleted={isCompleted}
           isEditable={isEditable}
@@ -113,9 +132,16 @@ class NewAssessmentContainer extends React.PureComponent {
           onSaveAssessment={this.handleSaveAssessment}
           pageHeaderButtonsController={pageHeaderButtonsController}
         />
+        <AssessmentSummaryScroller
+          canDisplaySummaryOnSave={canDisplaySummaryOnSave}
+          loadingState={loadingState}
+          scrollTarget={completeScrollTarget}
+          targetAdjustment={tuner}
+        />
         <AssessmentContainerInner
           assessment={assessment || defaultEmptyAssessment}
           assessmentServiceStatus={loadingState}
+          canDisplaySummaryOnSave={canDisplaySummaryOnSave}
           client={client}
           i18n={i18n}
           isEditable={isEditable}
@@ -128,7 +154,7 @@ class NewAssessmentContainer extends React.PureComponent {
           onCancelClick={() => {}}
           onEventDateFieldKeyUp={this.handleEventDateFieldKeyUp}
         />
-      </React.Fragment>
+      </div>
     )
   }
 }
