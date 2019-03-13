@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { DataGrid } from '@cwds/components'
+import { DataGrid, Icon } from '@cwds/components'
 import { gridMinRows } from '../../../util/DataGridHelper'
 import {
   CP_TABLE_COL_WIDTHS,
@@ -19,13 +19,21 @@ class ComparisonInnerTable extends React.PureComponent {
   }
 
   itemRatingColsGenerator = () => {
+    const upIcon = <Icon icon="arrow-up" size="sm" className="icon-margin" />
+    const downIcon = <Icon icon="arrow-up" size="sm" rotation={180} className="icon-margin" />
     return this.props.assessmentDates.map((el, index) => {
       return {
         id: `item-assessment-${index}`,
         accessor: item => {
           const itemRatings = item.item_ratings
+          const trendIcon = itemRatings[index].trend
+          const itemSymbolGenerator = trendIcon === 'UP' ? upIcon : '' || trendIcon === 'DOWN' ? downIcon : ''
           const type = item.item_ratings[index].type
-          return itemRatingSwitcher(itemRatings, index, type)
+          return (
+            <span>
+              {itemRatingSwitcher(itemRatings, index, type)} {itemSymbolGenerator}
+            </span>
+          )
         },
         className: 'inner-item-rating',
         headerClassName: 'text-center',

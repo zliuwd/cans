@@ -1,5 +1,5 @@
 import React from 'react'
-import { DataGrid } from '@cwds/components'
+import { DataGrid, Icon } from '@cwds/components'
 import ComparisonInnerTable from './ComparisonInnerTable'
 import { mount } from 'enzyme'
 import { fakeData } from './AssessmentComparison.test.js'
@@ -45,6 +45,22 @@ describe('<ComparisonInnerTable />', () => {
     target(fakeProps.items[0])
     expect(itemRatingSwitcherSpy).toHaveBeenCalledTimes(1)
     itemRatingSwitcherSpy.mockReset()
+  })
+
+  it('Icon will be rendered with correct props', () => {
+    const target = wrapper.find(Icon)
+    expect(
+      target
+        .find(Icon)
+        .at(1)
+        .props().icon
+    ).toBe('arrow-up')
+    expect(
+      target
+        .find(Icon)
+        .at(1)
+        .props().rotation
+    ).toBe(180)
   })
 
   it('getTitle will be invoked by itemNameCol accessor', () => {
