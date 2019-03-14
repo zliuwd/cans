@@ -148,7 +148,7 @@ export default class AssessmentContainer extends Component {
     this.updatePageTitle(assessment)
     this.setState({
       assessment,
-      isReassessmentModalShown: isSubsequentType(assessment.assessment_type),
+      isReassessmentModalShown: this.props.userFeatures.reassessment && isSubsequentType(assessment.assessment_type),
       isEventDateBeforeDob: !validateAssessmentEventDate(this.props.client.dob, assessment.event_date),
       assessmentServiceStatus: LoadingState.ready,
     })
@@ -156,7 +156,7 @@ export default class AssessmentContainer extends Component {
   }
 
   updatePageTitle(assessment) {
-    const isReassessment = isSubsequentType(assessment.assessment_type)
+    const isReassessment = this.props.userFeatures.reassessment && isSubsequentType(assessment.assessment_type)
     const title = isReassessment ? 'CANS Reassessment Form' : 'CANS Assessment Form'
     this.props.pageHeaderController.updateHeaderTitle(title)
   }
@@ -418,6 +418,7 @@ AssessmentContainer.propTypes = {
     updateHeaderButtonsToDefault: PropTypes.func.isRequired,
     updateHeaderTitle: PropTypes.func.isRequired,
   }).isRequired,
+  userFeatures: PropTypes.object.isRequired,
 }
 
 AssessmentContainer.defaultProps = {

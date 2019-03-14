@@ -56,6 +56,7 @@ export const permissions = Object.freeze({
   SUBORDINATES_READ: 'CANS-staff-person-subordinates-read',
   CLIENTS_READ: 'CANS-staff-person-clients-read',
   CLIENT_SEARCH: 'CANS-client-search',
+  REASSESSMENT_CREATE: 'CANS-reassessment-create',
 })
 
 export const dashboards = Object.freeze({

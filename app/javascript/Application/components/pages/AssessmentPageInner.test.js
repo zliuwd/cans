@@ -1,10 +1,11 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import { navigation } from '../../util/constants'
 import AssessmentPageInner from './AssessmentPageInner'
 import { AssessmentContainer } from '../Assessment'
 import ContextualBreadCrumb from '../Layout/BreadCrumb/ContextualBreadCrumb'
 import FullWidthLayout from '../Layout/FullWidthLayout'
+import UserFeaturesContext from '../../util/UserFeaturesContext'
 
 describe('Assessment Page Inner', () => {
   const render = props => shallow(<AssessmentPageInner {...props} />)
@@ -62,10 +63,15 @@ describe('Assessment Page Inner', () => {
     const history = { name: 'fake history object' }
     const staffInfo = { anyKey: 'staff info' }
     const navigateTo = navigation.ASSESSMENT_ADD
+    const props = { client: fakeClient, match, history, navigateTo, staffInfo }
     let wrapper
 
     beforeEach(() => {
-      wrapper = render({ client: fakeClient, match, history, navigateTo, staffInfo })
+      wrapper = mount(
+        <UserFeaturesContext.Provider value={{ reassessment: true }}>
+          <AssessmentPageInner {...props} />
+        </UserFeaturesContext.Provider>
+      )
     })
 
     it('renders a body of AssessmentContainer', () => {
@@ -128,6 +134,11 @@ describe('Assessment Page Inner', () => {
       expect(layout.props().pageTitle).toBe(state.pageTitle)
       expect(layout.props().leftButton).toBe(state.leftButton)
       expect(layout.props().rightButton).toBe(state.rightButton)
+    })
+
+    it('renders UserFeaturesContext.Consumer', () => {
+      const body = render(props).find(FullWidthLayout)
+      expect(body.find(UserFeaturesContext.Consumer).exists()).toBe(true)
     })
   })
 })

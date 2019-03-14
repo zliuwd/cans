@@ -35,6 +35,7 @@ const defaultProps = {
     updateHeaderTitle: () => {},
   },
   client: childInfoJson,
+  userFeatures: {},
 }
 
 describe('<AssessmentContainer />', () => {
@@ -51,6 +52,7 @@ describe('<AssessmentContainer />', () => {
         pageHeaderController: { ...defaultProps.pageHeaderController },
         client: {},
         assessment: {},
+        userFeatures: {},
       }
 
       beforeEach(() => {
@@ -267,6 +269,7 @@ describe('<AssessmentContainer />', () => {
           updateHeaderButtonsToDefault: () => {},
           updateHeaderTitle: () => {},
         },
+        userFeatures: {},
       }
 
       it('calls initializeAssessment', async () => {
@@ -325,6 +328,7 @@ describe('<AssessmentContainer />', () => {
           updateHeaderTitle: () => {},
         },
         client: {},
+        userFeatures: {},
       }
 
       it('calls fetchAssessment', async () => {
@@ -521,6 +525,7 @@ describe('<AssessmentContainer />', () => {
           updateHeaderButtonsToDefault: () => {},
           updateHeaderTitle: () => {},
         },
+        userFeatures: {},
       }
 
       it('should call AssessmentService.postAssessment', () => {
@@ -608,6 +613,7 @@ describe('<AssessmentContainer />', () => {
         history: { push: jest.fn() },
         client: childInfoJson,
         pageHeaderController: { ...defaultProps.pageHeaderController },
+        userFeatures: {},
       }
       const wrapper = shallow(<AssessmentContainer {...props} />)
 
@@ -965,79 +971,112 @@ describe('<AssessmentContainer />', () => {
     })
   })
 
-  describe('reassessment', () => {
-    it('renders a reassessment modal when new assessment is of SUBSEQUENT type', () => {
-      const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
-      expect(wrapper.find('ReassessmentModal').props().isOpen).toBeFalsy()
-      wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
-      expect(wrapper.find('ReassessmentModal').props().isOpen).toBeTruthy()
+  describe('reassessment modal', () => {
+    const buildProps = ({ isReassessmentFeatureActive = true }) => ({
+      ...defaultProps,
+      userFeatures: { reassessment: isReassessmentFeatureActive },
     })
 
-    it('starts an empty reassessment form', () => {
-      const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
-      wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
-      wrapper
-        .find('ReassessmentModal')
-        .props()
-        .startEmpty()
-      expect(wrapper.state().assessment.preceding_assessment_id).toBeNull()
-      expect(wrapper.state().isReassessmentModalShown).toBeFalsy()
+    describe('when reassessment feature is active', () => {
+      it('renders a reassessment modal when new assessment is of SUBSEQUENT type', () => {
+        const wrapper = shallow(<AssessmentContainer {...buildProps({})} />)
+        expect(wrapper.find('ReassessmentModal').props().isOpen).toBeFalsy()
+        wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
+        expect(wrapper.find('ReassessmentModal').props().isOpen).toBeTruthy()
+      })
+
+      it('starts an empty reassessment form', () => {
+        const wrapper = shallow(<AssessmentContainer {...buildProps({})} />)
+        wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
+        wrapper
+          .find('ReassessmentModal')
+          .props()
+          .startEmpty()
+        expect(wrapper.state().assessment.preceding_assessment_id).toBeNull()
+        expect(wrapper.state().isReassessmentModalShown).toBeFalsy()
+      })
+
+      it('starts a reassessment form with preceding assessment data', async () => {
+        const precedingAssessment = { ...assessment, status: 'COMPLETED' }
+        jest.spyOn(AssessmentService, 'fetch').mockReturnValue(Promise.resolve({ ...precedingAssessment }))
+        const wrapper = shallow(<AssessmentContainer {...buildProps({})} />)
+        wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
+        wrapper
+          .find('ReassessmentModal')
+          .props()
+          .fillPrecedingData()
+        expect(wrapper.state().isReassessmentModalShown).toBeFalsy()
+      })
     })
 
-    it('starts a reassessment form with preceding assessment data', async () => {
-      const precedingAssessment = { ...assessment, status: 'COMPLETED' }
-      jest.spyOn(AssessmentService, 'fetch').mockReturnValue(Promise.resolve({ ...precedingAssessment }))
-      const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
-      wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
-      wrapper
-        .find('ReassessmentModal')
-        .props()
-        .fillPrecedingData()
-      expect(wrapper.state().isReassessmentModalShown).toBeFalsy()
+    describe('when reassessment feature is inactive', () => {
+      it("doesn't render a reassessment modal even when new assessment is of SUBSEQUENT type", () => {
+        const wrapper = shallow(<AssessmentContainer {...buildProps({ isReassessmentFeatureActive: false })} />)
+        wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
+        expect(wrapper.find('ReassessmentModal').props().isOpen).toBeFalsy()
+      })
     })
   })
 
   describe('page title', () => {
     let updateHeaderTitleMock
-    let props
-
-    beforeEach(() => {
-      updateHeaderTitleMock = jest.fn()
-      props = {
+    const buildProps = ({ isReassessmentFeatureActive = true }) => {
+      return {
         ...defaultProps,
         pageHeaderController: {
           updateHeaderButtons: () => {},
           updateHeaderButtonsToDefault: () => {},
           updateHeaderTitle: updateHeaderTitleMock,
         },
+        userFeatures: { reassessment: isReassessmentFeatureActive },
       }
+    }
+
+    beforeEach(() => {
+      updateHeaderTitleMock = jest.fn()
     })
 
     describe('with assessment (not reassessment) form', () => {
       it('updates page title when assessment fetched', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
+        const wrapper = shallow(<AssessmentContainer {...buildProps({})} />)
         wrapper.instance().onFetchNewAssessmentSuccess(assessment)
         expect(updateHeaderTitleMock).toHaveBeenCalledWith('CANS Assessment Form')
       })
 
       it('updates page title when loading existent assessment', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
+        const wrapper = shallow(<AssessmentContainer {...buildProps({})} />)
         wrapper.instance().onFetchAssessmentSuccess(assessment)
         expect(updateHeaderTitleMock).toHaveBeenCalledWith('CANS Assessment Form')
       })
     })
 
     describe('with reassessment form', () => {
-      it('updates page title when new reassessment', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
-        expect(updateHeaderTitleMock).toHaveBeenCalledWith('CANS Reassessment Form')
+      describe('when reassessment feature is active', () => {
+        it('updates page title when new reassessment', () => {
+          const wrapper = shallow(<AssessmentContainer {...buildProps({})} />)
+          wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
+          expect(updateHeaderTitleMock).toHaveBeenCalledWith('CANS Reassessment Form')
+        })
+
+        it('updates page title when loading existent reassessment', () => {
+          const wrapper = shallow(<AssessmentContainer {...buildProps({})} />)
+          wrapper.instance().onFetchAssessmentSuccess(subsequentAssessment)
+          expect(updateHeaderTitleMock).toHaveBeenCalledWith('CANS Reassessment Form')
+        })
       })
 
-      it('updates page title when loading existent reassessment', () => {
-        const wrapper = shallow(<AssessmentContainer {...props} />)
-        wrapper.instance().onFetchAssessmentSuccess(subsequentAssessment)
-        expect(updateHeaderTitleMock).toHaveBeenCalledWith('CANS Reassessment Form')
+      describe('when reassessment feature is inactive', () => {
+        it('updates page title when new reassessment', () => {
+          const wrapper = shallow(<AssessmentContainer {...buildProps({ isReassessmentFeatureActive: false })} />)
+          wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
+          expect(updateHeaderTitleMock).toHaveBeenCalledWith('CANS Assessment Form')
+        })
+
+        it('updates page title when loading existent reassessment', () => {
+          const wrapper = shallow(<AssessmentContainer {...buildProps({ isReassessmentFeatureActive: false })} />)
+          wrapper.instance().onFetchAssessmentSuccess(subsequentAssessment)
+          expect(updateHeaderTitleMock).toHaveBeenCalledWith('CANS Assessment Form')
+        })
       })
     })
   })

@@ -3,17 +3,29 @@ import { shallow } from 'enzyme'
 import App from './App'
 import { Routes } from './routes'
 import TimeoutWarning from './components/common/TimeoutWarning'
+import CurrentUserLoadingBoundary from './components/common/CurrentUserLoadingBoundary'
+import UserFeatures from './util/UserFeatures'
 
 describe('<App />', () => {
   const getWrapper = () => shallow(<App />)
-  const getLength = component => getWrapper().find(component).length
+  const exists = component =>
+    getWrapper()
+      .find(component)
+      .exists()
+
+  it('renders with <CurrentUserLoadingBoundary /> component', () => {
+    expect(exists(CurrentUserLoadingBoundary)).toBeTruthy()
+  })
+
+  it('renders with <UserFeatures /> component', () => {
+    expect(exists(UserFeatures)).toBeTruthy()
+  })
 
   it('renders with <TimeoutWarning /> component', () => {
-    expect(getLength(TimeoutWarning)).toBe(1)
+    expect(exists(TimeoutWarning)).toBeTruthy()
   })
 
   it('renders with <Routes /> component', () => {
-    const wrapper = getWrapper()
-    expect(wrapper.find(Routes).length).toBe(1)
+    expect(exists(Routes)).toBeTruthy()
   })
 })

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import ContextualBreadCrumb from '../Layout/BreadCrumb/ContextualBreadCrumb'
 import { AssessmentContainer } from '../Assessment'
 import FullWidthLayout from '../Layout/FullWidthLayout'
+import UserFeaturesContext from '../../util/UserFeaturesContext'
 
 class AssessmentPageInner extends React.Component {
   constructor() {
@@ -35,12 +36,17 @@ class AssessmentPageInner extends React.Component {
     return (
       <FullWidthLayout breadcrumb={breadcrumb} pageTitle={pageTitle} leftButton={leftButton} rightButton={rightButton}>
         {client && (
-          <AssessmentContainer
-            client={client}
-            history={history}
-            match={match}
-            pageHeaderController={pageHeaderController}
-          />
+          <UserFeaturesContext.Consumer>
+            {userFeatures => (
+              <AssessmentContainer
+                client={client}
+                history={history}
+                match={match}
+                pageHeaderController={pageHeaderController}
+                userFeatures={userFeatures}
+              />
+            )}
+          </UserFeaturesContext.Consumer>
         )}
       </FullWidthLayout>
     )
