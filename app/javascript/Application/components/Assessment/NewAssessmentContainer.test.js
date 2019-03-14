@@ -21,6 +21,7 @@ describe('NewAssessmentContainer', () => {
   const render = ({
     assessment = mockAssessment,
     client = { dob: '2018-01-01' },
+    onResetAssessment = () => {},
     onSaveAssessment = () => {},
     onSetAssessment = () => {},
   } = {}) =>
@@ -29,6 +30,7 @@ describe('NewAssessmentContainer', () => {
         assessment={assessment}
         client={client}
         i18n={{}}
+        onResetAssessment={onResetAssessment}
         onSaveAssessment={onSaveAssessment}
         onSetAssessment={onSetAssessment}
         pageHeaderButtonsController={fakeController}
@@ -70,6 +72,7 @@ describe('NewAssessmentContainer', () => {
     const header = render().find(AssessmentPageHeader)
     expect(header.exists()).toBe(true)
     expect(header.props().pageHeaderButtonsController).toBe(fakeController)
+    expect(header.props().isDirty).toBe(false)
   })
 
   it('renders an AssessmentContainerInner', () => {
@@ -113,6 +116,19 @@ describe('NewAssessmentContainer', () => {
       ...mockAssessment,
       person: client,
     })
+  })
+
+  it('calls onResetAssessment when the page header requests it', () => {
+    const onResetAssessment = jest.fn()
+    const wrapper = render({ onResetAssessment })
+
+    wrapper
+      .find(AssessmentPageHeader)
+      .props()
+      .onResetAssessment()
+
+    expect(onResetAssessment).toHaveBeenCalledTimes(1)
+    expect(onResetAssessment).toHaveBeenCalledWith()
   })
 
   it('removes a single caregiver onCaregiverRemove', () => {

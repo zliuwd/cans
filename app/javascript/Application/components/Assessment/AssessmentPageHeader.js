@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { PrintAssessment } from '../Print'
+import UnsavedDataWarning from '../common/UnsavedDataWarning'
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
 import { handlePrintButtonEnabled } from './AssessmentHelper'
@@ -51,24 +52,46 @@ class AssessmentPageHeader extends React.PureComponent {
     )
   }
 
+  onSaveAndContinue = async () => {
+    this.props.onSaveAssessment()
+  }
+
+  onDiscardAndContinue = async () => {
+    this.props.onResetAssessment()
+  }
+
   render() {
-    // This component entirely operates through the pageHeaderButtonsController callbacks
-    return null
+    const {
+      isDirty,
+      assessment: { id },
+    } = this.props
+    return (
+      <UnsavedDataWarning
+        discardAndContinue={this.onDiscardAndContinue}
+        isUnsaved={isDirty}
+        saveAndContinue={this.onSaveAndContinue}
+        isSavable={this.isSaveable()}
+        assessmentId={id}
+      />
+    )
   }
 }
 
 AssessmentPageHeader.propTypes = {
   assessment: PropTypes.shape({
+    event_date: PropTypes.string,
+    id: PropTypes.number,
     state: PropTypes.shape({
       under_six: PropTypes.bool,
     }).isRequired,
-    event_date: PropTypes.string,
   }).isRequired,
   i18n: PropTypes.any.isRequired,
+  isDirty: PropTypes.bool.isRequired,
   isEditable: PropTypes.bool.isRequired,
   isEventDateBeforeDob: PropTypes.bool.isRequired,
   isValidDate: PropTypes.bool.isRequired,
   loadingState: PropTypes.oneOf(Object.values(LoadingState)).isRequired,
+  onResetAssessment: PropTypes.func.isRequired,
   onSaveAssessment: PropTypes.func.isRequired,
   pageHeaderButtonsController: PropTypes.shape({
     updateHeaderButtons: PropTypes.func.isRequired,

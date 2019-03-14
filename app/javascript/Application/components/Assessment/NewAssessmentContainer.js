@@ -101,7 +101,16 @@ class NewAssessmentContainer extends React.PureComponent {
   }
 
   render() {
-    const { assessment, client, i18n, loadingState, pageHeaderButtonsController, url } = this.props
+    const {
+      assessment,
+      client,
+      i18n,
+      isDirty,
+      loadingState,
+      onResetAssessment,
+      pageHeaderButtonsController,
+      url,
+    } = this.props
     const { completeScrollTarget, isEventDateBeforeDob, isValidDate } = this.state
 
     if (assessment === null) {
@@ -127,10 +136,12 @@ class NewAssessmentContainer extends React.PureComponent {
         <AssessmentPageHeader
           assessment={assessment}
           i18n={i18n}
+          isDirty={isDirty}
           isEditable={isEditable}
           isEventDateBeforeDob={isEventDateBeforeDob}
           isValidDate={isValidDate}
           loadingState={loadingState}
+          onResetAssessment={onResetAssessment}
           onSaveAssessment={this.handleSaveAssessment}
           pageHeaderButtonsController={pageHeaderButtonsController}
         />
@@ -180,6 +191,7 @@ NewAssessmentContainer.propTypes = {
     dob: PropTypes.string.isRequired,
   }).isRequired,
   i18n: PropTypes.any,
+  isDirty: PropTypes.bool,
   loadingState: PropTypes.oneOf(Object.values(LoadingState)),
   onResetAssessment: PropTypes.func,
   onSaveAssessment: PropTypes.func,
@@ -193,6 +205,7 @@ NewAssessmentContainer.propTypes = {
 NewAssessmentContainer.defaultProps = {
   assessment: null,
   i18n: null,
+  isDirty: false,
   loadingState: LoadingState.waiting,
   onResetAssessment: () => {},
   onSaveAssessment: () => {},
