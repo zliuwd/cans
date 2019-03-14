@@ -1,5 +1,5 @@
 import { createBrowserHistory } from 'history'
-import { basePath } from '../../util/common'
+import { basePath, getPageRoute } from '../../util/common'
 
 class PageLockService {
   // creates react history, sets page unloading confirmation
@@ -11,14 +11,20 @@ class PageLockService {
       getUserConfirmation: (message, allowed) => {
         this.confirm(() => {
           allowed(true)
+          if (this.newPath) {
+            this.history.push(this.newPath)
+          }
         })
       },
     })
     this.unlock = this.unlock.bind(this)
     this.confirm = this.confirm.bind(this)
+    this.cancel = this.cancel.bind(this)
     this.onBeforeUnload = this.onBeforeUnload.bind(this)
+    this.onPopState = this.onPopState.bind(this)
     this.lock = this.lock.bind(this)
     window.addEventListener('beforeunload', this.onBeforeUnload)
+    window.addEventListener('popstate', this.onPopState)
   }
 
   // locks page
@@ -29,7 +35,9 @@ class PageLockService {
       this.pageLock = {
         unblock: this.history.block(''),
         tryAction,
+        pageUrl: document.location.pathname,
       }
+      this.newPath = undefined
     }
   }
 
@@ -44,6 +52,11 @@ class PageLockService {
     }
   }
 
+  // cancels transition
+  cancel() {
+    this.newPath = undefined
+  }
+
   // MUST be called before page component will unmount
   unlock() {
     if (this.pageLock) {
@@ -52,14 +65,23 @@ class PageLockService {
     }
   }
 
-  // processesses browser events
-  // according to HTML specification those events can not be overriden!!!)
+  // processes browser events
+  // according to HTML specification those events can not be overridden!!!
   onBeforeUnload(e) {
     if (this.pageLock) {
       e.preventDefault()
       return (e.returnValue = '')
     }
     return e.returnValue
+  }
+
+  onPopState(e) {
+    if (this.pageLock) {
+      // postpone history change
+      this.newPath = getPageRoute()
+      // rollback history change
+      window.history.pushState({}, null, this.pageLock.pageUrl)
+    }
   }
 }
 

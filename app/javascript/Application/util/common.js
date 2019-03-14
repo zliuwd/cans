@@ -43,3 +43,6 @@ export const isSafari =
 export const isIE = /*@cc_on!@*/ false || Boolean(document.documentMode)
 /* eslint-enable spaced-comment */
 export const basePath = process.env.CANS_BASE_PATH || '/cans'
+export const getPageRoute = () => {
+  return basePath === '/' ? document.location.pathname : document.location.pathname.substring(basePath.length)
+}

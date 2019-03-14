@@ -75,6 +75,8 @@ feature 'Case Worker Functionality' do
     click_complete_button_then_summary_card_shown
     verify_the_tool_tip_of_summary_card
     verify_the_content_of_summary_card('6to21')
+    go_back
+    validate_unsaved_warning_closed
   end
 
   scenario 'Case worker attempts to access changelog from assessment' do
@@ -132,6 +134,41 @@ feature 'Case Worker Functionality' do
     print_assessment
     unsaved_warning_close
     expect(@form.header.conducted_by.value).to eq(CONDUCTED_BY)
+  end
+
+  scenario 'Case worker uses "back"/"forward" buttons on saved/unsaved assessment' do
+    CONDUCTED_BY = 'Test Name'
+    visit '/'
+    @assessment_helper.start_assessment_for CLIENT_NAME
+    click_0_to_5_button
+    fill_conducted_by_field(CONDUCTED_BY)
+    save_and_check_the_success_message
+    @form.breadcrumbs.route_from_breadcrumbs(CLIENT_NAME)
+    @client_profile.go_to_recently_updated_assessment(current_date)
+    fill_conducted_by_field('1')
+    go_back
+    unsaved_warning_close
+    expect(@form.header.conducted_by.value).to eq('1')
+    go_back
+    unsaved_warning_save_and_continue
+    expect(@client_profile).to have_client_information_title
+    @client_profile.go_to_recently_updated_assessment(current_date)
+    fill_conducted_by_field('2')
+    go_back
+    unsaved_warning_discard_and_continue
+    expect(@client_profile).to have_client_information_title
+    @client_profile.go_to_recently_updated_assessment(current_date)
+    @form.footer.change_log_link.click
+    go_back
+    fill_conducted_by_field('3')
+    go_forward
+    unsaved_warning_close
+    expect(@form.header.conducted_by.value).to eq('3')
+    save_and_check_the_success_message
+    @form.breadcrumbs.route_from_breadcrumbs(CLIENT_NAME)
+    @client_profile.go_to_recently_updated_assessment(current_date)
+    go_back
+    expect(@client_profile).to have_client_information_title
   end
 
   def validate_child_dob_and_age(dob)
@@ -565,5 +602,13 @@ feature 'Case Worker Functionality' do
 
   def visit_assessment_page_from_changelog(assessment_link)
     @form.breadcrumbs.route_from_breadcrumbs(assessment_link)
+  end
+
+  def go_back
+    page.evaluate_script('window.history.back()')
+  end
+
+  def go_forward
+    page.evaluate_script('window.history.forward()')
   end
 end

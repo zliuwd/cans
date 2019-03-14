@@ -1,4 +1,4 @@
-import { clone, isEmpty, stringify } from './common'
+import { clone, isEmpty, stringify, getPageRoute } from './common'
 
 describe('common', () => {
   describe('#clone()', () => {
@@ -61,6 +61,12 @@ describe('common', () => {
 
     it('should return false when input is valid String', () => {
       expect(isEmpty('2010-10-10')).toEqual(false)
+    })
+  })
+
+  describe('#getPagePath()', () => {
+    it('should return full pathname if base path is "/"', () => {
+      expect(getPageRoute()).toEqual(window.document.location.pathname)
     })
   })
 })

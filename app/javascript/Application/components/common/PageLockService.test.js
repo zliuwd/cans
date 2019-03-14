@@ -1,4 +1,5 @@
 import pageLockService from './PageLockService'
+import { getPageRoute } from '../../util/common'
 
 describe('PageLockService', () => {
   let tryAction
@@ -56,5 +57,13 @@ describe('PageLockService', () => {
     pageLockService.onBeforeUnload(event)
     expect(event.preventDefault).not.toHaveBeenCalled()
     expect(event.returnValue).not.toBe('')
+  })
+
+  it('postpones history change', () => {
+    window.history.pushState = jest.fn()
+    pageLockService.lock(tryAction)
+    pageLockService.onPopState()
+    expect(window.history.pushState).toHaveBeenCalledWith({}, null, pageLockService.pageLock.pageUrl)
+    expect(pageLockService.newPath).toBe(getPageRoute())
   })
 })

@@ -36,6 +36,7 @@ class UnsavedDataWarning extends Component {
   }
 
   close() {
+    pageLockService.cancel()
     if (this.mounted) {
       this.setState({ isOpened: false, action: undefined })
     }

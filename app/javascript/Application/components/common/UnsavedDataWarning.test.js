@@ -81,13 +81,16 @@ describe('<UnsavedDataWarning />', () => {
   })
 
   describe('unsaved data warning buttons', () => {
-    it('"Cancel" button does close warning', () => {
+    it('"Cancel" button does close warning and cancels transition', () => {
+      const cancel = jest.spyOn(pageLockService, 'cancel')
       const wrapper = openWarning()
+      pageLockService.onPopState()
       wrapper
         .find(Button)
         .at(0)
         .simulate('click')
       expect(wrapper.instance().state.isOpened).toBeFalsy()
+      expect(cancel).toHaveBeenCalledTimes(1)
     })
 
     it('"Save" button does call saveAndContinue and closes modal', () => {
