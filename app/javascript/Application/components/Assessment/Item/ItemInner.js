@@ -48,7 +48,7 @@ const ItemInner = props => {
   return (
     <div>
       <Paper>
-        <Toolbar style={{ justifyContent: 'left' }}>
+        <Toolbar className="item-inner-toolbar">
           <ItemHeader {...itemHeaderProps} />
           <ItemToolbarControls {...toolbarControlsProps} {...sharingProps} />
         </Toolbar>

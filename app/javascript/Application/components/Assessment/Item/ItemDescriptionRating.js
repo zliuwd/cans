@@ -54,6 +54,7 @@ class ItemDescriptionRating extends PureComponent {
                     value={stringify(i)}
                     key={label}
                     id={`input-${code}-${i}-select`}
+                    className="item-rating-desc-label"
                     control={
                       <Radio
                         value={stringify(i)}

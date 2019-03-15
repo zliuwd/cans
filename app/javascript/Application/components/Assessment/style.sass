@@ -216,6 +216,13 @@ $item-confidential-label-height: 6.05rem
   $reg-rating-width: 7.8125rem !global
   width: $reg-rating-width
 
+
+.item-bool-rating, .item-reg-rating, .item-rating-desc-label
+  svg
+    background-color: $white
+    border-radius: 50%
+
+
 .reg-rating-domain-comment-accordion-comment-icon
  margin-right: $toolbar-comment-icon-right-margin + $confidential-checkbox-width + $confidential-checkbox-right-margin + $reg-rating-width
 
@@ -293,9 +300,11 @@ $item-confidential-label-height: 6.05rem
 .domain-comment-header
   justify-content: left
   height: 4.0625rem
+  background-color: $light-blue-shade
 .domain-comment-accordion-paper
   box-shadow: none
   padding: .625rem 1.875rem
+  background-color: $light-blue-shade
 
 .domain-comment-wrapper
   display: flex

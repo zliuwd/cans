@@ -25,7 +25,7 @@ const ItemDescription = props => {
     itemBottomCollapseClick,
   } = props
   return (
-    <Paper style={{ padding: '1rem 3rem' }}>
+    <Paper className="item-description-paper">
       <Typography variant="subheading">Item Description:</Typography>
       <Typography variant="body2">{description}</Typography>
       {qtcDescriptions.length > 0 ? <ItemQtcDescriptions qtcDescriptions={qtcDescriptions} /> : null}
