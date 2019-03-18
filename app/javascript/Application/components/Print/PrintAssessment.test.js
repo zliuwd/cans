@@ -9,8 +9,11 @@ import {
 } from '../Assessment/assessment.mocks.test'
 
 describe('<PrintAssessment />', () => {
+  const substanceUseItemsIds = { underSix: ['41'], aboveSix: ['8', '48'] }
   it('should match fixture as plain html', () => {
-    const printAssessment = shallow(<PrintAssessment assessment={assessmentPrint} i18n={i18nPrint} />)
+    const printAssessment = shallow(
+      <PrintAssessment assessment={assessmentPrint} i18n={i18nPrint} substanceUseItemsIds={substanceUseItemsIds} />
+    )
     const actualHtmlRaw = printAssessment.html()
     const actualHtml = actualHtmlRaw.replace(
       /<span style="text-align:right;font-style:italic">[^>]+<\/span>/g,
@@ -20,7 +23,13 @@ describe('<PrintAssessment />', () => {
   })
 
   it('should render confidential item and redact comment and rating when confidential by default and confidential is true', () => {
-    const printConfidential = shallow(<PrintAssessment assessment={assessmentWithConfidentialItem} i18n={i18nPrint} />)
+    const printConfidential = shallow(
+      <PrintAssessment
+        assessment={assessmentWithConfidentialItem}
+        i18n={i18nPrint}
+        substanceUseItemsIds={substanceUseItemsIds}
+      />
+    )
     const printConfidentialHtml = printConfidential.html()
     expect(printConfidentialHtml).toContain('Confidential')
     expect(printConfidentialHtml).toContain('<div style="width:7.6rem"></div>') // Redacted rating
@@ -28,7 +37,13 @@ describe('<PrintAssessment />', () => {
   })
 
   it('should redact domain comment when it contains at least one item with confidential by default and confidential is true', () => {
-    const printConfidential = shallow(<PrintAssessment assessment={assessmentWithConfidentialItem} i18n={i18nPrint} />)
+    const printConfidential = shallow(
+      <PrintAssessment
+        assessment={assessmentWithConfidentialItem}
+        i18n={i18nPrint}
+        substanceUseItemsIds={substanceUseItemsIds}
+      />
+    )
     const printConfidentialHtml = printConfidential.html()
     expect(printConfidentialHtml).not.toContain('This domain comment is not supposed to be printed')
   })
@@ -36,12 +51,18 @@ describe('<PrintAssessment />', () => {
   it('should not crash if the assessment has no county', () => {
     const assessment = { ...assessmentPrint, county: undefined }
     expect(() => {
-      shallow(<PrintAssessment assessment={assessment} i18n={i18nPrint} />)
+      shallow(<PrintAssessment assessment={assessment} i18n={i18nPrint} substanceUseItemsIds={substanceUseItemsIds} />)
     }).not.toThrow()
   })
 
   it("renders 'Confidential' for domain total score if atleast one item with confidential by default or confidential is true", () => {
-    const printConfidential = shallow(<PrintAssessment assessment={assessmentWithConfidentialItem} i18n={i18nPrint} />)
+    const printConfidential = shallow(
+      <PrintAssessment
+        assessment={assessmentWithConfidentialItem}
+        i18n={i18nPrint}
+        substanceUseItemsIds={substanceUseItemsIds}
+      />
+    )
     const printConfidentialHtml = printConfidential.html()
     expect(printConfidentialHtml).toContain('Confidential')
   })

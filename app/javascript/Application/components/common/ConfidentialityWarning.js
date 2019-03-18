@@ -12,8 +12,8 @@ export class ConfidentialityWarning extends PureComponent {
     )
     const onCompleteDescription = (
       <div style={{ lineHeight: '3rem' }}>
-        In doing so items <strong>8, 48 and EC 41</strong> in this CANS assessment{' '}
-        <strong className="cargiver-text-block">will be redacted </strong> when printed.
+        In doing so items <strong>{this.props.substanceUseItemsIds.aboveSix[0]}, 48 and EC 41</strong> in this CANS
+        assessment <strong className="cargiver-text-block">will be redacted </strong> when printed.
       </div>
     )
     return (
@@ -34,6 +34,10 @@ export class ConfidentialityWarning extends PureComponent {
 ConfidentialityWarning.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onNextStep: PropTypes.func.isRequired,
+  substanceUseItemsIds: PropTypes.shape({
+    underSix: PropTypes.array.isRequired,
+    aboveSix: PropTypes.array.isRequired,
+  }).isRequired,
 }
 
 export default ConfidentialityWarning

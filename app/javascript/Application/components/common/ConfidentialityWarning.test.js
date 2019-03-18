@@ -11,6 +11,7 @@ describe('<ConfidentialityWarning />', () => {
     title: 'Warning',
     warningDescription: 'test warning description',
     cancelButtonLabel: 'Cancel',
+    substanceUseItemsIds: { underSix: ['41'], aboveSix: ['8', '48'] },
   }
 
   describe('PageModal presence trigger', () => {

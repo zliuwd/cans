@@ -10,8 +10,18 @@ import { Card, CardBody, CardHeader, CardTitle } from '@cwds/components'
 import moment from 'moment'
 
 describe('<AssessmentFormHeader />', () => {
-  const defaultProps = { assessment, client, onAssessmentUpdate: jest.fn() }
-  const propsWithEstimatedDob = { assessment, client: clientWithEstimatedDob, onAssessmentUpdate: jest.fn() }
+  const defaultProps = {
+    assessment,
+    client,
+    onAssessmentUpdate: jest.fn(),
+    substanceUseItemsIds: { underSix: ['41'], aboveSix: ['8', '48'] },
+  }
+  const propsWithEstimatedDob = {
+    assessment,
+    client: clientWithEstimatedDob,
+    onAssessmentUpdate: jest.fn(),
+    substanceUseItemsIds: { underSix: ['41'], aboveSix: ['8', '48'] },
+  }
 
   it('renders with 1 <ConductedByField> component', () => {
     const wrapper = shallow(<AssessmentFormHeader {...defaultProps} />)
@@ -24,7 +34,12 @@ describe('<AssessmentFormHeader />', () => {
       state: { ...assessment.state, under_six: undefined },
     }
     const wrapper = shallow(
-      <AssessmentFormHeader assessment={agelessAssessment} client={client} onAssessmentUpdate={jest.fn()} />
+      <AssessmentFormHeader
+        assessment={agelessAssessment}
+        client={client}
+        onAssessmentUpdate={jest.fn()}
+        substanceUseItemsIds={defaultProps.substanceUseItemsIds}
+      />
     )
     expect(wrapper.find(AgeRangeSwitch).props().isUnderSix).toBe(null)
   })
@@ -35,7 +50,12 @@ describe('<AssessmentFormHeader />', () => {
       state: { ...assessment.state, under_six: true },
     }
     const wrapper = shallow(
-      <AssessmentFormHeader assessment={underSixAssessment} client={client} onAssessmentUpdate={jest.fn()} />
+      <AssessmentFormHeader
+        assessment={underSixAssessment}
+        client={client}
+        onAssessmentUpdate={jest.fn()}
+        substanceUseItemsIds={defaultProps.substanceUseItemsIds}
+      />
     )
     expect(wrapper.find(AgeRangeSwitch).props().isUnderSix).toBe(true)
   })
@@ -52,6 +72,7 @@ describe('<AssessmentFormHeader />', () => {
         client,
         onAssessmentUpdate: jest.fn(),
         onEventDateFieldKeyUp: jest.fn(),
+        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
       }
       const caseWrapper = shallow(<AssessmentFormHeader {...props} />)
       const caseNumber = caseWrapper.find('#case-or-referral-number')
@@ -71,6 +92,7 @@ describe('<AssessmentFormHeader />', () => {
         client,
         onAssessmentUpdate: jest.fn(),
         onEventDateFieldKeyUp: jest.fn(),
+        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
       }
       const referralWrapper = shallow(<AssessmentFormHeader {...props} />)
       const referralNumber = referralWrapper.find('#case-or-referral-number')
@@ -85,6 +107,7 @@ describe('<AssessmentFormHeader />', () => {
         client,
         onAssessmentUpdate: jest.fn(),
         onEventDateFieldKeyUp: jest.fn(),
+        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
       }
       const caseReferralWrapper = shallow(<AssessmentFormHeader {...props} />)
       const caseNumber = caseReferralWrapper.find('#case-or-referral-number')
@@ -141,7 +164,12 @@ describe('<AssessmentFormHeader />', () => {
     it('will update event_date in assessment', () => {
       // given
       const mockFn = jest.fn()
-      const props = { assessment, client, onAssessmentUpdate: mockFn }
+      const props = {
+        assessment,
+        client,
+        onAssessmentUpdate: mockFn,
+        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+      }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(assessment.event_date).toBe('2018-06-11')
       // when
@@ -164,6 +192,7 @@ describe('<AssessmentFormHeader />', () => {
         assessment: sentAssessment,
         client,
         onAssessmentUpdate: mockFn,
+        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
       }
       const hasCaregiverQuestion = shallow(<AssessmentFormHeader {...props} />).find('HasCaregiverQuestion')
 
@@ -186,6 +215,7 @@ describe('<AssessmentFormHeader />', () => {
         assessment: sentAssessment,
         client,
         onAssessmentUpdate: mockFn,
+        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
       }
       const hasCaregiverQuestion = shallow(<AssessmentFormHeader {...props} />).find('HasCaregiverQuestion')
 
@@ -208,6 +238,7 @@ describe('<AssessmentFormHeader />', () => {
         assessment: sentAssessment,
         client,
         onAssessmentUpdate: mockFn,
+        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
       }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(sentAssessment.state.domains[0].items[3].confidential).toBe(false)
@@ -244,6 +275,7 @@ describe('<AssessmentFormHeader />', () => {
         client,
         onAssessmentUpdate: assessmentUpdateMockFn,
         expandCollapse: expandCollapseMockFn,
+        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
       }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(assessment.state.under_six).toBe(false)
@@ -295,7 +327,12 @@ describe('<AssessmentFormHeader />', () => {
   })
 
   describe('with no client', () => {
-    const props = { assessment, client: {}, onAssessmentUpdate: jest.fn() }
+    const props = {
+      assessment,
+      client: {},
+      onAssessmentUpdate: jest.fn(),
+      substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+    }
     const headerTitle = shallow(<AssessmentFormHeader {...props} />)
       .find(CardTitle)
       .dive()
@@ -327,6 +364,7 @@ describe('<AssessmentFormHeader />', () => {
       assessment: sentAssessment,
       client,
       onAssessmentUpdate: jest.fn(),
+      substanceUseItemsIds: defaultProps.substanceUseItemsIds,
     }
 
     const wrapper = shallow(<AssessmentFormHeader {...props} />)
@@ -338,7 +376,12 @@ describe('<AssessmentFormHeader />', () => {
   describe('Assessment Conducted by', () => {
     const mockFn = jest.fn()
     it('renders input', () => {
-      const props = { assessment, client, onAssessmentUpdate: mockFn }
+      const props = {
+        assessment,
+        client,
+        onAssessmentUpdate: mockFn,
+        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+      }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(wrapper.find('#conducted-by').length).toBe(1)
     })
@@ -350,6 +393,7 @@ describe('<AssessmentFormHeader />', () => {
         assessment: completedAssessment,
         client,
         onAssessmentUpdate: mockFn,
+        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
       }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(wrapper.find('#conducted-by').prop('disabled')).toBeTruthy()
@@ -358,7 +402,12 @@ describe('<AssessmentFormHeader />', () => {
     describe('#handleConductedByChange', () => {
       it('calls onAssessmentUpdate when conducted_by is changed', () => {
         const conductedByValue = 'NAME'
-        const props = { assessment, client, onAssessmentUpdate: mockFn }
+        const props = {
+          assessment,
+          client,
+          onAssessmentUpdate: mockFn,
+          substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+        }
         const wrapper = shallow(<AssessmentFormHeader {...props} />)
         const event = {
           target: { name: 'conducted_by', value: conductedByValue },

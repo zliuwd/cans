@@ -3,9 +3,16 @@ import { shallow } from 'enzyme'
 import ConfidentialityAlert from './ConfidentialityAlert'
 
 describe('<ConfidentialityAlert />', () => {
+  const substanceUseItemsIds = { underSix: ['41'], aboveSix: ['8', '48'] }
   describe("when can't release information", () => {
     it('renders a warning text for 0-5 age group', () => {
-      const wrapper = shallow(<ConfidentialityAlert canReleaseInformation={false} isUnderSix={true} />)
+      const wrapper = shallow(
+        <ConfidentialityAlert
+          canReleaseInformation={false}
+          isUnderSix={true}
+          substanceUseItemsIds={substanceUseItemsIds}
+        />
+      )
       const alert = wrapper.find('.warning-text')
       expect(alert.exists()).toBe(true)
       expect(alert.text()).toMatch(
@@ -14,7 +21,13 @@ describe('<ConfidentialityAlert />', () => {
     })
 
     it('renders a warning text for 6-21 age group', () => {
-      const wrapper = shallow(<ConfidentialityAlert canReleaseInformation={false} isUnderSix={false} />)
+      const wrapper = shallow(
+        <ConfidentialityAlert
+          canReleaseInformation={false}
+          isUnderSix={false}
+          substanceUseItemsIds={substanceUseItemsIds}
+        />
+      )
       const alert = wrapper.find('.warning-text')
       expect(alert.exists()).toBe(true)
       expect(alert.text()).toMatch(
@@ -23,13 +36,21 @@ describe('<ConfidentialityAlert />', () => {
     })
 
     it("doesn't render a warning text when age group is not selected", () => {
-      const wrapper = shallow(<ConfidentialityAlert canReleaseInformation={false} isUnderSix={null} />)
+      const wrapper = shallow(
+        <ConfidentialityAlert
+          canReleaseInformation={false}
+          isUnderSix={null}
+          substanceUseItemsIds={substanceUseItemsIds}
+        />
+      )
       expect(wrapper.type()).toBe(null)
     })
   })
 
   it('renders no warning when canReleaseInformation is true', () => {
-    const wrapper = shallow(<ConfidentialityAlert canReleaseInformation={true} />)
+    const wrapper = shallow(
+      <ConfidentialityAlert canReleaseInformation={true} substanceUseItemsIds={substanceUseItemsIds} />
+    )
     expect(wrapper.type()).toBe(null)
   })
 })

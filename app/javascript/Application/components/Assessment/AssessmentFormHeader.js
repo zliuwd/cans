@@ -280,6 +280,7 @@ class AssessmentFormHeader extends PureComponent {
             <ConfidentialityAlert
               canReleaseInformation={Boolean(this.props.assessment.can_release_confidential_info)}
               isUnderSix={this.props.assessment.state.under_six}
+              substanceUseItemsIds={this.props.substanceUseItemsIds}
             />
           </Col>
         </Row>
@@ -312,6 +313,10 @@ AssessmentFormHeader.propTypes = {
   isEventDateBeforeDob: PropTypes.bool,
   onAssessmentUpdate: PropTypes.func.isRequired,
   onEventDateFieldKeyUp: PropTypes.func,
+  substanceUseItemsIds: PropTypes.shape({
+    underSix: PropTypes.array.isRequired,
+    aboveSix: PropTypes.array.isRequired,
+  }).isRequired,
 }
 
 export default AssessmentFormHeader

@@ -44,7 +44,7 @@ class AssessmentContainerInner extends Component {
   }
 
   displayModalWarning() {
-    const { handleCaregiverRemove, handleSubmitAssessment } = this.props
+    const { handleCaregiverRemove, handleSubmitAssessment, substanceUseItemsIds } = this.props
     return (
       <Fragment>
         <RenderWarning
@@ -57,6 +57,7 @@ class AssessmentContainerInner extends Component {
           isSubmitWarningShown={this.state.isSubmitWarningShown}
           handleSubmitWarning={this.handleSubmitWarning}
           handleSubmitAssessment={handleSubmitAssessment}
+          substanceUseItemsIds={substanceUseItemsIds}
         />
       </Fragment>
     )
@@ -72,6 +73,7 @@ class AssessmentContainerInner extends Component {
       canDisplaySummaryOnSave,
       i18n,
       isEditable,
+      substanceUseItemsIds,
     } = this.props
     const isUnderSix = assessment && assessment.state && assessment.state.under_six
     const isDefaultExpanded = this.state.isDefaultExpanded
@@ -88,6 +90,7 @@ class AssessmentContainerInner extends Component {
             disabled={!isEditable}
             isEventDateBeforeDob={isEventDateBeforeDob}
             expandCollapse={this.handleExpandAllDomains}
+            substanceUseItemsIds={substanceUseItemsIds}
           />
         </div>
         <AssessmentSummaryCard
@@ -170,6 +173,10 @@ AssessmentContainerInner.propTypes = {
   onAssessmentUpdate: PropTypes.func.isRequired,
   onCancelClick: PropTypes.func.isRequired,
   onEventDateFieldKeyUp: PropTypes.func.isRequired,
+  substanceUseItemsIds: PropTypes.shape({
+    underSix: PropTypes.array.isRequired,
+    aboveSix: PropTypes.array.isRequired,
+  }).isRequired,
 }
 
 AssessmentContainerInner.defaultProps = {

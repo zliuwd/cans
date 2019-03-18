@@ -14,6 +14,7 @@ import {
   sortAssessments,
   statusTextOfHistory,
   handlePrintButtonEnabled,
+  getSubstanceUseItemsIds,
   isSubsequentType,
   AssessmentType,
   preparePrecedingAssessment,
@@ -144,6 +145,30 @@ const validAssessment = {
       },
     ],
   },
+}
+
+const substanceUseItem8 = {
+  under_six_id: '',
+  above_six_id: '8',
+  code: 'SUBSTANCE_USE',
+  required: true,
+  confidential: true,
+  confidential_by_default: true,
+  rating_type: 'REGULAR',
+  has_na_option: false,
+  rating: -1,
+}
+
+const substanceUseItem48 = {
+  under_six_id: 'EC41',
+  above_six_id: '48',
+  code: 'SUBSTANCE_USE_CAREGIVER',
+  required: true,
+  confidential: true,
+  confidential_by_default: true,
+  rating_type: 'REGULAR',
+  has_na_option: false,
+  rating: -1,
 }
 
 describe('AssessmentHelper', () => {
@@ -487,6 +512,16 @@ describe('AssessmentHelper', () => {
       expect(isSubsequentType('any string')).toBeFalsy()
       expect(isSubsequentType(100)).toBeFalsy()
       expect(isSubsequentType({})).toBeFalsy()
+    })
+  })
+
+  describe('getSubstanceUseItemsIds', () => {
+    it('returns substance use items ids object when valid assessment', () => {
+      const assessment = clone(validAssessment)
+      assessment.state.domains[0].items.push(substanceUseItem8)
+      assessment.state.domains[1].items.push(substanceUseItem48)
+      const actual = getSubstanceUseItemsIds(assessment, true)
+      expect(actual).toEqual({ underSix: ['1', '41'], aboveSix: ['8', '48'] })
     })
   })
 

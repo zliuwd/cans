@@ -24,6 +24,7 @@ import {
   updateUrlWithAssessment,
   validateAssessmentEventDate,
   validateAssessmentForSubmit,
+  getSubstanceUseItemsIds,
 } from './AssessmentHelper'
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
@@ -56,6 +57,10 @@ export default class AssessmentContainer extends Component {
       completeScrollTarget: 0,
       isUnsaved: false,
       isReassessmentModalShown: false,
+      substanceUseItemsIds: {
+        aboveSix: [],
+        underSix: [],
+      },
     }
   }
 
@@ -108,7 +113,9 @@ export default class AssessmentContainer extends Component {
 
   initHeaderButtons(isSaveButtonEnabled) {
     const { assessment, i18n, isEditable } = this.state
-    const node = <PrintAssessment assessment={assessment} i18n={i18n} />
+    const node = (
+      <PrintAssessment assessment={assessment} i18n={i18n} substanceUseItemsIds={this.state.substanceUseItemsIds} />
+    )
     const leftButton = isEditable ? buildSaveAssessmentButton(this.handleSaveAssessment, isSaveButtonEnabled) : null
     const isPrintButtonEnabled = handlePrintButtonEnabled(this.state)
     const rightButton = <PrintButton node={node} isEnabled={isPrintButtonEnabled} assessmentId={assessment.id} />
@@ -152,6 +159,7 @@ export default class AssessmentContainer extends Component {
       isReassessmentModalShown: isSubsequentType(assessment.assessment_type),
       isEventDateBeforeDob: !validateAssessmentEventDate(this.props.client.dob, assessment.event_date),
       assessmentServiceStatus: LoadingState.ready,
+      substanceUseItemsIds: getSubstanceUseItemsIds(assessment),
     })
     this.fetchI18n(assessment.instrument_id)
   }
@@ -175,7 +183,10 @@ export default class AssessmentContainer extends Component {
   onFetchAssessmentSuccess(assessment) {
     this.updatePageTitle(assessment)
     this.updateAssessment(assessment)
-    this.setState({ isUnsaved: false })
+    this.setState({
+      isUnsaved: false,
+      substanceUseItemsIds: getSubstanceUseItemsIds(assessment),
+    })
     this.fetchI18n(assessment.instrument_id)
   }
 
@@ -408,6 +419,7 @@ export default class AssessmentContainer extends Component {
             isValidForSubmit={isValidForSubmit}
             canDisplaySummaryOnSave={canDisplaySummaryOnSave}
             isEventDateBeforeDob={this.state.isValidDate && this.state.isEventDateBeforeDob}
+            substanceUseItemsIds={this.state.substanceUseItemsIds}
           />
         </div>
       </Fragment>

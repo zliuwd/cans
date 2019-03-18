@@ -24,6 +24,7 @@ const props = {
   handleSubmitWarning: jest.fn(),
   onKeyUp: jest.fn(),
   isEventDateBeforeDob: false,
+  substanceUseItemsIds: { underSix: ['41'], aboveSix: ['8', '48'] },
 }
 
 describe('AssessmentContainerInner />', () => {

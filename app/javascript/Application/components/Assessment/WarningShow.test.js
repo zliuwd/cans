@@ -7,6 +7,7 @@ describe('<WarningShow />', () => {
     isSubmitWarningShown: true,
     handleSubmitAssessment: jest.fn(),
     handleSubmitWarning: jest.fn(),
+    substanceUseItemsIds: { underSix: ['41'], aboveSix: ['8', '48'] },
   }
   describe('checks the length ', () => {
     it('checks the length of the component', () => {
@@ -69,6 +70,7 @@ describe('<WarningShow />', () => {
           isSubmitWarningShown={isSubmitWarningShown}
           handleSubmitWarning={handleSubmitWarning}
           handleSubmitAssessment={handleSubmitAssessment}
+          substanceUseItemsIds={props.substanceUseItemsIds}
         />
       )
     describe('cancel button', () => {

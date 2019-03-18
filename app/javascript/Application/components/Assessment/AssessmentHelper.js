@@ -5,6 +5,7 @@ import { urlTrimmer } from '../../util/urlTrimmer'
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
+import { isEmpty } from '../../util/common'
 
 export const AssessmentType = Object.freeze({
   initial: 'INITIAL',
@@ -242,6 +243,22 @@ export const handlePrintButtonEnabled = state => {
 
 export function isSubsequentType(type) {
   return AssessmentType.subsequent === type
+}
+
+export const getSubstanceUseItemsIds = assessment => {
+  const underSix = []
+  const aboveSix = []
+  assessment.state.domains.forEach(domain => {
+    domain.items.forEach(item => {
+      if (item.confidential_by_default && !isEmpty(item.under_six_id)) {
+        underSix.push(item.under_six_id.replace(/\D/g, ''))
+      }
+      if (item.confidential_by_default && !isEmpty(item.above_six_id)) {
+        aboveSix.push(item.above_six_id.replace(/\D/g, ''))
+      }
+    })
+  })
+  return { underSix: underSix, aboveSix: aboveSix }
 }
 
 export function preparePrecedingAssessment(precedingAssessment, eventDate) {

@@ -145,8 +145,8 @@ class PrintAssessment extends PureComponent {
     return (
       <div style={alertSignBox}>
         <strong>
-          By selecting NO, Items 8, 48, and EC 41 (Substance Use Disorder Items) from this CANS assessment will be
-          redacted when printed.
+          By selecting NO, Items {this.props.substanceUseItemsIds.aboveSix[0]}, 48, and EC 41 (Substance Use Disorder
+          Items) from this CANS assessment will be redacted when printed.
         </strong>
       </div>
     )
@@ -259,6 +259,10 @@ class PrintAssessment extends PureComponent {
 PrintAssessment.propTypes = {
   assessment: PropTypes.object.isRequired,
   i18n: PropTypes.object.isRequired,
+  substanceUseItemsIds: PropTypes.shape({
+    underSix: PropTypes.array.isRequired,
+    aboveSix: PropTypes.array.isRequired,
+  }).isRequired,
 }
 
 export default PrintAssessment
