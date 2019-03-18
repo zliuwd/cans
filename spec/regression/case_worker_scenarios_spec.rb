@@ -79,6 +79,21 @@ feature 'Case Worker Functionality' do
     validate_unsaved_warning_closed
   end
 
+  scenario 'Fill out Reassessment with preceding assessment data, from 0 to 5' do
+    visit '/'
+    is_reassessment = @assessment_helper.start_assessment_for(CLIENT_NAME, true)
+    unless is_reassessment
+      click_0_to_5_button
+      expand_all_domains
+      @form.caregiver_name_fields[0].set 'Awesome Caregiver'
+      fill_out_assessment_form_with_rating_1
+      warning_and_summary_card_shown_after_complete_button_clicked is_reassessment
+      visit '/'
+      @assessment_helper.start_assessment_for(CLIENT_NAME, true)
+    end
+    warning_and_summary_card_shown_after_complete_button_clicked true
+  end
+
   scenario 'Case worker attempts to access changelog from assessment' do
     CONDUCTED_BY = 'Test Name'
     CONDUCTED_BY_UPDATED = 'Test Name 2'

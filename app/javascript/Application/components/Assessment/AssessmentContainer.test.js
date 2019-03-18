@@ -985,15 +985,25 @@ describe('<AssessmentContainer />', () => {
     })
 
     it('starts a reassessment form with preceding assessment data', async () => {
+      // given
       const precedingAssessment = { ...assessment, status: 'COMPLETED' }
       jest.spyOn(AssessmentService, 'fetch').mockReturnValue(Promise.resolve({ ...precedingAssessment }))
       const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
       wrapper.instance().onFetchNewAssessmentSuccess(subsequentAssessment)
-      wrapper
+
+      // when
+      await wrapper
         .find('ReassessmentModal')
         .props()
         .fillPrecedingData()
+
+      // then
       expect(wrapper.state().isReassessmentModalShown).toBeFalsy()
+      const expectedAssessment = AHelper.preparePrecedingAssessment(
+        precedingAssessment,
+        subsequentAssessment.event_date
+      )
+      expect(wrapper.state().assessment).toEqual(expectedAssessment)
     })
   })
 

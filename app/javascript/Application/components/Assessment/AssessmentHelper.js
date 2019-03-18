@@ -243,3 +243,18 @@ export const handlePrintButtonEnabled = state => {
 export function isSubsequentType(type) {
   return AssessmentType.subsequent === type
 }
+
+export function preparePrecedingAssessment(precedingAssessment, eventDate) {
+  precedingAssessment.id = null
+  precedingAssessment.status = 'IN_PROGRESS'
+  precedingAssessment.event_date = eventDate
+  precedingAssessment.can_release_confidential_info = false
+  precedingAssessment.conducted_by = null
+  precedingAssessment.state.domains.forEach(domain => {
+    domain.comment = null
+    domain.items.forEach(item => {
+      item.comment = null
+    })
+  })
+  return precedingAssessment
+}

@@ -18,6 +18,7 @@ import {
   postCloseMessage,
   postInfoMessage,
   postSuccessMessage,
+  preparePrecedingAssessment,
   successMsgFrom,
   trimUrlForClientProfile,
   updateUrlWithAssessment,
@@ -355,6 +356,11 @@ export default class AssessmentContainer extends Component {
   }
 
   fillAssessmentWithPrecedingData = async () => {
+    const assessment = this.state.assessment
+    const precedingAssessmentId = assessment.preceding_assessment_id
+    const precedingAssessment = await AssessmentService.fetch(precedingAssessmentId)
+    preparePrecedingAssessment(precedingAssessment, assessment.event_date)
+    this.updateAssessment(precedingAssessment)
     this.setState({ isReassessmentModalShown: false })
   }
 

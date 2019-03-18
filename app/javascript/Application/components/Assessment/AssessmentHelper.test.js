@@ -16,6 +16,7 @@ import {
   handlePrintButtonEnabled,
   isSubsequentType,
   AssessmentType,
+  preparePrecedingAssessment,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
@@ -486,6 +487,52 @@ describe('AssessmentHelper', () => {
       expect(isSubsequentType('any string')).toBeFalsy()
       expect(isSubsequentType(100)).toBeFalsy()
       expect(isSubsequentType({})).toBeFalsy()
+    })
+  })
+
+  describe('#preparePrecedingAssessment()', () => {
+    it('prepares preceding assessment for reassessment ', () => {
+      const input = {
+        some_field: 'will not be updated',
+        status: 'COMPLETED',
+        event_date: '2019-01-01',
+        can_release_confidential_info: true,
+        conducted_by: 'John Doe',
+        state: {
+          domains: [
+            {
+              comment: 'domain 1 comment',
+              items: [{ comment: 'item 1-1 comment' }, { comment: 'item 1-2 comment' }],
+            },
+            {
+              comment: 'domain 2 comment',
+              items: [{ comment: 'item 2-1 comment' }],
+            },
+          ],
+        },
+      }
+      const actual = preparePrecedingAssessment(input, '2019-03-08')
+      const expected = {
+        id: null,
+        some_field: 'will not be updated',
+        status: 'IN_PROGRESS',
+        event_date: '2019-03-08',
+        can_release_confidential_info: false,
+        conducted_by: null,
+        state: {
+          domains: [
+            {
+              comment: null,
+              items: [{ comment: null }, { comment: null }],
+            },
+            {
+              comment: null,
+              items: [{ comment: null }],
+            },
+          ],
+        },
+      }
+      expect(actual).toEqual(expected)
     })
   })
 })
