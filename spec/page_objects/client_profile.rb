@@ -8,7 +8,7 @@ class ClientProfile < SitePrism::Page
   element :last_name, 'div#client-data-Last_Name div'
   element :assessment_history_title, 'span', text: 'Assessment History'
   element :in_progress_record, 'span.assessment-in-progress', text: 'In Progress'
-  element :add_cans_link, 'a#add-cans-link'
+  element :add_cans_button, 'button#new-cans-button'
   element :recent_assessment_ellipsis_icon, 'button.icon-ellipsis', match: :first
   element :assessment_change_log_date, 'div.rt-td', match: :first
   element :delete_cans_button, 'button.delete-assessment-button'

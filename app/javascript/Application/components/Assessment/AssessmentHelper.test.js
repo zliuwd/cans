@@ -16,6 +16,7 @@ import {
   handlePrintButtonEnabled,
   getSubstanceUseItemsIds,
   isSubsequentType,
+  hasOneCompletedForReassessment,
   AssessmentType,
   preparePrecedingAssessment,
 } from './AssessmentHelper'
@@ -512,6 +513,43 @@ describe('AssessmentHelper', () => {
       expect(isSubsequentType('any string')).toBeFalsy()
       expect(isSubsequentType(100)).toBeFalsy()
       expect(isSubsequentType({})).toBeFalsy()
+    })
+  })
+
+  describe('#hasOneCompletedForReassessment', () => {
+    const clientCaseReferralNumber = '123'
+    it('returns true if has a completed assessment for the same case or referral number', () => {
+      expect(
+        hasOneCompletedForReassessment(
+          [{ ...validAssessment, service_source_id: '123' }, { ...validAssessment, status: 'IN_PROGRESS' }],
+          clientCaseReferralNumber
+        )
+      ).toBeTruthy()
+    })
+
+    it('returns false if does not have a completed assessment for the same case or referral number', () => {
+      expect(
+        hasOneCompletedForReassessment(
+          [
+            { ...validAssessment, service_source_id: '567' },
+            { ...validAssessment, status: 'IN_PROGRESS', service_source_id: '123' },
+          ],
+          clientCaseReferralNumber
+        )
+      ).toBeFalsy()
+    })
+
+    it('returns false if assessments collection or client case/referral number is empty, null or undefined', () => {
+      expect(hasOneCompletedForReassessment([], '')).toBeFalsy()
+      expect(hasOneCompletedForReassessment([])).toBeFalsy()
+      expect(hasOneCompletedForReassessment([], null)).toBeFalsy()
+      expect(hasOneCompletedForReassessment([], undefined)).toBeFalsy()
+      expect(hasOneCompletedForReassessment(null, '')).toBeFalsy()
+      expect(hasOneCompletedForReassessment(null, undefined)).toBeFalsy()
+      expect(hasOneCompletedForReassessment(null, null)).toBeFalsy()
+      expect(hasOneCompletedForReassessment(undefined)).toBeFalsy()
+      expect(hasOneCompletedForReassessment(undefined, undefined)).toBeFalsy()
+      expect(hasOneCompletedForReassessment(undefined, null)).toBeFalsy()
     })
   })
 

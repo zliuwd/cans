@@ -5,9 +5,9 @@ import { Row } from 'reactstrap'
 import { Card, CardHeader, CardTitle, CardBody } from '@cwds/components'
 import ClientAssessmentHistoryRecord from './ClientAssessmentHistoryRecord'
 import { isAuthorized } from '../../common/AuthHelper'
-import AddCansLink from '../AddCansLink'
+import AddCansButton from '../AddCansButton'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
-import { sortAssessments } from '../../Assessment/'
+import { sortAssessments, hasOneCompletedForReassessment } from '../../Assessment/'
 import { LoadingState } from '../../../util/loadingHelper'
 import RecordsModeSwitchButton from '../RecordsModeSwitchButton'
 import { recordsMode } from '../Client.helper'
@@ -56,7 +56,7 @@ class ClientAssessmentHistory extends PureComponent {
   render() {
     const { assessments, client } = this.props
     const sortedAssessmentsByEventAndCreatedDate = sortAssessments(assessments)
-
+    const hasLastCompletedAssessment = hasOneCompletedForReassessment(assessments, client.service_source_id)
     return (
       <Grid item xs={12}>
         <Card>
@@ -68,7 +68,11 @@ class ClientAssessmentHistory extends PureComponent {
                 recordsModeSwitch={this.props.recordsModeSwitch}
                 assessments={assessments}
               />
-              <AddCansLink clientIdentifier={client.identifier} disabled={!isAuthorized(client, 'createAssessment')} />
+              <AddCansButton
+                clientIdentifier={client.identifier}
+                disabled={!isAuthorized(client, 'createAssessment')}
+                isReassessment={hasLastCompletedAssessment}
+              />
             </CardTitle>
           </CardHeader>
           <CardBody className={'card-body-client-assessment-history'}>

@@ -53,4 +53,26 @@ describe('<AddCansButton/>', () => {
       expect(wrapper.instance().isDisabled()).toEqual(false)
     })
   })
+
+  describe('isReassessment', () => {
+    it('renders Add Cans if isReassessment is false', () => {
+      const wrapper = shallow(<AddCansButton clientIdentifier={'aaa'} isReassessment={false} />)
+      expect(
+        wrapper
+          .find('#new-cans-button')
+          .render()
+          .text()
+      ).toBe('Add CANS')
+    })
+
+    it('renders Add reassessment if isReassessment is true', () => {
+      const wrapper = shallow(<AddCansButton clientIdentifier={'aaa'} isReassessment={true} />)
+      expect(
+        wrapper
+          .find('#new-cans-button')
+          .render()
+          .text()
+      ).toBe('Add reassessment')
+    })
+  })
 })

@@ -29,7 +29,7 @@ class AssessmentHelper
   def visit_start_assessment(client_name)
     @staff_dash.client_link(client_name).text eq(client_name)
     @staff_dash.visit_client_profile(client_name)
-    expect(@client_profile).to have_add_cans_link
-    @client_profile.add_cans_link.click
+    expect(@client_profile).to have_add_cans_button
+    @client_profile.add_cans_button.click
   end
 end

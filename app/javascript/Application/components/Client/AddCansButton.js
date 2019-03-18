@@ -10,13 +10,10 @@ class AddCansButton extends Component {
   }
 
   renderButton = () => {
+    const { isReassessment } = this.props
     return (
-      <Button
-        className={'button-fix-primary card-header-cans-button'}
-        id="new-cans-button"
-        disabled={this.isDisabled()}
-      >
-        Add CANS
+      <Button className="modal-regular-button" id="new-cans-button" disabled={this.isDisabled()}>
+        {isReassessment ? 'Add reassessment' : 'Add CANS'}
       </Button>
     )
   }
@@ -34,10 +31,12 @@ class AddCansButton extends Component {
 AddCansButton.propTypes = {
   clientIdentifier: PropTypes.string.isRequired,
   disabled: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  isReassessment: PropTypes.bool,
 }
 
 AddCansButton.defaultProps = {
   disabled: false,
+  isReassessment: false,
 }
 
 export default AddCansButton

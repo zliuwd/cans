@@ -245,6 +245,15 @@ export function isSubsequentType(type) {
   return AssessmentType.subsequent === type
 }
 
+export const hasOneCompletedForReassessment = (assessments, clientCaseReferralNumber) => {
+  if (!assessments || assessments.length === 0 || !clientCaseReferralNumber) return false
+  return (
+    assessments.filter(
+      assessment => assessment.status === 'COMPLETED' && assessment.service_source_id === clientCaseReferralNumber
+    ).length > 0
+  )
+}
+
 export const getSubstanceUseItemsIds = assessment => {
   const underSix = []
   const aboveSix = []
