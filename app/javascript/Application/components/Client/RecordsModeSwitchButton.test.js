@@ -23,13 +23,13 @@ const propsWithNoValid = {
 }
 
 const propsWithNoAssessments = {
-  assessments: [],
+  assessments: undefined,
   switchButtonName: 'recordsMode.COMPARISON',
   recordsModeSwitch: recordsModeSwitch,
 }
 
 const propsForComparisonTable = {
-  assessments: [],
+  assessments: [{ id: 1, status: 'COMPLETED' }, { id: 2, status: 'COMPLETED' }, { id: 3, status: 'COMPLETED' }],
   switchButtonName: recordsMode.HISTORY,
   recordsModeSwitch: recordsModeSwitch,
 }

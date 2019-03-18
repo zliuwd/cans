@@ -39,7 +39,7 @@ describe('<AssessmentComparisonLoadingBoundary />', () => {
       .find(LoadingBoundary)
       .props()
       .fetch()
-    expect(getAssessmentComparisonSpy).toHaveBeenCalledTimes(1)
+    expect(getAssessmentComparisonSpy).toHaveBeenCalledTimes(2)
     expect(fetchI18nSpy).toHaveBeenCalledTimes(1)
     getAssessmentComparisonSpy.mockReset()
     fetchI18nSpy.mockReset()

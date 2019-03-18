@@ -1,11 +1,5 @@
-import {
-  getTitle,
-  blankColFiller,
-  domainTitleSwitcher,
-  domainRatingSwitcher,
-  itemRatingSwitcher,
-} from './comparisonHelper'
-import * as I18n from '../../common/I18nHelper'
+import { getTitle, blankColFiller, domainRatingSwitcher, itemRatingSwitcher } from './comparisonTableHelper'
+import * as I18n from '../../../common/I18nHelper'
 
 const dashes = '--'
 
@@ -48,49 +42,10 @@ describe('blankColFiller', () => {
   })
 })
 
-describe('domainTitleSwitcher', () => {
-  const domainTitle = 'someTitle'
-  const domains = [
-    { code: 'TRM' },
-    { code: 'STR' },
-    { code: 'EST' },
-    { is_caregiver_domain: true, caregiver_name: 'firstCaregiver', caregiver_index: 'a' },
-    { is_caregiver_domain: true, caregiver_index: 'b' },
-    { code: 'DEFAULT' },
-  ]
-  it('will get correct results based on different domains code', () => {
-    const actualResults = []
-    const expectResults = [
-      'PTACE',
-      'someTitle ( 6 to 21 )',
-      'someTitle ( 0 to 5 )',
-      'Caregiver Domain-a-firstCaregiver',
-      'Caregiver Domain-b',
-      'someTitle',
-    ]
-    domains.forEach(domain => {
-      actualResults.push(domainTitleSwitcher(domain, domainTitle))
-    })
-    expect(actualResults).toEqual(expectResults)
-  })
-})
-
 describe('domainRatingSwitcher', () => {
   it('will return -- if ratingTotal is not valid', () => {
     const fakeParams = [undefined, 'REGULAR']
     const expectedResult = dashes
-    expect(domainRatingSwitcher(...fakeParams)).toBe(expectedResult)
-  })
-
-  it('will return # ratingTotal-Y# if rating type is BOOLEAN with some YES rating', () => {
-    const fakeParams = [10, 'BOOLEAN']
-    const expectedResult = '10-Y'
-    expect(domainRatingSwitcher(...fakeParams)).toBe(expectedResult)
-  })
-
-  it('will return # 0-Y# if rating type is BOOLEAN with no YES rating', () => {
-    const fakeParams = [0, 'BOOLEAN']
-    const expectedResult = '0-Y'
     expect(domainRatingSwitcher(...fakeParams)).toBe(expectedResult)
   })
 
@@ -103,7 +58,6 @@ describe('domainRatingSwitcher', () => {
 
 describe('itemRatingSwitcher', () => {
   const fakeItemRatings = [{ value: 3 }]
-  const fakeBoolRatings = [{ value: 1 }, { value: 0 }]
   it('will return according item rating value when have valid itemRatings', () => {
     const fakeParams = [fakeItemRatings, 0, 'REGULAR']
     const expectedResult = 3
@@ -114,19 +68,5 @@ describe('itemRatingSwitcher', () => {
     const fakeParams = [[], 0, 'REGULAR']
     const expectedResult = dashes
     expect(itemRatingSwitcher(...fakeParams)).toBe(expectedResult)
-  })
-
-  it('will return Yes or No when has valid item rating and type is BOOLEAN', () => {
-    const fakeParamsYes = [fakeBoolRatings, 0, 'BOOLEAN']
-    const fakeParamsNo = [fakeBoolRatings, 1, 'BOOLEAN']
-    expect(itemRatingSwitcher(...fakeParamsYes)).toBe('Yes')
-    expect(itemRatingSwitcher(...fakeParamsNo)).toBe('No')
-  })
-
-  it('will return -- when has no valid item rating and type is BOOLEAN', () => {
-    const fakeParamsYes = [fakeBoolRatings, 8, 'BOOLEAN']
-    const fakeParamsNo = [fakeBoolRatings, -1, 'BOOLEAN']
-    expect(itemRatingSwitcher(...fakeParamsYes)).toBe(dashes)
-    expect(itemRatingSwitcher(...fakeParamsNo)).toBe(dashes)
   })
 })

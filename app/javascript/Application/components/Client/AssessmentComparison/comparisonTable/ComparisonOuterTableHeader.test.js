@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import ComparisonOuterTableHeader from './ComparisonOuterTableHeader'
-import { isoToLocalDate } from '../../../util/dateHelper'
+import { isoToLocalDate } from '../../../../util/dateHelper'
 
 describe('<ComparisonOuterTableHeader />', () => {
   const inProgressProps = {

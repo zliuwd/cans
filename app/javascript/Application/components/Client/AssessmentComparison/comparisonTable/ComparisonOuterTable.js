@@ -1,19 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { DataGrid } from '@cwds/components'
-import { gridMinRows } from '../../../util/DataGridHelper'
+import { gridMinRows } from '../../../../util/DataGridHelper'
 import ComparisonInnerTable from './ComparisonInnerTable'
 import ComparisonOuterTableHeader from './ComparisonOuterTableHeader'
 import {
   CP_TABLE_COL_WIDTHS,
   getTitle,
   expander,
-  domainTitleSwitcher,
   blankColFiller,
   requiredDomainColumnsAmount,
   domainRatingSwitcher,
-} from './comparisonHelper'
-import './style.sass'
+} from './comparisonTableHelper'
+import '../style.sass'
 
 class ComparisonOuterTable extends React.PureComponent {
   constructor(props) {
@@ -65,8 +64,7 @@ class ComparisonOuterTable extends React.PureComponent {
       sortable: true,
       accessor: domain => {
         const domainTitle = getTitle(this.props.i18n, domain.code)
-        const finalTitle = domainTitleSwitcher(domain, domainTitle)
-        return finalTitle
+        return domainTitle
       },
       className: 'outer-domain-name-content',
       headerClassName: 'outer-domain-name-header',

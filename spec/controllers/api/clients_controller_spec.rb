@@ -34,9 +34,9 @@ module Api
       it 'returns a set of assessment comparison data' do
         allow(clients_repository)
           .to receive(:show_comparison)
-          .with('100')
+          .with('100', 'true')
           .and_return(comparison_response)
-        get :show_comparison, params: { id: 100 }
+        get :show_comparison, params: { id: 100, is_under_six: true }
         expect(response.body).to eq comparison.to_json
       end
     end

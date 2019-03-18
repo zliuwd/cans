@@ -10,9 +10,6 @@ const RecordsModeSwitchButton = ({ switchButtonName, recordsModeSwitch, assessme
     </Button>
   )
 
-  if (!assessments) {
-    return null
-  }
   if (switchButtonName === recordsMode.HISTORY) return switchButton
   // for AssessmentComparison, switch button will always be rendered
   return shouldRenderRecordsSwitch(assessments) ? switchButton : null

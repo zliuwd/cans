@@ -4,11 +4,11 @@ import ComparisonInnerTable from './ComparisonInnerTable'
 import ComparisonOuterTableHeader from './ComparisonOuterTableHeader'
 import ComparisonOuterTable from './ComparisonOuterTable'
 import { mount } from 'enzyme'
-import { fakeData } from './AssessmentComparison.test'
-import * as helper from './comparisonHelper'
+import { fakeData } from '../AssessmentComparison.test'
+import * as helper from './comparisonTableHelper'
 
 const fakeProps = {
-  data: fakeData,
+  data: fakeData.aboveSix,
   i18n: { key: 'value' },
 }
 
@@ -41,7 +41,7 @@ describe('<ComparisonOuterTable />', () => {
 
   it('will render ComparisonOuterTableHeader based on the amount of event_dates', () => {
     const target = wrapper.find(ComparisonOuterTableHeader)
-    expect(target.length).toBe(fakeData.event_dates.length)
+    expect(target.length).toBe(fakeProps.data.event_dates.length)
   })
 
   it('will render #Domain Name# in first column', () => {
@@ -69,21 +69,18 @@ describe('<ComparisonOuterTable />', () => {
     expect(target.exists()).toBe(true)
   })
 
-  it('getTitle and domainTitleSwitcher will be invoked by domainNameCol accessor', () => {
+  it('getTitle will be invoked by domainNameCol accessor', () => {
     const getTitleSpy = jest.spyOn(helper, 'getTitle')
-    const domainTitleSwitcherSpy = jest.spyOn(helper, 'domainTitleSwitcher')
     const target = wrapper.find(DataGrid).props().columns[0].accessor
-    target(fakeData.domains[0])
+    target(fakeProps.data.domains[0])
     expect(getTitleSpy).toHaveBeenCalledTimes(1)
     getTitleSpy.mockReset()
-    expect(domainTitleSwitcherSpy).toHaveBeenCalledTimes(1)
-    domainTitleSwitcherSpy.mockReset()
   })
 
   it('domainRatingSwitcher will be invoked by domainTotalCols accessor', () => {
     const domainRatingSwitcherSpy = jest.spyOn(helper, 'domainRatingSwitcher')
     const target = wrapper.find(DataGrid).props().columns[1].accessor
-    target(fakeData.domains[0])
+    target(fakeProps.data.domains[0])
     expect(domainRatingSwitcherSpy).toHaveBeenCalledTimes(1)
     domainRatingSwitcherSpy.mockReset()
   })

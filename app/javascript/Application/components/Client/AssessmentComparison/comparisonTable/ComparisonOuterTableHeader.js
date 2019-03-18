@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { isoToLocalDate } from '../../../util/dateHelper'
+import { isoToLocalDate } from '../../../../util/dateHelper'
 
 const ComparisonOuterTableHeader = ({ date, status }) => {
   return (

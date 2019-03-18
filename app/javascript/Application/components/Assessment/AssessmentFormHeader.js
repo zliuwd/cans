@@ -14,7 +14,7 @@ import DateField from '../common/DateField'
 import ConductedByField from './AssessmentFormHeader/ConductedByField'
 import HasCaregiverQuestion from './AssessmentFormHeader/HasCaregiverQuestion'
 import ConfidentialityAlert from './AssessmentFormHeader/ConfidentialityAlert'
-import UnderSixQuestion from './AssessmentFormHeader/UnderSixQuestion'
+import AgeRangeSwitch from '../common/AgeRangeSwitch'
 import { Card, CardBody, CardHeader, CardTitle } from '@cwds/components'
 import { calculateDateDifferenceInYears, isoToLocalDate, isValidDate } from '../../util/dateHelper'
 import moment from 'moment/moment'
@@ -253,7 +253,7 @@ class AssessmentFormHeader extends PureComponent {
         <Row className={'assessment-form-header-inputs'}>
           <Col sm={2}>{this.renderDateSelect()}</Col>
           <Col xs={3}>
-            <UnderSixQuestion
+            <AgeRangeSwitch
               isUnderSix={this.props.assessment.state.under_six}
               onChange={this.updateUnderSixAndAllDomainsExpand}
               disabled={this.props.disabled}

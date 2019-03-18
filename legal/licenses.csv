@@ -255,7 +255,7 @@ buffer-xor,1.0.3,MIT,https://github.com/crypto-browserify/buffer-xor
 builder,3.2.3,MIT,http://onestepback.org
 builtin-modules,1.1.1,MIT,sindresorhus.com
 builtin-status-codes,3.0.0,MIT,bendrucker.me
-bundler,1.17.1,MIT,http://bundler.io
+bundler,1.16.4,MIT,http://bundler.io
 byebug,10.0.2,Simplified BSD,http://github.com/deivid-rodriguez/byebug
 bytes,3.0.0,MIT,http://tjholowaychuk.com
 cacache,10.0.4,ISC,Unknown
@@ -383,6 +383,16 @@ currently-unhandled,0.4.1,MIT,github.com/jamestalmage
 cwds_store,0.1.5,AGPL-3.0,https://github.com/ca-cwds
 cyclist,0.2.2,MIT*,Unknown
 d,1.0.0,MIT,http://www.medikoo.com/
+d3-array,1.2.4,New BSD,https://d3js.org/d3-array/
+d3-collection,1.0.7,New BSD,https://d3js.org/d3-collection/
+d3-color,1.2.3,New BSD,https://d3js.org/d3-color/
+d3-format,1.3.2,New BSD,https://d3js.org/d3-format/
+d3-interpolate,1.3.2,New BSD,https://d3js.org/d3-interpolate/
+d3-path,1.0.7,New BSD,https://d3js.org/d3-path/
+d3-scale,2.1.2,New BSD,https://d3js.org/d3-scale/
+d3-shape,1.2.3,New BSD,https://d3js.org/d3-shape/
+d3-time,1.0.11,New BSD,https://d3js.org/d3-time/
+d3-time-format,2.1.3,New BSD,https://d3js.org/d3-time-format/
 damerau-levenshtein,1.0.4,Simplified BSD,Unknown
 dashdash,1.14.1,MIT,http://trentm.com
 data-urls,1.0.1,MIT,https://domenic.me/
@@ -392,6 +402,7 @@ debounce,1.2.0,MIT,Unknown
 debug,2.6.9,MIT,Unknown
 debug,3.1.0,MIT,Unknown
 decamelize,1.2.0,MIT,sindresorhus.com
+decimal.js-light,2.5.0,MIT,Unknown
 decode-uri-component,0.2.0,MIT,github.com/SamVerschueren
 deep-equal,1.0.1,MIT,http://substack.net
 deep-extend,0.6.0,MIT,https://github.com/unclechu/node-deep-extend
@@ -850,6 +861,7 @@ loader-runner,2.3.0,MIT,https://github.com/webpack/loader-runner#readme
 loader-utils,1.1.0,MIT,Unknown
 locate-path,2.0.0,MIT,sindresorhus.com
 lodash,4.17.10,MIT,https://lodash.com/
+lodash,4.17.11,MIT,https://lodash.com/
 lodash._reinterpolate,3.0.0,MIT,https://lodash.com/
 lodash.assign,4.2.0,MIT,https://lodash.com/
 lodash.camelcase,4.3.0,MIT,https://lodash.com/
@@ -871,6 +883,7 @@ lodash.sortby,4.7.0,MIT,https://lodash.com/
 lodash.tail,4.1.1,MIT,https://lodash.com/
 lodash.template,4.4.0,MIT,https://lodash.com/
 lodash.templatesettings,4.1.0,MIT,https://lodash.com/
+lodash.throttle,4.1.1,MIT,https://lodash.com/
 lodash.tonumber,4.0.3,MIT,https://lodash.com/
 lodash.uniq,4.5.0,MIT,https://lodash.com/
 lodash.uniqueid,4.0.1,MIT,https://lodash.com/
@@ -1198,13 +1211,16 @@ react-is,16.8.3,MIT,https://reactjs.org/
 react-jss,8.6.1,MIT,https://github.com/cssinjs/react-jss
 react-lifecycles-compat,3.0.4,MIT,Unknown
 react-popper,0.10.4,MIT,https://github.com/souporserious/react-popper
+react-resize-detector,2.3.0,MIT,https://github.com/maslianok/react-resize-detector
 react-router,4.3.1,MIT,Unknown
 react-router-dom,4.3.1,MIT,Unknown
 react-select,2.1.1,MIT,Unknown
+react-smooth,1.0.2,MIT,https://github.com/recharts/react-smooth#readme
 react-stickyfill,0.2.3,MIT,https://github.com/seleckis/react-stickyfill#readme
 react-table,6.8.6,MIT,https://github.com/react-tools/react-table#readme
 react-test-renderer,16.4.2,MIT,https://reactjs.org/
 react-transition-group,2.4.0,New BSD,https://github.com/reactjs/react-transition-group#readme
+react-transition-group,2.6.0,New BSD,https://github.com/reactjs/react-transition-group#readme
 react-widgets,4.4.9,MIT,http://jquense.github.io/react-widgets/docs/
 react-widgets-moment,4.0.20,MIT,https://github.com/jquense/react-widgets#readme
 reactstrap,6.4.0,MIT,https://github.com/reactstrap/reactstrap#readme
@@ -1219,6 +1235,8 @@ readable-stream,2.3.6,MIT,Unknown
 readable-stream,3.0.6,MIT,Unknown
 readdirp,2.1.0,MIT,https://github.com/thlorenz/readdirp
 realpath-native,1.0.1,MIT,Unknown
+recharts,1.5.0,MIT,https://github.com/recharts/recharts
+recharts-scale,0.4.2,MIT,https://github.com/recharts/recharts-scale
 recompose,0.29.0,MIT,https://github.com/acdlite/recompose
 recompose,0.30.0,MIT,https://github.com/acdlite/recompose
 redent,1.0.0,MIT,sindresorhus.com
@@ -1256,6 +1274,7 @@ require-from-string,2.0.2,MIT,github.com/floatdrop
 require-main-filename,1.0.1,ISC,https://github.com/yargs/require-main-filename#readme
 require-uncached,1.0.3,MIT,sindresorhus.com
 requires-port,1.0.0,MIT,https://github.com/unshiftio/requires-port
+resize-observer-polyfill,1.5.1,MIT,https://github.com/que-etc/resize-observer-polyfill
 resolve,1.1.7,MIT,http://substack.net
 resolve,1.10.0,MIT,http://substack.net
 resolve,1.8.1,MIT,http://substack.net

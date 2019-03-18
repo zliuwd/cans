@@ -13,9 +13,10 @@ class AssessmentComparisonLoadingBoundary extends React.Component {
         id: propsId,
         fetch: () =>
           Promise.all([
-            ClientService.getAssessmentComparison(propsId),
+            ClientService.getAssessmentComparison(propsId, true),
+            ClientService.getAssessmentComparison(propsId, false),
             I18nService.fetchByInstrumentId(instrumentId),
-          ]).then(([data, i18n]) => ({ data, i18n })),
+          ]).then(([underSix, aboveSix, i18n]) => ({ data: { underSix, aboveSix }, i18n })),
       }
     }
     return null

@@ -207,15 +207,20 @@ describe('shouldRenderRecordsSwitch', () => {
   ]
   const onlyOneValidAssessments = [{ id: 1, status: 'COMPLETED' }, { id: 2, status: 'DELETED' }]
   const noValidAssessments = [{ id: 1, status: 'DELETE' }, { id: 2, status: 'DELETED' }]
-  it('will return true when there are two or more assesment which status are not DELETED', () => {
+  const undefinedAssessments = undefined
+  it('will return true when there are two or more assesments which status are COMPLETED', () => {
     expect(shouldRenderRecordsSwitch(twoOrMoreValidAssessments)).toBe(true)
   })
 
-  it('will return false when there is only one assesment which status is not DELETED', () => {
+  it('will return false when there is only one assesment which status is COMPLETED', () => {
     expect(shouldRenderRecordsSwitch(onlyOneValidAssessments)).toBe(false)
   })
 
-  it('will return false when there is no assesment which status is not DELETED', () => {
+  it('will return false when there is no assesment which status is COMPLETED', () => {
     expect(shouldRenderRecordsSwitch(noValidAssessments)).toBe(false)
+  })
+
+  it('will return false when assesments is undefined', () => {
+    expect(shouldRenderRecordsSwitch(undefinedAssessments)).toBe(false)
   })
 })

@@ -31,12 +31,13 @@ describe('ClientService', () => {
 
     it('returns assessment comparison data', async () => {
       const clientId = 1
+      const isUnderSix = true
       const mockComparisonData = { event_dates: ['someDates'], domains: ['someDomains'] }
       apiGetSpy.mockReturnValue(mockComparisonData)
-      const assessmentComparisonData = await ClientService.getAssessmentComparison(clientId)
+      const assessmentComparisonData = await ClientService.getAssessmentComparison(clientId, isUnderSix)
       expect(assessmentComparisonData).toBe(mockComparisonData)
       expect(apiGetSpy).toHaveBeenCalledTimes(1)
-      expect(apiGetSpy).toHaveBeenCalledWith(`/clients/${clientId}/assessment_comparison`)
+      expect(apiGetSpy).toHaveBeenCalledWith(`/clients/${clientId}/assessment_comparison?is_under_six=true`)
     })
   })
 

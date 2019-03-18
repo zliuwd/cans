@@ -19,11 +19,11 @@ module Clients
     end
 
     describe '#show_comparison' do
-      it 'returns comparison data' do
+      it 'returns assessments comparison data' do
         allow(http_service).to receive(:call)
-          .with('/clients/16/assessment_comparison', :get, token)
+          .with('/clients/16/assessment_comparison?isUnderSix=true', :get, token)
           .and_return(response)
-        expect(clients_repository.show_comparison(16)).to eq(response)
+        expect(clients_repository.show_comparison(16, true)).to eq(response)
       end
     end
 

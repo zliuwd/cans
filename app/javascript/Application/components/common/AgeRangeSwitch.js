@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Button } from '@cwds/components'
 import './style.sass'
 
-const UnderSixQuestion = ({ isUnderSix, onChange, disabled }) => (
+const AgeRangeSwitch = ({ isUnderSix, onChange, disabled }) => (
   <Fragment>
     <div className={'age-buttons-group'}>
       <Button
@@ -26,14 +26,14 @@ const UnderSixQuestion = ({ isUnderSix, onChange, disabled }) => (
   </Fragment>
 )
 
-UnderSixQuestion.propTypes = {
+AgeRangeSwitch.propTypes = {
   disabled: PropTypes.bool,
   isUnderSix: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
 }
 
-UnderSixQuestion.defaultProps = {
+AgeRangeSwitch.defaultProps = {
   disabled: false,
   isUnderSix: null,
 }
-export default UnderSixQuestion
+export default AgeRangeSwitch

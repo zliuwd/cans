@@ -35,9 +35,11 @@ export const recordsMode = Object.freeze({
 })
 
 export const shouldRenderRecordsSwitch = assessments => {
-  const iniLen = assessments.length
-  const deletedAssessments = assessments.filter(el => {
-    return el.status === 'DELETED'
+  if (!assessments) {
+    return false
+  }
+  const completedAssessments = assessments.filter(el => {
+    return el.status === 'COMPLETED'
   })
-  return iniLen - deletedAssessments.length > 1 // have at least two accessable assessments
+  return completedAssessments.length > 1 // have at least two COMPLETED assessments
 }

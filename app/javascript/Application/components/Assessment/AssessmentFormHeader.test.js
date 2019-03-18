@@ -5,7 +5,7 @@ import { assessment, client, clientWithEstimatedDob } from './assessment.mocks.t
 import { clone } from '../../util/common'
 import ConductedByField from './AssessmentFormHeader/ConductedByField'
 import ConfidentialityAlert from './AssessmentFormHeader/ConfidentialityAlert'
-import UnderSixQuestion from './AssessmentFormHeader/UnderSixQuestion'
+import AgeRangeSwitch from '../common/AgeRangeSwitch'
 import { Card, CardBody, CardHeader, CardTitle } from '@cwds/components'
 import moment from 'moment'
 
@@ -26,7 +26,7 @@ describe('<AssessmentFormHeader />', () => {
     const wrapper = shallow(
       <AssessmentFormHeader assessment={agelessAssessment} client={client} onAssessmentUpdate={jest.fn()} />
     )
-    expect(wrapper.find(UnderSixQuestion).props().isUnderSix).toBe(null)
+    expect(wrapper.find(AgeRangeSwitch).props().isUnderSix).toBe(null)
   })
 
   it('renders the under_six question when under_six is set', () => {
@@ -37,7 +37,7 @@ describe('<AssessmentFormHeader />', () => {
     const wrapper = shallow(
       <AssessmentFormHeader assessment={underSixAssessment} client={client} onAssessmentUpdate={jest.fn()} />
     )
-    expect(wrapper.find(UnderSixQuestion).props().isUnderSix).toBe(true)
+    expect(wrapper.find(AgeRangeSwitch).props().isUnderSix).toBe(true)
   })
 
   describe('case number', () => {
@@ -234,7 +234,7 @@ describe('<AssessmentFormHeader />', () => {
     })
   })
 
-  describe('UnderSixQuestion onChange', () => {
+  describe('AgeRangeSwitch onChange', () => {
     it('will set under_six to its opposite and sets exapndAllDomains to false', () => {
       // given
       const assessmentUpdateMockFn = jest.fn()
@@ -249,7 +249,7 @@ describe('<AssessmentFormHeader />', () => {
       expect(assessment.state.under_six).toBe(false)
       // when
       wrapper
-        .find(UnderSixQuestion)
+        .find(AgeRangeSwitch)
         .props()
         .onChange(true)
       // then
@@ -401,8 +401,8 @@ describe('<AssessmentFormHeader />', () => {
       expect(wrapper.find('DateField').prop('disabled')).toEqual(true)
     })
 
-    it('propagates disable props to <UnderSixQuestion> ', () => {
-      expect(wrapper.find('UnderSixQuestion').prop('disabled')).toEqual(true)
+    it('propagates disable props to <AgeRangeSwitch> ', () => {
+      expect(wrapper.find('AgeRangeSwitch').prop('disabled')).toEqual(true)
     })
 
     it('propagates disable props to <HasCaregiverQuestion> ', () => {

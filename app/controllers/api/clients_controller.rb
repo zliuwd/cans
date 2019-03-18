@@ -8,7 +8,8 @@ module Api
     end
 
     def show_comparison
-      response = Clients::ClientsRepository.new(session[:token]).show_comparison(params[:id])
+      response = Clients::ClientsRepository.new(session[:token])
+                                           .show_comparison(params[:id], params[:is_under_six])
       render json: response.body, status: response.status
     end
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { DataGrid, Icon } from '@cwds/components'
-import { gridMinRows } from '../../../util/DataGridHelper'
+import { gridMinRows } from '../../../../util/DataGridHelper'
 import {
   CP_TABLE_COL_WIDTHS,
   getTitle,
@@ -9,8 +9,8 @@ import {
   blankColFiller,
   requiredDomainColumnsAmount,
   itemRatingSwitcher,
-} from './comparisonHelper'
-import './style.sass'
+} from './comparisonTableHelper'
+import '../style.sass'
 
 class ComparisonInnerTable extends React.PureComponent {
   constructor(props) {

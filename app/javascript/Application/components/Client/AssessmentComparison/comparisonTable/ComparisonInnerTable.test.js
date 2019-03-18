@@ -2,13 +2,13 @@ import React from 'react'
 import { DataGrid, Icon } from '@cwds/components'
 import ComparisonInnerTable from './ComparisonInnerTable'
 import { mount } from 'enzyme'
-import { fakeData } from './AssessmentComparison.test.js'
-import * as helper from './comparisonHelper'
+import { fakeData } from '../AssessmentComparison.test.js'
+import * as helper from './comparisonTableHelper'
 const fakeProps = {
   key: 'somekey',
   domainCode: 'TRM',
-  items: fakeData.domains[0].items,
-  assessmentDates: fakeData.event_dates,
+  items: fakeData.aboveSix.domains[0].items,
+  assessmentDates: fakeData.aboveSix.event_dates,
   i18n: { key: 'value' },
 }
 

@@ -1,10 +1,10 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import UnderSixQuestion from './UnderSixQuestion'
+import AgeRangeSwitch from './AgeRangeSwitch'
 
-describe('<UnderSixQuestion />', () => {
+describe('<AgeRangeSwitch />', () => {
   const defaultProps = { onChange: () => {} }
-  const render = props => shallow(<UnderSixQuestion {...props} />)
+  const render = props => shallow(<AgeRangeSwitch {...props} />)
 
   it('displays age buttons as unselected when isUnderSix is undefined', () => {
     const wrapper = render(defaultProps)

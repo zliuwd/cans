@@ -11,8 +11,9 @@ module Clients
       @http_service.call("/clients/#{id}", :get, @token)
     end
 
-    def show_comparison(id)
-      @http_service.call("/clients/#{id}/assessment_comparison", :get, @token)
+    def show_comparison(id, is_under_six)
+      @http_service
+        .call("/clients/#{id}/assessment_comparison?isUnderSix=#{is_under_six}", :get, @token)
     end
 
     def show_init_assessment(id)
