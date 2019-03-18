@@ -1,6 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { LoadingState } from '../../util/loadingHelper'
+import pageLockService from '../common/PageLockService'
 import NewAssessmentContainer from './NewAssessmentContainer'
 import AssessmentContainerInner from './AssessmentContainerInner'
 import AssessmentPageActions from './AssessmentPageActions'
@@ -365,7 +366,23 @@ describe('NewAssessmentContainer', () => {
       expect(wrapper.find(AssessmentContainerInner).props().canDisplaySummaryOnSave).toBe(false)
     })
   })
+
+  it('redirects to client profile page when state is set', () => {
+    const trimUrlForClientProfileSpy = jest.spyOn(AssessmentHelper, 'trimUrlForClientProfile')
+    const wrapper = render()
+    wrapper.setState({ shouldRedirectToClientProfile: true })
+    expect(wrapper.find('Redirect').exists()).toBe(true)
+    expect(trimUrlForClientProfileSpy).toHaveBeenCalledWith('/path')
+  })
+
+  it('confirms and sets shouldRedirect on cancel', async () => {
+    const confirmSpy = jest.spyOn(pageLockService, 'confirm').mockImplementation(f => f())
+    const wrapper = render()
+    await wrapper
+      .find(AssessmentContainerInner)
+      .props()
+      .onCancelClick()
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    expect(wrapper.state().shouldRedirectToClientProfile).toBe(true)
+  })
 })
-// TODO
-// Unsaved changes
-// Cancel button

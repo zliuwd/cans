@@ -1,12 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Redirect } from 'react-router-dom'
 import { isValidLocalDate, localToIsoDate } from '../../util/dateHelper'
 import { LoadingState } from '../../util/loadingHelper'
+import pageLockService from '../common/PageLockService'
 import AssessmentContainerInner from './AssessmentContainerInner'
 import {
   AssessmentStatus,
   defaultEmptyAssessment,
   getCaregiverDomainsNumber,
+  trimUrlForClientProfile,
   validateAssessmentEventDate,
   validateAssessmentForSubmit,
 } from './AssessmentHelper'
@@ -24,6 +27,7 @@ class NewAssessmentContainer extends React.PureComponent {
       completeScrollTarget: 0,
       isEventDateBeforeDob: false,
       isValidDate: true,
+      shouldRedirectToClientProfile: false,
     }
   }
 
@@ -100,6 +104,12 @@ class NewAssessmentContainer extends React.PureComponent {
     }
   }
 
+  handleCancelClick = () => {
+    pageLockService.confirm(() => {
+      this.setState({ shouldRedirectToClientProfile: true })
+    })
+  }
+
   render() {
     const {
       assessment,
@@ -111,10 +121,14 @@ class NewAssessmentContainer extends React.PureComponent {
       pageHeaderButtonsController,
       url,
     } = this.props
-    const { completeScrollTarget, isEventDateBeforeDob, isValidDate } = this.state
+    const { completeScrollTarget, isEventDateBeforeDob, isValidDate, shouldRedirectToClientProfile } = this.state
 
     if (assessment === null) {
       return null
+    }
+
+    if (shouldRedirectToClientProfile) {
+      return <Redirect push to={{ pathname: trimUrlForClientProfile(url) }} />
     }
 
     const isCompleted = assessment.status === AssessmentStatus.completed
@@ -158,13 +172,12 @@ class NewAssessmentContainer extends React.PureComponent {
           client={client}
           i18n={i18n}
           isEditable={isEditable}
-          // TODO: Do we need these props?
           handleCaregiverRemove={this.handleCaregiverRemove}
           handleSubmitAssessment={this.handleSubmitAssessment}
           isEventDateBeforeDob={isValidDate && isEventDateBeforeDob}
           isValidForSubmit={isValidForSubmit}
           onAssessmentUpdate={this.handleUpdateAssessment}
-          onCancelClick={() => {}}
+          onCancelClick={this.handleCancelClick}
           onEventDateFieldKeyUp={this.handleEventDateFieldKeyUp}
         />
       </div>
