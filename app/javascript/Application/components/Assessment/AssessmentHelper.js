@@ -212,7 +212,7 @@ export const handleCountyName = assessment => {
 }
 
 export const updateUrlWithAssessment = (history, match, assessment) => {
-  return history.push(`${match.url}/${assessment.id}`)
+  return history.replace(`${match.url}/${assessment.id}`)
 }
 
 export const selectOptions = [

@@ -26,6 +26,14 @@ describe('PageLockService', () => {
     expect(pageLockService.pageLock.unblock).toBe(unblock)
   })
 
+  it('verify that user confirmation unlocks page', () => {
+    pageLockService.unlock()
+    const unlock = jest.spyOn(pageLockService, 'unlock')
+    pageLockService.newPath = '/'
+    pageLockService.getUserConfirmation('', jest.fn())
+    expect(unlock).toHaveBeenCalledTimes(1)
+  })
+
   it('verify unlock', () => {
     pageLockService.unlock()
     expect(pageLockService.pageLock).toBeUndefined()

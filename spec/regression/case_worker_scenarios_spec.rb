@@ -155,6 +155,11 @@ feature 'Case Worker Functionality' do
     CONDUCTED_BY = 'Test Name'
     visit '/'
     @assessment_helper.start_assessment_for CLIENT_NAME
+    go_back
+    unsaved_warning_discard_and_continue
+    expect(@client_profile).to have_client_information_title
+    visit '/'
+    @assessment_helper.start_assessment_for CLIENT_NAME
     click_0_to_5_button
     fill_conducted_by_field(CONDUCTED_BY)
     save_and_check_the_success_message

@@ -5,24 +5,18 @@ class PageLockService {
   // creates react history, sets page unloading confirmation
   // confirmation will be triggered ONLY IF method lock() has been called before
   constructor() {
-    this.history = createBrowserHistory({
-      basename: basePath,
-      forceRefresh: false,
-      getUserConfirmation: (message, allowed) => {
-        this.confirm(() => {
-          allowed(true)
-          if (this.newPath) {
-            this.history.push(this.newPath)
-          }
-        })
-      },
-    })
+    this.getUserConfirmation = this.getUserConfirmation.bind(this)
     this.unlock = this.unlock.bind(this)
     this.confirm = this.confirm.bind(this)
     this.cancel = this.cancel.bind(this)
     this.onBeforeUnload = this.onBeforeUnload.bind(this)
     this.onPopState = this.onPopState.bind(this)
     this.lock = this.lock.bind(this)
+    this.history = createBrowserHistory({
+      basename: basePath,
+      forceRefresh: false,
+      getUserConfirmation: this.getUserConfirmation,
+    })
     window.addEventListener('beforeunload', this.onBeforeUnload)
     window.addEventListener('popstate', this.onPopState)
   }
@@ -82,6 +76,17 @@ class PageLockService {
       // rollback history change
       window.history.pushState({}, null, this.pageLock.pageUrl)
     }
+  }
+
+  getUserConfirmation(message, allowed) {
+    this.confirm(() => {
+      allowed(true)
+      if (this.newPath) {
+        this.unlock()
+        this.history.push(this.newPath)
+        this.newPath = undefined
+      }
+    })
   }
 }
 

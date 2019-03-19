@@ -605,7 +605,7 @@ describe('<AssessmentContainer />', () => {
       const props = {
         location: { childId: 1 },
         match: { params: { id: 1 }, url: 'someUrl' },
-        history: { push: jest.fn() },
+        history: { replace: jest.fn() },
         client: childInfoJson,
         pageHeaderController: { ...defaultProps.pageHeaderController },
       }
@@ -618,13 +618,13 @@ describe('<AssessmentContainer />', () => {
     })
 
     it('will update the url with the assessment id', () => {
-      const historyPushMock = { push: jest.fn() }
+      const historyPushMock = { replace: jest.fn() }
       const wrapper = shallow(<AssessmentContainer {...defaultProps} history={historyPushMock} />)
 
       wrapper.setState({ child: childInfoJson })
       wrapper.instance().initialSave(updatedAssessment)
 
-      expect(historyPushMock.push).toHaveBeenCalledWith('someurl/someid/someending/1')
+      expect(historyPushMock.replace).toHaveBeenCalledWith('someurl/someid/someending/1')
     })
   })
 
