@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import FullWidthLayout from './FullWidthLayout'
-import { Page, Utils } from '@cwds/components'
+import { CaresProvider, Page } from '@cwds/components'
 import CurrentUserLoadingBoundary from '../common/CurrentUserLoadingBoundary'
 import { GlobalAlert } from '../common'
 import UserMenu from '../Header/UserMenu'
@@ -24,16 +24,16 @@ describe('FullWidthLayout', () => {
   })
 
   it('renders its own CaresProvider', () => {
-    expect(render().type()).toBe(Utils.CaresProvider)
+    expect(render().type()).toBe(CaresProvider)
   })
 
   it('renders the breadcrumb', () => {
     const breadcrumb = <div id="my-breadcrumb" />
     const wrapper = render({ breadcrumb })
-    const provider = wrapper.find(Utils.CaresProvider)
+    const provider = wrapper.find(CaresProvider)
     const page = provider.find(Page)
 
-    expect(provider.props().value.breadcrumbRenderer(page.props().breadcrumb)).toBe(breadcrumb)
+    expect(page.props().Breadcrumb).toBe(breadcrumb)
   })
 
   describe('title', () => {
@@ -49,36 +49,35 @@ describe('FullWidthLayout', () => {
   })
 
   it('renders a UserMenu inside a LoadingBoundary', () => {
-    const context = render().props().value
-    const appBarUserMenu = context.appBarUserMenu()
-    expect(appBarUserMenu.type).toBe(CurrentUserLoadingBoundary)
-    expect(appBarUserMenu.props.children.type).toBe(UserMenu)
+    const userMenu = render().props().UserMenu
+    expect(userMenu.type).toBe(CurrentUserLoadingBoundary)
+    expect(userMenu.props.children.type).toBe(UserMenu)
   })
 
-  it('renders the leftButton as a cta', () => {
+  it('renders the leftButton as a PageActions', () => {
     const leftButton = <div id="my-button" />
     const page = render({ leftButton }).find(Page)
-    const cta = page.props().cta()
+    const pageActions = page.props().PageActions()
 
-    expect(cta.props.children).toContain(leftButton)
+    expect(pageActions.props.children).toContain(leftButton)
   })
 
-  it('renders the rightButton as a cta', () => {
+  it('renders the rightButton as a PageActions', () => {
     const rightButton = <div id="my-button" />
     const page = render({ rightButton }).find(Page)
-    const cta = page.props().cta()
+    const pageActions = page.props().PageActions()
 
-    expect(cta.props.children).toContain(rightButton)
+    expect(pageActions.props.children).toContain(rightButton)
   })
 
   it('can render both buttons at once', () => {
     const leftButton = <div id="my-left-button" />
     const rightButton = <div id="my-right-button" />
     const page = render({ leftButton, rightButton }).find(Page)
-    const cta = page.props().cta()
+    const pageActions = page.props().PageActions()
 
-    expect(cta.props.children).toContain(leftButton)
-    expect(cta.props.children).toContain(rightButton)
+    expect(pageActions.props.children).toContain(leftButton)
+    expect(pageActions.props.children).toContain(rightButton)
   })
 
   it('renders global alerts above main children', () => {

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import Icon from '@cwds/icons'
+import { Icon } from '@cwds/components'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'

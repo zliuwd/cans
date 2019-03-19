@@ -1,25 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Page, Utils } from '@cwds/components'
+import { CaresProvider, Page } from '@cwds/components'
 import CurrentUserLoadingBoundary from '../common/CurrentUserLoadingBoundary'
 import { GlobalAlert } from '../common'
 import UserMenu from '../Header/UserMenu'
 import Sticker from 'react-stickyfill'
-
-const { CaresProvider, defaultConfig } = Utils
-const id = x => x
+import { BRAND_NAME } from '../../util/constants'
 
 const appBarUserMenu = (
   <CurrentUserLoadingBoundary>
     <UserMenu />
   </CurrentUserLoadingBoundary>
 )
-
-const contextConfig = {
-  ...defaultConfig,
-  appBarUserMenu: () => appBarUserMenu,
-  breadcrumbRenderer: id,
-}
 
 const FullWidthLayout = ({ breadcrumb, children, pageTitle, leftButton, rightButton }) => {
   const buttons = (
@@ -41,8 +33,8 @@ const FullWidthLayout = ({ breadcrumb, children, pageTitle, leftButton, rightBut
     </React.Fragment>
   )
   return (
-    <CaresProvider value={contextConfig}>
-      <Page breadcrumb={breadcrumb} title={pageTitle} main={main} cta={() => buttons} />
+    <CaresProvider UserMenu={appBarUserMenu} Brand={BRAND_NAME}>
+      <Page Breadcrumb={breadcrumb} title={pageTitle} main={main} PageActions={() => buttons} />
     </CaresProvider>
   )
 }

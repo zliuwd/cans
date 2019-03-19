@@ -13,6 +13,7 @@ export const VALID_ASSESSMENT_DATE_FORMATS = [
 export const DEFAULT_AUTO_HIDE_TIMEOUT = 8000
 export const TIMEOUT_EVENT = 'TIMEOUT_EVENT'
 export const SESSION_EXPIRATION_WARNING_TIME = 300000 // 5 minutes
+export const BRAND_NAME = 'CWS-CARES'
 
 export const navigation = Object.freeze({
   STAFF_LIST: 'STAFF_LIST',

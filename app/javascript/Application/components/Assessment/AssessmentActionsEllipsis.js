@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button } from '@cwds/components'
-import Icon from '@cwds/icons'
+import { Button, Icon } from '@cwds/components'
 import AssessmentActionsMenu from './AssessmentActionsMenu'
 import AssessmentDeleteModal from './AssessmentDeleteModal'
 

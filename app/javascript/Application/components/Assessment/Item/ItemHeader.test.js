@@ -1,5 +1,5 @@
 import React from 'react'
-import Icon from '@cwds/icons'
+import { Icon } from '@cwds/components'
 import Typography from '@material-ui/core/Typography'
 import { mount } from 'enzyme'
 import ItemHeader from './ItemHeader'

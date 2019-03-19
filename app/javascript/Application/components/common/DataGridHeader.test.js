@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Icon from '@cwds/icons'
+import { Icon } from '@cwds/components'
 import Tooltip from '@material-ui/core/Tooltip'
 import DataGridHeader from './DataGridHeader'
 

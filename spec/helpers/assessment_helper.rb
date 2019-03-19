@@ -14,6 +14,7 @@ class AssessmentHelper
 
   def start_assessment_for(client_name, should_start_prefilled = false)
     visit_start_assessment client_name
+    sleep(2)
     is_reassessment = @form.has_reassessment_modal?
     if is_reassessment
       if should_start_prefilled

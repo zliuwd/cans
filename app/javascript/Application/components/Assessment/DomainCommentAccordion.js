@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Icon from '@cwds/icons'
+import { Icon } from '@cwds/components'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Icon from '@cwds/icons'
+import { Icon } from '@cwds/components'
 import Typography from '@material-ui/core/Typography'
 
 const ROTATION_RIGHT = 270

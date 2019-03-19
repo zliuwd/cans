@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap'
-import Icon from '@cwds/icons'
+import { Icon } from '@cwds/components'
 import { TIMEOUT_EVENT } from './../../util/constants'
 import { eventBus } from './../../util/eventBus'
 import { SecurityService } from './Security.service'

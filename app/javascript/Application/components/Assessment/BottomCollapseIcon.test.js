@@ -1,6 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import Icon from '@cwds/icons'
+import { Icon } from '@cwds/components'
 import BottomCollapseIcon from './BottomCollapseIcon'
 
 const fakeProps = {

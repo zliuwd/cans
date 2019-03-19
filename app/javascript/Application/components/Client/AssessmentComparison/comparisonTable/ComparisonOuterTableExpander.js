@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Icon from '@cwds/icons'
+import { Icon } from '@cwds/components'
 
 const ComparisonOuterTableExpander = ({ isExpanded }) => {
   return isExpanded ? (

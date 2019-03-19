@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Icon from '@cwds/icons'
+import { Icon } from '@cwds/components'
 import FullName from './FullName'
 import Gender from './Gender'
 import AgeInfo from './AgeInfo'

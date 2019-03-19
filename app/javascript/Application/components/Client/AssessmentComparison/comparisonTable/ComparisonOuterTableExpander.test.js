@@ -1,5 +1,5 @@
 import React from 'react'
-import Icon from '@cwds/icons'
+import { Icon } from '@cwds/components'
 import { mount } from 'enzyme'
 import ComparisonOuterTableExpander from './ComparisonOuterTableExpander'
 
