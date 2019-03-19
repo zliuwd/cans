@@ -282,5 +282,4 @@ export function preparePrecedingAssessment(precedingAssessment, eventDate) {
       item.comment = null
     })
   })
-  return precedingAssessment
 }

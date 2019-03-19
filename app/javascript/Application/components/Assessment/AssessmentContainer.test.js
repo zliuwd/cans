@@ -999,11 +999,8 @@ describe('<AssessmentContainer />', () => {
 
       // then
       expect(wrapper.state().isReassessmentModalShown).toBeFalsy()
-      const expectedAssessment = AHelper.preparePrecedingAssessment(
-        precedingAssessment,
-        subsequentAssessment.event_date
-      )
-      expect(wrapper.state().assessment).toEqual(expectedAssessment)
+      AHelper.preparePrecedingAssessment(precedingAssessment, subsequentAssessment.event_date)
+      expect(wrapper.state().assessment).toEqual(precedingAssessment)
     })
   })
 

@@ -584,7 +584,7 @@ describe('AssessmentHelper', () => {
           ],
         },
       }
-      const actual = preparePrecedingAssessment(input, '2019-03-08')
+      preparePrecedingAssessment(input, '2019-03-08')
       const expected = {
         id: null,
         some_field: 'will not be updated',
@@ -605,7 +605,7 @@ describe('AssessmentHelper', () => {
           ],
         },
       }
-      expect(actual).toEqual(expected)
+      expect(input).toEqual(expected)
     })
   })
 })
