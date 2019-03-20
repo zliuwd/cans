@@ -2,9 +2,9 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import AssessmentActionsEllipsis from './AssessmentActionsEllipsis'
 import AssessmentDeleteModal from './AssessmentDeleteModal'
-import { Button, Icon } from '@cwds/components'
-import AssessmentActionsMenu from './AssessmentActionsMenu'
+import { MenuItem, UncontrolledMenu as Menu } from '@cwds/components'
 import { AssessmentStatus } from '../Assessment/'
+import { clone } from '../../util/common'
 
 const defaultProps = {
   date: '01/01/2019',
@@ -49,105 +49,56 @@ describe('<AssessmentActionsEllipsis />', () => {
       })
     })
 
-    describe('div', () => {
-      it('renders a div', () => {
-        expect(getWrapper().find('div').length).toBe(1)
-      })
-    })
-
-    describe('Button', () => {
-      let button
-      beforeEach(() => {
-        button = wrapper.find(Button)
-      })
-
-      describe('when Button is clicked', () => {
-        it('toggles the isPopoverOpen state', () => {
-          expect(wrapper.state().isPopoverOpen).toEqual(false)
-          button.simulate('click')
-          expect(wrapper.state().isPopoverOpen).toEqual(true)
-        })
-      })
-
-      it('renders a Button component', () => {
-        expect(button.length).toBe(1)
-      })
-
-      it('sets the correct props', () => {
-        const buttonProps = button.props()
-        expect(buttonProps.id).toBe('icon-1234')
-        expect(buttonProps.className).toBe('icon-ellipsis')
-        expect(buttonProps.type).toBe('button')
-        expect(buttonProps['aria-label']).toBe('Ellipsis Menu Button')
-        expect(typeof buttonProps.onClick).toBe('function')
-      })
-    })
-
-    describe('Icon', () => {
-      let icon
-      beforeEach(() => {
-        icon = wrapper.find(Icon)
-      })
-
-      it('renders an Icon component', () => {
-        expect(icon.exists()).toBe(true)
-      })
-
-      it('sets the correct props', () => {
-        expect(icon.props().icon).toBe('ellipsis-v')
-      })
-    })
-
-    describe('AssessmentActionsMenu', () => {
+    describe('Menu', () => {
       let actionsMenu
       beforeEach(() => {
-        actionsMenu = wrapper.find(AssessmentActionsMenu)
+        actionsMenu = wrapper.find(Menu)
       })
 
-      it('renders a component', () => {
-        expect(actionsMenu.exists()).toBe(true)
+      it('renders Menu component', () => {
+        expect(actionsMenu.length).toBe(1)
       })
 
-      it('sets the correct props', () => {
-        const actionsMenuProps = actionsMenu.props()
-        expect(actionsMenuProps.clientId).toBe('C76Jg230X3')
-        expect(actionsMenuProps.assessmentId).toBe(1234)
-        expect(actionsMenuProps.assessmentMetaData).toEqual({
-          allowed_operations: ['read', 'update', 'create', 'complete', 'write', 'delete'],
-        })
-        expect(actionsMenuProps.assessmentStatus).toBe(AssessmentStatus.inProgress)
-        expect(typeof actionsMenuProps.toggleModal).toBe('function')
-        expect(typeof actionsMenuProps.togglePopover).toBe('function')
-        expect(actionsMenuProps.isPopoverOpen).toBe(false)
-        expect(actionsMenuProps.inheritUrl).toBe('/staff/0X5')
+      it('component has two menu items', () => {
+        const menuItems = wrapper.find(MenuItem)
+        expect(menuItems.length).toBe(2)
+      })
+
+      it('delete menu hidden if no permission', () => {
+        const props = clone(defaultProps)
+        props.assessmentMetaData.allowed_operations = ['read']
+        props.updateAssessmentHistoryCallback = () => {}
+        const wrapper = shallow(<AssessmentActionsEllipsis {...props} />)
+        expect(wrapper.find('button.delete-action').exists()).toBe(false)
+      })
+
+      it('delete menu hidden if status deleted ', () => {
+        const props = clone(defaultProps)
+        props.assessmentStatus = AssessmentStatus.deleted
+        props.updateAssessmentHistoryCallback = () => {}
+        const wrapper = shallow(<AssessmentActionsEllipsis {...props} />)
+        expect(wrapper.find('button.delete-action').exists()).toBe(false)
+      })
+
+      it('delete menu hidden if no allowed operations', () => {
+        const props = clone(defaultProps)
+        props.assessmentMetaData.allowed_operations = undefined
+        props.updateAssessmentHistoryCallback = () => {}
+        const wrapper = shallow(<AssessmentActionsEllipsis {...props} />)
+        expect(wrapper.find('button.delete-action').exists()).toBe(false)
       })
     })
   })
 
-  describe('toggleModal', () => {
+  describe('toggleDeleteModal', () => {
     describe('when the method is called', () => {
       it('toggles isDeleteAssessmentWarningShown state', () => {
         const wrapper = getWrapper()
         expect(wrapper.state().isDeleteAssessmentWarningShown).toBe(false)
-        wrapper
-          .find(AssessmentActionsMenu)
-          .props()
-          .toggleModal()
+        wrapper.instance().toggleDeleteModal()
         expect(wrapper.state().isDeleteAssessmentWarningShown).toBe(true)
-      })
-    })
-  })
-
-  describe('togglePopover', () => {
-    describe('when the method is called', () => {
-      it('toggles isPopoverOpen state', () => {
-        const wrapper = getWrapper()
-        expect(wrapper.state().isPopoverOpen).toBe(false)
-        wrapper
-          .find(AssessmentActionsMenu)
-          .props()
-          .togglePopover()
-        expect(wrapper.state().isPopoverOpen).toBe(true)
+        wrapper.instance().toggleDeleteModal()
+        expect(wrapper.state().isDeleteAssessmentWarningShown).toBe(false)
       })
     })
   })

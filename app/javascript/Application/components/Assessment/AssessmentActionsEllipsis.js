@@ -1,36 +1,51 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, Icon } from '@cwds/components'
-import AssessmentActionsMenu from './AssessmentActionsMenu'
+import { MenuItem, UncontrolledMenu as Menu } from '@cwds/components'
 import AssessmentDeleteModal from './AssessmentDeleteModal'
+import { Link } from 'react-router-dom'
+import { AssessmentStatus } from './AssessmentHelper'
 
 class AssessmentActionsEllipsis extends React.Component {
-  state = { isPopoverOpen: false, isDeleteAssessmentWarningShown: false }
+  state = { isDeleteAssessmentWarningShown: false }
 
-  toggleModal = () => {
+  toggleDeleteModal = () => {
     this.setState({
       isDeleteAssessmentWarningShown: !this.state.isDeleteAssessmentWarningShown,
     })
   }
 
-  togglePopover = () => {
-    this.setState({
-      isPopoverOpen: !this.state.isPopoverOpen,
-    })
+  canDeleteAssessment() {
+    if (!this.props.assessmentMetaData.allowed_operations) {
+      return false
+    }
+
+    const { allowed_operations: allowedOperations } = this.props.assessmentMetaData
+    const { assessmentStatus } = this.props
+
+    return allowedOperations.includes('delete') && assessmentStatus !== AssessmentStatus.deleted
+  }
+
+  renderDeleteMenuItem = () => {
+    return this.canDeleteAssessment() ? (
+      <MenuItem className={'delete-action'} onClick={this.toggleDeleteModal}>
+        Delete CANS
+      </MenuItem>
+    ) : null
   }
 
   render() {
-    const { isPopoverOpen, isDeleteAssessmentWarningShown } = this.state
+    const { isDeleteAssessmentWarningShown } = this.state
     const {
       date,
       clientId,
       assessmentCounty,
       assessmentId,
-      assessmentMetaData,
       assessmentStatus,
       inheritUrl,
       updateAssessmentHistoryCallback,
     } = this.props
+
+    const changeLogPath = `${inheritUrl}/clients/${clientId}/assessments/${assessmentId}/changelog/${assessmentStatus}`
 
     return (
       <React.Fragment>
@@ -39,30 +54,15 @@ class AssessmentActionsEllipsis extends React.Component {
           isShown={isDeleteAssessmentWarningShown}
           assessmentCounty={assessmentCounty}
           assessmentId={assessmentId}
-          toggleModal={this.toggleModal}
+          toggleModal={this.toggleDeleteModal}
           updateAssessmentHistoryCallback={updateAssessmentHistoryCallback}
         />
-        <div>
-          <Button
-            id={`icon-${assessmentId}`}
-            className="icon-ellipsis"
-            type="button"
-            aria-label="Ellipsis Menu Button"
-            onClick={this.togglePopover}
-          >
-            <Icon icon="ellipsis-v" />
-          </Button>
-          <AssessmentActionsMenu
-            clientId={clientId}
-            assessmentId={assessmentId}
-            assessmentMetaData={assessmentMetaData}
-            assessmentStatus={assessmentStatus}
-            toggleModal={this.toggleModal}
-            togglePopover={this.togglePopover}
-            isPopoverOpen={isPopoverOpen}
-            inheritUrl={inheritUrl}
-          />
-        </div>
+        <Menu>
+          <MenuItem className={'changelog-action'} tag={Link} to={changeLogPath}>
+            View CANS Change Log
+          </MenuItem>
+          {this.renderDeleteMenuItem()}
+        </Menu>
       </React.Fragment>
     )
   }

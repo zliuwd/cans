@@ -28,16 +28,18 @@ class AssessmentRecordInfo extends Component {
     return (
       <Card className="card-assessment-record-info">
         <CardBody className="card-assessment-record-body">
-          <AssessmentActionsEllipsis
-            inheritUrl={inheritUrl}
-            clientId={person.identifier}
-            assessmentCounty={handleCountyName(assessment)}
-            assessmentId={id}
-            assessmentMetaData={metadata}
-            date={formattedTimestamp}
-            assessmentStatus={status}
-            updateAssessmentHistoryCallback={updateAssessmentHistoryCallback}
-          />
+          <div className={'ellipsis-menu'}>
+            <AssessmentActionsEllipsis
+              inheritUrl={inheritUrl}
+              clientId={person.identifier}
+              assessmentCounty={handleCountyName(assessment)}
+              assessmentId={id}
+              assessmentMetaData={metadata}
+              date={formattedTimestamp}
+              assessmentStatus={status}
+              updateAssessmentHistoryCallback={updateAssessmentHistoryCallback}
+            />
+          </div>
           <div className={'assessment-info'}>
             {recordHeader}
             <p>
