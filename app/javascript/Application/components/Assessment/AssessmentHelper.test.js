@@ -575,7 +575,7 @@ describe('AssessmentHelper', () => {
           domains: [
             {
               comment: 'domain 1 comment',
-              items: [{ comment: 'item 1-1 comment' }, { comment: 'item 1-2 comment' }],
+              items: [{}, { comment: 'item 1-1 comment' }, { comment: 'item 1-2 comment' }],
             },
             {
               comment: 'domain 2 comment',
@@ -586,23 +586,12 @@ describe('AssessmentHelper', () => {
       }
       preparePrecedingAssessment(input, '2019-03-08')
       const expected = {
-        id: null,
         some_field: 'will not be updated',
         status: 'IN_PROGRESS',
         event_date: '2019-03-08',
         can_release_confidential_info: false,
-        conducted_by: null,
         state: {
-          domains: [
-            {
-              comment: null,
-              items: [{ comment: null }, { comment: null }],
-            },
-            {
-              comment: null,
-              items: [{ comment: null }],
-            },
-          ],
+          domains: [{ items: [{}, {}, {}] }, { items: [{}] }],
         },
       }
       expect(input).toEqual(expected)

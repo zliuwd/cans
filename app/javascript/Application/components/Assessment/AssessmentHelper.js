@@ -271,15 +271,16 @@ export const getSubstanceUseItemsIds = assessment => {
 }
 
 export function preparePrecedingAssessment(precedingAssessment, eventDate) {
-  precedingAssessment.id = null
-  precedingAssessment.status = 'IN_PROGRESS'
   precedingAssessment.event_date = eventDate
+  precedingAssessment.status = 'IN_PROGRESS'
   precedingAssessment.can_release_confidential_info = false
-  precedingAssessment.conducted_by = null
+
+  delete precedingAssessment.id
+  delete precedingAssessment.conducted_by
   precedingAssessment.state.domains.forEach(domain => {
-    domain.comment = null
+    delete domain.comment
     domain.items.forEach(item => {
-      item.comment = null
+      delete item.comment
     })
   })
 }

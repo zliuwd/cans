@@ -91,6 +91,9 @@ feature 'Case Worker Functionality' do
       visit '/'
       @assessment_helper.start_assessment_for(CLIENT_NAME, true)
     end
+    expand_first_domain
+    expand_first_item
+    item_and_domain_level_comment_test
     warning_and_summary_card_shown_after_complete_button_clicked true
   end
 
