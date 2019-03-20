@@ -138,6 +138,16 @@ class Assessment extends Component {
     this.props.onAssessmentUpdate(assessment)
   }
 
+  updateDomainIsReviewed = (code, caregiverIndex) => {
+    const assessment = clone(this.props.assessment)
+    assessment.state.domains.map(domain => {
+      if (domain.caregiver_index === caregiverIndex && domain.code === code) {
+        domain.is_reviewed = true
+      }
+    })
+    this.props.onAssessmentUpdate(assessment)
+  }
+
   render() {
     const { i18n, isDefaultExpanded } = this.props
     const assessmentDto = this.props.assessment
@@ -175,6 +185,7 @@ class Assessment extends Component {
                     onRemoveCaregiverDomain={this.removeCaregiverDomain}
                     onCaregiverNameUpdate={this.updateCaregiverName}
                     onDomainCommentUpdate={this.updateDomainComment}
+                    onDomainReviewed={this.updateDomainIsReviewed}
                     handleWarningShow={this.props.handleWarningShow}
                     disabled={this.props.disabled}
                   />

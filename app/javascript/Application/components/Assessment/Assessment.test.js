@@ -180,6 +180,33 @@ describe('<Assessment />', () => {
     })
   })
 
+  describe('#updateDomainIsReviewed', () => {
+    it('propogates onDomainReviewed prop for Domain', () => {
+      const onAssessmentUpdateMock = jest.fn()
+      const wrapper = shallow(
+        <Assessment onAssessmentUpdate={onAssessmentUpdateMock} assessment={assessment} i18n={i18n} />
+      )
+      const domains = wrapper.find(Domain)
+      domains.forEach(domain => domain.props().onDomainReviewed())
+      expect(onAssessmentUpdateMock).toHaveBeenCalledTimes(domains.length)
+    })
+
+    it('updates the domain is_reviewed when invoked', () => {
+      const mockFn = jest.fn()
+      const initialAssessment = clone(assessment)
+      initialAssessment.state.domains[0] = { ...initialAssessment.state.domains[0], code: 'AGV', caregiver_index: 'a' }
+      const wrapper = mount(<Assessment onAssessmentUpdate={mockFn} assessment={initialAssessment} i18n={i18n} />)
+      wrapper.instance().updateDomainIsReviewed('AGV', 'a')
+      const updatedAssessment = initialAssessment
+      updatedAssessment.state.domains[0] = {
+        ...initialAssessment.state.domains[0],
+        code: 'AGV',
+        is_reviewed: true,
+      }
+      expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
+    })
+  })
+
   describe('#updateCaregiverName()', () => {
     describe('onCareGiverNameUpdate call back', () => {
       it('is invoked when caregiver name is updated', () => {

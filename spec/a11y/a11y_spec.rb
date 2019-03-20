@@ -28,13 +28,19 @@ feature 'Pages are accessible' do
 
   scenario 'Assessment Form page is accessible' do
     visit '/'
-    assessment_helper.start_assessment_for CLIENT_NAME
+    is_reassessment = assessment_helper.start_assessment_for CLIENT_NAME
     click_button 'Age: 6-21'
     # Expanding one domain and one item in it to assert their accessibility
-    find('#domain0-expand').click
+    if is_reassessment
+      find('#domain0-review').click
+    else
+      find('#domain0-expand').click
+    end
     find('#PSYCHOSIS-item-expand').click
 
     # this exclude should be discussed with designers
-    expect(page).to be_accessible.excluding '#cancel-assessment', '#assessment-date_input'
+    expect(page).to be_accessible.excluding '#cancel-assessment',
+                                            '#assessment-date_input',
+                                            '.review-regular-button'
   end
 end

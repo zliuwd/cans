@@ -4,6 +4,8 @@ import Domain from './Domain'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
 import DomainCommentAccordion from './DomainCommentAccordion'
 import DomainCommentIcon from './DomainCommentIcon'
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 const domainDefault = {
   id: '1',
@@ -45,6 +47,7 @@ const domainComponentDefault = (
     onAddCaregiverDomain={() => {}}
     handleWarningShow={() => {}}
     onCaregiverNameUpdate={() => {}}
+    onDomainReviewed={() => {}}
   />
 )
 
@@ -73,6 +76,51 @@ describe('<Domain />', () => {
   it('renders DomainScore', () => {
     const wrapper = shallow(domainComponentDefault)
     expect(wrapper.find(DomainScore).length).toBe(1)
+  })
+
+  describe('Open to review', () => {
+    let wrapper, onDomainReviewed
+    beforeEach(() => {
+      onDomainReviewed = jest.fn()
+      wrapper = mount(
+        <Domain
+          key={'1'}
+          canReleaseConfidentialInfo={true}
+          domain={{ ...domainDefault }}
+          isAssessmentUnderSix={true}
+          i18n={{ ...i18nDefault }}
+          i18nAll={{ a: 'b' }}
+          index={1}
+          onItemCommentUpdate={() => {}}
+          onDomainCommentUpdate={() => {}}
+          onRatingUpdate={() => {}}
+          onConfidentialityUpdate={() => {}}
+          onAddCaregiverDomain={() => {}}
+          handleWarningShow={() => {}}
+          onCaregiverNameUpdate={() => {}}
+          onDomainReviewed={onDomainReviewed}
+        />
+      )
+    })
+
+    afterEach(() => {
+      wrapper.unmount()
+      onDomainReviewed.mockReset()
+    })
+
+    it('renders Open to review Button when isReviewed false', () => {
+      expect(wrapper.find(ExpansionPanelSummary).prop('expandIcon').props.children).toEqual('Open to review')
+    })
+
+    it('calls onDomainReviewed when expanded', () => {
+      wrapper.instance().handleExpandedChange(testExpandingEvent)
+      expect(onDomainReviewed.mock.calls.length).toBe(1)
+    })
+
+    it('renders ExpandMoreIcon when Open to review button is clicked', () => {
+      wrapper.find('Button#domain1-review').simulate('click')
+      expect(wrapper.find(ExpandMoreIcon).exists()).toBe(true)
+    })
   })
 
   it('when domain expands expandingThenScroll will be invoked', () => {
@@ -194,11 +242,7 @@ describe('<Domain />', () => {
   describe('caregiver domain', () => {
     const callbackMock = jest.fn()
     const handleWarningShow = jest.fn()
-    const domain = {
-      ...domainDefault,
-      is_caregiver_domain: true,
-      caregiver_index: 'a',
-    }
+    const domain = { ...domainDefault, is_caregiver_domain: true, caregiver_index: 'a' }
     const defaultProps = {
       key: '1',
       canReleaseConfidentialInfo: true,
@@ -235,8 +279,12 @@ describe('<Domain />', () => {
     it('invokes onRemoveCaregiverDomain() callback', () => {
       const removeCaregiverButton = wrapper.find('Button').at(1)
       removeCaregiverButton.simulate('click')
-      removeCaregiverButton.simulate('keypress', { key: 'Enter' })
-      removeCaregiverButton.simulate('keypress', { key: 'Space' })
+      removeCaregiverButton.simulate('keypress', {
+        key: 'Enter',
+      })
+      removeCaregiverButton.simulate('keypress', {
+        key: 'Space',
+      })
       expect(callbackMock.mock.calls.length).toBe(2)
     })
 
@@ -244,8 +292,12 @@ describe('<Domain />', () => {
       const addCaregiverButton = wrapper.find('div').at(1)
       expect(wrapper.find(DomainCaregiverControls).length).toBe(1)
       addCaregiverButton.simulate('click')
-      addCaregiverButton.simulate('keypress', { key: 'Enter' })
-      addCaregiverButton.simulate('keypress', { key: 'Space' })
+      addCaregiverButton.simulate('keypress', {
+        key: 'Enter',
+      })
+      addCaregiverButton.simulate('keypress', {
+        key: 'Space',
+      })
       expect(callbackMock.mock.calls.length).toBe(2)
     })
 
@@ -284,7 +336,9 @@ describe('<Domain />', () => {
             const nameInput = wrapper.find('.caregiver-name').at(0)
 
             // when
-            nameInput.simulate('change', { target: { value: 'Full Name' } })
+            nameInput.simulate('change', {
+              target: { value: 'Full Name' },
+            })
 
             // then
             expect(wrapper.state('caregiverName')).toEqual('Full Name')
@@ -324,7 +378,9 @@ describe('<Domain />', () => {
             wrapper.instance().handleExpandedChange(testExpandingEvent)
             wrapper.update()
             const nameInput = wrapper.find('.caregiver-name').at(0)
-            nameInput.simulate('change', { target: { value: 'Full Name' } })
+            nameInput.simulate('change', {
+              target: { value: 'Full Name' },
+            })
 
             // when
             nameInput.simulate('blur')
@@ -436,11 +492,7 @@ describe('<Domain />', () => {
 
   describe('read only mode', () => {
     const callbackMock = jest.fn()
-    const domain = {
-      ...domainDefault,
-      is_caregiver_domain: true,
-      caregiver_index: 'a',
-    }
+    const domain = { ...domainDefault, is_caregiver_domain: true, caregiver_index: 'a' }
     const defaultProps = {
       key: '1',
       canReleaseConfidentialInfo: true,

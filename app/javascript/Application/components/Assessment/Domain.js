@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { Icon } from '@cwds/components'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
@@ -17,6 +16,7 @@ import Grid from '@material-ui/core/Grid'
 import { totalScoreCalculation, itemFilter } from './DomainScoreHelper.js'
 import { isEmpty } from '../../util/common'
 import { expandingThenScroll } from '../../util/assessmentAutoScroll'
+import { Button, Icon } from '@cwds/components'
 import './style.sass'
 
 const mapI18nToState = props => ({
@@ -40,7 +40,14 @@ class Domain extends Component {
     return null
   }
 
+  handleOpenToReview = event => {
+    const code = this.props.domain.code
+    const caregiverIndex = this.props.domain.caregiver_index
+    this.props.onDomainReviewed(code, caregiverIndex)
+  }
+
   handleExpandedChange = event => {
+    this.handleOpenToReview(event)
     this.setState({
       expanded: !this.state.expanded,
     })
@@ -66,6 +73,7 @@ class Domain extends Component {
   handleCaregiverNameUpdate = () => {
     this.props.onCaregiverNameUpdate(this.props.domain.caregiver_index, this.state.caregiverName)
   }
+
   renderCaregiverName = () => {
     return (
       <div className={'caregiver-name-wrapper'}>
@@ -95,6 +103,7 @@ class Domain extends Component {
       index,
       disabled,
     } = this.props
+    const isReviewed = domain.is_reviewed
     const { items, is_caregiver_domain: isCaregiverDomain } = domain
     const { title, description, caregiverName, expanded } = this.state
     const itemListProps = {
@@ -111,15 +120,34 @@ class Domain extends Component {
     const validItems = itemFilter(items, isAssessmentUnderSix)
     const totalScore = totalScoreCalculation(validItems)
     const warningText = <span className={'caregiver-warning-text'}> Caregiver Name is required</span>
+
     return shouldDomainBeRendered(isAssessmentUnderSix, domain) ? (
       <Fragment>
         <ExpansionPanel expanded={expanded} onChange={this.handleExpandedChange} elevation={0}>
           <ExpansionPanelSummary
             expandIcon={
-              <ExpandMoreIcon id={`domain${index}-expand`} style={{ height: '28px', color: '#000000', padding: '0' }} />
+              isReviewed || expanded ? (
+                <ExpandMoreIcon id={`domain${index}-expand`} className={'expand-more-icon'} />
+              ) : (
+                <Button
+                  id={`domain${index}-review`}
+                  color="primary"
+                  className={'review-regular-button'}
+                  onClick={this.handleOpenToReview}
+                >
+                  Open to review
+                </Button>
+              )
             }
           >
-            <Grid container direction="row" justify="flex-end" alignItems="flex-end" spacing={0} style={{ padding: 0 }}>
+            <Grid
+              container
+              direction="row"
+              justify="flex-end"
+              alignItems="flex-end"
+              spacing={0}
+              style={{ padding: 0, flexWrap: 'nowrap', flexDirection: 'row' }}
+            >
               <Grid item xs={8}>
                 <Typography variant="title" style={{ color: '#0e6f89', fontSize: 16 }}>
                   {title}
@@ -134,7 +162,7 @@ class Domain extends Component {
                     : caregiverName && `- ${caregiverName}`}
                 </Typography>
               </Grid>
-              <Grid item xs={4} className={'domain-metric'}>
+              <Grid item xs={4} className={isReviewed ? 'domain-metric' : 'domain-metric-with-review'}>
                 <div className="domain-toolbar-comment-icon-block">
                   <DomainCommentIcon domain={domain} />
                 </div>
@@ -192,6 +220,7 @@ Domain.propTypes = {
   onCaregiverNameUpdate: PropTypes.func.isRequired,
   onConfidentialityUpdate: PropTypes.func.isRequired,
   onDomainCommentUpdate: PropTypes.func.isRequired,
+  onDomainReviewed: PropTypes.func,
   onItemCommentUpdate: PropTypes.func.isRequired,
   onRatingUpdate: PropTypes.func.isRequired,
 }
@@ -201,6 +230,7 @@ Domain.defaultProps = {
   handleWarningShow: () => {},
   isAssessmentUnderSix: null,
   isDefaultExpanded: false,
+  onDomainReviewed: () => {},
 }
 
 export default Domain
