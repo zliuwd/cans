@@ -27,7 +27,10 @@
   padding: .9375rem 1.875rem
   line-height: 1.6875rem
 .card-header-client-assessment-history
-  > div:first-child
+    #new-cans-button
+      font-size: 1rem
+      min-height: 2.2rem
+      padding: 0 0.5rem
     .add-cans-span
       color: $light-blue
       text-decoration: underline
@@ -49,6 +52,43 @@
     margin-left: 3.5rem
 .records-mode-switch-button
    margin-left: 2rem
-#new-cans-button
+
+.record-control-container
+  display: flex
+  flex-wrap: nowrap
   float: right
-  padding: 0
+//********************
+// AssessmentRecordsSwitch
+//********************
+.assessment-records-buttons-group
+  min-width: 3rem
+  margin-right: 1.5rem
+  margin-top: 0.03rem
+
+%button-in-group
+  background: #fff
+  color: $dark-cyan
+  width: 50%
+  min-width: 3.5rem
+  min-height: 2.18rem
+  padding: 0.2rem
+  margin: 0
+  font-size: 1.5rem
+  text-align: center
+  border-radius: 0
+  border: 0.63rem
+  cursor: pointer
+
+.assessment-records-button
+  @extend %button-in-group
+
+.assessment-records-button-selected
+  @extend %button-in-group
+  background: $dark-cyan
+  color: #fff
+#switch-to-comparison-view
+  border: $dark-cyan solid thin
+  border-radius: 0.1rem 0 0 0.1rem
+#switch-to-history-view
+  border: $dark-cyan solid thin
+  border-radius:  0 0.1rem 0.1rem 0

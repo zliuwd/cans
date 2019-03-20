@@ -30,8 +30,8 @@ export function clientCaseReferralNumber(serviceSource) {
 }
 
 export const recordsMode = Object.freeze({
-  HISTORY: 'Show History',
-  COMPARISON: 'Show Comparison',
+  HISTORY: 'history',
+  COMPARISON: 'comparison',
 })
 
 export const shouldRenderRecordsSwitch = assessments => {
@@ -42,4 +42,12 @@ export const shouldRenderRecordsSwitch = assessments => {
     return el.status === 'COMPLETED'
   })
   return completedAssessments.length > 1 // have at least two COMPLETED assessments
+}
+
+export const activeSwitchDetector = isComparisonShown => {
+  return isComparisonShown ? recordsMode.HISTORY : recordsMode.COMPARISON
+}
+
+export const viewNameSwitch = isComparisonShown => {
+  return isComparisonShown ? 'Assessment History Over Time' : 'Assessment History'
 }

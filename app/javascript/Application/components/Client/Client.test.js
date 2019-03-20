@@ -7,6 +7,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
 import { MemoryRouter } from 'react-router-dom'
 import ClientAssessmentStatistics from './ClientAssessmentStatistics'
+import ClientAssessmentHistoryLoadingBoundary from './AssessmentHistory/ClientAssessmentHistoryLoadingBoundary'
 
 const client = {
   id: 1,
@@ -71,6 +72,12 @@ describe('<Client />', () => {
         return wrapper.instance().sensitivityTypeLabel(type)
       })
       expect(result).toEqual(['Unrestricted', 'Sealed', 'Sensitive', 'OTHER'])
+    })
+
+    it('renders one ClientAssessmentHistoryLoadingBoundary', () => {
+      const wrapper = getWrapper()
+      const target = wrapper.find(ClientAssessmentHistoryLoadingBoundary)
+      expect(target.length).toBe(1)
     })
 
     it('ClientAssessmentHistoryUrlTrimmer', () => {

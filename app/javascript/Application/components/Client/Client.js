@@ -8,6 +8,7 @@ import { isoToLocalDate } from '../../util/dateHelper'
 import NavFromProducer from '../../util/NavFromProducer'
 import { urlTrimmer } from '../../util/urlTrimmer'
 import ClientAssessmentStatistics from './ClientAssessmentStatistics'
+import ClientAssessmentHistoryLoadingBoundary from './AssessmentHistory/ClientAssessmentHistoryLoadingBoundary'
 
 const SINGLE_WIDTH = 3
 const DOUBLE_WIDTH = 6
@@ -107,7 +108,12 @@ class Client extends Component {
               </div>
             </Card>
           </Grid>
-          <ClientAssessmentStatistics {...assessmentStatisticsProps} />
+          <ClientAssessmentHistoryLoadingBoundary
+            clientIdentifier={clientIdentifier}
+            key={this.state.loadingBoundaryKey}
+          >
+            <ClientAssessmentStatistics {...assessmentStatisticsProps} />
+          </ClientAssessmentHistoryLoadingBoundary>
         </Grid>
       </Fragment>
     )

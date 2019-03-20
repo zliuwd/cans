@@ -3,6 +3,9 @@ import {
   formatClientName,
   formatClientStatus,
   shouldRenderRecordsSwitch,
+  activeSwitchDetector,
+  viewNameSwitch,
+  recordsMode,
 } from './Client.helper'
 
 describe('Client.helper', () => {
@@ -222,5 +225,19 @@ describe('shouldRenderRecordsSwitch', () => {
 
   it('will return false when assesments is undefined', () => {
     expect(shouldRenderRecordsSwitch(undefinedAssessments)).toBe(false)
+  })
+})
+
+describe('activeSwitchDetector', () => {
+  it('returns correct values', () => {
+    expect(activeSwitchDetector(true)).toBe(recordsMode.HISTORY)
+    expect(activeSwitchDetector(false)).toBe(recordsMode.COMPARISON)
+  })
+})
+
+describe('viewNameSwitch', () => {
+  it('returns correct values', () => {
+    expect(viewNameSwitch(true)).toBe('Assessment History Over Time')
+    expect(viewNameSwitch(false)).toBe('Assessment History')
   })
 })

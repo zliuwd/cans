@@ -1,15 +1,11 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Card, CardHeader, CardTitle, CardBody } from '@cwds/components'
-import Grid from '@material-ui/core/Grid/Grid'
+import { CardBody } from '@cwds/components'
 import ClientAssessmentHistory from './ClientAssessmentHistory'
 import ClientAssessmentHistoryRecord from './ClientAssessmentHistoryRecord'
-import AddCansButton from '../AddCansButton'
 import ClientAssessmentHistoryTable from './ClientAssessmentHistoryTable'
 import { navigation } from '../../../util/constants'
 import { LoadingState } from '../../../util/loadingHelper'
-import RecordsModeSwitchButton from '../RecordsModeSwitchButton'
-import { assessment } from '../../Assessment/assessment.mocks.test'
 
 const client = {
   identifier: '0PcpFQu0QM',
@@ -64,49 +60,8 @@ describe('<ClientAssessmentHistory', () => {
   describe('components', () => {
     const getLength = component => getWrapper(mockedAssessmentsWithEventDate).find(component).length
 
-    it('renders a <Grid /> component', () => {
-      expect(getLength(Grid)).toBe(1)
-    })
-
-    it('renders a <Card /> component', () => {
-      expect(getLength(Card)).toBe(1)
-    })
-
-    it('renders a <CardHeader /> component', () => {
-      expect(getLength(CardHeader)).toBe(1)
-    })
-
-    it('renders a <CardTitle /> component', () => {
-      expect(getLength(CardTitle)).toBe(1)
-    })
-
-    it('renders a <RecordsModeSwitchButton /> in the Card header with correct props', () => {
-      const wrapper = getWrapper(mockedAssessmentsWithEventDate)
-      const target = wrapper.find(RecordsModeSwitchButton)
-      expect(target.length).toBe(1)
-      expect(Object.keys(target.props())).toContain('switchButtonName', 'recordsModeSwitch', 'assessments')
-    })
-
     it('renders a <CardBody /> component', () => {
       expect(getLength(CardBody)).toBe(1)
-    })
-
-    describe('AddCansButton', () => {
-      client.service_source_id = '123'
-      it('renders a <AddCansButton /> in the Card header', () => {
-        const wrapper = getWrapper(mockedAssessmentsWithEventDate)
-        expect(wrapper.find(AddCansButton).length).toBe(1)
-      })
-
-      it('sets isReassessment prop to false when 0 assessments', () => {
-        const wrapper = getWrapper([])
-        expect(wrapper.find(AddCansButton).props().isReassessment).toBe(false)
-      })
-
-      it('sets isReassessment prop to true when client has a completed assessment under same case/referral number', () => {
-        const wrapper = getWrapper([{ ...assessment, status: 'COMPLETED', service_source_id: '123' }])
-        expect(wrapper.find(AddCansButton).props().isReassessment).toBe(true)
-      })
     })
 
     describe('when there are more than 3 assessments', () => {

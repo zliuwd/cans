@@ -1,10 +1,12 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import ClientAssessmentHistory from './AssessmentHistory/ClientAssessmentHistory'
-import ClientAssessmentHistoryLoadingBoundary from './AssessmentHistory/ClientAssessmentHistoryLoadingBoundary'
+import { Container, Card } from '@cwds/components'
 import AssessmentComparison from './AssessmentComparison/AssessmentComparison'
 import AssessmentComparisonLoadingBoundary from './AssessmentComparison/AssessmentComparisonLoadingBoundary'
 import ClientAssessmentStatistics from './ClientAssessmentStatistics'
+import ClientAssessmentStatisticsHeader from './ClientAssessmentStatisticsHeader'
+
 const client = {
   id: 1,
   first_name: 'test',
@@ -20,9 +22,23 @@ const client = {
 }
 
 const fakeProps = {
+  loadingState: 'ready',
   clientIdentifier: '01',
   loadingBoundaryKey: 123,
   isComparisonShown: false,
+  client,
+  navFrom: 'someWhere',
+  inheritUrl: '/cans/someurl',
+  userId: '01',
+  updateAssessmentHistoryCallback: jest.fn(),
+  recordsModeSwitch: jest.fn(),
+}
+
+const comparisonShownProps = {
+  loadingState: 'ready',
+  clientIdentifier: '01',
+  loadingBoundaryKey: 123,
+  isComparisonShown: true,
   client,
   navFrom: 'someWhere',
   inheritUrl: '/cans/someurl',
@@ -41,14 +57,34 @@ describe('<ClientAssessmentStatistics />', () => {
     wrapper.unmount()
   })
 
-  it('initially renders with 1 <ClientAssessmentHistoryLoadingBoundary /> component', () => {
-    expect(wrapper.find(ClientAssessmentHistoryLoadingBoundary).length).toBe(1)
-  })
-
   it('initially renders 1 <AssessmentComparisonLoadingBoundary /> component with correct props', () => {
     const target = wrapper.find(AssessmentComparisonLoadingBoundary)
     expect(target.length).toBe(1)
     expect(Object.keys(target.props())).toContain('clientIdentifier', 'instrumentId')
+  })
+
+  it('initially renders 1 Container', () => {
+    const target = wrapper.find(Container)
+    expect(target.length).toBe(1)
+  })
+
+  it('initially renders 1 Card', () => {
+    const target = wrapper.find(Card)
+    expect(target.length).toBe(1)
+  })
+
+  it('initially renders 1 ClientAssessmentStatisticsHeader with correct props', () => {
+    const target = wrapper.find(ClientAssessmentStatisticsHeader)
+    expect(target.length).toBe(1)
+    expect(Object.keys(target.props())).toContain(
+      'isComparisonShown',
+      'activatedRecordSwitchButton',
+      'recordsModeSwitch',
+      'assessments',
+      'clientIdentifier',
+      'disabled',
+      'isReassessment'
+    )
   })
 
   it('renders with 1 <ClientAssessmentHistory /> and does not render <AssessmentComparison /> when isComparisonShown equal to false', () => {
@@ -58,17 +94,6 @@ describe('<ClientAssessmentStatistics />', () => {
   })
 
   it('does not render <ClientAssessmentHistory /> and renders <AssessmentComparison /> when isComparisonShown equal to true', () => {
-    const comparisonShownProps = {
-      clientIdentifier: '01',
-      loadingBoundaryKey: 123,
-      isComparisonShown: true,
-      client,
-      navFrom: 'someWhere',
-      inheritUrl: '/cans/someurl',
-      userId: '01',
-      updateAssessmentHistoryCallback: jest.fn(),
-      recordsModeSwitch: jest.fn(),
-    }
     const comparisonWrapper = shallow(<ClientAssessmentStatistics {...comparisonShownProps} />)
     expect(comparisonShownProps.isComparisonShown).toBe(true)
     expect(comparisonWrapper.find(AssessmentComparison).length).toBe(1)

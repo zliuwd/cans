@@ -1,10 +1,8 @@
 import React from 'react'
-import { Card, CardTitle } from '@cwds/components'
+import { Card } from '@cwds/components'
 import ComparisonOuterTable from './comparisonTable/ComparisonOuterTable'
 import ComparisonGraph from './comparisonGraph/ComparisonGraph'
 import './style.sass'
-import RecordsModeSwitchButton from '../RecordsModeSwitchButton'
-import { recordsMode } from '../Client.helper'
 import { shallow, mount } from 'enzyme'
 import AssessmentComparison from './AssessmentComparison'
 import ComparisonAgeSwitchButtonGroup from './ComparisonAgeSwitchButtonGroup'
@@ -223,33 +221,14 @@ describe('<AssessmentComparison />', () => {
     expect(Object.keys(target)).toContain('currentDataKey', 'isAgeSwitchShown')
   })
 
-  it('will render two cards', () => {
+  it('will render one card', () => {
     const target = wrapper.find(Card)
-    expect(target.length).toBe(2)
+    expect(target.length).toBe(1)
   })
 
-  it('each card has correct className', () => {
+  it('renders card with correct className', () => {
     const target = wrapper.find(Card)
-    expect(target.at(0).props().className).toBe('card-cans-comparison')
-    expect(target.at(1).props().className).toBe('comparison-graph-card')
-  })
-
-  it('will render one cardTitle with #Assessment Comparison# ', () => {
-    const target = wrapper.find(CardTitle)
-    expect(target.length).toBe(1)
-    expect(target.html()).toContain('Assessment Comparison')
-  })
-
-  it('will render a RecordsModeSwitchButton with text show history', () => {
-    const target = wrapper.find(RecordsModeSwitchButton)
-    expect(target.length).toBe(1)
-    expect(target.html()).toContain(recordsMode.HISTORY)
-  })
-
-  it('will render a RecordsModeSwitchButton with correct props', () => {
-    const target = wrapper.find(RecordsModeSwitchButton)
-    expect(target.length).toBe(1)
-    expect(Object.keys(target.props())).toContain('switchButtonName', 'recordsModeSwitch', 'assessments')
+    expect(target.props().className).toBe('comparison-graph-card')
   })
 
   it('will render a ComparisonOuterTable with correct props', () => {
