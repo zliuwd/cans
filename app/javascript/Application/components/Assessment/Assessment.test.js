@@ -181,6 +181,28 @@ describe('<Assessment />', () => {
   })
 
   describe('#updateDomainIsReviewed', () => {
+    it('sets using prior ratings to true if assessment has preceding_assessment_id', () => {
+      const onAssessmentUpdateMock = jest.fn()
+      const initialAssessment = clone(assessment)
+      initialAssessment.preceding_assessment_id = '123'
+      const wrapper = shallow(
+        <Assessment onAssessmentUpdate={onAssessmentUpdateMock} assessment={initialAssessment} i18n={i18n} />
+      )
+      const domain = wrapper.find(Domain)
+      expect(domain.prop('isUsingPriorRatings')).toBe(true)
+    })
+
+    it('sets using prior ratings to false if assessment does not have a preceding_assessment_id', () => {
+      const onAssessmentUpdateMock = jest.fn()
+      const initialAssessment = clone(assessment)
+      const wrapper = shallow(
+        <Assessment onAssessmentUpdate={onAssessmentUpdateMock} assessment={initialAssessment} i18n={i18n} />
+      )
+      const domain = wrapper.find(Domain)
+      expect(initialAssessment.preceding_assessment_id).toBeUndefined()
+      expect(domain.prop('isUsingPriorRatings')).toBe(false)
+    })
+
     it('propogates onDomainReviewed prop for Domain', () => {
       const onAssessmentUpdateMock = jest.fn()
       const wrapper = shallow(

@@ -28,14 +28,10 @@ feature 'Pages are accessible' do
 
   scenario 'Assessment Form page is accessible' do
     visit '/'
-    is_reassessment = assessment_helper.start_assessment_for CLIENT_NAME
+    assessment_helper.start_assessment_for CLIENT_NAME
     click_button 'Age: 6-21'
     # Expanding one domain and one item in it to assert their accessibility
-    if is_reassessment
-      find('#domain0-review').click
-    else
-      find('#domain0-expand').click
-    end
+    find('#domain0-expand').click
     find('#PSYCHOSIS-item-expand').click
 
     # this exclude should be discussed with designers

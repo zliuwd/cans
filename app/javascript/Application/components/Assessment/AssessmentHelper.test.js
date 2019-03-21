@@ -567,6 +567,7 @@ describe('AssessmentHelper', () => {
     it('prepares preceding assessment for reassessment ', () => {
       const input = {
         some_field: 'will not be updated',
+        id: 12345,
         status: 'COMPLETED',
         event_date: '2019-01-01',
         can_release_confidential_info: true,
@@ -587,6 +588,7 @@ describe('AssessmentHelper', () => {
       preparePrecedingAssessment(input, '2019-03-08')
       const expected = {
         some_field: 'will not be updated',
+        preceding_assessment_id: 12345,
         status: 'IN_PROGRESS',
         event_date: '2019-03-08',
         can_release_confidential_info: false,

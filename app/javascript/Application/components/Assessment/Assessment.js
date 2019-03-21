@@ -187,6 +187,7 @@ class Assessment extends Component {
                     onDomainCommentUpdate={this.updateDomainComment}
                     onDomainReviewed={this.updateDomainIsReviewed}
                     handleWarningShow={this.props.handleWarningShow}
+                    isUsingPriorRatings={Boolean(assessmentDto.preceding_assessment_id)}
                     disabled={this.props.disabled}
                   />
                 )

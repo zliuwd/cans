@@ -274,6 +274,7 @@ export function preparePrecedingAssessment(precedingAssessment, eventDate) {
   precedingAssessment.event_date = eventDate
   precedingAssessment.status = 'IN_PROGRESS'
   precedingAssessment.can_release_confidential_info = false
+  precedingAssessment.preceding_assessment_id = precedingAssessment.id
 
   delete precedingAssessment.id
   delete precedingAssessment.conducted_by

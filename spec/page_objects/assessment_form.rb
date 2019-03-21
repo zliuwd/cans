@@ -90,7 +90,6 @@ class AssessmentForm < SitePrism::Page
   elements :domain_score_badges, 'span.domain-score-badge'
   element :challenges_domain, 'svg#domain5-expand'
   element :caregiver_domain, 'svg#domain11-expand'
-  element :caregiver_domain_review_button, 'button#domain11-review'
   element :impulse_hyperactivity, '#IMPULSIVITY_HYPERACTIVITY-item-expand'
   element :expand_all_button, 'button', text: 'EXPAND ALL'
   element :collapse_all_button, 'button', text: 'COLLAPSE ALL'

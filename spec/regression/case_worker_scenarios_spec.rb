@@ -121,8 +121,8 @@ feature 'Case Worker Functionality' do
 
   scenario 'Case worker creates and deletes assessment' do
     visit '/'
-    is_reassessment = @assessment_helper.start_assessment_for CLIENT_NAME_2
-    verify_radio_buttons_on_assessment_header(current_date, is_reassessment)
+    @assessment_helper.start_assessment_for CLIENT_NAME_2
+    verify_radio_buttons_on_assessment_header current_date
     validate_domain_radio_and_chevron
     save_and_check_the_success_message
     navigate_to_client_profile(CLIENT_NAME_2)
@@ -275,7 +275,7 @@ feature 'Case Worker Functionality' do
     expect(@assessment_changelog.is_assessment?(current_date)).to be(true)
   end
 
-  def verify_radio_buttons_on_assessment_header(current_date, is_reassessment)
+  def verify_radio_buttons_on_assessment_header(current_date)
     click_0_to_5_button
     expect(@form.header).to have_redaction_message_0_to_5
     expect(@form.header.date_field.value).to eq(current_date)
@@ -283,11 +283,7 @@ feature 'Case Worker Functionality' do
     check_case_or_referral_number
     expect(@form).to have_assessment_card_title_0_5
     expect(@form).to have_caregiver_domain_headers
-    if is_reassessment
-      @form.caregiver_domain.click
-    else
-      @form.caregiver_domain_review_button.click
-    end
+    @form.caregiver_domain.click
     expect(@form.header.authorization_radio_no.checked?).to be(true)
     expect(@form.header.has_caregiver_yes_radio.checked?).to be(true)
     expect(@form.caregiver_domain_substance_use_confidential_checkbox.checked?).to be(true)

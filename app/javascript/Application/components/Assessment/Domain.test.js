@@ -4,7 +4,6 @@ import Domain from './Domain'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
 import DomainCommentAccordion from './DomainCommentAccordion'
 import DomainCommentIcon from './DomainCommentIcon'
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 const domainDefault = {
@@ -79,10 +78,39 @@ describe('<Domain />', () => {
   })
 
   describe('Open to review', () => {
-    let wrapper, onDomainReviewed
-    beforeEach(() => {
-      onDomainReviewed = jest.fn()
-      wrapper = mount(
+    const onDomainReviewed = jest.fn()
+    const wrapper = mount(
+      <Domain
+        key={'1'}
+        canReleaseConfidentialInfo={true}
+        domain={{ ...domainDefault }}
+        isAssessmentUnderSix={true}
+        i18n={{ ...i18nDefault }}
+        i18nAll={{ a: 'b' }}
+        index={1}
+        onItemCommentUpdate={() => {}}
+        onDomainCommentUpdate={() => {}}
+        onRatingUpdate={() => {}}
+        onConfidentialityUpdate={() => {}}
+        onAddCaregiverDomain={() => {}}
+        handleWarningShow={() => {}}
+        onCaregiverNameUpdate={() => {}}
+        onDomainReviewed={onDomainReviewed}
+        isUsingPriorRatings={false}
+      />
+    )
+
+    it('renders expand icon when isUsingPriorRatings is false', () => {
+      expect(wrapper.find(ExpandMoreIcon).exists()).toBe(true)
+    })
+
+    it('calls onDomainReviewed when expanded', () => {
+      wrapper.instance().handleExpandedChange(testExpandingEvent)
+      expect(onDomainReviewed.mock.calls.length).toBe(1)
+    })
+
+    it('renders ExpandMoreIcon when Open to review button is clicked', () => {
+      const wrapper = mount(
         <Domain
           key={'1'}
           canReleaseConfidentialInfo={true}
@@ -99,25 +127,9 @@ describe('<Domain />', () => {
           handleWarningShow={() => {}}
           onCaregiverNameUpdate={() => {}}
           onDomainReviewed={onDomainReviewed}
+          isUsingPriorRatings={true}
         />
       )
-    })
-
-    afterEach(() => {
-      wrapper.unmount()
-      onDomainReviewed.mockReset()
-    })
-
-    it('renders Open to review Button when isReviewed false', () => {
-      expect(wrapper.find(ExpansionPanelSummary).prop('expandIcon').props.children).toEqual('Open to review')
-    })
-
-    it('calls onDomainReviewed when expanded', () => {
-      wrapper.instance().handleExpandedChange(testExpandingEvent)
-      expect(onDomainReviewed.mock.calls.length).toBe(1)
-    })
-
-    it('renders ExpandMoreIcon when Open to review button is clicked', () => {
       wrapper.find('Button#domain1-review').simulate('click')
       expect(wrapper.find(ExpandMoreIcon).exists()).toBe(true)
     })

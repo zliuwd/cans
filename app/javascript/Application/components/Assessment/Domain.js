@@ -102,8 +102,9 @@ class Domain extends Component {
       canReleaseConfidentialInfo,
       index,
       disabled,
+      isUsingPriorRatings,
     } = this.props
-    const isReviewed = domain.is_reviewed
+    const isReviewed = isUsingPriorRatings ? domain.is_reviewed : true
     const { items, is_caregiver_domain: isCaregiverDomain } = domain
     const { title, description, caregiverName, expanded } = this.state
     const itemListProps = {
@@ -216,6 +217,7 @@ Domain.propTypes = {
   index: PropTypes.number.isRequired,
   isAssessmentUnderSix: PropTypes.bool,
   isDefaultExpanded: PropTypes.bool,
+  isUsingPriorRatings: PropTypes.bool,
   onAddCaregiverDomain: PropTypes.func.isRequired,
   onCaregiverNameUpdate: PropTypes.func.isRequired,
   onConfidentialityUpdate: PropTypes.func.isRequired,
@@ -230,6 +232,7 @@ Domain.defaultProps = {
   handleWarningShow: () => {},
   isAssessmentUnderSix: null,
   isDefaultExpanded: false,
+  isUsingPriorRatings: false,
   onDomainReviewed: () => {},
 }
 
