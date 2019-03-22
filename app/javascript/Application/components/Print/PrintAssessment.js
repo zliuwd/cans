@@ -38,9 +38,12 @@ import {
 } from '../Assessment/AssessmentSummary/DomainHelper'
 import moment from 'moment'
 
-const isItemHidden = item => item.confidential_by_default && item.confidential
+const isConfidential = item => item.confidential_by_default && item.confidential
+const isDiscretionNeeded = item => !item.confidential_by_default && item.confidential
+const isItemHidden = item => isConfidential(item) || isDiscretionNeeded(item)
 
-const hasConfidentialItems = domain => domain.items.filter(isItemHidden).length > 0
+const hasConfidentialItems = domain => domain.items.filter(isConfidential).length > 0
+const hasDiscretionNeededItems = domain => domain.items.filter(isDiscretionNeeded).length > 0
 
 class PrintAssessment extends PureComponent {
   constructor(props) {
@@ -113,7 +116,11 @@ class PrintAssessment extends PureComponent {
     const { code, caregiver_index: caregiverIndex, items, comment } = domain
     const title = (domainI18n._title_ || '').toUpperCase()
     const caregiverName = domain.caregiver_name || ''
-    const totalScore = hasConfidentialItems(domain) ? 'Confidential' : totalScoreCalculation(items)
+    const totalScore = hasConfidentialItems(domain)
+      ? 'Confidential'
+      : hasDiscretionNeededItems(domain)
+        ? 'Discretion Needed'
+        : totalScoreCalculation(items)
     return (
       <div key={code + caregiverIndex}>
         <div style={domainHeaderStyle}>
