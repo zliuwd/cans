@@ -4,18 +4,20 @@ import { Print } from '../../Print'
 import { buildButton } from '../PageHeaderButtonsBuilder'
 import pageLockService from './../../common/PageLockService'
 
+let self
+
 class PrintButton extends Component {
   constructor(props) {
     super(props)
     this.state = { shouldPrintNow: false }
-    this.togglePrintNow = this.togglePrintNow.bind(this)
+    self = this
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.activeCtrlP()
   }
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     this.muteCtrlP()
   }
 
@@ -40,8 +42,8 @@ class PrintButton extends Component {
     pageLockService.confirm(this.togglePrintNow, { isDiscardDisabled: this.props.assessmentId === undefined })
   }
 
-  togglePrintNow() {
-    this.setState({ shouldPrintNow: !this.state.shouldPrintNow })
+  togglePrintNow = () => {
+    self.setState(prevState => ({ shouldPrintNow: !prevState.shouldPrintNow }))
   }
 
   renderPrintButton = () => {
@@ -50,7 +52,7 @@ class PrintButton extends Component {
     return buildButton('Print', null, this.onPrint, isEnabled)
   }
 
-  render() {
+  render = () => {
     const { shouldPrintNow } = this.state
     const { node } = this.props
 
