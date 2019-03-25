@@ -1,31 +1,28 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import UserMenu from './UserMenu'
-import { Avatar } from '@cwds/components'
-import { UncontrolledDropdown, DropdownToggle, DropdownItem } from '@cwds/reactstrap'
+import { UncontrolledUserMenu, MenuItem } from '@cwds/components'
 import { logoutUrl } from '../../util/navigationUtil'
 
 describe('<UserMenu />', () => {
   const render = user => shallow(<UserMenu user={user} />)
 
   it('renders a dropdown menu', () => {
-    expect(render().type()).toBe(UncontrolledDropdown)
+    expect(render().type()).toBe(UncontrolledUserMenu)
   })
 
-  it('renders a toggle with user name and avatar', () => {
-    const toggle = render({ first_name: 'Eddard', last_name: 'Stark' }).find(DropdownToggle)
-
-    expect(toggle.find('span').props().children).toEqual('Eddard Stark')
-    expect(toggle.find(Avatar).exists()).toBe(true)
+  it('renders a toggle with user name', () => {
+    const userMenu = render({ first_name: 'Eddard', last_name: 'Stark' })
+    expect(userMenu.find(UncontrolledUserMenu).props().label).toEqual('Eddard Stark')
   })
 
   it('renders a logout item', () => {
-    const item = render().find(DropdownItem)
+    const item = render().find(MenuItem)
     expect(item.props().children).toBe('Logout')
   })
 
   it('logs out when clicking logout item', () => {
-    const item = render().find(DropdownItem)
+    const item = render().find(MenuItem)
     const spy = jest.spyOn(window.location, 'assign').mockImplementation(() => {})
     item.props().onClick()
     expect(spy).toHaveBeenCalledWith(logoutUrl())
