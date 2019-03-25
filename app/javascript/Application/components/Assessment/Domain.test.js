@@ -1,4 +1,5 @@
 import React from 'react'
+import { UncontrolledTooltip } from '@cwds/components'
 import { shallow, mount } from 'enzyme'
 import Domain from './Domain'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
@@ -79,6 +80,8 @@ describe('<Domain />', () => {
 
   describe('Open to review', () => {
     const onDomainReviewed = jest.fn()
+    const div = document.createElement('div')
+    document.body.appendChild(div)
     const wrapper = mount(
       <Domain
         key={'1'}
@@ -97,11 +100,17 @@ describe('<Domain />', () => {
         onCaregiverNameUpdate={() => {}}
         onDomainReviewed={onDomainReviewed}
         isUsingPriorRatings={false}
-      />
+      />,
+      { attachTo: div }
     )
 
     it('renders expand icon when isUsingPriorRatings is false', () => {
       expect(wrapper.find(ExpandMoreIcon).exists()).toBe(true)
+    })
+
+    it('will render toolTip', () => {
+      const target = wrapper.find(UncontrolledTooltip)
+      expect(target.length).toBe(1)
     })
 
     it('calls onDomainReviewed when expanded', () => {

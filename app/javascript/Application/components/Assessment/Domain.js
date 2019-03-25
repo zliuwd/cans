@@ -4,7 +4,6 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import Typography from '@material-ui/core/Typography'
-import Tooltip from '@material-ui/core/Tooltip'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Input } from 'reactstrap'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
@@ -16,7 +15,7 @@ import Grid from '@material-ui/core/Grid'
 import { totalScoreCalculation, itemFilter } from './DomainScoreHelper.js'
 import { isEmpty } from '../../util/common'
 import { expandingThenScroll } from '../../util/assessmentAutoScroll'
-import { Button, Icon } from '@cwds/components'
+import { Button, Icon, UncontrolledTooltip } from '@cwds/components'
 import './style.sass'
 
 const mapI18nToState = props => ({
@@ -152,10 +151,11 @@ class Domain extends Component {
               <Grid item xs={8}>
                 <Typography variant="title" style={{ color: '#0e6f89', fontSize: 16 }}>
                   {title}
+                  <Icon className="domain-help-icon" icon="info-circle" id={`domain-${index}`} />
                   {description ? (
-                    <Tooltip title={description} placement="top" classes={{ tooltip: 'tooltip_' }}>
-                      <Icon className="domain-help-icon" icon="info-circle" />
-                    </Tooltip>
+                    <UncontrolledTooltip style={{ minWidth: '20rem' }} target={`domain-${index}`} placement="top">
+                      {description}
+                    </UncontrolledTooltip>
                   ) : null}{' '}
                   {(isCaregiverDomain && caregiverName === '') ||
                   (isCaregiverDomain && caregiverName && caregiverName.trim() === '')
