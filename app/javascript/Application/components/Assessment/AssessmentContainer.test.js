@@ -285,7 +285,7 @@ describe('<AssessmentContainer />', () => {
         expect(wrapper.state('assessment')).toEqual(initialAssessment)
       })
 
-      it('hides the submit validation message', () => {
+      it('hides the complete validation message', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         wrapper.instance().onFetchNewAssessmentSuccess(initialAssessment)
         expect(wrapper.find('.submit-validation-message').exists()).toBe(false)
@@ -413,7 +413,7 @@ describe('<AssessmentContainer />', () => {
         expect(postSuccessSpy).toHaveBeenCalledTimes(1)
       })
 
-      it('should post success message on submit', async () => {
+      it('should post success message on complete', async () => {
         // given
         const postSuccessSpy = jest.spyOn(globalAlertService, 'postSuccess')
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
@@ -421,14 +421,14 @@ describe('<AssessmentContainer />', () => {
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({ assessment: { ...assessment, id: 1 } })
         // when
-        await wrapper.instance().handleSubmitAssessment()
+        await wrapper.instance().handleCompleteAssessment()
         wrapper.update()
 
         // then
         expect(postSuccessSpy).toHaveBeenCalledTimes(1)
       })
 
-      it('should set isEditable to false after submit', async () => {
+      it('should set isEditable to false after complete', async () => {
         jest.spyOn(ClientService, 'fetch').mockReturnValue(Promise.resolve(childInfoJson))
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({ assessment: { ...assessment, id: 1 }, isEditable: true })
@@ -436,7 +436,7 @@ describe('<AssessmentContainer />', () => {
         expect(wrapper.instance().state.isEditable).toBe(true)
         const assessmentAfterUpdate = { ...assessment, metadata: { allowed_operations: [] } }
         jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessmentAfterUpdate))
-        await wrapper.instance().handleSubmitAssessment()
+        await wrapper.instance().handleCompleteAssessment()
         wrapper.update()
 
         expect(wrapper.instance().state.isEditable).toBe(false)
@@ -501,7 +501,7 @@ describe('<AssessmentContainer />', () => {
     })
   })
 
-  describe('submit assessment', () => {
+  describe('complete assessment', () => {
     describe('when a new assessment', () => {
       let wrapper
       let assessmentServicePostSpy
@@ -524,7 +524,7 @@ describe('<AssessmentContainer />', () => {
       }
 
       it('should call AssessmentService.postAssessment', () => {
-        wrapper.instance().handleSubmitAssessment()
+        wrapper.instance().handleCompleteAssessment()
         const expectedArgument = {
           event_date: getCurrentIsoDate(),
           has_caregiver: true,
@@ -538,14 +538,14 @@ describe('<AssessmentContainer />', () => {
       it('should call completeAutoScroll with right parameters', async () => {
         const completeAutoScrollSpy = jest.spyOn(AssessmentAutoScroll, 'completeAutoScroll')
         const tuner = 15
-        await wrapper.instance().handleSubmitAssessment()
+        await wrapper.instance().handleCompleteAssessment()
         expect(completeAutoScrollSpy).toHaveBeenCalledWith(0, tuner)
       })
 
       it('should call postSuccessMessage with right parameters', async () => {
         const postSuccessSpy = jest.spyOn(AHelper, 'postSuccessMessage')
         jest.spyOn(AssessmentService, 'postAssessment').mockReturnValue(Promise.resolve(assessment))
-        await wrapper.instance().handleSubmitAssessment()
+        await wrapper.instance().handleCompleteAssessment()
         expect(postSuccessSpy).toHaveBeenCalledTimes(1)
         expect(postSuccessSpy).toHaveBeenCalledWith('someurl/someid/someending', 'COMPLETE')
       })
@@ -557,7 +557,7 @@ describe('<AssessmentContainer />', () => {
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
         assessmentServicePutSpy.mockReturnValue(Promise.resolve(assessment))
         wrapper.setState({ assessment: { ...assessment, id: 1 } })
-        wrapper.instance().handleSubmitAssessment()
+        wrapper.instance().handleCompleteAssessment()
         expect(assessmentServicePutSpy).toHaveBeenCalledWith(1, {
           ...assessment,
           id: 1,
@@ -567,12 +567,12 @@ describe('<AssessmentContainer />', () => {
       })
     })
 
-    it('should log analytics to New Relic when assessment is submitted', async () => {
+    it('should log analytics to New Relic when assessment is completed', async () => {
       const assessmentServicePutSpy = jest.spyOn(AssessmentService, 'update')
       const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
       assessmentServicePutSpy.mockReturnValue(Promise.resolve(assessment))
       wrapper.setState({ assessment: assessment })
-      await wrapper.instance().handleSubmitAssessment()
+      await wrapper.instance().handleCompleteAssessment()
       expect(analyticsSpy).toHaveBeenCalledWith('assessmentSubmit', {
         assessment_id: 1,
         assessment_county: assessment.county.name,
@@ -590,7 +590,7 @@ describe('<AssessmentContainer />', () => {
         expect(wrapper.state('assessment')).toEqual(updatedAssessment)
       })
 
-      it('validates assessment for submit', () => {
+      it('validates assessment for complete', () => {
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({ assessment: updatedAssessment })
         expect(wrapper.state('isValidForSubmit')).toEqual(false)
@@ -643,7 +643,7 @@ describe('<AssessmentContainer />', () => {
       })
     })
 
-    describe('Submit button', () => {
+    describe('Complete button', () => {
       it('is disabled/enabled based on the assessment validity', () => {
         const wrapper = mount(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({

@@ -300,7 +300,7 @@ export default class AssessmentContainer extends Component {
     }
   }
 
-  handleSubmitAssessment = async () => {
+  handleCompleteAssessment = async () => {
     this.setState({ assessmentServiceStatus: LoadingState.updating })
     const assessment = Object.assign({}, this.state.assessment)
     assessment.status = AssessmentStatus.completed
@@ -414,7 +414,8 @@ export default class AssessmentContainer extends Component {
             assessmentServiceStatus={assessmentServiceStatus}
             isEditable={isEditable}
             onCancelClick={this.handleCancelClick}
-            handleSubmitAssessment={this.handleSubmitAssessment}
+            handleCompleteAssessment={this.handleCompleteAssessment}
+            handleSaveAssessment={this.handleSaveAssessment}
             handleCaregiverRemove={this.handleCaregiverRemove}
             isValidForSubmit={isValidForSubmit}
             canDisplaySummaryOnSave={canDisplaySummaryOnSave}
