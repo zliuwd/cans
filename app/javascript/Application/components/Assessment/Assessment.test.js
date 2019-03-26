@@ -3,6 +3,7 @@ import { Assessment, Domain } from './'
 import { mount, shallow } from 'enzyme'
 import { clone } from '../../util/common'
 import { assessment, i18n } from './assessment.mocks.test'
+import * as AHelper from './AssessmentHelper'
 
 const enhanceDomainToCaregiver = domain => ({ ...domain, is_caregiver_domain: true, caregiver_index: 'a' })
 
@@ -367,6 +368,36 @@ describe('<Assessment />', () => {
 })
 
 describe('DomainsHeader', () => {
+  it('renders with 1 <DomainsHeader /> component', () => {
+    const wrapper = mount(<Assessment assessment={assessment} onAssessmentUpdate={jest.fn()} i18n={i18n} />)
+    expect(wrapper.find('DomainsHeader').length).toBe(1)
+  })
+
+  it('sets isDomainsReviewed to true if not using prior assessment ratings', () => {
+    const initialAssessment = clone(assessment)
+    initialAssessment.preceding_assessment_id = null
+    const wrapper = shallow(<Assessment onAssessmentUpdate={jest.fn()} assessment={initialAssessment} i18n={i18n} />)
+    const domain = wrapper.find('DomainsHeader')
+    expect(domain.prop('isDomainsReviewed')).toBe(true)
+  })
+
+  it('calls isAllDomainsReviewed if using prior assessment ratings', () => {
+    const initialAssessment = clone(assessment)
+    initialAssessment.preceding_assessment_id = '123'
+    const domainsReviewedSpy = jest.spyOn(AHelper, 'isAllDomainsReviewed')
+    shallow(<Assessment onAssessmentUpdate={jest.fn()} assessment={initialAssessment} i18n={i18n} />)
+    expect(domainsReviewedSpy).toHaveBeenCalledWith(initialAssessment)
+  })
+
+  it('sets isDomainsReviewed prop to isAllDomainsReviewed if using prior assessment ratings', () => {
+    const initialAssessment = clone(assessment)
+    initialAssessment.preceding_assessment_id = '123'
+    const hasAllDomainsBeenReviewed = AHelper.isAllDomainsReviewed(initialAssessment)
+    const wrapper = shallow(<Assessment onAssessmentUpdate={jest.fn()} assessment={initialAssessment} i18n={i18n} />)
+    const domain = wrapper.find('DomainsHeader')
+    expect(domain.prop('isDomainsReviewed')).toBe(hasAllDomainsBeenReviewed)
+  })
+
   it('passes isDefaultExpanded prop to DomainsHeader', () => {
     const mockFn = jest.fn()
     const assessmentWrapper = shallow(

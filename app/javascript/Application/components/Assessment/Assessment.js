@@ -5,6 +5,7 @@ import Domain from './Domain'
 import { clone } from '../../util/common'
 import DomainsHeader from './DomainsHeader'
 import { Card, CardBody } from '@cwds/components'
+import { isAllDomainsReviewed } from './AssessmentHelper'
 
 const INDICES = 'abcdefghijklmnopqrstuvwxyz'
 class Assessment extends Component {
@@ -155,6 +156,7 @@ class Assessment extends Component {
     const assessmentJson = assessmentDto.state
     const isUnderSix = assessmentJson.under_six
     const domains = assessmentJson.domains
+    const isDomainsReviewed = assessmentDto.preceding_assessment_id ? isAllDomainsReviewed(assessmentDto) : true
     return (
       <Fragment>
         {!(isUnderSix === null || isUnderSix === undefined) ? (
@@ -162,6 +164,7 @@ class Assessment extends Component {
             <DomainsHeader
               isUnderSix={isUnderSix}
               isDefaultExpanded={isDefaultExpanded}
+              isDomainsReviewed={isDomainsReviewed}
               expandCollapse={this.props.expandCollapse}
             />
             <CardBody>

@@ -285,3 +285,21 @@ export function preparePrecedingAssessment(precedingAssessment, eventDate) {
     })
   })
 }
+
+export const isAllDomainsReviewed = assessment => {
+  let isAllDomainsReviewed = true
+  if (assessment.state.under_six) {
+    assessment.state.domains.filter(domain => domain.under_six === true).map(domain => {
+      if (!domain.is_reviewed) {
+        isAllDomainsReviewed = false
+      }
+    })
+  } else if (!assessment.state.under_six) {
+    assessment.state.domains.filter(domain => domain.above_six === true).map(domain => {
+      if (!domain.is_reviewed) {
+        isAllDomainsReviewed = false
+      }
+    })
+  }
+  return isAllDomainsReviewed
+}
