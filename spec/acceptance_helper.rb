@@ -45,19 +45,31 @@ def setup_output_format
 end
 
 Capybara.register_driver :selenium do |app|
+
+ if ENV['CHROME']
   options = ::Selenium::WebDriver::Chrome::Options.new
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-dev-shm-usage')
   options.add_argument('--window-size=1400,1400')
+    Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+ else 
+  options = ::Selenium::WebDriver::Firefox::Options.new
+  options.add_argument('--no-sandbox')
+  options.add_argument('--disable-dev-shm-usage')
+  options.add_argument('--window-size=1400,1400')
+
+  # if ENV['FIREFOX']
+    # cans = Selenium::WebDriver::Remote::Capabilities.new(accept_insecure_certs: true)
+    Capybara::Selenium::Driver.new(app, browser: :firefox, options: options)
+ end 
 end
 
-Capybara.javascript_driver = :chrome_headless
+Capybara.javascript_driver = :selenium
 
 Capybara.configure do |config|
-  include acceptance_helper
-  setup_output_format
+ include acceptance_helper
+ setup_output_format
   config.default_max_wait_time = 30
   config.default_driver = :selenium
   config.app_host = ENV.fetch('CANS_WEB_BASE_URL', 'http://localhost:3000')

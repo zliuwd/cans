@@ -78,6 +78,7 @@ group :test do
   gem 'capybara-screenshot'
   gem 'chromedriver-helper'
   gem 'faker'
+  gem 'geckodriver-helper', '~> 0.23.0'
   gem 'nyan-cat-formatter'
   gem 'rails-controller-testing'
   gem 'rspec'
