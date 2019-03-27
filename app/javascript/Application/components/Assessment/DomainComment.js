@@ -17,7 +17,7 @@ class DomainComment extends Component {
 
   renderDomainCommentBody = (id, comment, commentTitle) => {
     return (
-      <Paper className={'domain-comment-accordion-paper'}>
+      <Paper className={'domain-comment-paper'}>
         <Typography variant="title" className={'domain-comment-title'}>
           {commentTitle}
         </Typography>
