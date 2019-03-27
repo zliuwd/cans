@@ -1,4 +1,3 @@
-
 FROM cwds/cans_testing_base_image:3
 RUN apt-get install -y netcat
 WORKDIR /app
@@ -11,3 +10,4 @@ ENV DISPLAY :99
 ADD docker/test/run.sh /run.sh
 RUN chmod a+x /run.sh
 CMD /run.sh
+

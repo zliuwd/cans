@@ -46,7 +46,7 @@ end
 
 Capybara.register_driver :selenium do |app|
 
- if ENV['FIREFOX']
+ if ENV['BROWSER'] == 'FIREFOX'
   options = ::Selenium::WebDriver::Firefox::Options.new
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-dev-shm-usage')
