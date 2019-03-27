@@ -1,18 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Icon } from '@cwds/components'
-import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Divider from '@material-ui/core/Divider'
 import Comment from '../common/Comment'
-import CommentIcon from '../common/CommentIcon'
 import { expandingThenScroll } from '../../util/assessmentAutoScroll'
 import BottomCollapseIcon from './BottomCollapseIcon'
 
 const maxCommentLength = 2500
 
-class DomainCommentAccordion extends Component {
+class DomainComment extends Component {
   constructor(props) {
     super(props)
     this.state = { isExpanded: false }
@@ -35,49 +32,16 @@ class DomainCommentAccordion extends Component {
     }
   }
 
-  renderDomainCommentHeader = (code, isExpanded, domain, commentTitle) => {
-    const ROTATION_RIGHT = 270
-    return (
-      <Paper>
-        <Toolbar className="domain-comment-header">
-          <Icon
-            id={`${code}-comment-accordion-expand`}
-            className="item-expand-icon"
-            role="link"
-            tabIndex={0}
-            icon="chevron-down"
-            rotation={isExpanded ? null : ROTATION_RIGHT}
-            onClick={this.switchExpandedState}
-            onKeyDown={this.handleKeyCheck}
-          />
-          <Typography
-            variant="title"
-            style={{
-              fontSize: '0.8rem',
-              flex: 1,
-              textAlign: 'left',
-              marginLeft: 10,
-            }}
-          >
-            {commentTitle}
-          </Typography>
-          {domain.comment ? (
-            <CommentIcon
-              className={'domain-comment-accordion-comment-icon'}
-              ratingType={domain.items[0].rating_type === 'BOOLEAN' ? 'bool-rating' : 'reg-rating'}
-            />
-          ) : null}
-        </Toolbar>
-      </Paper>
-    )
-  }
-
-  renderDomainCommentBody = (id, comment) => {
+  renderDomainCommentBody = (id, comment, commentTitle) => {
     return (
       <Paper className={'domain-comment-accordion-paper'}>
+        <Typography variant="title" className={'domain-comment-title'}>
+          {commentTitle}
+        </Typography>
         <Comment
           id={id}
           comment={comment}
+          title={'Leave a Comment'}
           onChange={this.handleDomainCommentChange}
           prefix={'domain-comment'}
           maxCommentLength={maxCommentLength}
@@ -88,15 +52,11 @@ class DomainCommentAccordion extends Component {
   }
   render() {
     const { title, domain, id } = this.props
-    const { isExpanded } = this.state
     const { code, comment } = domain
     const commentTitle = `Overall ${title} Comment`
     return (
       <div key={`${code}`}>
-        <div>
-          {this.renderDomainCommentHeader(code, isExpanded, domain, commentTitle)}
-          {isExpanded ? this.renderDomainCommentBody(id, comment) : null}
-        </div>
+        <div>{this.renderDomainCommentBody(id, comment, commentTitle)}</div>
         <Paper className={'domain-inner-collapse-icon-container'}>
           <BottomCollapseIcon code={this.props.domain.code} onClick={this.props.domainBottomCollapseClick} />
         </Paper>
@@ -106,7 +66,7 @@ class DomainCommentAccordion extends Component {
   }
 }
 
-DomainCommentAccordion.propTypes = {
+DomainComment.propTypes = {
   disabled: PropTypes.bool,
   domain: PropTypes.object.isRequired,
   domainBottomCollapseClick: PropTypes.func.isRequired,
@@ -115,8 +75,8 @@ DomainCommentAccordion.propTypes = {
   title: PropTypes.string.isRequired,
 }
 
-DomainCommentAccordion.defaultProps = {
+DomainComment.defaultProps = {
   disabled: false,
 }
 
-export default DomainCommentAccordion
+export default DomainComment

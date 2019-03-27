@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
-import DomainCommentAccordion from './DomainCommentAccordion'
+import DomainComment from './DomainComment'
 import Comment from '../common/Comment'
 import CommentIcon from '../common/CommentIcon'
 import BottomCollapseIcon from './BottomCollapseIcon'
@@ -45,10 +45,10 @@ const propsWithComment = {
   domainBottomCollapseClick: jest.fn(),
 }
 
-const domainCommentAccordionDefault = <DomainCommentAccordion {...defaultProps} />
-const domainCommentAccordionWithComment = <DomainCommentAccordion {...propsWithComment} />
+const domainCommentDefault = <DomainComment {...defaultProps} />
+const domainCommentWithComment = <DomainComment {...propsWithComment} />
 
-describe('<DomainCommentAccordion />', () => {
+describe('<DomainComment />', () => {
   jest.unmock('../../util/assessmentAutoScroll')
   const autoScroll = require.requireActual('../../util/assessmentAutoScroll')
   autoScroll.expandingThenScroll = jest.fn(() => null)
@@ -60,7 +60,7 @@ describe('<DomainCommentAccordion />', () => {
   describe('Expand/Collapse', () => {
     let wrapper
     beforeEach(() => {
-      wrapper = mount({ ...domainCommentAccordionDefault })
+      wrapper = mount({ ...domainCommentDefault })
     })
 
     afterEach(() => {
@@ -102,7 +102,7 @@ describe('<DomainCommentAccordion />', () => {
   })
 
   it('has a title', async () => {
-    const wrapper = mount({ ...domainCommentAccordionDefault })
+    const wrapper = mount({ ...domainCommentDefault })
     const foldedText = wrapper.text()
     expect(foldedText).toMatch(/Comment/)
 
@@ -115,7 +115,7 @@ describe('<DomainCommentAccordion />', () => {
     it('should propagate handleDomainCommentChange to onChange Comment prop', () => {
       const onDomainCommentUpdateMock = jest.fn()
       const wrapper = shallow(
-        <DomainCommentAccordion
+        <DomainComment
           id={'commenta'}
           title={'familiaDomain'}
           domain={{ ...domainWithComment }}
@@ -135,25 +135,25 @@ describe('<DomainCommentAccordion />', () => {
 
   describe('CommentIcon in the domain comment accordion', () => {
     it('should render CommentIcon with domain-comment-accordion-comment-icon style', () => {
-      const wrapper = shallow(domainCommentAccordionWithComment)
+      const wrapper = shallow(domainCommentWithComment)
       const commentIcon = wrapper.find(CommentIcon)
       expect(commentIcon.props().className.includes('domain-comment-accordion-comment-icon')).toBeTruthy()
     })
 
     it('should not render CommentIcon if the domain has no comment', () => {
-      const wrapper = shallow(domainCommentAccordionDefault)
+      const wrapper = shallow(domainCommentDefault)
       const commentIcon = wrapper.find(CommentIcon)
       expect(commentIcon.exists()).toBe(false)
     })
 
     it('should render CommentIcon if the domain has a comment', () => {
-      const wrapper = shallow(domainCommentAccordionWithComment)
+      const wrapper = shallow(domainCommentWithComment)
       const commentIcon = wrapper.find(CommentIcon)
       expect(commentIcon.exists()).toBe(true)
     })
 
     it('sets ratingType prop on CommentIcon based on domain item rating type', () => {
-      const wrapper = shallow(domainCommentAccordionWithComment)
+      const wrapper = shallow(domainCommentWithComment)
       const commentIcon = wrapper.find(CommentIcon)
       expect(commentIcon.props().ratingType).toBe('reg-rating')
     })
@@ -161,7 +161,7 @@ describe('<DomainCommentAccordion />', () => {
 
   describe('Comment', () => {
     it('should be rendered with a comment in props', () => {
-      const wrapper = shallow(domainCommentAccordionWithComment)
+      const wrapper = shallow(domainCommentWithComment)
       wrapper.setState({ isExpanded: true })
       expect(wrapper.find(Comment).props().comment).toBe('Domain test comment')
     })
@@ -169,13 +169,13 @@ describe('<DomainCommentAccordion />', () => {
 
   describe('Read only mode', () => {
     it('propagates disabled prop to <Comment/>', () => {
-      const wrapper = shallow(<DomainCommentAccordion {...propsWithComment} disabled={true} />)
+      const wrapper = shallow(<DomainComment {...propsWithComment} disabled={true} />)
       wrapper.setState({ isExpanded: true })
       expect(wrapper.find('Comment').prop('disabled')).toBe(true)
     })
 
     it('will render <BottomCollapseIcon/> with correct props', () => {
-      const wrapper = shallow(<DomainCommentAccordion {...propsWithComment} disabled={true} />)
+      const wrapper = shallow(<DomainComment {...propsWithComment} disabled={true} />)
       const target = wrapper.find(BottomCollapseIcon)
       expect(target.exists()).toBe(true)
       const expectedProps = ['code', 'onClick']
