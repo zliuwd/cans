@@ -1,4 +1,4 @@
-FROM selenium/node-firefox
+
 FROM cwds/cans_testing_base_image:3
 RUN apt-get install -y netcat
 WORKDIR /app

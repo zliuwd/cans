@@ -46,22 +46,20 @@ end
 
 Capybara.register_driver :selenium do |app|
 
- if ENV['CHROME']
+ if ENV['FIREFOX']
+  options = ::Selenium::WebDriver::Firefox::Options.new
+  options.add_argument('--no-sandbox')
+  options.add_argument('--disable-dev-shm-usage')
+  options.add_argument('--window-size=1400,1400')
+  cans = Selenium::WebDriver::Remote::Capabilities.new(accept_insecure_certs: true)
+   Capybara::Selenium::Driver.new(app, browser: :firefox, desired_capabilities: cans, options: options)
+
+ else 
   options = ::Selenium::WebDriver::Chrome::Options.new
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-dev-shm-usage')
   options.add_argument('--window-size=1400,1400')
     Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
-
- else 
-  options = ::Selenium::WebDriver::Firefox::Options.new
-  options.add_argument('--no-sandbox')
-  options.add_argument('--disable-dev-shm-usage')
-  options.add_argument('--window-size=1400,1400')
-
-  # if ENV['FIREFOX']
-    # cans = Selenium::WebDriver::Remote::Capabilities.new(accept_insecure_certs: true)
-    Capybara::Selenium::Driver.new(app, browser: :firefox, options: options)
  end 
 end
 
