@@ -4,32 +4,15 @@ import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Divider from '@material-ui/core/Divider'
 import Comment from '../common/Comment'
-import { expandingThenScroll } from '../../util/assessmentAutoScroll'
 import BottomCollapseIcon from './BottomCollapseIcon'
 
 const maxCommentLength = 2500
 
 class DomainComment extends Component {
-  constructor(props) {
-    super(props)
-    this.state = { isExpanded: false }
-  }
-
-  switchExpandedState = event => {
-    this.setState({ isExpanded: !this.state.isExpanded })
-    expandingThenScroll(event, this.state.expanded, this.props.domain.items.length, this.props.disabled)
-  }
-
   handleDomainCommentChange = comment => {
     const code = this.props.domain.code
     const caregiverIndex = this.props.domain.caregiver_index
     this.props.onDomainCommentUpdate(code, comment, caregiverIndex)
-  }
-
-  handleKeyCheck = event => {
-    if (event.key !== 'Tab') {
-      this.switchExpandedState()
-    }
   }
 
   renderDomainCommentBody = (id, comment, commentTitle) => {

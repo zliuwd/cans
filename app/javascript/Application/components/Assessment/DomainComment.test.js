@@ -2,7 +2,6 @@ import React from 'react'
 import { shallow, mount } from 'enzyme'
 import DomainComment from './DomainComment'
 import Comment from '../common/Comment'
-import CommentIcon from '../common/CommentIcon'
 import BottomCollapseIcon from './BottomCollapseIcon'
 
 const domainDefault = {
@@ -57,58 +56,12 @@ describe('<DomainComment />', () => {
     expandingThenScroll.mockReset()
   })
 
-  describe('Expand/Collapse', () => {
-    let wrapper
-    beforeEach(() => {
-      wrapper = mount({ ...domainCommentDefault })
-    })
-
-    afterEach(() => {
-      wrapper.unmount()
-    })
-
-    it('has chevron right icon to expand', () => {
-      const foldedText = wrapper.text()
-      const chevron = wrapper.find('Icon#BEHEMO-comment-accordion-expand')
-      expect(chevron.props().icon).toBe('chevron-down')
-      expect(chevron.props().rotation).toBe(270)
-      expect(foldedText).toMatch(/Comment/)
-    })
-
-    it('expands and has chevron down icon ', () => {
-      wrapper.find('Icon#BEHEMO-comment-accordion-expand').simulate('click')
-      const expandedText = wrapper.text()
-      const chevron = wrapper.find('Icon#BEHEMO-comment-accordion-expand')
-      expect(chevron.props().icon).toBe('chevron-down')
-      expect(chevron.props().rotation).toBe(null)
-      expect(expandedText).toMatch(/Comment/)
-    })
-
-    it('when chevron button get focus and press tab accordion will not expand', async () => {
-      wrapper.find('Icon#BEHEMO-comment-accordion-expand').simulate('keydown', { key: 'Tab' })
-      expect(wrapper.instance().state.isExpanded).toEqual(false)
-    })
-
-    it('when chevron button get focus and press a key other than Tab, accordion will expand', async () => {
-      wrapper.find('Icon#BEHEMO-comment-accordion-expand').simulate('keydown', { key: 'Enter' })
-      expect(wrapper.instance().state.isExpanded).toEqual(true)
-    })
-
-    it('when comment item expanded, expandingThenScroll will be invoked ', async () => {
-      wrapper.find('Icon#BEHEMO-comment-accordion-expand').simulate('click')
-      expect(wrapper.instance().state.isExpanded).toEqual(true)
-      expect(expandingThenScroll).toHaveBeenCalledTimes(1)
-    })
-  })
-
   it('has a title', async () => {
     const wrapper = mount({ ...domainCommentDefault })
     const foldedText = wrapper.text()
-    expect(foldedText).toMatch(/Comment/)
-
-    wrapper.find('Icon#BEHEMO-comment-accordion-expand').simulate('click')
+    expect(foldedText).toMatch(/Leave a Comment/)
     const expandedText = wrapper.text()
-    expect(expandedText).toMatch(/Comment/)
+    expect(expandedText).toMatch(/Leave a Comment/)
   })
 
   describe('#handleDomainCommentChange()', () => {
@@ -130,32 +83,6 @@ describe('<DomainComment />', () => {
         .onChange('new comment')
       expect(onDomainCommentUpdateMock).toHaveBeenCalledTimes(1)
       expect(onDomainCommentUpdateMock).toHaveBeenCalledWith('BEHEMO', 'new comment', undefined)
-    })
-  })
-
-  describe('CommentIcon in the domain comment accordion', () => {
-    it('should render CommentIcon with domain-comment-accordion-comment-icon style', () => {
-      const wrapper = shallow(domainCommentWithComment)
-      const commentIcon = wrapper.find(CommentIcon)
-      expect(commentIcon.props().className.includes('domain-comment-accordion-comment-icon')).toBeTruthy()
-    })
-
-    it('should not render CommentIcon if the domain has no comment', () => {
-      const wrapper = shallow(domainCommentDefault)
-      const commentIcon = wrapper.find(CommentIcon)
-      expect(commentIcon.exists()).toBe(false)
-    })
-
-    it('should render CommentIcon if the domain has a comment', () => {
-      const wrapper = shallow(domainCommentWithComment)
-      const commentIcon = wrapper.find(CommentIcon)
-      expect(commentIcon.exists()).toBe(true)
-    })
-
-    it('sets ratingType prop on CommentIcon based on domain item rating type', () => {
-      const wrapper = shallow(domainCommentWithComment)
-      const commentIcon = wrapper.find(CommentIcon)
-      expect(commentIcon.props().ratingType).toBe('reg-rating')
     })
   })
 
