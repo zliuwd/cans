@@ -999,6 +999,7 @@ describe('<AssessmentContainer />', () => {
 
       // then
       expect(wrapper.state().isReassessmentModalShown).toBeFalsy()
+      expect(wrapper.state().isShowReassessmentAlert).toBeTruthy()
       AHelper.preparePrecedingAssessment(precedingAssessment, subsequentAssessment.event_date)
       expect(wrapper.state().assessment).toEqual(precedingAssessment)
     })
@@ -1045,6 +1046,24 @@ describe('<AssessmentContainer />', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         wrapper.instance().onFetchAssessmentSuccess(subsequentAssessment)
         expect(updateHeaderTitleMock).toHaveBeenCalledWith('CANS Reassessment Form')
+      })
+    })
+  })
+
+  describe('Reassessment CloseableAlert', () => {
+    describe('render', () => {
+      const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+      wrapper.instance().setState({ isShowReassessmentAlert: true })
+      it('renders Reassessment CloseableAlert when choosed to Use previous ratings', () => {
+        expect(wrapper.find('CloseableAlert').exists()).toBe(true)
+        expect(wrapper.find('CloseableAlert').props().type).toBe('info')
+        expect(wrapper.find('CloseableAlert').props().isOpen).toBe(true)
+      })
+
+      it('shows reassessment alert message when choosed to Use previous ratings', () => {
+        expect(wrapper.find('CloseableAlert').props().message).toBe(
+          'If this child has turned 6 years old since the last assessment, only the common domain items for both age groups will carry over.'
+        )
       })
     })
   })

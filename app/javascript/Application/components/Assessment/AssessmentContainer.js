@@ -35,9 +35,12 @@ import { isAuthorized } from '../common/AuthHelper'
 import UnsavedDataWarning from '../common/UnsavedDataWarning'
 import pageLockService from '../common/PageLockService'
 import ReassessmentModal from './ReassessmentModal'
+import { CloseableAlert } from '../common/CloseableAlert'
 
 const SCROLL_POSITION_ADJUST = 15 // for manually adjust scroll destination 15 means go down 15px more
 const readOnlyMessageId = 'readonlyMessage'
+const reassessmentModalAlert =
+  'If this child has turned 6 years old since the last assessment, only the common domain items for both age groups will carry over.'
 
 export default class AssessmentContainer extends Component {
   constructor(props) {
@@ -372,8 +375,12 @@ export default class AssessmentContainer extends Component {
     const precedingAssessment = await AssessmentService.fetch(precedingAssessmentId)
     preparePrecedingAssessment(precedingAssessment, assessment.event_date)
     this.updateAssessment(precedingAssessment)
-    this.setState({ isReassessmentModalShown: false })
+    this.setState({ isReassessmentModalShown: false, isShowReassessmentAlert: true })
   }
+
+  reassessmentCloseableAlert = reassessmentModalAlert => (
+    <CloseableAlert type="info" isCloseable={true} message={reassessmentModalAlert} isOpen={true} />
+  )
 
   render() {
     const { client } = this.props
@@ -393,6 +400,7 @@ export default class AssessmentContainer extends Component {
     return (
       <Fragment>
         <div ref={this.assessmentHeader}>
+          {this.state.isShowReassessmentAlert && this.reassessmentCloseableAlert(reassessmentModalAlert)}
           <ReassessmentModal
             startEmpty={this.startEmptyReassessment}
             isOpen={isReassessmentModalShown}
