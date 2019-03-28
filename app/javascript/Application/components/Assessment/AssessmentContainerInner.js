@@ -2,12 +2,12 @@ import React, { Component, Fragment } from 'react'
 import Assessment from './Assessment'
 import PropTypes from 'prop-types'
 import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
-import { LoadingState, isReadyForAction } from '../../util/loadingHelper'
-import { AssessmentFormHeader, AssessmentFormFooter } from './'
-import { completeTip } from './AssessmentHelper'
+import { isReadyForAction } from '../../util/loadingHelper'
+import { AssessmentFormFooter, AssessmentFormHeader } from './'
 import RenderWarning from '../common/RenderWarning'
-import WarningShow from '../Assessment/WarningShow'
+import CompleteModal from '../Assessment/CompleteModal'
 import { isCompleteAssessmentAuthorized } from '../common/AuthHelper'
+import ChangelogLink from './ChangelogLink'
 
 class AssessmentContainerInner extends Component {
   constructor(props) {
@@ -15,16 +15,13 @@ class AssessmentContainerInner extends Component {
     this.state = {
       isCaregiverWarningShown: false,
       focusedCaregiverId: '',
-      isSubmitWarningShown: false,
+      isCompleteModalShown: false,
       isDefaultExpanded: false,
     }
   }
 
-  handleSubmitWarning = switcher => {
-    const { assessment } = this.props
-    if (assessment.can_release_confidential_info === false) {
-      this.setState({ isSubmitWarningShown: switcher })
-    }
+  handleCompleteWarning = switcher => {
+    this.setState({ isCompleteModalShown: switcher })
     return null
   }
 
@@ -44,7 +41,7 @@ class AssessmentContainerInner extends Component {
   }
 
   displayModalWarning() {
-    const { handleCaregiverRemove, handleSubmitAssessment, substanceUseItemsIds } = this.props
+    const { handleCaregiverRemove, handleCompleteAssessment, handleSaveAssessment } = this.props
     return (
       <Fragment>
         <RenderWarning
@@ -53,13 +50,29 @@ class AssessmentContainerInner extends Component {
           handleCaregiverRemove={handleCaregiverRemove}
           focusedCaregiverId={this.state.focusedCaregiverId}
         />
-        <WarningShow
-          isSubmitWarningShown={this.state.isSubmitWarningShown}
-          handleSubmitWarning={this.handleSubmitWarning}
-          handleSubmitAssessment={handleSubmitAssessment}
-          substanceUseItemsIds={substanceUseItemsIds}
+        <CompleteModal
+          isCompleteModalShown={this.state.isCompleteModalShown}
+          handleCompleteWarning={this.handleCompleteWarning}
+          handleCompleteAssessment={handleCompleteAssessment}
+          handleSaveAssessment={handleSaveAssessment}
         />
       </Fragment>
+    )
+  }
+
+  displayAssessmentFooter() {
+    const { assessment, client, assessmentServiceStatus, isEditable, onCancelClick, isValidForSubmit } = this.props
+    const canPerformUpdates = isReadyForAction(assessmentServiceStatus)
+    const isSubmissionEnabled =
+      isEditable && canPerformUpdates && isValidForSubmit && isCompleteAssessmentAuthorized(assessment, client)
+    return (
+      <AssessmentFormFooter
+        isEditable={isEditable}
+        assessment={assessment}
+        onCancelClick={onCancelClick}
+        isSubmissionEnabled={isSubmissionEnabled}
+        onSubmitAssessment={this.handleCompleteWarning}
+      />
     )
   }
 
@@ -73,10 +86,9 @@ class AssessmentContainerInner extends Component {
       canDisplaySummaryOnSave,
       i18n,
       isEditable,
+      previousRatingsMap,
       substanceUseItemsIds,
     } = this.props
-    const isUnderSix = assessment && assessment.state && assessment.state.under_six
-    const isDefaultExpanded = this.state.isDefaultExpanded
     return (
       <Fragment>
         <div rol="completeScrollLocator">
@@ -98,7 +110,7 @@ class AssessmentContainerInner extends Component {
           assessmentStatus={assessment.status}
           domains={assessment && assessment.state && assessment.state.domains}
           i18n={i18n}
-          isUnderSix={Boolean(isUnderSix)}
+          isUnderSix={Boolean(assessment && assessment.state && assessment.state.under_six)}
           disabled={!isEditable}
         />
         <Assessment
@@ -107,53 +119,21 @@ class AssessmentContainerInner extends Component {
           onAssessmentUpdate={onAssessmentUpdate}
           handleWarningShow={this.handleWarningShow}
           disabled={!isEditable}
-          isDefaultExpanded={isDefaultExpanded}
+          isDefaultExpanded={this.state.isDefaultExpanded}
           expandCollapse={this.handleExpandAllDomains}
+          previousRatingsMap={previousRatingsMap}
+          footer={this.displayAssessmentFooter()}
         />
+        {assessment.id && <ChangelogLink assessmentId={assessment.id} assessmentStatus={assessment.status} />}
       </Fragment>
     )
   }
-  displayAssessmentFooter() {
-    const {
-      assessment,
-      client,
-      assessmentServiceStatus,
-      isEditable,
-      onCancelClick,
-      handleSubmitAssessment,
-      isValidForSubmit,
-    } = this.props
-    const canPerformUpdates = isReadyForAction(assessmentServiceStatus)
-    const isCompleteButtonEnabled =
-      isEditable && canPerformUpdates && isValidForSubmit && isCompleteAssessmentAuthorized(assessment, client)
-    return (
-      <Fragment>
-        <AssessmentFormFooter
-          isEditable={isEditable}
-          assessment={assessment}
-          onCancelClick={onCancelClick}
-          isSubmitButtonEnabled={isCompleteButtonEnabled}
-          onSubmitAssessment={
-            assessment.can_release_confidential_info === true
-              ? handleSubmitAssessment
-              : this.handleSubmitWarning.bind(this, true)
-          }
-        />
-      </Fragment>
-    )
-  }
+
   render() {
-    const { assessment, assessmentServiceStatus, isEditable } = this.props
-    const isUnderSix = assessment && assessment.state && assessment.state.under_six
     return (
       <Fragment>
         {this.displayModalWarning()}
         {this.displayAssessment()}
-        {LoadingState.ready === assessmentServiceStatus &&
-          isEditable &&
-          !(isUnderSix === null || isUnderSix === undefined) &&
-          completeTip}
-        {this.displayAssessmentFooter()}
       </Fragment>
     )
   }
@@ -165,7 +145,8 @@ AssessmentContainerInner.propTypes = {
   canDisplaySummaryOnSave: PropTypes.bool,
   client: PropTypes.object.isRequired,
   handleCaregiverRemove: PropTypes.func.isRequired,
-  handleSubmitAssessment: PropTypes.func.isRequired,
+  handleCompleteAssessment: PropTypes.func.isRequired,
+  handleSaveAssessment: PropTypes.func.isRequired,
   i18n: PropTypes.object.isRequired,
   isEditable: PropTypes.bool,
   isEventDateBeforeDob: PropTypes.bool.isRequired,
@@ -173,6 +154,7 @@ AssessmentContainerInner.propTypes = {
   onAssessmentUpdate: PropTypes.func.isRequired,
   onCancelClick: PropTypes.func.isRequired,
   onEventDateFieldKeyUp: PropTypes.func.isRequired,
+  previousRatingsMap: PropTypes.object,
   substanceUseItemsIds: PropTypes.shape({
     underSix: PropTypes.array.isRequired,
     aboveSix: PropTypes.array.isRequired,
@@ -185,6 +167,7 @@ AssessmentContainerInner.defaultProps = {
   isUnderSix: null,
   domains: [],
   isEditable: undefined,
+  previousRatingsMap: undefined,
 }
 
 export default AssessmentContainerInner

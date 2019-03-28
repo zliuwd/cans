@@ -19,6 +19,8 @@ import {
   hasOneCompletedForReassessment,
   AssessmentType,
   preparePrecedingAssessment,
+  containsNotReviewedDomains,
+  createRatingsMap,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
@@ -576,10 +578,12 @@ describe('AssessmentHelper', () => {
           domains: [
             {
               comment: 'domain 1 comment',
+              is_reviewed: true,
               items: [{}, { comment: 'item 1-1 comment' }, { comment: 'item 1-2 comment' }],
             },
             {
               comment: 'domain 2 comment',
+              is_reviewed: false,
               items: [{ comment: 'item 2-1 comment' }],
             },
           ],
@@ -598,5 +602,45 @@ describe('AssessmentHelper', () => {
       }
       expect(input).toEqual(expected)
     })
+  })
+
+  describe('#containsNotReviewedDomains()', () => {
+    it('returns true when there is at least ont not reviewed domain in the requested age group', () => {
+      const domains = [
+        { under_six: true, is_reviewed: true },
+        { under_six: true, is_reviewed: false },
+        { under_six: false, is_reviewed: true },
+      ]
+      expect(containsNotReviewedDomains(domains, true)).toBeTruthy()
+    })
+
+    it('returns false when all the domains in the requested age group are reviewed', () => {
+      const domains = [
+        { under_six: true, is_reviewed: true },
+        { under_six: true, is_reviewed: true },
+        { under_six: false, is_reviewed: false },
+      ]
+      expect(containsNotReviewedDomains(domains, true)).toBeFalsy()
+    })
+  })
+
+  describe('#createRatingsMap()', () => {
+    const domains = [
+      {
+        items: [{ code: 'code00', rating: 1 }, { code: 'code01', rating: -1 }, { code: 'code02', rating: 2 }],
+      },
+      {
+        items: [{ code: 'code10', rating: 8 }, { code: 'code11', rating: 3 }],
+      },
+    ]
+    const expectedRatingsMap = {
+      code00: 1,
+      code01: -1,
+      code02: 2,
+      code10: 8,
+      code11: 3,
+    }
+    const actualRatingsMap = createRatingsMap(domains)
+    expect(actualRatingsMap).toEqual(expectedRatingsMap)
   })
 })

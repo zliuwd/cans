@@ -79,11 +79,11 @@ feature 'Case Worker Functionality' do
     validate_unsaved_warning_closed
   end
 
-  scenario 'Fill out Reassessment with preceding assessment data, from 0 to 5' do
+  scenario 'Fill out Reassessment with preceding assessment data, from 6 to 21' do
     visit '/'
     is_reassessment = @assessment_helper.start_assessment_for(CLIENT_NAME, true)
     unless is_reassessment
-      click_0_to_5_button
+      click_6_to_21_button
       expand_all_domains
       @form.caregiver_name_fields[0].set 'Awesome Caregiver'
       fill_out_assessment_form_with_rating_1
@@ -91,9 +91,10 @@ feature 'Case Worker Functionality' do
       visit '/'
       @assessment_helper.start_assessment_for(CLIENT_NAME, true)
     end
-    expand_first_domain
+    @form.review_all_domains_6_to_21
     expand_first_item
     item_and_domain_level_comment_test
+    @form.footer.confirm_domains_review
     warning_and_summary_card_shown_after_complete_button_clicked true
   end
 
@@ -104,8 +105,8 @@ feature 'Case Worker Functionality' do
     @assessment_helper.start_assessment_for CLIENT_NAME
     click_0_to_5_button
     fill_conducted_by_field(CONDUCTED_BY)
+    save_and_check_the_success_message
     validate_change_log_link
-    unsaved_warning_save_and_continue
     validate_changelog_page_is_accessible(current_date, CLIENT_NAME)
     visit_assessment_page_from_changelog(assessment_link)
     fill_conducted_by_field(CONDUCTED_BY_UPDATED)
@@ -181,7 +182,7 @@ feature 'Case Worker Functionality' do
     unsaved_warning_discard_and_continue
     expect(@client_profile).to have_client_information_title
     @client_profile.go_to_recently_updated_assessment(current_date)
-    @form.footer.change_log_link.click
+    @form.change_log_link.click
     go_back
     fill_conducted_by_field('3')
     go_forward
@@ -361,7 +362,7 @@ feature 'Case Worker Functionality' do
     within(@form.not_applicable_checkbox) do
       expect(find('input', visible: false).checked?).to be(true)
     end
-    not_applicable_radio_group = @form.not_applicable_text.sibling('div.item-reg-rating')
+    not_applicable_radio_group = @form.not_applicable_text.sibling('form')
     within(not_applicable_radio_group) do
       not_applicable_radios = page.all('input', visible: false)
       not_applicable_radios.each do |radio|
@@ -408,13 +409,14 @@ feature 'Case Worker Functionality' do
   end
 
   def fill_form_header_6_to_21
-    @assessment_helper.start_assessment_for CLIENT_NAME
+    is_reassessment = @assessment_helper.start_assessment_for CLIENT_NAME
     fill_conducted_by_field('')
     click_6_to_21_button
     expect(@form.header).to have_redaction_message_6_to_21
     expect(@form).to have_assessment_card_title_6_21
     with_retry(proc { @form.header.authorization_label_yes.click },
                proc { @form.header.wait_until_redaction_message_invisible(wait: 2) })
+    is_reassessment
   end
 
   def check_redacted_checkbox_0_to_5
@@ -495,25 +497,24 @@ feature 'Case Worker Functionality' do
   end
 
   def warning_and_summary_card_shown_after_complete_button_clicked(is_reassessment)
-    expect(@form.header.authorization_radio_no.checked?).to be(true)
     @form.footer.complete_button.click
-    expect(@form.app_globals.complete_warning_modal['style']).to eq('display: block;')
-    @form.app_globals.cancel_button_of_warning.click
+    sleep 2
+    expect(@form.app_globals).to have_complete_warning_modal
+    @form.app_globals.complete_warning_save_return_button.click
     if is_reassessment
       expect(@form.global).to have_reassessment_page_header
     else
       expect(@form.global).to have_assessment_page_header
     end
-    expect(@form.footer).to have_complete_button
-    @form.footer.complete_button.click
-    @form.app_globals.agree_button_of_warning.click
-    expect(@form.global).to have_global_complete_message_box
-    expect(@form).to have_summary
+    click_complete_button_then_summary_card_shown
   end
 
   def click_complete_button_then_summary_card_shown
-    expect(@form.header.authorization_radio_yes.checked?).to be(true)
+    expect(@form.footer).to have_complete_button
     @form.footer.complete_button.click
+    sleep 2
+    expect(@form.app_globals).to have_complete_warning_modal
+    @form.app_globals.complete_warning_confirm_button.click
     expect(@form.global).to have_global_complete_message_box
     expect(@form.app_globals).to have_no_complete_warning_modal
     expect(@form).to have_summary
@@ -615,7 +616,7 @@ feature 'Case Worker Functionality' do
   end
 
   def validate_change_log_link
-    @form.footer.change_log_link.click
+    @form.change_log_link.click
   end
 
   def validate_changelog_page_is_accessible(current_date, client_name)

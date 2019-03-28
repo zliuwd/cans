@@ -4,7 +4,6 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import Typography from '@material-ui/core/Typography'
-import Tooltip from '@material-ui/core/Tooltip'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Input } from 'reactstrap'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
@@ -16,7 +15,7 @@ import Grid from '@material-ui/core/Grid'
 import { totalScoreCalculation, itemFilter } from './DomainScoreHelper.js'
 import { isEmpty } from '../../util/common'
 import { expandingThenScroll } from '../../util/assessmentAutoScroll'
-import { Button, Icon } from '@cwds/components'
+import { Button, Icon, UncontrolledTooltip } from '@cwds/components'
 import './style.sass'
 
 const mapI18nToState = props => ({
@@ -95,6 +94,7 @@ class Domain extends Component {
     const i18nAll = this.props.i18nAll || {}
     const {
       isAssessmentUnderSix,
+      isCompletedAssessment,
       domain,
       onRatingUpdate,
       onItemCommentUpdate,
@@ -103,6 +103,7 @@ class Domain extends Component {
       index,
       disabled,
       isUsingPriorRatings,
+      previousRatingsMap,
     } = this.props
     const isReviewed = isUsingPriorRatings ? domain.is_reviewed : true
     const { items, is_caregiver_domain: isCaregiverDomain } = domain
@@ -115,8 +116,10 @@ class Domain extends Component {
       onItemCommentUpdate,
       onConfidentialityUpdate,
       isAssessmentUnderSix,
+      isCompletedAssessment,
       canReleaseConfidentialInfo,
       disabled,
+      previousRatingsMap,
     }
     const validItems = itemFilter(items, isAssessmentUnderSix)
     const totalScore = totalScoreCalculation(validItems)
@@ -133,7 +136,7 @@ class Domain extends Component {
                 <Button
                   id={`domain${index}-review`}
                   color="primary"
-                  className={'review-regular-button'}
+                  className={'review-regular-button no-uppercase'}
                   onClick={this.handleOpenToReview}
                 >
                   Open to review
@@ -152,10 +155,11 @@ class Domain extends Component {
               <Grid item xs={8}>
                 <Typography variant="title" style={{ color: '#0e6f89', fontSize: 16 }}>
                   {title}
+                  <Icon className="domain-help-icon" icon="info-circle" id={`domain-${index}`} />
                   {description ? (
-                    <Tooltip title={description} placement="top" classes={{ tooltip: 'tooltip_' }}>
-                      <Icon className="domain-help-icon" icon="info-circle" />
-                    </Tooltip>
+                    <UncontrolledTooltip style={{ minWidth: '20rem' }} target={`domain-${index}`} placement="top">
+                      {description}
+                    </UncontrolledTooltip>
                   ) : null}{' '}
                   {(isCaregiverDomain && caregiverName === '') ||
                   (isCaregiverDomain && caregiverName && caregiverName.trim() === '')
@@ -216,6 +220,7 @@ Domain.propTypes = {
   i18nAll: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   isAssessmentUnderSix: PropTypes.bool,
+  isCompletedAssessment: PropTypes.bool.isRequired,
   isDefaultExpanded: PropTypes.bool,
   isUsingPriorRatings: PropTypes.bool,
   onAddCaregiverDomain: PropTypes.func.isRequired,
@@ -225,6 +230,7 @@ Domain.propTypes = {
   onDomainReviewed: PropTypes.func,
   onItemCommentUpdate: PropTypes.func.isRequired,
   onRatingUpdate: PropTypes.func.isRequired,
+  previousRatingsMap: PropTypes.object,
 }
 
 Domain.defaultProps = {
@@ -234,6 +240,7 @@ Domain.defaultProps = {
   isDefaultExpanded: false,
   isUsingPriorRatings: false,
   onDomainReviewed: () => {},
+  previousRatingsMap: undefined,
 }
 
 export default Domain

@@ -1,6 +1,7 @@
 @import '../../styles/global/colors.sass'
-$toolbar-comment-icon-right-margin: 2rem
+$toolbar-comment-icon-right-margin: 0.5rem
 $item-confidential-label-height: 6.05rem
+
 //********************
 //AssessmentForm
 //********************
@@ -16,13 +17,6 @@ $item-confidential-label-height: 6.05rem
 //********************
 .authorization-warning
   margin-left: 0.5rem
-
-.view-changelog-link
-  text-transform: uppercase
-
-.align-footer-buttons
-  display: flex
-  justify-content: flex-end
 
 .warning-text
   color: #BB3709
@@ -107,16 +101,6 @@ $item-confidential-label-height: 6.05rem
 .county-name-block
   font-size: 1rem
   font-weight: 600
-
-//********************
-//AssessmentFormFooter
-//********************
-.footer-button-space
-  margin-right: 1rem
-
-.form-footer
-  display: flex
-  padding: 1.5rem 0
 
 //********************
 //Domain
@@ -234,15 +218,15 @@ $item-confidential-label-height: 6.05rem
   margin-right: $confidential-checkbox-right-margin
 
 .item-bool-rating
-  $bool-rating-width: 5.3125rem !global
+  $bool-rating-width: 6rem !global
   width: $bool-rating-width
 
 .item-reg-rating
-  $reg-rating-width: 7.8125rem !global
+  $reg-rating-width: 9rem !global
   width: $reg-rating-width
 
 
-.item-bool-rating, .item-reg-rating, .item-rating-desc-label
+.items-radio-group, .item-rating-desc-label
   svg
     background-color: $white
     border-radius: 50%
@@ -322,10 +306,6 @@ $item-confidential-label-height: 6.05rem
 //********************
 // DomainComment
 //********************
-.domain-comment-header
-  justify-content: left
-  height: 4.0625rem
-  background-color: $light-blue-shade
 .domain-comment-accordion-paper
   box-shadow: none
   padding: .625rem 1.875rem
@@ -428,3 +408,6 @@ $item-confidential-label-height: 6.05rem
     color: black
     float: right
     margin: 0.9375rem 1.625rem 0 auto
+
+.view-changelog-link
+  text-transform: uppercase

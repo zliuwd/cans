@@ -1,11 +1,12 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import AssessmentContainerInner from '../Assessment/AssessmentContainerInner'
+import AssessmentContainerInner from './AssessmentContainerInner'
 import { assessment } from './assessment.mocks.test'
-import AssessmentSummaryCard from '../Assessment/AssessmentSummary/AssessmentSummaryCard'
-import AssessmentFormFooter from '../Assessment/AssessmentFormFooter'
-import AssessmentFormHeader from '../Assessment/AssessmentFormHeader'
+import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
+import AssessmentFormHeader from './AssessmentFormHeader'
+import ChangelogLink from './ChangelogLink'
 import RenderWarning from '../common/RenderWarning'
+import { Assessment } from './index'
 
 const getLength = (wrapper, component) => wrapper.find(component).length
 
@@ -14,14 +15,15 @@ const props = {
   assessmentServiceStatus: 'IDLE',
   client: {},
   handleCaregiverRemove: jest.fn(),
-  handleSubmitAssessment: jest.fn(),
+  handleCompleteAssessment: jest.fn(),
+  handleSaveAssessment: jest.fn(),
   onEventDateFieldKeyUp: jest.fn(),
-  isSubmitWarningShown: false,
+  isCompleteModalShown: false,
   i18n: {},
   isValidForSubmit: false,
   onAssessmentUpdate: jest.fn(),
   onCancelClick: jest.fn(),
-  handleSubmitWarning: jest.fn(),
+  handleCompleteWarning: jest.fn(),
   onKeyUp: jest.fn(),
   isEventDateBeforeDob: false,
   substanceUseItemsIds: { underSix: ['41'], aboveSix: ['8', '48'] },
@@ -39,9 +41,28 @@ describe('AssessmentContainerInner />', () => {
       expect(getLength(wrapper, AssessmentFormHeader)).toBe(1)
     })
 
-    it('renders with <AssessmentFormFooter /> component initially', () => {
+    it('renders with <Assessment /> component initially', () => {
       const wrapper = shallow(<AssessmentContainerInner {...props} />)
-      expect(getLength(wrapper, AssessmentFormFooter)).toBe(1)
+      expect(getLength(wrapper, Assessment)).toBe(1)
+    })
+
+    describe('ChangelogLink', () => {
+      it('renders ChangelogLink when assessment has an id', () => {
+        const wrapper = shallow(<AssessmentContainerInner {...props} />)
+        expect(wrapper.find(ChangelogLink).exists()).toBeTruthy()
+      })
+
+      it('hides ChangelogLink when assessment has no id yet', () => {
+        const wrapper = shallow(<AssessmentContainerInner {...props} />)
+        wrapper.setProps({ assessment: { ...assessment, id: null } })
+        expect(wrapper.find(ChangelogLink).exists()).toBeFalsy()
+      })
+
+      it('sets props for ChangelogLink', () => {
+        const changelogLink = shallow(<AssessmentContainerInner {...props} />).find(ChangelogLink)
+        expect(changelogLink.props().assessmentId).toBe(1)
+        expect(changelogLink.props().assessmentStatus).toEqual('IN_PROGRESS')
+      })
     })
   })
 
@@ -99,49 +120,49 @@ describe('AssessmentContainerInner />', () => {
     })
   })
 
-  describe('isSubmit warning shown', () => {
-    it('isSubmitWarning is false it does not renders the ConfidentialityWarning component', () => {
+  describe('isComplete warning shown', () => {
+    it('isCompleteModalShown is false it does not renders the Modal component', () => {
       const wrapper = shallow(<AssessmentContainerInner {...props} />)
       wrapper.instance().setState({
-        isSubmitWarningShown: false,
+        isCompleteModalShown: false,
       })
-      const WarningShow = wrapper.find('WarningShow').dive()
-      expect(WarningShow.find('ConfidentialityWarning').exists()).toBe(false)
+      const completeModal = wrapper.find('CompleteModal').dive()
+      expect(completeModal.find('Modal').props().isOpen).toBe(false)
     })
 
-    it('isSubmitWarning is true it renders the ConfidentialityWarning component', () => {
+    it('isCompleteModalShown is true it renders the Modal component', () => {
       const wrapper = shallow(<AssessmentContainerInner {...props} />)
       wrapper.instance().setState({
-        isSubmitWarningShown: true,
+        isCompleteModalShown: true,
       })
-      const WarningShow = wrapper.find('WarningShow').dive()
-      expect(WarningShow.find('ConfidentialityWarning').exists()).toBe(true)
+      const completeModal = wrapper.find('CompleteModal').dive()
+      expect(completeModal.find('Modal').props().isOpen).toBe(true)
     })
   })
 
-  describe('changes the state of the component when handleSubmitWarning is invoked', () => {
-    it('sets isSubmitWarningShown to false when handleSubmitWarning is called', () => {
+  describe('changes the state of the component when handleCompleteWarning is invoked', () => {
+    it('sets isCompleteModalShown to false when handleCompleteWarning is called', () => {
       const wrapper = shallow(<AssessmentContainerInner {...props} />)
       wrapper.instance().setState({
-        isSubmitWarningShown: true,
+        isCompleteModalShown: true,
       })
       wrapper
-        .find('WarningShow')
+        .find('CompleteModal')
         .props()
-        .handleSubmitWarning(false)
-      expect(wrapper.state().isSubmitWarningShown).toEqual(false)
+        .handleCompleteWarning(false)
+      expect(wrapper.state().isCompleteModalShown).toEqual(false)
     })
 
-    it('sets isSubmitWarningShown to true when handleSubmitWarning is called', () => {
+    it('sets isCompleteModalShown to true when handleCompleteWarning is called', () => {
       const wrapper = shallow(<AssessmentContainerInner {...props} />)
       wrapper.instance().setState({
-        isSubmitWarningShown: false,
+        isCompleteModalShown: false,
       })
       wrapper
-        .find('WarningShow')
+        .find('CompleteModal')
         .props()
-        .handleSubmitWarning(true)
-      expect(wrapper.state().isSubmitWarningShown).toEqual(true)
+        .handleCompleteWarning(true)
+      expect(wrapper.state().isCompleteModalShown).toEqual(true)
     })
 
     describe('#handleExpandAllDomains()', () => {
