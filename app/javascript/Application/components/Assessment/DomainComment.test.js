@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow, mount } from 'enzyme'
 import DomainComment from './DomainComment'
 import Comment from '../common/Comment'
-import BottomCollapseIcon from './BottomCollapseIcon'
+import DomainCollapseButton from './DomainCollapseButton'
 
 const domainDefault = {
   id: '1',
@@ -101,11 +101,11 @@ describe('<DomainComment />', () => {
       expect(wrapper.find('Comment').prop('disabled')).toBe(true)
     })
 
-    it('will render <BottomCollapseIcon/> with correct props', () => {
+    it('will render <DomainCollapseButton/> with correct props', () => {
       const wrapper = shallow(<DomainComment {...propsWithComment} disabled={true} />)
-      const target = wrapper.find(BottomCollapseIcon)
+      const target = wrapper.find(DomainCollapseButton)
       expect(target.exists()).toBe(true)
-      const expectedProps = ['code', 'onClick']
+      const expectedProps = ['code', 'title', 'onClick']
       expect(Object.keys(target.props())).toEqual(expectedProps)
     })
   })

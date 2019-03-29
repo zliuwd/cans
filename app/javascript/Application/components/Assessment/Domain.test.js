@@ -1,5 +1,5 @@
 import React from 'react'
-import { UncontrolledTooltip } from '@cwds/components'
+import { UncontrolledTooltip, Button } from '@cwds/components'
 import { shallow, mount } from 'enzyme'
 import Domain from './Domain'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
@@ -304,8 +304,10 @@ describe('<Domain />', () => {
       expect(handleWarningShow.mock.calls.length).toBe(1)
     })
 
-    it('invokes onRemoveCaregiverDomain() callback', () => {
-      const removeCaregiverButton = wrapper.find('Button').at(1)
+    it('invokes handleWarningShow() callback', () => {
+      handleWarningShow.mockReset()
+      const domainCaregiverControls = wrapper.find(DomainCaregiverControls).at(0)
+      const removeCaregiverButton = domainCaregiverControls.find(Button).at(0)
       removeCaregiverButton.simulate('click')
       removeCaregiverButton.simulate('keypress', {
         key: 'Enter',
@@ -313,12 +315,12 @@ describe('<Domain />', () => {
       removeCaregiverButton.simulate('keypress', {
         key: 'Space',
       })
-      expect(callbackMock.mock.calls.length).toBe(2)
+      expect(handleWarningShow).toHaveBeenCalledTimes(2)
     })
 
     it('will invoke onAddCaregiverDomain() callback', () => {
-      const addCaregiverButton = wrapper.find('div').at(1)
-      expect(wrapper.find(DomainCaregiverControls).length).toBe(1)
+      const domainCaregiverControls = wrapper.find(DomainCaregiverControls).at(0)
+      const addCaregiverButton = domainCaregiverControls.find(Button).at(1)
       addCaregiverButton.simulate('click')
       addCaregiverButton.simulate('keypress', {
         key: 'Enter',

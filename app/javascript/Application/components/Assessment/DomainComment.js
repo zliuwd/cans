@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Divider from '@material-ui/core/Divider'
 import Comment from '../common/Comment'
-import BottomCollapseIcon from './BottomCollapseIcon'
+import DomainCollapseButton from './DomainCollapseButton'
 
 const maxCommentLength = 2500
 
@@ -40,8 +40,12 @@ class DomainComment extends Component {
     return (
       <div key={`${code}`}>
         <div>{this.renderDomainCommentBody(id, comment, commentTitle)}</div>
-        <Paper className={'domain-inner-collapse-icon-container'}>
-          <BottomCollapseIcon code={this.props.domain.code} onClick={this.props.domainBottomCollapseClick} />
+        <Paper className={'domain-inner-collapse-button-container'}>
+          <DomainCollapseButton
+            code={this.props.domain.code}
+            title={title}
+            onClick={this.props.domainBottomCollapseClick}
+          />
         </Paper>
         <Divider />
       </div>

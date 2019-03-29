@@ -333,7 +333,7 @@ feature 'Case Worker Functionality' do
   def domain_and_item_rating_test
     expand_first_domain
     @form.domain_level_reg_rating[0].click # avoid stuck
-    expect(@form).to have_domain_bottom_chevron
+    expect(@form).to have_domain_collapse_button
     @form.domain_level_reg_rating[0, 4].each_with_index do |label, index|
       label.click
       expect(@form.domain_reg_radios[index].checked?).to be(true)
@@ -348,8 +348,8 @@ feature 'Case Worker Functionality' do
     end
     @form.item_bottom_chevron[0].click
     expect(@form).to have_no_inner_item_rating
-    @form.domain_bottom_chevron[0].click
-    expect(@form).to have_no_domain_bottom_chevron
+    @form.domain_collapse_button.click
+    expect(@form).to have_no_domain_collapse_button
     expand_first_domain
     expand_first_item
   end
