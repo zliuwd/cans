@@ -580,7 +580,13 @@ describe('AssessmentHelper', () => {
             {
               comment: 'domain 1 comment',
               is_reviewed: true,
-              items: [{}, { comment: 'item 1-1 comment' }, { comment: 'item 1-2 comment' }],
+              items: [
+                {},
+                { confidential: true, confidential_by_default: false },
+                { confidential: false, confidential_by_default: false },
+                { comment: 'item 1-1 comment', confidential: true, confidential_by_default: true },
+                { comment: 'item 1-2 comment', confidential: false, confidential_by_default: true },
+              ],
             },
             {
               comment: 'domain 2 comment',
@@ -598,7 +604,18 @@ describe('AssessmentHelper', () => {
         event_date: '2019-03-08',
         can_release_confidential_info: false,
         state: {
-          domains: [{ items: [{}, {}, {}] }, { items: [{}] }],
+          domains: [
+            {
+              items: [
+                {},
+                { confidential: true, confidential_by_default: false },
+                { confidential: false, confidential_by_default: false },
+                { confidential: true, confidential_by_default: true },
+                { confidential: true, confidential_by_default: true },
+              ],
+            },
+            { items: [{}] },
+          ],
         },
       }
       expect(input).toEqual(expected)

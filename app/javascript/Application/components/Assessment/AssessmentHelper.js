@@ -280,6 +280,9 @@ export function preparePrecedingAssessment(precedingAssessment, eventDate) {
     delete domain.is_reviewed
     domain.items.forEach(item => {
       delete item.comment
+      if (item.confidential_by_default) {
+        item.confidential = true
+      }
     })
   })
 }
