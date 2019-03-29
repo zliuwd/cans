@@ -21,6 +21,7 @@ import {
   preparePrecedingAssessment,
   containsNotReviewedDomains,
   createRatingsMap,
+  buildItemUniqueKey,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
@@ -630,6 +631,7 @@ describe('AssessmentHelper', () => {
         items: [{ code: 'code00', rating: 1 }, { code: 'code01', rating: -1 }, { code: 'code02', rating: 2 }],
       },
       {
+        caregiver_index: 'a',
         items: [{ code: 'code10', rating: 8 }, { code: 'code11', rating: 3 }],
       },
     ]
@@ -637,10 +639,20 @@ describe('AssessmentHelper', () => {
       code00: 1,
       code01: -1,
       code02: 2,
-      code10: 8,
-      code11: 3,
+      code10a: 8,
+      code11a: 3,
     }
     const actualRatingsMap = createRatingsMap(domains)
     expect(actualRatingsMap).toEqual(expectedRatingsMap)
+  })
+
+  describe('#buildItemUniqueKey()', () => {
+    it('build a unique key for item', () => {
+      expect(buildItemUniqueKey('code')).toEqual('code')
+    })
+
+    it('build a unique key for item with a caregiver index', () => {
+      expect(buildItemUniqueKey('code', 'a')).toEqual('codea')
+    })
   })
 })

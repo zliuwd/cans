@@ -284,11 +284,14 @@ export function preparePrecedingAssessment(precedingAssessment, eventDate) {
   })
 }
 
+export const buildItemUniqueKey = (code, caregiverIndex) => `${code}${caregiverIndex || ''}`
+
 export function createRatingsMap(domains) {
   const codeToRatingMap = {}
   domains.forEach(domain =>
     domain.items.forEach(item => {
-      codeToRatingMap[item.code] = item.rating
+      const key = buildItemUniqueKey(item.code, domain.caregiver_index)
+      codeToRatingMap[key] = item.rating
     })
   )
   return codeToRatingMap
