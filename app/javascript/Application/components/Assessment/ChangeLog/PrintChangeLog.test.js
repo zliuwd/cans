@@ -120,7 +120,7 @@ describe('<PrintChangeLog />', () => {
           .dive()
           .find('div')
           .text()
-      ).toBe('11/01/2018 5:07:10 PM')
+      ).toBe('11/01/2018 05:07:10 PM')
     })
 
     it('renders the change type', () => {
