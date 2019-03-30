@@ -263,7 +263,7 @@ def acceptanceTestPreintStage(stageName, smokeTest = false) {
   }
 }
 
-def regressionTestStage(environmentVariables, stageName = 'Regression Test', smokeTest = false) {
+def regressionTestStage(environmentVariables, stageName, smokeTest = false, browser) {
   stage(stageName) {
     withDockerRegistry([credentialsId: JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID]) {
       withCredentials([
@@ -279,7 +279,7 @@ def regressionTestStage(environmentVariables, stageName = 'Regression Test', smo
         ]) {        
         sh "docker-compose -f docker-compose.ci.yml up -d --build cans-test"
         try {
-          command = "docker-compose -f docker-compose.ci.yml exec -T --env NON_CASEWORKER_USERNAME=$NON_CASEWORKER_USERNAME --env NON_CASEWORKER_PASSWORD=$NON_CASEWORKER_PASSWORD --env NON_CASEWORKER_VERIFICATION_CODE=$NON_CASEWORKER_VERIFICATION_CODE --env SUPERVISOR_USERNAME=$SUPERVISOR_USERNAME --env SUPERVISOR_PASSWORD=$SUPERVISOR_PASSWORD --env SUPERVISOR_VERIFICATION_CODE=$SUPERVISOR_VERIFICATION_CODE --env CASEWORKER_USERNAME=$CASEWORKER_USERNAME --env CASEWORKER_PASSWORD=$CASEWORKER_PASSWORD --env CASEWORKER_VERIFICATION_CODE=$CASEWORKER_VERIFICATION_CODE --env PROD_LOGIN=true ${environmentVariables} cans-test bundle exec rspec spec/regression"
+          command = "docker-compose -f docker-compose.ci.yml exec -T --env ${browser} --env NON_CASEWORKER_USERNAME=$NON_CASEWORKER_USERNAME --env NON_CASEWORKER_PASSWORD=$NON_CASEWORKER_PASSWORD --env NON_CASEWORKER_VERIFICATION_CODE=$NON_CASEWORKER_VERIFICATION_CODE --env SUPERVISOR_USERNAME=$SUPERVISOR_USERNAME --env SUPERVISOR_PASSWORD=$SUPERVISOR_PASSWORD --env SUPERVISOR_VERIFICATION_CODE=$SUPERVISOR_VERIFICATION_CODE --env CASEWORKER_USERNAME=$CASEWORKER_USERNAME --env CASEWORKER_PASSWORD=$CASEWORKER_PASSWORD --env CASEWORKER_VERIFICATION_CODE=$CASEWORKER_VERIFICATION_CODE --env PROD_LOGIN=true ${environmentVariables} cans-test bundle exec rspec spec/regression"
           if( smokeTest ) {
             command = "${command} --tag smoke"
           } else {
@@ -357,7 +357,8 @@ def releaseToEnvironment(environment) {
     smokeTestStage(environment)
     switch(environment) {
       case "preint": acceptanceTestPreintStage('Regression Test Preint'); break;
-      case "integration": regressionTestStage('--env CANS_WEB_BASE_URL=https://web.integration.cwds.io/cans'); break;
+      case "integration": regressionTestStage('--env CANS_WEB_BASE_URL=https://web.integration.cwds.io/cans', 'Regression Test Chrome'); break;
+      case "integration": regressionTestStage('--env CANS_WEB_BASE_URL=https://web.integration.cwds.io/cans', 'Regression Test Firefox', 'BROWSER=FIREFOX'); break;
       default: echo "No tests for run for $environment"
     }
   }
