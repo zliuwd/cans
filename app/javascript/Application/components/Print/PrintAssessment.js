@@ -4,6 +4,7 @@ import { getI18nByCode } from '../common/I18nHelper'
 import PrintSummary from './PrintSummary'
 import EprintLayout from './enhancedPrint/EprintLayout'
 import CategoryHeader from './enhancedPrint/CategoryHeader'
+import EprintPageBreaker from './enhancedPrint/EprintPageBreaker'
 import Logo from './Logo.jpeg'
 import {
   alertSignBox,
@@ -328,18 +329,19 @@ class PrintAssessment extends PureComponent {
       <EprintLayout header={printPageHeader} footer={printPageFooter}>
         {this.renderHeadLine()}
         {this.renderHeader()}
-        {handleStatus !== status ? null : (
-          <div>
-            <CategoryHeader title="CANS Summary" />
-            <PrintSummary renderSummaryRecord={this.renderSummaryRecord} summaryCodes={summaryCodes} />
-          </div>
-        )}
         <CategoryHeader title="CANS Ratings" />
         {domains.map(domain => {
           if (!shouldDomainBeRendered(isAssessmentUnderSix, domain)) return null
           const domainI18n = getI18nByCode(i18n, domain.code)
           return this.renderDomain(domain, domainI18n)
         })}
+        <EprintPageBreaker />
+        {handleStatus !== status ? null : (
+          <div>
+            <CategoryHeader title="CANS Summary" />
+            <PrintSummary renderSummaryRecord={this.renderSummaryRecord} summaryCodes={summaryCodes} />
+          </div>
+        )}
       </EprintLayout>
     )
   }
