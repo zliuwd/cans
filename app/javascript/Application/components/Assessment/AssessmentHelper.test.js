@@ -21,6 +21,7 @@ import {
   preparePrecedingAssessment,
   containsNotReviewedDomains,
   createRatingsMap,
+  buildItemUniqueKey,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
@@ -566,7 +567,7 @@ describe('AssessmentHelper', () => {
   })
 
   describe('#preparePrecedingAssessment()', () => {
-    it('prepares preceding assessment for reassessment ', () => {
+    it('prepares preceding assessment for reassessment with AGE 0-5', () => {
       const input = {
         some_field: 'will not be updated',
         id: 12345,
@@ -579,7 +580,13 @@ describe('AssessmentHelper', () => {
             {
               comment: 'domain 1 comment',
               is_reviewed: true,
-              items: [{}, { comment: 'item 1-1 comment' }, { comment: 'item 1-2 comment' }],
+              items: [
+                {},
+                { confidential: true, confidential_by_default: false },
+                { confidential: false, confidential_by_default: false },
+                { comment: 'item 1-1 comment', confidential: true, confidential_by_default: true },
+                { comment: 'item 1-2 comment', confidential: false, confidential_by_default: true },
+              ],
             },
             {
               comment: 'domain 2 comment',
@@ -589,15 +596,80 @@ describe('AssessmentHelper', () => {
           ],
         },
       }
-      preparePrecedingAssessment(input, '2019-03-08')
+      preparePrecedingAssessment(input, '2019-03-26', '2016-01-01')
       const expected = {
         some_field: 'will not be updated',
         preceding_assessment_id: 12345,
         status: 'IN_PROGRESS',
-        event_date: '2019-03-08',
+        event_date: '2019-03-26',
         can_release_confidential_info: false,
         state: {
-          domains: [{ items: [{}, {}, {}] }, { items: [{}] }],
+          domains: [
+            {
+              items: [
+                {},
+                { confidential: true, confidential_by_default: false },
+                { confidential: false, confidential_by_default: false },
+                { confidential: true, confidential_by_default: true },
+                { confidential: true, confidential_by_default: true },
+              ],
+            },
+            { items: [{}] },
+          ],
+          under_six: true,
+        },
+      }
+      expect(input).toEqual(expected)
+    })
+
+    it('prepares preceding assessment for reassessment with AGE 6-21', () => {
+      const input = {
+        some_field: 'will not be updated',
+        id: 12345,
+        status: 'COMPLETED',
+        event_date: '2019-03-26',
+        can_release_confidential_info: true,
+        conducted_by: 'John Doe',
+        state: {
+          domains: [
+            {
+              comment: 'domain 1 comment',
+              items: [
+                {},
+                { confidential: true, confidential_by_default: false },
+                { confidential: false, confidential_by_default: false },
+                { comment: 'item 1-1 comment', confidential: true, confidential_by_default: true },
+                { comment: 'item 1-2 comment', confidential: false, confidential_by_default: true },
+              ],
+            },
+            {
+              comment: 'domain 2 comment',
+              items: [{ comment: 'item 2-1 comment' }],
+            },
+          ],
+        },
+      }
+      preparePrecedingAssessment(input, '2019-03-26', '2010-02-01')
+      const expected = {
+        some_field: 'will not be updated',
+        preceding_assessment_id: 12345,
+        status: 'IN_PROGRESS',
+        event_date: '2019-03-26',
+        can_release_confidential_info: false,
+        state: {
+          domains: [
+            {
+              items: [
+                {},
+                { confidential: true, confidential_by_default: false },
+                { confidential: false, confidential_by_default: false },
+                { confidential: true, confidential_by_default: true },
+                { confidential: true, confidential_by_default: true },
+              ],
+            },
+            { items: [{}] },
+          ],
+          under_six: false,
         },
       }
       expect(input).toEqual(expected)
@@ -630,6 +702,7 @@ describe('AssessmentHelper', () => {
         items: [{ code: 'code00', rating: 1 }, { code: 'code01', rating: -1 }, { code: 'code02', rating: 2 }],
       },
       {
+        caregiver_index: 'a',
         items: [{ code: 'code10', rating: 8 }, { code: 'code11', rating: 3 }],
       },
     ]
@@ -637,10 +710,20 @@ describe('AssessmentHelper', () => {
       code00: 1,
       code01: -1,
       code02: 2,
-      code10: 8,
-      code11: 3,
+      code10a: 8,
+      code11a: 3,
     }
     const actualRatingsMap = createRatingsMap(domains)
     expect(actualRatingsMap).toEqual(expectedRatingsMap)
+  })
+
+  describe('#buildItemUniqueKey()', () => {
+    it('build a unique key for item', () => {
+      expect(buildItemUniqueKey('code')).toEqual('code')
+    })
+
+    it('build a unique key for item with a caregiver index', () => {
+      expect(buildItemUniqueKey('code', 'a')).toEqual('codea')
+    })
   })
 })

@@ -57,6 +57,15 @@ class AssessmentFormFooter < SitePrism::Section
   def confirm_domains_review
     review_confirmation_checkbox.click
   end
+
+  def complete_assessment(has_previous_values)
+    if has_previous_values
+      confirm_domains_review
+      sleep 1
+    end
+    complete_button.click
+    sleep 2
+  end
 end
 
 class ReassessmentModal < SitePrism::Section
@@ -99,7 +108,7 @@ class AssessmentForm < SitePrism::Page
   element :collapse_all_button, 'button', text: 'COLLAPSE ALL'
   element :collapsed_chevron, 'div[aria-expanded="false"]'
   element :expanded_chevron, 'div[aria-expanded="true"]'
-  elements :domain_bottom_chevron, 'div.domain-inner-collapse-icon-container svg'
+  element :domain_collapse_button, 'button.modal-regular-button'
   elements :item_bottom_chevron, 'div.item-inner-collapse-icon-container svg'
   elements :domain_level_reg_rating, 'div.item-reg-rating label'
   elements :domain_reg_radios, 'div.item-reg-rating input', visible: false
@@ -112,7 +121,7 @@ class AssessmentForm < SitePrism::Page
   element :not_applicable_checkbox, 'label', text: 'N/A'
   element :not_applicable_text, 'h2', text: 'N/A'
   element :item_level_comment, 'div.item-comment-block textarea'
-  element :domain_level_comment, 'div.domain-comment-block textarea'
+  elements :domain_level_comments, 'div.domain-comment-block textarea'
   elements :domain_toolbar_comment_icon_block, 'div.domain-toolbar-comment-icon-block'
   elements :item_comment_icons, '.item-toolbar-comment-icon'
   element :item_description_header, 'h3', text: 'Item Description:'
@@ -163,6 +172,10 @@ class AssessmentForm < SitePrism::Page
       find(element).click
       sleep 2
     end
+  end
+
+  def complete_assessment(has_previous_values)
+    footer.complete_assessment has_previous_values
   end
 end
 

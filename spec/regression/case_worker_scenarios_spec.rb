@@ -51,28 +51,30 @@ feature 'Case Worker Functionality' do
 
   scenario 'Fill out and complete (re)assessment from 0 to 5' do
     visit '/'
-    is_reassessment = fill_form_header_0_to_5
+    has_previous_values = false
+    fill_form_header_0_to_5 has_previous_values
     expand_all_domains
     check_redacted_checkbox_0_to_5
     verify_caregiver_name_input_field_and_label
     fill_out_assessment_form_and_check_domain_total
     check_all_progress_are_fully_filled
     click_save_and_summary_card_is_shown
-    warning_and_summary_card_shown_after_complete_button_clicked(is_reassessment)
+    warning_and_summary_card_shown_after_complete_button_clicked(has_previous_values)
     verify_the_tool_tip_of_summary_card
     verify_the_content_of_summary_card('0to5')
   end
 
   scenario 'Fill out and complete (re)assessment from 6 to 21' do
     visit '/'
-    fill_form_header_6_to_21
+    has_previous_values = false
+    fill_form_header_6_to_21 has_previous_values
     expand_all_domains
     check_redacted_checkbox_6_to_21
     verify_caregiver_name_input_field_and_label
     fill_out_assessment_form_and_check_domain_total
     check_all_progress_are_fully_filled
     click_save_and_summary_card_is_shown
-    click_complete_button_then_summary_card_shown
+    click_complete_button_then_summary_card_shown has_previous_values
     verify_the_tool_tip_of_summary_card
     verify_the_content_of_summary_card('6to21')
     go_back
@@ -81,7 +83,8 @@ feature 'Case Worker Functionality' do
 
   scenario 'Fill out Reassessment with preceding assessment data, from 6 to 21' do
     visit '/'
-    is_reassessment = @assessment_helper.start_assessment_for(CLIENT_NAME, true)
+    has_previous_values = true
+    is_reassessment = @assessment_helper.start_assessment_for(CLIENT_NAME, has_previous_values)
     unless is_reassessment
       click_6_to_21_button
       expand_all_domains
@@ -89,13 +92,12 @@ feature 'Case Worker Functionality' do
       fill_out_assessment_form_with_rating_1
       warning_and_summary_card_shown_after_complete_button_clicked is_reassessment
       visit '/'
-      @assessment_helper.start_assessment_for(CLIENT_NAME, true)
+      @assessment_helper.start_assessment_for(CLIENT_NAME, has_previous_values)
     end
     @form.review_all_domains_6_to_21
     expand_first_item
     item_and_domain_level_comment_test
-    @form.footer.confirm_domains_review
-    warning_and_summary_card_shown_after_complete_button_clicked true
+    warning_and_summary_card_shown_after_complete_button_clicked has_previous_values
   end
 
   scenario 'Case worker attempts to access changelog from assessment' do
@@ -331,7 +333,7 @@ feature 'Case Worker Functionality' do
   def domain_and_item_rating_test
     expand_first_domain
     @form.domain_level_reg_rating[0].click # avoid stuck
-    expect(@form).to have_domain_bottom_chevron
+    expect(@form).to have_domain_collapse_button
     @form.domain_level_reg_rating[0, 4].each_with_index do |label, index|
       label.click
       expect(@form.domain_reg_radios[index].checked?).to be(true)
@@ -346,8 +348,8 @@ feature 'Case Worker Functionality' do
     end
     @form.item_bottom_chevron[0].click
     expect(@form).to have_no_inner_item_rating
-    @form.domain_bottom_chevron[0].click
-    expect(@form).to have_no_domain_bottom_chevron
+    @form.domain_collapse_button.click
+    expect(@form).to have_no_domain_collapse_button
     expand_first_domain
     expand_first_item
   end
@@ -386,10 +388,10 @@ feature 'Case Worker Functionality' do
     end
     domain_comment_content = 'some domain level comments'
     @form.inner_items[-1].click
-    @form.domain_level_comment.set domain_comment_content
-    expect(@form.domain_level_comment.value).to eq(domain_comment_content)
+    @form.domain_level_comments[0].set domain_comment_content
+    expect(@form.domain_level_comments[0].value).to eq(domain_comment_content)
     expect(page.has_content?("#{domain_comment_content.length}/2500")).to be(true)
-    domain_comment_label = @form.domain_level_comment.sibling('label')
+    domain_comment_label = @form.domain_level_comments[0].sibling('label')
     within domain_comment_label do
       expect(find('svg')[:class].include?('comment-icon-solid')).to be(true)
     end
@@ -398,8 +400,8 @@ feature 'Case Worker Functionality' do
     end
   end
 
-  def fill_form_header_0_to_5
-    is_reassessment = @assessment_helper.start_assessment_for CLIENT_NAME
+  def fill_form_header_0_to_5(should_start_prefilled)
+    is_reassessment = @assessment_helper.start_assessment_for CLIENT_NAME, should_start_prefilled
     fill_conducted_by_field('')
     expect(@form.header).to have_no_redaction_message
     click_0_to_5_button
@@ -408,8 +410,8 @@ feature 'Case Worker Functionality' do
     is_reassessment
   end
 
-  def fill_form_header_6_to_21
-    is_reassessment = @assessment_helper.start_assessment_for CLIENT_NAME
+  def fill_form_header_6_to_21(should_start_prefilled)
+    is_reassessment = @assessment_helper.start_assessment_for CLIENT_NAME, should_start_prefilled
     fill_conducted_by_field('')
     click_6_to_21_button
     expect(@form.header).to have_redaction_message_6_to_21
@@ -496,23 +498,18 @@ feature 'Case Worker Functionality' do
     expect(@form).to have_summary
   end
 
-  def warning_and_summary_card_shown_after_complete_button_clicked(is_reassessment)
-    @form.footer.complete_button.click
-    sleep 2
+  def warning_and_summary_card_shown_after_complete_button_clicked(has_previous_values)
+    @form.complete_assessment has_previous_values
     expect(@form.app_globals).to have_complete_warning_modal
     @form.app_globals.complete_warning_save_return_button.click
-    if is_reassessment
-      expect(@form.global).to have_reassessment_page_header
-    else
-      expect(@form.global).to have_assessment_page_header
-    end
-    click_complete_button_then_summary_card_shown
+    sleep 2
+    @form.footer.review_confirmation_checkbox.click if has_previous_values
+    click_complete_button_then_summary_card_shown has_previous_values
   end
 
-  def click_complete_button_then_summary_card_shown
+  def click_complete_button_then_summary_card_shown(has_previous_values)
     expect(@form.footer).to have_complete_button
-    @form.footer.complete_button.click
-    sleep 2
+    @form.complete_assessment has_previous_values
     expect(@form.app_globals).to have_complete_warning_modal
     @form.app_globals.complete_warning_confirm_button.click
     expect(@form.global).to have_global_complete_message_box

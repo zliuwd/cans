@@ -935,6 +935,11 @@ describe('<AssessmentContainer />', () => {
           messageId: 'readonlyMessage',
         })
       })
+
+      it('"isUnsaved" flag should be false when assessment state is updated', async () => {
+        await wrapper.instance().updateAssessment(assessment)
+        expect(wrapper.instance().state.isUnsaved).toBeFalsy()
+      })
     })
 
     describe('when assessment status=IN_PROGRESS', () => {
@@ -1000,7 +1005,11 @@ describe('<AssessmentContainer />', () => {
       // then
       expect(wrapper.state().isReassessmentModalShown).toBeFalsy()
       expect(wrapper.state().isShowReassessmentAlert).toBeTruthy()
-      AHelper.preparePrecedingAssessment(precedingAssessment, subsequentAssessment.event_date)
+      AHelper.preparePrecedingAssessment(
+        precedingAssessment,
+        subsequentAssessment.event_date,
+        subsequentAssessment.person.dob
+      )
       expect(wrapper.state().assessment).toEqual(precedingAssessment)
       const expectedRatingsMap = AHelper.createRatingsMap(precedingAssessment.state.domains)
       expect(wrapper.state().previousRatingsMap).toEqual(expectedRatingsMap)

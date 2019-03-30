@@ -23,7 +23,7 @@ describe('ChangeLogDate', () => {
   it('renders a formatted date', () => {
     const wrapper = shallow(<ChangeLogDate original={change} />)
 
-    expect(wrapper.find('div').text()).toBe('11/19/2018 4:48:45 PM')
+    expect(wrapper.find('div').text()).toBe('11/19/2018 04:48:45 PM')
   })
 
   it('renders null if there is no date', () => {

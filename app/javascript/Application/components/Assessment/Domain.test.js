@@ -1,9 +1,9 @@
 import React from 'react'
-import { UncontrolledTooltip } from '@cwds/components'
+import { UncontrolledTooltip, Button } from '@cwds/components'
 import { shallow, mount } from 'enzyme'
 import Domain from './Domain'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
-import DomainCommentAccordion from './DomainCommentAccordion'
+import DomainComment from './DomainComment'
 import DomainCommentIcon from './DomainCommentIcon'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
@@ -202,15 +202,15 @@ describe('<Domain />', () => {
     })
   })
 
-  describe('DomainCommentAccordion', () => {
+  describe('DomainComment', () => {
     it('should render domain comment when extended', () => {
       const wrapper = shallow(domainComponentDefault)
       wrapper.instance().handleExpandedChange(testExpandingEvent)
       expect(wrapper.instance().state.expanded).toBeTruthy()
-      expect(wrapper.find(DomainCommentAccordion).length).toBe(1)
+      expect(wrapper.find(DomainComment).length).toBe(1)
     })
 
-    it('should propogate onDomainCommentUpdate prop to DomainCommentAccordion props', () => {
+    it('should propogate onDomainCommentUpdate prop to DomainComment props', () => {
       const onDomainCommentUpdateMock = jest.fn()
       const wrapper = shallow(
         <Domain
@@ -232,10 +232,10 @@ describe('<Domain />', () => {
         />
       )
       wrapper.instance().handleExpandedChange(testExpandingEvent)
-      expect(wrapper.find(DomainCommentAccordion).props().onDomainCommentUpdate).toBe(onDomainCommentUpdateMock)
+      expect(wrapper.find(DomainComment).props().onDomainCommentUpdate).toBe(onDomainCommentUpdateMock)
     })
 
-    it('should propogate props domainBottomCollapseClick to DomainCommentAccordion', () => {
+    it('should propogate props domainBottomCollapseClick to DomainComment', () => {
       const wrapper = shallow(
         <Domain
           key={'1'}
@@ -256,7 +256,7 @@ describe('<Domain />', () => {
         />
       )
       wrapper.instance().handleExpandedChange(testExpandingEvent)
-      const target = wrapper.find(DomainCommentAccordion)
+      const target = wrapper.find(DomainComment)
       expect(Object.keys(target.props()).includes('domainBottomCollapseClick')).toBe(true)
     })
   })
@@ -304,8 +304,10 @@ describe('<Domain />', () => {
       expect(handleWarningShow.mock.calls.length).toBe(1)
     })
 
-    it('invokes onRemoveCaregiverDomain() callback', () => {
-      const removeCaregiverButton = wrapper.find('Button').at(1)
+    it('invokes handleWarningShow() callback', () => {
+      handleWarningShow.mockReset()
+      const domainCaregiverControls = wrapper.find(DomainCaregiverControls).at(0)
+      const removeCaregiverButton = domainCaregiverControls.find(Button).at(0)
       removeCaregiverButton.simulate('click')
       removeCaregiverButton.simulate('keypress', {
         key: 'Enter',
@@ -313,12 +315,12 @@ describe('<Domain />', () => {
       removeCaregiverButton.simulate('keypress', {
         key: 'Space',
       })
-      expect(callbackMock.mock.calls.length).toBe(2)
+      expect(handleWarningShow).toHaveBeenCalledTimes(2)
     })
 
     it('will invoke onAddCaregiverDomain() callback', () => {
-      const addCaregiverButton = wrapper.find('div').at(1)
-      expect(wrapper.find(DomainCaregiverControls).length).toBe(1)
+      const domainCaregiverControls = wrapper.find(DomainCaregiverControls).at(0)
+      const addCaregiverButton = domainCaregiverControls.find(Button).at(1)
       addCaregiverButton.simulate('click')
       addCaregiverButton.simulate('keypress', {
         key: 'Enter',
@@ -557,8 +559,8 @@ describe('<Domain />', () => {
       expect(domainWrapper.find(DomainItemList).prop('disabled')).toBe(true)
     })
 
-    it('should propagate disabled prop to <DomainCommentAccordion/>', () => {
-      expect(domainWrapper.find('DomainCommentAccordion').prop('disabled')).toBe(true)
+    it('should propagate disabled prop to <DomainComment/>', () => {
+      expect(domainWrapper.find('DomainComment').prop('disabled')).toBe(true)
     })
 
     it('should hide <DomainCaregiverControls/> when disables=true ', () => {
