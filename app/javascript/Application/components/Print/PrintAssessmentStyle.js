@@ -2,14 +2,14 @@ export const headerBlock = {
   display: 'flex',
   flexDirection: 'column',
   padding: '1rem',
+  fontSize: '0.8rem',
 }
 
 export const headerRow = {
   display: 'flex',
   fontFamily: 'sans-serif',
   flexDirection: 'row',
-  margin: '0.5rem 0 0.5rem 0',
-  width: '107%',
+  width: '100%',
 }
 
 export const headerRecord = {
@@ -31,20 +31,20 @@ export const domainHeaderStyle = {
   padding: '0 1rem 0 1rem',
   margin: '1rem 0 0 0',
   minHeight: '3rem',
-  backgroundColor: 'transparent',
-  border: 'thin solid gray',
+  backgroundColor: 'e8e8e8',
   pageBreakInside: 'avoid',
   pageBreakAfter: 'avoid',
 }
 
 export const domainTitleStyle = {
-  fontSize: '1rem',
+  fontSize: '0.9rem',
   fontFamily: 'sans-serif',
   fontWeight: 500,
   display: 'flex',
   justifyContent: 'space-between',
   flexDirection: 'row',
   margin: '0.5rem 0 0.5rem 0',
+  flexWrap: 'nowrap',
 }
 
 export const domainScoreStyle = {
@@ -61,9 +61,7 @@ export const domainComment = {
 export const itemStyle = {
   display: 'flex',
   flexDirection: 'column',
-  padding: '0 1rem 0 1rem',
   backgroundColor: 'transparent',
-  borderBottom: 'thin solid gray',
   pageBreakInside: 'avoid',
 }
 
@@ -146,5 +144,4 @@ export const textAlignCenter = {
 
 export const textAlignLeft = {
   textAlign: 'left',
-  border: 'thin solid gray',
 }

@@ -2,6 +2,9 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { getI18nByCode } from '../common/I18nHelper'
 import PrintSummary from './PrintSummary'
+import EprintLayout from './enhancedPrint/EprintLayout'
+import CategoryHeader from './enhancedPrint/CategoryHeader'
+import Logo from './Logo.jpeg'
 import {
   alertSignBox,
   headerBlock,
@@ -84,13 +87,17 @@ class PrintAssessment extends PureComponent {
     </div>
   )
 
+  stripeGenerator = index => {
+    return index & 1 ? 'stripe-gray' : null
+  }
+
   renderItem = (item, index, caregiverIndex, itemI18n) => {
     const title = itemI18n._title_ || ''
     const itemNumber = this.state.isAssessmentUnderSix ? item.under_six_id : item.above_six_id
     const isRegularType = item.rating_type === 'REGULAR'
     return (
       <div key={caregiverIndex + itemNumber} style={itemStyle}>
-        <div style={itemMainLine}>
+        <div className={`item-main-line ${this.stripeGenerator(index)}`}>
           <div style={itemTitleWrapper}>
             <div style={itemTitle}>
               {itemNumber}
@@ -123,7 +130,7 @@ class PrintAssessment extends PureComponent {
         : totalScoreCalculation(items)
     return (
       <div key={code + caregiverIndex}>
-        <div style={domainHeaderStyle}>
+        <div className="domain-header">
           <div style={domainTitleStyle}>
             <span>
               <strong>
@@ -136,7 +143,7 @@ class PrintAssessment extends PureComponent {
           </div>
           {comment && !hasConfidentialItems(domain) && <div style={domainComment}>Domain Comment: {comment}</div>}
         </div>
-        <div style={thinGrayBorder}>
+        <div>
           {items.map((item, index) => {
             const { isAssessmentUnderSix } = this.state
             if (!shouldItemBeRendered(isAssessmentUnderSix, item)) return null
@@ -184,6 +191,18 @@ class PrintAssessment extends PureComponent {
     </div>
   )
 
+  renderHeadLine = () => {
+    return (
+      <div className="head-line-container">
+        <div className="logo-container">
+          <img className="logo" src={Logo} alt="Logo" />
+        </div>
+        <div className="head-title">CARES - CANS Reassessment</div>
+        <div className="head-age-range">6 - 21 years old</div>
+      </div>
+    )
+  }
+
   renderHeader() {
     const assessment = this.props.assessment
     const clientName = formatClientName(assessment.person)
@@ -195,25 +214,76 @@ class PrintAssessment extends PureComponent {
     const canReleaseInfo = assessment.can_release_confidential_info
     const isUnderSix = this.props.assessment.state.under_six
     return (
-      <div style={headerBlock}>
-        <h1 style={textAlignCenter}>CANS Assessment Form</h1>
-        <div style={headerNameRow}>
-          <h2>{clientName}</h2>
-          <h2>{countyName}</h2>
+      <div className="header-container">
+        <div className="header-first">
+          <div className="header-first-box">
+            <div>{eventDate}</div>
+            <hr />
+            <div>Date of Assessment</div>
+            <div>mm/dd/yy</div>
+          </div>
+          <div className="header-first-box">
+            <div>{caseReferralNumber}</div>
+            <hr />
+            <div>Case / Referral Number</div>
+            <div />
+          </div>
+          <div className="header-first-box">
+            <div>{countyName}</div>
+            <hr />
+            <div>County</div>
+            <div />
+          </div>
+          <div className="header-first-box">
+            <div>01/01/2015</div>
+            <hr />
+            <div>Date of Birth</div>
+            <div>mm/dd/yy</div>
+          </div>
+          <div className="header-first-box">
+            <div>4</div>
+            <hr />
+            <div>Age</div>
+            <div />
+          </div>
         </div>
-        <div style={headerRow}>
-          {this.renderHeaderRecord('Date', eventDate)}
-          {this.renderHeaderRecord('Conducted by', conductedBy)}
-          {this.renderHeaderRecord(caseReferralNumber, assessment.service_source_ui_id)}
-          {this.renderHeaderRecord('Complete as', assessment.completed_as)}
+        <div className="header-second">
+          <div className="header-sec-box">
+            <div>{countyName}</div>
+            <hr />
+            <div>First name</div>
+          </div>
+          <div className="header-sec-box">
+            <div>{countyName}</div>
+            <hr />
+            <div>Middle name</div>
+          </div>
+          <div className="header-sec-box">
+            <div>{countyName}</div>
+            <hr />
+            <div>Last name</div>
+          </div>
         </div>
-        <div style={headerRow}>
-          {this.renderHeaderRadioGroupRecord('Child/Youth has Caregiver?', hasCaregiver)}
-          {this.renderHeaderRadioGroupRecord('Authorization for release of information on file?', canReleaseInfo)}
-          {this.renderHeaderRadioGroupRecord('Age Template', isUnderSix, '0-5', '6-21')}
+        <div className="header-third">
+          <div className="header-third-box">
+            <div>Assessment Conducted by:</div>
+            <div>Mike</div>
+            <hr />
+            <div>First name</div>
+          </div>
+          <div className="header-third-box">
+            <div />
+            <div>Alen</div>
+            <hr />
+            <div>Middle name</div>
+          </div>
+          <div className="header-third-box">
+            <div />
+            <div>Seaver</div>
+            <hr />
+            <div>Last name</div>
+          </div>
         </div>
-        {!canReleaseInfo && this.renderConfidentialWarningAlert()}
-        <span style={timeStampStyle}>{moment().format('MMMM D YYYY, h:mm:ss a')}</span>
       </div>
     )
   }
@@ -246,19 +316,31 @@ class PrintAssessment extends PureComponent {
       Trauma: this.getCodes(domains, isTraumaDomain, item => item.rating === 1),
     }
 
-    return (
+    const printPageHeader = (
       <div>
+        <p className="h-p">CARES-CANS Reassessment | 03/01/2019</p>
+        <p className="h-p">Case/Referral Number: 123456789</p>
+        <p className="h-p">San Bernadino County | Age 6-21 Template</p>
+      </div>
+    )
+    const printPageFooter = 'This assessment is confidential...disclaimer text here'
+    return (
+      <EprintLayout header={printPageHeader} footer={printPageFooter}>
+        {this.renderHeadLine()}
         {this.renderHeader()}
         {handleStatus !== status ? null : (
-          <PrintSummary renderSummaryRecord={this.renderSummaryRecord} summaryCodes={summaryCodes} />
+          <div>
+            <CategoryHeader title="CANS Summary" />
+            <PrintSummary renderSummaryRecord={this.renderSummaryRecord} summaryCodes={summaryCodes} />
+          </div>
         )}
-        <h1 style={textAlignCenter}>CANS Scores</h1>
+        <CategoryHeader title="CANS Ratings" />
         {domains.map(domain => {
           if (!shouldDomainBeRendered(isAssessmentUnderSix, domain)) return null
           const domainI18n = getI18nByCode(i18n, domain.code)
           return this.renderDomain(domain, domainI18n)
         })}
-      </div>
+      </EprintLayout>
     )
   }
 }
