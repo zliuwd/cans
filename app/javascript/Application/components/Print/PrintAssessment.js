@@ -6,6 +6,7 @@ import EprintLayout from './enhancedPrint/EprintLayout'
 import CategoryHeader from './enhancedPrint/CategoryHeader'
 import EprintPageBreaker from './enhancedPrint/EprintPageBreaker'
 import CWDSlogo from './enhancedPrint/CWDSlogo'
+import DomainHeaderBg from './enhancedPrint/backgroundPng/DomainHeaderBg'
 import {
   alertSignBox,
   headerBlock,
@@ -42,6 +43,8 @@ import {
 } from '../Assessment/AssessmentSummary/DomainHelper'
 import moment from 'moment'
 
+// const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+
 const isConfidential = item => item.confidential_by_default && item.confidential
 const isDiscretionNeeded = item => !item.confidential_by_default && item.confidential
 const isItemHidden = item => isConfidential(item) || isDiscretionNeeded(item)
@@ -56,6 +59,10 @@ class PrintAssessment extends PureComponent {
       isAssessmentUnderSix: Boolean(this.props.assessment.state.under_six),
     }
   }
+
+  // safariBackgroundAdjust = img => {
+  //   return isSafari ? null : { backgroundImage: `url(${img})`, background: `url(${img})` }
+  // }
 
   renderOptions = (item, isRegularType) => {
     const optionCodes = {
@@ -88,8 +95,20 @@ class PrintAssessment extends PureComponent {
     </div>
   )
 
-  stripeGenerator = index => {
+  stripeContainerStyleGenerator = index => {
     return index & 1 ? 'stripe-gray' : null
+  }
+
+  stripeBgGenerator = index => {
+    return index & 1 ? (
+      <div>
+        <DomainHeaderBg />
+      </div>
+    ) : null
+  }
+
+  stripeContentStyleGenerator = index => {
+    return index & 1 ? 'header-with-svg-bg' : null
   }
 
   renderItem = (item, index, caregiverIndex, itemI18n) => {
@@ -97,8 +116,13 @@ class PrintAssessment extends PureComponent {
     const itemNumber = this.state.isAssessmentUnderSix ? item.under_six_id : item.above_six_id
     const isRegularType = item.rating_type === 'REGULAR'
     return (
-      <div key={caregiverIndex + itemNumber} style={itemStyle} className="item-container">
-        <div className={`item-main-line ${this.stripeGenerator(index)}`}>
+      <div
+        key={caregiverIndex + itemNumber}
+        style={itemStyle}
+        className={`item-container ${this.stripeContainerStyleGenerator(index)}`}
+      >
+        {this.stripeBgGenerator(index)}
+        <div className={`item-main-line ${this.stripeContentStyleGenerator(index)}`}>
           <div style={itemTitleWrapper}>
             <div style={itemTitle}>
               {itemNumber}
@@ -114,8 +138,9 @@ class PrintAssessment extends PureComponent {
             </div>
           </div>
           {!isItemHidden(item) ? this.renderOptions(item, isRegularType) : <div style={redactedRating} />}
+
+          {item.comment && !isItemHidden(item) ? <div style={itemComment}>Comment: {item.comment}</div> : null}
         </div>
-        {item.comment && !isItemHidden(item) ? <div style={itemComment}>Comment: {item.comment}</div> : null}
       </div>
     )
   }
@@ -132,7 +157,10 @@ class PrintAssessment extends PureComponent {
     return (
       <div key={code + caregiverIndex}>
         <div className="domain-header">
-          <div style={domainTitleStyle}>
+          <div>
+            <DomainHeaderBg />
+          </div>
+          <div style={domainTitleStyle} className="header-with-svg-bg">
             <span>
               <strong>
                 {title} {caregiverName && `- ${caregiverName}`}

@@ -43,7 +43,6 @@ export const domainTitleStyle = {
   display: 'flex',
   justifyContent: 'space-between',
   flexDirection: 'row',
-  margin: '0.5rem 0 0.5rem 0',
   flexWrap: 'nowrap',
 }
 
