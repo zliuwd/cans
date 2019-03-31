@@ -14,11 +14,7 @@ class Print extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <iframe id={printFrameId} title={printFrameId} />
-      </div>
-    )
+    return <iframe id={printFrameId} title={printFrameId} />
   }
 }
 
