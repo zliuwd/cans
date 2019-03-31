@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+// have to use svg to forc IE show the color
 
 const CategoryHeader = props => {
   return (
