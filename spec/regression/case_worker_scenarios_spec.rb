@@ -272,7 +272,9 @@ feature 'Case Worker Functionality' do
   end
 
   def view_cans_change_log_test(current_date, client_name)
-    @client_profile.recent_assessment_ellipsis_icon.click
+    expect(@client_profile).to have_recent_assessment_ellipsis_icon
+    with_retry(proc { @client_profile.recent_assessment_ellipsis_icon.click },
+               proc { @client_profile.wait_until_cans_change_log_button_visible(wait: 2) })
     @client_profile.cans_change_log_button.click
     expect(@assessment_changelog.is_client_name?(client_name)).to be(true)
     expect(@assessment_changelog.is_assessment?(current_date)).to be(true)
