@@ -1,7 +1,7 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 export const printContainerPreCss =
-  '@page {size: auto; margin: 5mm; padding:0; }\n' +
+  '@page {size: auto; margin: 5mm 5mm 6mm 5mm; padding:0; }\n' +
   'html {background-color: #FFFFFF; margin:0;  }\n' +
   'body {margin:0; font-family:sans-serif; color-adjust: exact; -webkit-print-color-adjust: exact;}\n'
 

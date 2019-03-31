@@ -343,7 +343,7 @@ class PrintAssessment extends PureComponent {
     const printPageFooter = (
       <svg height="15mm" width="100%">
         <text fontSize="16px" fill="#999999">
-          <tspan dy="1em" x="0" dx="0">
+          <tspan dy="20px" x="0" dx="0">
             This assessment is confidential...disclaimer text here
           </tspan>
         </text>
