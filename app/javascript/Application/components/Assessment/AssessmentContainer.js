@@ -8,8 +8,6 @@ import { I18nService } from '../common/'
 import { isReadyForAction, LoadingState } from '../../util/loadingHelper'
 import AssessmentContainerInner from './AssessmentContainerInner'
 import { PrintAssessment } from '../Print'
-import PrintImagePreLoader from '../Print/enhancedPrint/PrintImagePreLoader'
-import Logo from '../Print/Logo.jpeg'
 import {
   AssessmentStatus,
   defaultEmptyAssessment,
@@ -447,7 +445,6 @@ export default class AssessmentContainer extends Component {
           substanceUseItemsIds={this.state.substanceUseItemsIds}
           previousRatingsMap={previousRatingsMap}
         />
-        <PrintImagePreLoader imageArray={[Logo]} />
       </div>
     )
   }

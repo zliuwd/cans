@@ -37,7 +37,7 @@ export const domainHeaderStyle = {
 }
 
 export const domainTitleStyle = {
-  fontSize: '0.9rem',
+  fontSize: '1.1rem',
   fontFamily: 'sans-serif',
   fontWeight: 500,
   display: 'flex',
@@ -86,8 +86,8 @@ export const itemTitleWrapper = {
   flexGrow: 1,
   flexShrink: 1,
   display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
+  flexDirection: 'row',
+  justifyContent: 'flex-start',
   margin: '0.2rem 0.2rem',
 }
 

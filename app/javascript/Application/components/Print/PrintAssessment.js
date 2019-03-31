@@ -5,7 +5,7 @@ import PrintSummary from './PrintSummary'
 import EprintLayout from './enhancedPrint/EprintLayout'
 import CategoryHeader from './enhancedPrint/CategoryHeader'
 import EprintPageBreaker from './enhancedPrint/EprintPageBreaker'
-import Logo from './Logo.jpeg'
+import CWDSlogo from './enhancedPrint/CWDSlogo'
 import {
   alertSignBox,
   headerBlock,
@@ -97,7 +97,7 @@ class PrintAssessment extends PureComponent {
     const itemNumber = this.state.isAssessmentUnderSix ? item.under_six_id : item.above_six_id
     const isRegularType = item.rating_type === 'REGULAR'
     return (
-      <div key={caregiverIndex + itemNumber} style={itemStyle}>
+      <div key={caregiverIndex + itemNumber} style={itemStyle} className="item-container">
         <div className={`item-main-line ${this.stripeGenerator(index)}`}>
           <div style={itemTitleWrapper}>
             <div style={itemTitle}>
@@ -138,11 +138,18 @@ class PrintAssessment extends PureComponent {
                 {title} {caregiverName && `- ${caregiverName}`}
               </strong>
             </span>
-            <span>
-              Domain Total Score: <strong style={domainScoreStyle}>{totalScore}</strong>
-            </span>
           </div>
-          {comment && !hasConfidentialItems(domain) && <div style={domainComment}>Domain Comment: {comment}</div>}
+        </div>
+        <div>
+          {comment &&
+            !hasConfidentialItems(domain) && (
+              <div className="domain-comment" style={domainComment}>
+                <p>
+                  {title} {caregiverName && `- ${caregiverName}`} Comment
+                </p>
+                {comment}
+              </div>
+            )}
         </div>
         <div>
           {items.map((item, index) => {
@@ -195,8 +202,8 @@ class PrintAssessment extends PureComponent {
   renderHeadLine = () => {
     return (
       <div className="head-line-container">
-        <div className="logo-container">
-          <img className="logo" src={Logo} alt="Logo" />
+        <div className="logo">
+          <CWDSlogo />
         </div>
         <div className="head-title">CARES - CANS Reassessment</div>
         <div className="head-age-range">6 - 21 years old</div>
@@ -316,15 +323,32 @@ class PrintAssessment extends PureComponent {
       'Immediate Action Required': this.getCodes(filteredDomains, isNeedsDomain, item => item.rating === imaRating),
       Trauma: this.getCodes(domains, isTraumaDomain, item => item.rating === 1),
     }
-
+    // print page header and footer have to write as SVG to support safari, firefox, IE color display
+    // by the way, svg will effectively prevent content overlap with header or footer
     const printPageHeader = (
-      <div>
-        <p className="h-p">CARES-CANS Reassessment | 03/01/2019</p>
-        <p className="h-p">Case/Referral Number: 123456789</p>
-        <p className="h-p">San Bernadino County | Age 6-21 Template</p>
-      </div>
+      <svg height="80px" width="100%">
+        <text fontSize="16px" fill="#999999">
+          <tspan dy="20px" x="0" dx="0">
+            CARES-CANS Reassessment | 03/01/2019
+          </tspan>
+          <tspan dy="20px" x="0" dx="0">
+            Case/Referral Number: 123456789
+          </tspan>
+          <tspan dy="20px" x="0" dx="0">
+            San Bernadino County | Age 6-21 Template
+          </tspan>
+        </text>
+      </svg>
     )
-    const printPageFooter = 'This assessment is confidential...disclaimer text here'
+    const printPageFooter = (
+      <svg height="15mm" width="100%">
+        <text fontSize="16px" fill="#999999">
+          <tspan dy="1em" x="0" dx="0">
+            This assessment is confidential...disclaimer text here
+          </tspan>
+        </text>
+      </svg>
+    )
     return (
       <EprintLayout header={printPageHeader} footer={printPageFooter}>
         {this.renderHeadLine()}
