@@ -39,7 +39,7 @@ const restCss =
 export const printViewPreparation = node => {
   const cssCode = printContainerPreCss + printLayoutCss + restCss
   const printView = (
-    <html moznomarginboxes mozdisallowselectionprint lang="en">
+    <html lang="en">
       <head>
         <style type="text/css">{cssCode}</style>
       </head>
