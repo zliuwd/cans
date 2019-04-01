@@ -1,8 +1,8 @@
 import { isFirefox } from '../../util/common'
 
 const firefoxPrint = (frame, contentString) => {
-  const oldTitle = frame.contentDocument.title
-  frame.contentDocument.title = '\u200E'
+  const oldTitle = document.title
+  document.title = '\u200E'
   const curURL = window.location.href
   history.replaceState(history.state, '', '/')
   frame.focus()
@@ -11,13 +11,13 @@ const firefoxPrint = (frame, contentString) => {
   frame.contentDocument.write(contentString)
   frame.contentWindow.print()
   history.replaceState(history.state, '', curURL)
-  frame.contentDocument.title = oldTitle
+  document.title = oldTitle
 }
 
 const nonFirefoxPrint = (frame, contentString) => {
   const frameContentWindow = frame.contentWindow
-  const oldTitle = frameContentWindow.document.title
-  frameContentWindow.document.title = '\u200E'
+  const oldTitle = document.title
+  document.title = '\u200E'
   const curURL = window.location.href
   history.replaceState(history.state, '', '/')
   frameContentWindow.focus()
@@ -27,7 +27,7 @@ const nonFirefoxPrint = (frame, contentString) => {
   frameContentWindow.document.close()
   frameContentWindow.print()
   history.replaceState(history.state, '', curURL)
-  frameContentWindow.document.title = oldTitle
+  document.title = oldTitle
 }
 
 export const print = (printFrameId, contentString) => {
