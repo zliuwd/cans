@@ -4,6 +4,7 @@ import PrintAssessment from './PrintAssessment'
 import { clone } from '../../util/common'
 import {
   assessmentPrint,
+  assessmentReadyForCompletion,
   assessmentWithConfidentialItem,
   i18nPrint,
   printFixture,
@@ -103,5 +104,27 @@ describe('<PrintAssessment />', () => {
     )
     const printConfidentialHtml = printConfidential.html()
     expect(printConfidentialHtml).toContain('Confidential')
+  })
+
+  it('renders Assessment Summary for saved assessment with all items and fields filled', () => {
+    const printConfidential = shallow(
+      <PrintAssessment
+        assessment={assessmentReadyForCompletion}
+        i18n={i18nPrint}
+        substanceUseItemsIds={substanceUseItemsIds}
+      />
+    )
+    const printConfidentialHtml = printConfidential.html()
+    expect(printConfidentialHtml).toContain('CANS Summary')
+  })
+
+  it('renders Assessment Summary for completed assessment', () => {
+    const assessment = clone(assessmentPrint)
+    assessment.status = 'COMPLETED'
+    const printConfidential = shallow(
+      <PrintAssessment assessment={assessment} i18n={i18nPrint} substanceUseItemsIds={substanceUseItemsIds} />
+    )
+    const printConfidentialHtml = printConfidential.html()
+    expect(printConfidentialHtml).toContain('CANS Summary')
   })
 })

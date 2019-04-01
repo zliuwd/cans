@@ -1247,3 +1247,71 @@ export const subsequentAssessment = {
   },
   event_date: getCurrentIsoDate(),
 }
+
+export const assessmentReadyForCompletion = {
+  id: 4197527,
+  metadata: {
+    allowed_operations: ['read', 'create', 'delete'],
+  },
+  instrument_id: 1,
+  person: {
+    id: 4210001,
+    metadata: {
+      editable: true,
+    },
+    person_role: 'CLIENT',
+    first_name: 'Victim 02',
+    middle_name: 'Test',
+    last_name: 'Referral',
+    suffix: 'Suff',
+    identifier: '68FSl8xagn',
+    external_id: '0348-3589-7560-7141037',
+    dob: '2015-01-02',
+    county: {
+      id: 34,
+      name: 'Sacramento',
+      external_id: '1101',
+      export_id: '34',
+    },
+  },
+  county: {
+    id: 34,
+    name: 'Sacramento',
+    external_id: '1101',
+    export_id: '34',
+  },
+  assessment_type: 'INITIAL',
+  status: 'IN_PROGRESS',
+  completed_as: 'COMMUNIMETRIC',
+  can_release_confidential_info: false,
+  has_caregiver: true,
+  service_source_id: 'R9m1dTzagn',
+  service_source_ui_id: '1542-5612-1048-7141037',
+  service_source: 'REFERRAL',
+  event_date: '2019-03-01',
+  state: {
+    under_six: true,
+    domains: [
+      {
+        id: 8,
+        code: 'ECH',
+        under_six: true,
+        above_six: false,
+        is_caregiver_domain: false,
+        items: [
+          {
+            under_six_id: 'EC01',
+            above_six_id: '',
+            code: 'IMPULSIVITY_HYPERACTIVITY',
+            required: true,
+            confidential: false,
+            confidential_by_default: false,
+            rating_type: 'REGULAR',
+            has_na_option: false,
+            rating: 1,
+          },
+        ],
+      },
+    ],
+  },
+}
