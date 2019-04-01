@@ -6,7 +6,7 @@ import EprintLayout from './enhancedPrint/EprintLayout'
 import CategoryHeader from './enhancedPrint/CategoryHeader'
 import EprintPageBreaker from './enhancedPrint/EprintPageBreaker'
 import CWDSlogo from './enhancedPrint/CWDSlogo'
-import HeaderSvgBg from './enhancedPrint/backgroundPng/HeaderSvgBg'
+import HeaderSvgBg from './enhancedPrint/HeaderSvgBg'
 import {
   alertSignBox,
   headerBlock,
@@ -102,7 +102,7 @@ class PrintAssessment extends PureComponent {
   stripeBgGenerator = index => {
     return index & 1 ? (
       <div>
-        <HeaderSvgBg />
+        <HeaderSvgBg height="40px" />
       </div>
     ) : null
   }

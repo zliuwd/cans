@@ -44,6 +44,7 @@ export const domainTitleStyle = {
   justifyContent: 'flex-start',
   flexDirection: 'row',
   flexWrap: 'nowrap',
+  margin: '0 3rem 0 0.3rem',
 }
 
 export const domainScoreStyle = {
@@ -87,7 +88,7 @@ export const itemTitleWrapper = {
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'flex-start',
-  margin: '0.2rem 0.2rem',
+  margin: '0 3rem 0 0.3rem',
 }
 
 export const redactedRating = {
