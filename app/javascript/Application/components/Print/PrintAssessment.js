@@ -6,7 +6,7 @@ import EprintLayout from './enhancedPrint/EprintLayout'
 import CategoryHeader from './enhancedPrint/CategoryHeader'
 import EprintPageBreaker from './enhancedPrint/EprintPageBreaker'
 import CWDSlogo from './enhancedPrint/CWDSlogo'
-import DomainHeaderBg from './enhancedPrint/backgroundPng/DomainHeaderBg'
+import HeaderSvgBg from './enhancedPrint/backgroundPng/HeaderSvgBg'
 import {
   alertSignBox,
   headerBlock,
@@ -102,7 +102,7 @@ class PrintAssessment extends PureComponent {
   stripeBgGenerator = index => {
     return index & 1 ? (
       <div>
-        <DomainHeaderBg />
+        <HeaderSvgBg />
       </div>
     ) : null
   }
@@ -158,7 +158,7 @@ class PrintAssessment extends PureComponent {
       <div key={code + caregiverIndex}>
         <div className="domain-header">
           <div>
-            <DomainHeaderBg />
+            <HeaderSvgBg />
           </div>
           <div style={domainTitleStyle} className="header-with-svg-bg">
             <span>
@@ -369,9 +369,9 @@ class PrintAssessment extends PureComponent {
       </svg>
     )
     const printPageFooter = (
-      <svg height="15mm" width="100%">
+      <svg height="8mm" width="100%">
         <text fontSize="16px" fill="#999999">
-          <tspan dy="20px" x="0" dx="0">
+          <tspan dy="15px" x="0" dx="0">
             This assessment is confidential...disclaimer text here
           </tspan>
         </text>

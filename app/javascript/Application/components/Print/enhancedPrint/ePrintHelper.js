@@ -11,7 +11,7 @@ export const printLayoutCss =
   'tfoot.print-footer {test-align:left; margin: 0; padding: 0; color: #999999 !important; height:15mm; }\n' +
   'thead.print-header {test-align:left; margin-bottom: 5mm; padding: 0; color: #999999 !important; background-color:white; height:15mm; }\n' +
   'th.header-content {text-align: left; height:30mm; }\n' +
-  '.header-with-svg-bg{  position: absolute;top: 3px; display:flex; width:100%;}\n' +
+  '.header-with-svg-bg{  position: absolute;top: 10px; display:flex; }\n' +
   'div.cat-header {text-align: left;font-size:1.7rem; background-color:#e8e8e8 !important; padding:0.5rem; box-shadow: inset 0 0 0 1000px #e8e8e8; }\n' +
   'div.cat-header-container {page-break-inside: avoid; page-break-after: avoid;}\n' +
   'div.bottom-cover {-webkit-print-color-adjust: exact; background-color:white; height:8mm; width:120mm; position:fixed; bottom:0; margin-top:0; }\n' +
@@ -19,9 +19,10 @@ export const printLayoutCss =
 
 const restCss =
   'p.h-p {margin: 0; padding: 0; color: #999999 }\n' +
-  'div.domain-header { position: relative; display: flex; flex-direction: column; justify-content: center; margin: 1rem 0 0 0; min-height: 1.5rem; max-height:2rem; page-break-after: avoid; }\n' +
+  'div.domain-header { width:100%; position: relative; display: flex; flex-wrap: nowrap; flex-direction: column; justify-content: center; margin: 2rem 0 0 0; min-height: 3rem; max-height:3.5rem; page-break-inside: avoid; page-break-after: avoid; }\n' +
   'div.domain-comment {margin:0.5rem 0 0.2rem 0; padding: 1rem; border: solid black 1px}\n' +
-  'div.item-main-line {padding:1mm 0 1mm 0; width:100%; display: flex; flex-direction: row; justify-content: flex-start; page-break-inside: avoid; min-height:1.5rem; max-height:2rem;}\n' +
+  'div.item-main-line { width:100%; display: flex; flex-direction: row; justify-content: flex-start; page-break-inside: avoid; min-height:3rem; max-height:3.5rem;}\n' +
+  '.item-container {page-break-inside: avoid;}\n' +
   'div.stripe-gray {position: relative; display:flex; width:100%; }\n' +
   'div.header-container {margin-bottom:1rem; width:100%; align-content: flex-start; display: flex; flex-direction: column; flex-wrap: nowrap; max-height:17rem; justify-content:space-between;}\n' +
   'div.header-first {display: flex; flex-direction: row; flex-wrap: nowrap; width:100%; justify-content: space-between; align-content: flex-start;}\n' +

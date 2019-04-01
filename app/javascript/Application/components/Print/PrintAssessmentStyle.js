@@ -41,7 +41,7 @@ export const domainTitleStyle = {
   fontFamily: 'sans-serif',
   fontWeight: 500,
   display: 'flex',
-  justifyContent: 'space-between',
+  justifyContent: 'flex-start',
   flexDirection: 'row',
   flexWrap: 'nowrap',
 }
