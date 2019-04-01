@@ -89,34 +89,29 @@ class PrintAssessment extends PureComponent {
     </div>
   )
 
-  stripeContainerStyleGenerator = index => {
-    return index & 1 ? 'stripe-gray' : null
-  }
-
-  stripeBgGenerator = index => {
-    return index & 1 ? (
-      <div>
-        <HeaderSvgBg height="40px" />
-      </div>
-    ) : null
-  }
-
-  stripeContentStyleGenerator = index => {
-    return index & 1 ? 'header-with-svg-bg' : null
+  stripeGenerator = index => {
+    const result = { containerStyle: '', headerBg: null, contentStyle: '' }
+    if (index & 1) {
+      result.containerStyle = 'stripe-gray'
+      result.headerBg = (
+        <div>
+          <HeaderSvgBg height="40px" />
+        </div>
+      )
+      result.contentStyle = 'header-with-svg-bg'
+    }
+    return result
   }
 
   renderItem = (item, index, caregiverIndex, itemI18n) => {
     const title = itemI18n._title_ || ''
     const itemNumber = this.state.isAssessmentUnderSix ? item.under_six_id : item.above_six_id
     const isRegularType = item.rating_type === 'REGULAR'
+    const stripe = this.stripeGenerator(index)
     return (
-      <div
-        key={caregiverIndex + itemNumber}
-        style={itemStyle}
-        className={`item-container ${this.stripeContainerStyleGenerator(index)}`}
-      >
-        {this.stripeBgGenerator(index)}
-        <div className={`item-main-line ${this.stripeContentStyleGenerator(index)}`}>
+      <div key={caregiverIndex + itemNumber} style={itemStyle} className={`item-container ${stripe.containerStyle}`}>
+        {stripe.headerBg}
+        <div className={`item-main-line ${stripe.contentStyle}`}>
           <div style={itemTitleWrapper}>
             <div style={itemTitle}>
               {itemNumber}
