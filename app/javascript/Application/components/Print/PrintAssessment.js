@@ -43,8 +43,6 @@ import {
 } from '../Assessment/AssessmentSummary/DomainHelper'
 import moment from 'moment'
 
-// const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
-
 const isConfidential = item => item.confidential_by_default && item.confidential
 const isDiscretionNeeded = item => !item.confidential_by_default && item.confidential
 const isItemHidden = item => isConfidential(item) || isDiscretionNeeded(item)
@@ -59,10 +57,6 @@ class PrintAssessment extends PureComponent {
       isAssessmentUnderSix: Boolean(this.props.assessment.state.under_six),
     }
   }
-
-  // safariBackgroundAdjust = img => {
-  //   return isSafari ? null : { backgroundImage: `url(${img})`, background: `url(${img})` }
-  // }
 
   renderOptions = (item, isRegularType) => {
     const optionCodes = {
