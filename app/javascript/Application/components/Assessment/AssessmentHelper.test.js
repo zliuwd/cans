@@ -576,21 +576,26 @@ describe('AssessmentHelper', () => {
         can_release_confidential_info: true,
         conducted_by: 'John Doe',
         state: {
+          under_six: true,
           domains: [
             {
               comment: 'domain 1 comment',
               is_reviewed: true,
+              under_six: true,
               items: [
                 {},
                 { confidential: true, confidential_by_default: false },
                 { confidential: false, confidential_by_default: false },
                 { comment: 'item 1-1 comment', confidential: true, confidential_by_default: true },
                 { comment: 'item 1-2 comment', confidential: false, confidential_by_default: true },
+                { rating: 8, under_six_id: '1' },
+                { rating: 3, under_six_id: '2' },
               ],
             },
             {
               comment: 'domain 2 comment',
               is_reviewed: false,
+              under_six: false,
               items: [{ comment: 'item 2-1 comment' }],
             },
           ],
@@ -606,15 +611,21 @@ describe('AssessmentHelper', () => {
         state: {
           domains: [
             {
+              under_six: true,
               items: [
-                {},
-                { confidential: true, confidential_by_default: false },
-                { confidential: false, confidential_by_default: false },
-                { confidential: true, confidential_by_default: true },
-                { confidential: true, confidential_by_default: true },
+                { rating: -1 },
+                { confidential: true, confidential_by_default: false, rating: -1 },
+                { confidential: false, confidential_by_default: false, rating: -1 },
+                { confidential: true, confidential_by_default: true, rating: -1 },
+                { confidential: true, confidential_by_default: true, rating: -1 },
+                { rating: 8, under_six_id: '1' },
+                { rating: 3, under_six_id: '2' },
               ],
             },
-            { items: [{}] },
+            {
+              under_six: false,
+              items: [{ rating: -1 }],
+            },
           ],
           under_six: true,
         },
@@ -631,8 +642,10 @@ describe('AssessmentHelper', () => {
         can_release_confidential_info: true,
         conducted_by: 'John Doe',
         state: {
+          under_six: false,
           domains: [
             {
+              above_six: true,
               comment: 'domain 1 comment',
               items: [
                 {},
@@ -640,9 +653,12 @@ describe('AssessmentHelper', () => {
                 { confidential: false, confidential_by_default: false },
                 { comment: 'item 1-1 comment', confidential: true, confidential_by_default: true },
                 { comment: 'item 1-2 comment', confidential: false, confidential_by_default: true },
+                { rating: 1, above_six_id: '1' },
+                { rating: 2, above_six_id: '2' },
               ],
             },
             {
+              above_six: false,
               comment: 'domain 2 comment',
               items: [{ comment: 'item 2-1 comment' }],
             },
@@ -657,19 +673,25 @@ describe('AssessmentHelper', () => {
         event_date: '2019-03-26',
         can_release_confidential_info: false,
         state: {
+          under_six: false,
           domains: [
             {
+              above_six: true,
               items: [
-                {},
-                { confidential: true, confidential_by_default: false },
-                { confidential: false, confidential_by_default: false },
-                { confidential: true, confidential_by_default: true },
-                { confidential: true, confidential_by_default: true },
+                { rating: -1 },
+                { confidential: true, confidential_by_default: false, rating: -1 },
+                { confidential: false, confidential_by_default: false, rating: -1 },
+                { confidential: true, confidential_by_default: true, rating: -1 },
+                { confidential: true, confidential_by_default: true, rating: -1 },
+                { rating: 1, above_six_id: '1' },
+                { rating: 2, above_six_id: '2' },
               ],
             },
-            { items: [{}] },
+            {
+              above_six: false,
+              items: [{ rating: -1 }],
+            },
           ],
-          under_six: false,
         },
       }
       expect(input).toEqual(expected)
@@ -699,22 +721,51 @@ describe('AssessmentHelper', () => {
   describe('#createRatingsMap()', () => {
     const domains = [
       {
-        items: [{ code: 'code00', rating: 1 }, { code: 'code01', rating: -1 }, { code: 'code02', rating: 2 }],
+        under_six: true,
+        items: [
+          { code: 'code00', rating: 1, under_six_id: '00u' },
+          { code: 'code01', rating: -1, under_six_id: '01u' },
+          { code: 'code02', rating: 2, under_six_id: '02u' },
+        ],
       },
       {
+        above_six: true,
         caregiver_index: 'a',
-        items: [{ code: 'code10', rating: 8 }, { code: 'code11', rating: 3 }],
+        items: [{ code: 'code10', rating: 8, above_six_id: '10a' }, { code: 'code11', rating: 3, above_six_id: '11a' }],
+      },
+      {
+        under_six: true,
+        above_six: true,
+        items: [
+          { code: 'code20', rating: 2, under_six_id: '20u', above_six_id: '20a' },
+          { code: 'code21', rating: 1, under_six_id: '21u' },
+          { code: 'code22', rating: 0, above_six_id: '21a' },
+        ],
       },
     ]
-    const expectedRatingsMap = {
-      code00: 1,
-      code01: -1,
-      code02: 2,
-      code10a: 8,
-      code11a: 3,
-    }
-    const actualRatingsMap = createRatingsMap(domains)
-    expect(actualRatingsMap).toEqual(expectedRatingsMap)
+
+    it('creates ratings map for under six age group assessment', () => {
+      const expectedRatingsMap = {
+        code00: 1,
+        code01: -1,
+        code02: 2,
+        code20: 2,
+        code21: 1,
+      }
+      const actualRatingsMap = createRatingsMap({ state: { under_six: true, domains } })
+      expect(actualRatingsMap).toEqual(expectedRatingsMap)
+    })
+
+    it('creates ratings map for above six age group assessment', () => {
+      const expectedRatingsMap = {
+        code10a: 8,
+        code11a: 3,
+        code20: 2,
+        code22: 0,
+      }
+      const actualRatingsMap = createRatingsMap({ state: { under_six: false, domains } })
+      expect(actualRatingsMap).toEqual(expectedRatingsMap)
+    })
   })
 
   describe('#buildItemUniqueKey()', () => {

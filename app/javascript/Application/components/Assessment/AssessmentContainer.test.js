@@ -1011,7 +1011,7 @@ describe('<AssessmentContainer />', () => {
         subsequentAssessment.person.dob
       )
       expect(wrapper.state().assessment).toEqual(precedingAssessment)
-      const expectedRatingsMap = AHelper.createRatingsMap(precedingAssessment.state.domains)
+      const expectedRatingsMap = AHelper.createRatingsMap(precedingAssessment)
       expect(wrapper.state().previousRatingsMap).toEqual(expectedRatingsMap)
     })
 
@@ -1022,7 +1022,7 @@ describe('<AssessmentContainer />', () => {
         jest.spyOn(I18nService, 'fetchByInstrumentId').mockReturnValue(Promise.resolve({}))
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
         await wrapper.instance().onFetchAssessmentSuccess({ ...assessment, preceding_assessment_id: 12345 })
-        const expectedPreviousRatingsMap = AHelper.createRatingsMap(precedingAssessment.state.domains)
+        const expectedPreviousRatingsMap = AHelper.createRatingsMap(precedingAssessment)
         expect(wrapper.state().previousRatingsMap).toEqual(expectedPreviousRatingsMap)
       })
 

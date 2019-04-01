@@ -273,6 +273,7 @@ export const currentClientAge = dob => {
 
 export function preparePrecedingAssessment(precedingAssessment, eventDate, dob) {
   const SIX = 6
+  const underSix = precedingAssessment.state.under_six
 
   precedingAssessment.event_date = eventDate
   precedingAssessment.status = 'IN_PROGRESS'
@@ -284,10 +285,14 @@ export function preparePrecedingAssessment(precedingAssessment, eventDate, dob) 
   precedingAssessment.state.domains.forEach(domain => {
     delete domain.comment
     delete domain.is_reviewed
+    const renderedDomain = shouldDomainBeRendered(underSix, domain)
     domain.items.forEach(item => {
       delete item.comment
       if (item.confidential_by_default) {
         item.confidential = true
+      }
+      if (!renderedDomain || !shouldItemBeRendered(underSix, item)) {
+        item.rating = -1
       }
     })
   })
@@ -295,13 +300,16 @@ export function preparePrecedingAssessment(precedingAssessment, eventDate, dob) 
 
 export const buildItemUniqueKey = (code, caregiverIndex) => `${code}${caregiverIndex || ''}`
 
-export function createRatingsMap(domains) {
+export function createRatingsMap(assessment) {
+  const underSix = assessment.state.under_six
   const codeToRatingMap = {}
-  domains.forEach(domain =>
+  assessment.state.domains.forEach(domain => {
+    if (!shouldDomainBeRendered(underSix, domain)) return
     domain.items.forEach(item => {
+      if (!shouldItemBeRendered(underSix, item)) return
       const key = buildItemUniqueKey(item.code, domain.caregiver_index)
       codeToRatingMap[key] = item.rating
     })
-  )
+  })
   return codeToRatingMap
 }
