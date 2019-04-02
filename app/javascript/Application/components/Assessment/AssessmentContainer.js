@@ -18,7 +18,7 @@ import {
   postCloseMessage,
   postInfoMessage,
   postSuccessMessage,
-  preparePrecedingAssessment,
+  prepareReassessment,
   successMsgFrom,
   trimUrlForClientProfile,
   updateUrlWithAssessment,
@@ -383,9 +383,9 @@ export default class AssessmentContainer extends Component {
     const assessment = this.state.assessment
     const precedingAssessmentId = assessment.preceding_assessment_id
     const precedingAssessment = await AssessmentService.fetch(precedingAssessmentId)
-    preparePrecedingAssessment(precedingAssessment, assessment.event_date, assessment.person.dob)
-    this.updateAssessment(precedingAssessment)
-    const previousRatingsMap = createRatingsMap(precedingAssessment.state.domains)
+    const reassessment = prepareReassessment(assessment, precedingAssessment)
+    this.updateAssessment(reassessment)
+    const previousRatingsMap = createRatingsMap(reassessment.state.domains)
     this.setState({
       isReassessmentModalShown: false,
       isShowReassessmentAlert: true,

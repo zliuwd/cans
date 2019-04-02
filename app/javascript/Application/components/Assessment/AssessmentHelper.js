@@ -4,7 +4,7 @@ import { globalAlertService } from '../../util/GlobalAlertService'
 import { urlTrimmer } from '../../util/urlTrimmer'
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import { isEmpty } from '../../util/common'
+import { clone, isEmpty } from '../../util/common'
 
 export const AssessmentType = Object.freeze({
   initial: 'INITIAL',
@@ -267,21 +267,19 @@ export const getSubstanceUseItemsIds = assessment => {
   return { underSix: underSix, aboveSix: aboveSix }
 }
 
-export const currentClientAge = dob => {
-  return calculateDateDifferenceInYears(dob, getCurrentIsoDate())
+export const isReassessmentUnderSix = dob => {
+  const SIX = 6
+  return calculateDateDifferenceInYears(dob, getCurrentIsoDate()) < SIX
 }
 
-export function preparePrecedingAssessment(precedingAssessment, eventDate, dob) {
-  const SIX = 6
-
-  precedingAssessment.event_date = eventDate
-  precedingAssessment.status = 'IN_PROGRESS'
-  precedingAssessment.can_release_confidential_info = false
-  precedingAssessment.preceding_assessment_id = precedingAssessment.id
-  precedingAssessment.state.under_six = currentClientAge(dob) < SIX
-  delete precedingAssessment.id
-  delete precedingAssessment.conducted_by
-  precedingAssessment.state.domains.forEach(domain => {
+export function prepareReassessment(assessment, precedingAssessment) {
+  const reassessment = clone(assessment)
+  reassessment.state = clone(precedingAssessment.state)
+  reassessment.has_caregiver = precedingAssessment.has_caregiver
+  reassessment.conducted_by = precedingAssessment.conducted_by
+  reassessment.can_release_confidential_info = false
+  reassessment.state.under_six = isReassessmentUnderSix(assessment.person.dob)
+  reassessment.state.domains.forEach(domain => {
     delete domain.comment
     delete domain.is_reviewed
     domain.items.forEach(item => {
@@ -291,6 +289,7 @@ export function preparePrecedingAssessment(precedingAssessment, eventDate, dob) 
       }
     })
   })
+  return reassessment
 }
 
 export const buildItemUniqueKey = (code, caregiverIndex) => `${code}${caregiverIndex || ''}`

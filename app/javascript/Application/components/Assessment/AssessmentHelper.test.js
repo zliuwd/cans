@@ -18,14 +18,16 @@ import {
   isSubsequentType,
   hasOneCompletedForReassessment,
   AssessmentType,
-  preparePrecedingAssessment,
+  prepareReassessment,
   containsNotReviewedDomains,
   createRatingsMap,
   buildItemUniqueKey,
+  isReassessmentUnderSix,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
 import moment from 'moment'
+import { jsDateToIso } from '../../util/dateHelper'
 
 export const assessmentsToSort = [
   {
@@ -566,16 +568,27 @@ describe('AssessmentHelper', () => {
     })
   })
 
-  describe('#preparePrecedingAssessment()', () => {
-    it('prepares preceding assessment for reassessment with AGE 0-5', () => {
-      const input = {
-        some_field: 'will not be updated',
-        id: 12345,
-        status: 'COMPLETED',
+  describe('#prepareReassessment()', () => {
+    it('prepares reassessment', () => {
+      const assessment = {
+        status: 'IN_PROGRESS',
         event_date: '2019-01-01',
         can_release_confidential_info: true,
-        conducted_by: 'John Doe',
+        has_caregiver: true,
+        some_field: 'will be carried over',
+        person: {
+          dob: '2010-01-01',
+        },
         state: {
+          domains: [],
+        },
+      }
+      const precedingAssessment = {
+        has_caregiver: false,
+        conducted_by: 'John Doe',
+        some_other_field: 'will be ignored',
+        state: {
+          under_six: true,
           domains: [
             {
               comment: 'domain 1 comment',
@@ -596,14 +609,19 @@ describe('AssessmentHelper', () => {
           ],
         },
       }
-      preparePrecedingAssessment(input, '2019-03-26', '2016-01-01')
+      const actual = prepareReassessment(assessment, precedingAssessment)
       const expected = {
-        some_field: 'will not be updated',
-        preceding_assessment_id: 12345,
+        conducted_by: 'John Doe',
+        event_date: '2019-01-01',
+        has_caregiver: false,
         status: 'IN_PROGRESS',
-        event_date: '2019-03-26',
+        some_field: 'will be carried over',
         can_release_confidential_info: false,
+        person: {
+          dob: '2010-01-01',
+        },
         state: {
+          under_six: false,
           domains: [
             {
               items: [
@@ -616,63 +634,19 @@ describe('AssessmentHelper', () => {
             },
             { items: [{}] },
           ],
-          under_six: true,
         },
       }
-      expect(input).toEqual(expected)
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('isReassessmentUnderSix', () => {
+    it("returns false when child's age is more than 6", () => {
+      expect(isReassessmentUnderSix('2010-01-01')).toBeFalsy()
     })
 
-    it('prepares preceding assessment for reassessment with AGE 6-21', () => {
-      const input = {
-        some_field: 'will not be updated',
-        id: 12345,
-        status: 'COMPLETED',
-        event_date: '2019-03-26',
-        can_release_confidential_info: true,
-        conducted_by: 'John Doe',
-        state: {
-          domains: [
-            {
-              comment: 'domain 1 comment',
-              items: [
-                {},
-                { confidential: true, confidential_by_default: false },
-                { confidential: false, confidential_by_default: false },
-                { comment: 'item 1-1 comment', confidential: true, confidential_by_default: true },
-                { comment: 'item 1-2 comment', confidential: false, confidential_by_default: true },
-              ],
-            },
-            {
-              comment: 'domain 2 comment',
-              items: [{ comment: 'item 2-1 comment' }],
-            },
-          ],
-        },
-      }
-      preparePrecedingAssessment(input, '2019-03-26', '2010-02-01')
-      const expected = {
-        some_field: 'will not be updated',
-        preceding_assessment_id: 12345,
-        status: 'IN_PROGRESS',
-        event_date: '2019-03-26',
-        can_release_confidential_info: false,
-        state: {
-          domains: [
-            {
-              items: [
-                {},
-                { confidential: true, confidential_by_default: false },
-                { confidential: false, confidential_by_default: false },
-                { confidential: true, confidential_by_default: true },
-                { confidential: true, confidential_by_default: true },
-              ],
-            },
-            { items: [{}] },
-          ],
-          under_six: false,
-        },
-      }
-      expect(input).toEqual(expected)
+    it('returns true when child is younger than 6', () => {
+      expect(isReassessmentUnderSix(jsDateToIso(new Date()))).toBeTruthy()
     })
   })
 
