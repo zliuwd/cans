@@ -44,14 +44,14 @@ describe('<ComparisonOuterTable />', () => {
     expect(target.length).toBe(fakeProps.data.event_dates.length)
   })
 
-  it('will render #Domain Name# in first column', () => {
-    const target = wrapper.find(DataGrid).props().columns[0].Header
+  it('will render #Domain Name# in second column', () => {
+    const target = wrapper.find(DataGrid).props().columns[1].Header
     expect(target).toBe('Domain Name')
   })
 
-  it('will render the last assessment date in second column header', () => {
+  it('will render the last assessment date in third column header', () => {
     const expectedDate = '02/21/2019'
-    const target = wrapper.find(DataGrid).props().columns[1].Header
+    const target = wrapper.find(DataGrid).props().columns[2].Header
     expect(mount(target).text()).toBe(expectedDate)
   })
 
@@ -71,7 +71,7 @@ describe('<ComparisonOuterTable />', () => {
 
   it('getTitle will be invoked by domainNameCol accessor', () => {
     const getTitleSpy = jest.spyOn(helper, 'getTitle')
-    const target = wrapper.find(DataGrid).props().columns[0].accessor
+    const target = wrapper.find(DataGrid).props().columns[1].accessor
     target(fakeProps.data.domains[0])
     expect(getTitleSpy).toHaveBeenCalledTimes(1)
     getTitleSpy.mockReset()
@@ -79,7 +79,7 @@ describe('<ComparisonOuterTable />', () => {
 
   it('domainRatingSwitcher will be invoked by domainTotalCols accessor', () => {
     const domainRatingSwitcherSpy = jest.spyOn(helper, 'domainRatingSwitcher')
-    const target = wrapper.find(DataGrid).props().columns[1].accessor
+    const target = wrapper.find(DataGrid).props().columns[2].accessor
     target(fakeProps.data.domains[0])
     expect(domainRatingSwitcherSpy).toHaveBeenCalledTimes(1)
     domainRatingSwitcherSpy.mockReset()

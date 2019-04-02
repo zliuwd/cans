@@ -263,7 +263,7 @@ def acceptanceTestPreintStage(stageName, smokeTest = false) {
   }
 }
 
-def regressionTestStage(environmentVariables, stageName, smokeTest = false, browser) {
+def regressionTestStage(environmentVariables, stageName, browser, smokeTest = false) {
   stage(stageName) {
     withDockerRegistry([credentialsId: JENKINS_MANAGEMENT_DOCKER_REGISTRY_CREDENTIALS_ID]) {
       withCredentials([

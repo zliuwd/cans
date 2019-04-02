@@ -4,7 +4,6 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import Typography from '@material-ui/core/Typography'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Input } from 'reactstrap'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
 import DomainComment from './DomainComment'
@@ -124,15 +123,14 @@ class Domain extends Component {
     const validItems = itemFilter(items, isAssessmentUnderSix)
     const totalScore = totalScoreCalculation(validItems)
     const warningText = <span className={'caregiver-warning-text'}> Caregiver Name is required</span>
+    const ROTATION_RIGHT = 270
 
     return shouldDomainBeRendered(isAssessmentUnderSix, domain) ? (
       <Fragment>
         <ExpansionPanel expanded={expanded} onChange={this.handleExpandedChange} elevation={0}>
           <ExpansionPanelSummary
             expandIcon={
-              isReviewed || expanded ? (
-                <ExpandMoreIcon id={`domain${index}-expand`} className={'expand-more-icon'} />
-              ) : (
+              isReviewed || expanded ? null : (
                 <Button
                   id={`domain${index}-review`}
                   color="primary"
@@ -154,7 +152,14 @@ class Domain extends Component {
             >
               <Grid item xs={8}>
                 <Typography variant="title" style={{ color: '#0e6f89', fontSize: 16 }}>
-                  {title}
+                  <Icon
+                    id={`domain${index}-expand`}
+                    className="domain-icon"
+                    icon="chevron-down"
+                    size="lg"
+                    rotation={expanded ? null : ROTATION_RIGHT}
+                  />
+                  <span className="domain-item-margin">{title}</span>
                   <Icon className="domain-help-icon" icon="info-circle" id={`domain-${index}`} />
                   {description ? (
                     <UncontrolledTooltip style={{ minWidth: '20rem' }} target={`domain-${index}`} placement="top">
