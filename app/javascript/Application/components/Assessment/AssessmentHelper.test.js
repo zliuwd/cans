@@ -591,11 +591,12 @@ describe('AssessmentHelper', () => {
           under_six: true,
           domains: [
             {
+              under_six: true,
               comment: 'domain 1 comment',
               is_reviewed: true,
               items: [
-                {},
-                { confidential: true, confidential_by_default: false },
+                { code: 'CODE0', rating: 3, confidential: true, under_six_id: 'id' },
+                { confidential: true, confidential_by_default: false, code: 'CODE1', rating: 2, under_six_id: 'id2' },
                 { confidential: false, confidential_by_default: false },
                 { comment: 'item 1-1 comment', confidential: true, confidential_by_default: true },
                 { comment: 'item 1-2 comment', confidential: false, confidential_by_default: true },
@@ -609,9 +610,9 @@ describe('AssessmentHelper', () => {
           ],
         },
       }
-      const actual = prepareReassessment(assessment, precedingAssessment)
+      const previousRatingsMap = createRatingsMap(precedingAssessment)
+      const actual = prepareReassessment(assessment, precedingAssessment, previousRatingsMap)
       const expected = {
-        conducted_by: 'John Doe',
         event_date: '2019-01-01',
         has_caregiver: false,
         status: 'IN_PROGRESS',
@@ -624,15 +625,16 @@ describe('AssessmentHelper', () => {
           under_six: false,
           domains: [
             {
+              under_six: true,
               items: [
-                {},
-                { confidential: true, confidential_by_default: false },
-                { confidential: false, confidential_by_default: false },
-                { confidential: true, confidential_by_default: true },
-                { confidential: true, confidential_by_default: true },
+                { code: 'CODE0', rating: 3, confidential: true, under_six_id: 'id' },
+                { confidential: true, confidential_by_default: false, code: 'CODE1', rating: 2, under_six_id: 'id2' },
+                { confidential: false, confidential_by_default: false, rating: -1 },
+                { confidential: true, confidential_by_default: true, rating: -1 },
+                { confidential: true, confidential_by_default: true, rating: -1 },
               ],
             },
-            { items: [{}] },
+            { items: [{ rating: -1, confidential: false }] },
           ],
         },
       }
@@ -673,22 +675,56 @@ describe('AssessmentHelper', () => {
   describe('#createRatingsMap()', () => {
     const domains = [
       {
-        items: [{ code: 'code00', rating: 1 }, { code: 'code01', rating: -1 }, { code: 'code02', rating: 2 }],
+        under_six: true,
+        items: [
+          { code: 'code00', rating: 1, confidential: true, under_six_id: 'id00' },
+          { code: 'code01', rating: -1, confidential: true, under_six_id: 'id01' },
+          { code: 'code02', rating: 2, confidential: true, under_six_id: 'id02' },
+        ],
       },
       {
+        above_six: true,
         caregiver_index: 'a',
-        items: [{ code: 'code10', rating: 8 }, { code: 'code11', rating: 3 }],
+        items: [
+          { code: 'code10', rating: 8, confidential: false, above_six_id: 'id10' },
+          { code: 'code11', rating: 3, confidential: false, above_six_id: 'id11' },
+        ],
       },
     ]
-    const expectedRatingsMap = {
-      code00: 1,
-      code01: -1,
-      code02: 2,
-      code10a: 8,
-      code11a: 3,
-    }
-    const actualRatingsMap = createRatingsMap(domains)
-    expect(actualRatingsMap).toEqual(expectedRatingsMap)
+
+    it('builds ratings and confidential map for under_six = true', () => {
+      const expectedRatingsMap = {
+        code00: {
+          confidential: true,
+          rating: 1,
+        },
+        code01: {
+          confidential: true,
+          rating: -1,
+        },
+        code02: {
+          confidential: true,
+          rating: 2,
+        },
+      }
+      const actualRatingsMap = createRatingsMap({ state: { under_six: true, domains } })
+      expect(actualRatingsMap).toEqual(expectedRatingsMap)
+    })
+
+    it('builds ratings and confidential map for above_six: true', () => {
+      const expectedRatingsMap = {
+        code10a: {
+          confidential: false,
+          rating: 8,
+        },
+        code11a: {
+          confidential: false,
+          rating: 3,
+        },
+      }
+      const actualRatingsMap = createRatingsMap({ state: { under_six: false, domains } })
+      expect(actualRatingsMap).toEqual(expectedRatingsMap)
+    })
   })
 
   describe('#buildItemUniqueKey()', () => {

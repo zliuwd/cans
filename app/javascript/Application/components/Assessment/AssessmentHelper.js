@@ -1,4 +1,4 @@
-import { getCurrentIsoDate, calculateDateDifferenceInYears } from '../../util/dateHelper'
+import { calculateDateDifferenceInYears, getCurrentIsoDate } from '../../util/dateHelper'
 import moment from 'moment'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { urlTrimmer } from '../../util/urlTrimmer'
@@ -272,21 +272,33 @@ export const isReassessmentUnderSix = dob => {
   return calculateDateDifferenceInYears(dob, getCurrentIsoDate()) < SIX
 }
 
-export function prepareReassessment(assessment, precedingAssessment) {
+const prepareItemForReassessment = (item, previousRatingAndConfidential) => {
+  delete item.comment
+  if (previousRatingAndConfidential) {
+    item.rating = previousRatingAndConfidential.rating
+    item.confidential = previousRatingAndConfidential.confidential
+  } else {
+    item.rating = -1
+    item.confidential = false
+  }
+  if (item.confidential_by_default) {
+    item.confidential = true
+  }
+}
+
+export function prepareReassessment(assessment, precedingAssessment, previousRatingsMap) {
   const reassessment = clone(assessment)
   reassessment.state = clone(precedingAssessment.state)
   reassessment.has_caregiver = precedingAssessment.has_caregiver
-  reassessment.conducted_by = precedingAssessment.conducted_by
   reassessment.can_release_confidential_info = false
   reassessment.state.under_six = isReassessmentUnderSix(assessment.person.dob)
   reassessment.state.domains.forEach(domain => {
     delete domain.comment
     delete domain.is_reviewed
+    const caregiverIndex = domain.caregiver_index
     domain.items.forEach(item => {
-      delete item.comment
-      if (item.confidential_by_default) {
-        item.confidential = true
-      }
+      const previousRatingAndConfidential = previousRatingsMap[buildItemUniqueKey(item.code, caregiverIndex)]
+      prepareItemForReassessment(item, previousRatingAndConfidential)
     })
   })
   return reassessment
@@ -294,12 +306,16 @@ export function prepareReassessment(assessment, precedingAssessment) {
 
 export const buildItemUniqueKey = (code, caregiverIndex) => `${code}${caregiverIndex || ''}`
 
-export function createRatingsMap(domains) {
+export function createRatingsMap(assessment) {
   const codeToRatingMap = {}
-  domains.forEach(domain =>
-    domain.items.forEach(item => {
+  const { domains, under_six: underSix } = assessment.state
+  domains.filter(domain => shouldDomainBeRendered(underSix, domain)).forEach(domain =>
+    domain.items.filter(item => shouldItemBeRendered(underSix, item)).forEach(item => {
       const key = buildItemUniqueKey(item.code, domain.caregiver_index)
-      codeToRatingMap[key] = item.rating
+      codeToRatingMap[key] = {
+        rating: item.rating,
+        confidential: item.confidential,
+      }
     })
   )
   return codeToRatingMap
