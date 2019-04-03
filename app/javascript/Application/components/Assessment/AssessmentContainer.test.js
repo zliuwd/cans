@@ -1005,13 +1005,13 @@ describe('<AssessmentContainer />', () => {
       // then
       expect(wrapper.state().isReassessmentModalShown).toBeFalsy()
       expect(wrapper.state().isShowReassessmentAlert).toBeTruthy()
-      AHelper.preparePrecedingAssessment(
+      const expectedRatingsMap = AHelper.createRatingsMap(precedingAssessment)
+      const preparedReassessment = AHelper.prepareReassessment(
+        subsequentAssessment,
         precedingAssessment,
-        subsequentAssessment.event_date,
-        subsequentAssessment.person.dob
+        expectedRatingsMap
       )
-      expect(wrapper.state().assessment).toEqual(precedingAssessment)
-      const expectedRatingsMap = AHelper.createRatingsMap(precedingAssessment.state.domains)
+      expect(wrapper.state().assessment).toEqual(preparedReassessment)
       expect(wrapper.state().previousRatingsMap).toEqual(expectedRatingsMap)
     })
 
@@ -1022,7 +1022,7 @@ describe('<AssessmentContainer />', () => {
         jest.spyOn(I18nService, 'fetchByInstrumentId').mockReturnValue(Promise.resolve({}))
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
         await wrapper.instance().onFetchAssessmentSuccess({ ...assessment, preceding_assessment_id: 12345 })
-        const expectedPreviousRatingsMap = AHelper.createRatingsMap(precedingAssessment.state.domains)
+        const expectedPreviousRatingsMap = AHelper.createRatingsMap(precedingAssessment)
         expect(wrapper.state().previousRatingsMap).toEqual(expectedPreviousRatingsMap)
       })
 

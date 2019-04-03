@@ -4,9 +4,9 @@ import { Icon } from '@cwds/components'
 
 const ComparisonOuterTableExpander = ({ isExpanded }) => {
   return isExpanded ? (
-    <Icon className={'outer-table-expander-expanded'} icon="chevron-down" size="1x" rotation={180} />
+    <Icon className={'outer-table-expander-expanded'} icon="chevron-down" size="1x" />
   ) : (
-    <Icon className={'outer-table-expander-collapsed'} icon="chevron-down" size="1x" />
+    <Icon className={'outer-table-expander-collapsed'} icon="chevron-down" size="1x" rotation={270} />
   )
 }
 

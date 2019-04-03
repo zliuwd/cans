@@ -71,7 +71,7 @@ class ComparisonOuterTable extends React.PureComponent {
     }
     const domainTotalCols = this.domainTotalColsGenerator(assessmentDates)
     blankColFiller(domainTotalCols, 'domain', requiredDomainColumnsAmount)
-    const domainCmparisonTableTemplate = [domainNameCol, ...domainTotalCols, expander]
+    const domainCmparisonTableTemplate = [expander, domainNameCol, ...domainTotalCols]
     const domains = this.props.data.domains
 
     return (

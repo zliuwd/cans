@@ -65,7 +65,7 @@ describe('<ComparisonInnerTable />', () => {
 
   it('getTitle will be invoked by itemNameCol accessor', () => {
     const getTitleSpy = jest.spyOn(helper, 'getTitle')
-    const target = wrapper.find(DataGrid).props().columns[0].accessor
+    const target = wrapper.find(DataGrid).props().columns[1].accessor
     target(fakeProps.items[0])
     expect(getTitleSpy).toHaveBeenCalledTimes(1)
     getTitleSpy.mockReset()

@@ -51,7 +51,7 @@ class ComparisonInnerTable extends React.PureComponent {
 
     const itemRatingCols = this.itemRatingColsGenerator()
     blankColFiller(itemRatingCols, 'item', requiredDomainColumnsAmount)
-    const itemComparisonTableTemplate = [itemNameCol, ...itemRatingCols, expanderPlaceHolder]
+    const itemComparisonTableTemplate = [expanderPlaceHolder, itemNameCol, ...itemRatingCols]
     const { items, domainCode } = this.props
     const TheadComponent = () => null
 

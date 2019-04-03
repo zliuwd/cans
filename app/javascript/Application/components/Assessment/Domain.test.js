@@ -1,11 +1,10 @@
 import React from 'react'
-import { UncontrolledTooltip, Button } from '@cwds/components'
+import { UncontrolledTooltip, Button, Icon } from '@cwds/components'
 import { shallow, mount } from 'enzyme'
 import Domain from './Domain'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
 import DomainComment from './DomainComment'
 import DomainCommentIcon from './DomainCommentIcon'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 const domainDefault = {
   id: '1',
@@ -106,8 +105,15 @@ describe('<Domain />', () => {
       { attachTo: div }
     )
 
-    it('renders expand icon when isUsingPriorRatings is false', () => {
-      expect(wrapper.find(ExpandMoreIcon).exists()).toBe(true)
+    it('renders chevron icon', () => {
+      expect(wrapper.find(Icon).exists()).toBe(true)
+    })
+
+    it('will render a Icon with rotation 270 when expanded', () => {
+      const target = wrapper.find(Icon).at(0)
+      expect(target.length).toBe(1)
+      expect(target.props().icon).toBe('chevron-down')
+      expect(target.props(1).rotation).toEqual(270)
     })
 
     it('will render toolTip', () => {
@@ -143,7 +149,7 @@ describe('<Domain />', () => {
         />
       )
       wrapper.find('Button#domain1-review').simulate('click')
-      expect(wrapper.find(ExpandMoreIcon).exists()).toBe(true)
+      expect(wrapper.find(Icon).exists()).toBe(true)
     })
   })
 

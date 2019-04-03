@@ -33,7 +33,11 @@ import {
 } from './PrintAssessmentStyle'
 import { formatClientName, clientCaseReferralNumber } from '../Client/Client.helper'
 import { isoToLocalDate } from '../../util/dateHelper'
-import { shouldDomainBeRendered, shouldItemBeRendered } from '../Assessment/AssessmentHelper'
+import {
+  shouldDomainBeRendered,
+  shouldItemBeRendered,
+  validateAssessmentForSubmit,
+} from '../Assessment/AssessmentHelper'
 import { totalScoreCalculation } from '../Assessment/DomainScoreHelper.js'
 import {
   isStrengthsDomain,
@@ -326,11 +330,11 @@ class PrintAssessment extends PureComponent {
 
   render() {
     const { isAssessmentUnderSix } = this.state
-    const handleStatus = this.props.assessment.status
-    const status = 'COMPLETED'
     const { i18n } = this.props
     const imaRating = 3
     const domains = this.props.assessment.state.domains
+    const canDisplaySummary =
+      validateAssessmentForSubmit(this.props.assessment) || this.props.assessment.status === 'COMPLETED'
     const filteredDomains = domains.filter(
       domain => (this.state.isAssessmentUnderSix ? domain.under_six : domain.above_six)
     )
@@ -377,12 +381,12 @@ class PrintAssessment extends PureComponent {
           return this.renderDomain(domain, domainI18n)
         })}
         <EprintPageBreaker />
-        {handleStatus !== status ? null : (
+        {canDisplaySummary ? (
           <div>
             <CategoryHeader title="CANS Summary" />
             <PrintSummary renderSummaryRecord={this.renderSummaryRecord} summaryCodes={summaryCodes} />
           </div>
-        )}
+        ) : null}
       </EprintLayout>
     )
   }

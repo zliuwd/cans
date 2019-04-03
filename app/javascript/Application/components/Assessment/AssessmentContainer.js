@@ -18,7 +18,7 @@ import {
   postCloseMessage,
   postInfoMessage,
   postSuccessMessage,
-  preparePrecedingAssessment,
+  prepareReassessment,
   successMsgFrom,
   trimUrlForClientProfile,
   updateUrlWithAssessment,
@@ -199,7 +199,7 @@ export default class AssessmentContainer extends Component {
   async fetchPreviousRatingsIfNeeded(assessment) {
     if (!assessment.preceding_assessment_id || AssessmentStatus.completed === assessment.status) return
     const precedingAssessment = await AssessmentService.fetch(assessment.preceding_assessment_id)
-    const previousRatingsMap = createRatingsMap(precedingAssessment.state.domains)
+    const previousRatingsMap = createRatingsMap(precedingAssessment)
     this.setState({ previousRatingsMap })
   }
 
@@ -383,9 +383,9 @@ export default class AssessmentContainer extends Component {
     const assessment = this.state.assessment
     const precedingAssessmentId = assessment.preceding_assessment_id
     const precedingAssessment = await AssessmentService.fetch(precedingAssessmentId)
-    preparePrecedingAssessment(precedingAssessment, assessment.event_date, assessment.person.dob)
-    this.updateAssessment(precedingAssessment)
-    const previousRatingsMap = createRatingsMap(precedingAssessment.state.domains)
+    const previousRatingsMap = createRatingsMap(precedingAssessment)
+    const reassessment = prepareReassessment(assessment, precedingAssessment, previousRatingsMap)
+    this.updateAssessment(reassessment)
     this.setState({
       isReassessmentModalShown: false,
       isShowReassessmentAlert: true,

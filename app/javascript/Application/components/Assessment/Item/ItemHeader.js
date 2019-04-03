@@ -11,7 +11,7 @@ const ItemHeader = props => {
     <React.Fragment>
       <Icon
         id={`${code}-item-expand`}
-        className="item-expand-icon"
+        className="item-expand-icon domain-item-margin"
         role="link"
         tabIndex={0}
         icon="chevron-down"

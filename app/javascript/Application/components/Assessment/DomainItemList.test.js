@@ -13,8 +13,8 @@ describe('<DomainItemList/>', () => {
     canReleaseConfidentialInfo: true,
     isCompletedAssessment: false,
     previousRatingsMap: {
-      code1a: 2,
-      code2a: 3,
+      code1a: { rating: 2 },
+      code2a: { rating: 3 },
     },
     onConfidentialityUpdate: () => {
       return 'onConfidentialityUpdate haveBeenCalled'

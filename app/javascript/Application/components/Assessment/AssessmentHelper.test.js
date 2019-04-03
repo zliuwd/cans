@@ -18,14 +18,16 @@ import {
   isSubsequentType,
   hasOneCompletedForReassessment,
   AssessmentType,
-  preparePrecedingAssessment,
+  prepareReassessment,
   containsNotReviewedDomains,
   createRatingsMap,
   buildItemUniqueKey,
+  isReassessmentUnderSix,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
 import moment from 'moment'
+import { jsDateToIso } from '../../util/dateHelper'
 
 export const assessmentsToSort = [
   {
@@ -566,23 +568,35 @@ describe('AssessmentHelper', () => {
     })
   })
 
-  describe('#preparePrecedingAssessment()', () => {
-    it('prepares preceding assessment for reassessment with AGE 0-5', () => {
-      const input = {
-        some_field: 'will not be updated',
-        id: 12345,
-        status: 'COMPLETED',
+  describe('#prepareReassessment()', () => {
+    it('prepares reassessment', () => {
+      const assessment = {
+        status: 'IN_PROGRESS',
         event_date: '2019-01-01',
         can_release_confidential_info: true,
-        conducted_by: 'John Doe',
+        has_caregiver: true,
+        some_field: 'will be carried over',
+        person: {
+          dob: '2010-01-01',
+        },
         state: {
+          domains: [],
+        },
+      }
+      const precedingAssessment = {
+        has_caregiver: false,
+        conducted_by: 'John Doe',
+        some_other_field: 'will be ignored',
+        state: {
+          under_six: true,
           domains: [
             {
+              under_six: true,
               comment: 'domain 1 comment',
               is_reviewed: true,
               items: [
-                {},
-                { confidential: true, confidential_by_default: false },
+                { code: 'CODE0', rating: 3, confidential: true, under_six_id: 'id' },
+                { confidential: true, confidential_by_default: false, code: 'CODE1', rating: 2, under_six_id: 'id2' },
                 { confidential: false, confidential_by_default: false },
                 { comment: 'item 1-1 comment', confidential: true, confidential_by_default: true },
                 { comment: 'item 1-2 comment', confidential: false, confidential_by_default: true },
@@ -596,83 +610,45 @@ describe('AssessmentHelper', () => {
           ],
         },
       }
-      preparePrecedingAssessment(input, '2019-03-26', '2016-01-01')
+      const previousRatingsMap = createRatingsMap(precedingAssessment)
+      const actual = prepareReassessment(assessment, precedingAssessment, previousRatingsMap)
       const expected = {
-        some_field: 'will not be updated',
-        preceding_assessment_id: 12345,
+        event_date: '2019-01-01',
+        has_caregiver: false,
         status: 'IN_PROGRESS',
-        event_date: '2019-03-26',
+        some_field: 'will be carried over',
         can_release_confidential_info: false,
+        person: {
+          dob: '2010-01-01',
+        },
         state: {
+          under_six: false,
           domains: [
             {
+              under_six: true,
               items: [
-                {},
-                { confidential: true, confidential_by_default: false },
-                { confidential: false, confidential_by_default: false },
-                { confidential: true, confidential_by_default: true },
-                { confidential: true, confidential_by_default: true },
+                { code: 'CODE0', rating: 3, confidential: true, under_six_id: 'id' },
+                { confidential: true, confidential_by_default: false, code: 'CODE1', rating: 2, under_six_id: 'id2' },
+                { confidential: false, confidential_by_default: false, rating: -1 },
+                { confidential: true, confidential_by_default: true, rating: -1 },
+                { confidential: true, confidential_by_default: true, rating: -1 },
               ],
             },
-            { items: [{}] },
+            { items: [{ rating: -1, confidential: false }] },
           ],
-          under_six: true,
         },
       }
-      expect(input).toEqual(expected)
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('isReassessmentUnderSix', () => {
+    it("returns false when child's age is more than 6", () => {
+      expect(isReassessmentUnderSix('2010-01-01')).toBeFalsy()
     })
 
-    it('prepares preceding assessment for reassessment with AGE 6-21', () => {
-      const input = {
-        some_field: 'will not be updated',
-        id: 12345,
-        status: 'COMPLETED',
-        event_date: '2019-03-26',
-        can_release_confidential_info: true,
-        conducted_by: 'John Doe',
-        state: {
-          domains: [
-            {
-              comment: 'domain 1 comment',
-              items: [
-                {},
-                { confidential: true, confidential_by_default: false },
-                { confidential: false, confidential_by_default: false },
-                { comment: 'item 1-1 comment', confidential: true, confidential_by_default: true },
-                { comment: 'item 1-2 comment', confidential: false, confidential_by_default: true },
-              ],
-            },
-            {
-              comment: 'domain 2 comment',
-              items: [{ comment: 'item 2-1 comment' }],
-            },
-          ],
-        },
-      }
-      preparePrecedingAssessment(input, '2019-03-26', '2010-02-01')
-      const expected = {
-        some_field: 'will not be updated',
-        preceding_assessment_id: 12345,
-        status: 'IN_PROGRESS',
-        event_date: '2019-03-26',
-        can_release_confidential_info: false,
-        state: {
-          domains: [
-            {
-              items: [
-                {},
-                { confidential: true, confidential_by_default: false },
-                { confidential: false, confidential_by_default: false },
-                { confidential: true, confidential_by_default: true },
-                { confidential: true, confidential_by_default: true },
-              ],
-            },
-            { items: [{}] },
-          ],
-          under_six: false,
-        },
-      }
-      expect(input).toEqual(expected)
+    it('returns true when child is younger than 6', () => {
+      expect(isReassessmentUnderSix(jsDateToIso(new Date()))).toBeTruthy()
     })
   })
 
@@ -699,22 +675,56 @@ describe('AssessmentHelper', () => {
   describe('#createRatingsMap()', () => {
     const domains = [
       {
-        items: [{ code: 'code00', rating: 1 }, { code: 'code01', rating: -1 }, { code: 'code02', rating: 2 }],
+        under_six: true,
+        items: [
+          { code: 'code00', rating: 1, confidential: true, under_six_id: 'id00' },
+          { code: 'code01', rating: -1, confidential: true, under_six_id: 'id01' },
+          { code: 'code02', rating: 2, confidential: true, under_six_id: 'id02' },
+        ],
       },
       {
+        above_six: true,
         caregiver_index: 'a',
-        items: [{ code: 'code10', rating: 8 }, { code: 'code11', rating: 3 }],
+        items: [
+          { code: 'code10', rating: 8, confidential: false, above_six_id: 'id10' },
+          { code: 'code11', rating: 3, confidential: false, above_six_id: 'id11' },
+        ],
       },
     ]
-    const expectedRatingsMap = {
-      code00: 1,
-      code01: -1,
-      code02: 2,
-      code10a: 8,
-      code11a: 3,
-    }
-    const actualRatingsMap = createRatingsMap(domains)
-    expect(actualRatingsMap).toEqual(expectedRatingsMap)
+
+    it('builds ratings and confidential map for under_six = true', () => {
+      const expectedRatingsMap = {
+        code00: {
+          confidential: true,
+          rating: 1,
+        },
+        code01: {
+          confidential: true,
+          rating: -1,
+        },
+        code02: {
+          confidential: true,
+          rating: 2,
+        },
+      }
+      const actualRatingsMap = createRatingsMap({ state: { under_six: true, domains } })
+      expect(actualRatingsMap).toEqual(expectedRatingsMap)
+    })
+
+    it('builds ratings and confidential map for above_six: true', () => {
+      const expectedRatingsMap = {
+        code10a: {
+          confidential: false,
+          rating: 8,
+        },
+        code11a: {
+          confidential: false,
+          rating: 3,
+        },
+      }
+      const actualRatingsMap = createRatingsMap({ state: { under_six: false, domains } })
+      expect(actualRatingsMap).toEqual(expectedRatingsMap)
+    })
   })
 
   describe('#buildItemUniqueKey()', () => {
