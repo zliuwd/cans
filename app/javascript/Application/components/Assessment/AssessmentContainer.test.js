@@ -782,6 +782,98 @@ describe('<AssessmentContainer />', () => {
     })
   })
 
+  describe('#shouldDisplaySummaryOnSave()', () => {
+    const getInstance = () => shallow(<AssessmentContainer {...defaultProps} />).instance()
+
+    it('should return true when summary should be visible for in-progress assessment', () => {
+      const instance = getInstance()
+      instance.setState({
+        isValidForSubmit: true,
+        isEditable: true,
+        assessment: {
+          id: 1,
+          status: 'IN_PROGRESS',
+          event_date: '2010-10-13',
+          metadata: {
+            allowed_operations: ['update'],
+          },
+          state: {
+            domains: [],
+            under_six: false,
+          },
+        },
+        assessmentServiceStatus: LoadingState.ready,
+      })
+      expect(instance.shouldDisplaySummaryOnSave()).toBeTruthy()
+    })
+
+    it('should return false when summary should be hidden for in-progress read-only assessment', () => {
+      const instance = getInstance()
+      instance.setState({
+        isValidForSubmit: true,
+        isEditable: true,
+        assessment: {
+          id: 1,
+          status: 'IN_PROGRESS',
+          event_date: '2010-10-13',
+          metadata: {
+            allowed_operations: ['read'],
+          },
+          state: {
+            domains: [],
+            under_six: false,
+          },
+        },
+        assessmentServiceStatus: LoadingState.ready,
+      })
+      expect(instance.shouldDisplaySummaryOnSave()).toBeFalsy()
+    })
+
+    it('should return false when summary should be hidden for in-progress assessment without all fields filled', () => {
+      const instance = getInstance()
+      instance.setState({
+        isValidForSubmit: false,
+        isEditable: true,
+        assessment: {
+          id: 1,
+          status: 'IN_PROGRESS',
+          event_date: '2010-10-13',
+          metadata: {
+            allowed_operations: ['update'],
+          },
+          state: {
+            domains: [],
+            under_six: false,
+          },
+        },
+        assessmentServiceStatus: LoadingState.ready,
+      })
+      expect(instance.shouldDisplaySummaryOnSave()).toBeFalsy()
+    })
+
+    it('should return false when summary should be hidden for assessment with status different from in-progress', () => {
+      const instance = getInstance()
+      instance.setState({
+        isValidForSubmit: false,
+        isEditable: true,
+        assessment: {
+          id: 1,
+          status: 'DELETED',
+          event_date: '2010-10-13',
+          metadata: {
+            allowed_operations: ['update'],
+          },
+          state: {
+            domains: [],
+            under_six: false,
+          },
+        },
+        assessmentServiceStatus: LoadingState.ready,
+      })
+      expect(instance.shouldDisplaySummaryOnSave()).toBeFalsy()
+    })
+  })
+
   describe('#shouldSaveButtonBeEnabled()', () => {
     const getInstance = () => shallow(<AssessmentContainer {...defaultProps} />).instance()
 
