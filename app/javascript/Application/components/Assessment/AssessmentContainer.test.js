@@ -3,6 +3,7 @@ import React from 'react'
 import { AssessmentContainer, AssessmentService, AssessmentStatus } from './index'
 import { I18nService } from '../common/'
 import * as AHelper from './AssessmentHelper'
+import * as ReassessmentHelper from './ReassessmentHelper'
 import { childInfoJson } from '../Client/Client.helper.test'
 import ClientService from '../Client/Client.service'
 import { mount, shallow } from 'enzyme'
@@ -1097,8 +1098,8 @@ describe('<AssessmentContainer />', () => {
       // then
       expect(wrapper.state().isReassessmentModalShown).toBeFalsy()
       expect(wrapper.state().isShowReassessmentAlert).toBeTruthy()
-      const expectedRatingsMap = AHelper.createRatingsMap(precedingAssessment)
-      const preparedReassessment = AHelper.prepareReassessment(
+      const expectedRatingsMap = ReassessmentHelper.createRatingsMap(precedingAssessment)
+      const preparedReassessment = ReassessmentHelper.prepareReassessment(
         subsequentAssessment,
         precedingAssessment,
         expectedRatingsMap
@@ -1114,7 +1115,7 @@ describe('<AssessmentContainer />', () => {
         jest.spyOn(I18nService, 'fetchByInstrumentId').mockReturnValue(Promise.resolve({}))
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
         await wrapper.instance().onFetchAssessmentSuccess({ ...assessment, preceding_assessment_id: 12345 })
-        const expectedPreviousRatingsMap = AHelper.createRatingsMap(precedingAssessment)
+        const expectedPreviousRatingsMap = ReassessmentHelper.createRatingsMap(precedingAssessment)
         expect(wrapper.state().previousRatingsMap).toEqual(expectedPreviousRatingsMap)
       })
 

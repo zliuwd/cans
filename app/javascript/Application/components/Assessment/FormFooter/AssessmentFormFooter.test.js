@@ -1,15 +1,15 @@
 import React from 'react'
 import AssessmentFormFooter from './AssessmentFormFooter'
 import FooterControls from './FooterControls'
-import * as AssessmentHelper from '../AssessmentHelper'
+import * as ReassessmentHelper from '../ReassessmentHelper'
 import SecurityService from '../../common/Security.service'
 import { shallow } from 'enzyme'
 
 jest.mock('../../common/Security.service')
 jest.spyOn(SecurityService, 'checkPermission').mockReturnValue(Promise.resolve(true))
 
-jest.mock('../AssessmentHelper')
-const spy = jest.spyOn(AssessmentHelper, 'containsNotReviewedDomains')
+jest.mock('../ReassessmentHelper')
+const spy = jest.spyOn(ReassessmentHelper, 'containsNotReviewedDomains')
 spy.mockReturnValue(false)
 
 describe('AssessmentFormFooter', () => {

@@ -1,10 +1,10 @@
-import { calculateDateDifferenceInYears, getCurrentIsoDate } from '../../util/dateHelper'
+import { getCurrentIsoDate } from '../../util/dateHelper'
 import moment from 'moment'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { urlTrimmer } from '../../util/urlTrimmer'
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import { clone, isEmpty } from '../../util/common'
+import { isEmpty } from '../../util/common'
 
 export const AssessmentType = Object.freeze({
   initial: 'INITIAL',
@@ -95,10 +95,6 @@ export function shouldDomainBeRendered(isAssessmentUnderSix, domain) {
 
 export function shouldItemBeRendered(isAssessmentUnderSix, item) {
   return (isAssessmentUnderSix && item.under_six_id) || (!isAssessmentUnderSix && item.above_six_id)
-}
-
-export function containsNotReviewedDomains(domains, isUnderSix) {
-  return Boolean(domains.find(domain => shouldDomainBeRendered(isUnderSix, domain) && !domain.is_reviewed))
 }
 
 export function getActionVerbByStatus(status) {
@@ -242,15 +238,6 @@ export function isSubsequentType(type) {
   return AssessmentType.subsequent === type
 }
 
-export const hasOneCompletedForReassessment = (assessments, clientCaseReferralNumber) => {
-  if (!assessments || assessments.length === 0 || !clientCaseReferralNumber) return false
-  return (
-    assessments.filter(
-      assessment => assessment.status === 'COMPLETED' && assessment.service_source_id === clientCaseReferralNumber
-    ).length > 0
-  )
-}
-
 export const getSubstanceUseItemsIds = assessment => {
   const underSix = []
   const aboveSix = []
@@ -265,58 +252,4 @@ export const getSubstanceUseItemsIds = assessment => {
     })
   })
   return { underSix: underSix, aboveSix: aboveSix }
-}
-
-export const isReassessmentUnderSix = dob => {
-  const SIX = 6
-  return calculateDateDifferenceInYears(dob, getCurrentIsoDate()) < SIX
-}
-
-const prepareItemForReassessment = (item, previousRatingAndConfidential) => {
-  delete item.comment
-  if (previousRatingAndConfidential) {
-    item.rating = previousRatingAndConfidential.rating
-    item.confidential = previousRatingAndConfidential.confidential
-  } else {
-    item.rating = -1
-    item.confidential = false
-  }
-  if (item.confidential_by_default) {
-    item.confidential = true
-  }
-}
-
-export function prepareReassessment(assessment, precedingAssessment, previousRatingsMap) {
-  const reassessment = clone(assessment)
-  reassessment.state = clone(precedingAssessment.state)
-  reassessment.has_caregiver = precedingAssessment.has_caregiver
-  reassessment.can_release_confidential_info = false
-  reassessment.state.under_six = isReassessmentUnderSix(assessment.person.dob)
-  reassessment.state.domains.forEach(domain => {
-    delete domain.comment
-    delete domain.is_reviewed
-    const caregiverIndex = domain.caregiver_index
-    domain.items.forEach(item => {
-      const previousRatingAndConfidential = previousRatingsMap[buildItemUniqueKey(item.code, caregiverIndex)]
-      prepareItemForReassessment(item, previousRatingAndConfidential)
-    })
-  })
-  return reassessment
-}
-
-export const buildItemUniqueKey = (code, caregiverIndex) => `${code}${caregiverIndex || ''}`
-
-export function createRatingsMap(assessment) {
-  const codeToRatingMap = {}
-  const { domains, under_six: underSix } = assessment.state
-  domains.filter(domain => shouldDomainBeRendered(underSix, domain)).forEach(domain =>
-    domain.items.filter(item => shouldItemBeRendered(underSix, item)).forEach(item => {
-      const key = buildItemUniqueKey(item.code, domain.caregiver_index)
-      codeToRatingMap[key] = {
-        rating: item.rating,
-        confidential: item.confidential,
-      }
-    })
-  )
-  return codeToRatingMap
 }

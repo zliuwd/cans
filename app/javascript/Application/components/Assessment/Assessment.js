@@ -5,7 +5,8 @@ import Domain from './Domain'
 import { clone } from '../../util/common'
 import DomainsHeader from './DomainsHeader'
 import { Card, CardBody, CardFooter } from '@cwds/components'
-import { AssessmentStatus, containsNotReviewedDomains } from './AssessmentHelper'
+import { AssessmentStatus } from './AssessmentHelper'
+import { containsNotReviewedDomains } from './ReassessmentHelper'
 
 const INDICES = 'abcdefghijklmnopqrstuvwxyz'
 
@@ -167,12 +168,12 @@ class Assessment extends Component {
             />
             <CardBody>
               {domains.map((domain, index) => {
-                const { id, code } = domain
+                const { id, code, caregiver_index: caregiverIndex } = domain
                 const domainI18n = getI18nByCode(i18n, code)
                 return (
                   <Domain
                     index={index}
-                    key={code + isDefaultExpanded + id + isUnderSix}
+                    key={code + caregiverIndex + isDefaultExpanded + id + isUnderSix}
                     domain={domain}
                     i18n={domainI18n}
                     i18nAll={i18n}

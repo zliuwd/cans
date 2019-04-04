@@ -18,15 +18,14 @@ import {
   postCloseMessage,
   postInfoMessage,
   postSuccessMessage,
-  prepareReassessment,
   successMsgFrom,
   trimUrlForClientProfile,
   updateUrlWithAssessment,
   validateAssessmentEventDate,
   validateAssessmentForSubmit,
   getSubstanceUseItemsIds,
-  createRatingsMap,
 } from './AssessmentHelper'
+import { createRatingsMap, prepareReassessment } from './ReassessmentHelper'
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
 import './style.sass'

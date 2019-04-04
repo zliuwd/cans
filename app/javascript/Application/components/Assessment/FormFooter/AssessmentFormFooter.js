@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import './style.sass'
-import * as AssessmentHelper from '../AssessmentHelper'
+import * as ReassessmentHelper from '../ReassessmentHelper'
 import FooterControls from './FooterControls'
 
 const getUnderSix = assessment => assessment && assessment.state && assessment.state.under_six
@@ -12,7 +12,7 @@ const AssessmentFormFooter = ({ assessment, isEditable, onCancelClick, isSubmiss
   if (isUnderSix === undefined || isUnderSix === null) return null
   const isReviewNeeded = Boolean(assessment.preceding_assessment_id)
   const isDomainsReviewMessageShown = isReviewNeeded
-    ? AssessmentHelper.containsNotReviewedDomains(assessment.state.domains, isUnderSix)
+    ? ReassessmentHelper.containsNotReviewedDomains(assessment.state.domains, isUnderSix)
     : false
   return (
     <div className="form-footer">
