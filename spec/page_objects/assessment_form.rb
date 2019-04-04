@@ -29,10 +29,10 @@ class AssessmentFormHeader < SitePrism::Section
   element :has_caregiver_yes_label, '#has-caregiver-yes'
   element :has_caregiver_no_radio, '#input-has-caregiver-no', visible: false
   element :has_caregiver_yes_radio, '#input-has-caregiver-yes', visible: false
-  element :authorization_label_yes, 'div#can-release-control label', text: 'Yes'
-  element :authorization_label_no, 'div#can-release-control label', text: 'No'
-  element :authorization_radio_yes, 'input#input-can-release-yes', visible: false
-  element :authorization_radio_no, 'input#input-can-release-no', visible: false
+  element :authorization_label_yes, 'div#can-release-confidential-info label', text: 'Yes'
+  element :authorization_label_no, 'div#can-release-confidential-info label', text: 'No'
+  element :authorization_radio_yes, 'input#input-can-release-confidential-info-yes', visible: false
+  element :authorization_radio_no, 'input#input-can-release-confidential-info-no', visible: false
   element :redaction_message, 'div.warning-text'
   element :redaction_message_0_to_5, 'div.warning-text', text: 'By selecting "No" item EC 41'\
     ' (Substance Use Disorder Item) from this CANS assessment will be redacted when printed.'

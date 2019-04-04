@@ -29,4 +29,12 @@ describe('<ConductedByField/>', () => {
     wrapper.find('Input').simulate('change', event)
     expect(mockFn).toHaveBeenCalledTimes(1)
   })
+
+  it('quietly does nothing when no onChange is provided', () => {
+    expect(() => {
+      shallow(<ConductedByField />)
+        .props()
+        .onChange()
+    }).not.toThrow()
+  })
 })

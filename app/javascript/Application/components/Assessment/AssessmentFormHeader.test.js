@@ -1,10 +1,9 @@
 import React from 'react'
-import { mount, shallow } from 'enzyme'
+import { shallow } from 'enzyme'
 import { AssessmentFormHeader } from './index'
 import { assessment, client, clientWithEstimatedDob } from './assessment.mocks.test'
 import { clone } from '../../util/common'
 import ConductedByField from './AssessmentFormHeader/ConductedByField'
-import ConfidentialityAlert from './AssessmentFormHeader/ConfidentialityAlert'
 import AgeRangeSwitch from '../common/AgeRangeSwitch'
 import { Card, CardBody, CardHeader, CardTitle } from '@cwds/components'
 import moment from 'moment'
@@ -140,24 +139,6 @@ describe('<AssessmentFormHeader />', () => {
         'Case/Referral Number',
       ])
     })
-
-    it('renderHasCaregiverQuestion() returns correct label text', () => {
-      expect(
-        mount(wrapped.instance().renderHasCaregiverQuestion())
-          .find('Typography')
-          .first()
-          .text()
-      ).toBe('Child/Youth has Caregiver?')
-    })
-
-    it('renderCanReleaseInfoQuestion() returns correct label text', () => {
-      expect(
-        mount(wrapped.instance().renderCanReleaseInfoQuestion())
-          .find('Typography')
-          .first()
-          .text()
-      ).toBe('Authorization for release of information on file?')
-    })
   })
 
   describe('#handleValueChange()', () => {
@@ -182,7 +163,7 @@ describe('<AssessmentFormHeader />', () => {
     })
   })
 
-  describe('HasCaregiverQuestion onHasCaregiverChange', () => {
+  describe('AssessmentOptions onHasCaregiverChange', () => {
     it('will update has_caregiver in assessment', () => {
       // given
       const mockFn = jest.fn()
@@ -194,11 +175,11 @@ describe('<AssessmentFormHeader />', () => {
         onAssessmentUpdate: mockFn,
         substanceUseItemsIds: defaultProps.substanceUseItemsIds,
       }
-      const hasCaregiverQuestion = shallow(<AssessmentFormHeader {...props} />).find('HasCaregiverQuestion')
+      const options = shallow(<AssessmentFormHeader {...props} />).find('AssessmentOptions')
 
       // when
       const event = { target: { name: 'has_caregiver', value: 'true' } }
-      hasCaregiverQuestion.props().onHasCaregiverChange(event)
+      options.props().onHasCaregiverChange(event)
 
       // then
       const updatedAssessment = clone(assessment)
@@ -217,11 +198,11 @@ describe('<AssessmentFormHeader />', () => {
         onAssessmentUpdate: mockFn,
         substanceUseItemsIds: defaultProps.substanceUseItemsIds,
       }
-      const hasCaregiverQuestion = shallow(<AssessmentFormHeader {...props} />).find('HasCaregiverQuestion')
+      const options = shallow(<AssessmentFormHeader {...props} />).find('AssessmentOptions')
 
       // when
       const event = { target: { name: 'has_caregiver', value: 'false' } }
-      hasCaregiverQuestion.props().onHasCaregiverChange(event)
+      options.props().onHasCaregiverChange(event)
 
       // then
       expect(mockFn).not.toHaveBeenCalled()
@@ -246,7 +227,8 @@ describe('<AssessmentFormHeader />', () => {
       const event = {
         target: { name: 'can_release_confidential_info', value: 'false' },
       }
-      wrapper.instance().handleCanReleaseInfoChange(event)
+      let options = wrapper.find('AssessmentOptions')
+      options.props().onCanReleaseInfoChange(event)
       // then
       const updatedAssessment = clone(assessment)
       updatedAssessment.can_release_confidential_info = false
@@ -256,7 +238,8 @@ describe('<AssessmentFormHeader />', () => {
       const switchToYesEvent = {
         target: { name: 'can_release_confidential_info', value: 'true' },
       }
-      wrapper.instance().handleCanReleaseInfoChange(switchToYesEvent)
+      options = wrapper.find('AssessmentOptions')
+      options.props().onCanReleaseInfoChange(switchToYesEvent)
       // then
       const secondUpdatedAssessment = clone(assessment)
       secondUpdatedAssessment.can_release_confidential_info = true
@@ -357,22 +340,6 @@ describe('<AssessmentFormHeader />', () => {
     })
   })
 
-  it('renders a confidentiality warning alert', () => {
-    const sentAssessment = clone(assessment)
-    sentAssessment.can_release_confidential_info = true
-    const props = {
-      assessment: sentAssessment,
-      client,
-      onAssessmentUpdate: jest.fn(),
-      substanceUseItemsIds: defaultProps.substanceUseItemsIds,
-    }
-
-    const wrapper = shallow(<AssessmentFormHeader {...props} />)
-    const alert = wrapper.find(ConfidentialityAlert)
-    expect(alert.exists()).toBe(true)
-    expect(alert.props().canReleaseInformation).toBe(true)
-  })
-
   describe('Assessment Conducted by', () => {
     const mockFn = jest.fn()
     it('renders input', () => {
@@ -454,12 +421,8 @@ describe('<AssessmentFormHeader />', () => {
       expect(wrapper.find('AgeRangeSwitch').prop('disabled')).toEqual(true)
     })
 
-    it('propagates disable props to <HasCaregiverQuestion> ', () => {
-      expect(wrapper.find('HasCaregiverQuestion').prop('disabled')).toEqual(true)
-    })
-
-    it('propagates disable props to #can-release-control ', () => {
-      expect(wrapper.find('#can-release-control').prop('disabled')).toEqual(true)
+    it('propagates disable props to <AssessmentOptions> ', () => {
+      expect(wrapper.find('AssessmentOptions').prop('isDisabled')).toEqual(true)
     })
 
     it('propagates disable props to <ConductedByField> ', () => {

@@ -8,7 +8,7 @@ describe('<ConfidentialityAlert />', () => {
     it('renders a warning text for 0-5 age group', () => {
       const wrapper = shallow(
         <ConfidentialityAlert
-          canReleaseInformation={false}
+          canReleaseConfidentialInfo={false}
           isUnderSix={true}
           substanceUseItemsIds={substanceUseItemsIds}
         />
@@ -23,7 +23,7 @@ describe('<ConfidentialityAlert />', () => {
     it('renders a warning text for 6-21 age group', () => {
       const wrapper = shallow(
         <ConfidentialityAlert
-          canReleaseInformation={false}
+          canReleaseConfidentialInfo={false}
           isUnderSix={false}
           substanceUseItemsIds={substanceUseItemsIds}
         />
@@ -38,7 +38,7 @@ describe('<ConfidentialityAlert />', () => {
     it("doesn't render a warning text when age group is not selected", () => {
       const wrapper = shallow(
         <ConfidentialityAlert
-          canReleaseInformation={false}
+          canReleaseConfidentialInfo={false}
           isUnderSix={null}
           substanceUseItemsIds={substanceUseItemsIds}
         />
@@ -47,9 +47,9 @@ describe('<ConfidentialityAlert />', () => {
     })
   })
 
-  it('renders no warning when canReleaseInformation is true', () => {
+  it('renders no warning when canReleaseConfidentialInfo is true', () => {
     const wrapper = shallow(
-      <ConfidentialityAlert canReleaseInformation={true} substanceUseItemsIds={substanceUseItemsIds} />
+      <ConfidentialityAlert canReleaseConfidentialInfo={true} substanceUseItemsIds={substanceUseItemsIds} />
     )
     expect(wrapper.type()).toBe(null)
   })
