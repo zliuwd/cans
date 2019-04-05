@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap'
-import { Icon } from '@cwds/components'
+import { Alert, Button, CardTitle, Modal, ModalBody, ModalHeader } from '@cwds/components'
 import { TIMEOUT_EVENT } from './../../util/constants'
 import { eventBus } from './../../util/eventBus'
 import { SecurityService } from './Security.service'
@@ -43,22 +42,23 @@ export class TimeoutWarning extends Component {
   render() {
     return (
       <Modal className="warning-modal" isOpen={this.state.isOpened}>
+        <ModalHeader>
+          <CardTitle>Session timeout!</CardTitle>
+        </ModalHeader>
         <ModalBody className="warning-modal-body">
-          <div className="warning-modal-exclamation-triangle">
-            <Icon icon="exclamation-triangle" size="2x" color="danger" />
-          </div>
-          <div className="warning-modal-heading">Session timeout!</div>
-          <div>Due to inactivity, your session is about to timeout. Any unsaved work will be lost.</div>
-          <div>Would you like to continue?</div>
+          <Alert color="danger">
+            Due to inactivity, your session is about to timeout. Any unsaved work will be lost.
+          </Alert>
+          Would you like to continue?
         </ModalBody>
-        <ModalFooter className="warning-modal-footer">
-          <Button className="warning-modal-logout" onClick={this.logout}>
+        <div className="p-3 text-right">
+          <Button className="m-1 no-uppercase warning-modal-logout" onClick={this.logout}>
             Logout
           </Button>{' '}
-          <Button className="warning-modal-stay-logged-in" onClick={this.refresh}>
+          <Button className="m-1 no-uppercase warning-modal-stay-logged-in" color="primary" onClick={this.refresh}>
             Stay Logged In
           </Button>
-        </ModalFooter>
+        </div>
       </Modal>
     )
   }
