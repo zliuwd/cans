@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { formatClientName } from '../../Client'
-import ChangeLogDate from './ChangeLogDate'
-import ChangeLogStatus from './ChangeLogStatus'
-import ChangeLogName from './ChangeLogName'
+import PrintChangeLogTable from './PrintChangeLogTable'
 import { clientPropTypes } from './ChangeLogHelper'
 
 class PrintChangeLog extends Component {
@@ -19,59 +17,13 @@ class PrintChangeLog extends Component {
     )
   }
 
-  renderChangeLogTable(history) {
-    const fontSize = '1.2rem'
-    const textAlign = 'left'
-    const columnWidths = ['30rem', '20rem', '20rem']
-
-    return (
-      <table className="print-change-log-table">
-        <tr className="print-change-table-header">
-          <th style={{ width: columnWidths[0], textAlign, fontSize }}>{'Date / Time Updated'}</th>
-          <th style={{ width: columnWidths[1], textAlign, fontSize }}>{'Updated By'}</th>
-          <th style={{ width: columnWidths[2], textAlign, fontSize }}>{'Change'}</th>
-        </tr>
-        {history.map((record, index) => {
-          return (
-            <tr className="print-change-log-row" key={index}>
-              <td
-                style={{
-                  width: columnWidths[0],
-                  fontSize,
-                }}
-              >
-                {<ChangeLogDate original={record} />}
-              </td>
-              <td
-                style={{
-                  width: columnWidths[1],
-                  fontSize,
-                }}
-              >
-                {<ChangeLogName original={record} />}
-              </td>
-              <td
-                style={{
-                  width: columnWidths[2],
-                  fontSize,
-                }}
-              >
-                {<ChangeLogStatus original={record} />}
-              </td>
-            </tr>
-          )
-        })}
-      </table>
-    )
-  }
-
   render() {
     const { history, client, assessmentId } = this.props
 
     return history && history.length > 0 ? (
       <div className="print-change-log-table-wrapper">
         {this.renderHeader(client, assessmentId)}
-        {this.renderChangeLogTable(history)}
+        {<PrintChangeLogTable history={history} />}
       </div>
     ) : null
   }
