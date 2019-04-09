@@ -17,6 +17,7 @@ describe('<PrintChangeLog />', () => {
     history: [
       {
         id: 1,
+        event_date: '2018-11-01',
         user_id: 'RACFID',
         entity_id: 1,
         changed_at: '2018-11-01T17:07:10.043Z',
@@ -64,7 +65,11 @@ describe('<PrintChangeLog />', () => {
     })
 
     it('renders an assessment id header', () => {
-      expect(wrapper.find('h3.print-assessment-id').exists()).toBe(true)
+      expect(wrapper.find('th.print-assessment-id').exists()).toBe(true)
+    })
+
+    it('renders an assessment date', () => {
+      expect(wrapper.find('th.print-assessment-date').exists()).toBe(true)
     })
   })
 
@@ -84,7 +89,11 @@ describe('<PrintChangeLog />', () => {
     })
 
     it('renders the assessment id', () => {
-      expect(wrapper.find('h3.print-assessment-id').text()).toBe('Assessment ID: 1')
+      expect(wrapper.find('th.print-assessment-id').text()).toBe('Assessment ID: 1')
+    })
+
+    it('renders the assessment date', () => {
+      expect(wrapper.find('th.print-assessment-date').text()).toBe('Assessment Date: 11/01/2018')
     })
   })
 })
