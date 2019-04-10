@@ -3,7 +3,7 @@ import { Assessment, Domain } from './'
 import { shallow } from 'enzyme'
 import { clone } from '../../util/common'
 import { assessment as assessmentMock, i18n as i18nMock } from './assessment.mocks.test'
-import * as AHelper from './AssessmentHelper'
+import * as ReassessmentHelper from './ReassessmentHelper'
 
 const enhanceDomainToCaregiver = domain => ({ ...domain, is_caregiver_domain: true, caregiver_index: 'a' })
 
@@ -392,7 +392,7 @@ describe('<Assessment />', () => {
 
     it('calls isAllDomainsReviewed if using prior assessment ratings', () => {
       const initialAssessment = { ...assessmentMock, preceding_assessment_id: '123' }
-      const domainsReviewedSpy = jest.spyOn(AHelper, 'containsNotReviewedDomains')
+      const domainsReviewedSpy = jest.spyOn(ReassessmentHelper, 'containsNotReviewedDomains')
       shallowAssessment({ assessment: initialAssessment })
       expect(domainsReviewedSpy).toHaveBeenCalledWith(
         initialAssessment.state.domains,
@@ -402,7 +402,7 @@ describe('<Assessment />', () => {
 
     it('sets isDomainsReviewed prop to isAllDomainsReviewed if using prior assessment ratings', () => {
       const initialAssessment = { ...assessmentMock, preceding_assessment_id: '123' }
-      const hasAllDomainsBeenReviewed = !AHelper.containsNotReviewedDomains(
+      const hasAllDomainsBeenReviewed = !ReassessmentHelper.containsNotReviewedDomains(
         initialAssessment.state.domains,
         initialAssessment.state.under_six
       )

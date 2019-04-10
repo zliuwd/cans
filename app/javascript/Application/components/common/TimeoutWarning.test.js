@@ -3,7 +3,7 @@ import { TimeoutWarning } from './TimeoutWarning'
 import { shallow } from 'enzyme'
 import { eventBus } from './../../util/eventBus'
 import { TIMEOUT_EVENT } from './../../util/constants'
-import { Button } from 'reactstrap'
+import { Button } from '@cwds/components'
 import { SecurityService } from './Security.service'
 
 describe('<TimeoutWarning />', () => {

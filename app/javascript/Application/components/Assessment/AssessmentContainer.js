@@ -18,15 +18,14 @@ import {
   postCloseMessage,
   postInfoMessage,
   postSuccessMessage,
-  preparePrecedingAssessment,
   successMsgFrom,
   trimUrlForClientProfile,
   updateUrlWithAssessment,
   validateAssessmentEventDate,
   validateAssessmentForSubmit,
   getSubstanceUseItemsIds,
-  createRatingsMap,
 } from './AssessmentHelper'
+import { createRatingsMap, prepareReassessment } from './ReassessmentHelper'
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
 import './style.sass'
@@ -66,6 +65,7 @@ export default class AssessmentContainer extends Component {
         underSix: [],
       },
       previousRatingsMap: {},
+      canDisplaySummaryOnSave: false,
     }
   }
 
@@ -92,10 +92,13 @@ export default class AssessmentContainer extends Component {
   }
 
   updateIsEditableState() {
-    const assessment = this.state.assessment
-    const isEditable = Boolean(!assessment || !assessment.id || isAuthorized(assessment, 'update'))
+    const isEditable = this.isEditable(this.state.assessment)
     this.setState({ isEditable })
     this.postReadOnlyMessageIfNeeded()
+  }
+
+  isEditable = assessment => {
+    return Boolean(!assessment || !assessment.id || isAuthorized(assessment, 'update'))
   }
 
   postReadOnlyMessageIfNeeded() {
@@ -165,6 +168,7 @@ export default class AssessmentContainer extends Component {
       isEventDateBeforeDob: !validateAssessmentEventDate(this.props.client.dob, assessment.event_date),
       assessmentServiceStatus: LoadingState.ready,
       substanceUseItemsIds: getSubstanceUseItemsIds(assessment),
+      canDisplaySummaryOnSave: this.shouldDisplaySummaryOnSave(),
     })
     this.fetchI18n(assessment.instrument_id)
   }
@@ -192,6 +196,7 @@ export default class AssessmentContainer extends Component {
     this.setState({
       isUnsaved: false,
       substanceUseItemsIds: getSubstanceUseItemsIds(assessment),
+      canDisplaySummaryOnSave: this.shouldDisplaySummaryOnSave(),
     })
     await this.fetchI18n(assessment.instrument_id)
   }
@@ -199,7 +204,7 @@ export default class AssessmentContainer extends Component {
   async fetchPreviousRatingsIfNeeded(assessment) {
     if (!assessment.preceding_assessment_id || AssessmentStatus.completed === assessment.status) return
     const precedingAssessment = await AssessmentService.fetch(assessment.preceding_assessment_id)
-    const previousRatingsMap = createRatingsMap(precedingAssessment.state.domains)
+    const previousRatingsMap = createRatingsMap(precedingAssessment)
     this.setState({ previousRatingsMap })
   }
 
@@ -286,10 +291,7 @@ export default class AssessmentContainer extends Component {
 
     if (this.state.assessment.id) {
       this.updateIsEditableState()
-      const canDisplaySummaryOnSave =
-        this.state.assessment.status === AssessmentStatus.inProgress &&
-        this.state.isEditable &&
-        this.state.isValidForSubmit
+      const canDisplaySummaryOnSave = this.shouldDisplaySummaryOnSave()
       this.setState({ canDisplaySummaryOnSave })
       if (canDisplaySummaryOnSave) {
         // scroll the page upwards when assessment summary can display on save
@@ -302,6 +304,13 @@ export default class AssessmentContainer extends Component {
         assessment_county: countyName,
       })
     }
+  }
+
+  shouldDisplaySummaryOnSave = () => {
+    const assessment = this.state.assessment
+    return (
+      this.isEditable(assessment) && assessment.status === AssessmentStatus.inProgress && this.state.isValidForSubmit
+    )
   }
 
   handleCompleteScrollTarget = () => {
@@ -383,9 +392,9 @@ export default class AssessmentContainer extends Component {
     const assessment = this.state.assessment
     const precedingAssessmentId = assessment.preceding_assessment_id
     const precedingAssessment = await AssessmentService.fetch(precedingAssessmentId)
-    preparePrecedingAssessment(precedingAssessment, assessment.event_date, assessment.person.dob)
-    this.updateAssessment(precedingAssessment)
-    const previousRatingsMap = createRatingsMap(precedingAssessment.state.domains)
+    const previousRatingsMap = createRatingsMap(precedingAssessment)
+    const reassessment = prepareReassessment(assessment, precedingAssessment, previousRatingsMap)
+    this.updateAssessment(reassessment)
     this.setState({
       isReassessmentModalShown: false,
       isShowReassessmentAlert: true,

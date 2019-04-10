@@ -4,6 +4,7 @@ require 'page_objects/sections/app_globals'
 require 'page_objects/sections/breadcrumbs'
 
 class AssessmentGlobal < SitePrism::Section
+  element :page_header, 'h1'
   element :assessment_page_header, 'h1', text: 'CANS Assessment Form'
   element :reassessment_page_header, 'h1', text: 'CANS Reassessment Form'
   element :save_button, 'button', text: 'SAVE'
@@ -29,10 +30,10 @@ class AssessmentFormHeader < SitePrism::Section
   element :has_caregiver_yes_label, '#has-caregiver-yes'
   element :has_caregiver_no_radio, '#input-has-caregiver-no', visible: false
   element :has_caregiver_yes_radio, '#input-has-caregiver-yes', visible: false
-  element :authorization_label_yes, 'div#can-release-control label', text: 'Yes'
-  element :authorization_label_no, 'div#can-release-control label', text: 'No'
-  element :authorization_radio_yes, 'input#input-can-release-yes', visible: false
-  element :authorization_radio_no, 'input#input-can-release-no', visible: false
+  element :authorization_label_yes, 'div#can-release-confidential-info label', text: 'Yes'
+  element :authorization_label_no, 'div#can-release-confidential-info label', text: 'No'
+  element :authorization_radio_yes, 'input#input-can-release-confidential-info-yes', visible: false
+  element :authorization_radio_no, 'input#input-can-release-confidential-info-no', visible: false
   element :redaction_message, 'div.warning-text'
   element :redaction_message_0_to_5, 'div.warning-text', text: 'By selecting "No" item EC 41'\
     ' (Substance Use Disorder Item) from this CANS assessment will be redacted when printed.'
@@ -51,11 +52,11 @@ class AssessmentSummary < SitePrism::Section
 end
 
 class AssessmentFormFooter < SitePrism::Section
-  element :review_confirmation_checkbox, 'span.review-confirmation-label'
+  element :review_confirmation_checkbox, 'input#review-confirmation-input', visible: false
   element :complete_button, 'button#submit-assessment'
 
   def confirm_domains_review
-    review_confirmation_checkbox.click
+    review_confirmation_checkbox.set(true)
   end
 
   def complete_assessment(has_previous_values)
@@ -69,16 +70,28 @@ class AssessmentFormFooter < SitePrism::Section
 end
 
 class ReassessmentModal < SitePrism::Section
+  FADE_TIME = 0.3 # Reactstrap modal fade time. Don't try to click a moving button
+
   element :title, '.cans-modal-body > .info-modal-title'
   element :start_new_button, 'button.modal-regular-button', text: 'Start new'
   element :use_previous_button, 'button.modal-regular-button', text: 'Use previous rating'
 
   def start_empty_reassessment
+    sleep FADE_TIME
     start_new_button.click
   end
 
   def fill_reassessment_with_preceding_data
+    sleep FADE_TIME
     use_previous_button.click
+  end
+
+  def start(should_start_prefilled)
+    if should_start_prefilled
+      fill_reassessment_with_preceding_data
+    else
+      start_empty_reassessment
+    end
   end
 end
 
@@ -140,6 +153,11 @@ class AssessmentForm < SitePrism::Page
   element :caregiver_domain_warning_popup, 'div.warning-modal-body'
   element :caregiver_domain_warning_message, 'div.warning-modal-body div div'
   element :change_log_link, '.view-changelog-link'
+
+  def is_reassessment?
+    global.has_page_header?(text: 'CANS')
+    global.has_reassessment_page_header?(wait: 0)
+  end
 
   def review_all_domains_0_to_5
     targets = [

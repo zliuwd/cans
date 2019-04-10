@@ -21,8 +21,7 @@ class AssessmentContainerInner extends Component {
   }
 
   handleCompleteWarning = switcher => {
-    this.setState({ isCompleteModalShown: switcher })
-    return null
+    this.setState({ isCompleteModalShown: Boolean(switcher) })
   }
 
   handleWarningShow = (switcher, caregiverIndex) => {

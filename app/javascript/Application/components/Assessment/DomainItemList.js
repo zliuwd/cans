@@ -1,7 +1,8 @@
 import React from 'react'
 import { getI18nByCode } from '../common/I18nHelper'
 import Item from './Item'
-import { buildItemUniqueKey, shouldItemBeRendered } from './AssessmentHelper'
+import { shouldItemBeRendered } from './AssessmentHelper'
+import { buildItemUniqueKey } from './ReassessmentHelper'
 import Divider from '@material-ui/core/Divider'
 import PropTypes from 'prop-types'
 
@@ -10,6 +11,8 @@ const DomainItemList = props => {
     const code = item.code
     const itemI18n = getI18nByCode(props.i18nAll, code)
     const isAssessmentUnderSix = props.isAssessmentUnderSix
+    const itemUniqueKey = buildItemUniqueKey(code, props.caregiverIndex)
+    const previousRating = (props.previousRatingsMap[itemUniqueKey] || {}).rating
     return shouldItemBeRendered(isAssessmentUnderSix, item) ? (
       <div key={`${code}`}>
         <Item
@@ -24,7 +27,7 @@ const DomainItemList = props => {
           isCompletedAssessment={props.isCompletedAssessment}
           canReleaseConfidentialInfo={props.canReleaseConfidentialInfo}
           disabled={props.disabled}
-          previousRating={props.previousRatingsMap[buildItemUniqueKey(code, props.caregiverIndex)]}
+          previousRating={previousRating}
         />
         <Divider />
       </div>

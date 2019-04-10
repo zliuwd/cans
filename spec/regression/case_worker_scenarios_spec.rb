@@ -59,6 +59,8 @@ feature 'Case Worker Functionality' do
     fill_out_assessment_form_and_check_domain_total
     check_all_progress_are_fully_filled
     click_save_and_summary_card_is_shown
+    reload_page
+    expect(@form).to have_summary
     warning_and_summary_card_shown_after_complete_button_clicked(has_previous_values)
     verify_the_tool_tip_of_summary_card
     verify_the_content_of_summary_card('0to5')
@@ -505,7 +507,7 @@ feature 'Case Worker Functionality' do
     expect(@form.app_globals).to have_complete_warning_modal
     @form.app_globals.complete_warning_save_return_button.click
     sleep 2
-    @form.footer.review_confirmation_checkbox.click if has_previous_values
+    @form.footer.confirm_domains_review if has_previous_values
     click_complete_button_then_summary_card_shown has_previous_values
   end
 
@@ -633,5 +635,9 @@ feature 'Case Worker Functionality' do
 
   def go_forward
     page.evaluate_script('window.history.forward()')
+  end
+
+  def reload_page
+    page.evaluate_script('window.location.reload()')
   end
 end

@@ -73,12 +73,12 @@ describe('ClientSocialWorkerCardTemplateHelper', () => {
     })
 
     describe('when reminder date is more than 1 month after today', () => {
-      it('should return null when reminder date is more than 1 month and 1 day after today', () => {
-        const oneMonthAndOneDayAfterToday = moment()
-          .add(1, 'days')
+      it('should return null when reminder date is more than 1 month after today', () => {
+        const moreThanOneMonthAfterToday = moment()
+          .add(3, 'days')
           .add(1, 'months')
           .format(ISO_DATE_FORMAT)
-        expect(renderReminderDate(oneMonthAndOneDayAfterToday)).toBe(null)
+        expect(renderReminderDate(moreThanOneMonthAfterToday)).toBe(null)
       })
 
       it('should return null when reminder date is more than 1 year after today', () => {

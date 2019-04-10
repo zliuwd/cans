@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty } from '../../../util/common'
 
-const ConfidentialityAlert = ({ canReleaseInformation, isUnderSix, substanceUseItemsIds }) =>
-  !canReleaseInformation && !isEmpty(isUnderSix) ? (
+const ConfidentialityAlert = ({ canReleaseConfidentialInfo, isUnderSix, substanceUseItemsIds }) =>
+  !canReleaseConfidentialInfo && !isEmpty(isUnderSix) ? (
     <div className={'warning-text'}>
       By selecting &quot;No&quot;{' '}
       {isUnderSix
@@ -14,7 +14,7 @@ const ConfidentialityAlert = ({ canReleaseInformation, isUnderSix, substanceUseI
   ) : null
 
 ConfidentialityAlert.propTypes = {
-  canReleaseInformation: PropTypes.bool.isRequired,
+  canReleaseConfidentialInfo: PropTypes.bool.isRequired,
   isUnderSix: PropTypes.bool,
   substanceUseItemsIds: PropTypes.shape({
     underSix: PropTypes.array.isRequired,

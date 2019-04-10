@@ -3,17 +3,11 @@ import { Row, Col, Label } from 'reactstrap'
 import { resetConfidentialByDefaultItems, AssessmentStatus } from './AssessmentHelper'
 import { clientCaseReferralNumber, formatClientName } from '../Client/Client.helper'
 import PropTypes from 'prop-types'
-import Typography from '@material-ui/core/Typography'
-import FormControl from '@material-ui/core/FormControl'
-import RadioGroup from '@material-ui/core/RadioGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio'
-import { clone, stringify } from '../../util/common'
+import { clone } from '../../util/common'
 import './style.sass'
 import DateField from '../common/DateField'
 import ConductedByField from './AssessmentFormHeader/ConductedByField'
-import HasCaregiverQuestion from './AssessmentFormHeader/HasCaregiverQuestion'
-import ConfidentialityAlert from './AssessmentFormHeader/ConfidentialityAlert'
+import AssessmentOptions from './AssessmentFormHeader/AssessmentOptions'
 import AgeRangeSwitch from '../common/AgeRangeSwitch'
 import { Card, CardBody, CardHeader, CardTitle } from '@cwds/components'
 import { calculateDateDifferenceInYears, isoToLocalDate, isValidDate } from '../../util/dateHelper'
@@ -138,69 +132,6 @@ class AssessmentFormHeader extends PureComponent {
     )
   }
 
-  renderHasCaregiverQuestion() {
-    const hasCaregiver = (this.props.assessment || {}).has_caregiver
-    return (
-      <HasCaregiverQuestion
-        hasCaregiver={hasCaregiver}
-        onHasCaregiverChange={this.handleHasCaregiverChange}
-        onHasCaregiverNoClicked={this.handleHasCaregiverSwitcher}
-        disabled={this.props.disabled}
-      />
-    )
-  }
-
-  renderCanReleaseInfoQuestion() {
-    const canReleaseConfidentialInfo = (this.props.assessment || {}).can_release_confidential_info
-    return (
-      <Fragment>
-        <Typography id={'can-release-label'} variant="headline" classes={{ root: 'assessment-form-header-label' }}>
-          Authorization for release of information on file?
-        </Typography>
-        <FormControl id={'can-release-control'} disabled={this.props.disabled}>
-          <fieldset>
-            <legend />
-            <RadioGroup
-              name={'can_release_confidential_info'}
-              value={stringify(canReleaseConfidentialInfo)}
-              onChange={this.handleCanReleaseInfoChange}
-              className={'assessment-form-header-radio-group'}
-            >
-              <FormControlLabel
-                value={stringify(true)}
-                control={
-                  <Radio
-                    color="default"
-                    inputProps={{
-                      id: 'input-can-release-yes',
-                      'aria-labelledby': 'can-release-label',
-                    }}
-                  />
-                }
-                label={'Yes'}
-                classes={{ label: 'assessment-form-header-label' }}
-              />
-              <FormControlLabel
-                value={stringify(false)}
-                control={
-                  <Radio
-                    color="default"
-                    inputProps={{
-                      id: 'input-can-release-no',
-                      'aria-labelledby': 'can-release-label',
-                    }}
-                  />
-                }
-                label={'No'}
-                classes={{ label: 'assessment-form-header-label' }}
-              />
-            </RadioGroup>
-          </fieldset>
-        </FormControl>
-      </Fragment>
-    )
-  }
-
   renderCardHeader() {
     return (
       <CardHeader>
@@ -247,6 +178,9 @@ class AssessmentFormHeader extends PureComponent {
   }
 
   renderCardContent() {
+    const assessment = this.props.assessment
+    const hasCaregiver = (assessment || {}).has_caregiver
+    const canReleaseInfo = (assessment || {}).can_release_confidential_info
     return (
       <CardBody>
         {this.renderTopLabels()}
@@ -254,7 +188,7 @@ class AssessmentFormHeader extends PureComponent {
           <Col sm={2}>{this.renderDateSelect()}</Col>
           <Col xs={3}>
             <AgeRangeSwitch
-              isUnderSix={this.props.assessment.state.under_six}
+              isUnderSix={assessment.state.under_six}
               onChange={this.updateUnderSixAndAllDomainsExpand}
               disabled={this.props.disabled}
             />
@@ -262,28 +196,25 @@ class AssessmentFormHeader extends PureComponent {
           <Col sm={4}>
             <ConductedByField
               id={'conducted-by'}
-              value={this.props.assessment.conducted_by}
+              value={assessment.conducted_by}
               onChange={this.handleConductedByChange}
-              disabled={this.props.assessment.status === AssessmentStatus.completed || this.props.disabled}
+              disabled={assessment.status === AssessmentStatus.completed || this.props.disabled}
             />
           </Col>
           <Col sm={3}>{this.renderCaseNumber()}</Col>
         </Row>
-        <Row>
-          <Col sm={2}>{this.renderHasCaregiverQuestion()}</Col>
-          <Col xs={3}>{this.renderCanReleaseInfoQuestion()}</Col>
-        </Row>
 
-        <Row className={'authorization-warning'}>
-          <Col xs={3} />
-          <Col xs={8}>
-            <ConfidentialityAlert
-              canReleaseInformation={Boolean(this.props.assessment.can_release_confidential_info)}
-              isUnderSix={this.props.assessment.state.under_six}
-              substanceUseItemsIds={this.props.substanceUseItemsIds}
-            />
-          </Col>
-        </Row>
+        <AssessmentOptions
+          assessment={assessment}
+          canReleaseConfidentialInfo={canReleaseInfo}
+          hasCaregiver={hasCaregiver}
+          isDisabled={this.props.disabled}
+          isUnderSix={assessment.state.under_six}
+          onCanReleaseInfoChange={this.handleCanReleaseInfoChange}
+          onHasCaregiverChange={this.handleHasCaregiverChange}
+          onHasCaregiverNoClicked={this.handleHasCaregiverSwitcher}
+          substanceUseItemsIds={this.props.substanceUseItemsIds}
+        />
       </CardBody>
     )
   }

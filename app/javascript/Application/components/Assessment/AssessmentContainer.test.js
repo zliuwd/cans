@@ -3,6 +3,7 @@ import React from 'react'
 import { AssessmentContainer, AssessmentService, AssessmentStatus } from './index'
 import { I18nService } from '../common/'
 import * as AHelper from './AssessmentHelper'
+import * as ReassessmentHelper from './ReassessmentHelper'
 import { childInfoJson } from '../Client/Client.helper.test'
 import ClientService from '../Client/Client.service'
 import { mount, shallow } from 'enzyme'
@@ -782,6 +783,98 @@ describe('<AssessmentContainer />', () => {
     })
   })
 
+  describe('#shouldDisplaySummaryOnSave()', () => {
+    const getInstance = () => shallow(<AssessmentContainer {...defaultProps} />).instance()
+
+    it('should return true when summary should be visible for in-progress assessment', () => {
+      const instance = getInstance()
+      instance.setState({
+        isValidForSubmit: true,
+        isEditable: true,
+        assessment: {
+          id: 1,
+          status: 'IN_PROGRESS',
+          event_date: '2010-10-13',
+          metadata: {
+            allowed_operations: ['update'],
+          },
+          state: {
+            domains: [],
+            under_six: false,
+          },
+        },
+        assessmentServiceStatus: LoadingState.ready,
+      })
+      expect(instance.shouldDisplaySummaryOnSave()).toBeTruthy()
+    })
+
+    it('should return false when summary should be hidden for in-progress read-only assessment', () => {
+      const instance = getInstance()
+      instance.setState({
+        isValidForSubmit: true,
+        isEditable: true,
+        assessment: {
+          id: 1,
+          status: 'IN_PROGRESS',
+          event_date: '2010-10-13',
+          metadata: {
+            allowed_operations: ['read'],
+          },
+          state: {
+            domains: [],
+            under_six: false,
+          },
+        },
+        assessmentServiceStatus: LoadingState.ready,
+      })
+      expect(instance.shouldDisplaySummaryOnSave()).toBeFalsy()
+    })
+
+    it('should return false when summary should be hidden for in-progress assessment without all fields filled', () => {
+      const instance = getInstance()
+      instance.setState({
+        isValidForSubmit: false,
+        isEditable: true,
+        assessment: {
+          id: 1,
+          status: 'IN_PROGRESS',
+          event_date: '2010-10-13',
+          metadata: {
+            allowed_operations: ['update'],
+          },
+          state: {
+            domains: [],
+            under_six: false,
+          },
+        },
+        assessmentServiceStatus: LoadingState.ready,
+      })
+      expect(instance.shouldDisplaySummaryOnSave()).toBeFalsy()
+    })
+
+    it('should return false when summary should be hidden for assessment with status different from in-progress', () => {
+      const instance = getInstance()
+      instance.setState({
+        isValidForSubmit: false,
+        isEditable: true,
+        assessment: {
+          id: 1,
+          status: 'DELETED',
+          event_date: '2010-10-13',
+          metadata: {
+            allowed_operations: ['update'],
+          },
+          state: {
+            domains: [],
+            under_six: false,
+          },
+        },
+        assessmentServiceStatus: LoadingState.ready,
+      })
+      expect(instance.shouldDisplaySummaryOnSave()).toBeFalsy()
+    })
+  })
+
   describe('#shouldSaveButtonBeEnabled()', () => {
     const getInstance = () => shallow(<AssessmentContainer {...defaultProps} />).instance()
 
@@ -1005,13 +1098,13 @@ describe('<AssessmentContainer />', () => {
       // then
       expect(wrapper.state().isReassessmentModalShown).toBeFalsy()
       expect(wrapper.state().isShowReassessmentAlert).toBeTruthy()
-      AHelper.preparePrecedingAssessment(
+      const expectedRatingsMap = ReassessmentHelper.createRatingsMap(precedingAssessment)
+      const preparedReassessment = ReassessmentHelper.prepareReassessment(
+        subsequentAssessment,
         precedingAssessment,
-        subsequentAssessment.event_date,
-        subsequentAssessment.person.dob
+        expectedRatingsMap
       )
-      expect(wrapper.state().assessment).toEqual(precedingAssessment)
-      const expectedRatingsMap = AHelper.createRatingsMap(precedingAssessment.state.domains)
+      expect(wrapper.state().assessment).toEqual(preparedReassessment)
       expect(wrapper.state().previousRatingsMap).toEqual(expectedRatingsMap)
     })
 
@@ -1022,7 +1115,7 @@ describe('<AssessmentContainer />', () => {
         jest.spyOn(I18nService, 'fetchByInstrumentId').mockReturnValue(Promise.resolve({}))
         const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
         await wrapper.instance().onFetchAssessmentSuccess({ ...assessment, preceding_assessment_id: 12345 })
-        const expectedPreviousRatingsMap = AHelper.createRatingsMap(precedingAssessment.state.domains)
+        const expectedPreviousRatingsMap = ReassessmentHelper.createRatingsMap(precedingAssessment)
         expect(wrapper.state().previousRatingsMap).toEqual(expectedPreviousRatingsMap)
       })
 

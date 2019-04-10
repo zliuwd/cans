@@ -16,16 +16,12 @@ import {
   handlePrintButtonEnabled,
   getSubstanceUseItemsIds,
   isSubsequentType,
-  hasOneCompletedForReassessment,
   AssessmentType,
-  preparePrecedingAssessment,
-  containsNotReviewedDomains,
-  createRatingsMap,
-  buildItemUniqueKey,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
 import moment from 'moment'
+import { validAssessment } from './assessment.mocks.test'
 
 export const assessmentsToSort = [
   {
@@ -49,107 +45,6 @@ export const assessmentsToSort = [
     created_timestamp: '2018-10-23T20:56:19.684Z',
   },
 ]
-
-const validAssessment = {
-  instrument_id: 1,
-  person: {
-    id: 1,
-    dob: '2000-01-01',
-  },
-  event_date: '2018-06-29',
-  completed_as: 'COMMUNIMETRIC',
-  can_release_confidential_info: false,
-  assessment_type: 'INITIAL',
-  status: 'COMPLETED',
-  has_caregiver: true,
-  state: {
-    under_six: false,
-    domains: [
-      {
-        items: [
-          {
-            under_six_id: 'EC.1',
-            above_six_id: '',
-            code: 'PSYCHOSIS',
-            required: true,
-            confidential: false,
-            confidential_by_default: true,
-            rating_type: 'REGULAR',
-            has_na_option: false,
-            rating: 2,
-          },
-          {
-            under_six_id: 'EC.2',
-            above_six_id: '11',
-            code: 'IMPULSIVITY_HYPERACTIVITY',
-            required: true,
-            confidential: false,
-            confidential_by_default: false,
-            rating_type: 'REGULAR',
-            has_na_option: false,
-            rating: 1,
-          },
-        ],
-        id: 1,
-        code: 'BEN',
-        under_six: true,
-        above_six: true,
-      },
-      {
-        items: [
-          {
-            under_six_id: '',
-            above_six_id: '10',
-            code: 'FAMILY_FUNCTIONING',
-            required: true,
-            confidential: false,
-            confidential_by_default: false,
-            rating_type: 'REGULAR',
-            has_na_option: false,
-            rating: 1,
-          },
-          {
-            under_six_id: '',
-            above_six_id: '11',
-            code: 'LIVING_SITUATION',
-            required: true,
-            confidential: false,
-            confidential_by_default: false,
-            rating_type: 'REGULAR',
-            has_na_option: false,
-            rating: 0,
-          },
-        ],
-        id: 2,
-        code: 'LFD',
-        under_six: false,
-        above_six: true,
-      },
-      {
-        items: [
-          {
-            under_six_id: 'EC34',
-            above_six_id: '41',
-            code: 'SUPERVISION',
-            required: true,
-            confidential: false,
-            confidential_by_default: false,
-            rating_type: 'REGULAR',
-            has_na_option: false,
-            rating: 1,
-          },
-        ],
-        id: 6,
-        is_caregiver_domain: true,
-        code: 'CGV',
-        under_six: true,
-        above_six: true,
-        caregiver_index: 'a',
-        caregiver_name: 'Mike',
-      },
-    ],
-  },
-}
 
 const substanceUseItem8 = {
   under_six_id: '',
@@ -519,43 +414,6 @@ describe('AssessmentHelper', () => {
     })
   })
 
-  describe('#hasOneCompletedForReassessment', () => {
-    const clientCaseReferralNumber = '123'
-    it('returns true if has a completed assessment for the same case or referral number', () => {
-      expect(
-        hasOneCompletedForReassessment(
-          [{ ...validAssessment, service_source_id: '123' }, { ...validAssessment, status: 'IN_PROGRESS' }],
-          clientCaseReferralNumber
-        )
-      ).toBeTruthy()
-    })
-
-    it('returns false if does not have a completed assessment for the same case or referral number', () => {
-      expect(
-        hasOneCompletedForReassessment(
-          [
-            { ...validAssessment, service_source_id: '567' },
-            { ...validAssessment, status: 'IN_PROGRESS', service_source_id: '123' },
-          ],
-          clientCaseReferralNumber
-        )
-      ).toBeFalsy()
-    })
-
-    it('returns false if assessments collection or client case/referral number is empty, null or undefined', () => {
-      expect(hasOneCompletedForReassessment([], '')).toBeFalsy()
-      expect(hasOneCompletedForReassessment([])).toBeFalsy()
-      expect(hasOneCompletedForReassessment([], null)).toBeFalsy()
-      expect(hasOneCompletedForReassessment([], undefined)).toBeFalsy()
-      expect(hasOneCompletedForReassessment(null, '')).toBeFalsy()
-      expect(hasOneCompletedForReassessment(null, undefined)).toBeFalsy()
-      expect(hasOneCompletedForReassessment(null, null)).toBeFalsy()
-      expect(hasOneCompletedForReassessment(undefined)).toBeFalsy()
-      expect(hasOneCompletedForReassessment(undefined, undefined)).toBeFalsy()
-      expect(hasOneCompletedForReassessment(undefined, null)).toBeFalsy()
-    })
-  })
-
   describe('getSubstanceUseItemsIds', () => {
     it('returns substance use items ids object when valid assessment', () => {
       const assessment = clone(validAssessment)
@@ -563,167 +421,6 @@ describe('AssessmentHelper', () => {
       assessment.state.domains[1].items.push(substanceUseItem48)
       const actual = getSubstanceUseItemsIds(assessment, true)
       expect(actual).toEqual({ underSix: ['1', '41'], aboveSix: ['8', '48'] })
-    })
-  })
-
-  describe('#preparePrecedingAssessment()', () => {
-    it('prepares preceding assessment for reassessment with AGE 0-5', () => {
-      const input = {
-        some_field: 'will not be updated',
-        id: 12345,
-        status: 'COMPLETED',
-        event_date: '2019-01-01',
-        can_release_confidential_info: true,
-        conducted_by: 'John Doe',
-        state: {
-          domains: [
-            {
-              comment: 'domain 1 comment',
-              is_reviewed: true,
-              items: [
-                {},
-                { confidential: true, confidential_by_default: false },
-                { confidential: false, confidential_by_default: false },
-                { comment: 'item 1-1 comment', confidential: true, confidential_by_default: true },
-                { comment: 'item 1-2 comment', confidential: false, confidential_by_default: true },
-              ],
-            },
-            {
-              comment: 'domain 2 comment',
-              is_reviewed: false,
-              items: [{ comment: 'item 2-1 comment' }],
-            },
-          ],
-        },
-      }
-      preparePrecedingAssessment(input, '2019-03-26', '2016-01-01')
-      const expected = {
-        some_field: 'will not be updated',
-        preceding_assessment_id: 12345,
-        status: 'IN_PROGRESS',
-        event_date: '2019-03-26',
-        can_release_confidential_info: false,
-        state: {
-          domains: [
-            {
-              items: [
-                {},
-                { confidential: true, confidential_by_default: false },
-                { confidential: false, confidential_by_default: false },
-                { confidential: true, confidential_by_default: true },
-                { confidential: true, confidential_by_default: true },
-              ],
-            },
-            { items: [{}] },
-          ],
-          under_six: true,
-        },
-      }
-      expect(input).toEqual(expected)
-    })
-
-    it('prepares preceding assessment for reassessment with AGE 6-21', () => {
-      const input = {
-        some_field: 'will not be updated',
-        id: 12345,
-        status: 'COMPLETED',
-        event_date: '2019-03-26',
-        can_release_confidential_info: true,
-        conducted_by: 'John Doe',
-        state: {
-          domains: [
-            {
-              comment: 'domain 1 comment',
-              items: [
-                {},
-                { confidential: true, confidential_by_default: false },
-                { confidential: false, confidential_by_default: false },
-                { comment: 'item 1-1 comment', confidential: true, confidential_by_default: true },
-                { comment: 'item 1-2 comment', confidential: false, confidential_by_default: true },
-              ],
-            },
-            {
-              comment: 'domain 2 comment',
-              items: [{ comment: 'item 2-1 comment' }],
-            },
-          ],
-        },
-      }
-      preparePrecedingAssessment(input, '2019-03-26', '2010-02-01')
-      const expected = {
-        some_field: 'will not be updated',
-        preceding_assessment_id: 12345,
-        status: 'IN_PROGRESS',
-        event_date: '2019-03-26',
-        can_release_confidential_info: false,
-        state: {
-          domains: [
-            {
-              items: [
-                {},
-                { confidential: true, confidential_by_default: false },
-                { confidential: false, confidential_by_default: false },
-                { confidential: true, confidential_by_default: true },
-                { confidential: true, confidential_by_default: true },
-              ],
-            },
-            { items: [{}] },
-          ],
-          under_six: false,
-        },
-      }
-      expect(input).toEqual(expected)
-    })
-  })
-
-  describe('#containsNotReviewedDomains()', () => {
-    it('returns true when there is at least ont not reviewed domain in the requested age group', () => {
-      const domains = [
-        { under_six: true, is_reviewed: true },
-        { under_six: true, is_reviewed: false },
-        { under_six: false, is_reviewed: true },
-      ]
-      expect(containsNotReviewedDomains(domains, true)).toBeTruthy()
-    })
-
-    it('returns false when all the domains in the requested age group are reviewed', () => {
-      const domains = [
-        { under_six: true, is_reviewed: true },
-        { under_six: true, is_reviewed: true },
-        { under_six: false, is_reviewed: false },
-      ]
-      expect(containsNotReviewedDomains(domains, true)).toBeFalsy()
-    })
-  })
-
-  describe('#createRatingsMap()', () => {
-    const domains = [
-      {
-        items: [{ code: 'code00', rating: 1 }, { code: 'code01', rating: -1 }, { code: 'code02', rating: 2 }],
-      },
-      {
-        caregiver_index: 'a',
-        items: [{ code: 'code10', rating: 8 }, { code: 'code11', rating: 3 }],
-      },
-    ]
-    const expectedRatingsMap = {
-      code00: 1,
-      code01: -1,
-      code02: 2,
-      code10a: 8,
-      code11a: 3,
-    }
-    const actualRatingsMap = createRatingsMap(domains)
-    expect(actualRatingsMap).toEqual(expectedRatingsMap)
-  })
-
-  describe('#buildItemUniqueKey()', () => {
-    it('build a unique key for item', () => {
-      expect(buildItemUniqueKey('code')).toEqual('code')
-    })
-
-    it('build a unique key for item with a caregiver index', () => {
-      expect(buildItemUniqueKey('code', 'a')).toEqual('codea')
     })
   })
 })

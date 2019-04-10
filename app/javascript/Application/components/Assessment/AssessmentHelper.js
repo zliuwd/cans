@@ -1,4 +1,4 @@
-import { getCurrentIsoDate, calculateDateDifferenceInYears } from '../../util/dateHelper'
+import { getCurrentIsoDate } from '../../util/dateHelper'
 import moment from 'moment'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { urlTrimmer } from '../../util/urlTrimmer'
@@ -95,10 +95,6 @@ export function shouldDomainBeRendered(isAssessmentUnderSix, domain) {
 
 export function shouldItemBeRendered(isAssessmentUnderSix, item) {
   return (isAssessmentUnderSix && item.under_six_id) || (!isAssessmentUnderSix && item.above_six_id)
-}
-
-export function containsNotReviewedDomains(domains, isUnderSix) {
-  return Boolean(domains.find(domain => shouldDomainBeRendered(isUnderSix, domain) && !domain.is_reviewed))
 }
 
 export function getActionVerbByStatus(status) {
@@ -242,15 +238,6 @@ export function isSubsequentType(type) {
   return AssessmentType.subsequent === type
 }
 
-export const hasOneCompletedForReassessment = (assessments, clientCaseReferralNumber) => {
-  if (!assessments || assessments.length === 0 || !clientCaseReferralNumber) return false
-  return (
-    assessments.filter(
-      assessment => assessment.status === 'COMPLETED' && assessment.service_source_id === clientCaseReferralNumber
-    ).length > 0
-  )
-}
-
 export const getSubstanceUseItemsIds = assessment => {
   const underSix = []
   const aboveSix = []
@@ -265,43 +252,4 @@ export const getSubstanceUseItemsIds = assessment => {
     })
   })
   return { underSix: underSix, aboveSix: aboveSix }
-}
-
-export const currentClientAge = dob => {
-  return calculateDateDifferenceInYears(dob, getCurrentIsoDate())
-}
-
-export function preparePrecedingAssessment(precedingAssessment, eventDate, dob) {
-  const SIX = 6
-
-  precedingAssessment.event_date = eventDate
-  precedingAssessment.status = 'IN_PROGRESS'
-  precedingAssessment.can_release_confidential_info = false
-  precedingAssessment.preceding_assessment_id = precedingAssessment.id
-  precedingAssessment.state.under_six = currentClientAge(dob) < SIX
-  delete precedingAssessment.id
-  delete precedingAssessment.conducted_by
-  precedingAssessment.state.domains.forEach(domain => {
-    delete domain.comment
-    delete domain.is_reviewed
-    domain.items.forEach(item => {
-      delete item.comment
-      if (item.confidential_by_default) {
-        item.confidential = true
-      }
-    })
-  })
-}
-
-export const buildItemUniqueKey = (code, caregiverIndex) => `${code}${caregiverIndex || ''}`
-
-export function createRatingsMap(domains) {
-  const codeToRatingMap = {}
-  domains.forEach(domain =>
-    domain.items.forEach(item => {
-      const key = buildItemUniqueKey(item.code, domain.caregiver_index)
-      codeToRatingMap[key] = item.rating
-    })
-  )
-  return codeToRatingMap
 }
