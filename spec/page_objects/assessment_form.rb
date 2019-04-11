@@ -13,6 +13,9 @@ class AssessmentGlobal < SitePrism::Section
                                             'CANS assessment has been saved'
   element :global_complete_message_box, 'div.global-alert', text: 'This assessment was completed '\
                                         'and is available for view only.'
+  element :global_complete_rw_message_box, 'div.global-alert', text: 'Success! CANS assessment '\
+                                           'has been completed. Click here to '\
+                                           'return to Child/Youth profile.'
 end
 
 class AssessmentFormHeader < SitePrism::Section
