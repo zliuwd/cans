@@ -73,12 +73,12 @@ export default class CompleteModal extends Component {
         </ModalBody>
 
         <div className="p-3 text-right">
-          <Button className="m-1 cancel-confirm-button no-uppercase" onClick={this.close}>
+          <Button className="m-1 cancel-confirm-button" onClick={this.close}>
             Cancel
           </Button>
           <Button
-            className="m-1 save-confirm-button no-uppercase"
-            color="primary"
+            className="m-1 save-confirm-button"
+            primary
             disabled={this.state.action === undefined}
             onClick={this.doAction}
           >
