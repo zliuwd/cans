@@ -4,6 +4,7 @@ import { renderDate, sortDOB, cellTempSwitcher } from './ClientSocialWorkerCardT
 import { ReminderDateCell } from './ReminderDateCell'
 import DataGridHeader from '../common/DataGridHeader'
 import './style.sass'
+import { isoToLocalDate } from '../../util/dateHelper'
 
 export function SocialWorkerCardTemplate(navFrom, staffId) {
   return [
@@ -51,8 +52,8 @@ and meet the setting rules of reactTable at same time */
         />
       ),
       headerStyle: { textAlign: 'center' },
+      accessor: client => isoToLocalDate(client.reminder_date),
       Cell: ReminderDateCell,
-      className: 'client-list-table-cell-center',
       sortable: true,
     },
   ]
