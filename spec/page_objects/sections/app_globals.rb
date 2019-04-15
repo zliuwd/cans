@@ -15,7 +15,7 @@ class AppGlobals < SitePrism::Section
   element :cancel_button_of_delete_modal, 'button', text: 'Cancel'
   element :delete_button_of_delete_modal, 'button', text: 'Delete CANS'
   element :agree_button_of_warning, 'button.warning-modal-stay-logged-in'
-  element :return_to_the_assessment_button, 'button', text: 'Return to the assessment'
-  element :save_and_continue_button, 'button', text: 'SAVE CHANGES AND CONTINUE'
-  element :discard_and_continue_button, 'button', text: 'Discard changes and continue'
+  element :return_to_the_assessment_button, 'button', text: 'Return to the Assessment'
+  element :save_and_continue_button, 'button', text: 'Save Changes and Continue'
+  element :discard_and_continue_button, 'button', text: 'Discard Changes and Continue'
 end
