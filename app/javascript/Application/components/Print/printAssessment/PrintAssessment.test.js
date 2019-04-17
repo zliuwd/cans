@@ -142,7 +142,13 @@ describe('<PrintAssessment />', () => {
     getWrapper(completedFakeProps)
     target = wrapper.find(PrintDomain)
     expect(target.exists()).toBe(true)
-    expect(Object.keys(target.at(0).props())).toContain('domain', 'domainI18n', 'i18n', 'isAssessmentUnderSix')
+    expect(Object.keys(target.at(0).props())).toContain(
+      'domain',
+      'domainI18n',
+      'i18n',
+      'isAssessmentUnderSix',
+      'redactLevel'
+    )
   })
 
   it('will not render PrintDomain for the domain which does not match the ageRange', () => {

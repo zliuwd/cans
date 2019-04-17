@@ -19,6 +19,7 @@ import {
   isSubsequentType,
 } from '../../Assessment/AssessmentHelper'
 import moment from 'moment/moment'
+import { redactLevels } from './PrintAssessmentHelper'
 
 class PrintAssessment extends PureComponent {
   constructor(props) {
@@ -53,7 +54,7 @@ class PrintAssessment extends PureComponent {
     return status === 'IN_PROGRESS' ? 'DRAFT' : 'FINAL'
   }
 
-  renderDomain = (domains, isAssessmentUnderSix, i18n) => {
+  renderDomain = (domains, isAssessmentUnderSix, i18n, redactLevel) => {
     return domains.map((domain, index) => {
       if (!shouldDomainBeRendered(isAssessmentUnderSix, domain)) return null
       const domainI18n = getI18nByCode(i18n, domain.code)
@@ -62,6 +63,7 @@ class PrintAssessment extends PureComponent {
         domainI18n,
         i18n,
         isAssessmentUnderSix,
+        redactLevel,
       }
       return <PrintDomain key={`print-domain-${index}`} {...printDomainProps} />
     })
@@ -69,7 +71,7 @@ class PrintAssessment extends PureComponent {
 
   render() {
     const { isAssessmentUnderSix } = this.state
-    const { i18n, assessment } = this.props
+    const { i18n, assessment, redactLevel } = this.props
     const domains = this.props.assessment.state.domains
     const isUnderSix = assessment.state.under_six
     const reassessmentInfo = this.handleIsReassessmentInfo(assessment)
@@ -108,7 +110,7 @@ class PrintAssessment extends PureComponent {
           {...printAssessmentHeaderProps}
         />
         <CategoryHeader title="CANS Ratings" />
-        {this.renderDomain(domains, isAssessmentUnderSix, i18n)}
+        {this.renderDomain(domains, isAssessmentUnderSix, i18n, redactLevel)}
         {canDisplaySummary ? (
           <div>
             <PrintPageBreaker isIE={isIE} />
@@ -123,10 +125,20 @@ class PrintAssessment extends PureComponent {
 PrintAssessment.propTypes = {
   assessment: PropTypes.object.isRequired,
   i18n: PropTypes.object.isRequired,
+  redactLevel: PropTypes.oneOf([
+    redactLevels.all,
+    redactLevels.discrationNeeded,
+    redactLevels.confidential,
+    redactLevels.doNotRedact,
+  ]),
   substanceUseItemsIds: PropTypes.shape({
     underSix: PropTypes.array.isRequired,
     aboveSix: PropTypes.array.isRequired,
   }).isRequired,
+}
+
+PrintAssessment.defaultProps = {
+  redactLevel: redactLevels.all,
 }
 
 export default PrintAssessment
