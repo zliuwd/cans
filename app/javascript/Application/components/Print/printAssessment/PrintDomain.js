@@ -21,6 +21,9 @@ const getTotalScore = (domain, items, redactLevel) => {
   if (shouldShowDiscretionLabel(domain, redactLevel)) return 'Discretion Needed'
   return totalScoreCalculation(items)
 }
+const commentRemark = comment => {
+  return comment ? '' : 'None'
+}
 
 const PrintDomain = props => {
   const { domain, domainI18n, i18n, isAssessmentUnderSix, redactLevel } = props
@@ -50,10 +53,10 @@ const PrintDomain = props => {
         })}
       </div>
       <div>
+        <PrintDomainCommentHeader text={`${title} ${displayCaregiverName}`} remark={commentRemark(comment)} />
         {comment &&
           (!hasConfidentialItems(domain) || redactLevel === redactLevels.doNotRedact) && (
             <div style={domainComment}>
-              <PrintDomainCommentHeader text={`${title} ${displayCaregiverName}`} />
               <div style={domainCommentContent}>{comment}</div>
             </div>
           )}

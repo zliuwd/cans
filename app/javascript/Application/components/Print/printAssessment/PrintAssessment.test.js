@@ -83,11 +83,23 @@ describe('<PrintAssessment />', () => {
     )
   })
 
+  it('will render two PrintAssessmentOverallHeader for assessment with summary', () => {
+    getWrapper(completedFakeProps)
+    target = wrapper.find(PrintAssessmentOverallHeader)
+    expect(target.length).toBe(2)
+  })
+
   it('will render a PrintAssessmentOverallFooter with correct props', () => {
     getWrapper(normalFakeProps)
     target = wrapper.find(PrintAssessmentOverallFooter)
     expect(target.length).toBe(1)
     expect(Object.keys(target.props())).toContain('text', 'isFirefox')
+  })
+
+  it('will render two PrintAssessmentOverallFooter for assessment with summary', () => {
+    getWrapper(completedFakeProps)
+    target = wrapper.find(PrintAssessmentOverallFooter)
+    expect(target.length).toBe(2)
   })
 
   it('will render a PrintAssessmentHeadline with correct props', () => {
@@ -173,13 +185,13 @@ describe('<PrintAssessment />', () => {
     getWrapper(readyFakeProps)
     target = wrapper.find(PrintSummary)
     expect(target.length).toBe(1)
-    expect(Object.keys(target.props())).toContain('domains', 'i18n', 'isUnderSix')
+    expect(Object.keys(target.props())).toContain('domains', 'i18n', 'isUnderSix', 'header', 'footer')
   })
 
   it('will render a PrintSummary for completed assessment with correct props', () => {
     getWrapper(completedFakeProps)
     target = wrapper.find(PrintSummary)
     expect(target.length).toBe(1)
-    expect(Object.keys(target.props())).toContain('domains', 'i18n', 'isUnderSix')
+    expect(Object.keys(target.props())).toContain('domains', 'i18n', 'isUnderSix', 'header', 'footer')
   })
 })

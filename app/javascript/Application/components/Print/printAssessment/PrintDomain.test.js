@@ -1,6 +1,7 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import {
+  assessment,
   assessmentWithConfidentialItem,
   assessmentWithDiscretionNeededItem,
   assessmentWithNoConfidentialItem,
@@ -26,6 +27,12 @@ const fakePropsWithConfidentialItem = {
   isAssessmentUnderSix: false,
 }
 
+const fakePropsWithoutComment = {
+  domain: { ...assessment.state.domains[0] },
+  domainI18n: getI18nByCode(i18nPrint, 'BEN'),
+  i18n: i18nPrint,
+  isAssessmentUnderSix: false,
+}
 const fakePropsWithDiscretionNeededItem = {
   domain: { ...assessmentWithDiscretionNeededItem.state.domains[0] },
   domainI18n: getI18nByCode(i18nPrint, 'BEN'),
@@ -35,24 +42,20 @@ const fakePropsWithDiscretionNeededItem = {
 
 describe('<PrintDomain />', () => {
   let wrapper
-  let confidentialWrapper
-  beforeEach(() => {
-    wrapper = mount(<PrintDomain {...fakePropsWithNoConfidentialItem} />)
-    confidentialWrapper = mount(<PrintDomain {...fakePropsWithConfidentialItem} />)
-  })
-
-  afterEach(() => {
-    wrapper.unmount()
-    confidentialWrapper.unmount()
-  })
+  const getWrapper = props => {
+    wrapper = mount(<PrintDomain {...props} />)
+  }
 
   it('will render a PrintDomainHeader with correct props', () => {
+    getWrapper(fakePropsWithNoConfidentialItem)
     const target = wrapper.find(PrintDomainHeader)
     expect(target.length).toBe(1)
     expect(Object.keys(target.props())).toContain('text', 'total')
+    wrapper.unmount()
   })
 
   it('will render PrintItem with correct props', () => {
+    getWrapper(fakePropsWithNoConfidentialItem)
     const target = wrapper.find(PrintItem)
     expect(target.length).toBeGreaterThan(0)
     expect(Object.keys(target.at(0).props())).toContain(
@@ -64,17 +67,40 @@ describe('<PrintDomain />', () => {
       'isItemHidden',
       'redactLevel'
     )
+    wrapper.unmount()
   })
 
   it('will render PrintDomainCommentHeader with correct props when does not have confidential items', () => {
+    getWrapper(fakePropsWithNoConfidentialItem)
     const target = wrapper.find(PrintDomainCommentHeader)
     expect(target.length).toBe(1)
-    expect(Object.keys(target.props())).toContain('text')
+    expect(Object.keys(target.props())).toContain('text', 'remark')
+    wrapper.unmount()
   })
 
-  it('will not render PrintDomainCommentHeader does not have confidential items', () => {
-    const target = confidentialWrapper.find(PrintDomainCommentHeader)
+  it('will render PrintDomainCommentHeader without remark when has comment', () => {
+    getWrapper(fakePropsWithNoConfidentialItem)
+    expect(fakePropsWithNoConfidentialItem.domain.comment.length).toBeGreaterThan(0)
+    const target = wrapper.find(PrintDomainCommentHeader)
+    expect(target.length).toBe(1)
+    expect(target.props().remark).toEqual('')
+    wrapper.unmount()
+  })
+
+  it('will render PrintDomainCommentHeader with remark #None# when has not comment', () => {
+    getWrapper(fakePropsWithoutComment)
+    expect(fakePropsWithoutComment.domain.comment).toBe(undefined)
+    const target = wrapper.find(PrintDomainCommentHeader)
+    expect(target.length).toBe(1)
+    expect(target.props().remark).toEqual('None')
+    wrapper.unmount()
+  })
+
+  it('will not render domain comment when have confidential items', () => {
+    getWrapper(fakePropsWithConfidentialItem)
+    const target = wrapper.find('#domain-comment')
     expect(target.length).toBe(0)
+    wrapper.unmount()
   })
 
   describe('#getTotalScore', () => {
@@ -83,8 +109,10 @@ describe('<PrintDomain />', () => {
     }
 
     it('returns Confidential when redactLevel = all and domain has confidential item ', () => {
-      const target = confidentialWrapper.find(PrintDomainHeader)
+      getWrapper(fakePropsWithConfidentialItem)
+      const target = wrapper.find(PrintDomainHeader)
       expect(target.props().total).toEqual('Confidential')
+      wrapper.unmount()
     })
 
     it('returns Confidential when redactLevel = confidential and domain has confidential item ', () => {

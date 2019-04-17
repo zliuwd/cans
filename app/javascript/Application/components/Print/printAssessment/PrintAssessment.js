@@ -69,8 +69,11 @@ class PrintAssessment extends PureComponent {
     })
   }
 
+  printHeaderGenerator = (headerPorps, assessment) => {
+    return <PrintAssessmentOverallHeader printStatus={this.handlePrintStatus(assessment.status)} {...headerPorps} />
+  }
+
   render() {
-    const { isAssessmentUnderSix } = this.state
     const { i18n, assessment, redactLevel } = this.props
     const domains = this.props.assessment.state.domains
     const isUnderSix = assessment.state.under_six
@@ -95,29 +98,32 @@ class PrintAssessment extends PureComponent {
       validateAssessmentForSubmit(this.props.assessment) || this.props.assessment.status === 'COMPLETED'
 
     return (
-      <PrintLayout
-        header={
-          <PrintAssessmentOverallHeader
-            printStatus={this.handlePrintStatus(assessment.status)}
+      <div>
+        <PrintLayout
+          header={this.printHeaderGenerator(printAssessmentHeaderProps, assessment)}
+          footer={<PrintAssessmentOverallFooter text={this.handleTimeStamp()} isFirefox={isFirefox} />}
+        >
+          <PrintAssessmentHeadline ageRange={this.handleAgeRange(isUnderSix)} reassessmentInfo={reassessmentInfo} />
+          <PrintAssessmentHeader
+            confidentialWarningAlert={this.handleConfidentialWarningAlert()}
             {...printAssessmentHeaderProps}
           />
-        }
-        footer={<PrintAssessmentOverallFooter text={this.handleTimeStamp()} isFirefox={isFirefox} />}
-      >
-        <PrintAssessmentHeadline ageRange={this.handleAgeRange(isUnderSix)} reassessmentInfo={reassessmentInfo} />
-        <PrintAssessmentHeader
-          confidentialWarningAlert={this.handleConfidentialWarningAlert()}
-          {...printAssessmentHeaderProps}
-        />
-        <CategoryHeader title="CANS Ratings" />
-        {this.renderDomain(domains, isAssessmentUnderSix, i18n, redactLevel)}
+          <CategoryHeader title="CANS Ratings" />
+          {this.renderDomain(domains, this.state.isAssessmentUnderSix, i18n, redactLevel)}
+        </PrintLayout>
         {canDisplaySummary ? (
           <div>
             <PrintPageBreaker isIE={isIE} />
-            <PrintSummary domains={domains} i18n={this.props.i18n} isUnderSix={this.state.isAssessmentUnderSix} />
+            <PrintSummary
+              header={this.printHeaderGenerator(printAssessmentHeaderProps, assessment)}
+              footer={<PrintAssessmentOverallFooter text={this.handleTimeStamp()} isFirefox={isFirefox} />}
+              domains={domains}
+              i18n={this.props.i18n}
+              isUnderSix={this.state.isAssessmentUnderSix}
+            />
           </div>
         ) : null}
-      </PrintLayout>
+      </div>
     )
   }
 }
