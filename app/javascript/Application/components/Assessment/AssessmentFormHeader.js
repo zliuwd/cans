@@ -135,7 +135,10 @@ class AssessmentFormHeader extends PureComponent {
   }
 
   renderCaseNumber() {
-    return this.props.assessment.service_source_ui_id || 'No case/referral number exists'
+    const caseReferralNumber = this.props.assessment.service_source_ui_id
+    return caseReferralNumber === undefined || caseReferralNumber
+      ? caseReferralNumber
+      : 'No case/referral number exists'
   }
 
   renderCardHeader() {

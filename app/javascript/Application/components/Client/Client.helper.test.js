@@ -72,6 +72,11 @@ describe('Client.helper', () => {
   })
 
   describe('case or referralnumber label', () => {
+    it('renders Empty Case/referral Number label undefined', () => {
+      const caseReferralNumberLabel = clientCaseReferralNumber(undefined)
+      expect(caseReferralNumberLabel).toBe('')
+    })
+
     it('renders with Case Number label', () => {
       const caseNumberLabel = clientCaseReferralNumber('CASE')
       expect(caseNumberLabel).toBe('Case Number')

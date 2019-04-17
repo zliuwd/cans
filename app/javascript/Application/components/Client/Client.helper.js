@@ -19,7 +19,9 @@ export const failedFetching = { message: 'Fail to fetch data from server side!' 
 
 export function clientCaseReferralNumber(serviceSource) {
   let caseReferralNumber = ''
-  if (serviceSource === 'CASE') {
+  if (serviceSource === undefined) {
+    caseReferralNumber = ''
+  } else if (serviceSource === 'CASE') {
     caseReferralNumber = 'Case Number'
   } else if (serviceSource === 'REFERRAL') {
     caseReferralNumber = 'Referral Number'

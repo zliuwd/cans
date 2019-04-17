@@ -317,9 +317,34 @@ describe('<AssessmentFormHeader />', () => {
       expect(referralNumber.text()).toBe('4704-9166-3831-2001287')
     })
 
-    it('renders without case/referral number when not exists and Case/Referral Number label', () => {
+    it('does not renders referral label and Referral Number when referral number is undefined', () => {
+      const assessmentWithReferralNumberUndefined = {
+        ...assessment,
+        service_source_ui_id: undefined,
+        service_source: undefined,
+      }
       const props = {
-        assessment,
+        assessment: assessmentWithReferralNumberUndefined,
+        client,
+        onAssessmentUpdate: jest.fn(),
+        onEventDateFieldKeyUp: jest.fn(),
+        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+      }
+      const referralWrapper = shallow(<AssessmentFormHeader {...props} />)
+      const referralNumberLabel = referralWrapper.find('#case-or-referral-number-label')
+      const referralNumber = referralWrapper.find('#case-or-referral-number')
+      expect(referralNumberLabel.text()).toBe('')
+      expect(referralNumber.text()).toBe('')
+    })
+
+    it('renders without case/referral number when not exists and Case/Referral Number label', () => {
+      const assessmentWithReferralNumber = {
+        ...assessment,
+        service_source_ui_id: '',
+        service_source: '',
+      }
+      const props = {
+        assessment: assessmentWithReferralNumber,
         client,
         onAssessmentUpdate: jest.fn(),
         onEventDateFieldKeyUp: jest.fn(),
