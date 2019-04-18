@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
@@ -23,12 +23,10 @@ const mapI18nToState = props => ({
   caregiverName: props.domain.caregiver_name || '',
 })
 
-class Domain extends Component {
+class Domain extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      expanded: props.isDefaultExpanded,
-    }
+    this.state = {}
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -39,6 +37,9 @@ class Domain extends Component {
   }
 
   handleOpenToReview = event => {
+    if (this.props.domain.is_reviewed || !this.props.isUsingPriorRatings) {
+      return
+    }
     const code = this.props.domain.code
     const caregiverIndex = this.props.domain.caregiver_index
     this.props.onDomainReviewed(code, caregiverIndex)
@@ -46,9 +47,7 @@ class Domain extends Component {
 
   handleExpandedChange = event => {
     this.handleOpenToReview(event)
-    this.setState({
-      expanded: !this.state.expanded,
-    })
+    this.props.onExpandedChange(this.props.index, !this.props.isExpanded)
     expandingThenScroll(event, this.state.expanded, this.props.domain.items.length, this.props.disabled)
   }
 
@@ -94,6 +93,7 @@ class Domain extends Component {
     const {
       isAssessmentUnderSix,
       isCompletedAssessment,
+      isExpanded,
       domain,
       onRatingUpdate,
       onItemCommentUpdate,
@@ -106,7 +106,7 @@ class Domain extends Component {
     } = this.props
     const isReviewed = isUsingPriorRatings ? domain.is_reviewed : true
     const { items, is_caregiver_domain: isCaregiverDomain } = domain
-    const { title, description, caregiverName, expanded } = this.state
+    const { title, description, caregiverName } = this.state
     const itemListProps = {
       items,
       caregiverIndex: domain.caregiver_index,
@@ -125,88 +125,82 @@ class Domain extends Component {
     const warningText = <span className={'caregiver-warning-text'}> Caregiver Name is required</span>
     const ROTATION_RIGHT = 270
 
-    return shouldDomainBeRendered(isAssessmentUnderSix, domain) ? (
-      <Fragment>
-        <ExpansionPanel expanded={expanded} onChange={this.handleExpandedChange} elevation={0}>
-          <ExpansionPanelSummary
-            expandIcon={
-              isReviewed || expanded ? null : (
-                <Button id={`domain${index}-review`} onClick={this.handleOpenToReview}>
-                  Open to review
-                </Button>
-              )
-            }
+    return title && shouldDomainBeRendered(isAssessmentUnderSix, domain) ? (
+      <ExpansionPanel expanded={isExpanded} onChange={this.handleExpandedChange} elevation={0}>
+        <ExpansionPanelSummary
+          expandIcon={
+            isReviewed || isExpanded ? null : (
+              <Button id={`domain${index}-review`} onClick={this.handleOpenToReview}>
+                Open to review
+              </Button>
+            )
+          }
+        >
+          <Grid
+            container
+            direction="row"
+            justify="flex-end"
+            alignItems="flex-end"
+            spacing={0}
+            style={{ padding: 0, flexWrap: 'nowrap', flexDirection: 'row' }}
           >
-            <Grid
-              container
-              direction="row"
-              justify="flex-end"
-              alignItems="flex-end"
-              spacing={0}
-              style={{ padding: 0, flexWrap: 'nowrap', flexDirection: 'row' }}
-            >
-              <Grid item xs={8}>
-                <Typography variant="title" style={{ color: '#0e6f89', fontSize: 16 }}>
-                  <Icon
-                    id={`domain${index}-expand`}
-                    className="domain-icon"
-                    icon="chevron-down"
-                    size="lg"
-                    rotation={expanded ? null : ROTATION_RIGHT}
-                  />
-                  <span className="domain-item-margin">{title}</span>
-                  <Icon className="domain-help-icon" icon="info-circle" id={`domain-${index}`} />
-                  {description ? (
-                    <UncontrolledTooltip style={{ minWidth: '20rem' }} target={`domain-${index}`} placement="top">
-                      {description}
-                    </UncontrolledTooltip>
-                  ) : null}{' '}
-                  {(isCaregiverDomain && caregiverName === '') ||
-                  (isCaregiverDomain && caregiverName && caregiverName.trim() === '')
-                    ? warningText
-                    : caregiverName && `- ${caregiverName}`}
-                </Typography>
-              </Grid>
-              <Grid item xs={4} className={isReviewed ? 'domain-metric' : 'domain-metric-with-review'}>
-                <div className="domain-toolbar-comment-icon-block">
-                  <DomainCommentIcon domain={domain} />
-                </div>
-                <DomainProgressBar isAssessmentUnderSix={isAssessmentUnderSix} domain={domain} />
-                <DomainScore totalScore={totalScore} key={index} />
-              </Grid>
-            </Grid>
-          </ExpansionPanelSummary>
-          {expanded && (
-            <div>
-              <ExpansionPanelDetails
-                style={{
-                  display: 'block',
-                  padding: '0',
-                  backgroundColor: 'white',
-                }}
-              >
-                {isCaregiverDomain && this.renderCaregiverName()}
-                <DomainItemList {...itemListProps} />
-                <DomainComment
-                  id={`${domain.code}-${domain.caregiver_index}`}
-                  title={title}
-                  domain={domain}
-                  onDomainCommentUpdate={this.props.onDomainCommentUpdate}
-                  disabled={this.props.disabled}
-                  domainBottomCollapseClick={this.handleExpandedChange}
+            <Grid item xs={8}>
+              <Typography variant="title" style={{ color: '#0e6f89', fontSize: 16 }}>
+                <Icon
+                  id={`domain${index}-expand`}
+                  className="domain-icon"
+                  icon="chevron-down"
+                  size="lg"
+                  rotation={isExpanded ? null : ROTATION_RIGHT}
                 />
-                {isCaregiverDomain &&
-                  !this.props.disabled && (
-                    <DomainCaregiverControls
-                      onRemoveCaregiverDomain={this.handleRemoveCaregiverDomain}
-                      onAddCaregiverDomain={this.handleAddCaregiverDomain}
-                    />
-                  )}
-              </ExpansionPanelDetails>
-            </div>
-          )}
-        </ExpansionPanel>
-      </Fragment>
+                <span className="domain-item-margin">{title}</span>
+                <Icon className="domain-help-icon" icon="info-circle" id={`domain-${index}`} />
+                {description ? (
+                  <UncontrolledTooltip style={{ minWidth: '20rem' }} target={`domain-${index}`} placement="top">
+                    {description}
+                  </UncontrolledTooltip>
+                ) : null}{' '}
+                {(isCaregiverDomain && caregiverName === '') ||
+                (isCaregiverDomain && caregiverName && caregiverName.trim() === '')
+                  ? warningText
+                  : caregiverName && `- ${caregiverName}`}
+              </Typography>
+            </Grid>
+            <Grid item xs={4} className={isReviewed ? 'domain-metric' : 'domain-metric-with-review'}>
+              <div className="domain-toolbar-comment-icon-block">
+                <DomainCommentIcon domain={domain} />
+              </div>
+              <DomainProgressBar isAssessmentUnderSix={isAssessmentUnderSix} domain={domain} />
+              <DomainScore totalScore={totalScore} key={index} />
+            </Grid>
+          </Grid>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails
+          style={{
+            display: 'block',
+            padding: '0',
+            backgroundColor: 'white',
+          }}
+        >
+          {isCaregiverDomain && this.renderCaregiverName()}
+          <DomainItemList {...itemListProps} />
+          <DomainComment
+            id={`${domain.code}-${domain.caregiver_index}`}
+            title={title}
+            domain={domain}
+            onDomainCommentUpdate={this.props.onDomainCommentUpdate}
+            disabled={this.props.disabled}
+            domainBottomCollapseClick={this.handleExpandedChange}
+          />
+          {isCaregiverDomain &&
+            !this.props.disabled && (
+              <DomainCaregiverControls
+                onRemoveCaregiverDomain={this.handleRemoveCaregiverDomain}
+                onAddCaregiverDomain={this.handleAddCaregiverDomain}
+              />
+            )}
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     ) : null
   }
 }
@@ -221,13 +215,14 @@ Domain.propTypes = {
   index: PropTypes.number.isRequired,
   isAssessmentUnderSix: PropTypes.bool,
   isCompletedAssessment: PropTypes.bool.isRequired,
-  isDefaultExpanded: PropTypes.bool,
+  isExpanded: PropTypes.bool,
   isUsingPriorRatings: PropTypes.bool,
   onAddCaregiverDomain: PropTypes.func.isRequired,
   onCaregiverNameUpdate: PropTypes.func.isRequired,
   onConfidentialityUpdate: PropTypes.func.isRequired,
   onDomainCommentUpdate: PropTypes.func.isRequired,
   onDomainReviewed: PropTypes.func,
+  onExpandedChange: PropTypes.func.isRequired,
   onItemCommentUpdate: PropTypes.func.isRequired,
   onRatingUpdate: PropTypes.func.isRequired,
   previousRatingsMap: PropTypes.object,
@@ -237,7 +232,7 @@ Domain.defaultProps = {
   disabled: false,
   handleWarningShow: () => {},
   isAssessmentUnderSix: null,
-  isDefaultExpanded: false,
+  isExpanded: false,
   isUsingPriorRatings: false,
   onDomainReviewed: () => {},
   previousRatingsMap: undefined,
