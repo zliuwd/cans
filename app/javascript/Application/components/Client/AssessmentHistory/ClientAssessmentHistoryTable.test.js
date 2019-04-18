@@ -12,6 +12,8 @@ import { navigation } from '../../../util/constants'
 import { AssessmentStatus, AssessmentActionsEllipsis } from '../../Assessment'
 import SessionDataGrid from '../../common/SessionDataGrid'
 import { ASSESSMENT_HISTORY_PAGE_SIZE_KEY } from '../../../util/sessionStorageUtil'
+import { isoToLocalDate } from '../../../util/dateHelper'
+import { assessmentInProgressWithCaseNumber } from '../../Assessment/assessment.mocks.test'
 
 const defaultMockedAssessments = [
   { id: 1, county: { name: 'Los Angeles' } },
@@ -365,13 +367,12 @@ describe('<ClientAssessmentHistoryTable />', () => {
         it('passes the correct column config', () => {
           const row = {
             original: {
-              updated_timestamp: '2019-01-28T12:16:01.874Z',
-              created_timestamp: '2019-01-28T11:02:14.383Z',
               inheritUrl: '/staff/0X5',
               person: { identifier: '0PcpFQu0QM' },
               county: { name: 'Los Angeles' },
               id: 12345,
               status: AssessmentStatus.completed,
+              assessmentDate: assessmentInProgressWithCaseNumber.event_date,
               metadata: {
                 allowed_operations: ['read', 'update', 'create', 'write', 'delete'],
               },
@@ -382,7 +383,7 @@ describe('<ClientAssessmentHistoryTable />', () => {
           expect(assessmentTableColumnConfig.Header).toBe('')
           expect(assessmentTableColumnConfig.Cell(row)).toEqual(
             <AssessmentActionsEllipsis
-              date="01/28/2019"
+              date={isoToLocalDate(assessmentInProgressWithCaseNumber.event_date)}
               inheritUrl="/staff/0X5"
               clientId="0PcpFQu0QM"
               assessmentId={12345}

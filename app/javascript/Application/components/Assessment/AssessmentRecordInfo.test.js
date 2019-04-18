@@ -19,6 +19,7 @@ import {
   assessmentDeletedWithNoClientandReferralNumber,
   assessmentWithNoUpdateInfoWithNoClientandReferralNumber,
 } from '../Assessment/assessment.mocks.test'
+import { isoToLocalDate } from '../../util/dateHelper'
 
 const prepareWrapper = (assessment, header, callback = () => {}) =>
   shallow(
@@ -49,6 +50,12 @@ describe('AssessmentRecordInfo', () => {
 
     it('renders an AssessmentActionsEllipsis component', () => {
       expect(wrapper.find(AssessmentActionsEllipsis).exists()).toBe(true)
+    })
+
+    it('renders an AssessmentActionsEllipsis component with assessmentDate', () => {
+      expect(wrapper.find(AssessmentActionsEllipsis).props().date).toBe(
+        isoToLocalDate(assessmentInProgressWithCaseNumber.event_date)
+      )
     })
 
     it('renders an assessment-info div', () => {
