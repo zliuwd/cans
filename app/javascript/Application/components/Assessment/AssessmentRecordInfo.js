@@ -13,6 +13,7 @@ class AssessmentRecordInfo extends Component {
     const { status, person, id, metadata } = assessment
     const {
       clientName,
+      assessmentDate,
       actionVerb,
       formattedTimestamp,
       updatedByName,
@@ -35,7 +36,7 @@ class AssessmentRecordInfo extends Component {
               assessmentCounty={handleCountyName(assessment)}
               assessmentId={id}
               assessmentMetaData={metadata}
-              date={formattedTimestamp}
+              date={assessmentDate}
               assessmentStatus={status}
               updateAssessmentHistoryCallback={updateAssessmentHistoryCallback}
             />
@@ -76,6 +77,7 @@ class AssessmentRecordInfo extends Component {
     const { first_name: firstName, middle_name: middleName, last_name: lastName } = person
     const suffix = person.suffix ? `, ${person.suffix}` : ''
     const clientName = `${firstName} ${middleName} ${lastName}${suffix}`
+    const assessmentDate = isoToLocalDate(assessment.event_date)
     const actionVerb = getActionVerbByStatus(status)
     const formattedTimestamp = isoToLocalDate(updatedTimestamp || createdTimestamp)
     const user = updatedBy || createdBy || {}
@@ -84,6 +86,7 @@ class AssessmentRecordInfo extends Component {
     const caseReferralNumber = clientCaseReferralNumber(serviceSource).replace('Number', '#')
     const assessmentInfo = {
       clientName,
+      assessmentDate,
       actionVerb,
       formattedTimestamp,
       updatedByName,

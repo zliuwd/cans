@@ -100,10 +100,9 @@ class ClientAssessmentHistoryTable extends React.Component {
           status,
           metadata,
           updateAssessmentHistoryCallback,
-          updated_timestamp: updatedTimestamp,
-          created_timestamp: createdTimestamp,
+          assessmentDate,
         } = row.original
-        const formattedTimestamp = isoToLocalDate(updatedTimestamp || createdTimestamp)
+        const formattedTimestamp = isoToLocalDate(assessmentDate)
         return (
           <AssessmentActionsEllipsis
             inheritUrl={inheritUrl}
@@ -139,6 +138,7 @@ class ClientAssessmentHistoryTable extends React.Component {
         inheritUrl,
         userId,
         updateAssessmentHistoryCallback,
+        assessmentDate: assessment.event_date,
         ...assessment,
       }
     })
