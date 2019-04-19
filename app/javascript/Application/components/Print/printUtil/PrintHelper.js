@@ -28,11 +28,7 @@ const nonFirefoxPrint = (frame, contentString) => {
   frameContentWindow.document.write('<!DOCTYPE html>')
   frameContentWindow.document.write(contentString)
   frameContentWindow.document.close()
-  if (isIE) {
-    frameContentWindow.document.execCommand('print', false, null)
-  } else {
-    frameContentWindow.print()
-  }
+  frameContentWindow.print()
   history.replaceState(history.state, '', curURL)
   document.title = oldTitle
 }
