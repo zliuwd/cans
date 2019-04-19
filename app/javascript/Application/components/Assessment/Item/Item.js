@@ -15,22 +15,12 @@ const initI18nValue = i18n => ({
   ratingDescriptions: getI18nValuesByPrefix(i18n, '_rating_.'),
 })
 
-/* eslint-disable camelcase */
 class Item extends React.PureComponent {
   constructor(props) {
     super(props)
-    const i18nValues = initI18nValue(props.i18n)
     this.state = {
       isExpanded: false,
-      ...i18nValues,
     }
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const i18nValues = initI18nValue(nextProps.i18n)
-    this.setState({
-      ...i18nValues,
-    })
   }
 
   handleKeyCheck = event => {
@@ -83,43 +73,31 @@ class Item extends React.PureComponent {
   }
 
   render = () => {
-    const { item, isAssessmentUnderSix, caregiverIndex, disabled, canReleaseConfidentialInfo } = this.props
-    const {
-      code,
-      rating_type,
-      has_na_option,
-      rating,
-      confidential: isConfidential,
-      confidential_by_default,
-      under_six_id,
-      above_six_id,
-      comment,
-    } = item
-    const itemNumber = isAssessmentUnderSix ? under_six_id : above_six_id
-    const { isExpanded, title, description, qtcDescriptions, ratingDescriptions } = this.state
-    const isBooleanRating = rating_type === 'BOOLEAN'
+    const { i18n, item, isAssessmentUnderSix, caregiverIndex, disabled, canReleaseConfidentialInfo } = this.props
+    const itemNumber = isAssessmentUnderSix ? item.under_six_id : item.above_six_id
+    const { title, description, qtcDescriptions, ratingDescriptions } = initI18nValue(i18n)
+    const isBooleanRating = item.rating_type === 'BOOLEAN'
     const propsResource = {
-      item,
       isAssessmentUnderSix,
       caregiverIndex,
       disabled,
       canReleaseConfidentialInfo,
-      code,
-      rating_type,
-      hasNaOption: has_na_option,
-      rating,
-      isConfidential,
-      isConfidentialByDefault: confidential_by_default,
-      under_six_id,
-      above_six_id,
-      comment,
+      code: item.code,
+      rating_type: item.rating_type,
+      hasNaOption: item.has_na_option,
+      rating: item.rating,
+      isConfidential: item.confidential,
+      isConfidentialByDefault: item.confidential_by_default,
+      under_six_id: item.under_six_id,
+      above_six_id: item.above_six_id,
+      comment: item.comment,
       itemNumber,
-      isExpanded,
       title,
       description,
       qtcDescriptions,
       ratingDescriptions,
       isBooleanRating,
+      isExpanded: this.state.isExpanded,
       previousRating: this.props.previousRating,
       isCompletedAssessment: this.props.isCompletedAssessment,
       handleRatingChange: this.handleRatingChange,
@@ -133,7 +111,6 @@ class Item extends React.PureComponent {
     return <ItemInner {...propsResource} />
   }
 }
-/* eslint-enable camelcase */
 
 Item.propTypes = {
   canReleaseConfidentialInfo: PropTypes.bool.isRequired,

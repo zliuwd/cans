@@ -467,7 +467,6 @@ describe('<Item />', () => {
     it('will render ItemInner with correct props', () => {
       const target = wrapper.find(ItemInner)
       const expectedProps = [
-        'item',
         'isAssessmentUnderSix',
         'caregiverIndex',
         'disabled',
@@ -482,12 +481,12 @@ describe('<Item />', () => {
         'above_six_id',
         'comment',
         'itemNumber',
-        'isExpanded',
         'title',
         'description',
         'qtcDescriptions',
         'ratingDescriptions',
         'isBooleanRating',
+        'isExpanded',
         'previousRating',
         'isCompletedAssessment',
         'handleRatingChange',
