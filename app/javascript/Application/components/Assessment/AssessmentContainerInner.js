@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
 import { isReadyForAction } from '../../util/loadingHelper'
 import { AssessmentFormFooter, AssessmentFormHeader } from './'
-import RenderWarning from '../common/RenderWarning'
+import CaregiverDeleteWarning from '../common/CaregiverDeleteWarning'
 import CompleteModal from '../Assessment/CompleteModal'
 import { isCompleteAssessmentAuthorized } from '../common/AuthHelper'
 import ChangelogLink from './ChangelogLink'
@@ -35,7 +35,7 @@ class AssessmentContainerInner extends Component {
     const { handleCaregiverRemove, handleCompleteAssessment, handleSaveAssessment } = this.props
     return (
       <Fragment>
-        <RenderWarning
+        <CaregiverDeleteWarning
           isCaregiverWarningShown={this.state.isCaregiverWarningShown}
           handleWarningShow={this.handleWarningShow}
           handleCaregiverRemove={handleCaregiverRemove}

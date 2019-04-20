@@ -55,7 +55,7 @@ const simulateSelect = (wrapper, optionNumber) => {
 describe('AssessmentDeleteModal', () => {
   describe('layout', () => {
     describe('isShown prop is true', () => {
-      it('renders a PageModal', () => {
+      it('renders a Modal', () => {
         const wrapper = getWrapper(true)
         expect(wrapper.find(Modal).exists()).toBe(true)
       })

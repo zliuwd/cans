@@ -16,7 +16,7 @@ SEARCH_CLIENT_NAME = 'Case, Child 01 Test'
 SEARCH_CLIENT_LAST_NAME = SEARCH_CLIENT_NAME.split(',').first
 STAFF_NAME = 'Regression, QA02'
 CLIENT_LIST_TITLE = 'Client List'
-CAREGIVER_DOMAIN_WARNING_MESSAGE = 'You are about to remove the CAREGIVER from this Assessment.'
+CAREGIVER_DOMAIN_WARNING_MESSAGE = 'You are about to remove the caregiver from this Assessment.'
 
 def with_retry(func0, func1, times = 3)
   loop do
