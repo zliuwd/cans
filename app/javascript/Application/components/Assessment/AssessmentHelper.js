@@ -210,8 +210,8 @@ export const updateUrlWithAssessment = (history, match, assessment) => {
 
 export const selectOptions = [
   { value: 'Entered in error', label: 'Entered in error' },
-  { value: 'Referral / Case closed', label: 'Referral / Case closed' },
-  { value: 'Family refused', label: 'Family refused' },
+  { value: 'Duplicate', label: 'Duplicate' },
+  { value: 'Unable to locate child/family', label: 'Unable to locate child/family' },
   { value: 'Other', label: 'Other' },
 ]
 

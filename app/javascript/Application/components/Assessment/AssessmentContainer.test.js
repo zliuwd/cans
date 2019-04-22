@@ -10,7 +10,6 @@ import { mount, shallow } from 'enzyme'
 import AssessmentFormFooter from './FormFooter/AssessmentFormFooter'
 import * as AssessmentAutoScroll from '../../util/assessmentAutoScroll'
 import AssessmentContainerInner from '../Assessment/AssessmentContainerInner'
-import PageModal from '../common/PageModal'
 import pageLockService from '../common/PageLockService'
 import {
   assessment,
@@ -24,6 +23,7 @@ import {
 import { LoadingState } from '../../util/loadingHelper'
 import { getCurrentIsoDate } from '../../util/dateHelper'
 import * as Analytics from '../../util/analytics'
+import CaregiverDeleteWarning from '../common/CaregiverDeleteWarning'
 
 jest.mock('../../util/analytics')
 
@@ -250,13 +250,13 @@ describe('<AssessmentContainer />', () => {
 
     describe('warning modal when warning is canceled', () => {
       const props = { ...defaultProps }
-      it('should not render PageModal component when warningShow is not true', () => {
+      it('should not render CaregiverDeleteWarning component when warningShow is not true', () => {
         const wrapper = shallow(<AssessmentContainer {...props} />)
         wrapper.instance().setState({
           assessment: assessment,
           isCaregiverWarningShown: false,
         })
-        expect(wrapper.find(PageModal).length).toBe(0)
+        expect(wrapper.find(CaregiverDeleteWarning).length).toBe(0)
       })
     })
 

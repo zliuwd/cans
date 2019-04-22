@@ -12,6 +12,7 @@ import AgeRangeSwitch from '../common/AgeRangeSwitch'
 import { Card, CardBody, CardHeader, CardTitle } from '@cwds/components'
 import { calculateDateDifferenceInYears, isoToLocalDate, isValidDate } from '../../util/dateHelper'
 import moment from 'moment/moment'
+import { LoadingState } from '../../util/loadingHelper'
 
 class AssessmentFormHeader extends PureComponent {
   handleValueChange = event => this.changeFieldAndUpdateAssessment(event.target.name, event.target.value)
@@ -96,23 +97,27 @@ class AssessmentFormHeader extends PureComponent {
   renderCountyAndCaseInfo() {
     const county = this.props.assessment.county || {}
     const countyName = county.name ? `${county.name} County` : ''
+    const assessmentReady = this.props.assessmentServiceStatus === LoadingState.ready
     return (
-      <div>
-        {countyName && (
-          <div className={'card-title-block'}>
-            <span id={'county-name'}>{countyName}</span>
+      <div id="county-and-case-info">
+        {assessmentReady &&
+          countyName && (
+            <div className={'card-title-block'}>
+              <span id={'county-name'}>{countyName}</span>
+            </div>
+          )}
+        {assessmentReady && (
+          <div>
+            <div className={'case-referral-text'}>
+              <span id={'case-or-referral-number-label'}>
+                {clientCaseReferralNumber(this.props.assessment.service_source)}
+              </span>
+            </div>
+            <div id={'case-or-referral-number'} className={'helper-text'}>
+              <span>{this.renderCaseNumber()}</span>
+            </div>
           </div>
         )}
-        <div>
-          <div className={'case-referral-text'}>
-            <span id={'case-or-referral-number-label'}>
-              {clientCaseReferralNumber(this.props.assessment.service_source)}
-            </span>
-          </div>
-          <div id={'case-or-referral-number'} className={'helper-text'}>
-            <span>{this.renderCaseNumber()}</span>
-          </div>
-        </div>
       </div>
     )
   }
@@ -233,6 +238,7 @@ AssessmentFormHeader.defaultProps = {
 }
 AssessmentFormHeader.propTypes = {
   assessment: PropTypes.object.isRequired,
+  assessmentServiceStatus: PropTypes.string.isRequired,
   client: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   expandCollapse: PropTypes.func,

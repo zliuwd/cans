@@ -63,7 +63,8 @@ export default class CompleteModal extends Component {
           <CardTitle className="complete-modal-header">Confirm CANS completion</CardTitle>
         </ModalHeader>
         <ModalBody>
-          Once confirmed, you have 7 calendar days to make edits before the completed assessment will become read-only.
+          Once confirmed, you have 7 calendar days to make edits but cannot delete the assessment. After 7 calendar days
+          the completed assessment will become read-only.
           <FormControl classes={{ root: 'radio-group-control' }} className={'complete-assessment-radio-group'}>
             <RadioGroup value={this.state.action} onChange={this.handleChange}>
               {this.renderFormControl(Action.save, 'Save changes and return to the assessment')}

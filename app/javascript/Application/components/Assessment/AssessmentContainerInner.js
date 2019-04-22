@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
 import { isReadyForAction } from '../../util/loadingHelper'
 import { AssessmentFormFooter, AssessmentFormHeader } from './'
-import RenderWarning from '../common/RenderWarning'
+import CaregiverDeleteWarning from '../common/CaregiverDeleteWarning'
 import CompleteModal from '../Assessment/CompleteModal'
 import { isCompleteAssessmentAuthorized } from '../common/AuthHelper'
 import ChangelogLink from './ChangelogLink'
@@ -35,7 +35,7 @@ class AssessmentContainerInner extends Component {
     const { handleCaregiverRemove, handleCompleteAssessment, handleSaveAssessment } = this.props
     return (
       <Fragment>
-        <RenderWarning
+        <CaregiverDeleteWarning
           isCaregiverWarningShown={this.state.isCaregiverWarningShown}
           handleWarningShow={this.handleWarningShow}
           handleCaregiverRemove={handleCaregiverRemove}
@@ -67,10 +67,15 @@ class AssessmentContainerInner extends Component {
     )
   }
 
+  isUnderSix(assessment) {
+    return Boolean(assessment && assessment.state && assessment.state.under_six)
+  }
+
   displayAssessment() {
     const {
       client,
       assessment,
+      assessmentServiceStatus,
       onAssessmentUpdate,
       onEventDateFieldKeyUp,
       isEventDateBeforeDob,
@@ -81,13 +86,13 @@ class AssessmentContainerInner extends Component {
       substanceUseItemsIds,
     } = this.props
 
-    const isUnderSix = Boolean(assessment && assessment.state && assessment.state.under_six)
     return (
       <Fragment>
         <div rol="completeScrollLocator">
           <AssessmentFormHeader
             client={client}
             assessment={assessment}
+            assessmentServiceStatus={assessmentServiceStatus}
             onAssessmentUpdate={onAssessmentUpdate}
             onEventDateFieldKeyUp={onEventDateFieldKeyUp}
             handleWarningShow={this.handleWarningShow}
@@ -102,11 +107,11 @@ class AssessmentContainerInner extends Component {
           assessmentStatus={assessment.status}
           domains={assessment && assessment.state && assessment.state.domains}
           i18n={i18n}
-          isUnderSix={isUnderSix}
+          isUnderSix={this.isUnderSix(assessment)}
           disabled={!isEditable}
         />
         <Assessment
-          key={`Assessment-${isUnderSix}`}
+          key={`Assessment-${this.isUnderSix(assessment)}`}
           assessment={assessment}
           i18n={i18n}
           onAssessmentUpdate={onAssessmentUpdate}

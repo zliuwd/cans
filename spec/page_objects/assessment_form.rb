@@ -152,8 +152,10 @@ class AssessmentForm < SitePrism::Page
   element :remove_first_caregiver_domain_button,
           'button[aria-label="remove caregiver button"]',
           match: :first
-  element :caregiver_domain_warning_popup, 'div.warning-modal-body'
-  element :caregiver_domain_warning_message, 'div.warning-modal-body div div'
+  element :caregiver_domain_warning_popup, '#caregiver-delete-warning'
+  element :caregiver_domain_warning_message, '#caregiver-delete-alert'
+  element :caregiver_domain_warning_cancel, '#caregiver-warning-cancel'
+  element :caregiver_domain_warning_remove, '#caregiver-warning-remove'
   element :change_log_link, '#view-changelog-link'
 
   def is_reassessment?

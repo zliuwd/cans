@@ -576,8 +576,8 @@ feature 'Case Worker Functionality' do
     @form.remove_first_caregiver_domain_button.click
     expect(@form).to have_caregiver_domain_warning_popup
     expect(@form.caregiver_domain_warning_message.text).to eq(CAREGIVER_DOMAIN_WARNING_MESSAGE)
-    expect(@form.app_globals).to have_agree_button_of_warning
-    @form.app_globals.agree_button_of_warning.click
+    expect(@form).to have_caregiver_domain_warning_remove
+    @form.caregiver_domain_warning_remove.click
     expect(@form.caregiver_name_fields.length).to eq(1)
   end
 
@@ -586,15 +586,15 @@ feature 'Case Worker Functionality' do
     @form.header.has_caregiver_no_label.click
     expect(@form).to have_caregiver_domain_warning_popup
     expect(@form.caregiver_domain_warning_message.text).to eq(CAREGIVER_DOMAIN_WARNING_MESSAGE)
-    expect(@form.app_globals).to have_cancel_button_of_warning
-    @form.app_globals.cancel_button_of_warning.click
+    expect(@form).to have_caregiver_domain_warning_cancel
+    @form.caregiver_domain_warning_cancel.click
     expect(@form.caregiver_name_fields.length).to eq(1)
     expect(@form.header.has_caregiver_yes_radio.checked?).to be(true)
     @form.header.has_caregiver_no_label.click
     expect(@form).to have_caregiver_domain_warning_popup
     expect(@form.caregiver_domain_warning_message.text).to eq(CAREGIVER_DOMAIN_WARNING_MESSAGE)
-    expect(@form.app_globals).to have_agree_button_of_warning
-    @form.app_globals.agree_button_of_warning.click
+    expect(@form).to have_caregiver_domain_warning_remove
+    @form.caregiver_domain_warning_remove.click
     expect(@form.caregiver_name_fields.length).to eq(0)
     expect(@form.header.has_caregiver_no_radio.checked?).to be(true)
   end

@@ -5,7 +5,7 @@ import { assessment } from './assessment.mocks.test'
 import AssessmentSummaryCard from './AssessmentSummary/AssessmentSummaryCard'
 import AssessmentFormHeader from './AssessmentFormHeader'
 import ChangelogLink from './ChangelogLink'
-import RenderWarning from '../common/RenderWarning'
+import CaregiverDeleteWarning from '../common/CaregiverDeleteWarning'
 import { Assessment } from './index'
 
 const getLength = (wrapper, component) => wrapper.find(component).length
@@ -83,7 +83,7 @@ describe('AssessmentContainerInner />', () => {
         focusedCaregiverId: 0,
       })
       wrapper
-        .find(RenderWarning)
+        .find(CaregiverDeleteWarning)
         .props()
         .handleWarningShow(false)
       wrapper.instance().handleWarningShow(false)
@@ -97,7 +97,7 @@ describe('AssessmentContainerInner />', () => {
         focusedCaregiverId: 0,
       })
       wrapper
-        .find(RenderWarning)
+        .find(CaregiverDeleteWarning)
         .props()
         .handleWarningShow(true)
       wrapper.instance().handleWarningShow(true)

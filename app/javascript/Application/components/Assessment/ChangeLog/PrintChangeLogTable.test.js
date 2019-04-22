@@ -27,7 +27,7 @@ describe('<PrintChangeLogTable />', () => {
         change_type: 'ADD',
         changes: [],
         assessment_change_type: 'CREATED',
-        deletion_reason: 'Referral / Case closed',
+        deletion_reason: 'Duplicate',
       },
     ],
   }
@@ -111,7 +111,7 @@ describe('<PrintChangeLogTable />', () => {
           .dive()
           .find('div')
           .text()
-      ).toBe('Referral / Case closed')
+      ).toBe('Duplicate')
     })
 
     describe('name column', () => {

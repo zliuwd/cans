@@ -18,6 +18,7 @@ describe('<ClientAssessmentHistoryLoadingBoundary />', () => {
     expect(loadingBoundary.props().childNodeFetchedPropName).toBe('assessments')
     expect(loadingBoundary.props().fetch).toBeDefined()
     expect(loadingBoundary.props().children.type).toBe('div')
+    expect(loadingBoundary.props().isHiddenWhileLoading).toEqual(false)
   })
 
   it('does not update if the id does not change', () => {

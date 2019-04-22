@@ -6,6 +6,7 @@ import { clone } from '../../util/common'
 import ConductedByField from './AssessmentFormHeader/ConductedByField'
 import AgeRangeSwitch from '../common/AgeRangeSwitch'
 import { Card, CardBody, CardHeader, CardTitle } from '@cwds/components'
+import { LoadingState } from '../../util/loadingHelper'
 import moment from 'moment'
 
 describe('<AssessmentFormHeader />', () => {
@@ -14,12 +15,14 @@ describe('<AssessmentFormHeader />', () => {
     client,
     onAssessmentUpdate: jest.fn(),
     substanceUseItemsIds: { underSix: ['41'], aboveSix: ['8', '48'] },
+    assessmentServiceStatus: LoadingState.ready,
   }
   const propsWithEstimatedDob = {
     assessment,
     client: clientWithEstimatedDob,
     onAssessmentUpdate: jest.fn(),
     substanceUseItemsIds: { underSix: ['41'], aboveSix: ['8', '48'] },
+    assessmentServiceStatus: LoadingState.ready,
   }
 
   it('renders with 1 <ConductedByField> component', () => {
@@ -38,6 +41,7 @@ describe('<AssessmentFormHeader />', () => {
         client={client}
         onAssessmentUpdate={jest.fn()}
         substanceUseItemsIds={defaultProps.substanceUseItemsIds}
+        assessmentServiceStatus={LoadingState.ready}
       />
     )
     expect(wrapper.find(AgeRangeSwitch).props().isUnderSix).toBe(null)
@@ -54,6 +58,7 @@ describe('<AssessmentFormHeader />', () => {
         client={client}
         onAssessmentUpdate={jest.fn()}
         substanceUseItemsIds={defaultProps.substanceUseItemsIds}
+        assessmentServiceStatus={LoadingState.ready}
       />
     )
     expect(wrapper.find(AgeRangeSwitch).props().isUnderSix).toBe(true)
@@ -88,6 +93,7 @@ describe('<AssessmentFormHeader />', () => {
         client,
         onAssessmentUpdate: mockFn,
         substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+        assessmentServiceStatus: LoadingState.ready,
       }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(assessment.event_date).toBe('2018-06-11')
@@ -112,6 +118,7 @@ describe('<AssessmentFormHeader />', () => {
         client,
         onAssessmentUpdate: mockFn,
         substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+        assessmentServiceStatus: LoadingState.ready,
       }
       const options = shallow(<AssessmentFormHeader {...props} />).find('AssessmentOptions')
 
@@ -135,6 +142,7 @@ describe('<AssessmentFormHeader />', () => {
         client,
         onAssessmentUpdate: mockFn,
         substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+        assessmentServiceStatus: LoadingState.ready,
       }
       const options = shallow(<AssessmentFormHeader {...props} />).find('AssessmentOptions')
 
@@ -158,6 +166,7 @@ describe('<AssessmentFormHeader />', () => {
         client,
         onAssessmentUpdate: mockFn,
         substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+        assessmentServiceStatus: LoadingState.ready,
       }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(sentAssessment.state.domains[0].items[3].confidential).toBe(false)
@@ -197,6 +206,7 @@ describe('<AssessmentFormHeader />', () => {
         onAssessmentUpdate: assessmentUpdateMockFn,
         expandCollapse: expandCollapseMockFn,
         substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+        assessmentServiceStatus: LoadingState.ready,
       }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(assessment.state.under_six).toBe(false)
@@ -253,6 +263,7 @@ describe('<AssessmentFormHeader />', () => {
       client: {},
       onAssessmentUpdate: jest.fn(),
       substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+      assessmentServiceStatus: LoadingState.ready,
     }
     const headerTitle = shallow(<AssessmentFormHeader {...props} />)
       .find(CardTitle)
@@ -270,14 +281,7 @@ describe('<AssessmentFormHeader />', () => {
   })
 
   describe('with county name and case/Referal number', () => {
-    it('displays correct county name', () => {
-      const title = shallow(<AssessmentFormHeader {...defaultProps} />)
-        .find(CardTitle)
-        .dive()
-      expect(title.find('#county-name').text()).toBe('Calaveras County')
-    })
-
-    it('renders with case number label and Case Number', () => {
+    it('displays nothing while waiting to load assessments', () => {
       const assessmentWithCaseNumber = {
         ...assessment,
         service_source_ui_id: '0687-9473-7673-8000672',
@@ -289,47 +293,97 @@ describe('<AssessmentFormHeader />', () => {
         onAssessmentUpdate: jest.fn(),
         onEventDateFieldKeyUp: jest.fn(),
         substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+        assessmentServiceStatus: LoadingState.waiting,
       }
       const caseWrapper = shallow(<AssessmentFormHeader {...props} />)
-      const caseNumberLabel = caseWrapper.find('#case-or-referral-number-label')
-      const caseNumber = caseWrapper.find('#case-or-referral-number')
-      expect(caseNumberLabel.children().text()).toBe('Case Number')
-      expect(caseNumber.text()).toBe('0687-9473-7673-8000672')
+      const countyCaseInfo = caseWrapper.find('#county-and-case-info')
+      expect(countyCaseInfo.text()).toEqual('')
     })
 
-    it('renders with referral number label and Referral Number', () => {
-      const assessmentWithReferralNumber = {
+    it('displays nothing while idle loading assessments', () => {
+      const assessmentWithCaseNumber = {
         ...assessment,
-        service_source_ui_id: '4704-9166-3831-2001287',
-        service_source: 'REFERRAL',
+        service_source_ui_id: '0687-9473-7673-8000672',
+        service_source: 'CASE',
       }
       const props = {
-        assessment: assessmentWithReferralNumber,
+        assessment: assessmentWithCaseNumber,
         client,
         onAssessmentUpdate: jest.fn(),
         onEventDateFieldKeyUp: jest.fn(),
         substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+        assessmentServiceStatus: LoadingState.idle,
       }
-      const referralWrapper = shallow(<AssessmentFormHeader {...props} />)
-      const referralNumberLabel = referralWrapper.find('#case-or-referral-number-label')
-      const referralNumber = referralWrapper.find('#case-or-referral-number')
-      expect(referralNumberLabel.children().text()).toBe('Referral Number')
-      expect(referralNumber.text()).toBe('4704-9166-3831-2001287')
+      const caseWrapper = shallow(<AssessmentFormHeader {...props} />)
+      const countyCaseInfo = caseWrapper.find('#county-and-case-info')
+      expect(countyCaseInfo.text()).toEqual('')
     })
 
-    it('renders without case/referral number when not exists and Case/Referral Number label', () => {
-      const props = {
-        assessment,
-        client,
-        onAssessmentUpdate: jest.fn(),
-        onEventDateFieldKeyUp: jest.fn(),
-        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
-      }
-      const caseReferralWrapper = shallow(<AssessmentFormHeader {...props} />)
-      const referralNumberLabel = caseReferralWrapper.find('#case-or-referral-number-label')
-      const caseNumber = caseReferralWrapper.find('#case-or-referral-number')
-      expect(referralNumberLabel.children().text()).toBe('Case/Referral Number')
-      expect(caseNumber.text()).toBe('No case/referral number exists')
+    describe('when assessment is loaded', () => {
+      it('displays correct county name', () => {
+        const title = shallow(<AssessmentFormHeader {...defaultProps} />)
+          .find(CardTitle)
+          .dive()
+        expect(title.find('#county-name').text()).toBe('Calaveras County')
+      })
+
+      it('renders with case number label and Case Number', () => {
+        const assessmentWithCaseNumber = {
+          ...assessment,
+          service_source_ui_id: '0687-9473-7673-8000672',
+          service_source: 'CASE',
+        }
+        const props = {
+          assessment: assessmentWithCaseNumber,
+          client,
+          onAssessmentUpdate: jest.fn(),
+          onEventDateFieldKeyUp: jest.fn(),
+          substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+          assessmentServiceStatus: LoadingState.ready,
+        }
+        const caseWrapper = shallow(<AssessmentFormHeader {...props} />)
+        const caseNumberLabel = caseWrapper.find('#case-or-referral-number-label')
+        const caseNumber = caseWrapper.find('#case-or-referral-number')
+        expect(caseNumberLabel.children().text()).toBe('Case Number')
+        expect(caseNumber.text()).toBe('0687-9473-7673-8000672')
+      })
+
+      it('renders with referral number label and Referral Number', () => {
+        const assessmentWithReferralNumber = {
+          ...assessment,
+          service_source_ui_id: '4704-9166-3831-2001287',
+          service_source: 'REFERRAL',
+        }
+        const props = {
+          assessment: assessmentWithReferralNumber,
+          client,
+          onAssessmentUpdate: jest.fn(),
+          onEventDateFieldKeyUp: jest.fn(),
+          substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+          assessmentServiceStatus: LoadingState.ready,
+        }
+        const referralWrapper = shallow(<AssessmentFormHeader {...props} />)
+        const referralNumberLabel = referralWrapper.find('#case-or-referral-number-label')
+        const referralNumber = referralWrapper.find('#case-or-referral-number')
+        expect(referralNumberLabel.children().text()).toBe('Referral Number')
+        expect(referralNumber.text()).toBe('4704-9166-3831-2001287')
+      })
+
+      it('renders without case/referral number when not exists and Case/Referral Number label', () => {
+        const props = {
+          assessment,
+          client,
+          onAssessmentUpdate: jest.fn(),
+          onEventDateFieldKeyUp: jest.fn(),
+          substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+          assessmentServiceStatus: LoadingState.ready,
+        }
+        const caseReferralWrapper = shallow(<AssessmentFormHeader {...props} />)
+        const referralNumberLabel = caseReferralWrapper.find('#case-or-referral-number-label')
+        const caseNumber = caseReferralWrapper.find('#case-or-referral-number')
+        expect(referralNumberLabel.children().text()).toBe('Case/Referral Number')
+        expect(caseNumber.text()).toBe('No case/referral number exists')
+      })
     })
   })
 
@@ -341,6 +395,7 @@ describe('<AssessmentFormHeader />', () => {
         client,
         onAssessmentUpdate: mockFn,
         substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+        assessmentServiceStatus: LoadingState.ready,
       }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
       expect(wrapper.find('#conducted-by').length).toBe(1)
@@ -354,6 +409,7 @@ describe('<AssessmentFormHeader />', () => {
         client,
         onAssessmentUpdate: mockFn,
         substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+        assessmentServiceStatus: LoadingState.ready,
         disabled: true,
       }
       const wrapper = shallow(<AssessmentFormHeader {...props} />)
@@ -368,6 +424,7 @@ describe('<AssessmentFormHeader />', () => {
           client,
           onAssessmentUpdate: mockFn,
           substanceUseItemsIds: defaultProps.substanceUseItemsIds,
+          assessmentServiceStatus: LoadingState.ready,
         }
         const wrapper = shallow(<AssessmentFormHeader {...props} />)
         const event = {

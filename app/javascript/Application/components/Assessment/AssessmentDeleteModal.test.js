@@ -55,7 +55,7 @@ const simulateSelect = (wrapper, optionNumber) => {
 describe('AssessmentDeleteModal', () => {
   describe('layout', () => {
     describe('isShown prop is true', () => {
-      it('renders a PageModal', () => {
+      it('renders a Modal', () => {
         const wrapper = getWrapper(true)
         expect(wrapper.find(Modal).exists()).toBe(true)
       })
@@ -65,7 +65,46 @@ describe('AssessmentDeleteModal', () => {
         expect(wrapper.find(Select).exists()).toBe(true)
       })
 
-      it('renders a comment when select Other option', () => {
+      it('the first option of select should be #Entered in error#', () => {
+        const wrapper = mountWrapper(true, toggleModalSpy, assessmentHistoryCallbackSpy)
+        simulateSelect(wrapper, 1)
+        expect(
+          wrapper
+            .find('.list__single-value')
+            .last()
+            .text()
+        ).toEqual('Entered in error')
+        expect(wrapper.state().selectedReason.value).toBe('Entered in error')
+        expect(wrapper.find(Comment).exists()).toBe(false)
+      })
+
+      it('the second option of select should be #Duplicate#', () => {
+        const wrapper = mountWrapper(true, toggleModalSpy, assessmentHistoryCallbackSpy)
+        simulateSelect(wrapper, 2)
+        expect(
+          wrapper
+            .find('.list__single-value')
+            .last()
+            .text()
+        ).toEqual('Duplicate')
+        expect(wrapper.state().selectedReason.value).toBe('Duplicate')
+        expect(wrapper.find(Comment).exists()).toBe(false)
+      })
+
+      it('the third option of select should be #Unable to locate child/family#', () => {
+        const wrapper = mountWrapper(true, toggleModalSpy, assessmentHistoryCallbackSpy)
+        simulateSelect(wrapper, 3)
+        expect(
+          wrapper
+            .find('.list__single-value')
+            .last()
+            .text()
+        ).toEqual('Unable to locate child/family')
+        expect(wrapper.state().selectedReason.value).toBe('Unable to locate child/family')
+        expect(wrapper.find(Comment).exists()).toBe(false)
+      })
+
+      it('the forth option of select should be #Other# and renders a comment when selected', () => {
         const wrapper = mountWrapper(true, toggleModalSpy, assessmentHistoryCallbackSpy)
         simulateSelect(wrapper, 4)
         expect(
@@ -88,19 +127,7 @@ describe('AssessmentDeleteModal', () => {
             .text()
         ).toEqual('Other')
         expect(wrapper.find(Comment).exists()).toBe(true)
-      })
-
-      it('the second option of select should be #Referral / Case closed#', () => {
-        const wrapper = mountWrapper(true, toggleModalSpy, assessmentHistoryCallbackSpy)
-        simulateSelect(wrapper, 2)
-        expect(
-          wrapper
-            .find('.list__single-value')
-            .last()
-            .text()
-        ).toEqual('Referral / Case closed')
-        expect(wrapper.state().selectedReason.value).toBe('Referral / Case closed')
-        expect(wrapper.find(Comment).exists()).toBe(false)
+        expect(wrapper.find(Comment).props().comment).toBe('some reasons')
       })
     })
   })
