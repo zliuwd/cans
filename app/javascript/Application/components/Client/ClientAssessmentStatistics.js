@@ -9,21 +9,19 @@ import { activeSwitchDetector } from './Client.helper'
 import { hasOneCompletedForReassessment } from '../Assessment/'
 import { isAuthorized } from '../common/AuthHelper'
 
-const ClientAssessmentStatistics = props => {
-  const {
-    clientIdentifier,
-    loadingBoundaryKey,
-    isComparisonShown,
-    client,
-    navFrom,
-    inheritUrl,
-    userId,
-    updateAssessmentHistoryCallback,
-    recordsModeSwitch,
-    assessments,
-    loadingState,
-  } = props
-
+const ClientAssessmentStatistics = ({
+  clientIdentifier,
+  loadingBoundaryKey,
+  isComparisonShown,
+  client,
+  navFrom,
+  inheritUrl,
+  userId,
+  updateAssessmentHistoryCallback,
+  recordsModeSwitch,
+  assessments,
+  loadingState,
+}) => {
   const headerProps = {
     isComparisonShown,
     activatedRecordSwitchButton: activeSwitchDetector(isComparisonShown),
@@ -32,7 +30,9 @@ const ClientAssessmentStatistics = props => {
     clientIdentifier,
     disabled: !isAuthorized(client, 'createAssessment'),
     isReassessment: hasOneCompletedForReassessment(assessments, client.service_source_id),
+    loadingState,
   }
+
   return (
     <Container>
       <Card>

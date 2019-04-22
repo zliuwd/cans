@@ -67,10 +67,15 @@ class AssessmentContainerInner extends Component {
     )
   }
 
+  isUnderSix(assessment) {
+    return Boolean(assessment && assessment.state && assessment.state.under_six)
+  }
+
   displayAssessment() {
     const {
       client,
       assessment,
+      assessmentServiceStatus,
       onAssessmentUpdate,
       onEventDateFieldKeyUp,
       isEventDateBeforeDob,
@@ -81,13 +86,13 @@ class AssessmentContainerInner extends Component {
       substanceUseItemsIds,
     } = this.props
 
-    const isUnderSix = Boolean(assessment && assessment.state && assessment.state.under_six)
     return (
       <Fragment>
         <div rol="completeScrollLocator">
           <AssessmentFormHeader
             client={client}
             assessment={assessment}
+            assessmentServiceStatus={assessmentServiceStatus}
             onAssessmentUpdate={onAssessmentUpdate}
             onEventDateFieldKeyUp={onEventDateFieldKeyUp}
             handleWarningShow={this.handleWarningShow}
@@ -102,11 +107,11 @@ class AssessmentContainerInner extends Component {
           assessmentStatus={assessment.status}
           domains={assessment && assessment.state && assessment.state.domains}
           i18n={i18n}
-          isUnderSix={isUnderSix}
+          isUnderSix={this.isUnderSix(assessment)}
           disabled={!isEditable}
         />
         <Assessment
-          key={`Assessment-${isUnderSix}`}
+          key={`Assessment-${this.isUnderSix(assessment)}`}
           assessment={assessment}
           i18n={i18n}
           onAssessmentUpdate={onAssessmentUpdate}
