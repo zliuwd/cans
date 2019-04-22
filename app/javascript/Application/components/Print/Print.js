@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { print, printViewPreparation } from './printUtil/PrintHelper'
 
-import './style.sass'
-
 const printFrameId = 'print-frame'
 
 class Print extends React.Component {

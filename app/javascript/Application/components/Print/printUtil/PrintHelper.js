@@ -1,4 +1,4 @@
-import { isFirefox, isIE } from '../../../util/common'
+import { isFirefox } from '../../../util/common'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import HeaderSvgBg from './HeaderSvgBg'
@@ -42,7 +42,7 @@ export const print = (printFrameId, contentString) => {
 }
 
 export const printContainerPreCss =
-  '@page {size: letter; margin:32px; padding:0; font-size:16px; }\n' +
+  '@page {size: auto; margin:8.5mm; padding:0; font-size:16px; }\n' +
   'html {margin:0; background-color: #FFFFFF; font-size:16px}\n' +
   'body {margin:0; font-family:sans-serif, Arial; color-adjust: exact; -webkit-print-color-adjust: exact; text-transform:none;}\n'
 
