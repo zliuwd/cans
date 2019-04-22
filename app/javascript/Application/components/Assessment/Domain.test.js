@@ -1,6 +1,6 @@
 import React from 'react'
+import { Button, Icon, UncontrolledInfotip } from '@cwds/components'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
-import { UncontrolledTooltip, Button, Icon } from '@cwds/components'
 import { shallow, mount } from 'enzyme'
 import Domain from './Domain'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
@@ -126,7 +126,7 @@ describe('<Domain />', () => {
     })
 
     it('will render toolTip', () => {
-      const target = wrapper.find(UncontrolledTooltip)
+      const target = wrapper.find(UncontrolledInfotip)
       expect(target.length).toBe(1)
     })
 

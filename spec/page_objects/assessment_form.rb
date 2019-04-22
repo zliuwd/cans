@@ -49,7 +49,7 @@ class AssessmentFormHeader < SitePrism::Section
 end
 
 class AssessmentSummary < SitePrism::Section
-  elements :summary_card_tips, '.data-grid-header-help-icon'
+  elements :summary_card_tips, 'svg[data-icon="info-circle"]'
   element :summary_header_strengths, 'span', text: 'Strengths'
   elements :summary_columns, 'div.assessment-summary-card div.rt-tbody'
 end
