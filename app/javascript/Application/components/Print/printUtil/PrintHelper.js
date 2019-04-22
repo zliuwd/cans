@@ -41,6 +41,7 @@ export const print = (printFrameId, contentString) => {
   return nonFirefoxPrint(frame, contentString)
 }
 
+// css setting for print container. @Page margin must use mm to ensure that IE working well
 export const printContainerPreCss =
   '@page {size: auto; margin:8.5mm; padding:0; font-size:16px; }\n' +
   'html {margin:0; background-color: #FFFFFF; font-size:16px}\n' +
