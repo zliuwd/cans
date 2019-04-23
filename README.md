@@ -89,6 +89,15 @@ yarn test:a11y # runs accessibility tests, requires app to be running
 yarn lint
 ```
 
+To run local tests with a real browser instead of headless mode execute rspec directly like:
+```
+HEADLESS='false' bundle exec rspec spec/regression
+HEADLESS='false' bundle exec rspec spec/acceptance
+HEADLESS='false' bundle exec rspec spec/a11y
+```
+
+The reason for this is that node does not propagate environment variables very easily
+
 # Hotfix approach
 ## Hotfix steps
 
