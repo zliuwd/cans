@@ -49,3 +49,4 @@ screenshot_*.png
 .yarn-integrity
 .byebug_history
 dump.rdb
+package-lock.json

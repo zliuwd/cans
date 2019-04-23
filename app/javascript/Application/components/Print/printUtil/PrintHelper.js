@@ -1,4 +1,4 @@
-import { isFirefox, isIE } from '../../../util/common'
+import { isFirefox } from '../../../util/common'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import HeaderSvgBg from './HeaderSvgBg'
@@ -28,11 +28,7 @@ const nonFirefoxPrint = (frame, contentString) => {
   frameContentWindow.document.write('<!DOCTYPE html>')
   frameContentWindow.document.write(contentString)
   frameContentWindow.document.close()
-  if (isIE) {
-    frameContentWindow.document.execCommand('print', false, null)
-  } else {
-    frameContentWindow.print()
-  }
+  frameContentWindow.print()
   history.replaceState(history.state, '', curURL)
   document.title = oldTitle
 }
@@ -45,8 +41,9 @@ export const print = (printFrameId, contentString) => {
   return nonFirefoxPrint(frame, contentString)
 }
 
+// css setting for print container. @Page margin must use mm to ensure that IE working well
 export const printContainerPreCss =
-  '@page {size: letter; margin:32px; padding:0; font-size:16px; }\n' +
+  '@page {size: auto; margin:8.5mm; padding:0; font-size:16px; }\n' +
   'html {margin:0; background-color: #FFFFFF; font-size:16px}\n' +
   'body {margin:0; font-family:sans-serif, Arial; color-adjust: exact; -webkit-print-color-adjust: exact; text-transform:none;}\n'
 

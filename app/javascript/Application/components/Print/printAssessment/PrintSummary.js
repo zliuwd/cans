@@ -55,6 +55,8 @@ class PrintSummary extends PureComponent {
             items={this.getCodes(filteredDomains, isNeedsDomain, actionRequiredItemsFilter)}
             title={ACTION_REQUIRED}
           />
+        </div>
+        <div style={summaryContainer}>
           <PrintSummaryRecord
             items={this.getCodes(filteredDomains, isNeedsDomain, immediateActionRequiredItemsFilter)}
             title={IMMEDIATE_ACTION_REQUIRED}

@@ -96,6 +96,16 @@ describe('PrintHelper', () => {
       })
     })
 
+    describe('printContainerPreCss', () => {
+      it('printContainerPreCss contains #margin:8.5mm#', () => {
+        expect(printContainerPreCss).toContain('margin:8.5mm')
+      })
+
+      it('printContainerPreCss contains #size: auto#', () => {
+        expect(printContainerPreCss).toContain('size: auto')
+      })
+    })
+
     describe('stripeGenerator', () => {
       it('will return a stripe styling object when index is odd', () => {
         expect(stripeGenerator(1)).toEqual({

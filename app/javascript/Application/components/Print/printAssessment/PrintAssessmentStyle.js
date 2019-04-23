@@ -254,8 +254,6 @@ export const summaryTitle = {
   padding: '0.5rem',
   borderBottom: 'thin solid #ccc',
   margin: '0 0.2rem 0.2rem 0.2rem',
-  pageBreakInside: 'avoid',
-  pageBreakBefore: 'avoid',
 }
 
 export const summaryContent = {
@@ -265,7 +263,6 @@ export const summaryContent = {
 }
 
 export const summaryItem = {
+  marginBottom: '0.2rem',
   pageBreakInside: 'avoid',
-  pageBreakBefore: 'avoid',
-  marginBottom: '0.25rem',
 }

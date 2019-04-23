@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { print, printViewPreparation } from './printUtil/PrintHelper'
 
-import './style.sass'
-
 const printFrameId = 'print-frame'
 
 class Print extends React.Component {
@@ -13,7 +11,15 @@ class Print extends React.Component {
   }
 
   render() {
-    return <iframe id={printFrameId} title={printFrameId} style={{ height: '100%', width: '100%' }} />
+    return (
+      <iframe
+        id={printFrameId}
+        title={printFrameId}
+        style={{ height: '100%', width: '100%' }}
+        height="100%"
+        width="100%"
+      />
+    )
   }
 }
 
