@@ -15,7 +15,7 @@ describe('<SummaryGrid />', () => {
     ).toBe(true)
   })
 
-  it('is striped', () => {
+  it('is striped and wraps text', () => {
     expect(render().props().className).toContain('-striped')
   })
 
