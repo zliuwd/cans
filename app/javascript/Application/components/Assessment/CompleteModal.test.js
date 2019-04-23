@@ -59,7 +59,10 @@ describe('<CompleteModal />', () => {
 
     it('should render modal body when isCompleteModalShown is true', () => {
       expect(wrapper.find('ModalBody').props().children[0]).toBe(
-        'Once confirmed, you have 7 calendar days to make edits but cannot delete the assessment. After 7 calendar days the completed assessment will become read-only.'
+        'Once confirmed, you have 7 calendar days to make edits but cannot delete the assessment.'
+      )
+      expect(wrapper.find('ModalBody').props().children[2]).toBe(
+        'After 7 calendar days the completed assessment will become read-only.'
       )
     })
 
