@@ -14,7 +14,7 @@ describe('<Print />', () => {
     expect(printComponent.find('iframe').length).toBe(1)
   })
 
-  it('renders print iframe with full-screnn size', () => {
+  it('renders print iframe with full-screen size', () => {
     const printComponent = mountPrintComponent(jest.fn())
     expect(printComponent.find('iframe').props().height).toBe('100%')
     expect(printComponent.find('iframe').props().width).toBe('100%')

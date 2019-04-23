@@ -247,7 +247,6 @@ export const summaryInnerContainer = {
   border: 'solid thin black',
   marginTop: '1rem',
   minHeight: '20rem',
-  pageBreakInside: 'avoid',
 }
 
 export const summaryTitle = {
@@ -261,7 +260,6 @@ export const summaryContent = {
   fontWeight: '400',
   fontSize: '0.9rem',
   padding: '0.2rem 0 0.2rem 1.5rem',
-  pageBreakInside: 'avoid',
 }
 
 export const summaryItem = {

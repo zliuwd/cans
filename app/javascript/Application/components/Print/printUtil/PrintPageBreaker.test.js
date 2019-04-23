@@ -18,15 +18,15 @@ describe('<PrintPageBreaker />', () => {
     wrapper = mount(<PrintPageBreaker isIE={false} />)
     const target = wrapper.find('h1')
     expect(target.props().style.pageBreakInside).toBe('avoid')
-    expect(target.props().style.pageBreakAfter).toBe('always')
-    expect(target.props().style.marginBottom).toBe('50rem')
+    expect(target.props().style.pageBreakBefore).toBe('always')
+    expect(target.props().style.marginBottom).toBe('5rem')
   })
 
   it('will render a h1 with correct props for IE', () => {
     wrapper = mount(<PrintPageBreaker isIE={true} />)
     const target = wrapper.find('h1')
     expect(target.props().style.pageBreakInside).toBe('avoid')
-    expect(target.props().style.pageBreakAfter).toBe('always')
+    expect(target.props().style.pageBreakBefore).toBe('always')
     expect(target.props().style.marginBottom).toBe('0rem')
   })
 })
