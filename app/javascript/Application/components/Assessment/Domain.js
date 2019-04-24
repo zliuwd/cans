@@ -4,7 +4,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import Typography from '@material-ui/core/Typography'
-import { Input } from 'reactstrap'
+import { Input, Label } from 'reactstrap'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
 import DomainComment from './DomainComment'
 import DomainCommentIcon from './DomainCommentIcon'
@@ -74,7 +74,11 @@ class Domain extends React.PureComponent {
   renderCaregiverName = () => {
     return (
       <div className={'caregiver-name-wrapper'}>
+        <Label for={'caregiverName'} className={'caregiver-name-label'}>
+          Caregiver Name
+        </Label>
         <Input
+          id="caregiverName"
           bsSize="sm"
           placeholder="ex. Last Name, First Name/Relationship to child or youth"
           className={'caregiver-name'}
