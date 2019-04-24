@@ -50,18 +50,6 @@ describe('AssessmentMutations', () => {
       expect(newDomains[2]).toBe(nonCaregiver)
     })
 
-    it('leaves untouched any caregiver domains that were in the right order', () => {
-      const domains = [caregiverC, caregiverB, caregiverA, nonCaregiver]
-      const newDomains = updateCaregiverDomainsIndices(domains)
-      expect(newDomains[1]).toBe(caregiverB)
-    })
-
-    it('leaves the entire array untouched if nothing changes', () => {
-      const domains = [caregiverA, caregiverB, caregiverC, nonCaregiver]
-      const newDomains = updateCaregiverDomainsIndices(domains)
-      expect(newDomains).toBe(domains)
-    })
-
     it('does not update domains in place', () => {
       const aJSON = JSON.stringify(caregiverA)
       const domains = [caregiverB, caregiverA, nonCaregiver]
@@ -97,10 +85,6 @@ describe('AssessmentMutations', () => {
         expect(updated.state.domains[1].items[0]).toBe(initial.state.domains[1].items[0])
       })
 
-      it('preserves references to untouched domains', () => {
-        expect(updated.state.domains[1]).toBe(initial.state.domains[1])
-      })
-
       it('preserves references to untouched assessment properties', () => {
         expect(updated.other).toBe(initial.other)
       })
@@ -111,16 +95,35 @@ describe('AssessmentMutations', () => {
       })
     })
 
-    it('returns the same assessment when the property is already set', () => {
-      const initialDomains = [
-        { id: 1, items: [{ code: 'A' }, { code: 'B', myKey: 'myValue' }] },
-        { id: 2, items: [{ code: 'C' }] },
-      ]
-      const initial = { other: { foo: 'bar' }, state: { domains: initialDomains } }
+    describe('when the property is already set', () => {
+      beforeEach(() => {
+        initialDomains = [
+          { id: 1, items: [{ code: 'A' }, { code: 'B', myKey: 'myValue' }] },
+          { id: 2, items: [{ code: 'C' }] },
+        ]
+        initial = { other: { foo: 'bar' }, state: { domains: initialDomains } }
+        initialJSON = JSON.stringify(initial)
 
-      const updated = updateItem(initial, 'B', 'myKey', 'myValue')
+        updated = updateItem(initial, 'B', 'myKey', 'myValue')
+      })
 
-      expect(updated).toBe(initial)
+      it('still has the property', () => {
+        expect(updated.state.domains[0].items[1][key]).toBe(value)
+      })
+
+      it('preserves references to all (untouched) items', () => {
+        expect(updated.state.domains[0].items[0]).toBe(initial.state.domains[0].items[0])
+        expect(updated.state.domains[0].items[1]).toBe(initial.state.domains[0].items[1])
+        expect(updated.state.domains[1].items[0]).toBe(initial.state.domains[1].items[0])
+      })
+
+      it('preserves references to untouched assessment properties', () => {
+        expect(updated.other).toBe(initial.other)
+      })
+
+      it('does not mutate the original object', () => {
+        expect(JSON.stringify(initial)).toBe(initialJSON)
+      })
     })
 
     describe('when updating a caregiver item', () => {
@@ -160,11 +163,6 @@ describe('AssessmentMutations', () => {
       it('preserves references to untouched items', () => {
         expect(updated.state.domains[0].items[0]).toBe(initial.state.domains[0].items[0])
         expect(updated.state.domains[1].items[0]).toBe(initial.state.domains[1].items[0])
-      })
-
-      it('preserves references to untouched domains', () => {
-        expect(updated.state.domains[0]).toBe(initial.state.domains[0])
-        expect(updated.state.domains[2]).toBe(initial.state.domains[2])
       })
 
       it('preserves references to untouched assessment properties', () => {
