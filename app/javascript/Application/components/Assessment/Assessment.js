@@ -6,19 +6,7 @@ import { containsNotReviewedDomains } from './ReassessmentHelper'
 import AssessmentCard from './AssessmentCard'
 import DomainExpansionController from './DomainExpansionController'
 
-const INDICES = 'abcdefghijklmnopqrstuvwxyz'
-
 class Assessment extends Component {
-  /* eslint-disable camelcase */
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.assessment.state.domains.length === 0 && nextProps.assessment.state.domains.length !== 0) {
-      const assessment = Object.assign({}, nextProps.assessment)
-      this.updateCaregiverDomainsIndices(assessment.state)
-      this.props.onAssessmentUpdate(assessment)
-    }
-  }
-  /* eslint-enable camelcase */
-
   componentDidUpdate(prevProps) {
     const hasCaregiver = this.props.assessment.has_caregiver
     const hasCaregiverChange = hasCaregiver !== prevProps.assessment.has_caregiver
@@ -54,14 +42,6 @@ class Assessment extends Component {
     this.props.onAssessmentUpdate(assessment)
   }
 
-  updateCaregiverDomainsIndices(assessmentState) {
-    let i = 0
-    assessmentState.domains
-      .filter(domain => domain.is_caregiver_domain)
-      .map(domain => (domain.caregiver_index = INDICES[i++]))
-    return assessmentState
-  }
-
   addCaregiverDomainAfter = caregiverIndex => {
     const assessment = clone(this.props.assessment)
     const domains = assessment.state.domains
@@ -79,7 +59,6 @@ class Assessment extends Component {
         break
       }
     }
-    this.updateCaregiverDomainsIndices(assessment.state)
     this.props.onAssessmentUpdate(assessment)
   }
 
@@ -87,7 +66,6 @@ class Assessment extends Component {
     const assessment = clone(this.props.assessment)
     const domains = assessment.state.domains
     domains.splice(domains.length - 1, 0, clone(assessment.state.caregiver_domain_template))
-    this.updateCaregiverDomainsIndices(assessment.state)
     this.props.onAssessmentUpdate(assessment)
   }
 
@@ -103,7 +81,6 @@ class Assessment extends Component {
     if (!domains.filter(domain => domain.is_caregiver_domain).length) {
       assessment.has_caregiver = false
     }
-    this.updateCaregiverDomainsIndices(assessment.state)
     this.props.onAssessmentUpdate(assessment)
   }
 
@@ -114,7 +91,6 @@ class Assessment extends Component {
     for (const caregiverDomain of caregiverDomains) {
       domains.splice(domains.findIndex(domain => domain.id === caregiverDomain.id), 1)
     }
-    this.updateCaregiverDomainsIndices(assessment.state)
     this.props.onAssessmentUpdate(assessment)
   }
 

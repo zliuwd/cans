@@ -71,7 +71,7 @@ describe('<Assessment />', () => {
 
         // then
         const finalAssessment = mockFn.mock.calls[0][0]
-        expect(finalAssessment.state.domains[0].caregiver_index).toEqual('a')
+        expect(finalAssessment.state.domains[0].is_caregiver_domain).toBe(true)
       })
     })
 
@@ -289,7 +289,7 @@ describe('<Assessment />', () => {
 
         // then
         const updatedAssessment = mockFn.mock.calls[0][0]
-        expect(updatedAssessment.state.domains[0].caregiver_index).toEqual('a')
+        expect(updatedAssessment.state.domains[0].is_caregiver_domain).toBe(true)
       })
     })
 
@@ -307,7 +307,7 @@ describe('<Assessment />', () => {
 
         // then
         const updatedAssessment = mockFn.mock.calls[0][0]
-        expect(updatedAssessment.state.domains.map(domain => domain.caregiver_index)).toEqual(['a'])
+        expect(updatedAssessment.state.domains.map(domain => domain.is_caregiver_domain)).toEqual([true])
       })
 
       it('adds additional caregiver domain', () => {
@@ -323,18 +323,27 @@ describe('<Assessment />', () => {
 
         // then
         const updatedAssessment = mockFn.mock.calls[0][0]
-        expect(updatedAssessment.state.domains.map(domain => domain.caregiver_index)).toEqual(['a', 'b'])
+        expect(updatedAssessment.state.domains.map(domain => domain.is_caregiver_domain)).toEqual([true, true])
+        expect(updatedAssessment.state.domains.map(domain => domain.id)).toEqual([0, 1])
       })
     })
 
     describe('#removeCaregiverDomain', () => {
       describe('assessment has multiple caregiver domain', () => {
-        it('removes the caregiver domain and reset the caregiver indexes', () => {
+        it('removes the caregiver domain', () => {
           // given
           const initialAssessment = clone(assessmentMock)
           initialAssessment.state.domains[0] = enhanceDomainToCaregiver(initialAssessment.state.domains[0])
-          initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'b' })
-          initialAssessment.state.domains.push({ ...initialAssessment.state.domains[0], caregiver_index: 'c' })
+          initialAssessment.state.domains.push({
+            ...initialAssessment.state.domains[0],
+            id: 1,
+            caregiver_index: 'b',
+          })
+          initialAssessment.state.domains.push({
+            ...initialAssessment.state.domains[0],
+            id: 2,
+            caregiver_index: 'c',
+          })
           const mockFn = jest.fn()
           const wrapper = shallowAssessment({ onAssessmentUpdate: mockFn, assessment: initialAssessment })
           const instance = wrapper.instance()
@@ -344,7 +353,7 @@ describe('<Assessment />', () => {
 
           // then
           const updatedAssessment = mockFn.mock.calls[0][0]
-          expect(updatedAssessment.state.domains.map(domain => domain.caregiver_index)).toEqual(['a', 'b'])
+          expect(updatedAssessment.state.domains.map(domain => domain.id)).toEqual([0, 2])
         })
       })
 
