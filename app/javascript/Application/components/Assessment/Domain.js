@@ -174,31 +174,33 @@ class Domain extends React.PureComponent {
             </Grid>
           </Grid>
         </ExpansionPanelSummary>
-        <ExpansionPanelDetails
-          style={{
-            display: 'block',
-            padding: '0',
-            backgroundColor: 'white',
-          }}
-        >
-          {isCaregiverDomain && this.renderCaregiverName()}
-          <DomainItemList {...itemListProps} />
-          <DomainComment
-            id={`${domain.code}-${domain.caregiver_index}`}
-            title={title}
-            domain={domain}
-            onDomainCommentUpdate={this.props.onDomainCommentUpdate}
-            disabled={this.props.disabled}
-            domainBottomCollapseClick={this.handleExpandedChange}
-          />
-          {isCaregiverDomain &&
-            !this.props.disabled && (
-              <DomainCaregiverControls
-                onRemoveCaregiverDomain={this.handleRemoveCaregiverDomain}
-                onAddCaregiverDomain={this.handleAddCaregiverDomain}
-              />
-            )}
-        </ExpansionPanelDetails>
+        {isExpanded && (
+          <ExpansionPanelDetails
+            style={{
+              display: 'block',
+              padding: '0',
+              backgroundColor: 'white',
+            }}
+          >
+            {isCaregiverDomain && this.renderCaregiverName()}
+            <DomainItemList {...itemListProps} />
+            <DomainComment
+              id={`${domain.code}-${domain.caregiver_index}`}
+              title={title}
+              domain={domain}
+              onDomainCommentUpdate={this.props.onDomainCommentUpdate}
+              disabled={this.props.disabled}
+              domainBottomCollapseClick={this.handleExpandedChange}
+            />
+            {isCaregiverDomain &&
+              !this.props.disabled && (
+                <DomainCaregiverControls
+                  onRemoveCaregiverDomain={this.handleRemoveCaregiverDomain}
+                  onAddCaregiverDomain={this.handleAddCaregiverDomain}
+                />
+              )}
+          </ExpansionPanelDetails>
+        )}
       </ExpansionPanel>
     ) : null
   }

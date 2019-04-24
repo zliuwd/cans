@@ -236,9 +236,9 @@ describe('<Domain />', () => {
         handleWarningShow={() => {}}
         onCaregiverNameUpdate={() => {}}
         isCompletedAssessment={false}
+        isExpanded={true}
       />
     )
-    wrapper.setState({ expanded: true })
     expect(wrapper.find(DomainItemList).props().onItemCommentUpdate).toBe(onItemCommentUpdateMock)
   })
 
