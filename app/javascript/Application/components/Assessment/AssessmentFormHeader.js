@@ -168,7 +168,7 @@ class AssessmentFormHeader extends PureComponent {
           </Label>
         </Col>
         <Col sm={3}>
-          <Label className={'assessment-form-header-label'}>Select CANS Template *</Label>
+          <div className={'assessment-form-header-label'}>Select CANS Template *</div>
         </Col>
         <Col sm={4}>
           <Label for={'conducted-by'} className={'assessment-form-header-label'}>
