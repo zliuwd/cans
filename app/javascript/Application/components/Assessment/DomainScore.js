@@ -7,7 +7,7 @@ const DomainScore = props => {
   return (
     <div className={'domain-score'}>
       {/* <Typography style={{ fontSize: '0.5625rem', alignSelf: 'center', whiteSpace: 'nowrap' }}> */}
-      <Typography style={{ fontSize: '0.63rem', alignSelf: 'center', whiteSpace: 'nowrap' }}>Domain Total:</Typography>
+      <Typography style={{ fontSize: '0.75rem', alignSelf: 'center', whiteSpace: 'nowrap' }}>Domain Total:</Typography>
       <Badge color={'info'} className={'domain-score-badge'}>
         {props.totalScore}
       </Badge>
