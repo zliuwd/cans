@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { clone } from '../../util/common'
 import { AssessmentStatus, shouldDomainBeRendered } from './AssessmentHelper'
+import { updateItem } from './AssessmentMutations'
 import { containsNotReviewedDomains } from './ReassessmentHelper'
 import AssessmentCard from './AssessmentCard'
 import DomainExpansionController from './DomainExpansionController'
@@ -30,16 +31,8 @@ class Assessment extends Component {
   }
 
   updateItem = (itemCode, key, value, itemCaregiverIndex) => {
-    const assessment = clone(this.props.assessment)
-    assessment.state.domains.map(domain => {
-      if (itemCaregiverIndex !== domain.caregiver_index) return
-      domain.items.map(item => {
-        if (item.code === itemCode) {
-          item[key] = value
-        }
-      })
-    })
-    this.props.onAssessmentUpdate(assessment)
+    const newAssessment = updateItem(this.props.assessment, itemCode, key, value, itemCaregiverIndex)
+    this.props.onAssessmentUpdate(newAssessment)
   }
 
   addCaregiverDomainAfter = caregiverIndex => {

@@ -35,3 +35,50 @@ export const updateCaregiverDomainsIndices = domains => {
   const { newDomains, numChanged } = result
   return numChanged > 0 ? newDomains : domains
 }
+
+const updateIfChanged = (obj, key, value) => {
+  if (obj[key] === value) {
+    return obj
+  }
+  return { ...obj, [key]: value }
+}
+
+const mapIfChanged = (array, updater) => {
+  const result = array.reduce(
+    ({ newArray, isChanged }, item) => {
+      const newItem = updater(item)
+      newArray.push(newItem)
+      return { newArray, isChanged: isChanged || newItem !== item }
+    },
+    { newArray: [], isChanged: false }
+  )
+
+  const { newArray, isChanged } = result
+  return isChanged ? newArray : array
+}
+
+const setDomains = (assessment, newDomains) => {
+  return newDomains !== assessment.state.domains
+    ? { ...assessment, state: { ...assessment.state, domains: newDomains } }
+    : assessment
+}
+
+const setItems = (domain, newItems) => {
+  return newItems !== domain.items ? { ...domain, items: newItems } : domain
+}
+
+export const updateItem = (assessment, itemCode, key, value, itemCaregiverIndex) => {
+  return setDomains(
+    assessment,
+    mapIfChanged(assessment.state.domains, domain => {
+      if (itemCaregiverIndex !== domain.caregiver_index) {
+        return domain
+      }
+
+      return setItems(
+        domain,
+        mapIfChanged(domain.items, item => (item.code === itemCode ? updateIfChanged(item, key, value) : item))
+      )
+    })
+  )
+}

@@ -8,11 +8,11 @@ import { expandingThenScroll, itemRatingOptionsAmount } from '../../../util/asse
 
 import ItemInner from './ItemInner'
 
-const initI18nValue = i18n => ({
-  title: (i18n._title_ || '').toUpperCase(),
-  description: i18n._description_ || 'No Description',
-  qtcDescriptions: getI18nValuesByPrefix(i18n, '_to_consider_.'),
-  ratingDescriptions: getI18nValuesByPrefix(i18n, '_rating_.'),
+const initI18nValue = (code, i18n) => ({
+  title: (i18n[`${code}._title_`] || '').toUpperCase(),
+  description: i18n[`${code}._description_`] || 'No Description',
+  qtcDescriptions: getI18nValuesByPrefix(i18n, `${code}._to_consider_.`),
+  ratingDescriptions: getI18nValuesByPrefix(i18n, `${code}._rating_.`),
 })
 
 class Item extends React.PureComponent {
@@ -75,7 +75,7 @@ class Item extends React.PureComponent {
   render = () => {
     const { i18n, item, isAssessmentUnderSix, caregiverIndex, disabled, canReleaseConfidentialInfo } = this.props
     const itemNumber = isAssessmentUnderSix ? item.under_six_id : item.above_six_id
-    const { title, description, qtcDescriptions, ratingDescriptions } = initI18nValue(i18n)
+    const { title, description, qtcDescriptions, ratingDescriptions } = initI18nValue(item.code, i18n)
     const isBooleanRating = item.rating_type === 'BOOLEAN'
     const propsResource = {
       isAssessmentUnderSix,
