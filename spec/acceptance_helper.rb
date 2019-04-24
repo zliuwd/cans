@@ -63,7 +63,7 @@ Capybara.register_driver :headless_selenium do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
-Capybara::Screenshot.register_driver(:headless_selenium) do |driver,path|
+Capybara::Screenshot.register_driver(:headless_selenium) do |driver, path|
   driver.browser.save_screenshot path
 end
 

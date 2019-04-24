@@ -10,7 +10,7 @@ module LoginHelper
 
   def enter_credentials(login_config = default_json)
     page.fill_in('username', with: JSON.generate(login_config))
-    page.find('body').click()
+    page.find('body').click
     click_button 'Sign In'
   end
 
