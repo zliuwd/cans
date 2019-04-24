@@ -14,7 +14,9 @@
     "test:rspec": "bundle exec rspec --exclude-pattern 'spec/{acceptance,a11y,regression}/**/*_spec.rb' --format NyanCatFormatter",
     "test:acceptance": "bundle exec rspec spec/acceptance",
     "test:regression": "bundle exec rspec spec/regression --format html --out regression-report/index.html",
-    "test:a11y": "bundle exec rspec spec/a11y"
+    "test:regression:local": "HEADLESS='false' bundle exec rspec spec/regression",
+    "test:a11y": "bundle exec rspec spec/a11y",
+    "test:a11y:local": "HEADLESS='false' bundle exec rspec spec/a11y"
   },
   "dependencies": {
     "@babel/core": "^7.0.0",

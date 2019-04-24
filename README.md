@@ -83,7 +83,6 @@ Other commands:
 
 ```
 yarn test:rspec # runs Rspec unit tests
-yarn test:acceptance # runs acceptance tests, requires app to be running
 yarn test:regression # runs regression tests, requires app to be running
 yarn test:a11y # runs accessibility tests, requires app to be running
 yarn lint
@@ -91,12 +90,9 @@ yarn lint
 
 To run local tests with a real browser instead of headless mode execute rspec directly like:
 ```
-HEADLESS='false' bundle exec rspec spec/regression
-HEADLESS='false' bundle exec rspec spec/acceptance
-HEADLESS='false' bundle exec rspec spec/a11y
+yarn test:regression:local
+yarn test:a11y:local
 ```
-
-The reason for this is that node does not propagate environment variables very easily
 
 # Hotfix approach
 ## Hotfix steps
