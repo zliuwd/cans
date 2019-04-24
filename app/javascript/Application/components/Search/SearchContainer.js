@@ -37,7 +37,7 @@ class SearchContainer extends React.Component {
     return (
       <div>
         <PersonSearchForm searchTitle={SEARCH_TITLE} searchPrompt={SEARCH_PROMPT} />
-        <h4 className="client-assessments-title">{ASSESSMENTS_TITLE}</h4>
+        <span className="client-assessments-title">{ASSESSMENTS_TITLE}</span>
         <SearchAssessmentHistoryLoadingBoundary key={loadingBoundaryKey}>
           <SearchAssessmentHistory
             navFrom={NavFromProducer(this.props.navigateTo)}
