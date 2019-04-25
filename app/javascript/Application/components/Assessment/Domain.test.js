@@ -6,6 +6,7 @@ import Domain from './Domain'
 import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
 import DomainComment from './DomainComment'
 import DomainCommentIcon from './DomainCommentIcon'
+import { Label } from 'reactstrap'
 
 const domainDefault = {
   id: '1',
@@ -427,6 +428,7 @@ describe('<Domain />', () => {
             // then
             expect(wrapper.state('caregiverName')).toEqual('Full Name')
             expect(wrapper.find('ExpansionPanelSummary').text()).toMatch(/Full Name/)
+            expect(wrapper.find(Label).text()).toEqual('Caregiver Name *')
           })
         })
 

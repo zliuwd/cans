@@ -78,7 +78,7 @@ class Domain extends React.PureComponent {
     return (
       <div className={'caregiver-name-wrapper'}>
         <Label for={'caregiverName'} className={'caregiver-name-label'}>
-          Caregiver Name *
+          Caregiver Name <span className={'caregiver-name-label-asterisk'}>*</span>
         </Label>
         <Input
           id="caregiverName"
