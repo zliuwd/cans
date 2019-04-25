@@ -45,7 +45,7 @@ describe('<DomainItemList/>', () => {
       .props()
     expect(target.canReleaseConfidentialInfo).toBe(true)
     expect(target.caregiverIndex).toBe('a')
-    expect(target.i18n).toEqual({})
+    expect(target.i18n).toEqual({ i18nkey: 'i18nvalue' })
     expect(target.isAssessmentUnderSix).toBe(false)
     expect(target.item).toEqual({ code: 'code1', above_six_id: 1, rating: -1 })
     expect(target.onConfidentialityUpdate()).toBe('onConfidentialityUpdate haveBeenCalled')

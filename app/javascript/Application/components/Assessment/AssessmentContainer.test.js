@@ -192,6 +192,7 @@ describe('<AssessmentContainer />', () => {
             },
           },
         })
+        const domainIds = domainWithTwoCaregiver.map(d => d.id)
         wrapper
           .find(AssessmentContainerInner)
           .props()
@@ -199,7 +200,9 @@ describe('<AssessmentContainer />', () => {
 
         wrapper.update()
         expect(wrapper.state().assessment.state.domains.length).toEqual(1)
-        expect(wrapper.state().assessment.state.domains[0].caregiver_index).toEqual('b')
+        const remainingDomain = wrapper.state().assessment.state.domains[0]
+        expect(remainingDomain.caregiver_index).toBe('a') // Re-indexed
+        expect(remainingDomain.id).toBe(domainIds[1])
       })
 
       it('removes all caregiver domains when user confirms after switching radio button to no', () => {
@@ -582,6 +585,20 @@ describe('<AssessmentContainer />', () => {
         wrapper.instance().updateAssessment(assessment)
         expect(wrapper.state('isValidForSubmit')).toEqual(true)
       })
+    })
+
+    it('resets the caregiver indices if they are out of order', () => {
+      const wrapper = shallow(<AssessmentContainer {...defaultProps} />)
+      const assessment = {
+        ...updatedAssessmentWithDomains,
+        state: {
+          ...updatedAssessmentWithDomains.state,
+          domains: [domainWithTwoCaregiver[1], domainWithTwoCaregiver[0]],
+        },
+      }
+      wrapper.setState({ assessment })
+      wrapper.instance().updateAssessment(assessment)
+      expect(wrapper.state().assessment.state.domains.map(d => d.caregiver_index)).toEqual(['a', 'b'])
     })
   })
 

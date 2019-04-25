@@ -60,14 +60,14 @@ const itemWithOutNaChecked = {
 }
 
 const i18nDefault = {
-  _title_: 'Title',
-  _description_: 'Description',
-  '_to_consider_.0': 'qtc 0',
-  '_to_consider_.1': 'qtc 1',
-  '_rating_.0': 'rating 0 description',
-  '_rating_.1': 'rating 1 description',
-  '_rating_.2': 'rating 2 description',
-  '_rating_.3': 'rating 3 description',
+  'lf10family._title_': 'Title',
+  'lf10family._description_': 'Description',
+  'lf10family._to_consider_.0': 'qtc 0',
+  'lf10family._to_consider_.1': 'qtc 1',
+  'lf10family._rating_.0': 'rating 0 description',
+  'lf10family._rating_.1': 'rating 1 description',
+  'lf10family._rating_.2': 'rating 2 description',
+  'lf10family._rating_.3': 'rating 3 description',
 }
 
 const propsDefault = { i18n: i18nDefault }

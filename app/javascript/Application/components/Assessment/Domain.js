@@ -17,11 +17,14 @@ import { expandingThenScroll } from '../../util/assessmentAutoScroll'
 import { Button, Icon, UncontrolledInfotip, PopoverBody } from '@cwds/components'
 import './style.sass'
 
-const mapI18nToState = props => ({
-  title: props.i18n._title_ || '',
-  description: props.i18n._description_ || 'No Description',
-  caregiverName: props.domain.caregiver_name || '',
-})
+const mapI18nToState = props => {
+  const code = props.domain.code
+  return {
+    title: props.i18nAll[`${code}._title_`] || '',
+    description: props.i18nAll[`${code}._description_`] || 'No Description',
+    caregiverName: props.domain.caregiver_name || '',
+  }
+}
 
 class Domain extends React.PureComponent {
   constructor(props) {
@@ -30,7 +33,7 @@ class Domain extends React.PureComponent {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (!isEmpty(nextProps.i18n) && !prevState.description) {
+    if (!isEmpty(nextProps.i18nAll) && !prevState.description) {
       return mapI18nToState(nextProps)
     }
     return null
@@ -178,31 +181,33 @@ class Domain extends React.PureComponent {
             </Grid>
           </Grid>
         </ExpansionPanelSummary>
-        <ExpansionPanelDetails
-          style={{
-            display: 'block',
-            padding: '0',
-            backgroundColor: 'white',
-          }}
-        >
-          {isCaregiverDomain && this.renderCaregiverName()}
-          <DomainItemList {...itemListProps} />
-          <DomainComment
-            id={`${domain.code}-${domain.caregiver_index}`}
-            title={title}
-            domain={domain}
-            onDomainCommentUpdate={this.props.onDomainCommentUpdate}
-            disabled={this.props.disabled}
-            domainBottomCollapseClick={this.handleExpandedChange}
-          />
-          {isCaregiverDomain &&
-            !this.props.disabled && (
-              <DomainCaregiverControls
-                onRemoveCaregiverDomain={this.handleRemoveCaregiverDomain}
-                onAddCaregiverDomain={this.handleAddCaregiverDomain}
-              />
-            )}
-        </ExpansionPanelDetails>
+        {isExpanded && (
+          <ExpansionPanelDetails
+            style={{
+              display: 'block',
+              padding: '0',
+              backgroundColor: 'white',
+            }}
+          >
+            {isCaregiverDomain && this.renderCaregiverName()}
+            <DomainItemList {...itemListProps} />
+            <DomainComment
+              id={`${domain.code}-${domain.caregiver_index}`}
+              title={title}
+              domain={domain}
+              onDomainCommentUpdate={this.props.onDomainCommentUpdate}
+              disabled={this.props.disabled}
+              domainBottomCollapseClick={this.handleExpandedChange}
+            />
+            {isCaregiverDomain &&
+              !this.props.disabled && (
+                <DomainCaregiverControls
+                  onRemoveCaregiverDomain={this.handleRemoveCaregiverDomain}
+                  onAddCaregiverDomain={this.handleAddCaregiverDomain}
+                />
+              )}
+          </ExpansionPanelDetails>
+        )}
       </ExpansionPanel>
     ) : null
   }
@@ -213,7 +218,6 @@ Domain.propTypes = {
   disabled: PropTypes.bool,
   domain: PropTypes.object.isRequired,
   handleWarningShow: PropTypes.func,
-  i18n: PropTypes.object.isRequired,
   i18nAll: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   isAssessmentUnderSix: PropTypes.bool,

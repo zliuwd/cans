@@ -24,6 +24,7 @@ import {
   validateAssessmentForSubmit,
   getSubstanceUseItemsIds,
 } from './AssessmentHelper'
+import { updateCaregiverDomainsIndices } from './AssessmentMutations'
 import { createRatingsMap, prepareReassessment } from './ReassessmentHelper'
 import { buildSaveAssessmentButton } from '../Header/PageHeaderButtonsBuilder'
 import PrintButton from '../Header/PageHeaderButtons/PrintButton'
@@ -232,6 +233,7 @@ export default class AssessmentContainer extends Component {
   }
 
   updateAssessment = assessment => {
+    assessment.state.domains = updateCaregiverDomainsIndices(assessment.state.domains)
     assessment.person = this.props.client
     const isValidForSubmit = validateAssessmentForSubmit(assessment)
     this.setState({
