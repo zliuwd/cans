@@ -54,7 +54,6 @@ export default class AssessmentContainer extends Component {
       i18n: {},
       isValidForSubmit: false,
       shouldRedirectToClientProfile: false,
-      isEditable: false,
       isValidDate: true,
       isEventDateBeforeDob: false,
       isSaveButtonEnabled: false,
@@ -89,14 +88,8 @@ export default class AssessmentContainer extends Component {
   loadAssessment() {
     const assessmentId = this.props.match.params.id
     return (assessmentId ? this.fetchAssessment(assessmentId) : this.fetchNewAssessment()).then(() => {
-      this.updateIsEditableState()
+      this.postReadOnlyMessageIfNeeded()
     })
-  }
-
-  updateIsEditableState() {
-    const isEditable = this.isEditable(this.state.assessment)
-    this.setState({ isEditable })
-    this.postReadOnlyMessageIfNeeded()
   }
 
   isEditable = assessment => {
@@ -104,7 +97,7 @@ export default class AssessmentContainer extends Component {
   }
 
   postReadOnlyMessageIfNeeded() {
-    if (!this.state.isEditable) {
+    if (!this.isEditable(this.state.assessment)) {
       this.postReadOnlyMessage()
     }
   }
@@ -147,7 +140,8 @@ export default class AssessmentContainer extends Component {
   }
 
   shouldSaveButtonBeEnabled() {
-    const { assessment, assessmentServiceStatus, isEditable, isValidDate, isEventDateBeforeDob } = this.state
+    const { assessment, assessmentServiceStatus, isValidDate, isEventDateBeforeDob } = this.state
+    const isEditable = this.isEditable(assessment)
     return assessment.status === AssessmentStatus.completed
       ? validateAssessmentForSubmit(assessment)
       : isValidDate &&
@@ -240,7 +234,7 @@ export default class AssessmentContainer extends Component {
       assessment,
       assessmentServiceStatus: LoadingState.ready,
       isValidForSubmit,
-      isUnsaved: this.state.isEditable,
+      isUnsaved: this.isEditable(assessment),
     })
   }
 
@@ -299,7 +293,7 @@ export default class AssessmentContainer extends Component {
     }
 
     if (this.state.assessment.id) {
-      this.updateIsEditableState()
+      this.postReadOnlyMessageIfNeeded()
       const canDisplaySummaryOnSave = this.shouldDisplaySummaryOnSave()
       this.setState({ canDisplaySummaryOnSave })
       if (canDisplaySummaryOnSave) {
@@ -365,7 +359,7 @@ export default class AssessmentContainer extends Component {
     }
     completeAutoScroll(this.state.completeScrollTarget, SCROLL_POSITION_ADJUST)
     if (this.state.assessment.id) {
-      this.updateIsEditableState()
+      this.postReadOnlyMessageIfNeeded()
       // Capture New Relic data after the assessment has been successfully submitted
       const countyName = handleCountyName(this.state.assessment)
       logPageAction('assessmentSubmit', {
@@ -434,11 +428,11 @@ export default class AssessmentContainer extends Component {
       assessment,
       i18n,
       assessmentServiceStatus,
-      isEditable,
       canDisplaySummaryOnSave,
       isReassessmentModalShown,
       previousRatingsMap,
     } = this.state
+    const isEditable = this.isEditable(assessment)
     if (shouldRedirectToClientProfile) {
       return <Redirect push to={{ pathname: trimUrlForClientProfile(this.props.match.url) }} />
     }
