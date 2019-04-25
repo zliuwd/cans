@@ -27,8 +27,8 @@ const domainDefault = {
 }
 
 const i18nDefault = {
-  _title_: 'Title',
-  _description_: 'Description',
+  'BEHEMO._title_': 'Title',
+  'BEHEMO._description_': 'Description',
 }
 
 const domainComponentDefault = (
@@ -37,8 +37,7 @@ const domainComponentDefault = (
     canReleaseConfidentialInfo={true}
     domain={{ ...domainDefault }}
     isAssessmentUnderSix={true}
-    i18n={{ ...i18nDefault }}
-    i18nAll={{ a: 'b' }}
+    i18nAll={{ ...i18nDefault }}
     index={1}
     onItemCommentUpdate={() => {}}
     onDomainCommentUpdate={() => {}}
@@ -95,8 +94,7 @@ describe('<Domain />', () => {
           canReleaseConfidentialInfo={true}
           domain={{ ...domainDefault }}
           isAssessmentUnderSix={true}
-          i18n={{ ...i18nDefault }}
-          i18nAll={{ a: 'b' }}
+          i18nAll={{ ...i18nDefault }}
           index={1}
           onItemCommentUpdate={() => {}}
           onDomainCommentUpdate={() => {}}
@@ -186,8 +184,7 @@ describe('<Domain />', () => {
           canReleaseConfidentialInfo={true}
           domain={{ ...domainDefault }}
           isAssessmentUnderSix={true}
-          i18n={{ ...i18nDefault }}
-          i18nAll={{ a: 'b' }}
+          i18nAll={{ ...i18nDefault }}
           index={1}
           onItemCommentUpdate={() => {}}
           onDomainCommentUpdate={() => {}}
@@ -224,8 +221,7 @@ describe('<Domain />', () => {
         canReleaseConfidentialInfo={true}
         domain={{ ...domainDefault }}
         isAssessmentUnderSix={true}
-        i18n={{ ...i18nDefault }}
-        i18nAll={{}}
+        i18nAll={{ ...i18nDefault }}
         index={1}
         onItemCommentUpdate={onItemCommentUpdateMock}
         onDomainCommentUpdate={() => {}}
@@ -278,8 +274,7 @@ describe('<Domain />', () => {
           domain={{ ...domainDefault }}
           isAssessmentUnderSix={true}
           isExpanded={true}
-          i18n={{ ...i18nDefault }}
-          i18nAll={{}}
+          i18nAll={{ ...i18nDefault }}
           index={1}
           onItemCommentUpdate={() => {}}
           onDomainCommentUpdate={onDomainCommentUpdateMock}
@@ -303,8 +298,7 @@ describe('<Domain />', () => {
           domain={{ ...domainDefault }}
           isAssessmentUnderSix={true}
           isExpanded={true}
-          i18n={{ ...i18nDefault }}
-          i18nAll={{}}
+          i18nAll={{ ...i18nDefault }}
           index={1}
           onItemCommentUpdate={() => {}}
           onDomainCommentUpdate={() => {}}
@@ -336,8 +330,7 @@ describe('<Domain />', () => {
       canReleaseConfidentialInfo: true,
       domain: { ...domain },
       handleWarningShow: handleWarningShow,
-      i18n: { ...i18nDefault },
-      i18nAll: {},
+      i18nAll: { ...i18nDefault },
       index: 1,
       isAssessmentUnderSix: true,
       isCompletedAssessment: false,
@@ -410,8 +403,7 @@ describe('<Domain />', () => {
                 domain={{ ...domain }}
                 isAssessmentUnderSix={true}
                 isExpanded={true}
-                i18n={{ ...i18nDefault }}
-                i18nAll={{}}
+                i18nAll={{ ...i18nDefault }}
                 index={1}
                 onItemCommentUpdate={() => {}}
                 onDomainCommentUpdate={() => {}}
@@ -455,8 +447,7 @@ describe('<Domain />', () => {
                 domain={{ ...domain }}
                 isAssessmentUnderSix={true}
                 isExpanded={true}
-                i18n={{ ...i18nDefault }}
-                i18nAll={{}}
+                i18nAll={{ ...i18nDefault }}
                 index={1}
                 onItemCommentUpdate={() => {}}
                 onDomainCommentUpdate={() => {}}
@@ -498,8 +489,7 @@ describe('<Domain />', () => {
                 canReleaseConfidentialInfo={true}
                 domain={{ ...domain }}
                 isAssessmentUnderSix={true}
-                i18n={{ ...i18nDefault }}
-                i18nAll={{}}
+                i18nAll={{ ...i18nDefault }}
                 index={1}
                 onItemCommentUpdate={() => {}}
                 onDomainCommentUpdate={() => {}}
@@ -532,8 +522,7 @@ describe('<Domain />', () => {
                 canReleaseConfidentialInfo={true}
                 domain={{ ...domain }}
                 isAssessmentUnderSix={true}
-                i18n={{ ...i18nDefault }}
-                i18nAll={{}}
+                i18nAll={{ ...i18nDefault }}
                 index={1}
                 onItemCommentUpdate={() => {}}
                 onDomainCommentUpdate={() => {}}
@@ -566,8 +555,7 @@ describe('<Domain />', () => {
                 canReleaseConfidentialInfo={true}
                 domain={{ ...domain }}
                 isAssessmentUnderSix={true}
-                i18n={{ ...i18nDefault }}
-                i18nAll={{}}
+                i18nAll={{ ...i18nDefault }}
                 index={1}
                 onItemCommentUpdate={() => {}}
                 onDomainCommentUpdate={() => {}}
@@ -597,8 +585,7 @@ describe('<Domain />', () => {
       canReleaseConfidentialInfo: true,
       domain: { ...domain },
       handleWarningShow: () => {},
-      i18n: { ...i18nDefault },
-      i18nAll: {},
+      i18nAll: { ...i18nDefault },
       index: 1,
       isAssessmentUnderSix: true,
       isExpanded: true,
@@ -640,8 +627,7 @@ describe('<Domain />', () => {
         domain={{ ...domainDefault }}
         isAssessmentUnderSix={true}
         isExpanded={false}
-        i18n={{ ...i18nDefault }}
-        i18nAll={{}}
+        i18nAll={{ ...i18nDefault }}
         index={1}
         onItemCommentUpdate={onItemCommentUpdateMock}
         onDomainCommentUpdate={() => {}}
@@ -666,8 +652,7 @@ describe('<Domain />', () => {
         domain={{ ...domainDefault }}
         isAssessmentUnderSix={true}
         isExpanded={true}
-        i18n={{ ...i18nDefault }}
-        i18nAll={{}}
+        i18nAll={{ ...i18nDefault }}
         index={1}
         onItemCommentUpdate={onItemCommentUpdateMock}
         onDomainCommentUpdate={() => {}}

@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Card, CardBody, CardFooter } from '@cwds/components'
-import { getI18nByCode } from '../common/I18nHelper'
 import Domain from './Domain'
 import DomainsHeader from './DomainsHeader'
 
@@ -31,13 +30,11 @@ const AssessmentCard = ({
     <CardBody>
       {domainsExpanded.map(({ domain, isExpanded }, index) => {
         const { id, code, caregiver_index: caregiverIndex } = domain
-        const domainI18n = getI18nByCode(i18n, code)
         return (
           <Domain
             index={index}
             key={code + caregiverIndex + id}
             domain={domain}
-            i18n={domainI18n}
             i18nAll={i18n}
             isAssessmentUnderSix={isUnderSix}
             isCompletedAssessment={isCompletedAssessment}
