@@ -297,8 +297,6 @@ describe('<AssessmentContainer />', () => {
             ...assessment,
           },
         })
-        wrapper.instance().updateIsEditableState()
-        wrapper.update()
         expect(wrapper.find(AssessmentFormFooter).exists()).toBeFalsy()
       })
 
@@ -309,8 +307,6 @@ describe('<AssessmentContainer />', () => {
             ...assessment,
           },
         })
-        wrapper.instance().updateIsEditableState()
-        wrapper.update()
         expect(wrapper.find('AssessmentFormFooter').exists()).toBeTruthy()
       })
     })
@@ -432,13 +428,13 @@ describe('<AssessmentContainer />', () => {
         const wrapper = await shallow(<AssessmentContainer {...defaultProps} />)
         wrapper.setState({ assessment: { ...assessment, id: 1 }, isEditable: true })
 
-        expect(wrapper.instance().state.isEditable).toBe(true)
+        expect(wrapper.find(AssessmentContainerInner).props().isEditable).toBe(true)
         const assessmentAfterUpdate = { ...assessment, metadata: { allowed_operations: [] } }
         jest.spyOn(AssessmentService, 'update').mockReturnValue(Promise.resolve(assessmentAfterUpdate))
         await wrapper.instance().handleCompleteAssessment()
         wrapper.update()
 
-        expect(wrapper.instance().state.isEditable).toBe(false)
+        expect(wrapper.find(AssessmentContainerInner).props().isEditable).toBe(false)
       })
     })
 
@@ -770,12 +766,13 @@ describe('<AssessmentContainer />', () => {
       it('should not be rendered when assessment is not editable', () => {
         const wrapper = mount(<AssessmentContainer {...defaultProps} />)
 
+        const readOnlyAssessment = { ...assessment, metadata: { allowed_operations: [] } }
+
         // when
         wrapper.setState({
           isValidForSubmit: false,
           assessmentServiceStatus: LoadingState.ready,
-          isEditable: false,
-          assessment,
+          assessment: readOnlyAssessment,
         })
 
         // then
@@ -933,16 +930,18 @@ describe('<AssessmentContainer />', () => {
         const instance = getInstance()
         instance.setState({
           isValidDate: true,
-          isEditable: false,
           assessment: {
+            id: '123',
             event_date: '2010-10-13',
             state: {
               domains: [],
               under_six: false,
             },
+            metadata: { allowed_operations: [] },
           },
           assessmentServiceStatus: LoadingState.ready,
         })
+
         expect(instance.shouldSaveButtonBeEnabled()).toBeFalsy()
       })
 
@@ -1018,8 +1017,8 @@ describe('<AssessmentContainer />', () => {
             dob: '2019-01-01',
           },
           status: AHelper.AssessmentStatus.completed,
+          metadata: { allowed_operations: [] },
         },
-        isEditable: false,
       })
 
       it('should post Info', async () => {
@@ -1034,7 +1033,7 @@ describe('<AssessmentContainer />', () => {
       })
 
       it('"isUnsaved" flag should be false when assessment state is updated', async () => {
-        await wrapper.instance().updateAssessment(assessment)
+        await wrapper.instance().updateAssessment({ ...assessment, metadata: { allowed_operations: [] } })
         expect(wrapper.instance().state.isUnsaved).toBeFalsy()
       })
     })

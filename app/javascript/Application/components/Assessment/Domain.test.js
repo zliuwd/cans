@@ -3,9 +3,8 @@ import { Button, Icon, UncontrolledInfotip } from '@cwds/components'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import { shallow, mount } from 'enzyme'
 import Domain from './Domain'
-import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
+import { DomainItemList, DomainCaregiverControls } from './'
 import DomainComment from './DomainComment'
-import DomainCommentIcon from './DomainCommentIcon'
 
 const domainDefault = {
   id: '1',
@@ -72,11 +71,6 @@ describe('<Domain />', () => {
 
   it('renders with no exceptions', () => {
     expect(() => shallow(domainComponentDefault)).not.toThrow()
-  })
-
-  it('renders DomainScore', () => {
-    const wrapper = shallow(domainComponentDefault)
-    expect(wrapper.find(DomainScore).length).toBe(1)
   })
 
   describe('Open to review', () => {
@@ -241,21 +235,20 @@ describe('<Domain />', () => {
   it('should render ItemList when extended', () => {
     const wrapper = shallow(domainComponentDefault)
     wrapper.setProps({ isExpanded: true })
-    expect(wrapper.find(DomainItemList).length).toBe(1)
+    expect(wrapper.find(DomainItemList).exists()).toBe(true)
   })
 
-  describe('progress bar', () => {
-    it('should render progress bar when folded', () => {
-      const wrapper = shallow(domainComponentDefault)
-      wrapper.setProps({ isExpanded: false })
-      expect(wrapper.find(DomainProgressBar).length).toBe(1)
-    })
+  it('should skip rendering ItemList on mount if collapsed', () => {
+    // This is to speed up initial rendering of the assessment
+    const wrapper = shallow(domainComponentDefault)
+    expect(wrapper.find(DomainItemList).exists()).toBe(false)
+  })
 
-    it('should render progress bar when extended', () => {
-      const wrapper = shallow(domainComponentDefault)
-      wrapper.setProps({ isExpanded: true })
-      expect(wrapper.find(DomainProgressBar).length).toBe(1)
-    })
+  it('should render ItemList in second cycle after mount if collapsed', async () => {
+    const wrapper = shallow(domainComponentDefault)
+    await wrapper.instance().componentDidUpdate()
+    wrapper.update()
+    expect(wrapper.find(DomainItemList).exists()).toBe(true)
   })
 
   describe('DomainComment', () => {
@@ -314,11 +307,6 @@ describe('<Domain />', () => {
       const target = wrapper.find(DomainComment)
       expect(Object.keys(target.props()).includes('domainBottomCollapseClick')).toBe(true)
     })
-  })
-
-  it('renders comment icon on the domain header', () => {
-    const wrapper = shallow(domainComponentDefault)
-    expect(wrapper.find(DomainCommentIcon).exists()).toBe(true)
   })
 
   describe('caregiver domain', () => {
