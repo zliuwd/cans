@@ -3,9 +3,8 @@ import { Button, Icon, UncontrolledInfotip } from '@cwds/components'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import { shallow, mount } from 'enzyme'
 import Domain from './Domain'
-import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
+import { DomainItemList, DomainCaregiverControls } from './'
 import DomainComment from './DomainComment'
-import DomainCommentIcon from './DomainCommentIcon'
 
 const domainDefault = {
   id: '1',
@@ -27,8 +26,8 @@ const domainDefault = {
 }
 
 const i18nDefault = {
-  _title_: 'Title',
-  _description_: 'Description',
+  'BEHEMO._title_': 'Title',
+  'BEHEMO._description_': 'Description',
 }
 
 const domainComponentDefault = (
@@ -37,8 +36,7 @@ const domainComponentDefault = (
     canReleaseConfidentialInfo={true}
     domain={{ ...domainDefault }}
     isAssessmentUnderSix={true}
-    i18n={{ ...i18nDefault }}
-    i18nAll={{ a: 'b' }}
+    i18nAll={{ ...i18nDefault }}
     index={1}
     onItemCommentUpdate={() => {}}
     onDomainCommentUpdate={() => {}}
@@ -75,11 +73,6 @@ describe('<Domain />', () => {
     expect(() => shallow(domainComponentDefault)).not.toThrow()
   })
 
-  it('renders DomainScore', () => {
-    const wrapper = shallow(domainComponentDefault)
-    expect(wrapper.find(DomainScore).length).toBe(1)
-  })
-
   describe('Open to review', () => {
     const onDomainReviewed = jest.fn()
     let div
@@ -95,8 +88,7 @@ describe('<Domain />', () => {
           canReleaseConfidentialInfo={true}
           domain={{ ...domainDefault }}
           isAssessmentUnderSix={true}
-          i18n={{ ...i18nDefault }}
-          i18nAll={{ a: 'b' }}
+          i18nAll={{ ...i18nDefault }}
           index={1}
           onItemCommentUpdate={() => {}}
           onDomainCommentUpdate={() => {}}
@@ -116,6 +108,10 @@ describe('<Domain />', () => {
 
     it('renders chevron icon', () => {
       expect(wrapper.find(Icon).exists()).toBe(true)
+    })
+
+    it('passes isReviewed false to DomainPanelSummary when domain.is_reviewed is undefined', () => {
+      expect(wrapper.find('DomainPanelSummary').props().isReviewed).toBe(false)
     })
 
     it('will render a Icon with rotation 270 when expanded', () => {
@@ -186,8 +182,7 @@ describe('<Domain />', () => {
           canReleaseConfidentialInfo={true}
           domain={{ ...domainDefault }}
           isAssessmentUnderSix={true}
-          i18n={{ ...i18nDefault }}
-          i18nAll={{ a: 'b' }}
+          i18nAll={{ ...i18nDefault }}
           index={1}
           onItemCommentUpdate={() => {}}
           onDomainCommentUpdate={() => {}}
@@ -224,8 +219,7 @@ describe('<Domain />', () => {
         canReleaseConfidentialInfo={true}
         domain={{ ...domainDefault }}
         isAssessmentUnderSix={true}
-        i18n={{ ...i18nDefault }}
-        i18nAll={{}}
+        i18nAll={{ ...i18nDefault }}
         index={1}
         onItemCommentUpdate={onItemCommentUpdateMock}
         onDomainCommentUpdate={() => {}}
@@ -236,30 +230,29 @@ describe('<Domain />', () => {
         handleWarningShow={() => {}}
         onCaregiverNameUpdate={() => {}}
         isCompletedAssessment={false}
+        isExpanded={true}
       />
     )
-    wrapper.setState({ expanded: true })
     expect(wrapper.find(DomainItemList).props().onItemCommentUpdate).toBe(onItemCommentUpdateMock)
   })
 
   it('should render ItemList when extended', () => {
     const wrapper = shallow(domainComponentDefault)
     wrapper.setProps({ isExpanded: true })
-    expect(wrapper.find(DomainItemList).length).toBe(1)
+    expect(wrapper.find(DomainItemList).exists()).toBe(true)
   })
 
-  describe('progress bar', () => {
-    it('should render progress bar when folded', () => {
-      const wrapper = shallow(domainComponentDefault)
-      wrapper.setProps({ isExpanded: false })
-      expect(wrapper.find(DomainProgressBar).length).toBe(1)
-    })
+  it('should skip rendering ItemList on mount if collapsed', () => {
+    // This is to speed up initial rendering of the assessment
+    const wrapper = shallow(domainComponentDefault)
+    expect(wrapper.find(DomainItemList).exists()).toBe(false)
+  })
 
-    it('should render progress bar when extended', () => {
-      const wrapper = shallow(domainComponentDefault)
-      wrapper.setProps({ isExpanded: true })
-      expect(wrapper.find(DomainProgressBar).length).toBe(1)
-    })
+  it('should render ItemList in second cycle after mount if collapsed', async () => {
+    const wrapper = shallow(domainComponentDefault)
+    await wrapper.instance().componentDidUpdate()
+    wrapper.update()
+    expect(wrapper.find(DomainItemList).exists()).toBe(true)
   })
 
   describe('DomainComment', () => {
@@ -278,8 +271,7 @@ describe('<Domain />', () => {
           domain={{ ...domainDefault }}
           isAssessmentUnderSix={true}
           isExpanded={true}
-          i18n={{ ...i18nDefault }}
-          i18nAll={{}}
+          i18nAll={{ ...i18nDefault }}
           index={1}
           onItemCommentUpdate={() => {}}
           onDomainCommentUpdate={onDomainCommentUpdateMock}
@@ -303,8 +295,7 @@ describe('<Domain />', () => {
           domain={{ ...domainDefault }}
           isAssessmentUnderSix={true}
           isExpanded={true}
-          i18n={{ ...i18nDefault }}
-          i18nAll={{}}
+          i18nAll={{ ...i18nDefault }}
           index={1}
           onItemCommentUpdate={() => {}}
           onDomainCommentUpdate={() => {}}
@@ -322,11 +313,6 @@ describe('<Domain />', () => {
     })
   })
 
-  it('renders comment icon on the domain header', () => {
-    const wrapper = shallow(domainComponentDefault)
-    expect(wrapper.find(DomainCommentIcon).exists()).toBe(true)
-  })
-
   describe('caregiver domain', () => {
     const callbackMock = jest.fn()
     const handleWarningShow = jest.fn()
@@ -336,8 +322,7 @@ describe('<Domain />', () => {
       canReleaseConfidentialInfo: true,
       domain: { ...domain },
       handleWarningShow: handleWarningShow,
-      i18n: { ...i18nDefault },
-      i18nAll: {},
+      i18nAll: { ...i18nDefault },
       index: 1,
       isAssessmentUnderSix: true,
       isCompletedAssessment: false,
@@ -410,8 +395,7 @@ describe('<Domain />', () => {
                 domain={{ ...domain }}
                 isAssessmentUnderSix={true}
                 isExpanded={true}
-                i18n={{ ...i18nDefault }}
-                i18nAll={{}}
+                i18nAll={{ ...i18nDefault }}
                 index={1}
                 onItemCommentUpdate={() => {}}
                 onDomainCommentUpdate={() => {}}
@@ -455,8 +439,7 @@ describe('<Domain />', () => {
                 domain={{ ...domain }}
                 isAssessmentUnderSix={true}
                 isExpanded={true}
-                i18n={{ ...i18nDefault }}
-                i18nAll={{}}
+                i18nAll={{ ...i18nDefault }}
                 index={1}
                 onItemCommentUpdate={() => {}}
                 onDomainCommentUpdate={() => {}}
@@ -498,8 +481,7 @@ describe('<Domain />', () => {
                 canReleaseConfidentialInfo={true}
                 domain={{ ...domain }}
                 isAssessmentUnderSix={true}
-                i18n={{ ...i18nDefault }}
-                i18nAll={{}}
+                i18nAll={{ ...i18nDefault }}
                 index={1}
                 onItemCommentUpdate={() => {}}
                 onDomainCommentUpdate={() => {}}
@@ -532,8 +514,7 @@ describe('<Domain />', () => {
                 canReleaseConfidentialInfo={true}
                 domain={{ ...domain }}
                 isAssessmentUnderSix={true}
-                i18n={{ ...i18nDefault }}
-                i18nAll={{}}
+                i18nAll={{ ...i18nDefault }}
                 index={1}
                 onItemCommentUpdate={() => {}}
                 onDomainCommentUpdate={() => {}}
@@ -566,8 +547,7 @@ describe('<Domain />', () => {
                 canReleaseConfidentialInfo={true}
                 domain={{ ...domain }}
                 isAssessmentUnderSix={true}
-                i18n={{ ...i18nDefault }}
-                i18nAll={{}}
+                i18nAll={{ ...i18nDefault }}
                 index={1}
                 onItemCommentUpdate={() => {}}
                 onDomainCommentUpdate={() => {}}
@@ -597,8 +577,7 @@ describe('<Domain />', () => {
       canReleaseConfidentialInfo: true,
       domain: { ...domain },
       handleWarningShow: () => {},
-      i18n: { ...i18nDefault },
-      i18nAll: {},
+      i18nAll: { ...i18nDefault },
       index: 1,
       isAssessmentUnderSix: true,
       isExpanded: true,
@@ -640,8 +619,7 @@ describe('<Domain />', () => {
         domain={{ ...domainDefault }}
         isAssessmentUnderSix={true}
         isExpanded={false}
-        i18n={{ ...i18nDefault }}
-        i18nAll={{}}
+        i18nAll={{ ...i18nDefault }}
         index={1}
         onItemCommentUpdate={onItemCommentUpdateMock}
         onDomainCommentUpdate={() => {}}
@@ -666,8 +644,7 @@ describe('<Domain />', () => {
         domain={{ ...domainDefault }}
         isAssessmentUnderSix={true}
         isExpanded={true}
-        i18n={{ ...i18nDefault }}
-        i18nAll={{}}
+        i18nAll={{ ...i18nDefault }}
         index={1}
         onItemCommentUpdate={onItemCommentUpdateMock}
         onDomainCommentUpdate={() => {}}

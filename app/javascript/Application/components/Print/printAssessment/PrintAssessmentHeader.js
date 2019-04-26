@@ -11,7 +11,6 @@ import {
   headerConductedByBox,
   headerTitleRow,
   headerSubDescriptionBox,
-  headerReleaseInfoBox,
 } from './PrintAssessmentStyle'
 import PrintAssessmentHeaderOptions from './PrintAssessmentHeaderOptions'
 
@@ -83,12 +82,12 @@ class PrintAssessmentHeader extends PureComponent {
           <div style={headerDescriptionBox}>Child/youth has caregiver?</div>
           <div style={headerSubDescriptionBox} />
         </div>
-        <div style={headerReleaseInfoBox}>
+        <div style={headerThreeColsBox}>
           <div style={headerContentBox}>
             <PrintAssessmentHeaderOptions isChecked={Boolean(this.props.canReleaseInfo)} />
           </div>
           <div style={headerDescriptionBox}>Authorization for release of information on file?</div>
-          <div style={headerSubDescriptionBox}>{this.props.canReleaseInfo || this.props.confidentialWarningAlert}</div>
+          <div style={headerSubDescriptionBox} />
         </div>
       </div>
     )
@@ -134,7 +133,6 @@ PrintAssessmentHeader.propTypes = {
   clientAge: PropTypes.string,
   clientDob: PropTypes.string,
   conductedBy: PropTypes.string,
-  confidentialWarningAlert: PropTypes.string.isRequired,
   countyName: PropTypes.string.isRequired,
   eventDate: PropTypes.string.isRequired,
   hasCaregiver: PropTypes.bool.isRequired,

@@ -4,7 +4,7 @@ import { summaryInnerContainer, summaryTitle, summaryContent, summaryItem } from
 
 export const PrintSummaryRecord = ({ title, items }) => {
   return (
-    <div style={summaryInnerContainer}>
+    <td style={summaryInnerContainer}>
       <div id="summary-header" style={summaryTitle}>
         {title}
       </div>
@@ -16,7 +16,7 @@ export const PrintSummaryRecord = ({ title, items }) => {
             </li>
           ))}
       </ul>
-    </div>
+    </td>
   )
 }
 

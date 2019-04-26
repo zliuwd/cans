@@ -1,5 +1,4 @@
 import React from 'react'
-import { getI18nByCode } from '../common/I18nHelper'
 import Item from './Item'
 import { shouldItemBeRendered } from './AssessmentHelper'
 import { buildItemUniqueKey } from './ReassessmentHelper'
@@ -10,7 +9,6 @@ class DomainItemList extends React.PureComponent {
   render() {
     return this.props.items.map((item, index) => {
       const code = item.code
-      const itemI18n = getI18nByCode(this.props.i18nAll, code)
       const isAssessmentUnderSix = this.props.isAssessmentUnderSix
       const itemUniqueKey = buildItemUniqueKey(code, this.props.caregiverIndex)
       const previousRating = (this.props.previousRatingsMap[itemUniqueKey] || {}).rating
@@ -20,7 +18,7 @@ class DomainItemList extends React.PureComponent {
             key={`${index}-${code}`}
             item={item}
             caregiverIndex={this.props.caregiverIndex}
-            i18n={itemI18n}
+            i18n={this.props.i18nAll}
             onRatingUpdate={this.props.onRatingUpdate}
             onCommentUpdate={this.props.onItemCommentUpdate}
             onConfidentialityUpdate={this.props.onConfidentialityUpdate}

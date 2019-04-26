@@ -2,9 +2,11 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import {
   assessment,
+  assessmentPrint,
   assessmentWithConfidentialItem,
   assessmentWithDiscretionNeededItem,
   assessmentWithNoConfidentialItem,
+  validAssessment,
   i18nPrint,
 } from '../../Assessment/assessment.mocks.test'
 import { getI18nByCode } from '../../common/I18nHelper'
@@ -13,6 +15,8 @@ import PrintItem from './PrintItem'
 import PrintDomainHeader from './PrintDomainHeader'
 import PrintDomainCommentHeader from './PrintDomainCommentHeader'
 import { redactLevels } from './PrintAssessmentHelper'
+import PrintCaregiverName from './PrintCaregiverName'
+
 const fakePropsWithNoConfidentialItem = {
   domain: { ...assessmentWithNoConfidentialItem.state.domains[0] },
   domainI18n: getI18nByCode(i18nPrint, 'BEN'),
@@ -36,6 +40,20 @@ const fakePropsWithoutComment = {
 const fakePropsWithDiscretionNeededItem = {
   domain: { ...assessmentWithDiscretionNeededItem.state.domains[0] },
   domainI18n: getI18nByCode(i18nPrint, 'BEN'),
+  i18n: i18nPrint,
+  isAssessmentUnderSix: false,
+}
+
+const fakePropsWithCaregiverName = {
+  domain: { ...validAssessment.state.domains[2] },
+  domainI18n: getI18nByCode(i18nPrint, 'CGV'),
+  i18n: i18nPrint,
+  isAssessmentUnderSix: false,
+}
+
+const fakePropsWithoutCaregiverName = {
+  domain: { ...assessmentPrint.state.domains[1] },
+  domainI18n: getI18nByCode(i18nPrint, 'CGV'),
   i18n: i18nPrint,
   isAssessmentUnderSix: false,
 }
@@ -93,6 +111,33 @@ describe('<PrintDomain />', () => {
     const target = wrapper.find(PrintDomainCommentHeader)
     expect(target.length).toBe(1)
     expect(target.props().remark).toEqual('None')
+    wrapper.unmount()
+  })
+
+  it('will render two PrintCaregiverName when it is caregiver domain and has caregiver name', () => {
+    getWrapper(fakePropsWithCaregiverName)
+    expect(fakePropsWithCaregiverName.domain.is_caregiver_domain).toBe(true)
+    const target = wrapper.find(PrintCaregiverName)
+    expect(target.length).toBe(2)
+    expect(target.at(0).props().name).toEqual(fakePropsWithCaregiverName.domain.caregiver_name)
+    wrapper.unmount()
+  })
+
+  // backup for some old assessment data which have caregiver domain but have no name
+  it('will not render PrintCaregiverName when it is caregiver domain but has no caregiver name', () => {
+    getWrapper(fakePropsWithoutCaregiverName)
+    expect(fakePropsWithoutCaregiverName.domain.is_caregiver_domain).toBe(true)
+    expect(fakePropsWithoutCaregiverName.domain.caregiver_name).toBe(undefined)
+    const target = wrapper.find(PrintCaregiverName)
+    expect(target.exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('will not render PrintCaregiverName when it is not caregiver domain', () => {
+    getWrapper(fakePropsWithNoConfidentialItem)
+    expect(fakePropsWithNoConfidentialItem.domain.is_caregiver_domain).toEqual(false)
+    const target = wrapper.find(PrintCaregiverName)
+    expect(target.exists()).toBe(false)
     wrapper.unmount()
   })
 

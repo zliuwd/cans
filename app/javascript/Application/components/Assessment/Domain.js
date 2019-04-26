@@ -3,37 +3,50 @@ import PropTypes from 'prop-types'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
-import Typography from '@material-ui/core/Typography'
 import { Input } from 'reactstrap'
-import { DomainProgressBar, DomainScore, DomainItemList, DomainCaregiverControls } from './'
+import { DomainItemList, DomainCaregiverControls } from './'
 import DomainComment from './DomainComment'
-import DomainCommentIcon from './DomainCommentIcon'
 import { shouldDomainBeRendered } from './AssessmentHelper'
 import { isA11yAllowedInput } from '../../util/events'
-import Grid from '@material-ui/core/Grid'
 import { totalScoreCalculation, itemFilter } from './DomainScoreHelper.js'
 import { isEmpty } from '../../util/common'
 import { expandingThenScroll } from '../../util/assessmentAutoScroll'
-import { Button, Icon, UncontrolledInfotip, PopoverBody } from '@cwds/components'
+import { Button } from '@cwds/components'
+import DomainPanelSummary from './DomainPanelSummary'
 import './style.sass'
 
-const mapI18nToState = props => ({
-  title: props.i18n._title_ || '',
-  description: props.i18n._description_ || 'No Description',
-  caregiverName: props.domain.caregiver_name || '',
-})
+const mapI18nToState = props => {
+  const code = props.domain.code
+  return {
+    title: props.i18nAll[`${code}._title_`] || '',
+    description: props.i18nAll[`${code}._description_`] || 'No Description',
+    caregiverName: props.domain.caregiver_name || '',
+  }
+}
 
 class Domain extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      shouldRenderDetails: props.isExpanded,
+    }
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (!isEmpty(nextProps.i18n) && !prevState.description) {
+    if (!isEmpty(nextProps.i18nAll) && !prevState.description) {
       return mapI18nToState(nextProps)
     }
     return null
+  }
+
+  componentDidUpdate = async () => {
+    if (this.state.title && this.state.shouldRenderDetails === false) {
+      await new Promise(resolve =>
+        setTimeout(() => {
+          this.setState({ shouldRenderDetails: true }, resolve)
+        }, 0)
+      )
+    }
   }
 
   handleOpenToReview = event => {
@@ -104,7 +117,7 @@ class Domain extends React.PureComponent {
       isUsingPriorRatings,
       previousRatingsMap,
     } = this.props
-    const isReviewed = isUsingPriorRatings ? domain.is_reviewed : true
+    const isReviewed = Boolean(isUsingPriorRatings ? domain.is_reviewed : true)
     const { items, is_caregiver_domain: isCaregiverDomain } = domain
     const { title, description, caregiverName } = this.state
     const itemListProps = {
@@ -123,7 +136,6 @@ class Domain extends React.PureComponent {
     const validItems = itemFilter(items, isAssessmentUnderSix)
     const totalScore = totalScoreCalculation(validItems)
     const warningText = <span className={'caregiver-warning-text'}> Caregiver Name is required</span>
-    const ROTATION_RIGHT = 270
 
     return title && shouldDomainBeRendered(isAssessmentUnderSix, domain) ? (
       <ExpansionPanel expanded={isExpanded} onChange={this.handleExpandedChange} elevation={0}>
@@ -136,69 +148,47 @@ class Domain extends React.PureComponent {
             )
           }
         >
-          <Grid
-            container
-            direction="row"
-            justify="flex-end"
-            alignItems="flex-end"
-            spacing={0}
-            style={{ padding: 0, flexWrap: 'nowrap', flexDirection: 'row' }}
-          >
-            <Grid item xs={8}>
-              <Typography variant="title" style={{ color: '#0e6f89', fontSize: 16 }}>
-                <Icon
-                  id={`domain${index}-expand`}
-                  className="domain-icon"
-                  icon="chevron-down"
-                  size="lg"
-                  rotation={isExpanded ? null : ROTATION_RIGHT}
-                />
-                <span className="domain-item-margin">{title}</span>
-                {description ? (
-                  <UncontrolledInfotip id={`domain-${index}`} placement="top">
-                    <PopoverBody>{description}</PopoverBody>
-                  </UncontrolledInfotip>
-                ) : null}{' '}
-                {(isCaregiverDomain && caregiverName === '') ||
-                (isCaregiverDomain && caregiverName && caregiverName.trim() === '')
-                  ? warningText
-                  : caregiverName && `- ${caregiverName}`}
-              </Typography>
-            </Grid>
-            <Grid item xs={4} className={isReviewed ? 'domain-metric' : 'domain-metric-with-review'}>
-              <div className="domain-toolbar-comment-icon-block">
-                <DomainCommentIcon domain={domain} />
-              </div>
-              <DomainProgressBar isAssessmentUnderSix={isAssessmentUnderSix} domain={domain} />
-              <DomainScore totalScore={totalScore} key={index} />
-            </Grid>
-          </Grid>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails
-          style={{
-            display: 'block',
-            padding: '0',
-            backgroundColor: 'white',
-          }}
-        >
-          {isCaregiverDomain && this.renderCaregiverName()}
-          <DomainItemList {...itemListProps} />
-          <DomainComment
-            id={`${domain.code}-${domain.caregiver_index}`}
-            title={title}
+          <DomainPanelSummary
+            caregiverName={caregiverName}
+            description={description}
             domain={domain}
-            onDomainCommentUpdate={this.props.onDomainCommentUpdate}
-            disabled={this.props.disabled}
-            domainBottomCollapseClick={this.handleExpandedChange}
-          />
-          {isCaregiverDomain &&
-            !this.props.disabled && (
-              <DomainCaregiverControls
-                onRemoveCaregiverDomain={this.handleRemoveCaregiverDomain}
-                onAddCaregiverDomain={this.handleAddCaregiverDomain}
-              />
-            )}
-        </ExpansionPanelDetails>
+            index={index}
+            isAssessmentUnderSix={isAssessmentUnderSix}
+            isCaregiverDomain={isCaregiverDomain}
+            isExpanded={isExpanded}
+            isReviewed={isReviewed}
+            totalScore={totalScore}
+            title={title}
+            warningText={warningText}
+          />{' '}
+        </ExpansionPanelSummary>
+        {isExpanded || this.state.shouldRenderDetails ? (
+          <ExpansionPanelDetails
+            style={{
+              display: 'block',
+              padding: '0',
+              backgroundColor: 'white',
+            }}
+          >
+            {isCaregiverDomain && this.renderCaregiverName()}
+            <DomainItemList {...itemListProps} />
+            <DomainComment
+              id={`${domain.code}-${domain.caregiver_index}`}
+              title={title}
+              domain={domain}
+              onDomainCommentUpdate={this.props.onDomainCommentUpdate}
+              disabled={this.props.disabled}
+              domainBottomCollapseClick={this.handleExpandedChange}
+            />
+            {isCaregiverDomain &&
+              !this.props.disabled && (
+                <DomainCaregiverControls
+                  onRemoveCaregiverDomain={this.handleRemoveCaregiverDomain}
+                  onAddCaregiverDomain={this.handleAddCaregiverDomain}
+                />
+              )}
+          </ExpansionPanelDetails>
+        ) : null}
       </ExpansionPanel>
     ) : null
   }
@@ -209,7 +199,6 @@ Domain.propTypes = {
   disabled: PropTypes.bool,
   domain: PropTypes.object.isRequired,
   handleWarningShow: PropTypes.func,
-  i18n: PropTypes.object.isRequired,
   i18nAll: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   isAssessmentUnderSix: PropTypes.bool,
