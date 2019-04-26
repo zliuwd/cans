@@ -45,11 +45,6 @@ class PrintAssessment extends PureComponent {
     return checker ? 'Reassessment' : 'Assessment'
   }
 
-  handleConfidentialWarningAlert = () => {
-    return `By selecting NO, Items ${this.props.substanceUseItemsIds.aboveSix[0]}, 48, and EC 41 (Substance Use Disorder
-        Items) from this CANS assessment will be redacted when printed.`
-  }
-
   handlePrintStatus = status => {
     return status === 'IN_PROGRESS' ? 'DRAFT' : 'FINAL'
   }
@@ -104,10 +99,7 @@ class PrintAssessment extends PureComponent {
           footer={<PrintAssessmentOverallFooter text={this.handleTimeStamp()} isFirefox={isFirefox} />}
         >
           <PrintAssessmentHeadline ageRange={this.handleAgeRange(isUnderSix)} reassessmentInfo={reassessmentInfo} />
-          <PrintAssessmentHeader
-            confidentialWarningAlert={this.handleConfidentialWarningAlert()}
-            {...printAssessmentHeaderProps}
-          />
+          <PrintAssessmentHeader {...printAssessmentHeaderProps} />
           <CategoryHeader title="CANS Ratings" />
           {this.renderDomain(domains, this.state.isAssessmentUnderSix, i18n, redactLevel)}
         </PrintLayout>

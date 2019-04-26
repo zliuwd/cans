@@ -79,6 +79,25 @@ describe('<PrintSummary />', () => {
     mount(
       <PrintSummary domains={domains} i18n={i18n} isUnderSix={isUnderSix} header="some header" footer="some footer" />
     )
+  it('will render a table', () => {
+    const wrapper = render({ domainsWithWrongItemCode })
+    expect(wrapper.find('table').length).toBe(1)
+  })
+
+  it('will render a tbody', () => {
+    const wrapper = render({ domainsWithWrongItemCode })
+    expect(wrapper.find('tbody').length).toBe(1)
+  })
+
+  it('will render 3 rows', () => {
+    const wrapper = render({ domainsWithWrongItemCode })
+    expect(wrapper.find('tr').length).toBe(3)
+  })
+
+  it('will render 4 <PrintSummaryRecord/>', () => {
+    const wrapper = render({ domainsWithWrongItemCode })
+    expect(wrapper.find(PrintSummaryRecord).length).toBe(4)
+  })
 
   it('will render header props', () => {
     const wrapper = render({ domainsWithWrongItemCode })

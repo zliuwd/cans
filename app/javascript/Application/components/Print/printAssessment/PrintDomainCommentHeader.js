@@ -8,7 +8,7 @@ const PrintDomainCommentHeader = props => {
       <text
         id="comment-header-left"
         fontSize="16"
-        fontWeight="900"
+        fontWeight="600"
         fill="#000000"
         x="1%"
         y="50%"
@@ -20,7 +20,7 @@ const PrintDomainCommentHeader = props => {
       <text
         id="comment-header-right"
         fontSize="16"
-        fontWeight="900"
+        fontWeight="600"
         fill="#000000"
         x="99%"
         y="50%"

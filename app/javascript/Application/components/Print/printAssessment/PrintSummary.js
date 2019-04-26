@@ -1,6 +1,11 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { summaryContainer } from './PrintAssessmentStyle'
+import {
+  summaryContainer,
+  summarySpaceHolderRow,
+  summaryContentRow,
+  summarySpaceHolderCol,
+} from './PrintAssessmentStyle'
 import CategoryHeader from '../printUtil/CategoryHeader'
 import {
   isBehavioralNeedsDomain,
@@ -46,26 +51,37 @@ class PrintSummary extends PureComponent {
       <div>
         {this.props.header}
         <CategoryHeader title="CANS Summary" />
-        <div style={summaryContainer}>
-          <PrintSummaryRecord
-            items={this.getCodes(filteredDomains, isStrengthsDomain, strengthItemsFilter)}
-            title={STRENGTHS}
-          />
-          <PrintSummaryRecord
-            items={this.getCodes(filteredDomains, isNeedsDomain, actionRequiredItemsFilter)}
-            title={ACTION_REQUIRED}
-          />
-        </div>
-        <div style={summaryContainer}>
-          <PrintSummaryRecord
-            items={this.getCodes(filteredDomains, isNeedsDomain, immediateActionRequiredItemsFilter)}
-            title={IMMEDIATE_ACTION_REQUIRED}
-          />
-          <PrintSummaryRecord
-            items={this.getCodes(filteredDomains, isTraumaDomain, traumaItemsFilter)}
-            title={TRAUMA}
-          />
-        </div>
+        <table style={summaryContainer}>
+          <tbody>
+            <tr style={summaryContentRow}>
+              <PrintSummaryRecord
+                items={this.getCodes(filteredDomains, isStrengthsDomain, strengthItemsFilter)}
+                title={STRENGTHS}
+              />
+              <td style={summarySpaceHolderCol} />
+              <PrintSummaryRecord
+                items={this.getCodes(filteredDomains, isNeedsDomain, actionRequiredItemsFilter)}
+                title={ACTION_REQUIRED}
+              />
+            </tr>
+            <tr style={summarySpaceHolderRow}>
+              <td />
+              <td />
+              <td />
+            </tr>
+            <tr style={summaryContentRow}>
+              <PrintSummaryRecord
+                items={this.getCodes(filteredDomains, isNeedsDomain, immediateActionRequiredItemsFilter)}
+                title={IMMEDIATE_ACTION_REQUIRED}
+              />
+              <td />
+              <PrintSummaryRecord
+                items={this.getCodes(filteredDomains, isTraumaDomain, traumaItemsFilter)}
+                title={TRAUMA}
+              />
+            </tr>
+          </tbody>
+        </table>
         {this.props.footer}
       </div>
     )

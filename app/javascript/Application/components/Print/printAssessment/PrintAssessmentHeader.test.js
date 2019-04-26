@@ -55,6 +55,7 @@ describe('<PrintAssessmentHeader />', () => {
     const target = wrapper.find('#third-row')
     expect(target.length).toBe(1)
     expect(target.contains(headerFakeProps.clientAge)).toBe(true)
+    expect(target.contains('Authorization for release of information on file?')).toBe(true)
     expect(wrapper.find(PrintAssessmentHeaderOptions).length).toBe(2)
   })
 
