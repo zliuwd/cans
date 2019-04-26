@@ -91,7 +91,6 @@ class Domain extends React.PureComponent {
           Caregiver Name <span className={'caregiver-name-label-asterisk'}>*</span>
         </Label>
         <Input
-          id="caregiverName"
           bsSize="sm"
           placeholder="ex. Last Name, First Name/Relationship to child or youth"
           className={'caregiver-name'}
