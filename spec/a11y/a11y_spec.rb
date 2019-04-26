@@ -37,6 +37,9 @@ feature 'Pages are accessible' do
     # this exclude should be discussed with designers
     expect(page).to be_accessible.excluding '#cancel-assessment',
                                             '#assessment-date_input',
-                                            '.review-regular-button'
+                                            '.review-regular-button',
+                                            # will be fixed in CANS-1183
+                                            '#conducted-by-last-name',
+                                            '#conducted-by-role'
   end
 end

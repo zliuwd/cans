@@ -6,13 +6,13 @@ import PropTypes from 'prop-types'
 import { clone } from '../../util/common'
 import './style.sass'
 import DateField from '../common/DateField'
-import ConductedByField from './AssessmentFormHeader/ConductedByField'
 import AssessmentOptions from './AssessmentFormHeader/AssessmentOptions'
 import AgeRangeSwitch from '../common/AgeRangeSwitch'
 import { Card, CardBody, CardHeader, CardTitle } from '@cwds/components'
 import { calculateDateDifferenceInYears, isoToLocalDate, isValidDate } from '../../util/dateHelper'
 import moment from 'moment/moment'
 import { LoadingState } from '../../util/loadingHelper'
+import ConductedBy from './AssessmentFormHeader/ConductedBy'
 
 class AssessmentFormHeader extends PureComponent {
   handleValueChange = event => this.changeFieldAndUpdateAssessment(event.target.name, event.target.value)
@@ -41,12 +41,6 @@ class AssessmentFormHeader extends PureComponent {
     const assessment = clone(this.props.assessment)
     assessment.can_release_confidential_info = canReleaseInfo
     resetConfidentialByDefaultItems(assessment, !canReleaseInfo)
-    this.props.onAssessmentUpdate(assessment)
-  }
-
-  handleConductedByChange = event => {
-    const assessment = clone(this.props.assessment)
-    assessment.conducted_by = event.target.value
     this.props.onAssessmentUpdate(assessment)
   }
 
@@ -170,11 +164,6 @@ class AssessmentFormHeader extends PureComponent {
         <Col sm={3}>
           <Label className={'assessment-form-header-label'}>Select CANS Template *</Label>
         </Col>
-        <Col sm={4}>
-          <Label for={'conducted-by'} className={'assessment-form-header-label'}>
-            Assessment Conducted by
-          </Label>
-        </Col>
       </Row>
     )
   }
@@ -195,16 +184,12 @@ class AssessmentFormHeader extends PureComponent {
               disabled={this.props.disabled}
             />
           </Col>
-          <Col sm={4}>
-            <ConductedByField
-              id={'conducted-by'}
-              value={assessment.conducted_by}
-              onChange={this.handleConductedByChange}
-              disabled={this.props.disabled}
-            />
-          </Col>
         </Row>
-
+        <ConductedBy
+          disabled={this.props.disabled}
+          assessment={assessment}
+          onAssessmentUpdate={this.props.onAssessmentUpdate}
+        />
         <AssessmentOptions
           assessment={assessment}
           canReleaseConfidentialInfo={canReleaseInfo}

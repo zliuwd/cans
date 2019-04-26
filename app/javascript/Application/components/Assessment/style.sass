@@ -399,3 +399,33 @@ $item-confidential-label-height: 6.05rem
 .-redacted-level-radio-group
   padding-left: 2rem
   padding-top: 1rem
+
+//*********************************
+//  Form fields
+//*********************************
+
+.conducted-by-name-field-err
+  border-color: $error-red !important
+
+.form-field-length
+  @extend .domain-comment-text-length
+
+.form-field-length-err
+  @extend .form-field-length
+  color: $error-red
+  width: 30%
+
+.form-field-error-message-container
+  width: 70%
+
+.form-field-error-message
+  padding-left: 0.5rem
+  font-size: 0.9rem
+  color: $error-red
+
+.conducted-by-name-field-err
+  background-image: none !important
+
+
+.assessment-form-header-input-role
+  width: 100%

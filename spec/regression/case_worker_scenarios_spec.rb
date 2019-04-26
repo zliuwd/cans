@@ -37,10 +37,10 @@ feature 'Case Worker Functionality' do
     validate_save_button
     click_0_to_5_button
     clear_date_field
-    fill_conducted_by_field('Mike Seaver')
+    fill_conducted_by_first_name_field('Mike')
     validate_save_button
     input_date_and_calendar_icon_test(current_date)
-    fill_conducted_by_field('Mike Seaver')
+    fill_conducted_by_first_name_field('Mike')
     check_case_or_referral_number
     click_0_to_5_button
     domain_and_item_rating_test
@@ -96,6 +96,7 @@ feature 'Case Worker Functionality' do
       visit '/'
       @assessment_helper.start_assessment_for(CLIENT_NAME, has_previous_values)
     end
+    fill_conducted_by
     @form.review_all_domains_6_to_21
     expand_first_item
     item_and_domain_level_comment_test
@@ -108,20 +109,20 @@ feature 'Case Worker Functionality' do
     visit '/'
     @assessment_helper.start_assessment_for CLIENT_NAME
     click_0_to_5_button
-    fill_conducted_by_field(CONDUCTED_BY)
+    fill_conducted_by_first_name_field(CONDUCTED_BY)
     save_and_check_the_success_message
     validate_change_log_link
     validate_changelog_page_is_accessible(current_date, CLIENT_NAME)
     visit_assessment_page_from_changelog(assessment_link)
-    fill_conducted_by_field(CONDUCTED_BY_UPDATED)
+    fill_conducted_by_first_name_field(CONDUCTED_BY_UPDATED)
     validate_change_log_link
     unsaved_warning_discard_and_continue
     validate_changelog_page_is_accessible(current_date, CLIENT_NAME)
     visit_assessment_page_from_changelog(assessment_link)
-    fill_conducted_by_field(CONDUCTED_BY)
+    fill_conducted_by_first_name_field(CONDUCTED_BY)
     validate_change_log_link
     unsaved_warning_close
-    expect(@form.header.conducted_by.value).to eq(CONDUCTED_BY)
+    expect(@form.header.conducted_by_first_name.value).to eq(CONDUCTED_BY)
   end
 
   scenario 'Case worker creates and deletes assessment' do
@@ -153,10 +154,10 @@ feature 'Case Worker Functionality' do
     visit '/'
     @assessment_helper.start_assessment_for CLIENT_NAME
     click_0_to_5_button
-    fill_conducted_by_field(CONDUCTED_BY)
+    fill_conducted_by_first_name_field(CONDUCTED_BY)
     print_assessment
     unsaved_warning_close
-    expect(@form.header.conducted_by.value).to eq(CONDUCTED_BY)
+    expect(@form.header.conducted_by_first_name.value).to eq(CONDUCTED_BY)
   end
 
   scenario 'Case worker uses "back"/"forward" buttons on saved/unsaved assessment' do
@@ -169,29 +170,29 @@ feature 'Case Worker Functionality' do
     visit '/'
     @assessment_helper.start_assessment_for CLIENT_NAME
     click_0_to_5_button
-    fill_conducted_by_field(CONDUCTED_BY)
+    fill_conducted_by_first_name_field(CONDUCTED_BY)
     save_and_check_the_success_message
     @form.breadcrumbs.route_from_breadcrumbs(CLIENT_NAME)
     @client_profile.go_to_recently_updated_assessment(current_date)
-    fill_conducted_by_field('1')
+    fill_conducted_by_first_name_field('1')
     go_back
     unsaved_warning_close
-    expect(@form.header.conducted_by.value).to eq('1')
+    expect(@form.header.conducted_by_first_name.value).to eq('1')
     go_back
     unsaved_warning_save_and_continue
     expect(@client_profile).to have_recently_updated_assessments_links
     @client_profile.go_to_recently_updated_assessment(current_date)
-    fill_conducted_by_field('2')
+    fill_conducted_by_first_name_field('2')
     go_back
     unsaved_warning_discard_and_continue
     expect(@client_profile).to have_recently_updated_assessments_links
     @client_profile.go_to_recently_updated_assessment(current_date)
     @form.change_log_link.click
     go_back
-    fill_conducted_by_field('3')
+    fill_conducted_by_first_name_field('3')
     go_forward
     unsaved_warning_close
-    expect(@form.header.conducted_by.value).to eq('3')
+    expect(@form.header.conducted_by_first_name.value).to eq('3')
     save_and_check_the_success_message
     @form.breadcrumbs.route_from_breadcrumbs(CLIENT_NAME)
     @client_profile.go_to_recently_updated_assessment(current_date)
@@ -285,7 +286,7 @@ feature 'Case Worker Functionality' do
     click_0_to_5_button
     expect(@form.header).to have_redaction_message_0_to_5
     expect(@form.header.date_field.value).to eq(current_date)
-    expect(@form.header).to have_conducted_by
+    expect(@form.header).to have_conducted_by_first_name
     check_case_or_referral_number
     expect(@form).to have_assessment_card_title_0_5
     expect(@form).to have_caregiver_domain_headers
@@ -405,7 +406,7 @@ feature 'Case Worker Functionality' do
 
   def fill_form_header_0_to_5(should_start_prefilled)
     is_reassessment = @assessment_helper.start_assessment_for CLIENT_NAME, should_start_prefilled
-    fill_conducted_by_field('')
+    fill_conducted_by
     expect(@form.header).to have_no_redaction_message
     click_0_to_5_button
     expect(@form.header).to have_redaction_message_0_to_5
@@ -415,7 +416,7 @@ feature 'Case Worker Functionality' do
 
   def fill_form_header_6_to_21(should_start_prefilled)
     is_reassessment = @assessment_helper.start_assessment_for CLIENT_NAME, should_start_prefilled
-    fill_conducted_by_field('')
+    fill_conducted_by
     click_6_to_21_button
     expect(@form.header).to have_redaction_message_6_to_21
     expect(@form).to have_assessment_card_title_6_21

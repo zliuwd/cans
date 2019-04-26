@@ -23,7 +23,7 @@ export const headerContainer = {
 export const headerContentBox = {
   fontSize: '0.9rem',
   fontWeight: '900',
-  minHeight: '1.1rem',
+  minHeight: '1.3rem',
   borderBottom: 'thin solid black',
   paddingBottom: '0.3rem',
 }

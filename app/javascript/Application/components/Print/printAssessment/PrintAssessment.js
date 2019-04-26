@@ -17,6 +17,8 @@ import {
   shouldDomainBeRendered,
   validateAssessmentForSubmit,
   isSubsequentType,
+  ConductedByNameMaxLength,
+  getConductedByRoleName,
 } from '../../Assessment/AssessmentHelper'
 import moment from 'moment/moment'
 import { redactLevels } from './PrintAssessmentHelper'
@@ -68,18 +70,16 @@ class PrintAssessment extends PureComponent {
     return <PrintAssessmentOverallHeader printStatus={this.handlePrintStatus(assessment.status)} {...headerPorps} />
   }
 
-  render() {
-    const { i18n, assessment, redactLevel } = this.props
-    const domains = this.props.assessment.state.domains
-    const isUnderSix = assessment.state.under_six
-    const reassessmentInfo = this.handleIsReassessmentInfo(assessment)
-    const printAssessmentHeaderProps = {
+  printAssessmentHeaderProps = (assessment, reassessmentInfo, isUnderSix) => {
+    return {
       client: assessment.person,
       clientDob: isoToLocalDate(assessment.person.dob),
       clientAge: this.handleClientAge(assessment.person.dob),
       countyName: assessment.county && assessment.county.name ? `${assessment.county.name}` : '',
       eventDate: isoToLocalDate(assessment.event_date),
-      conductedBy: assessment.conducted_by || '',
+      conducted_by_first_name: (assessment.conducted_by_first_name || '').substring(0, ConductedByNameMaxLength),
+      conducted_by_last_name: assessment.conducted_by_last_name || '',
+      conducted_by_role: getConductedByRoleName(assessment),
       caseReferralNumberTitle: clientCaseReferralNumber(assessment.service_source),
       caseReferralNumber: assessment.service_source_ui_id,
       assessmentType: assessment.completed_as,
@@ -89,6 +89,14 @@ class PrintAssessment extends PureComponent {
       ageRange: this.handleAgeRange(isUnderSix),
       reassessmentInfo,
     }
+  }
+
+  render() {
+    const { i18n, assessment, redactLevel } = this.props
+    const domains = this.props.assessment.state.domains
+    const isUnderSix = assessment.state.under_six
+    const reassessmentInfo = this.handleIsReassessmentInfo(assessment)
+    const printAssessmentHeaderProps = this.printAssessmentHeaderProps(assessment, reassessmentInfo, isUnderSix)
     const canDisplaySummary =
       validateAssessmentForSubmit(this.props.assessment) || this.props.assessment.status === 'COMPLETED'
 

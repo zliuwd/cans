@@ -9,7 +9,9 @@ export const headerFakeProps = {
   clientAge: '4',
   countyName: 'Jim',
   eventDate: '01/01/2019',
-  conductedBy: 'Mike',
+  conducted_by_first_name: 'conducted_by_first_name',
+  conducted_by_last_name: 'conducted_by_last_name',
+  conducted_by_role: 'UNKNOWN',
   caseReferralNumberTitle: 'case number',
   caseReferralNumber: '123456',
   assessmentType: 'some type',
@@ -62,6 +64,8 @@ describe('<PrintAssessmentHeader />', () => {
   it('will render fourth row of header with correct content', () => {
     const target = wrapper.find('#fourth-row')
     expect(target.length).toBe(1)
-    expect(target.contains(headerFakeProps.conductedBy)).toBe(true)
+    expect(target.contains(headerFakeProps.conducted_by_first_name)).toBe(true)
+    expect(target.contains(headerFakeProps.conducted_by_last_name)).toBe(true)
+    expect(target.contains(headerFakeProps.conducted_by_role)).toBe(true)
   })
 })

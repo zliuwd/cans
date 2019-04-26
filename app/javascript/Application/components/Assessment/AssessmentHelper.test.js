@@ -18,6 +18,7 @@ import {
   isSubsequentType,
   AssessmentType,
   hasConfidentialItems,
+  getConductedByRoleName,
 } from './AssessmentHelper'
 import { globalAlertService } from '../../util/GlobalAlertService'
 import { clone } from '../../util/common'
@@ -450,6 +451,16 @@ describe('AssessmentHelper', () => {
       item.confidential = false
       item.confidential_by_default = true
       expect(hasConfidentialItems(assessment)).toBeFalsy()
+    })
+  })
+
+  describe('#getConductedByRoleName()', () => {
+    it('should return role label by value', () => {
+      expect(getConductedByRoleName({ conducted_by_role: 'UNKNOWN' })).toBe('Unknown')
+    })
+
+    it('should return empty string if label not found', () => {
+      expect(getConductedByRoleName({ conducted_by_role: 'ERR' })).toBe('')
     })
   })
 })

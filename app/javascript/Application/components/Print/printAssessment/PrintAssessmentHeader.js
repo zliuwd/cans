@@ -97,15 +97,15 @@ class PrintAssessmentHeader extends PureComponent {
     return (
       <div id="fourth-row" style={headerThreeColsRow}>
         <div style={headerConductedByBox}>
-          <div style={headerContentBox}>{this.props.conductedBy}</div>
+          <div style={headerContentBox}>{this.props.conducted_by_first_name}</div>
           <div style={headerDescriptionBox}>First name</div>
         </div>
         <div style={headerConductedByBox}>
-          <div style={headerContentBox} />
+          <div style={headerContentBox}>{this.props.conducted_by_last_name}</div>
           <div style={headerDescriptionBox}>Last name</div>
         </div>
         <div style={headerConductedByBox}>
-          <div style={headerContentBox} />
+          <div style={headerContentBox}>{this.props.conducted_by_role}</div>
           <div style={headerDescriptionBox}>Role</div>
         </div>
       </div>
@@ -132,7 +132,9 @@ PrintAssessmentHeader.propTypes = {
   client: PropTypes.object.isRequired,
   clientAge: PropTypes.string,
   clientDob: PropTypes.string,
-  conductedBy: PropTypes.string,
+  conducted_by_first_name: PropTypes.string,
+  conducted_by_last_name: PropTypes.string,
+  conducted_by_role: PropTypes.string,
   countyName: PropTypes.string.isRequired,
   eventDate: PropTypes.string.isRequired,
   hasCaregiver: PropTypes.bool.isRequired,
@@ -141,9 +143,11 @@ PrintAssessmentHeader.propTypes = {
 PrintAssessmentHeader.defaultProps = {
   clientDob: '',
   clientAge: '',
-  conductedBy: '',
   caseReferralNumber: '',
   caseReferralNumberTitle: '',
+  conducted_by_first_name: '',
+  conducted_by_last_name: '',
+  conducted_by_role: '',
 }
 
 export default PrintAssessmentHeader
