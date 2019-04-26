@@ -121,7 +121,7 @@ class Domain extends React.PureComponent {
       isUsingPriorRatings,
       previousRatingsMap,
     } = this.props
-    const isReviewed = isUsingPriorRatings ? domain.is_reviewed : true
+    const isReviewed = Boolean(isUsingPriorRatings ? domain.is_reviewed : true)
     const { items, is_caregiver_domain: isCaregiverDomain } = domain
     const { title, description, caregiverName } = this.state
     const itemListProps = {

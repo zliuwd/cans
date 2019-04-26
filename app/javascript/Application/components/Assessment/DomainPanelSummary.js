@@ -80,7 +80,7 @@ DomainPanelSummary.propTypes = {
   isAssessmentUnderSix: PropTypes.bool.isRequired,
   isCaregiverDomain: PropTypes.bool,
   isExpanded: PropTypes.bool.isRequired,
-  isReviewed: PropTypes.bool,
+  isReviewed: PropTypes.bool.isRequired,
   title: PropTypes.string,
   totalScore: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   warningText: PropTypes.node.isRequired,
@@ -90,7 +90,6 @@ DomainPanelSummary.defaultProps = {
   caregiverName: '',
   description: '',
   isCaregiverDomain: false,
-  isReviewed: true,
   title: '',
 }
 

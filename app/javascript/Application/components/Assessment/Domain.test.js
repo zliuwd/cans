@@ -111,6 +111,10 @@ describe('<Domain />', () => {
       expect(wrapper.find(Icon).exists()).toBe(true)
     })
 
+    it('passes isReviewed false to DomainPanelSummary when domain.is_reviewed is undefined', () => {
+      expect(wrapper.find('DomainPanelSummary').props().isReviewed).toBe(false)
+    })
+
     it('will render a Icon with rotation 270 when expanded', () => {
       const target = wrapper.find(Icon).at(0)
       expect(target.length).toBe(1)
