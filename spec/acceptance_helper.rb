@@ -54,16 +54,21 @@ Capybara.register_driver :selenium do |app|
 end
 
 Capybara.register_driver :headless_selenium do |app|
-  options = ::Selenium::WebDriver::Chrome::Options.new
-  options.add_argument('--headless')
-  options.add_argument('--disable-gpu')
-  options.add_argument('--no-sandbox')
-  options.add_argument('--disable-dev-shm-usage')
-  options.add_argument('--remote-debugging-pipe')
-  options.add_argument('--incognito')
-  options.add_argument('--window-size=1400,1400')
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    chromeOptions: {
+      args: [
+        'headless',
+        'disable-gpu',
+        'no-sandbox',
+        'disable-dev-shm-usage',
+        'window-size=1400,1400'
+      ]
+    }
+  )
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+  Capybara::Selenium::Driver.new app,
+                                 browser: :chrome,
+                                 desired_capabilities: capabilities
 end
 
 Capybara::Screenshot.register_driver(:headless_selenium) do |driver, path|
