@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import { AssessmentFormHeader } from './index'
 import { assessment, client, clientWithEstimatedDob } from './assessment.mocks.test'
 import { clone } from '../../util/common'
-import ConductedByField from './AssessmentFormHeader/ConductedByField'
+import ConductedBy from './AssessmentFormHeader/ConductedBy'
 import AgeRangeSwitch from '../common/AgeRangeSwitch'
 import { Card, CardBody, CardHeader, CardTitle } from '@cwds/components'
 import { LoadingState } from '../../util/loadingHelper'
@@ -25,9 +25,9 @@ describe('<AssessmentFormHeader />', () => {
     assessmentServiceStatus: LoadingState.ready,
   }
 
-  it('renders with 1 <ConductedByField> component', () => {
+  it('renders with 1 <ConductedBy> component', () => {
     const wrapper = shallow(<AssessmentFormHeader {...defaultProps} />)
-    expect(wrapper.find(ConductedByField).exists()).toBe(true)
+    expect(wrapper.find(ConductedBy).exists()).toBe(true)
   })
 
   it('renders the under_six question when under_six is unknown', () => {
@@ -78,9 +78,9 @@ describe('<AssessmentFormHeader />', () => {
       wrapped = shallow(<AssessmentFormHeader {...defaultProps} />)
     })
 
-    it('renders top 3 labels', () => {
+    it('renders top 2 labels', () => {
       const labels = wrapped.find('.assessment-form-header-label').map(label => label.children().text())
-      expect(labels).toEqual(['Assessment Date *', 'Select CANS Template *', 'Assessment Conducted by'])
+      expect(labels).toEqual(['Assessment Date *', 'Select CANS Template *'])
     })
   })
 
@@ -387,60 +387,6 @@ describe('<AssessmentFormHeader />', () => {
     })
   })
 
-  describe('Assessment Conducted by', () => {
-    const mockFn = jest.fn()
-    it('renders input', () => {
-      const props = {
-        assessment,
-        client,
-        onAssessmentUpdate: mockFn,
-        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
-        assessmentServiceStatus: LoadingState.ready,
-      }
-      const wrapper = shallow(<AssessmentFormHeader {...props} />)
-      expect(wrapper.find('#conducted-by').length).toBe(1)
-    })
-
-    it('disabled when assessment is read-only ', () => {
-      const completedAssessment = clone(assessment)
-      completedAssessment.metadata.allowed_operations = ['read', 'create', 'complete', 'delete']
-      const props = {
-        assessment: completedAssessment,
-        client,
-        onAssessmentUpdate: mockFn,
-        substanceUseItemsIds: defaultProps.substanceUseItemsIds,
-        assessmentServiceStatus: LoadingState.ready,
-        disabled: true,
-      }
-      const wrapper = shallow(<AssessmentFormHeader {...props} />)
-      expect(wrapper.find('#conducted-by').prop('disabled')).toBeTruthy()
-    })
-
-    describe('#handleConductedByChange', () => {
-      it('calls onAssessmentUpdate when conducted_by is changed', () => {
-        const conductedByValue = 'NAME'
-        const props = {
-          assessment,
-          client,
-          onAssessmentUpdate: mockFn,
-          substanceUseItemsIds: defaultProps.substanceUseItemsIds,
-          assessmentServiceStatus: LoadingState.ready,
-        }
-        const wrapper = shallow(<AssessmentFormHeader {...props} />)
-        const event = {
-          target: { name: 'conducted_by', value: conductedByValue },
-        }
-        wrapper
-          .find('#conducted-by')
-          .props()
-          .onChange(event)
-        const updatedAssessment = clone(assessment)
-        updatedAssessment.conducted_by = conductedByValue
-        expect(mockFn).toHaveBeenCalledWith(updatedAssessment)
-      })
-    })
-  })
-
   describe('AssessmentFormHeader Card', () => {
     describe('when loading', () => {
       const wrapper = shallow(<AssessmentFormHeader {...defaultProps} />)
@@ -476,8 +422,8 @@ describe('<AssessmentFormHeader />', () => {
       expect(wrapper.find('AssessmentOptions').prop('isDisabled')).toEqual(true)
     })
 
-    it('propagates disable props to <ConductedByField> ', () => {
-      expect(wrapper.find('ConductedByField').prop('disabled')).toEqual(true)
+    it('propagates disable props to <ConductedBy> ', () => {
+      expect(wrapper.find('ConductedBy').prop('disabled')).toEqual(true)
     })
   })
 })

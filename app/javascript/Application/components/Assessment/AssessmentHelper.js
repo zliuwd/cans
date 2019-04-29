@@ -4,7 +4,7 @@ import { globalAlertService } from '../../util/GlobalAlertService'
 import { urlTrimmer } from '../../util/urlTrimmer'
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import { isEmpty } from '../../util/common'
+import { isEmpty, findSelectOptionByValue } from '../../util/common'
 
 export const AssessmentType = Object.freeze({
   initial: 'INITIAL',
@@ -21,6 +21,20 @@ export const AssessmentStatus = Object.freeze({
   deleted: 'DELETED',
 })
 
+export const ConductedByRoleOptions = [
+  { label: 'CFT Facilitator', value: 'CFT_FACILITATOR' },
+  { label: 'Child Welfare Worker', value: 'CHILD_WELFARE_WORKER' },
+  { label: 'Mental Health', value: 'MENTAL_HEALTH' },
+  { label: 'Comm. Based Agency', value: 'COMM_BASED_AGENCY' },
+  { label: 'Other', value: 'OTHER' },
+  { label: 'Unknown', value: 'UNKNOWN' },
+]
+
+export const getConductedByRoleName = assessment => {
+  const option = findSelectOptionByValue(assessment.conducted_by_role, ConductedByRoleOptions)
+  return option ? option.label : ''
+}
+
 export const defaultEmptyAssessment = {
   event_date: getCurrentIsoDate(),
   has_caregiver: true,
@@ -28,6 +42,8 @@ export const defaultEmptyAssessment = {
     domains: [],
   },
 }
+
+export const ConductedByNameMaxLength = 30
 
 export function validateAssessmentForSubmit(assessment) {
   return validateAssessmentDtoFields(assessment) && validateAssessmentState(assessment.state)
@@ -39,7 +55,11 @@ function validateAssessmentDtoFields(assessmentDto) {
     validateAssessmentEventDate(assessmentDto.person.dob, assessmentDto.event_date) &&
     isDefined(assessmentDto.assessment_type) &&
     isDefined(assessmentDto.completed_as) &&
-    isDefined(assessmentDto.has_caregiver)
+    isDefined(assessmentDto.has_caregiver) &&
+    isDefined(assessmentDto.conducted_by_first_name) &&
+    assessmentDto.conducted_by_first_name.length <= ConductedByNameMaxLength &&
+    isDefined(assessmentDto.conducted_by_last_name) &&
+    isDefined(assessmentDto.conducted_by_role)
   )
 }
 

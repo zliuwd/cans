@@ -27,7 +27,10 @@ class AssessmentFormHeader < SitePrism::Section
   element :date_field_validation_msg, 'div.validation-error-line'
   element :calendar_icon, 'span.rw-i-calendar'
   element :calendar_cell_11, 'td.rw-cell', text: '11'
-  element :conducted_by, 'input#conducted-by'
+  element :conducted_by_first_name, 'input#conducted-by-first-name'
+  element :conducted_by_last_name, 'input#conducted-by-last-name'
+  element :conducted_by_role, 'div#conducted-by-role'
+  elements :conducted_by_role_options, '.list__option'
   element :case_or_referral, 'div#case-or-referral-number'
   element :has_caregiver_no_label, '#has-caregiver-no'
   element :has_caregiver_yes_label, '#has-caregiver-yes'
@@ -201,10 +204,23 @@ class AssessmentForm < SitePrism::Page
   end
 end
 
-def fill_conducted_by_field(text)
-  @form.header.conducted_by.set ''
-  @form.header.conducted_by.set text
-  expect(@form.header.conducted_by.value).to eq(text)
+def fill_conducted_by_first_name_field(text)
+  fill_in 'conducted-by-first-name', with: ''
+  fill_in 'conducted-by-first-name', with: text
+  expect(@form.header.conducted_by_first_name.value).to eq(text)
+end
+
+def fill_conducted_by_last_name_field(text)
+  fill_in 'conducted-by-last-name', with: ''
+  fill_in 'conducted-by-last-name', with: text
+  expect(@form.header.conducted_by_last_name.value).to eq(text)
+end
+
+def fill_conducted_by
+  fill_conducted_by_first_name_field('F')
+  fill_conducted_by_last_name_field('L')
+  @form.header.conducted_by_role.click
+  @form.header.conducted_by_role_options[0].click
 end
 
 def check_case_or_referral_number

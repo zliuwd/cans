@@ -30,7 +30,7 @@ class FooterControls extends Component {
         {isEditable &&
           !isSubmissionEnabled && (
             <span>
-              The Assessment Date and all assessment ratings must be completed before the{' '}
+              All required fields and assessment ratings must be completed before the{' '}
               {this.props.assessmentStatus === AssessmentStatus.completed ? 'Save' : 'Complete'} button becomes active.
             </span>
           )}

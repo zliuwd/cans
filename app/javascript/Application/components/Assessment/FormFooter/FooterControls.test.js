@@ -66,7 +66,7 @@ describe('<FooterControls />', () => {
       const infoMessage = wrapper.find('span')
       expect(infoMessage.exists()).toBeTruthy()
       expect(infoMessage.text()).toBe(
-        'The Assessment Date and all assessment ratings must be completed before the Complete button becomes active.'
+        'All required fields and assessment ratings must be completed before the Complete button becomes active.'
       )
     })
 

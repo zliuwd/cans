@@ -127,20 +127,8 @@ describe('<PrintAssessment />', () => {
       'canReleaseInfo',
       'isUnderSix',
       'ageRange',
-      'reassessmentInfo',
-      'confidentialWarningAlert'
+      'reassessmentInfo'
     )
-  })
-
-  it('will generate correct canReleaseInfo and pass it to PrintAssessmentHeader', () => {
-    const expectedInfo = `By selecting NO, Items ${
-      normalFakeProps.substanceUseItemsIds.aboveSix[0]
-    }, 48, and EC 41 (Substance Use Disorder
-        Items) from this CANS assessment will be redacted when printed.`
-    getWrapper(normalFakeProps)
-    target = wrapper.find(PrintAssessmentHeader)
-    expect(target.length).toBe(1)
-    expect(target.props().confidentialWarningAlert).toContain(expectedInfo)
   })
 
   it('will render a CategoryHeader with correct props', () => {

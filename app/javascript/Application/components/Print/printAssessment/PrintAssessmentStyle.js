@@ -23,7 +23,7 @@ export const headerContainer = {
 export const headerContentBox = {
   fontSize: '0.9rem',
   fontWeight: '900',
-  minHeight: '1.1rem',
+  minHeight: '1.3rem',
   borderBottom: 'thin solid black',
   paddingBottom: '0.3rem',
 }
@@ -83,17 +83,7 @@ export const headerThreeColsRow = {
 }
 
 export const headerThreeColsBox = {
-  minWidth: '10%',
-  textAlign: 'left',
-  fontSize: '1rem',
-  display: 'flex',
-  height: '5rem',
-  flexDirection: 'column',
-  flexWrap: 'nowrap',
-}
-
-export const headerReleaseInfoBox = {
-  width: '25rem',
+  minWidth: '20%',
   textAlign: 'left',
   fontSize: '1rem',
   display: 'flex',
@@ -114,7 +104,6 @@ export const headerConductedByBox = {
 
 export const headerTitleRow = {
   marginBottom: '0.5rem',
-  marginTop: '1.5rem',
 }
 
 export const headerNameRow = {
@@ -154,15 +143,31 @@ export const domainContainer = {
 }
 
 export const domainComment = {
-  pageBreakInside: 'avoid',
   marginTop: '1rem',
+  pageBreakInside: 'auto',
+  maxWidth: '42rem',
 }
 
 export const domainCommentContent = {
-  width: '95%',
-  padding: '1rem 2rem 1rem 2rem',
+  marginLeft: '2rem',
+  marginBottom: '2rem',
+  whiteSpace: 'pre-wrap',
+  wordWrap: 'break-word',
   fontWeight: '400',
   fontSize: '1rem',
+}
+
+// PrintCaregiverName-------------------------
+export const caregiverNameContainer = {
+  margin: '1rem',
+  border: 'solid thin black',
+  minHeight: '2rem',
+  padding: '1rem 0.5rem 0 1rem',
+  pageBreakInside: 'avoid',
+}
+
+export const caregiverNameText = {
+  fontWeight: '400',
 }
 
 // PrintItem----------------------------------
@@ -197,9 +202,12 @@ export const itemStyle = {
 }
 
 export const itemComment = {
-  width: '95%',
+  maxWidth: '42rem',
   fontSize: '0.9rem',
-  padding: '0.5rem 2rem 2rem 2rem',
+  marginLeft: '2rem',
+  marginBottom: '2rem',
+  whiteSpace: 'pre-wrap',
+  wordWrap: 'break-word',
   fontWeight: '100',
 }
 
@@ -232,21 +240,15 @@ export const optionLabelText = {
 
 // PrintSummary-------------------------------
 
-export const summaryContainer = {
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  flexWrap: 'wrap',
-}
+export const summaryContainer = { width: '100%', minHeight: '45rem', marginTop: '1rem' }
 
 export const summaryInnerContainer = {
-  display: 'flex',
-  flexDirection: 'column',
-  width: '48%',
+  width: '49%',
+  align: 'left',
+  verticalAlign: 'top',
   border: 'solid thin black',
   marginTop: '1rem',
-  minHeight: '20rem',
+  minHeight: '1rem',
 }
 
 export const summaryTitle = {
@@ -266,3 +268,7 @@ export const summaryItem = {
   marginBottom: '0.2rem',
   pageBreakInside: 'avoid',
 }
+
+export const summarySpaceHolderRow = { height: '1rem' }
+export const summarySpaceHolderCol = { width: '2%' }
+export const summaryContentRow = { minHeight: '1rem' }

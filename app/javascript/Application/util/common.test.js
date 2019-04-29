@@ -1,4 +1,4 @@
-import { clone, isEmpty, stringify, getPageRoute } from './common'
+import { clone, isEmpty, stringify, getPageRoute, findSelectOptionByValue } from './common'
 
 describe('common', () => {
   describe('#clone()', () => {
@@ -67,6 +67,17 @@ describe('common', () => {
   describe('#getPagePath()', () => {
     it('should return full pathname if base path is "/"', () => {
       expect(getPageRoute()).toEqual(window.document.location.pathname)
+    })
+  })
+
+  describe('#findSelectOptionByValue()', () => {
+    const options = [{ label: 'l0', value: 'v0' }, { label: 'l1', value: 'v1' }]
+    it('should return option if option is present', () => {
+      expect(findSelectOptionByValue('v0', options)).toBe(options[0])
+    })
+
+    it('should return undefined if option is not present', () => {
+      expect(findSelectOptionByValue('err', options)).toBeUndefined()
     })
   })
 })

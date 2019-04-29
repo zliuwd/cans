@@ -33,6 +33,9 @@ export const assessment = {
   assessment_type: 'INITIAL',
   status: 'IN_PROGRESS',
   completed_as: 'COMMUNIMETRIC',
+  conducted_by_first_name: 'conducted_by_first_name',
+  conducted_by_last_name: 'conducted_by_last_name',
+  conducted_by_role: 'UNKNOWN',
   can_release_confidential_info: false,
   has_caregiver: false,
   state: {
@@ -112,6 +115,9 @@ export const updatedAssessmentWithDomains = {
   assessment_type: 'INITIAL',
   status: 'IN_PROGRESS',
   completed_as: 'COMMUNIMETRIC',
+  conducted_by_first_name: 'conducted_by_first_name',
+  conducted_by_last_name: 'conducted_by_last_name',
+  conducted_by_role: 'UNKNOWN',
   can_release_confidential_info: false,
   has_caregiver: false,
   state: {
@@ -1363,6 +1369,9 @@ export const subsequentAssessment = {
 
 export const assessmentReadyForCompletion = {
   id: 4197527,
+  conducted_by_first_name: 'conducted_by_first_name',
+  conducted_by_last_name: 'conducted_by_last_name',
+  conducted_by_role: 'UNKNOWN',
   metadata: {
     allowed_operations: ['read', 'create', 'delete'],
   },
@@ -1441,6 +1450,9 @@ export const validAssessment = {
   assessment_type: 'INITIAL',
   status: 'COMPLETED',
   has_caregiver: true,
+  conducted_by_first_name: 'conducted_by_first_name',
+  conducted_by_last_name: 'conducted_by_last_name',
+  conducted_by_role: 'UNKNOWN',
   state: {
     under_six: false,
     domains: [

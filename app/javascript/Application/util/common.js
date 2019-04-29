@@ -46,3 +46,6 @@ export const basePath = process.env.CANS_BASE_PATH || '/cans'
 export const getPageRoute = () => {
   return basePath === '/' ? document.location.pathname : document.location.pathname.substring(basePath.length)
 }
+export const findSelectOptionByValue = (value, selectOptions) => {
+  return selectOptions.find(option => option.value === value)
+}

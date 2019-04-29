@@ -8,6 +8,7 @@ import PrintDomainCommentHeader from './PrintDomainCommentHeader'
 import { totalScoreCalculation } from '../../Assessment/DomainScoreHelper.js'
 import { shouldItemBeRendered } from '../../Assessment/AssessmentHelper'
 import { isConfidential, isDiscretionNeeded, redactLevels } from './PrintAssessmentHelper'
+import PrintCaregiverName from './PrintCaregiverName'
 
 const hasConfidentialItems = domain => domain.items.filter(isConfidential).length > 0
 const hasDiscretionNeededItems = domain => domain.items.filter(isDiscretionNeeded).length > 0
@@ -30,12 +31,14 @@ const PrintDomain = props => {
   const { code, caregiver_index: caregiverIndex, items, comment } = domain
   const title = domainI18n._title_ || ''
   const caregiverName = domain.caregiver_name || ''
-  const displayCaregiverName = caregiverName && `- ${caregiverName}`
+  const displayCaregiverName = caregiverName && `${caregiverName}`
+  const shouldRenderCaregiverName = Boolean(domain.caregiver_name && displayCaregiverName.length > 0)
   const totalScore = getTotalScore(domain, items, redactLevel)
   return (
     <div key={code + caregiverIndex} style={domainContainer}>
       <div>
-        <PrintDomainHeader text={`${title} ${displayCaregiverName}`} total={totalScore} />
+        <PrintDomainHeader text={title} total={totalScore} />
+        {shouldRenderCaregiverName && <PrintCaregiverName name={displayCaregiverName} />}
       </div>
       <div>
         {items.map((item, index) => {
@@ -53,7 +56,8 @@ const PrintDomain = props => {
         })}
       </div>
       <div>
-        <PrintDomainCommentHeader text={`${title} ${displayCaregiverName}`} remark={commentRemark(comment)} />
+        <PrintDomainCommentHeader text={title} remark={commentRemark(comment)} />
+        {shouldRenderCaregiverName && <PrintCaregiverName name={displayCaregiverName} />}
         {comment && (
           <div style={domainComment}>
             <div style={domainCommentContent}>{comment}</div>
