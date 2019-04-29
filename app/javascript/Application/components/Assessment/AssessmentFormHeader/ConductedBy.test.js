@@ -1,6 +1,5 @@
 import React from 'react'
 import { clone } from '../../../util/common'
-import { Label } from 'reactstrap'
 import './style.sass'
 import ConductedByNameField from './ConductedByNameField'
 import ConductedByRole from './ConductedByRole'
@@ -27,7 +26,7 @@ describe('Assessment Conducted by', () => {
     expect(firstNameInput.props().value).toBe(assessment.conducted_by_first_name)
     expect(firstNameInput.props().disabled).toBe(props.disabled)
     expect(firstNameInput.props().id).toBe('conducted-by-first-name')
-    expect(firstNameInput.props().placeholder).toBe('First Name')
+    expect(firstNameInput.props().label).toBe('First Name *')
     expect(firstNameInput.props().onChange).toBe(wrapper.instance().handleConductedByFirstNameChange)
     expect(firstNameInput.props().errorMessage).toBe('First name is too long')
   })
@@ -38,7 +37,7 @@ describe('Assessment Conducted by', () => {
     expect(lastNameInput.props().value).toBe(assessment.conducted_by_last_name)
     expect(lastNameInput.props().disabled).toBe(props.disabled)
     expect(lastNameInput.props().id).toBe('conducted-by-last-name')
-    expect(lastNameInput.props().placeholder).toBe('Last Name')
+    expect(lastNameInput.props().label).toBe('Last Name *')
     expect(lastNameInput.props().onChange).toBe(wrapper.instance().handleConductedByLastNameChange)
     expect(lastNameInput.props().errorMessage).toBe('')
   })
@@ -53,8 +52,8 @@ describe('Assessment Conducted by', () => {
 
   it('renders label', () => {
     const wrapper = shallow(<ConductedBy {...props} />)
-    const label = wrapper.find(Label).at(0)
-    expect(label.render().text()).toBe('Assessment Conducted By *')
+    const label = wrapper.find('legend').at(0)
+    expect(label.render().text()).toBe('Assessment Conducted By')
   })
 
   it('handleConductedByFirstNameChange calls onAssessmentUpdate', () => {

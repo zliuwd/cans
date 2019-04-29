@@ -13,7 +13,7 @@ describe('<ConductedByNameField/>', () => {
     onChange: jest.fn(),
     disabled: false,
     maxLength: ConductedByNameMaxLength,
-    placeholder: 'placeholder',
+    label: 'label',
     errorMessage: 'errorMessage',
   }
 
@@ -33,7 +33,12 @@ describe('<ConductedByNameField/>', () => {
     expect(input.props().onChange).toBe(props.onChange)
     expect(input.props().disabled).toBe(props.disabled)
     expect(input.props().maxLength).toBe(props.maxLength)
-    expect(input.props().placeholder).toBe(props.placeholder)
+    expect(
+      wrapper
+        .find('Label')
+        .render()
+        .text()
+    ).toBe(props.label)
   })
 
   it('renders character counter', () => {

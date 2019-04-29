@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Row, Col, Label } from 'reactstrap'
+import { Row, Col } from 'reactstrap'
 import PropTypes from 'prop-types'
 import './style.sass'
 import ConductedByNameField from './ConductedByNameField'
@@ -27,43 +27,39 @@ class ConductedBy extends Component {
   render() {
     const { assessment, disabled } = this.props
     return (
-      <div>
-        <Row>
-          <Col sm={4}>
-            <Label for={'conducted-by-first-name'} className={'assessment-form-header-label'}>
-              Assessment Conducted By *
-            </Label>
-          </Col>
-        </Row>
-        <Row className={'assessment-form-header-inputs'}>
-          <Col sm={4}>
-            <ConductedByNameField
-              id={'conducted-by-first-name'}
-              placeholder={'First Name'}
-              value={assessment.conducted_by_first_name}
-              onChange={this.handleConductedByFirstNameChange}
-              disabled={disabled}
-              errorMessage={'First name is too long'}
-            />
-          </Col>
-          <Col sm={4}>
-            <ConductedByNameField
-              id={'conducted-by-last-name'}
-              placeholder={'Last Name'}
-              value={assessment.conducted_by_last_name}
-              onChange={this.handleConductedByLastNameChange}
-              disabled={disabled}
-            />
-          </Col>
-          <Col sm={4}>
-            <ConductedByRole
-              value={assessment.conducted_by_role}
-              onChange={this.handleConductedByRoleChange}
-              disabled={disabled}
-            />
-          </Col>
-        </Row>
-      </div>
+      <form>
+        <fieldset>
+          <legend className={'assessment-form-header-legend'}>Assessment Conducted By</legend>
+          <Row className={'assessment-form-header-inputs'}>
+            <Col sm={4}>
+              <ConductedByNameField
+                id={'conducted-by-first-name'}
+                label={'First Name *'}
+                value={assessment.conducted_by_first_name}
+                onChange={this.handleConductedByFirstNameChange}
+                disabled={disabled}
+                errorMessage={'First name is too long'}
+              />
+            </Col>
+            <Col sm={4}>
+              <ConductedByNameField
+                id={'conducted-by-last-name'}
+                label={'Last Name *'}
+                value={assessment.conducted_by_last_name}
+                onChange={this.handleConductedByLastNameChange}
+                disabled={disabled}
+              />
+            </Col>
+            <Col sm={4}>
+              <ConductedByRole
+                value={assessment.conducted_by_role}
+                onChange={this.handleConductedByRoleChange}
+                disabled={disabled}
+              />
+            </Col>
+          </Row>
+        </fieldset>
+      </form>
     )
   }
 }
