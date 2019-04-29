@@ -8,12 +8,15 @@ import { Icon, UncontrolledTooltip } from '@cwds/components'
 
 class DomainPanelSummary extends React.PureComponent {
   renderCaregiverName() {
-    const { caregiverName, isCaregiverDomain, warningText } = this.props
+    const { caregiverName, isCaregiverDomain } = this.props
+    const needsWarning =
+      (isCaregiverDomain && caregiverName === '') || (isCaregiverDomain && caregiverName && caregiverName.trim() === '')
 
-    return (isCaregiverDomain && caregiverName === '') ||
-      (isCaregiverDomain && caregiverName && caregiverName.trim() === '')
-      ? warningText
-      : caregiverName && `- ${caregiverName}`
+    return needsWarning ? (
+      <span className={'caregiver-warning-text'}> Caregiver Name is required</span>
+    ) : (
+      caregiverName && `- ${caregiverName}`
+    )
   }
 
   renderInfoTip() {
@@ -97,7 +100,6 @@ DomainPanelSummary.propTypes = {
   isReviewed: PropTypes.bool.isRequired,
   title: PropTypes.string,
   totalScore: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  warningText: PropTypes.node.isRequired,
 }
 
 DomainPanelSummary.defaultProps = {

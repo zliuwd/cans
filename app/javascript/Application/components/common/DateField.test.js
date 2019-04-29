@@ -107,21 +107,25 @@ describe('DateField', () => {
   })
 
   describe('when value is null, emptystring, or undefined', () => {
-    describe('with time', () =>
-      [null, '', undefined].map(value => {
+    const testValues = [null, '', undefined]
+
+    describe('with time', () => {
+      testValues.forEach(value => {
         it(`with ${value} has a blank as value`, () => {
           const input = mountDateField({ value }).find('input')
           expect(input.props().value).toEqual('')
         })
-      }))
+      })
+    })
 
-    describe('without time', () =>
-      [null, '', undefined].map(value => {
+    describe('without time', () => {
+      testValues.forEach(value => {
         it(`with ${value} has a blank as value`, () => {
           const input = mountDateField({ value, hasTime: false }).find('input')
           expect(input.props().value).toEqual('')
         })
-      }))
+      })
+    })
   })
 
   it('handles null changes to dates (value deleted)', () => {

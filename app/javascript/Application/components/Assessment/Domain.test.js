@@ -1,7 +1,6 @@
 import React from 'react'
-import { Button, Icon, UncontrolledTooltip } from '@cwds/components'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
-import { shallow, mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import Domain from './Domain'
 import { DomainItemList, DomainCaregiverControls } from './'
 import DomainComment from './DomainComment'
@@ -30,27 +29,6 @@ const i18nDefault = {
   'BEHEMO._description_': 'Description',
 }
 
-const domainComponentDefault = (
-  <Domain
-    key={'1'}
-    canReleaseConfidentialInfo={true}
-    domain={{ ...domainDefault }}
-    isAssessmentUnderSix={true}
-    i18nAll={{ ...i18nDefault }}
-    index={1}
-    onItemCommentUpdate={() => {}}
-    onDomainCommentUpdate={() => {}}
-    onExpandedChange={() => {}}
-    onRatingUpdate={() => {}}
-    onConfidentialityUpdate={() => {}}
-    onAddCaregiverDomain={() => {}}
-    handleWarningShow={() => {}}
-    onCaregiverNameUpdate={() => {}}
-    onDomainReviewed={() => {}}
-    isCompletedAssessment={false}
-  />
-)
-
 const testExpandingEvent = {
   type: 'keydown',
   target: {
@@ -65,65 +43,88 @@ describe('<Domain />', () => {
   const autoScroll = require.requireActual('../../util/assessmentAutoScroll')
   autoScroll.expandingThenScroll = jest.fn(() => null)
   const expandingThenScroll = autoScroll.expandingThenScroll
+
+  const shallowRender = ({
+    key = '1',
+    canReleaseConfidentialInfo = true,
+    domain = { ...domainDefault },
+    disabled = false,
+    isAssessmentUnderSix = true,
+    i18nAll = { ...i18nDefault },
+    index = 1,
+    onItemCommentUpdate = () => {},
+    onDomainCommentUpdate = () => {},
+    onExpandedChange = () => {},
+    onRatingUpdate = () => {},
+    onConfidentialityUpdate = () => {},
+    onAddCaregiverDomain = () => {},
+    handleWarningShow = () => {},
+    onCaregiverNameUpdate = () => {},
+    onDomainReviewed = () => {},
+    isCompletedAssessment = false,
+    isUsingPriorRatings = false,
+    isExpanded = false,
+  } = {}) =>
+    shallow(
+      <Domain
+        key={key}
+        canReleaseConfidentialInfo={canReleaseConfidentialInfo}
+        domain={domain}
+        disabled={disabled}
+        isAssessmentUnderSix={isAssessmentUnderSix}
+        i18nAll={i18nAll}
+        index={index}
+        onItemCommentUpdate={onItemCommentUpdate}
+        onDomainCommentUpdate={onDomainCommentUpdate}
+        onExpandedChange={onExpandedChange}
+        onRatingUpdate={onRatingUpdate}
+        onConfidentialityUpdate={onConfidentialityUpdate}
+        onAddCaregiverDomain={onAddCaregiverDomain}
+        handleWarningShow={handleWarningShow}
+        onCaregiverNameUpdate={onCaregiverNameUpdate}
+        onDomainReviewed={onDomainReviewed}
+        isCompletedAssessment={isCompletedAssessment}
+        isUsingPriorRatings={isUsingPriorRatings}
+        isExpanded={isExpanded}
+      />
+    )
+
   afterEach(() => {
     expandingThenScroll.mockReset()
   })
 
   it('renders with no exceptions', () => {
-    expect(() => shallow(domainComponentDefault)).not.toThrow()
+    expect(() => shallowRender()).not.toThrow()
+  })
+
+  it('renders nothing when there is no title', () => {
+    const i18n = { ...i18nDefault, 'BEHEMO._title_': undefined }
+    const wrapper = shallowRender({ i18nAll: i18n })
+    expect(wrapper.type()).toBe(null)
+  })
+
+  it('defaults the description to "No Description"', () => {
+    const i18n = { ...i18nDefault, 'BEHEMO._description_': undefined }
+    const wrapper = shallowRender({ i18nAll: i18n })
+    expect(wrapper.find('DomainPanelSummary').props().description).toBe('No Description')
   })
 
   describe('Open to review', () => {
     const onDomainReviewed = jest.fn()
-    let div
+    const onExpandedChange = jest.fn()
     let wrapper
 
     beforeEach(() => {
       onDomainReviewed.mockReset()
-      div = document.createElement('div')
-      document.body.appendChild(div)
-      wrapper = mount(
-        <Domain
-          key={'1'}
-          canReleaseConfidentialInfo={true}
-          domain={{ ...domainDefault }}
-          isAssessmentUnderSix={true}
-          i18nAll={{ ...i18nDefault }}
-          index={1}
-          onItemCommentUpdate={() => {}}
-          onDomainCommentUpdate={() => {}}
-          onRatingUpdate={() => {}}
-          onConfidentialityUpdate={() => {}}
-          onAddCaregiverDomain={() => {}}
-          onExpandedChange={() => {}}
-          handleWarningShow={() => {}}
-          onCaregiverNameUpdate={() => {}}
-          onDomainReviewed={onDomainReviewed}
-          isUsingPriorRatings={true}
-          isCompletedAssessment={false}
-        />,
-        { attachTo: div }
-      )
-    })
-
-    it('renders chevron icon', () => {
-      expect(wrapper.find(Icon).exists()).toBe(true)
+      wrapper = shallowRender({
+        onDomainReviewed,
+        onExpandedChange,
+        isUsingPriorRatings: true,
+      })
     })
 
     it('passes isReviewed false to DomainPanelSummary when domain.is_reviewed is undefined', () => {
       expect(wrapper.find('DomainPanelSummary').props().isReviewed).toBe(false)
-    })
-
-    it('will render a Icon with rotation 270 when expanded', () => {
-      const target = wrapper.find(Icon).at(0)
-      expect(target.length).toBe(1)
-      expect(target.props().icon).toBe('chevron-down')
-      expect(target.props(1).rotation).toEqual(270)
-    })
-
-    it('will render toolTip', () => {
-      const target = wrapper.find(UncontrolledTooltip)
-      expect(target.length).toBe(1)
     })
 
     it('calls onDomainReviewed when expanded if not already reviewed', () => {
@@ -146,23 +147,21 @@ describe('<Domain />', () => {
     })
 
     it('calls onExpandedChange callback when expand is toggled', () => {
-      const handleExpandedChange = jest.fn()
-      wrapper.setProps({ onExpandedChange: handleExpandedChange, isExpanded: false })
+      wrapper.setProps({ isExpanded: false })
       wrapper
         .find(ExpansionPanel)
         .props()
         .onChange(testExpandingEvent)
-      expect(handleExpandedChange).toHaveBeenCalledWith(1, true)
+      expect(onExpandedChange).toHaveBeenCalledWith(1, true)
     })
 
     it('calls onExpandedChange callback when collapse is toggled', () => {
-      const handleExpandedChange = jest.fn()
-      wrapper.setProps({ onExpandedChange: handleExpandedChange, isExpanded: true })
+      wrapper.setProps({ isExpanded: true })
       wrapper
         .find(ExpansionPanel)
         .props()
         .onChange(testExpandingEvent)
-      expect(handleExpandedChange).toHaveBeenCalledWith(1, false)
+      expect(onExpandedChange).toHaveBeenCalledWith(1, false)
     })
 
     it('can be collapsed from domain comment', () => {
@@ -174,82 +173,36 @@ describe('<Domain />', () => {
         .domainBottomCollapseClick(testExpandingEvent)
       expect(handleExpandedChange).toHaveBeenCalledWith(1, false)
     })
-
-    it('renders ExpandMoreIcon when Open to review button is clicked', () => {
-      const wrapper = mount(
-        <Domain
-          key={'1'}
-          canReleaseConfidentialInfo={true}
-          domain={{ ...domainDefault }}
-          isAssessmentUnderSix={true}
-          i18nAll={{ ...i18nDefault }}
-          index={1}
-          onItemCommentUpdate={() => {}}
-          onDomainCommentUpdate={() => {}}
-          onRatingUpdate={() => {}}
-          onConfidentialityUpdate={() => {}}
-          onAddCaregiverDomain={() => {}}
-          onExpandedChange={() => {}}
-          handleWarningShow={() => {}}
-          onCaregiverNameUpdate={() => {}}
-          onDomainReviewed={onDomainReviewed}
-          isUsingPriorRatings={true}
-          isCompletedAssessment={false}
-        />
-      )
-      wrapper
-        .find('ExpansionPanelSummary')
-        .find(Button)
-        .simulate('click')
-      expect(wrapper.find(Icon).exists()).toBe(true)
-    })
   })
 
   it('when domain expands expandingThenScroll will be invoked', () => {
-    const wrapper = shallow(domainComponentDefault)
+    const wrapper = shallowRender()
     wrapper.instance().handleExpandedChange(testExpandingEvent)
     expect(expandingThenScroll).toHaveBeenCalledTimes(1)
   })
 
   it('should propagate onItemCommentUpdate from props to DomainItemList props', () => {
     const onItemCommentUpdateMock = jest.fn()
-    const wrapper = shallow(
-      <Domain
-        key={'1'}
-        canReleaseConfidentialInfo={true}
-        domain={{ ...domainDefault }}
-        isAssessmentUnderSix={true}
-        i18nAll={{ ...i18nDefault }}
-        index={1}
-        onItemCommentUpdate={onItemCommentUpdateMock}
-        onDomainCommentUpdate={() => {}}
-        onExpandedChange={() => {}}
-        onRatingUpdate={() => {}}
-        onConfidentialityUpdate={() => {}}
-        onAddCaregiverDomain={() => {}}
-        handleWarningShow={() => {}}
-        onCaregiverNameUpdate={() => {}}
-        isCompletedAssessment={false}
-        isExpanded={true}
-      />
-    )
+    const wrapper = shallowRender({
+      onItemCommentUpdate: onItemCommentUpdateMock,
+      isExpanded: true,
+    })
     expect(wrapper.find(DomainItemList).props().onItemCommentUpdate).toBe(onItemCommentUpdateMock)
   })
 
   it('should render ItemList when extended', () => {
-    const wrapper = shallow(domainComponentDefault)
-    wrapper.setProps({ isExpanded: true })
+    const wrapper = shallowRender({ isExpanded: true })
     expect(wrapper.find(DomainItemList).exists()).toBe(true)
   })
 
   it('should skip rendering ItemList on mount if collapsed', () => {
     // This is to speed up initial rendering of the assessment
-    const wrapper = shallow(domainComponentDefault)
+    const wrapper = shallowRender()
     expect(wrapper.find(DomainItemList).exists()).toBe(false)
   })
 
   it('should render ItemList in second cycle after mount if collapsed', async () => {
-    const wrapper = shallow(domainComponentDefault)
+    const wrapper = shallowRender()
     await wrapper.instance().componentDidUpdate()
     wrapper.update()
     expect(wrapper.find(DomainItemList).exists()).toBe(true)
@@ -257,57 +210,21 @@ describe('<Domain />', () => {
 
   describe('DomainComment', () => {
     it('should render domain comment when extended', () => {
-      const wrapper = shallow(domainComponentDefault)
-      wrapper.setProps({ isExpanded: true })
+      const wrapper = shallowRender({ isExpanded: true })
       expect(wrapper.find(DomainComment).length).toBe(1)
     })
 
     it('should propogate onDomainCommentUpdate prop to DomainComment props', () => {
       const onDomainCommentUpdateMock = jest.fn()
-      const wrapper = shallow(
-        <Domain
-          key={'1'}
-          canReleaseConfidentialInfo={true}
-          domain={{ ...domainDefault }}
-          isAssessmentUnderSix={true}
-          isExpanded={true}
-          i18nAll={{ ...i18nDefault }}
-          index={1}
-          onItemCommentUpdate={() => {}}
-          onDomainCommentUpdate={onDomainCommentUpdateMock}
-          onExpandedChange={() => {}}
-          onRatingUpdate={() => {}}
-          onConfidentialityUpdate={() => {}}
-          onAddCaregiverDomain={() => {}}
-          handleWarningShow={() => {}}
-          onCaregiverNameUpdate={() => {}}
-          isCompletedAssessment={false}
-        />
-      )
+      const wrapper = shallowRender({
+        isExpanded: true,
+        onDomainCommentUpdate: onDomainCommentUpdateMock,
+      })
       expect(wrapper.find(DomainComment).props().onDomainCommentUpdate).toBe(onDomainCommentUpdateMock)
     })
 
     it('should propogate props domainBottomCollapseClick to DomainComment', () => {
-      const wrapper = shallow(
-        <Domain
-          key={'1'}
-          canReleaseConfidentialInfo={true}
-          domain={{ ...domainDefault }}
-          isAssessmentUnderSix={true}
-          isExpanded={true}
-          i18nAll={{ ...i18nDefault }}
-          index={1}
-          onItemCommentUpdate={() => {}}
-          onDomainCommentUpdate={() => {}}
-          onExpandedChange={() => {}}
-          onRatingUpdate={() => {}}
-          onConfidentialityUpdate={() => {}}
-          onAddCaregiverDomain={() => {}}
-          handleWarningShow={() => {}}
-          onCaregiverNameUpdate={() => {}}
-          isCompletedAssessment={false}
-        />
-      )
+      const wrapper = shallowRender({ isExpanded: true })
       const target = wrapper.find(DomainComment)
       expect(Object.keys(target.props()).includes('domainBottomCollapseClick')).toBe(true)
     })
@@ -317,32 +234,18 @@ describe('<Domain />', () => {
     const callbackMock = jest.fn()
     const handleWarningShow = jest.fn()
     const domain = { ...domainDefault, is_caregiver_domain: true, caregiver_index: 'a' }
-    const defaultProps = {
-      key: '1',
-      canReleaseConfidentialInfo: true,
-      domain: { ...domain },
-      handleWarningShow: handleWarningShow,
-      i18nAll: { ...i18nDefault },
-      index: 1,
-      isAssessmentUnderSix: true,
-      isCompletedAssessment: false,
-      isExpanded: true,
-      onAddCaregiverDomain: callbackMock,
-      onCaregiverNameUpdate: () => {},
-      onConfidentialityUpdate: () => {},
-      onDomainCommentUpdate: () => {},
-      onExpandedChange: () => {},
-      onItemCommentUpdate: () => {},
-      onRatingUpdate: () => {},
-    }
-    const domainComponent = <Domain {...defaultProps} />
     let wrapper
     beforeEach(() => {
-      wrapper = mount(domainComponent)
+      wrapper = shallowRender({
+        domain: { ...domain },
+        handleWarningShow,
+        isExpanded: true,
+        onAddCaregiverDomain: callbackMock,
+      })
     })
 
     it('will render DomainCaregiverControls', () => {
-      expect(wrapper.find(DomainCaregiverControls).length).toBe(1)
+      expect(wrapper.find(DomainCaregiverControls).exists()).toBe(true)
     })
 
     it('warning modal will show when remove caregiver domain', () => {
@@ -352,28 +255,18 @@ describe('<Domain />', () => {
 
     it('invokes handleWarningShow() callback', () => {
       handleWarningShow.mockReset()
-      const domainCaregiverControls = wrapper.find(DomainCaregiverControls).at(0)
-      const removeCaregiverButton = domainCaregiverControls.find(Button).at(0)
-      removeCaregiverButton.simulate('click')
-      removeCaregiverButton.simulate('keypress', {
-        key: 'Enter',
-      })
-      removeCaregiverButton.simulate('keypress', {
-        key: 'Space',
-      })
+      const onRemoveCaregiverDomain = wrapper.find(DomainCaregiverControls).props().onRemoveCaregiverDomain
+      onRemoveCaregiverDomain({ type: 'click' })
+      onRemoveCaregiverDomain({ type: 'keypress', key: 'Enter' })
+      onRemoveCaregiverDomain({ type: 'keypress', key: 'Space' }) // Ignored, not a11y allowed
       expect(handleWarningShow).toHaveBeenCalledTimes(2)
     })
 
     it('will invoke onAddCaregiverDomain() callback', () => {
-      const domainCaregiverControls = wrapper.find(DomainCaregiverControls).at(0)
-      const addCaregiverButton = domainCaregiverControls.find(Button).at(1)
-      addCaregiverButton.simulate('click')
-      addCaregiverButton.simulate('keypress', {
-        key: 'Enter',
-      })
-      addCaregiverButton.simulate('keypress', {
-        key: 'Space',
-      })
+      const onAddCaregiverDomain = wrapper.find(DomainCaregiverControls).props().onAddCaregiverDomain
+      onAddCaregiverDomain({ type: 'click' })
+      onAddCaregiverDomain({ type: 'keypress', key: 'Enter' })
+      onAddCaregiverDomain({ type: 'keypress', key: 'Space' }) // Ignored, not a11y allowed
       expect(callbackMock.mock.calls.length).toBe(2)
     })
 
@@ -388,37 +281,20 @@ describe('<Domain />', () => {
               caregiver_index: 'a',
               caregiver_name: undefined,
             }
-            const domainComponent = (
-              <Domain
-                key={'1'}
-                canReleaseConfidentialInfo={true}
-                domain={{ ...domain }}
-                isAssessmentUnderSix={true}
-                isExpanded={true}
-                i18nAll={{ ...i18nDefault }}
-                index={1}
-                onItemCommentUpdate={() => {}}
-                onDomainCommentUpdate={() => {}}
-                onExpandedChange={() => {}}
-                onRatingUpdate={() => {}}
-                onConfidentialityUpdate={() => {}}
-                onAddCaregiverDomain={() => {}}
-                handleWarningShow={() => {}}
-                onCaregiverNameUpdate={() => {}}
-                isCompletedAssessment={false}
-              />
-            )
-            const wrapper = mount(domainComponent)
-            const nameInput = wrapper.find('.caregiver-name').at(0)
+            const wrapper = shallowRender({
+              domain,
+              isExpanded: true,
+            })
+            const nameInput = wrapper.find('.caregiver-name')
 
             // when
-            nameInput.simulate('change', {
+            nameInput.props().onChange({
               target: { value: 'Full Name' },
             })
 
             // then
-            expect(wrapper.state('caregiverName')).toEqual('Full Name')
-            expect(wrapper.find('ExpansionPanelSummary').text()).toMatch(/Full Name/)
+            expect(wrapper.state().caregiverName).toEqual('Full Name')
+            expect(wrapper.find('DomainPanelSummary').props().caregiverName).toMatch(/Full Name/)
           })
         })
 
@@ -432,137 +308,23 @@ describe('<Domain />', () => {
               caregiver_name: undefined,
             }
             const callbackMock = jest.fn()
-            const domainComponent = (
-              <Domain
-                key={'1'}
-                canReleaseConfidentialInfo={true}
-                domain={{ ...domain }}
-                isAssessmentUnderSix={true}
-                isExpanded={true}
-                i18nAll={{ ...i18nDefault }}
-                index={1}
-                onItemCommentUpdate={() => {}}
-                onDomainCommentUpdate={() => {}}
-                onExpandedChange={() => {}}
-                onRatingUpdate={() => {}}
-                onConfidentialityUpdate={() => {}}
-                onAddCaregiverDomain={() => {}}
-                handleWarningShow={() => {}}
-                onCaregiverNameUpdate={callbackMock}
-                isCompletedAssessment={false}
-              />
-            )
-            const wrapper = mount(domainComponent)
-            const nameInput = wrapper.find('.caregiver-name').at(0)
-            nameInput.simulate('change', {
+            const wrapper = shallowRender({
+              domain,
+              isExpanded: true,
+              onCaregiverNameUpdate: callbackMock,
+            })
+            const nameInput = wrapper.find('.caregiver-name')
+            nameInput.props().onChange({
               target: { value: 'Full Name' },
             })
 
             // when
-            nameInput.simulate('blur')
+            nameInput.props().onBlur()
 
             // then
             expect(callbackMock.mock.calls.length).toBe(1)
             expect(callbackMock.mock.calls[0][0]).toBe('a')
             expect(callbackMock.mock.calls[0][1]).toBe('Full Name')
-          })
-
-          it('renders a warning text when no caregiver name is filled', () => {
-            const domain = {
-              ...domainDefault,
-              is_caregiver_domain: true,
-              caregiver_index: 'a',
-              caregiver_name: undefined,
-            }
-            const callbackMock = jest.fn()
-            const domainComponent = (
-              <Domain
-                key={'1'}
-                canReleaseConfidentialInfo={true}
-                domain={{ ...domain }}
-                isAssessmentUnderSix={true}
-                i18nAll={{ ...i18nDefault }}
-                index={1}
-                onItemCommentUpdate={() => {}}
-                onDomainCommentUpdate={() => {}}
-                onExpandedChange={() => {}}
-                onRatingUpdate={() => {}}
-                onConfidentialityUpdate={() => {}}
-                onAddCaregiverDomain={() => {}}
-                handleWarningShow={() => {}}
-                onCaregiverNameUpdate={callbackMock}
-                isCompletedAssessment={false}
-              />
-            )
-            const wrapper = mount(domainComponent)
-            const alert = wrapper.find('.caregiver-warning-text')
-            expect(alert.exists()).toBe(true)
-            expect(alert.text()).toMatch(' Caregiver Name is required')
-          })
-
-          it('renders a warning text when caregiver name is blank or whitespace', () => {
-            const domain = {
-              ...domainDefault,
-              is_caregiver_domain: true,
-              caregiver_index: 'a',
-              caregiver_name: ' ',
-            }
-            const callbackMock = jest.fn()
-            const domainComponent = (
-              <Domain
-                key={'1'}
-                canReleaseConfidentialInfo={true}
-                domain={{ ...domain }}
-                isAssessmentUnderSix={true}
-                i18nAll={{ ...i18nDefault }}
-                index={1}
-                onItemCommentUpdate={() => {}}
-                onDomainCommentUpdate={() => {}}
-                onExpandedChange={() => {}}
-                onRatingUpdate={() => {}}
-                onConfidentialityUpdate={() => {}}
-                onAddCaregiverDomain={() => {}}
-                handleWarningShow={() => {}}
-                onCaregiverNameUpdate={callbackMock}
-                isCompletedAssessment={false}
-              />
-            )
-            const wrapper = mount(domainComponent)
-            const alert = wrapper.find('.caregiver-warning-text')
-            expect(alert.exists()).toBe(true)
-            expect(alert.text()).toMatch(' Caregiver Name is required')
-          })
-
-          it('warning text is not rendered when caregiver name is filled', () => {
-            const domain = {
-              ...domainDefault,
-              is_caregiver_domain: true,
-              caregiver_index: 'a',
-              caregiver_name: 'a',
-            }
-            const callbackMock = jest.fn()
-            const domainComponent = (
-              <Domain
-                key={'1'}
-                canReleaseConfidentialInfo={true}
-                domain={{ ...domain }}
-                isAssessmentUnderSix={true}
-                i18nAll={{ ...i18nDefault }}
-                index={1}
-                onItemCommentUpdate={() => {}}
-                onDomainCommentUpdate={() => {}}
-                onExpandedChange={() => {}}
-                onRatingUpdate={() => {}}
-                onConfidentialityUpdate={() => {}}
-                onAddCaregiverDomain={() => {}}
-                handleWarningShow={() => {}}
-                onCaregiverNameUpdate={callbackMock}
-                isCompletedAssessment={false}
-              />
-            )
-            const wrapper = mount(domainComponent)
-            const alert = wrapper.find('.caregiver-warning-text')
-            expect(alert.exists()).toBe(false)
           })
         })
       })
@@ -572,26 +334,16 @@ describe('<Domain />', () => {
   describe('read only mode', () => {
     const callbackMock = jest.fn()
     const domain = { ...domainDefault, is_caregiver_domain: true, caregiver_index: 'a' }
-    const defaultProps = {
-      key: '1',
-      canReleaseConfidentialInfo: true,
-      domain: { ...domain },
-      handleWarningShow: () => {},
-      i18nAll: { ...i18nDefault },
-      index: 1,
-      isAssessmentUnderSix: true,
-      isExpanded: true,
-      isCompletedAssessment: false,
-      onAddCaregiverDomain: callbackMock,
-      onCaregiverNameUpdate: () => {},
-      onConfidentialityUpdate: () => {},
-      onDomainCommentUpdate: () => {},
-      onExpandedChange: () => {},
-      onItemCommentUpdate: () => {},
-      onRatingUpdate: () => {},
-      disabled: true,
-    }
-    const domainWrapper = shallow(<Domain {...defaultProps} />)
+    let domainWrapper
+
+    beforeEach(() => {
+      domainWrapper = shallowRender({
+        domain: { ...domain },
+        isExpanded: true,
+        onAddCaregiverDomain: callbackMock,
+        disabled: true,
+      })
+    })
 
     it('should propagate disabled prop to caregiver-name input', () => {
       expect(domainWrapper.find('.caregiver-name').prop('disabled')).toBe(true)
@@ -612,51 +364,18 @@ describe('<Domain />', () => {
 
   it('should collapse when isExpanded is false ', () => {
     const onItemCommentUpdateMock = jest.fn()
-    const domainWrapper = shallow(
-      <Domain
-        key={'1'}
-        canReleaseConfidentialInfo={true}
-        domain={{ ...domainDefault }}
-        isAssessmentUnderSix={true}
-        isExpanded={false}
-        i18nAll={{ ...i18nDefault }}
-        index={1}
-        onItemCommentUpdate={onItemCommentUpdateMock}
-        onDomainCommentUpdate={() => {}}
-        onExpandedChange={() => {}}
-        onRatingUpdate={() => {}}
-        onConfidentialityUpdate={() => {}}
-        onAddCaregiverDomain={() => {}}
-        handleWarningShow={() => {}}
-        onCaregiverNameUpdate={() => {}}
-        isCompletedAssessment={false}
-      />
-    )
+    const domainWrapper = shallowRender({
+      onItemCommentUpdate: onItemCommentUpdateMock,
+    })
     expect(domainWrapper.find(ExpansionPanel).props().expanded).toBe(false)
   })
 
   it('should expand the domain when isExpanded is true', () => {
     const onItemCommentUpdateMock = jest.fn()
-    const domainWrapper = shallow(
-      <Domain
-        key={'1'}
-        canReleaseConfidentialInfo={true}
-        domain={{ ...domainDefault }}
-        isAssessmentUnderSix={true}
-        isExpanded={true}
-        i18nAll={{ ...i18nDefault }}
-        index={1}
-        onItemCommentUpdate={onItemCommentUpdateMock}
-        onDomainCommentUpdate={() => {}}
-        onExpandedChange={() => {}}
-        onRatingUpdate={() => {}}
-        onConfidentialityUpdate={() => {}}
-        onAddCaregiverDomain={() => {}}
-        handleWarningShow={() => {}}
-        onCaregiverNameUpdate={() => {}}
-        isCompletedAssessment={false}
-      />
-    )
+    const domainWrapper = shallowRender({
+      isExpanded: true,
+      onItemCommentUpdate: onItemCommentUpdateMock,
+    })
     expect(domainWrapper.find(ExpansionPanel).props().expanded).toBe(true)
   })
 })
