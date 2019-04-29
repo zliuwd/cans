@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 import { DomainProgressBar, DomainScore } from './'
 import DomainCommentIcon from './DomainCommentIcon'
 import Grid from '@material-ui/core/Grid'
-import { Icon, UncontrolledInfotip, PopoverBody } from '@cwds/components'
+import { Icon, UncontrolledTooltip } from '@cwds/components'
 
 class DomainPanelSummary extends React.PureComponent {
   renderCaregiverName() {
@@ -20,9 +20,22 @@ class DomainPanelSummary extends React.PureComponent {
     const { description, index } = this.props
 
     return description ? (
-      <UncontrolledInfotip id={`domain-${index}`} placement="top">
-        <PopoverBody>{description}</PopoverBody>
-      </UncontrolledInfotip>
+      <UncontrolledTooltip
+        style={{
+          minWidth: '32rem',
+          textAlign: 'left',
+          padding: '1.2rem',
+          fontSize: '1rem',
+          opacity: '1.5!important',
+          color: '#1a1a1a',
+          backgroundColor: '#ffffff',
+          border: '1px solid #b3b3b3',
+        }}
+        target={`domain-${index}`}
+        placement="top"
+      >
+        {description}
+      </UncontrolledTooltip>
     ) : null
   }
 
@@ -41,6 +54,7 @@ class DomainPanelSummary extends React.PureComponent {
             rotation={isExpanded ? null : ROTATION_RIGHT}
           />
           <span className="domain-item-margin">{title}</span>
+          <Icon className="domain-help-icon text-primary" icon="info-circle" id={`domain-${index}`} />
           {this.renderInfoTip()} {this.renderCaregiverName()}
         </Typography>
       </Grid>
