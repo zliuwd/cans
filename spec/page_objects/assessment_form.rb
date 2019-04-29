@@ -205,15 +205,29 @@ class AssessmentForm < SitePrism::Page
 end
 
 def fill_conducted_by_first_name_field(text)
-  fill_in 'conducted-by-first-name', with: ''
-  fill_in 'conducted-by-first-name', with: text
-  expect(@form.header.conducted_by_first_name.value).to eq(text)
+  with_retry(
+    proc {
+      @form.header.conducted_by_first_name.set ''
+      @form.header.conducted_by_first_name.set text
+    },
+    proc {
+      expect(@form.header.conducted_by_first_name.value).to eq(text)
+    },
+    5
+  )
 end
 
 def fill_conducted_by_last_name_field(text)
-  fill_in 'conducted-by-last-name', with: ''
-  fill_in 'conducted-by-last-name', with: text
-  expect(@form.header.conducted_by_last_name.value).to eq(text)
+  with_retry(
+    proc {
+      @form.header.conducted_by_last_name.set ''
+      @form.header.conducted_by_last_name.set text
+    },
+    proc {
+      expect(@form.header.conducted_by_last_name.value).to eq(text)
+    },
+    5
+  )
 end
 
 def fill_conducted_by
