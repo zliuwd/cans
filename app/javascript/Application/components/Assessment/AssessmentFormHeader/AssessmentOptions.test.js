@@ -21,7 +21,8 @@ describe('AssessmentOptions', () => {
   } = {}) =>
     shallow(
       <AssessmentOptions
-        assessment={assessment}
+        hasCaregiver={assessment.has_caregiver}
+        canReleaseConfidentialInfo={assessment.can_release_confidential_info}
         isDisabled={isDisabled}
         isUnderSix={isUnderSix}
         onCanReleaseInfoChange={onCanReleaseInfoChange}

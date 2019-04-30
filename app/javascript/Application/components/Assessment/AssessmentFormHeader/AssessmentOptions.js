@@ -6,42 +6,40 @@ import CanReleaseInfoQuestion from './CanReleaseInfoQuestion'
 import ConfidentialityAlert from './ConfidentialityAlert'
 
 const AssessmentOptions = ({
-  assessment,
+  canReleaseConfidentialInfo,
+  hasCaregiver,
   isDisabled,
   isUnderSix,
   onCanReleaseInfoChange,
   onHasCaregiverChange,
   onHasCaregiverNoClicked,
   substanceUseItemsIds,
-}) => {
-  const hasCaregiver = Boolean(assessment.has_caregiver)
-  const canReleaseConfidentialInfo = Boolean(assessment.can_release_confidential_info)
-  return (
-    <Row>
-      <HasCaregiverQuestion
-        hasCaregiver={hasCaregiver}
-        disabled={isDisabled}
-        onHasCaregiverChange={onHasCaregiverChange}
-        onHasCaregiverNoClicked={onHasCaregiverNoClicked}
-      />
-      <CanReleaseInfoQuestion
-        canReleaseConfidentialInfo={canReleaseConfidentialInfo}
-        message={
-          <ConfidentialityAlert
-            canReleaseConfidentialInfo={canReleaseConfidentialInfo}
-            isUnderSix={isUnderSix}
-            substanceUseItemsIds={substanceUseItemsIds}
-          />
-        }
-        isDisabled={isDisabled}
-        onCanReleaseInfoChange={onCanReleaseInfoChange}
-      />
-    </Row>
-  )
-}
+}) => (
+  <Row>
+    <HasCaregiverQuestion
+      hasCaregiver={hasCaregiver}
+      disabled={isDisabled}
+      onHasCaregiverChange={onHasCaregiverChange}
+      onHasCaregiverNoClicked={onHasCaregiverNoClicked}
+    />
+    <CanReleaseInfoQuestion
+      canReleaseConfidentialInfo={canReleaseConfidentialInfo}
+      message={
+        <ConfidentialityAlert
+          canReleaseConfidentialInfo={canReleaseConfidentialInfo}
+          isUnderSix={isUnderSix}
+          substanceUseItemsIds={substanceUseItemsIds}
+        />
+      }
+      isDisabled={isDisabled}
+      onCanReleaseInfoChange={onCanReleaseInfoChange}
+    />
+  </Row>
+)
 
 AssessmentOptions.propTypes = {
-  assessment: PropTypes.object.isRequired,
+  canReleaseConfidentialInfo: PropTypes.bool,
+  hasCaregiver: PropTypes.bool,
   isDisabled: PropTypes.bool,
   isUnderSix: PropTypes.bool,
   onCanReleaseInfoChange: PropTypes.func.isRequired,
@@ -54,6 +52,8 @@ AssessmentOptions.propTypes = {
 }
 
 AssessmentOptions.defaultProps = {
+  canReleaseConfidentialInfo: false,
+  hasCaregiver: false,
   isDisabled: undefined,
   isUnderSix: undefined,
 }
