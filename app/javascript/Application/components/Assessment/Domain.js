@@ -87,10 +87,11 @@ class Domain extends React.PureComponent {
   renderCaregiverName = () => {
     return (
       <div className={'caregiver-name-wrapper'}>
-        <Label for={'caregiverName'} className={'caregiver-name-label'}>
+        <Label for={'caregiverNameInput'} className={'caregiver-name-label'}>
           Caregiver Name <span className={'caregiver-name-label-asterisk'}>*</span>
         </Label>
         <Input
+          id={'caregiverNameInput'}
           bsSize="sm"
           placeholder="ex. Last Name, First Name/Relationship to child or youth"
           className={'caregiver-name'}
