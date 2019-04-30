@@ -1,14 +1,17 @@
 import React from 'react'
-import { Input } from 'reactstrap'
+import { Input, Label } from 'reactstrap'
 import PropTypes from 'prop-types'
 import { Icon } from '@cwds/components'
 import { ConductedByNameMaxLength } from '../AssessmentHelper'
 
-const ConductedByNameField = ({ id, value, onChange, disabled, placeholder, errorMessage }) => {
+const ConductedByNameField = ({ id, value, onChange, disabled, label, errorMessage }) => {
   const isValid = !value || value.length <= ConductedByNameMaxLength
   const showError = !disabled && !isValid
   return (
     <div className={'domain-comment-block'}>
+      <Label for={id} className={'conducted-by-input-label'}>
+        {label}
+      </Label>
       <Input
         className={showError ? 'conducted-by-name-field-err' : ''}
         type={'text'}
@@ -17,7 +20,6 @@ const ConductedByNameField = ({ id, value, onChange, disabled, placeholder, erro
         onChange={onChange}
         disabled={disabled}
         maxLength={ConductedByNameMaxLength}
-        placeholder={placeholder}
       />
       {showError && (
         <div className={'form-field-error-message-container'}>
@@ -44,8 +46,8 @@ ConductedByNameField.propTypes = {
   disabled: PropTypes.bool,
   errorMessage: PropTypes.string,
   id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string.isRequired,
   value: PropTypes.string,
 }
 

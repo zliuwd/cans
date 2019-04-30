@@ -207,8 +207,7 @@ end
 def fill_conducted_by_first_name_field(text)
   with_retry(
     proc {
-      @form.header.conducted_by_first_name.set ''
-      @form.header.conducted_by_first_name.set text
+      set_value_for_text_field(@form.header.conducted_by_first_name, text)
     },
     proc {
       expect(@form.header.conducted_by_first_name.value).to eq(text)
@@ -220,14 +219,22 @@ end
 def fill_conducted_by_last_name_field(text)
   with_retry(
     proc {
-      @form.header.conducted_by_last_name.set ''
-      @form.header.conducted_by_last_name.set text
+      set_value_for_text_field(@form.header.conducted_by_last_name, text)
     },
     proc {
       expect(@form.header.conducted_by_last_name.value).to eq(text)
     },
     5
   )
+end
+
+def set_value_for_text_field(field, text)
+  field.click
+  sleep 2
+  field.set ''
+  field.click
+  sleep 2
+  field.set text
 end
 
 def fill_conducted_by

@@ -5,51 +5,24 @@ import ComparisonGraph from './comparisonGraph/ComparisonGraph'
 import './style.sass'
 import PropTypes from 'prop-types'
 import ComparisonAgeSwitchButtonGroup from './ComparisonAgeSwitchButtonGroup'
-
-const ageRange = Object.freeze({
-  UNDERSIX: 'underSix',
-  ABOVESIX: 'aboveSix',
-})
-
-const dataAnalyzer = data => {
-  if (!data || !data.aboveSix || !data.aboveSix) {
-    return { currentDataKey: '', showSwitch: false }
-  }
-  const result = { currentDataKey: '', showSwitch: true }
-  if (data.underSix.event_dates.length < 1) {
-    result.showSwitch = false
-    result.currentDataKey = ageRange.ABOVESIX
-  } else if (data.aboveSix.event_dates.length < 1) {
-    result.showSwitch = false
-    result.currentDataKey = ageRange.UNDERSIX
-  } else {
-    result.currentDataKey = currentDataKeyGenerator(data)
-  }
-  return result
-}
-
-const currentDataKeyGenerator = data => {
-  return data.underSix.event_dates[0].assessment_id > data.aboveSix.event_dates[0].assessment_id
-    ? ageRange.UNDERSIX
-    : ageRange.ABOVESIX
-}
+import { ageRange, analyzeData } from './AssessmentComparisonHelper'
 
 class AssessmentComparison extends React.Component {
   constructor(props) {
     super(props)
-    const dataInfo = dataAnalyzer(this.props.comparisonRecords.data)
+    const dataInfo = analyzeData(this.props.comparisonRecords.data)
+    const currentDataKey = dataInfo.currentDataKey
+    this.props.dataChangeCallback({ currentDataKey })
     this.state = {
-      currentDataKey: dataInfo.currentDataKey,
+      currentDataKey,
       isAgeSwitchShown: dataInfo.showSwitch,
     }
   }
 
   handleAgeSwitch = isUnderSix => {
-    if (!isUnderSix) {
-      this.setState({ currentDataKey: ageRange.ABOVESIX })
-    } else {
-      this.setState({ currentDataKey: ageRange.UNDERSIX })
-    }
+    const key = { currentDataKey: isUnderSix ? ageRange.UNDERSIX : ageRange.ABOVESIX }
+    this.props.dataChangeCallback(key)
+    this.setState({ ...key })
   }
 
   handleCurrentData = key => {
@@ -88,10 +61,12 @@ AssessmentComparison.propTypes = {
     }),
     i18n: PropTypes.object,
   }),
+  dataChangeCallback: PropTypes.func,
 }
 
 AssessmentComparison.defaultProps = {
   comparisonRecords: {},
+  dataChangeCallback: () => {},
 }
 
 export default AssessmentComparison

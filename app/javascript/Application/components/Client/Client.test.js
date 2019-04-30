@@ -8,20 +8,11 @@ import Grid from '@material-ui/core/Grid'
 import { MemoryRouter } from 'react-router-dom'
 import ClientAssessmentStatistics from './ClientAssessmentStatistics'
 import ClientAssessmentHistoryLoadingBoundary from './AssessmentHistory/ClientAssessmentHistoryLoadingBoundary'
+import { defaultClient } from './client.mock'
+import PrintClient from '../Print/printClient/PrintClient'
+import { ageRange } from './AssessmentComparison/AssessmentComparisonHelper'
 
-const client = {
-  id: 1,
-  first_name: 'test',
-  middle_name: 'name',
-  last_name: 'user',
-  suffix: 'Mr.',
-  dob: '1980-01-02',
-  identifier: 'aaaaaaaaaa',
-  external_id: '1234567891234567890',
-  counties: [{ name: 'Sacramento' }, { name: 'State of California' }],
-  cases: [],
-  sensitivity_type: null,
-}
+const client = { ...defaultClient }
 
 const params = {
   match: { params: { id: '1', staffId: '05X' }, url: '/staff/0X5/clients/AznnyCs0X5' },
@@ -29,6 +20,7 @@ const params = {
   history: { location: '/client' },
   client,
   navigateTo: 'CLIENT_LIST',
+  headerController: { setPrintButton: () => {} },
 }
 
 describe('<Client />', () => {
@@ -97,6 +89,7 @@ describe('<Client />', () => {
       location: { pathname: 'client' },
       history: { location: '/client' },
       navigateTo: 'CLIENT_LIST',
+      headerController: { setPrintButton: () => {} },
     }
 
     const getWrapper = () => shallow(<Client {...params} />)
@@ -228,6 +221,89 @@ describe('<Client />', () => {
         const nullCountyParams = { ...params }
         nullCountyParams.client.county = null
         expect(clientWrapper(nullCountyParams).find('#client-data-county')).toBeDefined()
+      })
+    })
+  })
+
+  describe('Print', () => {
+    describe('#onPrintDataChange', () => {
+      const spy = jest.fn()
+      const headerController = { setPrintButton: spy }
+      const currentProps = { ...params, headerController }
+      const wrapper = shallow(<Client {...currentProps} />)
+      const comparisonData = { data: { underSix: {}, aboveSix: {} }, i18n: {} }
+      describe('when first time called', () => {
+        it('should call setPrintButton', () => {
+          wrapper.instance().onPrintDataChange({})
+          expect(spy).toHaveBeenCalledTimes(1)
+        })
+      })
+
+      describe('when history passed as argument', () => {
+        it('should set assessmentsHistory to the state', () => {
+          const assessments = { assessments: [] }
+          wrapper.instance().onPrintDataChange(assessments)
+          expect(wrapper.state().assessmentsHistory).toBe(assessments)
+        })
+      })
+
+      describe('when comparisonData passed as argument', () => {
+        it('should set comparisonData to the state', () => {
+          wrapper.instance().onPrintDataChange(comparisonData)
+          expect(wrapper.state().comparisonData).toEqual(comparisonData)
+        })
+      })
+
+      describe('when currentDataKey passed as argument', () => {
+        it('should update comparisonData in the state', () => {
+          const currentDataKey = { currentDataKey: ageRange.UNDERSIX }
+          wrapper.instance().onPrintDataChange(currentDataKey)
+          expect(wrapper.state().comparisonData).toEqual({ ...comparisonData, ...currentDataKey })
+        })
+      })
+    })
+
+    it('should render <PrintClient> with props when printNow is true', () => {
+      const wrapper = shallow(<Client {...params} />)
+      wrapper.instance().togglePrintNow()
+      const printClientWrapper = wrapper.find(PrintClient)
+      expect(printClientWrapper.exists()).toBeTruthy()
+      expect(printClientWrapper.props().client).toBe(params.client)
+      expect(printClientWrapper.props().onClose).toBe(wrapper.instance().onPrintClose)
+    })
+
+    describe('#togglePrintNow', () => {
+      it('should rerender <PrintClient> with correspondent props', () => {
+        const wrapper = shallow(<Client {...params} />)
+        expect(wrapper.find(PrintClient).exists()).toBeFalsy()
+        wrapper.instance().togglePrintNow()
+        expect(wrapper.find(PrintClient).exists()).toBeTruthy()
+        wrapper.instance().togglePrintNow()
+        expect(wrapper.find(PrintClient).exists()).toBeFalsy()
+      })
+    })
+
+    describe('#onPrintClick', () => {
+      it('should rerender <PrintClient> with shouldPrint=true', () => {
+        const wrapper = shallow(<Client {...params} />)
+        expect(wrapper.find(PrintClient).exists()).toBeFalsy()
+        wrapper.instance().onPrintClick()
+        expect(wrapper.find(PrintClient).exists()).toBeTruthy()
+        wrapper.instance().onPrintClick()
+        expect(wrapper.find(PrintClient).exists()).toBeTruthy()
+      })
+    })
+
+    describe('#onPrintClose', () => {
+      it('should rerender <PrintClient> with shouldPrint=false', () => {
+        const wrapper = shallow(<Client {...params} />)
+        expect(wrapper.find(PrintClient).exists()).toBeFalsy()
+        wrapper.instance().onPrintClick()
+        expect(wrapper.find(PrintClient).exists()).toBeTruthy()
+        wrapper.instance().onPrintClose()
+        expect(wrapper.find(PrintClient).exists()).toBeFalsy()
+        wrapper.instance().onPrintClose()
+        expect(wrapper.find(PrintClient).exists()).toBeFalsy()
       })
     })
   })

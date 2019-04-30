@@ -105,7 +105,7 @@ class Domain extends React.PureComponent {
   }
 
   render = () => {
-    const i18nAll = this.props.i18nAll || {}
+    const i18nAll = this.props.i18nAll
     const {
       isAssessmentUnderSix,
       isCompletedAssessment,
@@ -138,7 +138,6 @@ class Domain extends React.PureComponent {
     }
     const validItems = itemFilter(items, isAssessmentUnderSix)
     const totalScore = totalScoreCalculation(validItems)
-    const warningText = <span className={'caregiver-warning-text'}> Caregiver Name is required</span>
 
     return title && shouldDomainBeRendered(isAssessmentUnderSix, domain) ? (
       <ExpansionPanel expanded={isExpanded} onChange={this.handleExpandedChange} elevation={0}>
@@ -162,7 +161,6 @@ class Domain extends React.PureComponent {
             isReviewed={isReviewed}
             totalScore={totalScore}
             title={title}
-            warningText={warningText}
           />{' '}
         </ExpansionPanelSummary>
         {isExpanded || this.state.shouldRenderDetails ? (
@@ -201,7 +199,7 @@ Domain.propTypes = {
   canReleaseConfidentialInfo: PropTypes.bool.isRequired,
   disabled: PropTypes.bool,
   domain: PropTypes.object.isRequired,
-  handleWarningShow: PropTypes.func,
+  handleWarningShow: PropTypes.func.isRequired,
   i18nAll: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   isAssessmentUnderSix: PropTypes.bool,
@@ -212,7 +210,7 @@ Domain.propTypes = {
   onCaregiverNameUpdate: PropTypes.func.isRequired,
   onConfidentialityUpdate: PropTypes.func.isRequired,
   onDomainCommentUpdate: PropTypes.func.isRequired,
-  onDomainReviewed: PropTypes.func,
+  onDomainReviewed: PropTypes.func.isRequired,
   onExpandedChange: PropTypes.func.isRequired,
   onItemCommentUpdate: PropTypes.func.isRequired,
   onRatingUpdate: PropTypes.func.isRequired,
@@ -221,11 +219,9 @@ Domain.propTypes = {
 
 Domain.defaultProps = {
   disabled: false,
-  handleWarningShow: () => {},
   isAssessmentUnderSix: null,
   isExpanded: false,
   isUsingPriorRatings: false,
-  onDomainReviewed: () => {},
   previousRatingsMap: undefined,
 }
 

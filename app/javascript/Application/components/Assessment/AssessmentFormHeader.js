@@ -191,7 +191,6 @@ class AssessmentFormHeader extends PureComponent {
           onAssessmentUpdate={this.props.onAssessmentUpdate}
         />
         <AssessmentOptions
-          assessment={assessment}
           canReleaseConfidentialInfo={canReleaseInfo}
           hasCaregiver={hasCaregiver}
           isDisabled={this.props.disabled}

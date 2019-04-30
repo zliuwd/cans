@@ -19,9 +19,14 @@ describe('<ConductedByRole/>', () => {
     expect(select.props().className).toBe('assessment-form-header-input-role')
     expect(select.props().isDisabled).toBe(props.disabled)
     expect(select.props().onChange).toBe(props.onChange)
-    expect(select.props().placeholder).toBe('Role')
+    expect(
+      wrapper
+        .find('Label')
+        .render()
+        .text()
+    ).toBe('Select Role *')
     expect(select.props().classNamePrefix).toBe('list')
-    expect(select.props().isSearchable).toBeFalsy()
+    expect(select.props().isSearchable).toBeTruthy()
     expect(select.props().options).toBe(ConductedByRoleOptions)
     expect(select.props().value).toBe(findSelectOptionByValue(props.value, ConductedByRoleOptions))
   })

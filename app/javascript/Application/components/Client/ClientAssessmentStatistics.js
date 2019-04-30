@@ -21,6 +21,7 @@ const ClientAssessmentStatistics = ({
   recordsModeSwitch,
   assessments,
   loadingState,
+  dataChangeCallback,
 }) => {
   const headerProps = {
     isComparisonShown,
@@ -56,8 +57,13 @@ const ClientAssessmentStatistics = ({
           clientIdentifier={clientIdentifier}
           key={`${loadingBoundaryKey}-comparison`}
           instrumentId="1"
+          dataFetchCallback={dataChangeCallback}
         >
-          {isComparisonShown ? <AssessmentComparison recordsModeSwitch={recordsModeSwitch} /> : <Fragment />}
+          {isComparisonShown ? (
+            <AssessmentComparison recordsModeSwitch={recordsModeSwitch} dataChangeCallback={dataChangeCallback} />
+          ) : (
+            <Fragment />
+          )}
         </AssessmentComparisonLoadingBoundary>
       </Card>
     </Container>
@@ -68,6 +74,7 @@ ClientAssessmentStatistics.propTypes = {
   assessments: PropTypes.arrayOf(PropTypes.object),
   client: PropTypes.object,
   clientIdentifier: PropTypes.string,
+  dataChangeCallback: PropTypes.func,
   inheritUrl: PropTypes.string.isRequired,
   isComparisonShown: PropTypes.bool.isRequired,
   loadingBoundaryKey: PropTypes.number.isRequired,
@@ -81,6 +88,7 @@ ClientAssessmentStatistics.propTypes = {
 ClientAssessmentStatistics.defaultProps = {
   assessments: [],
   client: {},
+  dataChangeCallback: () => {},
   navFrom: '',
   clientIdentifier: '',
   userId: '',
