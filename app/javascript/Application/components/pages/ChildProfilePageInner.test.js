@@ -6,6 +6,7 @@ import { Client } from '../Client'
 import ContextualBreadCrumb from '../Layout/BreadCrumb/ContextualBreadCrumb'
 import { buildSearchClientsButton as SearchClientsButton } from '../Header/PageHeaderButtonsBuilder'
 import FullWidthLayout from '../Layout/FullWidthLayout'
+import PrintButton from '../Header/PageHeaderButtons/PrintButton'
 
 describe('Child Profile Page Inner', () => {
   const defaultProps = { match: { params: { staffId: 'ABC' }, url: '/my/url' }, navigateTo: navigation.CHILD_PROFILE }
@@ -21,7 +22,14 @@ describe('Child Profile Page Inner', () => {
 
   it('renders a Search button', () => {
     const layout = render(defaultProps).find(FullWidthLayout)
-    expect(layout.props().rightButton.type).toBe(SearchClientsButton)
+    expect(layout.props().leftButton.type).toBe(SearchClientsButton)
+  })
+
+  it('renders a Print button', () => {
+    const wrapper = render(defaultProps)
+    wrapper.instance().headerController.setPrintButton(<PrintButton isEnabled={true} />)
+    const layout = wrapper.find(FullWidthLayout)
+    expect(layout.props().rightButton.type).toBe(PrintButton)
   })
 
   it('passes navigateTo to the breadcrumb', () => {

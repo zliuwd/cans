@@ -7,7 +7,7 @@ import { ClientService } from '../'
 class AssessmentComparisonLoadingBoundary extends React.Component {
   state = {}
 
-  static getDerivedStateFromProps({ clientIdentifier: propsId, instrumentId }, { id: stateId }) {
+  static getDerivedStateFromProps({ clientIdentifier: propsId, instrumentId, dataFetchCallback }, { id: stateId }) {
     if (propsId !== stateId) {
       return {
         id: propsId,
@@ -16,7 +16,11 @@ class AssessmentComparisonLoadingBoundary extends React.Component {
             ClientService.getAssessmentComparison(propsId, true),
             ClientService.getAssessmentComparison(propsId, false),
             I18nService.fetchByInstrumentId(instrumentId),
-          ]).then(([underSix, aboveSix, i18n]) => ({ data: { underSix, aboveSix }, i18n })),
+          ]).then(([underSix, aboveSix, i18n]) => {
+            const fetchedData = { data: { underSix, aboveSix }, i18n }
+            dataFetchCallback(fetchedData)
+            return fetchedData
+          }),
       }
     }
     return null
@@ -38,7 +42,12 @@ class AssessmentComparisonLoadingBoundary extends React.Component {
 AssessmentComparisonLoadingBoundary.propTypes = {
   children: PropTypes.node.isRequired,
   clientIdentifier: PropTypes.string.isRequired,
+  dataFetchCallback: PropTypes.func,
   instrumentId: PropTypes.string.isRequired,
+}
+
+AssessmentComparisonLoadingBoundary.defaultProps = {
+  dataFetchCallback: () => {},
 }
 
 export default AssessmentComparisonLoadingBoundary
