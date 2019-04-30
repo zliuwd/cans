@@ -36,7 +36,7 @@ const PrintDomain = props => {
   const totalScore = getTotalScore(domain, items, redactLevel)
   return (
     <div key={code + caregiverIndex} style={domainContainer}>
-      <div>
+      <div id="print-domain-header-container">
         <PrintDomainHeader text={title} total={totalScore} />
         {shouldRenderCaregiverName && <PrintCaregiverName name={displayCaregiverName} />}
       </div>
@@ -57,7 +57,6 @@ const PrintDomain = props => {
       </div>
       <div>
         <PrintDomainCommentHeader text={title} remark={commentRemark(comment)} />
-        {shouldRenderCaregiverName && <PrintCaregiverName name={displayCaregiverName} />}
         {comment && (
           <div style={domainComment}>
             <div style={domainCommentContent}>{comment}</div>
