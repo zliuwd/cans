@@ -15,6 +15,7 @@ describe('<ConductedByNameField/>', () => {
     maxLength: ConductedByNameMaxLength,
     label: 'label',
     errorMessage: 'errorMessage',
+    fieldName: 'fieldName',
   }
 
   const longValue = '123456789012345678901234567890A'
@@ -30,7 +31,7 @@ describe('<ConductedByNameField/>', () => {
     expect(input.props().type).toBe(props.type)
     expect(input.props().id).toBe(props.id)
     expect(input.props().value).toBe(props.value)
-    expect(input.props().onChange).toBe(props.onChange)
+    expect(input.props().onChange).toBe(wrapper.instance().handleConductedByNameChange)
     expect(input.props().disabled).toBe(props.disabled)
     expect(input.props().maxLength).toBe(props.maxLength)
     expect(
@@ -85,5 +86,20 @@ describe('<ConductedByNameField/>', () => {
     const wrapper = shallow(<ConductedByNameField {...disabledProps} />)
     expect(wrapper.text()).not.toContain(props.errorMessage)
     expect(wrapper.find(Icon).length).toBe(0)
+  })
+
+  it('field change triggers onChange call', () => {
+    jest.resetAllMocks()
+    const event = {
+      target: {
+        value: 'new name',
+      },
+    }
+    const wrapper = shallow(<ConductedByNameField {...props} />)
+    wrapper
+      .find('#id')
+      .props()
+      .onChange(event)
+    expect(props.onChange).toHaveBeenCalledWith(props.fieldName, event.target.value)
   })
 })

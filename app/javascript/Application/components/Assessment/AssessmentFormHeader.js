@@ -51,6 +51,11 @@ class AssessmentFormHeader extends PureComponent {
     this.props.expandCollapse(false)
   }
 
+  handleConductedByFieldChange = (name, value) => {
+    const assessment = { ...this.props.assessment, [name]: value }
+    this.props.onAssessmentUpdate(assessment)
+  }
+
   renderClientName() {
     const { first_name: firstName, last_name: lastName, dob, estimated_dob: estimatedDob } = this.props.client
     return (
@@ -187,8 +192,10 @@ class AssessmentFormHeader extends PureComponent {
         </Row>
         <ConductedBy
           disabled={this.props.disabled}
-          assessment={assessment}
-          onAssessmentUpdate={this.props.onAssessmentUpdate}
+          onChange={this.handleConductedByFieldChange}
+          firstName={assessment.conducted_by_first_name}
+          lastName={assessment.conducted_by_last_name}
+          role={assessment.conducted_by_role}
         />
         <AssessmentOptions
           canReleaseConfidentialInfo={canReleaseInfo}

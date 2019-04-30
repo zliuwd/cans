@@ -18,7 +18,7 @@ describe('<ConductedByRole/>', () => {
     expect(select.props().id).toBe('conducted-by-role')
     expect(select.props().className).toBe('assessment-form-header-input-role')
     expect(select.props().isDisabled).toBe(props.disabled)
-    expect(select.props().onChange).toBe(props.onChange)
+    expect(select.props().onChange).toBe(wrapper.instance().handleConductedByRoleChange)
     expect(
       wrapper
         .find('Label')
@@ -29,5 +29,20 @@ describe('<ConductedByRole/>', () => {
     expect(select.props().isSearchable).toBeTruthy()
     expect(select.props().options).toBe(ConductedByRoleOptions)
     expect(select.props().value).toBe(findSelectOptionByValue(props.value, ConductedByRoleOptions))
+  })
+
+  it('field change triggers onChange call', () => {
+    jest.resetAllMocks()
+    const event = {
+      target: {
+        value: 'new name',
+      },
+    }
+    const wrapper = shallow(<ConductedByRole {...props} />)
+    wrapper
+      .find('#conducted-by-role')
+      .props()
+      .onChange(event)
+    expect(props.onChange).toHaveBeenCalledWith('conducted_by_role', event.value)
   })
 })
