@@ -114,12 +114,20 @@ describe('<PrintDomain />', () => {
     wrapper.unmount()
   })
 
-  it('will render two PrintCaregiverName when it is caregiver domain and has caregiver name', () => {
+  it('will render only one PrintCaregiverName when it is caregiver domain and has caregiver name', () => {
     getWrapper(fakePropsWithCaregiverName)
     expect(fakePropsWithCaregiverName.domain.is_caregiver_domain).toBe(true)
     const target = wrapper.find(PrintCaregiverName)
-    expect(target.length).toBe(2)
-    expect(target.at(0).props().name).toEqual(fakePropsWithCaregiverName.domain.caregiver_name)
+    expect(target.length).toBe(1)
+    expect(target.props().name).toEqual(fakePropsWithCaregiverName.domain.caregiver_name)
+    wrapper.unmount()
+  })
+
+  it('will render caregiver name inside the div with id #print-domain-header-container', () => {
+    getWrapper(fakePropsWithCaregiverName)
+    expect(fakePropsWithCaregiverName.domain.is_caregiver_domain).toBe(true)
+    const target = wrapper.find('#print-domain-header-container')
+    expect(target.text()).toContain(fakePropsWithCaregiverName.domain.caregiver_name)
     wrapper.unmount()
   })
 
