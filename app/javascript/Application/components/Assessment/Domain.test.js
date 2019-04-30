@@ -4,7 +4,7 @@ import { shallow } from 'enzyme'
 import Domain from './Domain'
 import { DomainItemList, DomainCaregiverControls } from './'
 import DomainComment from './DomainComment'
-import { Label } from 'reactstrap'
+import { Label } from '@cwds/components'
 
 const domainDefault = {
   id: '1',
@@ -296,7 +296,12 @@ describe('<Domain />', () => {
             // then
             expect(wrapper.state().caregiverName).toEqual('Full Name')
             expect(wrapper.find('DomainPanelSummary').props().caregiverName).toMatch(/Full Name/)
-            expect(wrapper.find(Label).text()).toEqual('Caregiver Name *')
+            expect(
+              wrapper
+                .find(Label)
+                .dive()
+                .text()
+            ).toEqual('Caregiver Name *')
           })
         })
 
