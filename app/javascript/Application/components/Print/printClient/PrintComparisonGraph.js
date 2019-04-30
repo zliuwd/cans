@@ -14,7 +14,7 @@ class PrintComparisonGraph extends PureComponent {
     const dates = datesGenerator(eventDates)
     const domainBarsData = domainBarsDataGenerator(eventDates, data.domains, i18n)
     return (
-      <BarChart width={800} height={300} data={domainBarsData}>
+      <BarChart width={1100} height={400} data={domainBarsData}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} fill={'#f1f1f1'} />
         <XAxis dataKey="name" interval={0} />
         <YAxis padding={{ top: 20 }} />

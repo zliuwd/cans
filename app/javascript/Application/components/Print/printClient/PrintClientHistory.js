@@ -3,12 +3,13 @@ import { header, container } from '../PrintStyles'
 import PropTypes from 'prop-types'
 import { isoToLocalDate } from '../../../util/dateHelper'
 import { composeUpdatedByName } from './PrintClientHelper'
+import { historyTable } from './PrintClientStyle'
 
 class PrintClientHistory extends PureComponent {
   renderHistoryTable = assessments => {
     return (
       <div style={container} id={'print-client-history-table'}>
-        <table>
+        <table style={historyTable.table}>
           <thead>
             <tr>
               <th>Status</th>
