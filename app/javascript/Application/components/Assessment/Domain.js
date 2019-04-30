@@ -11,7 +11,7 @@ import { isA11yAllowedInput } from '../../util/events'
 import { totalScoreCalculation, itemFilter } from './DomainScoreHelper.js'
 import { isEmpty } from '../../util/common'
 import { expandingThenScroll } from '../../util/assessmentAutoScroll'
-import { Button } from '@cwds/components'
+import { Button, Label } from '@cwds/components'
 import DomainPanelSummary from './DomainPanelSummary'
 import './style.sass'
 
@@ -87,7 +87,11 @@ class Domain extends React.PureComponent {
   renderCaregiverName = () => {
     return (
       <div className={'caregiver-name-wrapper'}>
+        <Label for={'caregiverNameInput'} className={'caregiver-name-label'}>
+          Caregiver Name <span className={'caregiver-name-label-asterisk'}>*</span>
+        </Label>
         <Input
+          id={'caregiverNameInput'}
           bsSize="sm"
           placeholder="ex. Last Name, First Name/Relationship to child or youth"
           className={'caregiver-name'}

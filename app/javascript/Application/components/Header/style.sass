@@ -4,23 +4,29 @@
 //  PageHeader
 //******************
 .header-button
-  background-color: $astronaut-blue
-  border-color: $astronaut-blue
-  font-size: 0.5625rem
+  background-color: transparent
+  min-width: 5.3125rem
+  min-height: 2.5rem
+  border: 0.06rem solid $white
+  border-radius: 0.125rem 0.125rem 0.125rem 0.125rem
+  border-color: $white
+  color: $white
+  font-family: Source Sans Pro, sans-serif
+  font-size: 1.0625rem
   font-weight: bold
+  height: 1.25rem
+  text-align: center
   margin-left: 0.75rem
-  min-width: 5.625rem
-  padding: 0.234375rem 0.46875rem
-  text-transform: uppercase
-
-  &:disabled
-    color: $white
-    background-color: $astronaut-blue
-    border-color: $astronaut-blue
 
   &:hover
-    background-color: $dark-cerulean
-    border-color: $dark-cerulean
+    color: $white
+    background-color: transparent
+    border-color: $white
+  
+  &:disabled
+    color: $black
+    background-color: transparent
+    border-color: $black
 
 .header-button-icon
   font-size: 0.875rem !important
