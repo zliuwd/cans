@@ -11,8 +11,6 @@ import AssessmentFormHeaderTitle from './AssessmentFormHeader/AssessmentFormHead
 import DateAndTemplate from './AssessmentFormHeader/DateAndTemplate'
 
 class AssessmentFormHeader extends PureComponent {
-  handleValueChange = event => this.changeFieldAndUpdateAssessment(event.target.name, event.target.value)
-
   handleEventDateChange = value => this.changeFieldAndUpdateAssessment('event_date', value)
 
   handleHasCaregiverSwitcher = event => {
@@ -29,9 +27,7 @@ class AssessmentFormHeader extends PureComponent {
   }
 
   changeFieldAndUpdateAssessment(name, value) {
-    const assessment = clone(this.props.assessment)
-    assessment[name] = value
-    this.props.onAssessmentUpdate(assessment)
+    this.props.onAssessmentUpdate({ ...this.props.assessment, [name]: value })
   }
 
   handleCanReleaseInfoChange = event => {
@@ -43,9 +39,10 @@ class AssessmentFormHeader extends PureComponent {
   }
 
   updateUnderSixAndAllDomainsExpand = value => {
-    const assessment = clone(this.props.assessment)
-    assessment.state.under_six = value
-    this.props.onAssessmentUpdate(assessment)
+    this.props.onAssessmentUpdate({
+      ...this.props.assessment,
+      state: { ...this.props.assessment.state, under_six: value },
+    })
   }
 
   renderCardHeader() {
