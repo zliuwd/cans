@@ -58,4 +58,4 @@ AssessmentOptions.defaultProps = {
   isUnderSix: undefined,
 }
 
-export default AssessmentOptions
+export default React.memo(AssessmentOptions)
