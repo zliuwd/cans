@@ -7,8 +7,8 @@ class AssessmentGlobal < SitePrism::Section
   element :page_header, 'h1'
   element :assessment_page_header, 'h1', text: 'CANS Assessment Form'
   element :reassessment_page_header, 'h1', text: 'CANS Reassessment Form'
-  element :save_button, 'button', text: 'SAVE'
-  element :print_button, 'button', text: 'PRINT'
+  element :save_button, 'button', text: 'Save'
+  element :print_button, 'button', text: 'Print'
   element :global_save_success_message_box, 'div.global-alert', text: 'Success! '\
                                             'CANS assessment has been saved'
   element :global_complete_message_box, 'div.global-alert', text: 'This assessment was completed '\

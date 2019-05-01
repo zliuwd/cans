@@ -1,31 +1,13 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { Row, Col } from 'reactstrap'
 import PropTypes from 'prop-types'
 import './style.sass'
 import ConductedByNameField from './ConductedByNameField'
 import ConductedByRole from './ConductedByRole'
 
-class ConductedBy extends Component {
-  handleConductedByFirstNameChange = event => {
-    const assessment = { ...this.props.assessment }
-    assessment.conducted_by_first_name = event.target.value
-    this.props.onAssessmentUpdate(assessment)
-  }
-
-  handleConductedByLastNameChange = event => {
-    const assessment = { ...this.props.assessment }
-    assessment.conducted_by_last_name = event.target.value
-    this.props.onAssessmentUpdate(assessment)
-  }
-
-  handleConductedByRoleChange = event => {
-    const assessment = { ...this.props.assessment }
-    assessment.conducted_by_role = event.value
-    this.props.onAssessmentUpdate(assessment)
-  }
-
+class ConductedBy extends PureComponent {
   render() {
-    const { assessment, disabled } = this.props
+    const { firstName, lastName, role, onChange, disabled } = this.props
     return (
       <form>
         <fieldset>
@@ -35,27 +17,25 @@ class ConductedBy extends Component {
               <ConductedByNameField
                 id={'conducted-by-first-name'}
                 label={'First Name *'}
-                value={assessment.conducted_by_first_name}
-                onChange={this.handleConductedByFirstNameChange}
+                value={firstName}
+                onChange={onChange}
                 disabled={disabled}
                 errorMessage={'First name is too long'}
+                fieldName={'conducted_by_first_name'}
               />
             </Col>
             <Col sm={4}>
               <ConductedByNameField
                 id={'conducted-by-last-name'}
                 label={'Last Name *'}
-                value={assessment.conducted_by_last_name}
-                onChange={this.handleConductedByLastNameChange}
+                value={lastName}
+                onChange={onChange}
                 disabled={disabled}
+                fieldName={'conducted_by_last_name'}
               />
             </Col>
             <Col sm={4}>
-              <ConductedByRole
-                value={assessment.conducted_by_role}
-                onChange={this.handleConductedByRoleChange}
-                disabled={disabled}
-              />
+              <ConductedByRole value={role} onChange={onChange} disabled={disabled} />
             </Col>
           </Row>
         </fieldset>
@@ -64,10 +44,18 @@ class ConductedBy extends Component {
   }
 }
 
+ConductedBy.defaultProps = {
+  firstName: undefined,
+  lastName: undefined,
+  role: undefined,
+}
+
 ConductedBy.propTypes = {
-  assessment: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
-  onAssessmentUpdate: PropTypes.func.isRequired,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+  role: PropTypes.string,
 }
 
 export default ConductedBy

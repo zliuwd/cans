@@ -26,7 +26,7 @@ class AssessmentFormHeader extends PureComponent {
     }
   }
 
-  changeFieldAndUpdateAssessment(name, value) {
+  changeFieldAndUpdateAssessment = (name, value) => {
     this.props.onAssessmentUpdate({ ...this.props.assessment, [name]: value })
   }
 
@@ -82,8 +82,10 @@ class AssessmentFormHeader extends PureComponent {
         />
         <ConductedBy
           disabled={this.props.disabled}
-          assessment={assessment}
-          onAssessmentUpdate={this.props.onAssessmentUpdate}
+          onChange={this.changeFieldAndUpdateAssessment}
+          firstName={assessment.conducted_by_first_name}
+          lastName={assessment.conducted_by_last_name}
+          role={assessment.conducted_by_role}
         />
         <AssessmentOptions
           canReleaseConfidentialInfo={canReleaseInfo}

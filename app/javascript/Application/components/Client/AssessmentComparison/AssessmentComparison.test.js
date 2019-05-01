@@ -6,6 +6,7 @@ import './style.sass'
 import { shallow, mount } from 'enzyme'
 import AssessmentComparison from './AssessmentComparison'
 import ComparisonAgeSwitchButtonGroup from './ComparisonAgeSwitchButtonGroup'
+import { ageRange } from './AssessmentComparisonHelper'
 
 export const fakeData = {
   underSix: {
@@ -315,5 +316,19 @@ describe('<AssessmentComparison />', () => {
     wrapper.instance().handleAgeSwitch(true)
     const target2 = wrapper.state().currentDataKey
     expect(target2).toBe('underSix')
+  })
+
+  it('should call comparisonDataCallback', () => {
+    const spy = jest.fn()
+    const props = { ...fakeProps, dataChangeCallback: spy }
+    const wrapper = shallow(<AssessmentComparison {...props} />)
+    expect(spy).toHaveBeenCalledTimes(1)
+    expect(spy).toHaveBeenCalledWith({ currentDataKey: ageRange.ABOVESIX })
+    wrapper.instance().handleAgeSwitch(true)
+    expect(spy).toHaveBeenCalledTimes(2)
+    expect(spy).toHaveBeenCalledWith({ currentDataKey: ageRange.UNDERSIX })
+    wrapper.instance().handleAgeSwitch(false)
+    expect(spy).toHaveBeenCalledTimes(3)
+    expect(spy).toHaveBeenCalledWith({ currentDataKey: ageRange.ABOVESIX })
   })
 })

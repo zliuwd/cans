@@ -9,6 +9,8 @@ import NavFromProducer from '../../util/NavFromProducer'
 import { urlTrimmer } from '../../util/urlTrimmer'
 import ClientAssessmentStatistics from './ClientAssessmentStatistics'
 import ClientAssessmentHistoryLoadingBoundary from './AssessmentHistory/ClientAssessmentHistoryLoadingBoundary'
+import PrintButton from '../Header/PageHeaderButtons/PrintButton'
+import PrintClient from '../Print/printClient/PrintClient'
 
 const SINGLE_WIDTH = 3
 const DOUBLE_WIDTH = 6
@@ -19,12 +21,42 @@ class Client extends Component {
     this.state = {
       loadingBoundaryKey: Math.random(),
       isComparisonShown: false,
+      printNow: false,
     }
+  }
+
+  togglePrintNow = () => {
+    this.setState(prewState => ({ printNow: !prewState.printNow }))
+  }
+
+  onPrintClick = () => {
+    !this.state.printNow && this.togglePrintNow()
+  }
+
+  onPrintClose = () => {
+    this.state.printNow && this.togglePrintNow()
   }
 
   recordsModeSwitch = () => {
     this.setState({ isComparisonShown: !this.state.isComparisonShown })
   }
+
+  onPrintDataChange = printData => {
+    const newState = {}
+    if (printData.assessments) {
+      newState.assessmentsHistory = printData
+    } else if (printData.currentDataKey || (printData.data && printData.i18n)) {
+      const prevComparisonData = this.state.comparisonData
+      newState.comparisonData = prevComparisonData ? { ...prevComparisonData, ...printData } : { ...printData }
+    }
+    if (!this.state.printButton) {
+      newState.printButton = <PrintButton isEnabled={Boolean(printData)} onPrintClick={this.onPrintClick} />
+      this.props.headerController.setPrintButton(newState.printButton)
+    }
+    this.setState({ ...newState })
+  }
+
+  printData = () => (this.state.isComparisonShown ? this.state.comparisonData : this.state.assessmentsHistory)
 
   renderClientData(data, label, gridSize = SINGLE_WIDTH, itemId = label) {
     return (
@@ -68,6 +100,20 @@ class Client extends Component {
     return linkUrl
   }
 
+  renderGrid = client => {
+    return (
+      <Grid container spacing={24} id={'client-info-content'}>
+        {this.renderClientData(<b>{client.first_name}</b>, 'First Name')}
+        {this.renderClientData(<b>{client.middle_name}</b>, 'Middle Name')}
+        {this.renderClientData(<b>{client.last_name}</b>, 'Last Name')}
+        {this.renderClientData(<b>{client.suffix}</b>, 'Suffix')}
+        {this.renderClientData(isoToLocalDate(client.dob), 'Date of Birth')}
+        {this.renderClientData(this.formatCounty(client.county), 'County', SINGLE_WIDTH, 'county')}
+        {this.renderClientData(client.external_id, 'Client Id', DOUBLE_WIDTH)}
+      </Grid>
+    )
+  }
+
   render() {
     const { client } = this.props
     const clientIdentifier = client.identifier ? client.identifier : ''
@@ -81,6 +127,7 @@ class Client extends Component {
       userId: this.props.match.params.staffId,
       updateAssessmentHistoryCallback: this.updateClientAssessmentHistory,
       recordsModeSwitch: this.recordsModeSwitch,
+      dataChangeCallback: this.onPrintDataChange,
     }
 
     return (
@@ -92,15 +139,7 @@ class Client extends Component {
               <div className={'content'}>
                 <CardContent>
                   {client && client.identifier ? (
-                    <Grid container spacing={24} id={'client-info-content'}>
-                      {this.renderClientData(<b>{client.first_name}</b>, 'First Name')}
-                      {this.renderClientData(<b>{client.middle_name}</b>, 'Middle Name')}
-                      {this.renderClientData(<b>{client.last_name}</b>, 'Last Name')}
-                      {this.renderClientData(<b>{client.suffix}</b>, 'Suffix')}
-                      {this.renderClientData(isoToLocalDate(client.dob), 'Date of Birth')}
-                      {this.renderClientData(this.formatCounty(client.county), 'County', SINGLE_WIDTH, 'county')}
-                      {this.renderClientData(client.external_id, 'Client Id', DOUBLE_WIDTH)}
-                    </Grid>
+                    this.renderGrid(client)
                   ) : (
                     <span id={'no-data'}>No Child Data Found</span>
                   )}
@@ -111,10 +150,14 @@ class Client extends Component {
           <ClientAssessmentHistoryLoadingBoundary
             clientIdentifier={clientIdentifier}
             key={this.state.loadingBoundaryKey}
+            dataFetchCallback={this.onPrintDataChange}
           >
             <ClientAssessmentStatistics {...assessmentStatisticsProps} />
           </ClientAssessmentHistoryLoadingBoundary>
         </Grid>
+        {this.state.printNow ? (
+          <PrintClient client={client} printData={this.printData()} onClose={this.onPrintClose} />
+        ) : null}
       </Fragment>
     )
   }
@@ -122,6 +165,7 @@ class Client extends Component {
 
 Client.propTypes = {
   client: PropTypes.object,
+  headerController: PropTypes.shape({ setPrintButton: PropTypes.func.isRequired }),
   match: PropTypes.shape({
     params: PropTypes.shape({ staffId: PropTypes.string }),
     url: PropTypes.string.isRequired,
@@ -131,6 +175,7 @@ Client.propTypes = {
 
 Client.defaultProps = {
   client: {},
+  headerController: undefined,
 }
 
 export default Client

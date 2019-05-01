@@ -19,9 +19,9 @@ class DateAndTemplate extends React.PureComponent {
           </Label>
         </Col>
         <Col sm={3}>
-          <Label id="assessment-template-label" className="assessment-form-header-label">
+          <span id="assessment-template-label" className="assessment-form-header-label">
             Select CANS Template *
-          </Label>
+          </span>
         </Col>
       </Row>
     )
